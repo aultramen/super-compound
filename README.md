@@ -92,7 +92,7 @@ your-project/
 │   │   ├── SUPER-COMPOUND.md                  ← Core philosophy, skills, workflows, git
 │   │   ├── project-config.md            ← Tech stack config + presets + auto-detect
 │   │   └── quality-gates.md             ← Verification, knowledge, architecture rules
-│   ├── workflows/                       ← 8 workflow commands  
+│   ├── workflows/                       ← 10 workflow commands  
 │   │   ├── brainstorm.md
 │   │   ├── plan.md
 │   │   ├── work.md
@@ -100,10 +100,13 @@ your-project/
 │   │   ├── compound.md
 │   │   ├── debug.md
 │   │   ├── launch.md
-│   │   └── reload.md
-│   └── skills/                          ← 9 development skills
+│   │   ├── reload.md
+│   │   ├── init.md
+│   │   └── compatibility.md
+│   └── skills/                          ← 10 development skills
 │       ├── architecture-enforcement/    ← Per-framework guides + preset definitions
 │       ├── brainstorming/
+│       ├── compatibility-check/         ← Version & dependency compatibility validation
 │       ├── writing-plans/
 │       ├── executing-plans/
 │       ├── test-driven-development/
@@ -116,6 +119,15 @@ your-project/
 ```
 
 > **Note:** Rules are split into 3 files to stay under Antigravity's 12K character limit per rule file. Skills have no size limit and load progressively.
+
+> [!IMPORTANT]
+> **Known Behavior: Rules Not Showing in Antigravity IDE UI**
+>
+> Files in `.agent/rules/` may not appear in the **Customizations → Rules** list within Antigravity IDE. This is a limitation of the IDE itself, **not** a Super Compound issue. The IDE's Rules UI enforces a strict naming convention: **only lowercase letters, numbers, and hyphens are allowed** (e.g., `super-compound`, not `SUPER-COMPOUND`).
+>
+> **However, rules still work correctly regardless of whether they appear in the UI.** The AI agent reads and applies all rule files from `.agent/rules/` at the start of every conversation — the UI list is only a visual management layer.
+>
+> If you want your rules to appear in the UI list, ensure filenames use only lowercase letters, numbers, and hyphens and do little changes like add/remove space then save it, after that hit the 3 dots on the top right corner of the IDE, choose "Customizations" then hit "Refresh" after that you will see the rules in the UI list (e.g., `super-compound.md`, `project-config.md`).
 
 ### Global vs Workspace Scope
 
@@ -174,6 +186,8 @@ Use the workflow commands in your IDE:
 /compound      → Document solved problems
 /launch        → Full pipeline (brainstorm → plan → work → review → compound)
 /reload        → Re-read rules mid-conversation after edits
+/init          → Scan codebase, auto-fill config, generate codebase map
+/compatibility → Audit tech stack compatibility, report conflicts
 ```
 
 ---
@@ -196,6 +210,8 @@ Use the workflow commands in your IDE:
 | 📚 **Compound** | `/compound` | Capture solutions in `docs/solutions/` for future reference |
 | 🚀 **Launch** | `/launch` | Full autonomous pipeline with user approval at each gate |
 | 🔄 **Reload** | `/reload` | Re-read all rule files, apply changes immediately |
+| 🔰 **Init** | `/init` | Scan codebase, auto-fill config, generate `docs/codebase-map.md` |
+| 🔍 **Compatibility** | `/compatibility` | Audit dependency versions, report conflicts, suggest fixes |
 
 ---
 
@@ -211,6 +227,7 @@ Use the workflow commands in your IDE:
 | **verification-before-completion** | Evidence-based completion | Iron Law: no claims without proof |
 | **knowledge-compounding** | Document solutions | `docs/solutions/` with categories + patterns |
 | **code-review** | Multi-perspective review | Spec + quality + architecture with P1/P2/P3 |
+| **compatibility-check** | Tech stack validation | Pre-flight during planning + on-demand audit |
 
 ---
 

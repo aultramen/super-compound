@@ -66,6 +66,8 @@ Brainstorm → Plan → Work → Review → Compound
 | `compound.md` | Problem solved, issue fixed | Document knowledge for future |
 | `launch.md` | Want full autonomous pipeline | Run all stages sequentially |
 | `reload.md` | Updated rules mid-conversation | Re-read all rule files immediately |
+| `init.md`   | New/imported project, empty config | Scan codebase, auto-fill config, generate map |
+| `compatibility.md` | Dependency changes, stack health check | Audit compatibility, report conflicts, suggest fixes |
 
 ---
 
@@ -128,3 +130,4 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `knowledge-compounding` | After solving a non-trivial problem |
 | `code-review` | When reviewing code changes |
 | `architecture-enforcement` | Before writing code — verify correct folder and imports |
+| `compatibility-check` | Before introducing new deps or auditing existing stack |

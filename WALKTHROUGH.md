@@ -24,6 +24,8 @@ This tutorial will walk you through installation, basic configuration, and the u
   - [2.7 Workflow: Launch (Full Pipeline)](#27-workflow-launch-full-pipeline)
   - [2.8 Workflow: Debug](#28-workflow-debug)
   - [2.9 Workflow: Reload](#29-workflow-reload)
+  - [2.10 Workflow: Init](#210-workflow-init)
+  - [2.11 Workflow: Compatibility](#211-workflow-compatibility)
 - [Part 3: Advanced — Skills Deep Dive](#part-3-advanced--skills-deep-dive)
   - [3.1 Test-Driven Development (TDD)](#31-test-driven-development-tdd)
   - [3.2 Systematic Debugging](#32-systematic-debugging)
@@ -31,6 +33,7 @@ This tutorial will walk you through installation, basic configuration, and the u
   - [3.4 Architecture Enforcement](#34-architecture-enforcement)
   - [3.5 Knowledge Compounding](#35-knowledge-compounding)
   - [3.6 Code Review](#36-code-review)
+  - [3.7 Compatibility Check](#37-compatibility-check)
 - [Part 4: Real-World Case Studies](#part-4-real-world-case-studies)
   - [Case 1: Building a REST API with FastAPI](#case-1-building-a-rest-api-with-fastapi)
   - [Case 2: Debugging a Production Bug](#case-2-debugging-a-production-bug)
@@ -123,7 +126,7 @@ your-project/
 │   │   ├── SUPER-COMPOUND.md     ← Core philosophy, skills, workflows, git
 │   │   ├── project-config.md  ← Tech stack configuration + presets
 │   │   └── quality-gates.md   ← Verification, knowledge, architecture
-│   ├── workflows/          ← 6 workflow commands
+│   ├── workflows/          ← 10 workflow commands
 │   │   ├── brainstorm.md
 │   │   ├── plan.md
 │   │   ├── work.md
@@ -131,10 +134,13 @@ your-project/
 │   │   ├── compound.md
 │   │   ├── debug.md
 │   │   ├── launch.md
-│   │   └── reload.md
-│   └── skills/             ← 9 development skills
+│   │   ├── reload.md
+│   │   ├── init.md
+│   │   └── compatibility.md
+│   └── skills/             ← 10 development skills
 │       ├── architecture-enforcement/
 │       ├── brainstorming/
+│       ├── compatibility-check/
 │       ├── writing-plans/
 │       ├── executing-plans/
 │       ├── test-driven-development/
@@ -299,6 +305,8 @@ Each phase can be run independently or as a full pipeline via `/launch`.
 | 🔍 Review | `/review` | Multi-perspective review, severity classification |
 | 📚 Compound | `/compound` | Document solutions in `docs/solutions/` |
 | 🚀 Launch | `/launch` | Full pipeline with approval at each gate |
+| 🔰 Init | `/init` | Scan codebase, auto-fill config, generate codebase map |
+| 🔍 Compatibility | `/compatibility` | Audit dependency versions, report conflicts |
 
 ### 2.2 Workflow: Brainstorm
 
@@ -768,6 +776,192 @@ AI: ✅ Rules reloaded. Changes detected in:
 | Edit a workflow | ❌ Not needed — workflows are read when triggered |
 | Start a new chat | ❌ Not needed — rules are automatically read |
 
+### 2.10 Workflow: Init
+
+**When to use:** First time opening a project in this IDE, after cloning/importing from another IDE, or when AI outputs feel generic.
+
+**Command:** `/init`
+
+**Process:**
+
+```
+1. Read config      → Check which project-config.md fields are filled
+2. Scan packages    → package.json, composer.json, requirements.txt, etc.
+3. Scan configs     → tsconfig.json, docker-compose.yml, .env.example, etc.
+4. Scan markers     → artisan, manage.py, next.config.js, etc.
+5. Scan tree        → Directory structure (top 3 levels)
+6. Sample files     → 2-3 files per category (controllers, models, routes)
+7. Auto-fill config → Update empty fields in project-config.md
+8. Generate map     → Create docs/codebase-map.md
+9. Present          → Show results, ask for corrections
+```
+
+**Output:**
+- Updated `project-config.md` with detected tech stack
+- New `docs/codebase-map.md` with architecture, key files, conventions
+
+#### 📌 Example Case: Importing a Project from Cursor
+
+```
+# You just opened a Laravel + React project that was built in Cursor.
+# AI has no context about the existing codebase.
+
+You: /init
+
+AI: Running codebase initialization. Scanning project structure...
+
+    📦 Packages detected:
+    • composer.json → Laravel 11, PHP 8.2
+    • package.json → React 18, TypeScript, Vite, Tailwind
+    • requirements.txt → Python 3.11, Flask (agent service)
+
+    🔧 Config files:
+    • docker-compose.yml → PostgreSQL, Redis
+    • .env.example → 32 environment variables
+
+    📁 Architecture: Monorepo with 3 services
+    • omnisocial-api/ → Laravel backend
+    • omnisocial-fe/ → React frontend
+    • omnisocial-agent/ → Python agent
+
+    📝 project-config.md updated (diff):
+    + project_name: "omnisocial"
+    + project_type: "fullstack"
+    + monorepo: true
+    + frontend.framework: "react"
+    + backend.framework: "laravel"
+    + database.primary: "postgresql"
+
+    📄 docs/codebase-map.md generated (42 key files mapped)
+
+    Does this look correct? Any corrections needed?
+
+You: Looks good!
+
+# Now when you use /plan, AI will reference existing files
+# and follow the project's established patterns.
+```
+
+#### When to Skip `/init`
+
+| Situation | Skip? |
+|-----------|-------|
+| Brand new project (nothing to scan) | ✅ Skip |
+| Config and codebase map already exist | ✅ Skip |
+| Project imported from another IDE | ❌ Run `/init` |
+| AI outputs feel generic/miss context | ❌ Run `/init` |
+
+### 2.11 Workflow: Compatibility
+
+**When to use:** Before major dependency upgrades, after cloning a project, periodic health checks, or before deployment.
+
+**Command:** `/compatibility`
+
+**Important:** This workflow is **strictly read-only**. It never modifies any files without your explicit approval.
+
+**Process:**
+
+```
+1.  Read skill      → Load compatibility-check skill in Audit mode
+2.  Announce         → "Running compatibility audit..."
+3.  Read config      → Load project-config.md for declared stack
+4.  Scan deps        → Read package.json, requirements.txt, go.mod, etc.
+5.  Detect runtime   → Check .node-version, engines, Dockerfile, etc.
+6.  Invoke skill     → Build dependency map, cross-reference combinations
+7.  Web search       → Search for known incompatibilities, EOL, security
+8.  Generate report  → Structured findings with severity levels
+9.  Present summary  → Show report with actionable suggestions
+10. ⛔ Ask approval   → "Apply any suggestions?" → NEVER modify without consent
+```
+
+**Severity Levels:**
+
+| Level | Meaning | Example |
+|-------|---------|---------|
+| 🔴 Critical | Will break at runtime/build | Incompatible peer deps, missing runtime |
+| 🟡 Warning | Risky or approaching EOL | Deprecated library, upcoming end of support |
+| 🟢 Info | Suggestion, no immediate risk | Newer version available |
+
+#### 📌 Example Case: Auditing a Next.js Project
+
+```
+You: /compatibility
+
+AI: Running compatibility audit. Scanning project dependencies...
+
+    📦 Dependencies scanned: 34 packages
+    🔧 Runtime: Node 18.17.0
+    
+    # Compatibility Audit Report
+    
+    ## Summary
+    - 🔴 Critical: 1
+    - 🟡 Warning: 2
+    - 🟢 Info: 3
+    
+    ## 🔴 Critical
+    
+    1. **react-router-dom v5.3.0 ↔ React 18**
+       - Issue: v5 has known issues with React 18 concurrent mode
+       - Impact: Unexpected re-renders, navigation bugs
+       - Suggestion: Upgrade to react-router-dom v6.x
+    
+    ## 🟡 Warning
+    
+    2. **Node 18.17 approaching EOL** (April 2025)
+       - Suggestion: Plan upgrade to Node 20 LTS
+    
+    3. **@types/react v17.0.80 mismatched with React 18**
+       - Suggestion: Upgrade to @types/react v18.x
+    
+    ## 🟢 Info
+    
+    4-6. Newer stable versions available for 3 packages
+    
+    ⛔ No changes will be made without your approval.
+    Which suggestions would you like me to apply? (list numbers, or "none")
+
+You: Apply 1 and 3
+
+AI: I'll create a plan for those changes before applying...
+    [Creates upgrade plan → executes only approved items]
+```
+
+#### Automatic Pre-flight (During Planning)
+
+The compatibility check also runs **automatically during `/plan`** when new dependencies are introduced:
+
+```
+You: /plan
+
+AI: Creating implementation plan...
+
+    ## Compatibility Check (Pre-flight)
+    
+    This plan introduces 2 new dependencies:
+    
+    | Dependency | Version | Status | Notes |
+    |------------|---------|--------|-------|
+    | better-auth | ^2.0   | 🟢 Compatible | Works with Next.js 14+ |
+    | uploadthing | ^6.0   | 🔴 Conflict | Requires Node 20+, project uses 18 |
+    
+    ⚠️ Blocker found: uploadthing v6 needs Node 20+.
+    Alternatives:
+    - Use uploadthing v5.x (supports Node 18)
+    - Upgrade Node to 20 LTS first
+    
+    How would you like to proceed?
+```
+
+#### When to Skip `/compatibility`
+
+| Situation | Skip? |
+|-----------|-------|
+| Brand new project with no deps | ✅ Skip |
+| Just ran audit, nothing changed | ✅ Skip |
+| Before major upgrade | ❌ Run `/compatibility` |
+| Unexplained build failures | ❌ Run `/compatibility` |
+
 ---
 
 ## Part 3: Advanced — Skills Deep Dive
@@ -1118,6 +1312,48 @@ Multi-perspective review with **6 dimensions** of quality checks:
 | Copy-paste code | DRY violation |
 | `console.log` / `print` | Leftover debug artifacts |
 | Business logic in controllers | Architecture violation = P1 |
+
+### 3.7 Compatibility Check
+
+The compatibility-check skill validates that libraries, frameworks, and runtime versions are compatible with each other.
+
+#### Dual Mode Operation
+
+| Mode | Trigger | Scope |
+|------|---------|-------|
+| **Pre-flight** | Automatic during `/plan` | New/changed deps only |
+| **Audit** | On-demand via `/compatibility` | Full project scan |
+
+#### What Gets Checked
+
+| Category | Examples |
+|----------|----------|
+| **Library ↔ Library** | React 18 + React Router 5 (needs v6) |
+| **Framework ↔ Runtime** | Next.js 14 needs Node 18+ |
+| **Peer dependencies** | Package A requires React ^17 but project uses 18 |
+| **Deprecated / EOL** | Node 16 EOL, unmaintained libraries |
+| **Version range conflicts** | Two packages need conflicting versions of a shared dep |
+| **Build tool compatibility** | Vite plugin requires Vite 5 but project uses Vite 4 |
+| **Type system** | @types/[lib] version mismatched with lib version |
+
+#### Safety Rule (Audit Mode)
+
+```
+AUDIT MODE IS READ-ONLY.
+NEVER modify any file without explicit user approval.
+Present findings and suggestions ONLY.
+```
+
+The audit always ends with an approval gate — you choose which suggestions to apply (or none).
+
+#### Red Flags
+
+| Thought | Reality |
+|---------|---------|
+| "These versions are probably fine" | Search for actual compatibility data |
+| "The latest version should work" | Latest ≠ compatible. Check the combination |
+| "Peer dep warnings are just warnings" | Peer dep mismatches cause subtle runtime bugs |
+| "I can fix compatibility issues later" | Later = after test failures + wasted time |
 
 ---
 
