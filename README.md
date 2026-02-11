@@ -27,44 +27,60 @@ Super Compound is a complete AI-assisted development framework for **Antigravity
 
 Super Compound follows the official Antigravity IDE convention: **all rules, workflows, and skills live inside the `.agent/` directory.**
 
-### Antigravity IDE
-
-#### Windows (PowerShell)
-
-```powershell
-# Navigate to your project root
-cd C:\path\to\your-project
-
-# Copy the entire .agent folder (includes rules, workflows, and skills)
-Copy-Item -Recurse "path\to\SUPER-COMPOUND\.agent" -Destination ".\.agent" -Force
-```
-
-#### Linux / macOS (Bash)
+### Option A: Git Clone (Recommended)
 
 ```bash
+# Clone the repository
+git clone https://github.com/aultramen/super-compound.git
+
 # Navigate to your project root
 cd /path/to/your-project
 
-# Copy the entire .agent folder (includes rules, workflows, and skills)
-cp -r /path/to/SUPER-COMPOUND/.agent ./.agent
+# Copy the .agent folder from the cloned repo
+cp -r /path/to/super-compound/.agent ./.agent
 ```
 
-### Claude Code
+**Windows (PowerShell):**
 
-For Claude Code, copy the `.agent/` folder the same way. Additionally, you may want to copy `SUPER-COMPOUND.md` to your project root so Claude Code reads it as the main rules file:
+```powershell
+git clone https://github.com/aultramen/super-compound.git
+cd C:\path\to\your-project
+Copy-Item -Recurse "path\to\super-compound\.agent" -Destination ".\.agent" -Force
+```
+
+> [!TIP]
+> By cloning the repo, you can easily pull updates with `git pull` and re-copy the `.agent/` folder to stay current.
+
+### Option B: Manual Copy
+
+If you already have the Super Compound files locally:
 
 #### Windows (PowerShell)
 
 ```powershell
-Copy-Item -Recurse "path\to\SUPER-COMPOUND\.agent" -Destination ".\.agent" -Force
-Copy-Item "path\to\SUPER-COMPOUND\SUPER-COMPOUND.md" -Destination ".\SUPER-COMPOUND.md"
+cd C:\path\to\your-project
+Copy-Item -Recurse "path\to\super-compound\.agent" -Destination ".\.agent" -Force
 ```
 
 #### Linux / macOS (Bash)
 
 ```bash
-cp -r /path/to/SUPER-COMPOUND/.agent ./.agent
-cp /path/to/SUPER-COMPOUND/SUPER-COMPOUND.md ./SUPER-COMPOUND.md
+cd /path/to/your-project
+cp -r /path/to/super-compound/.agent ./.agent
+```
+
+### Claude Code (Additional Step)
+
+For Claude Code, after copying `.agent/` using either option above, also copy `SUPER-COMPOUND.md` to your project root so Claude Code reads it as the main rules file:
+
+```bash
+cp /path/to/super-compound/SUPER-COMPOUND.md ./SUPER-COMPOUND.md
+```
+
+**Windows (PowerShell):**
+
+```powershell
+Copy-Item "path\to\super-compound\SUPER-COMPOUND.md" -Destination ".\SUPER-COMPOUND.md"
 ```
 
 ### Project Structure After Installation

@@ -66,30 +66,52 @@ Super Compound is a framework for **AI-assisted development** in **Antigravity I
 
 Super Compound lives inside the `.agent/` folder at your project root.
 
-#### Antigravity IDE — Windows (PowerShell)
+#### Option A: Git Clone (Recommended)
 
-```powershell
+```bash
+# Clone the repository
+git clone https://github.com/aultramen/super-compound.git
+
 # Navigate to your project root
-cd C:\path\to\your-project
+cd /path/to/your-project
 
-# Copy the entire .agent folder
-Copy-Item -Recurse "path\to\SUPER-COMPOUND\.agent" -Destination ".\.agent" -Force
+# Copy the .agent folder from the cloned repo
+cp -r /path/to/super-compound/.agent ./.agent
 ```
 
-#### Antigravity IDE — Linux / macOS (Bash)
+**Windows (PowerShell):**
+
+```powershell
+git clone https://github.com/aultramen/super-compound.git
+cd C:\path\to\your-project
+Copy-Item -Recurse "path\to\super-compound\.agent" -Destination ".\.agent" -Force
+```
+
+> [!TIP]
+> By cloning the repo, you can easily pull updates with `git pull` and re-copy the `.agent/` folder to stay current.
+
+#### Option B: Manual Copy
+
+If you already have the Super Compound files locally:
 
 ```bash
 cd /path/to/your-project
-cp -r /path/to/SUPER-COMPOUND/.agent ./.agent
+cp -r /path/to/super-compound/.agent ./.agent
+```
+
+**Windows (PowerShell):**
+
+```powershell
+cd C:\path\to\your-project
+Copy-Item -Recurse "path\to\super-compound\.agent" -Destination ".\.agent" -Force
 ```
 
 #### Claude Code
 
-For Claude Code, copy `.agent/` and also `SUPER-COMPOUND.md` to the project root:
+For Claude Code, copy `.agent/` using either option above, and also copy `SUPER-COMPOUND.md` to the project root:
 
 ```bash
-cp -r /path/to/SUPER-COMPOUND/.agent ./.agent
-cp /path/to/SUPER-COMPOUND/SUPER-COMPOUND.md ./SUPER-COMPOUND.md
+cp /path/to/super-compound/SUPER-COMPOUND.md ./SUPER-COMPOUND.md
 ```
 
 #### Structure After Installation
@@ -1108,8 +1130,11 @@ Multi-perspective review with **6 dimensions** of quality checks:
 #### Step 1: Setup Super Compound
 
 ```bash
-# Copy Super Compound to project
-cp -r /path/to/SUPER-COMPOUND/.agent ./.agent
+# Clone Super Compound (if you haven't already)
+git clone https://github.com/aultramen/super-compound.git
+
+# Copy to your project
+cp -r /path/to/super-compound/.agent ./.agent
 
 # Edit config: use Preset 4 (FastAPI)
 # .agent/rules/project-config.md → paste FastAPI preset
