@@ -1,4 +1,4 @@
-﻿---
+---
 description: "Full autonomous pipeline: brainstorm → plan → work → review → compound. Use when you want the complete development lifecycle."
 ---
 
@@ -16,6 +16,7 @@ Run these workflows in order:
    - Explore the idea collaboratively
    - Create design document
    - Get user approval on approach
+   - **Frontend features** auto-activate `ui-ux-pro-max` for design intelligence
 
 2. **Plan** — `/plan`
    - Auto-detects recent brainstorm document

@@ -54,6 +54,16 @@ Ask questions **one at a time** to understand the idea:
 - Lead with your hypothesis: "I think you're describing X. Is that right, or is it more like Y?"
 - Validate assumptions explicitly
 
+**1.3 UI/UX Detection**
+
+If the idea involves frontend/UI work (pages, components, dashboards, landing pages):
+- Announce: "This involves UI work. I'll use the ui-ux-pro-max skill for design intelligence."
+- Run design system generation to inform the brainstorm:
+  ```bash
+  python3 skills/ui-ux-pro-max/scripts/search.py "<product_type> <industry>" --design-system -p "<Project>"
+  ```
+- Include design system recommendations in the brainstorm document
+
 ### Phase 2: Explore Approaches
 
 Propose **2-3 concrete approaches** with trade-offs:
@@ -117,3 +127,4 @@ docs/brainstorms/YYYY-MM-DD-<topic>-brainstorm.md
 **This skill feeds into:**
 - **writing-plans** — Creates the plan from this design
 - **knowledge-compounding** — Solutions reference brainstorm decisions
+- **ui-ux-pro-max** — Provides design intelligence when idea involves frontend

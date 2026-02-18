@@ -68,6 +68,7 @@ Brainstorm → Plan → Work → Review → Compound
 | `reload.md` | Updated rules mid-conversation | Re-read all rule files immediately |
 | `init.md`   | New/imported project, empty config | Scan codebase, auto-fill config, generate map |
 | `compatibility.md` | Dependency changes, stack health check | Audit compatibility, report conflicts, suggest fixes |
+| `ui-ux-pro-max.md` | Any frontend/UI work | Generate design system, implement professional UI |
 
 ---
 
@@ -109,6 +110,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | "parallel", "swarm", "multiple agents" | Worktree mode, ask for confirmation |
 | "debug", "fix", "broken" | Systematic debugging skill |
 | "plan", "design", "architecture" | Brainstorming → Planning pipeline |
+| "landing page", "UI", "frontend", "dashboard", "component" | UI/UX Pro Max skill, design system first |
 
 ### Execution Mode
 
@@ -131,3 +133,4 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `code-review` | When reviewing code changes |
 | `architecture-enforcement` | Before writing code — verify correct folder and imports |
 | `compatibility-check` | Before introducing new deps or auditing existing stack |
+| `ui-ux-pro-max` | When building any frontend UI — pages, dashboards, landing pages |

@@ -26,6 +26,7 @@ This tutorial will walk you through installation, basic configuration, and the u
   - [2.9 Workflow: Reload](#29-workflow-reload)
   - [2.10 Workflow: Init](#210-workflow-init)
   - [2.11 Workflow: Compatibility](#211-workflow-compatibility)
+  - [2.12 Workflow: UI/UX Pro Max](#212-workflow-uiux-pro-max)
 - [Part 3: Advanced — Skills Deep Dive](#part-3-advanced--skills-deep-dive)
   - [3.1 Test-Driven Development (TDD)](#31-test-driven-development-tdd)
   - [3.2 Systematic Debugging](#32-systematic-debugging)
@@ -34,6 +35,7 @@ This tutorial will walk you through installation, basic configuration, and the u
   - [3.5 Knowledge Compounding](#35-knowledge-compounding)
   - [3.6 Code Review](#36-code-review)
   - [3.7 Compatibility Check](#37-compatibility-check)
+  - [3.8 UI/UX Pro Max](#38-uiux-pro-max)
 - [Part 4: Real-World Case Studies](#part-4-real-world-case-studies)
   - [Case 1: Building a REST API with FastAPI](#case-1-building-a-rest-api-with-fastapi)
   - [Case 2: Debugging a Production Bug](#case-2-debugging-a-production-bug)
@@ -126,7 +128,7 @@ your-project/
 │   │   ├── SUPER-COMPOUND.md     ← Core philosophy, skills, workflows, git
 │   │   ├── project-config.md  ← Tech stack configuration + presets
 │   │   └── quality-gates.md   ← Verification, knowledge, architecture
-│   ├── workflows/          ← 10 workflow commands
+│   ├── workflows/          ← 11 workflow commands
 │   │   ├── brainstorm.md
 │   │   ├── plan.md
 │   │   ├── work.md
@@ -136,11 +138,13 @@ your-project/
 │   │   ├── launch.md
 │   │   ├── reload.md
 │   │   ├── init.md
-│   │   └── compatibility.md
-│   └── skills/             ← 10 development skills
+│   │   ├── compatibility.md
+│   │   └── ui-ux-pro-max.md
+│   └── skills/             ← 11 development skills
 │       ├── architecture-enforcement/
 │       ├── brainstorming/
 │       ├── compatibility-check/
+│       ├── ui-ux-pro-max/
 │       ├── writing-plans/
 │       ├── executing-plans/
 │       ├── test-driven-development/
@@ -307,6 +311,7 @@ Each phase can be run independently or as a full pipeline via `/launch`.
 | 🚀 Launch | `/launch` | Full pipeline with approval at each gate |
 | 🔰 Init | `/init` | Scan codebase, auto-fill config, generate codebase map |
 | 🔍 Compatibility | `/compatibility` | Audit dependency versions, report conflicts |
+| 🎨 UI/UX Pro Max | `/ui-ux-pro-max` | Generate design system, build professional UI |
 
 ### 2.2 Workflow: Brainstorm
 
@@ -962,6 +967,91 @@ AI: Creating implementation plan...
 | Before major upgrade | ❌ Run `/compatibility` |
 | Unexplained build failures | ❌ Run `/compatibility` |
 
+### 2.12 Workflow: UI/UX Pro Max
+
+**When to use:** Building landing pages, dashboards, admin panels, UI components, or any frontend work.
+
+**Command:** `/ui-ux-pro-max`
+
+**What it does:** Uses a BM25 search engine over curated databases to generate complete design systems with style, color, typography, layout, and UX recommendations tailored to your product type and industry.
+
+**Key stats:** 67 styles, 96 color palettes, 57 font pairings, 99 UX guidelines, 100 reasoning rules, 25 chart types across 13 technology stacks.
+
+**Process:**
+
+```
+1.  Read skill       → Load ui-ux-pro-max skill
+2.  Validate Python  → Ensure Python 3.x is available
+3.  Analyze request  → Extract product type, style, industry, stack
+4.  Generate design  → Run design system generator (--design-system)
+5.  Persist (opt.)   → Save for cross-session reuse (--persist)
+6.  Supplement       → Detailed searches for charts, icons, UX, fonts
+7.  Architecture     → Verify file placement with architecture-enforcement
+8.  Implement        → Build UI following the design system
+9.  Pre-delivery     → Run quality checklist (icons, hover, a11y, layout)
+10. Handoff          → Suggest /review or /compound
+```
+
+#### 📌 Example Case: Building a SaaS Dashboard
+
+```
+You: /ui-ux-pro-max Build an analytics dashboard for our fintech SaaS
+
+AI: I'm using the ui-ux-pro-max skill to generate design intelligence.
+
+    Analyzing requirements:
+    • Product type: SaaS dashboard
+    • Industry: Fintech
+    • Style: Professional, data-driven
+    • Stack: Next.js + Tailwind (from project-config)
+
+    Generating design system...
+
+    ┌─ Design System: Fintech Analytics Dashboard ────────┐
+    │                                                   │
+    │  Pattern  : Dashboard with sidebar navigation     │
+    │  Style    : Corporate Modern with glassmorphism     │
+    │  Colors   : Deep Navy + Electric Blue + Slate       │
+    │  Typography: Inter (headings) + JetBrains Mono (data)│
+    │  Effects  : Subtle shadows, glass cards, fade-in    │
+    │                                                   │
+    │  ⚠️ Anti-patterns to AVOID:                         │
+    │  • NO emoji icons (use Lucide React)                │
+    │  • NO scale hover effects (use opacity/color)       │
+    │  • NO mixed container widths                        │
+    └─────────────────────────────────────────────────┘
+
+    Searching for fintech chart recommendations...
+    → Trend charts for revenue, area charts for growth
+    → Recommended library: Recharts for React
+
+    Building the dashboard now...
+```
+
+#### Design System Persistence
+
+The design system can be saved and reused across sessions:
+
+```
+design-system/
+├── MASTER.md          ← Global source of truth
+└── pages/
+    ├── dashboard.md   ← Page-specific overrides
+    └── checkout.md    ← Page-specific overrides
+```
+
+When building a specific page, the page file rules **override** the Master file.
+
+#### When to Skip `/ui-ux-pro-max`
+
+| Situation | Skip? |
+|-----------|-------|
+| Backend-only work, no UI | ✅ Skip |
+| CLI tools or API-only services | ✅ Skip |
+| Minor text or copy changes | ✅ Skip |
+| Any frontend page or component | ❌ Run `/ui-ux-pro-max` |
+| Redesigning existing UI | ❌ Run `/ui-ux-pro-max` |
+
 ---
 
 ## Part 3: Advanced — Skills Deep Dive
@@ -1354,6 +1444,65 @@ The audit always ends with an approval gate — you choose which suggestions to 
 | "The latest version should work" | Latest ≠ compatible. Check the combination |
 | "Peer dep warnings are just warnings" | Peer dep mismatches cause subtle runtime bugs |
 | "I can fix compatibility issues later" | Later = after test failures + wasted time |
+
+### 3.8 UI/UX Pro Max
+
+The ui-ux-pro-max skill provides AI-powered design intelligence for building professional frontend UI.
+
+#### How It Works
+
+Uses a **BM25 search engine** over curated databases to match your project's product type, industry, and style to the best design recommendations:
+
+| Database | Entries | Covers |
+|----------|---------|--------|
+| Styles | 67 | Glassmorphism, minimalism, dark mode, brutalism, etc. |
+| Color palettes | 96 | Curated by product type and industry |
+| Font pairings | 57 | Google Fonts combinations for any tone |
+| UX guidelines | 99 | Anti-patterns, best practices, accessibility |
+| Reasoning rules | 100 | Logic for matching style to product type |
+| Chart types | 25 | By data type: trend, comparison, funnel, etc. |
+| Tech stacks | 13 | React, Next.js, Vue, Svelte, Flutter, SwiftUI, etc. |
+
+#### Key Phases
+
+```
+1. Analyze   → Product type, industry, style keywords, stack
+2. Generate  → Complete design system (colors, fonts, effects, layout)
+3. Persist   → Save MASTER.md + page overrides for cross-session use
+4. Search    → Detailed lookups: charts, icons, UX, typography
+5. Implement → Build with stack-specific guidelines
+6. Checklist → Visual quality, interaction, a11y, responsive
+```
+
+#### Common Rules for Professional UI
+
+| Category | Do | Don't |
+|----------|----|-------|
+| **Icons** | SVG icons (Heroicons, Lucide) | Emojis as UI icons |
+| **Hover** | Color/opacity transitions | Scale transforms that shift layout |
+| **Cursor** | `cursor-pointer` on clickable | Default cursor on buttons |
+| **Light mode** | `bg-white/80+` for glass cards | `bg-white/10` (invisible) |
+| **Typography** | Google Fonts (Inter, Outfit) | Browser default fonts |
+| **Layout** | Floating navbar with spacing | Navbar stuck to edges |
+
+#### Pre-Delivery Checklist
+
+- [ ] No emojis used as icons
+- [ ] All clickable elements have `cursor-pointer`
+- [ ] Hover states don't cause layout shift
+- [ ] Light/dark mode contrast verified
+- [ ] Responsive at 375px, 768px, 1024px, 1440px
+- [ ] All images have alt text
+- [ ] `prefers-reduced-motion` respected
+
+#### Red Flags
+
+| Thought | Reality |
+|---------|---------|
+| "I'll just pick colors myself" | Use the design system. It has 96 curated palettes |
+| "Skip the design system for simple UI" | Even simple UI benefits from consistent style |
+| "Tailwind is always the answer" | Check project-config first. Respect the project's choice |
+| "I know what looks good" | Search the database. Data beats intuition |
 
 ---
 

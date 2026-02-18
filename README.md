@@ -20,6 +20,7 @@ Super Compound is a complete AI-assisted development framework for **Antigravity
 | 🔍 **Multi-Perspective Review** | 2-stage code review (spec + quality) with P1/P2/P3 severity classification |
 | 🐛 **Systematic Debugging** | 4-phase root cause diagnosis — never guess, always diagnose first |
 | ✅ **Verification Gate** | Evidence-based completion — no claims without fresh verification output |
+| 🎨 **UI/UX Pro Max** | AI-powered design intelligence with 67 styles, 96 palettes, 57 fonts across 13 stacks |
 
 ---
 
@@ -92,7 +93,7 @@ your-project/
 │   │   ├── SUPER-COMPOUND.md                  ← Core philosophy, skills, workflows, git
 │   │   ├── project-config.md            ← Tech stack config + presets + auto-detect
 │   │   └── quality-gates.md             ← Verification, knowledge, architecture rules
-│   ├── workflows/                       ← 10 workflow commands  
+│   ├── workflows/                       ← 11 workflow commands  
 │   │   ├── brainstorm.md
 │   │   ├── plan.md
 │   │   ├── work.md
@@ -103,10 +104,12 @@ your-project/
 │   │   ├── reload.md
 │   │   ├── init.md
 │   │   └── compatibility.md
-│   └── skills/                          ← 10 development skills
+│   │   └── ui-ux-pro-max.md
+│   └── skills/                          ← 11 development skills
 │       ├── architecture-enforcement/    ← Per-framework guides + preset definitions
 │       ├── brainstorming/
 │       ├── compatibility-check/         ← Version & dependency compatibility validation
+│       ├── ui-ux-pro-max/               ← Design intelligence with BM25 search engine
 │       ├── writing-plans/
 │       ├── executing-plans/
 │       ├── test-driven-development/
@@ -188,6 +191,7 @@ Use the workflow commands in your IDE:
 /reload        → Re-read rules mid-conversation after edits
 /init          → Scan codebase, auto-fill config, generate codebase map
 /compatibility → Audit tech stack compatibility, report conflicts
+/ui-ux-pro-max → Generate design system, build professional UI
 ```
 
 ---
@@ -212,6 +216,7 @@ Use the workflow commands in your IDE:
 | 🔄 **Reload** | `/reload` | Re-read all rule files, apply changes immediately |
 | 🔰 **Init** | `/init` | Scan codebase, auto-fill config, generate `docs/codebase-map.md` |
 | 🔍 **Compatibility** | `/compatibility` | Audit dependency versions, report conflicts, suggest fixes |
+| 🎨 **UI/UX Pro Max** | `/ui-ux-pro-max` | Generate design system, implement professional UI with design intelligence |
 
 ---
 
@@ -228,6 +233,7 @@ Use the workflow commands in your IDE:
 | **knowledge-compounding** | Document solutions | `docs/solutions/` with categories + patterns |
 | **code-review** | Multi-perspective review | Spec + quality + architecture with P1/P2/P3 |
 | **compatibility-check** | Tech stack validation | Pre-flight during planning + on-demand audit |
+| **ui-ux-pro-max** | Design intelligence for frontend UI | 67 styles, 96 palettes, 57 fonts, 13 stacks |
 
 ---
 

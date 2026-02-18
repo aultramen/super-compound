@@ -54,6 +54,20 @@ If the plan introduces **new dependencies or major version changes**:
 
 **Skip if:** No new dependencies are introduced, or changes are internal-only.
 
+### 1.4 UI/UX Design System (if frontend)
+
+If the plan involves creating or modifying frontend UI:
+
+1. **Check** for existing `design-system/MASTER.md` — reuse if available
+2. **Generate** new design system if none exists:
+   ```bash
+   python3 skills/ui-ux-pro-max/scripts/search.py "<product_type> <industry>" --design-system -p "<Project>"
+   ```
+3. **Include** design system recommendations in plan document
+4. **Add** pre-delivery checklist items as acceptance criteria
+
+**Skip if:** Plan is backend-only or has no UI changes.
+
 ## Phase 2: Choose Depth Level
 
 ### 📄 QUICK (Simple tasks)
@@ -191,3 +205,4 @@ After saving the plan, present execution options:
 **This skill feeds into:**
 - **executing-plans** — Executes the plan task by task
 - **test-driven-development** — Each task follows TDD cycle
+- **ui-ux-pro-max** — Design system generation for frontend plans

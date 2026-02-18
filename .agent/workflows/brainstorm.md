@@ -17,6 +17,7 @@ This workflow explores ideas and turns them into designs. Use it when you have a
 4. **Phase 2: Explore** — Present 2-3 approaches with trade-offs. Lead with recommendation.
 
 5. **Phase 3: Design** — Present the design in 200-300 word sections, validating each.
+   - If the idea involves **frontend/UI work**, the brainstorming skill auto-invokes `ui-ux-pro-max` for design intelligence.
 
 6. **Phase 4: Capture** — Save brainstorm document to `docs/brainstorms/YYYY-MM-DD-<topic>-brainstorm.md`.
 

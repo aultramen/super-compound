@@ -1,4 +1,4 @@
-﻿---
+---
 description: "Execute an implementation plan task by task. Sequential by default, optional swarm mode for parallel tasks."
 ---
 
@@ -26,6 +26,7 @@ This workflow executes a plan systematically. It handles environment setup, task
 6. **Execute tasks** — For each task:
    - Follow TDD cycle (if strict/balanced mode): test → fail → code → pass → refactor
    - Follow existing codebase patterns
+   - For **frontend/UI tasks**: follow `ui-ux-pro-max` design system and run pre-delivery checklist
    - Run tests after each change
    - Commit incrementally with conventional messages
    - Mark task complete

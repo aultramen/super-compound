@@ -13,6 +13,7 @@ This workflow creates a detailed implementation plan. Use it when you know WHAT 
 2. **Read writing-plans skill** — Load `skills/writing-plans/SKILL.md` and follow its process.
 
 3. **Research phase** — Review codebase patterns, check `docs/solutions/` for past learnings, decide if external research is needed.
+   - If the plan involves **frontend/UI work**, the writing-plans skill invokes `ui-ux-pro-max` to generate a design system.
 
 4. **Choose depth** — Ask user:
    - 📄 **Quick** — Simple tasks, small fixes (list of tasks + acceptance criteria)
