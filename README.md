@@ -21,6 +21,7 @@ Super Compound is a complete AI-assisted development framework for **Antigravity
 | 🐛 **Systematic Debugging** | 4-phase root cause diagnosis — never guess, always diagnose first |
 | ✅ **Verification Gate** | Evidence-based completion — no claims without fresh verification output |
 | 🎨 **UI/UX Pro Max** | AI-powered design intelligence with 67 styles, 96 palettes, 57 fonts across 13 stacks |
+| 🛡️ **Security-by-Design** | OWASP Top 10, STRIDE threat modeling, GDPR/UU PDP compliance, secrets management |
 
 ---
 
@@ -93,7 +94,7 @@ your-project/
 │   │   ├── SUPER-COMPOUND.md                  ← Core philosophy, skills, workflows, git
 │   │   ├── project-config.md            ← Tech stack config + presets + auto-detect
 │   │   └── quality-gates.md             ← Verification, knowledge, architecture rules
-│   ├── workflows/                       ← 11 workflow commands  
+│   ├── workflows/                       ← 12 workflow commands  
 │   │   ├── brainstorm.md
 │   │   ├── plan.md
 │   │   ├── work.md
@@ -104,8 +105,9 @@ your-project/
 │   │   ├── reload.md
 │   │   ├── init.md
 │   │   └── compatibility.md
-│   │   └── ui-ux-pro-max.md
-│   └── skills/                          ← 11 development skills
+│   │   ├── ui-ux-pro-max.md
+│   │   └── security.md
+│   └── skills/                          ← 16 development skills
 │       ├── architecture-enforcement/    ← Per-framework guides + preset definitions
 │       ├── brainstorming/
 │       ├── compatibility-check/         ← Version & dependency compatibility validation
@@ -116,7 +118,12 @@ your-project/
 │       ├── systematic-debugging/
 │       ├── verification-before-completion/
 │       ├── knowledge-compounding/
-│       └── code-review/
+│       ├── code-review/
+│       ├── security-audit/              ← OWASP Top 10, compliance mapping
+│       ├── secure-code-patterns/         ← Input validation, crypto, encryption
+│       ├── threat-modeling/              ← STRIDE, attack trees, trust boundaries
+│       ├── data-privacy/                ← GDPR, UU PDP Indonesia, privacy-by-design
+│       └── secrets-management/           ← Zero hardcoded secrets, vault patterns
 ├── SUPER-COMPOUND.md                          ← (Optional) Root copy for Claude Code
 └── README.md
 ```
@@ -192,6 +199,7 @@ Use the workflow commands in your IDE:
 /init          → Scan codebase, auto-fill config, generate codebase map
 /compatibility → Audit tech stack compatibility, report conflicts
 /ui-ux-pro-max → Generate design system, build professional UI
+/security      → Full security audit (OWASP, secrets, deps, privacy)
 ```
 
 ---
@@ -217,6 +225,7 @@ Use the workflow commands in your IDE:
 | 🔰 **Init** | `/init` | Scan codebase, auto-fill config, generate `docs/codebase-map.md` |
 | 🔍 **Compatibility** | `/compatibility` | Audit dependency versions, report conflicts, suggest fixes |
 | 🎨 **UI/UX Pro Max** | `/ui-ux-pro-max` | Generate design system, implement professional UI with design intelligence |
+| 🛡️ **Security** | `/security` | Full OWASP audit, secrets scan, dependency CVEs, privacy check |
 
 ---
 
@@ -234,6 +243,11 @@ Use the workflow commands in your IDE:
 | **code-review** | Multi-perspective review | Spec + quality + architecture with P1/P2/P3 |
 | **compatibility-check** | Tech stack validation | Pre-flight during planning + on-demand audit |
 | **ui-ux-pro-max** | Design intelligence for frontend UI | 67 styles, 96 palettes, 57 fonts, 13 stacks |
+| **security-audit** | Security vulnerability assessment | OWASP Top 10, compliance mapping (ISO 27001, NIST) |
+| **secure-code-patterns** | Secure coding implementation | Input validation, cryptography, encryption at rest/transit |
+| **threat-modeling** | Proactive threat identification | STRIDE framework, attack trees, trust boundaries |
+| **data-privacy** | Privacy compliance | GDPR, UU PDP Indonesia, privacy-by-design, DPIA |
+| **secrets-management** | Credential security | Zero hardcoded secrets, vault patterns, incident response |
 
 ---
 

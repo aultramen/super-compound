@@ -68,6 +68,18 @@ If the plan involves creating or modifying frontend UI:
 
 **Skip if:** Plan is backend-only or has no UI changes.
 
+### 1.5 Privacy Pre-flight (if PII handling)
+
+If the plan involves processing personal data (PII):
+
+1. **Invoke** the `data-privacy` skill in **pre-flight mode**
+2. **Check** if consent mechanism is needed
+3. **Verify** data minimization (collect only what's needed)
+4. **Add** privacy requirements to plan acceptance criteria
+5. **Include** `## Privacy Considerations` section in plan if applicable
+
+**Skip if:** No personal data processing involved.
+
 ## Phase 2: Choose Depth Level
 
 ### 📄 QUICK (Simple tasks)
@@ -206,3 +218,8 @@ After saving the plan, present execution options:
 - **executing-plans** — Executes the plan task by task
 - **test-driven-development** — Each task follows TDD cycle
 - **ui-ux-pro-max** — Design system generation for frontend plans
+
+**Pre-flight skills (invoked conditionally):**
+- **compatibility-check** — When new dependencies introduced
+- **threat-modeling** — When auth/data/API features involved
+- **data-privacy** — When PII processing involved

@@ -24,6 +24,7 @@ This workflow reviews completed code changes from multiple perspectives and clas
    - ✅ **Correctness** — Logic, error handling, edge cases
    - 🏗️ **Design** — Patterns, SRP, YAGNI, DRY
    - 🔒 **Security** — Input validation, secrets, injection
+   - 🛡️ **Privacy** — PII handling, consent, data retention (if PII involved)
    - ⚡ **Performance** — N+1, memory, complexity
    - 📖 **Readability** — Naming, comments, formatting
    - 🧪 **Testing** — Coverage, edge cases, reliability

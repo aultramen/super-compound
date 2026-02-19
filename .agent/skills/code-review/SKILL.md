@@ -61,11 +61,29 @@ Before reviewing any code:
 - [ ] Naming conventions followed
 
 #### Security
-- [ ] Input validation present
-- [ ] No hardcoded secrets or credentials
-- [ ] SQL injection / XSS prevention (if applicable)
-- [ ] Authentication/authorization checks (if applicable)
-- [ ] Sensitive data not logged
+- [ ] Input validation present (server-side, typed, length-bound)
+- [ ] No hardcoded secrets or credentials (no API keys, passwords, tokens in code)
+- [ ] SQL injection prevented (parameterized queries / ORM)
+- [ ] XSS prevented (output encoding, no `dangerouslySetInnerHTML` with user data)
+- [ ] Authentication checks on all protected routes
+- [ ] Authorization checks — users can only access their own resources (no IDOR)
+- [ ] CSRF protection enabled (per framework mechanism)
+- [ ] Security headers present (CSP, HSTS, X-Content-Type-Options)
+- [ ] CORS properly configured (no wildcard `*` in production)
+- [ ] Rate limiting on auth endpoints and public APIs
+- [ ] File upload validation (type, size, stored outside webroot)
+- [ ] Sensitive data not logged (passwords, tokens, PII)
+- [ ] Error responses don't leak internals (no stack traces, DB details in production)
+- [ ] Passwords hashed with strong algorithm (bcrypt, argon2)
+- [ ] Secrets from environment variables only (`.env` in `.gitignore`)
+- [ ] Session/JWT configured securely (httpOnly, Secure, SameSite, expiry)
+- [ ] Dependencies free of known CVEs
+- [ ] Command injection prevented (no unsanitized shell exec)
+
+> For deeper security analysis, invoke the **security-audit** skill.
+> For input validation and crypto patterns, invoke the **secure-code-patterns** skill.
+> For secrets handling, invoke the **secrets-management** skill.
+> For PII/privacy compliance, invoke the **data-privacy** skill.
 
 #### Performance
 - [ ] No N+1 queries

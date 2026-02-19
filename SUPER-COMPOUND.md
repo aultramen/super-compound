@@ -68,6 +68,7 @@ Brainstorm → Plan → Work → Review → Compound
 | `reload.md` | Updated rules mid-conversation | Re-read all rule files immediately |
 | `init.md`   | New/imported project, empty config | Scan codebase, auto-fill config, generate map |
 | `compatibility.md` | Dependency changes, stack health check | Audit compatibility, report conflicts, suggest fixes |
+| `security.md` | Security audit, vulnerability check, OWASP review | Scan codebase for security vulnerabilities |
 | `ui-ux-pro-max.md` | Any frontend/UI work | Generate design system, implement professional UI |
 
 ---
@@ -111,6 +112,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | "debug", "fix", "broken" | Systematic debugging skill |
 | "plan", "design", "architecture" | Brainstorming → Planning pipeline |
 | "landing page", "UI", "frontend", "dashboard", "component" | UI/UX Pro Max skill, design system first |
+| "security", "vulnerability", "audit", "OWASP", "pentest" | Security audit skill |
 
 ### Execution Mode
 
@@ -134,3 +136,8 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `architecture-enforcement` | Before writing code — verify correct folder and imports |
 | `compatibility-check` | Before introducing new deps or auditing existing stack |
 | `ui-ux-pro-max` | When building any frontend UI — pages, dashboards, landing pages |
+| `security-audit` | When auditing code for security, reviewing auth, checking OWASP compliance |
+| `secure-code-patterns` | When implementing input validation, cryptography, or secure data handling |
+| `threat-modeling` | Before designing features with sensitive data, auth, or external integrations |
+| `data-privacy` | When processing PII, implementing consent, or handling data subject requests |
+| `secrets-management` | When handling credentials, API keys, tokens, or encryption keys |

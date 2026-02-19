@@ -27,6 +27,7 @@ This tutorial will walk you through installation, basic configuration, and the u
   - [2.10 Workflow: Init](#210-workflow-init)
   - [2.11 Workflow: Compatibility](#211-workflow-compatibility)
   - [2.12 Workflow: UI/UX Pro Max](#212-workflow-uiux-pro-max)
+  - [2.13 Workflow: Security](#213-workflow-security)
 - [Part 3: Advanced — Skills Deep Dive](#part-3-advanced--skills-deep-dive)
   - [3.1 Test-Driven Development (TDD)](#31-test-driven-development-tdd)
   - [3.2 Systematic Debugging](#32-systematic-debugging)
@@ -36,6 +37,7 @@ This tutorial will walk you through installation, basic configuration, and the u
   - [3.6 Code Review](#36-code-review)
   - [3.7 Compatibility Check](#37-compatibility-check)
   - [3.8 UI/UX Pro Max](#38-uiux-pro-max)
+  - [3.9 Security-by-Design](#39-security-by-design)
 - [Part 4: Real-World Case Studies](#part-4-real-world-case-studies)
   - [Case 1: Building a REST API with FastAPI](#case-1-building-a-rest-api-with-fastapi)
   - [Case 2: Debugging a Production Bug](#case-2-debugging-a-production-bug)
@@ -128,7 +130,7 @@ your-project/
 │   │   ├── SUPER-COMPOUND.md     ← Core philosophy, skills, workflows, git
 │   │   ├── project-config.md  ← Tech stack configuration + presets
 │   │   └── quality-gates.md   ← Verification, knowledge, architecture
-│   ├── workflows/          ← 11 workflow commands
+│   ├── workflows/          ← 12 workflow commands
 │   │   ├── brainstorm.md
 │   │   ├── plan.md
 │   │   ├── work.md
@@ -139,8 +141,9 @@ your-project/
 │   │   ├── reload.md
 │   │   ├── init.md
 │   │   ├── compatibility.md
-│   │   └── ui-ux-pro-max.md
-│   └── skills/             ← 11 development skills
+│   │   ├── ui-ux-pro-max.md
+│   │   └── security.md
+│   └── skills/             ← 16 development skills
 │       ├── architecture-enforcement/
 │       ├── brainstorming/
 │       ├── compatibility-check/
@@ -151,7 +154,12 @@ your-project/
 │       ├── systematic-debugging/
 │       ├── verification-before-completion/
 │       ├── knowledge-compounding/
-│       └── code-review/
+│       ├── code-review/
+│       ├── security-audit/
+│       ├── secure-code-patterns/
+│       ├── threat-modeling/
+│       ├── data-privacy/
+│       └── secrets-management/
 └── README.md
 ```
 
@@ -312,6 +320,7 @@ Each phase can be run independently or as a full pipeline via `/launch`.
 | 🔰 Init | `/init` | Scan codebase, auto-fill config, generate codebase map |
 | 🔍 Compatibility | `/compatibility` | Audit dependency versions, report conflicts |
 | 🎨 UI/UX Pro Max | `/ui-ux-pro-max` | Generate design system, build professional UI |
+| 🛡️ Security | `/security` | Full OWASP audit, secrets scan, dependency CVEs, privacy check |
 
 ### 2.2 Workflow: Brainstorm
 
@@ -1052,6 +1061,89 @@ When building a specific page, the page file rules **override** the Master file.
 | Any frontend page or component | ❌ Run `/ui-ux-pro-max` |
 | Redesigning existing UI | ❌ Run `/ui-ux-pro-max` |
 
+### 2.13 Workflow: Security
+
+**When to use:** Auditing your codebase for security vulnerabilities, before deployment, after auth changes, or on a regular security review schedule.
+
+**Command:** `/security`
+
+**What it does:** Runs a comprehensive, **read-only** security audit across your entire codebase. Orchestrates 5 specialized security skills: `security-audit`, `secure-code-patterns`, `threat-modeling`, `data-privacy`, and `secrets-management`.
+
+**Process:**
+
+```
+1.  Load skill      → Read security-audit SKILL.md
+2.  Read config     → Get stack, auth method, framework from project-config
+3.  Scan secrets    → Hardcoded keys, tokens, .env in git (secrets-management)
+4.  Check config    → Debug mode, security headers, CORS, CSRF
+5.  OWASP Top 10    → Full checklist: A01-A10 (security-audit)
+6.  Secure patterns → Input validation, crypto, JWT (secure-code-patterns)
+7.  Auth review     → JWT/Session/OAuth2 implementation check
+8.  Threat assess   → Quick STRIDE scan on trust boundaries (threat-modeling)
+9.  Vuln scan       → npm audit / pip-audit / govulncheck per stack
+10. Privacy check   → PII handling, consent, GDPR/UU PDP (data-privacy)
+11. Generate report → Summary table + P1/P2/P3 findings + recommendations
+12. Present         → Fix P1 now, schedule P2, suggest deeper analysis
+```
+
+#### 📌 Example Case: Pre-Deployment Security Audit
+
+```
+You: /security
+
+AI: Running security audit. Scanning codebase for vulnerabilities...
+
+    ┌─ Security Audit Report ─────────────────────────────┐
+    │                                                      │
+    │  Stack: Next.js + FastAPI (from project-config)      │
+    │  Auth:  JWT with refresh tokens                      │
+    │                                                      │
+    │  ────────────────────────────────────────────────     │
+    │  OWASP       : 8/10 passed                           │
+    │  Secrets     : ✅ No hardcoded secrets found          │
+    │  Dependencies: ⚠️ 2 moderate CVEs in node_modules     │
+    │  Privacy     : ✅ GDPR consent mechanism present      │
+    │  ────────────────────────────────────────────────     │
+    │                                                      │
+    │  P1 Critical:                                        │
+    │  • A01 — Missing auth check on /api/admin/users      │
+    │                                                      │
+    │  P2 Important:                                       │
+    │  • A07 — JWT access token expiry set to 24h (→ 15m)  │
+    │  • A09 — Admin actions not logged with actor          │
+    │                                                      │
+    │  P3 Suggestion:                                      │
+    │  • A06 — Update lodash 4.17.20 → 4.17.21 (CVE fix)  │
+    └──────────────────────────────────────────────────────┘
+
+    Recommendations:
+    1. Fix P1 immediately — add auth middleware to admin routes
+    2. Schedule P2 for this sprint
+    3. Run /review after fixes are applied
+```
+
+#### Compliance Framework Mapping
+
+The audit maps findings to major compliance frameworks:
+
+| Security Control | ISO 27001:2022 | NIST CSF 2.0 | CIS v8 |
+|-----------------|----------------|--------------|--------|
+| Access Control | A.5.15, A.8.2 | PR.AC | Control 5-6 |
+| Encryption | A.8.24 | PR.DS | Control 3 |
+| Input Validation | A.8.28 | PR.DS | Control 16 |
+| Logging & Monitoring | A.8.15-16 | DE.CM | Control 8 |
+| Secrets Management | A.5.33 | PR.AC | Control 6.7 |
+
+#### When to Skip `/security`
+
+| Situation | Skip? |
+|-----------|-------|
+| Static landing page with no backend | ✅ Skip |
+| Just ran audit, nothing changed | ✅ Skip |
+| Before production deployment | ❌ Run `/security` |
+| After implementing auth/payment features | ❌ Run `/security` |
+| Quarterly security review | ❌ Run `/security` |
+
 ---
 
 ## Part 3: Advanced — Skills Deep Dive
@@ -1503,6 +1595,114 @@ Uses a **BM25 search engine** over curated databases to match your project's pro
 | "Skip the design system for simple UI" | Even simple UI benefits from consistent style |
 | "Tailwind is always the answer" | Check project-config first. Respect the project's choice |
 | "I know what looks good" | Search the database. Data beats intuition |
+
+### 3.9 Security-by-Design
+
+Super Compound provides a comprehensive security framework through 5 specialized skills that work together to cover the full security lifecycle.
+
+#### 3.9.1 Security Audit
+
+The `security-audit` skill is the primary entry point for security assessment. Used automatically during code review and planning for auth/data features, or on-demand via `/security`.
+
+**Key capabilities:**
+
+- **OWASP Top 10 coverage** — Full A01-A10 checklist with per-category pass/partial/fail
+- **Per-framework patterns** — JWT security, CSRF handling, security headers per stack
+- **Dependency scanning** — `npm audit`, `pip-audit`, `govulncheck`, `bundle-audit`
+- **Compliance mapping** — Maps controls to ISO 27001:2022, NIST CSF 2.0, CIS v8
+- **Exit criteria** — No P1 open, all P2 have mitigation plan, secrets scan clean
+
+**Security checklists include:**
+- Authentication (password hashing, MFA, rate limiting)
+- Authorization (RBAC/ABAC, no IDOR, middleware enforcement)
+- Secrets (no hardcoded credentials, `.env` in `.gitignore`)
+- Rate limiting (API, password reset, file upload)
+- File upload (MIME + extension + magic bytes validation)
+- Logging & monitoring (audit trail, no PII in logs)
+- Dependency security (CVE scanning, lock files committed)
+
+#### 3.9.2 Secure Code Patterns
+
+The `secure-code-patterns` skill provides concrete implementation guidance for secure coding.
+
+**Core principles:**
+
+| Area | Key Rule |
+|------|----------|
+| Input validation | Allowlist over blocklist. Server-side is for security, client-side is for UX |
+| Output encoding | Context-specific: HTML, URL, CSS, JSON, SQL each need different encoding |
+| Cryptography | AES-256-GCM for symmetric, Argon2id/bcrypt for passwords, never MD5/SHA1 |
+| Key management | Never hardcode. Load from vault/env. Rotate every 90 days |
+| Random values | Always `crypto/rand`, never `Math.random()` for tokens/keys |
+
+**Encryption checklist:**
+- At rest: Sensitive fields encrypted, keys separate from data, database connections use TLS
+- In transit: TLS 1.2+ enforced, HSTS configured, certificate pinning for mobile
+
+#### 3.9.3 Threat Modeling
+
+The `threat-modeling` skill identifies threats **before** building features using the STRIDE framework.
+
+**STRIDE categories:**
+
+| Category | Question |
+|----------|----------|
+| **S**poofing | Can an attacker impersonate a user? |
+| **T**ampering | Can data be modified in transit or at rest? |
+| **R**epudiation | Can actions be denied without audit trail? |
+| **I**nformation Disclosure | Can sensitive data leak? |
+| **D**enial of Service | Can the system be overwhelmed? |
+| **E**levation of Privilege | Can a user gain unauthorized access? |
+
+**Also provides:**
+- Attack tree construction (AND/OR goals with mitigation status)
+- Trust boundary analysis (browser → API → database → external services)
+- Threat model document template saved to `docs/security/`
+
+#### 3.9.4 Data Privacy
+
+The `data-privacy` skill ensures compliance with privacy regulations and privacy-by-design principles.
+
+**Covers:**
+- **GDPR** (EU) — Consent, data subject rights, breach notification (72h)
+- **UU PDP** (Indonesia) — Pasal 16 principles, breach notification (3×24h)
+- **Privacy-by-Design** — 7 foundational principles (proactive, default, embedded, full lifecycle, visibility, respect)
+
+**Implementation patterns:**
+- PII classification (direct identifiers → encrypt + access control)
+- Granular consent management (per-purpose, not bundled)
+- Data retention policies with automated enforcement
+- Anonymization techniques (pseudonymization, generalization, suppression)
+- Data subject request handling (verify → log → acknowledge → process → respond)
+
+#### 3.9.5 Secrets Management
+
+The `secrets-management` skill enforces zero hardcoded secrets across the codebase.
+
+**5 rules:**
+
+1. **Zero hardcoded secrets** — Passwords, API keys, tokens, private keys forbidden in Git
+2. **Environment variables only** — `process.env`, `os.environ`, vault services
+3. **`.env.example`** — Template with placeholder values (never real secrets)
+4. **Per-environment isolation** — Dev, staging, production each use unique secrets
+5. **Rotate regularly** — Every 90 days or immediately on compromise
+
+**Secret scanning tools:**
+- `detect-secrets` (pre-commit hook)
+- `gitleaks` (CI/CD integration)
+- `trufflehog` (Git history scanning)
+
+**Incident response:** Rotate → Revoke → Deploy → Verify → Audit (within 1 hour of detection)
+
+#### Security Red Flags
+
+| Thought | Reality |
+|---------|---------|
+| "It's an internal API, nobody will attack it" | 60% of breaches involve insider threats or lateral movement |
+| "We'll add security later" | Technical debt grows exponentially. Build it in from the start |
+| "It's just a development key" | Development keys become production keys. Treat all secrets equally |
+| "The framework handles security" | Frameworks provide tools, not guarantees. Verify configuration |
+| "This repo is private" | Private repos get cloned, forked, and shared. Secrets spread |
 
 ---
 

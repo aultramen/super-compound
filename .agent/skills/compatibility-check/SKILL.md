@@ -152,6 +152,36 @@ Present findings and suggestions ONLY.
 
 ---
 
+## Vulnerability Scanning
+
+Run security vulnerability scans as part of both Pre-flight and Audit modes. Use the appropriate command(s) for the project's stack:
+
+| Ecosystem | Command | What It Checks |
+|-----------|---------|----------------|
+| Node.js (npm) | `npm audit --audit-level=high` | Known CVEs in npm registry |
+| Node.js (pnpm) | `pnpm audit --audit-level=high` | Known CVEs in npm registry |
+| Node.js (yarn) | `yarn audit --level high` | Known CVEs in npm registry |
+| Python | `pip-audit` | Known CVEs via PyPI advisory DB |
+| Python (alt) | `safety check` | Known CVEs via Safety DB |
+| Python (SAST) | `bandit -r . -ll` | Static analysis for common issues |
+| Go | `govulncheck ./...` | Go vulnerability database |
+| Go (SAST) | `gosec ./...` | Static analysis for Go |
+| PHP | `composer audit` | Known CVEs in Packagist |
+| Rust | `cargo audit` | RustSec advisory database |
+| Ruby | `bundle audit check --update` | Ruby advisory database |
+
+**Severity mapping:**
+- 🔴 **Critical/High CVE** → Same as Critical compatibility finding
+- 🟡 **Medium CVE** → Same as Warning
+- 🟢 **Low CVE** → Same as Info
+
+**In Pre-flight mode:** Run scan only for newly added dependencies.
+**In Audit mode:** Run full scan and include results in the audit report.
+
+> For comprehensive security analysis beyond dependencies, use the **security-audit** skill or `/security` workflow.
+
+---
+
 ## Red Flags
 
 | Thought | Reality |

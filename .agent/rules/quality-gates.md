@@ -38,6 +38,62 @@ docs/solutions/<category>/<filename>.md
 
 ---
 
+## Secrets & Environment Security
+
+**The Environment Law: NEVER commit secrets. NEVER log secrets. NEVER hardcode secrets.**
+
+### .env Rules
+
+| Rule | Enforcement |
+|------|------------|
+| `.env` in `.gitignore` | **Mandatory** — verify on every project setup |
+| `.env.example` exists | **Mandatory** — template with all keys, no real values |
+| No secrets in source code | P1 Critical in code review |
+| No secrets in logs | P1 Critical in code review |
+| Different secrets per environment | dev ≠ staging ≠ production |
+
+### Secret Patterns to Detect
+
+```
+# Red flags — search codebase for these patterns:
+password = "..."          # Hardcoded password
+api_key = "sk-..."        # API key in source code
+SECRET_KEY = "..."        # Django/Flask secret in source
+PRIVATE_KEY = "..."       # Private key in source
+token = "eyJ..."          # JWT token in source code
+connectionString = "..."  # Database connection string in source
+```
+
+### Environment Configuration
+
+```
+✅ DO:
+- Access secrets via process.env / os.environ / os.Getenv
+- Use .env files for local development only
+- Use vault/secrets manager for production (AWS Secrets Manager, HashiCorp Vault, etc.)
+- Rotate secrets on schedule and after any exposure
+- Use separate database credentials per environment
+
+❌ DON'T:
+- Commit .env files to git
+- Copy production secrets to development
+- Share secrets via chat/email
+- Use the same secret for multiple services
+- Store secrets in frontend code (they are visible to users)
+```
+
+### Verification Checklist (add to standard verification)
+
+```
+□ .env is in .gitignore?
+□ .env.example exists with all required keys?
+□ No secrets in committed code? (grep for patterns above)
+□ No secrets in log output?
+□ Production secrets in vault/secure config?
+```
+
+---
+
 ## Architecture Rules (Universal)
 
 **Every file MUST follow dependency direction + complexity limits.**
