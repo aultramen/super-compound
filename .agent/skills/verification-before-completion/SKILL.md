@@ -112,12 +112,99 @@ Run the command. Read the output. THEN claim the result.
 
 This is non-negotiable.
 
+## Goal-Backward Verification
+
+When verifying a completed feature or workflow (not just a single task), apply goal-backward tracing:
+
+### The Process
+
+```
+1. STATE THE GOAL
+   → What outcome was this work supposed to achieve?
+   → Express as a user-visible outcome, not a task description
+   → Example: "Users can register and log in" NOT "Implement auth"
+
+2. DERIVE OBSERVABLE TRUTHS (3-7)
+   → What must be true FROM THE USER'S PERSPECTIVE?
+   → Each truth must be independently verifiable
+   → Example: "A new user can create an account with email"
+   → Example: "A logged-in user sees their dashboard"
+
+3. DERIVE REQUIRED ARTIFACTS
+   → What specific files/outputs must exist?
+   → Be precise: file paths, not categories
+   → Example: "src/routes/auth/register.ts exists"
+
+4. DERIVE REQUIRED WIRING
+   → What connections between components must work?
+   → Example: "Register form submits to /api/auth/register"
+   → Example: "JWT token stored in httpOnly cookie"
+
+5. TRACE BACK TO COMPLETED TASKS
+   → For each observable truth: which tasks make it true?
+   → For each required artifact: does it exist and is it correct?
+   → For each required wiring: does data flow correctly?
+
+6. IDENTIFY GAPS
+   → Any truth that cannot be traced = GAP
+   → Any artifact missing = GAP
+   → Any wiring broken = GAP
+```
+
+### Verification Report Template
+
+```markdown
+## Goal-Backward Verification
+
+**Goal:** [outcome statement]
+
+### Observable Truths
+
+| # | Truth | Status | Evidence |
+|---|-------|--------|----------|
+| 1 | [user-visible truth] | ✅ Verified / ❌ Gap | [command output / file reference] |
+
+### Required Artifacts
+
+| File | Exists | Correct |
+|------|--------|---------|
+| [file path] | ✅/❌ | ✅/❌/⚠️ |
+
+### Required Wiring
+
+| Connection | Works |
+|-----------|-------|
+| [A → B description] | ✅/❌ |
+
+### Gaps Found
+
+| # | Gap | Type | Severity |
+|---|-----|------|----------|
+| 1 | [description] | truth/artifact/wiring | critical/important/minor |
+```
+
+### When to Apply Goal-Backward
+
+- After completing all tasks in a plan
+- Before claiming a feature is "done"
+- After gap closure plans
+- During code review of a complete feature
+
+### When Standard Verification is Sufficient
+
+- Single task completion (just run the verify command)
+- Bug fixes (just confirm the fix works)
+- Refactoring (just confirm tests still pass)
+
 ## Integration
 
 **This skill is used by:**
 - **executing-plans** — Before marking any task complete
 - **code-review** — Verify review findings are accurate
+- **gap-closure** — Verify gaps are actually closed
 
 **Pairs with:**
 - **test-driven-development** — TDD verification cycle
 - **systematic-debugging** — Verify fix actually works
+- **integration-checking** — Verify cross-component wiring
+- **state-management** — Update STATE.md after verification

@@ -51,20 +51,27 @@ Before responding to ANY user message:
 ## 3. Workflow Pipeline
 
 ```
-Brainstorm → Plan → Work → Review → Compound
-     ↑                                    ↓
-     └────── Knowledge feeds back ────────┘
+                    ┌─── Pause ──→ .continue-here.md ──→ Resume ───┐
+                    │                                               │
+Brainstorm → Discuss → Research → Plan → Work → Review → Compound
+     ↑                                                        ↓
+     └──────────────── Knowledge feeds back ──────────────────┘
 ```
 
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
 | `brainstorm.md` | New feature idea, unclear requirements | Explore WHAT to build |
-| `plan.md` | Clear requirements, approved design | Define HOW to build it |
+| `discuss.md` | Before planning, need to clarify gray areas | Gather context via structured Q&A |
+| `research.md` | Need domain research before planning | Investigate standard stack, patterns, pitfalls |
+| `plan.md` | Clear requirements, approved design | Define HOW to build it (with auto-verification) |
 | `work.md` | Approved plan | Execute the plan |
 | `debug.md` | Bug, error, test failure, unexpected behavior | Diagnose → fix → verify |
 | `review.md` | Completed implementation | Multi-perspective quality review |
 | `compound.md` | Problem solved, issue fixed | Document knowledge for future |
 | `launch.md` | Want full autonomous pipeline | Run all stages sequentially |
+| `pause.md` | Pausing work mid-session | Save state to .continue-here.md |
+| `resume.md` | Returning to paused project | Restore state and route to next action |
+| `progress.md` | Want project status overview | Show state, route to next action |
 | `reload.md` | Updated rules mid-conversation | Re-read all rule files immediately |
 | `init.md`   | New/imported project, empty config | Scan codebase, auto-fill config, generate map |
 | `compatibility.md` | Dependency changes, stack health check | Audit compatibility, report conflicts, suggest fixes |
@@ -113,6 +120,9 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | "plan", "design", "architecture" | Brainstorming → Planning pipeline |
 | "landing page", "UI", "frontend", "dashboard", "component" | UI/UX Pro Max skill, design system first |
 | "security", "vulnerability", "audit", "OWASP", "pentest" | Security audit skill |
+| "continue", "resume", "where was I" | Resume workflow, load state |
+| "pause", "stop", "save progress" | Pause workflow, create handoff |
+| "status", "progress", "what's next" | Progress workflow, show state |
 
 ### Execution Mode
 
@@ -130,7 +140,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `executing-plans` | When you have a plan to execute |
 | `test-driven-development` | When implementing any feature or bugfix |
 | `systematic-debugging` | When encountering any bug or unexpected behavior |
-| `verification-before-completion` | Before claiming work is complete |
+| `verification-before-completion` | Before claiming work is complete (includes goal-backward verification) |
 | `knowledge-compounding` | After solving a non-trivial problem |
 | `code-review` | When reviewing code changes |
 | `architecture-enforcement` | Before writing code — verify correct folder and imports |
@@ -141,3 +151,10 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `threat-modeling` | Before designing features with sensitive data, auth, or external integrations |
 | `data-privacy` | When processing PII, implementing consent, or handling data subject requests |
 | `secrets-management` | When handling credentials, API keys, tokens, or encryption keys |
+| `state-management` | When starting/ending sessions, making decisions, tracking work progress |
+| `checkpoint-protocol` | When human input, decision, or action is required before proceeding |
+| `plan-verification` | After creating a plan — validates 8 dimensions before execution |
+| `gap-closure` | When verification finds gaps — creates targeted fix plans |
+| `todo-management` | When ideas/tasks surface during work — capture and track |
+| `context-engineering` | When managing AI context budget — selective loading, history digest |
+| `integration-checking` | After multi-component work — verify cross-component wiring |

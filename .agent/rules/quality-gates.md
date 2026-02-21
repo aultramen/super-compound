@@ -12,12 +12,61 @@ Before claiming ANY work is complete:
 4. **VERIFY** — Does output confirm the claim?
 5. **CLAIM** — Only then make the claim WITH evidence
 
+### Goal-Backward Verification (for feature completion)
+
+When completing a full feature or plan (not just a single task), apply goal-backward verification:
+
+1. **State the goal** — User-visible outcome, not task description
+2. **Derive observable truths** — What must be true from user's perspective (3-7)
+3. **Derive required artifacts** — Specific files that must exist
+4. **Derive required wiring** — Connections that must work
+5. **Trace back** — Every truth must trace to verified task output
+6. **Gaps → gap-closure skill** — Don't restart; fix specifically
+
+### Plan Verification Gate
+
+Before executing ANY plan, validate 8 dimensions:
+
+| Dimension | Check |
+|-----------|-------|
+| Requirement coverage | Every requirement has a task |
+| Task completeness | Each task has action + verify + done |
+| Dependency correctness | No broken/circular dependencies |
+| Key links | Critical connections are planned |
+| Scope sanity | Plan is achievable |
+| Must-haves | Essential outputs are included |
+| Complexity | Tasks aren't too broad/narrow |
+| Test coverage | Critical paths have verification |
+
+### Integration Verification Gate
+
+After multi-component work, verify cross-component wiring:
+
+- API contracts: callers exist and send correct format
+- Data flows: CRUD works through all layers
+- Event wiring: emitters have handlers
+- Auth wiring: protected routes enforce auth
+- Config wiring: env vars are defined and loaded
+
+**Core principle:** Existence ≠ Integration
+
+### State Management Gate
+
+Track project state persistently:
+
+- Update `docs/STATE.md` at session boundaries
+- Record decisions as they're made (locked constraints)
+- Track blockers and deferred ideas
+- Use checkpoints for human-in-the-loop gates
+
 ### Red Flags — STOP
 
 - Using "should", "probably", "seems to"
 - Expressing satisfaction before verification ("Great!", "Done!")
 - About to commit without running tests
 - Trusting subagent success reports without independent verification
+- Claiming integration works without checking both sides
+- Skipping plan verification before execution
 
 ---
 

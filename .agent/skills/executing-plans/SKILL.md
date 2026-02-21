@@ -129,6 +129,30 @@ git commit -m "feat(scope): description"
 4. Code follows existing patterns
 5. Architecture compliance verified (SUPER-COMPOUND.md Section 10)
 6. No console errors or warnings
+7. For multi-component work: run integration-checking skill
+
+### Revision Mode
+
+**When verification fails, don't restart — revise:**
+
+```
+IF verification gate fails:
+  1. Identify specific failures (which checks failed)
+  2. Enter revision mode:
+     → Fix ONLY the failing aspects
+     → DO NOT touch passing code
+     → DO NOT add new features
+  3. Re-run failed verification checks
+  4. Max 3 revision iterations
+  5. If still failing → checkpoint: needs_review
+```
+
+| Revision Allowed | Revision NOT Allowed |
+|-----------------|---------------------|
+| Fix failing tests | Add new features |
+| Fix linting errors | Refactor passing code |
+| Fix broken wiring | Change architecture |
+| Add missing error handling | Change scope |
 
 ## Phase 4: Ship It
 
@@ -141,6 +165,13 @@ git diff --staged  # Check the changes
 
 git commit -m "feat(scope): description of what and why"
 ```
+
+### Update State
+
+If `docs/STATE.md` exists:
+1. Mark completed tasks in Completed Work section
+2. Update Current Position (next task or "done")
+3. Record any decisions made during execution
 
 ### Notify User
 
@@ -157,6 +188,7 @@ git commit -m "feat(scope): description of what and why"
 | **Test As You Go** | After each change, not end |
 | **Quality Built In** | Patterns, tests, linting |
 | **Ship Complete** | Don't leave features 80% done |
+| **Revise, Don't Restart** | When checks fail, fix specifically |
 
 ## Red Flags
 
@@ -167,6 +199,7 @@ git commit -m "feat(scope): description of what and why"
 | "Test at the end" | Test continuously or suffer later |
 | "80% done is fine" | Finish the feature. Ship complete. |
 | "Tests pass, we're done" | Use verification-before-completion skill |
+| "Verification failed, start over" | Use revision mode — fix specific failures |
 
 ## Integration
 
@@ -175,9 +208,15 @@ git commit -m "feat(scope): description of what and why"
 
 **Skills used during execution:**
 - **test-driven-development** — Each task follows TDD
-- **verification-before-completion** — Before claiming done
+- **verification-before-completion** — Before claiming done (includes goal-backward)
 - **systematic-debugging** — When things break during execution
+- **checkpoint-protocol** — When human input is needed during execution
+- **state-management** — Track progress in STATE.md
+- **context-engineering** — Load files strategically per task
+- **integration-checking** — Verify cross-component wiring
 
 **This skill feeds into:**
 - **code-review** — Review completed implementation
 - **knowledge-compounding** — Document learnings
+- **gap-closure** — When verification reveals gaps
+
