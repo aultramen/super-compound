@@ -58,6 +58,17 @@ Track project state persistently:
 - Record decisions as they're made (locked constraints)
 - Track blockers and deferred ideas
 - Use checkpoints for human-in-the-loop gates
+- Append to `docs/progress.md` before pausing (session progress log)
+- Read Codebase Patterns from `docs/progress.md` before starting new work
+
+### Task Sizing Gate
+
+Before executing a plan, validate task sizes:
+
+- Each task must be describable in 2-3 sentences
+- Each task should modify ONE layer (DB, backend, or frontend)
+- Each task must be independently verifiable
+- Split tasks that span >2 hours of estimated work
 
 ### Red Flags — STOP
 
@@ -67,6 +78,8 @@ Track project state persistently:
 - Trusting subagent success reports without independent verification
 - Claiming integration works without checking both sides
 - Skipping plan verification before execution
+- PRD acceptance criteria saying "works correctly" (must be specific)
+- Creating tasks that can't be described in 2-3 sentences (too big)
 
 ---
 

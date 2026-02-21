@@ -14,7 +14,7 @@ Super Compound is a complete AI-assisted development framework for **Antigravity
 | 🏗️ **Architecture Enforcement** | Per-framework folder structure + dependency rules to prevent spaghetti code |
 | 🤖 **Auto-Detect Smart Suggestion** | Empty config? Super Compound suggests optimal stack with reasoning and waits for confirmation |
 | 📋 **10 Presets** | Ready-to-use templates for popular stacks — all local-first, no cloud required |
-| 🧠 **Knowledge Compounding** | Every solved problem becomes searchable documentation in `docs/solutions/` |
+| 🧠 **Knowledge Compounding** | Every solved problem becomes searchable documentation in `docs/solutions/` + session progress log |
 | 🌿 **Adaptive Git** | Branch (default), Worktree (parallel dev), or No-Git (prototyping) |
 | 🔄 **Optional Swarm Mode** | Sequential by default, parallel multi-agent when tasks are independent |
 | 🔍 **Multi-Perspective Review** | 2-stage code review (spec + quality) with P1/P2/P3 severity classification |
@@ -22,6 +22,10 @@ Super Compound is a complete AI-assisted development framework for **Antigravity
 | ✅ **Verification Gate** | Evidence-based completion — no claims without fresh verification output |
 | 🎨 **UI/UX Pro Max** | AI-powered design intelligence with 67 styles, 96 palettes, 57 fonts across 13 stacks |
 | 🛡️ **Security-by-Design** | OWASP Top 10, STRIDE threat modeling, GDPR/UU PDP compliance, secrets management |
+| 📝 **PRD Generator** | Structured Product Requirements Documents with lettered Q&A, user stories, and sizing |
+| 💾 **State & Session Management** | Persistent state tracking, session handoff, progress logs, checkpoints |
+| 📊 **Structured Tasks** | Machine-parseable `tasks.json` with automated progress tracking |
+| 🔬 **Plan Verification** | 8-dimension plan validation with task-sizing discipline before execution |
 
 ---
 
@@ -91,40 +95,55 @@ Copy-Item "path\to\super-compound\SUPER-COMPOUND.md" -Destination ".\SUPER-COMPO
 your-project/
 ├── .agent/                              ← All Super Compound files live here
 │   ├── rules/                           ← Workspace rules (3 files, each <12K chars)
-│   │   ├── SUPER-COMPOUND.md                  ← Core philosophy, skills, workflows, git
+│   │   ├── super-compound.md            ← Core philosophy, skills, workflows, git
 │   │   ├── project-config.md            ← Tech stack config + presets + auto-detect
 │   │   └── quality-gates.md             ← Verification, knowledge, architecture rules
-│   ├── workflows/                       ← 12 workflow commands  
-│   │   ├── brainstorm.md
-│   │   ├── plan.md
-│   │   ├── work.md
-│   │   ├── review.md
-│   │   ├── compound.md
-│   │   ├── debug.md
-│   │   ├── launch.md
-│   │   ├── reload.md
-│   │   ├── init.md
-│   │   └── compatibility.md
-│   │   ├── ui-ux-pro-max.md
-│   │   └── security.md
-│   └── skills/                          ← 16 development skills
+│   ├── workflows/                       ← 18 workflow commands  
+│   │   ├── brainstorm.md                ← Explore ideas collaboratively
+│   │   ├── discuss.md                   ← Pre-planning context gathering
+│   │   ├── research.md                  ← Structured domain research
+│   │   ├── prd.md                       ← Generate Product Requirements Document
+│   │   ├── plan.md                      ← Create implementation plan
+│   │   ├── work.md                      ← Execute plan with TDD
+│   │   ├── debug.md                     ← Systematic debugging
+│   │   ├── review.md                    ← Multi-perspective code review
+│   │   ├── compound.md                  ← Document solutions
+│   │   ├── launch.md                    ← Full autonomous pipeline
+│   │   ├── pause.md                     ← Session handoff with archiving
+│   │   ├── resume.md                    ← Restore state and continue
+│   │   ├── progress.md                  ← Project status overview
+│   │   ├── reload.md                    ← Re-read rules mid-conversation
+│   │   ├── init.md                      ← Scan codebase, generate map
+│   │   ├── compatibility.md             ← Audit tech stack compatibility
+│   │   ├── ui-ux-pro-max.md             ← Design system + professional UI
+│   │   └── security.md                  ← Full security audit
+│   └── skills/                          ← 25 development skills
 │       ├── architecture-enforcement/    ← Per-framework guides + preset definitions
-│       ├── brainstorming/
-│       ├── compatibility-check/         ← Version & dependency compatibility validation
-│       ├── ui-ux-pro-max/               ← Design intelligence with BM25 search engine
-│       ├── writing-plans/
-│       ├── executing-plans/
-│       ├── test-driven-development/
-│       ├── systematic-debugging/
-│       ├── verification-before-completion/
-│       ├── knowledge-compounding/
-│       ├── code-review/
+│       ├── brainstorming/               ← Idea exploration with lettered Q&A
+│       ├── writing-plans/               ← Implementation plans with task-sizing
+│       ├── executing-plans/             ← Execute plans with revision mode
+│       ├── prd-generator/               ← Structured PRD with user stories
+│       ├── structured-tasks/            ← Machine-parseable tasks.json
+│       ├── test-driven-development/     ← Adaptive RED-GREEN-REFACTOR
+│       ├── systematic-debugging/        ← 4-phase root cause diagnosis
+│       ├── verification-before-completion/ ← Evidence-based completion
+│       ├── knowledge-compounding/       ← Solution docs + session progress log
+│       ├── code-review/                 ← Multi-perspective P1/P2/P3 review
+│       ├── compatibility-check/         ← Version & dependency validation
+│       ├── ui-ux-pro-max/               ← Design intelligence with BM25 engine
+│       ├── state-management/            ← Persistent STATE.md tracking
+│       ├── checkpoint-protocol/         ← 7 human-in-the-loop gate types
+│       ├── plan-verification/           ← 8-dimension plan validation
+│       ├── gap-closure/                 ← Targeted fix plans from gaps
+│       ├── todo-management/             ← Capture ideas without losing focus
+│       ├── context-engineering/         ← AI context budget management
+│       ├── integration-checking/        ← Cross-component wiring verification
 │       ├── security-audit/              ← OWASP Top 10, compliance mapping
-│       ├── secure-code-patterns/         ← Input validation, crypto, encryption
-│       ├── threat-modeling/              ← STRIDE, attack trees, trust boundaries
+│       ├── secure-code-patterns/        ← Input validation, crypto, encryption
+│       ├── threat-modeling/             ← STRIDE, attack trees, trust boundaries
 │       ├── data-privacy/                ← GDPR, UU PDP Indonesia, privacy-by-design
-│       └── secrets-management/           ← Zero hardcoded secrets, vault patterns
-├── SUPER-COMPOUND.md                          ← (Optional) Root copy for Claude Code
+│       └── secrets-management/          ← Zero hardcoded secrets, vault patterns
+├── SUPER-COMPOUND.md                    ← (Optional) Root copy for Claude Code
 └── README.md
 ```
 
@@ -189,12 +208,18 @@ Use the workflow commands in your IDE:
 
 ```
 /brainstorm    → Explore an idea collaboratively
-/plan          → Create an implementation plan
+/discuss       → Pre-planning context gathering via structured Q&A
+/research      → Structured domain research before planning
+/prd           → Generate structured Product Requirements Document
+/plan          → Create an implementation plan with auto-verification
 /work          → Execute the plan with TDD
 /debug         → Diagnose and fix bugs systematically
 /review        → Multi-perspective code review
 /compound      → Document solved problems
 /launch        → Full pipeline (brainstorm → plan → work → review → compound)
+/pause         → Save session state for later resumption
+/resume        → Restore state and continue from where you left off
+/progress      → Show project status overview and next actions
 /reload        → Re-read rules mid-conversation after edits
 /init          → Scan codebase, auto-fill config, generate codebase map
 /compatibility → Audit tech stack compatibility, report conflicts
@@ -207,20 +232,28 @@ Use the workflow commands in your IDE:
 ## Core Workflow
 
 ```
-💡 Brainstorm → 📋 Plan → ⚡ Work → 🔍 Review → 📚 Compound
-      ↑                                               ↓
-      └──────── Knowledge feeds back ──────────────────┘
+                    ┌─── Pause ──→ .continue-here.md ──→ Resume ───┐
+                    │                                               │
+💡 Brainstorm → 📝 PRD → 📋 Plan → ⚡ Work → 🔍 Review → 📚 Compound
+      ↑                                                          ↓
+      └──────────────── Knowledge feeds back ────────────────────┘
 ```
 
 | Phase | Workflow | What Happens |
 |-------|----------|--------------|
-| 💡 **Brainstorm** | `/brainstorm` | Explore ideas, ask questions one-at-a-time, present 2-3 approaches |
-| 📋 **Plan** | `/plan` | Research codebase, choose depth (Quick/Standard/Comprehensive), create tasks |
+| 💡 **Brainstorm** | `/brainstorm` | Explore ideas, ask questions with lettered options (A/B/C/D) |
+| 💬 **Discuss** | `/discuss` | Pre-planning context gathering via structured gray-area exploration |
+| 🔬 **Research** | `/research` | Structured domain research — standard stack, patterns, pitfalls |
+| 📝 **PRD** | `/prd` | Generate structured PRD with user stories and acceptance criteria |
+| 📋 **Plan** | `/plan` | Create implementation plan with auto-verification (8 dimensions) |
 | ⚡ **Work** | `/work` | Execute tasks with TDD, incremental commits, architecture checks |
 | 🐛 **Debug** | `/debug` | Reproduce → investigate → diagnose → fix with TDD → verify |
 | 🔍 **Review** | `/review` | Spec compliance → code quality → architecture → severity classification |
-| 📚 **Compound** | `/compound` | Capture solutions in `docs/solutions/` for future reference |
+| 📚 **Compound** | `/compound` | Capture solutions in `docs/solutions/` + session progress log |
 | 🚀 **Launch** | `/launch` | Full autonomous pipeline with user approval at each gate |
+| ⏸️ **Pause** | `/pause` | Save session state, progress log, and optional archiving |
+| ▶️ **Resume** | `/resume` | Restore state from `.continue-here.md` and route to next action |
+| 📊 **Progress** | `/progress` | Show project state overview and route to next action |
 | 🔄 **Reload** | `/reload` | Re-read all rule files, apply changes immediately |
 | 🔰 **Init** | `/init` | Scan codebase, auto-fill config, generate `docs/codebase-map.md` |
 | 🔍 **Compatibility** | `/compatibility` | Audit dependency versions, report conflicts, suggest fixes |
@@ -233,16 +266,25 @@ Use the workflow commands in your IDE:
 
 | Skill | Purpose | Key Feature |
 |-------|---------|-------------|
-| **brainstorming** | Idea exploration before coding | One question at a time, YAGNI |
-| **writing-plans** | Create implementation plans | Quick / Standard / Comprehensive depth |
-| **executing-plans** | Execute plans task by task | Sequential + optional swarm mode |
+| **brainstorming** | Idea exploration before coding | Lettered options (A/B/C/D), YAGNI |
+| **writing-plans** | Create implementation plans | Quick / Standard / Comprehensive + task-sizing discipline |
+| **executing-plans** | Execute plans task by task | Sequential + optional swarm + revision mode |
+| **prd-generator** | Structured PRD creation | User stories, acceptance criteria, lettered Q&A |
+| **structured-tasks** | Machine-parseable task tracking | `tasks.json` with priority and status |
 | **test-driven-development** | Adaptive RED-GREEN-REFACTOR | Strict / balanced / relaxed |
 | **systematic-debugging** | Root cause diagnosis | 4-phase: investigate → analyze → hypothesize → fix |
 | **verification-before-completion** | Evidence-based completion | Iron Law: no claims without proof |
-| **knowledge-compounding** | Document solutions | `docs/solutions/` with categories + patterns |
+| **knowledge-compounding** | Document solutions + session log | `docs/solutions/` + append-only `docs/progress.md` |
 | **code-review** | Multi-perspective review | Spec + quality + architecture with P1/P2/P3 |
 | **compatibility-check** | Tech stack validation | Pre-flight during planning + on-demand audit |
 | **ui-ux-pro-max** | Design intelligence for frontend UI | 67 styles, 96 palettes, 57 fonts, 13 stacks |
+| **state-management** | Persistent project state | STATE.md tracking, decisions, blockers |
+| **checkpoint-protocol** | Human-in-the-loop gates | 7 checkpoint types for structured decisions |
+| **plan-verification** | Plan validation before execution | 8 dimensions including task-sizing |
+| **gap-closure** | Targeted fixes from verification | Fix specific gaps without rewriting |
+| **todo-management** | Capture ideas without losing focus | Area inference, deferred tracking |
+| **context-engineering** | AI context budget management | Selective loading, history digest |
+| **integration-checking** | Cross-component wiring | Existence ≠ Integration |
 | **security-audit** | Security vulnerability assessment | OWASP Top 10, compliance mapping (ISO 27001, NIST) |
 | **secure-code-patterns** | Secure coding implementation | Input validation, cryptography, encryption at rest/transit |
 | **threat-modeling** | Proactive threat identification | STRIDE framework, attack trees, trust boundaries |
@@ -348,10 +390,13 @@ When project config fields are empty, Super Compound automatically:
 
 ## Origin
 
-Super Compound synthesizes the best ideas from two excellent frameworks:
+Super Compound synthesizes the best ideas from excellent frameworks:
 
-- **[Superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — TDD discipline, systematic debugging, verification rigor
-- **[Compound Engineering](https://github.com/EveryInc/compound-engineering-plugin)** by Kieran Klaassen — Knowledge compounding, multi-depth planning, swarm orchestration
+- **[Superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — TDD discipline, systematic debugging, verification rigor.
+- **[Compound Engineering](https://github.com/EveryInc/compound-engineering-plugin)** by Kieran Klaassen — Knowledge compounding, multi-depth planning, swarm orchestration.
+- **[CIA](https://github.com/Hack23/cia)** by Hack23 — Citizen Intelligence Agency. Open-source intelligence platform analyzing Swedish political activities using AI and data visualization. Tracks politicians, government institutions, and parliamentary data, offering detailed insights, performance metrics, and advanced analytics.
+- **[GET SHIT DONE](https://github.com/gsd-build/get-shit-done)** by glittercowboy TÂCHES — A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code and OpenCode.
+- **[RALPH](https://github.com/snarktank/ralph)** by snarktank — Ralph is an autonomous AI agent loop that runs repeatedly until all PRD items are complete.
 
 Named after the hypothetical particle that mediates gravity — connecting to the Antigravity IDE name while representing the fundamental building blocks of disciplined AI development.
 

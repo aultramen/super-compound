@@ -71,15 +71,26 @@ From the goal, derive what MUST exist:
   → If missing → FLAG: "Must-have missing: [description]"
 ```
 
-### 7. Complexity Check
+### 7. Complexity & Sizing Check
 
 ```
 For EACH task:
   → Is it too broad? (>2 hours of work = split it)
   → Is it too narrow? (just changing a variable = merge it)
   → Does it mix concerns? (backend + frontend in one task = split)
-  → If issues → FLAG: "Task [X] is [too broad / too narrow / mixed concerns]"
+  → Can it be described in 2-3 sentences? (if not = too big)
+  → Is it completable in one context window? (if not = split)
+  → Does it modify more than one layer? (DB + API + UI = split)
+  → If issues → FLAG: "Task [X] is [too broad / too narrow / mixed concerns / multi-layer]"
 ```
+
+**Sizing Heuristics:**
+
+| Right-Sized | Too Big (Split) |
+|-------------|----------------|
+| "Add a DB column + migration" | "Build the entire dashboard" |
+| "Add a UI component to existing page" | "Add authentication" |
+| "Update a server action with new logic" | "Refactor the API" |
 
 ### 8. Test Coverage
 

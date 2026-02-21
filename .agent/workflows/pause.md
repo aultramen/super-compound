@@ -57,10 +57,28 @@ This workflow creates a `.continue-here.md` handoff file to preserve complete wo
    Run `/resume` to continue from this point.
    ```
 
-5. **Update STATE.md** — Update current position to reflect paused state.
+5. **Append to progress log** — Append a session entry to `docs/progress.md`:
+   ```markdown
+   ## [YYYY-MM-DD HH:MM] - [Current Task/Feature]
+   - **What was done:** [Summary of work in this session]
+   - **Files changed:** [Key files modified]
+   - **Learnings for future sessions:**
+     - [Patterns discovered, gotchas encountered]
+   ---
+   ```
+   If recurring patterns are discovered, also add them to the `## Codebase Patterns` section at the top of `docs/progress.md`.
 
-6. **Confirm** — Present summary:
-   > "✅ Session paused. Handoff saved to `.continue-here.md`. Run `/resume` in your next session to continue."
+6. **Archive completed work** (if applicable) —
+   If the current plan/feature is fully complete:
+   - Create archive folder: `docs/archive/YYYY-MM-DD-<feature-name>/`
+   - Copy completed plan to archive
+   - Copy related STATE.md snapshot to archive
+   - This preserves history while keeping `docs/plans/` clean
+
+7. **Update STATE.md** — Update current position to reflect paused state.
+
+8. **Confirm** — Present summary:
+   > "✅ Session paused. Handoff saved to `.continue-here.md`. Progress logged to `docs/progress.md`. Run `/resume` in your next session to continue."
 
 ## When to Use
 - End of working session

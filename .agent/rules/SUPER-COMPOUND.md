@@ -53,9 +53,9 @@ Before responding to ANY user message:
 ```
                     ┌─── Pause ──→ .continue-here.md ──→ Resume ───┐
                     │                                               │
-Brainstorm → Discuss → Research → Plan → Work → Review → Compound
-     ↑                                                        ↓
-     └──────────────── Knowledge feeds back ──────────────────┘
+Brainstorm → Discuss → Research → PRD → Plan → Work → Review → Compound
+     ↑                                                          ↓
+     └──────────────── Knowledge feeds back ────────────────────┘
 ```
 
 | Workflow | Trigger | Purpose |
@@ -63,6 +63,7 @@ Brainstorm → Discuss → Research → Plan → Work → Review → Compound
 | `brainstorm.md` | New feature idea, unclear requirements | Explore WHAT to build |
 | `discuss.md` | Before planning, need to clarify gray areas | Gather context via structured Q&A |
 | `research.md` | Need domain research before planning | Investigate standard stack, patterns, pitfalls |
+| `prd.md` | Need formal specification before planning | Generate structured PRD with stories |
 | `plan.md` | Clear requirements, approved design | Define HOW to build it (with auto-verification) |
 | `work.md` | Approved plan | Execute the plan |
 | `debug.md` | Bug, error, test failure, unexpected behavior | Diagnose → fix → verify |
@@ -123,6 +124,8 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | "continue", "resume", "where was I" | Resume workflow, load state |
 | "pause", "stop", "save progress" | Pause workflow, create handoff |
 | "status", "progress", "what's next" | Progress workflow, show state |
+| "PRD", "requirements", "specification", "user stories" | PRD workflow, generate structured PRD |
+| "tasks.json", "structured tasks", "machine-readable" | Structured-tasks skill |
 
 ### Execution Mode
 
@@ -158,3 +161,5 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `todo-management` | When ideas/tasks surface during work — capture and track |
 | `context-engineering` | When managing AI context budget — selective loading, history digest |
 | `integration-checking` | After multi-component work — verify cross-component wiring |
+| `prd-generator` | When planning a feature — generate structured PRD with user stories |
+| `structured-tasks` | When needing machine-parseable task tracking (tasks.json) |

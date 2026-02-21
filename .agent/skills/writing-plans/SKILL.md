@@ -191,6 +191,52 @@ After saving the plan, present execution options:
 3. **Review and refine** — Improve the plan document
 4. **Done for now** — Come back later
 
+## Task-Sizing Discipline
+
+**The #1 rule:** Each task must be completable in one focused session (one AI context window).
+
+### Right-Sized Tasks (DO)
+
+| Example | Why It Works |
+|---------|-------------|
+| "Add a database column and migration" | One schema change, verifiable |
+| "Add a UI component to an existing page" | One visual change, verifiable in browser |
+| "Update a server action with new logic" | One endpoint, verifiable with test |
+| "Add a filter dropdown to a list" | One interaction, verifiable in browser |
+| "Create a validation middleware" | One concern, testable in isolation |
+
+### Too-Big Tasks (SPLIT THESE)
+
+| Too Big | Split Into |
+|---------|-----------|
+| "Build the entire dashboard" | Schema → queries → UI components → filters → layout |
+| "Add authentication" | Schema → middleware → login UI → session handling → guards |
+| "Refactor the API" | One story per endpoint or pattern |
+| "Add notification system" | DB table → service → bell icon → dropdown → mark-as-read → preferences |
+
+### Sizing Rules
+
+1. **2-3 sentence test:** If you cannot describe the change in 2-3 sentences, it is too big — split it
+2. **Single concern:** Each task should modify ONE layer (DB, backend, or frontend) — not all three
+3. **Dependency order:** Schema → backend logic → API → frontend UI → integration tests
+4. **Independent verification:** Each task must be independently verifiable (not "verify after task 5")
+5. **Time estimate:** If a task feels like >2 hours of work, split it
+
+### Auto-Splitting Guidance
+
+When a requirement is too broad, split using this pattern:
+
+```
+Original: "Add [complex feature]"
+Split:
+  1. DB/Schema changes + migration
+  2. Backend service/logic
+  3. API endpoint/route
+  4. UI component (minimal)
+  5. UI interaction + validation
+  6. Integration test
+```
+
 ## Remember
 
 - Exact file paths always
@@ -199,6 +245,7 @@ After saving the plan, present execution options:
 - DRY, YAGNI, TDD, frequent commits
 - Don't skip the depth selection — ask the user
 - Reference `docs/solutions/` learnings when relevant
+- Read `docs/progress.md` Codebase Patterns before planning
 
 ## Red Flags
 

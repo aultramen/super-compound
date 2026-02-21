@@ -28,6 +28,8 @@ This tutorial will walk you through installation, basic configuration, and the u
   - [2.11 Workflow: Compatibility](#211-workflow-compatibility)
   - [2.12 Workflow: UI/UX Pro Max](#212-workflow-uiux-pro-max)
   - [2.13 Workflow: Security](#213-workflow-security)
+  - [2.14 Workflow: Discuss, Research & PRD](#214-workflow-discuss-research--prd)
+  - [2.15 Workflow: Pause, Resume & Progress](#215-workflow-pause-resume--progress)
 - [Part 3: Advanced — Skills Deep Dive](#part-3-advanced--skills-deep-dive)
   - [3.1 Test-Driven Development (TDD)](#31-test-driven-development-tdd)
   - [3.2 Systematic Debugging](#32-systematic-debugging)
@@ -38,6 +40,8 @@ This tutorial will walk you through installation, basic configuration, and the u
   - [3.7 Compatibility Check](#37-compatibility-check)
   - [3.8 UI/UX Pro Max](#38-uiux-pro-max)
   - [3.9 Security-by-Design](#39-security-by-design)
+  - [3.10 PRD Generator & Structured Tasks](#310-prd-generator--structured-tasks)
+  - [3.11 State & Session Management](#311-state--session-management)
 - [Part 4: Real-World Case Studies](#part-4-real-world-case-studies)
   - [Case 1: Building a REST API with FastAPI](#case-1-building-a-rest-api-with-fastapi)
   - [Case 2: Debugging a Production Bug](#case-2-debugging-a-production-bug)
@@ -127,38 +131,29 @@ cp /path/to/super-compound/SUPER-COMPOUND.md ./SUPER-COMPOUND.md
 your-project/
 ├── .agent/
 │   ├── rules/              ← 3 rule files
-│   │   ├── SUPER-COMPOUND.md     ← Core philosophy, skills, workflows, git
-│   │   ├── project-config.md  ← Tech stack configuration + presets
-│   │   └── quality-gates.md   ← Verification, knowledge, architecture
-│   ├── workflows/          ← 12 workflow commands
-│   │   ├── brainstorm.md
-│   │   ├── plan.md
-│   │   ├── work.md
-│   │   ├── review.md
-│   │   ├── compound.md
-│   │   ├── debug.md
-│   │   ├── launch.md
-│   │   ├── reload.md
-│   │   ├── init.md
-│   │   ├── compatibility.md
-│   │   ├── ui-ux-pro-max.md
-│   │   └── security.md
-│   └── skills/             ← 16 development skills
-│       ├── architecture-enforcement/
-│       ├── brainstorming/
-│       ├── compatibility-check/
-│       ├── ui-ux-pro-max/
-│       ├── writing-plans/
-│       ├── executing-plans/
-│       ├── test-driven-development/
-│       ├── systematic-debugging/
-│       ├── verification-before-completion/
-│       ├── knowledge-compounding/
-│       ├── code-review/
-│       ├── security-audit/
-│       ├── secure-code-patterns/
-│       ├── threat-modeling/
-│       ├── data-privacy/
+│   │   ├── super-compound.md ← Core philosophy, skills, workflows, git
+│   │   ├── project-config.md ← Tech stack configuration + presets
+│   │   └── quality-gates.md  ← Verification, knowledge, architecture
+│   ├── workflows/          ← 18 workflow commands
+│   │   ├── brainstorm.md     ├── discuss.md       ├── research.md
+│   │   ├── prd.md            ├── plan.md          ├── work.md
+│   │   ├── debug.md          ├── review.md        ├── compound.md
+│   │   ├── launch.md         ├── pause.md         ├── resume.md
+│   │   ├── progress.md       ├── reload.md        ├── init.md
+│   │   ├── compatibility.md  ├── ui-ux-pro-max.md └── security.md
+│   └── skills/             ← 25 development skills
+│       ├── architecture-enforcement/  ├── brainstorming/
+│       ├── writing-plans/            ├── executing-plans/
+│       ├── prd-generator/            ├── structured-tasks/
+│       ├── test-driven-development/   ├── systematic-debugging/
+│       ├── verification-before-completion/ ├── knowledge-compounding/
+│       ├── code-review/              ├── compatibility-check/
+│       ├── ui-ux-pro-max/            ├── state-management/
+│       ├── checkpoint-protocol/      ├── plan-verification/
+│       ├── gap-closure/              ├── todo-management/
+│       ├── context-engineering/      ├── integration-checking/
+│       ├── security-audit/           ├── secure-code-patterns/
+│       ├── threat-modeling/           ├── data-privacy/
 │       └── secrets-management/
 └── README.md
 ```
@@ -302,21 +297,30 @@ AI will respond:
 Super Compound has a structured **development pipeline**:
 
 ```
-💡 Brainstorm → 📋 Plan → ⚡ Work → 🔍 Review → 📚 Compound
-      ↑                                               ↓
-      └──────── Knowledge feeds back ──────────────────┘
+                    ┌─── Pause ──→ .continue-here.md ──→ Resume ───┐
+                    │                                               │
+💡 Brainstorm → 📝 PRD → 📋 Plan → ⚡ Work → 🔍 Review → 📚 Compound
+      ↑                                                          ↓
+      └──────────────── Knowledge feeds back ────────────────────┘
 ```
 
 Each phase can be run independently or as a full pipeline via `/launch`.
 
 | Phase | Command | Purpose |
 |-------|---------|---------|
-| 💡 Brainstorm | `/brainstorm` | Explore ideas, Q&A, 2-3 approaches |
-| 📋 Plan | `/plan` | Research codebase, choose depth, create tasks |
+| 💡 Brainstorm | `/brainstorm` | Explore ideas, lettered Q&A (A/B/C/D) |
+| 💬 Discuss | `/discuss` | Pre-planning context gathering |
+| 🔬 Research | `/research` | Structured domain research |
+| 📝 PRD | `/prd` | Generate structured PRD with user stories |
+| 📋 Plan | `/plan` | Create implementation plan with auto-verification |
 | ⚡ Work | `/work` | Execute tasks with TDD, incremental commits |
+| 🐛 Debug | `/debug` | Reproduce → diagnose → fix with TDD |
 | 🔍 Review | `/review` | Multi-perspective review, severity classification |
-| 📚 Compound | `/compound` | Document solutions in `docs/solutions/` |
+| 📚 Compound | `/compound` | Document solutions + session progress log |
 | 🚀 Launch | `/launch` | Full pipeline with approval at each gate |
+| ⏸️ Pause | `/pause` | Save session state + archive + progress log |
+| ▶️ Resume | `/resume` | Restore from `.continue-here.md` |
+| 📊 Progress | `/progress` | Show project state + next actions |
 | 🔰 Init | `/init` | Scan codebase, auto-fill config, generate codebase map |
 | 🔍 Compatibility | `/compatibility` | Audit dependency versions, report conflicts |
 | 🎨 UI/UX Pro Max | `/ui-ux-pro-max` | Generate design system, build professional UI |
@@ -1146,6 +1150,99 @@ The audit maps findings to major compliance frameworks:
 
 ---
 
+### 2.14 Workflow: Discuss, Research & PRD
+
+These three workflows form the **pre-planning pipeline** — use them when requirements need clarification before creating an implementation plan.
+
+| Workflow | When to Use | Output |
+|----------|-------------|--------|
+| `/discuss` | Gray areas, ambiguous requirements | Structured context gathered |
+| `/research` | Need to investigate standard patterns, libraries, pitfalls | Research findings document |
+| `/prd` | Need formal specification with user stories | `docs/prds/<feature>.md` |
+
+#### 📌 Example Case: Using the PRD Workflow
+
+```
+You: /prd I want to add a multi-tenant billing system
+
+AI: I'm using the prd-generator skill.
+
+    Clarifying questions:
+
+    1. What billing model?
+       A. Per-seat pricing
+       B. Usage-based pricing
+       C. Flat subscription tiers
+       D. Other: [please specify]
+
+    2. Payment gateway?
+       A. Stripe
+       B. Midtrans
+       C. PayPal
+       D. Other: [please specify]
+
+    3. Invoice generation needed?
+       A. PDF invoices with branding
+       B. Simple receipt emails
+       C. Both
+       D. None — handle externally
+
+You: 1C, 2A, 3C
+
+AI: Generating PRD...
+
+    PRD saved to: docs/prds/multi-tenant-billing.md
+    
+    Includes:
+    - 3 user stories with acceptance criteria
+    - Non-goals (no crypto payments, no manual invoicing)
+    - Technical constraints (Stripe API, webhook security)
+
+    Next: /plan to create implementation plan from this PRD?
+```
+
+### 2.15 Workflow: Pause, Resume & Progress
+
+These workflows manage **session continuity** across conversations.
+
+| Workflow | When to Use | What Happens |
+|----------|-------------|-------------|
+| `/pause` | Stopping work, switching context | Saves state + progress log + optional archive |
+| `/resume` | Returning to saved work | Loads `.continue-here.md`, routes to next action |
+| `/progress` | Checking project status | Shows overview + what to do next |
+
+#### 📌 Example Case: Pausing and Resuming Work
+
+```
+You: /pause
+
+AI: Saving session state...
+
+    ✅ Created .continue-here.md
+    ✅ Appended to docs/progress.md:
+       ## 2026-02-21 11:30 - Multi-tenant Billing
+       - What was done: Completed DB schema + Stripe webhook handler
+       - Files changed: schema.prisma, stripe-webhook.ts
+       - Learnings: Stripe webhook signature verification required
+    ✅ STATE.md updated
+
+    Safe to close. Run /resume in next session to continue.
+
+--- Next session ---
+
+You: /resume
+
+AI: Found .continue-here.md
+    
+    You were working on: Multi-tenant Billing (Task 3/8)
+    Branch: feat/billing
+    Remaining: 5 tasks (invoice generation, payment UI...)
+    
+    Continue with /work?
+```
+
+---
+
 ## Part 3: Advanced — Skills Deep Dive
 
 ### 3.1 Test-Driven Development (TDD)
@@ -1703,6 +1800,84 @@ The `secrets-management` skill enforces zero hardcoded secrets across the codeba
 | "It's just a development key" | Development keys become production keys. Treat all secrets equally |
 | "The framework handles security" | Frameworks provide tools, not guarantees. Verify configuration |
 | "This repo is private" | Private repos get cloned, forked, and shared. Secrets spread |
+
+---
+
+### 3.10 PRD Generator & Structured Tasks
+
+Two complementary skills for project specification and tracking:
+
+#### 3.10.1 PRD Generator
+
+The `prd-generator` skill creates structured Product Requirements Documents with:
+
+- **Lettered clarifying questions** (A/B/C/D) for fast user responses
+- **User stories** with acceptance criteria (`US-001`, `US-002`...)
+- **Story sizing** — Small (1-2h), Medium (2-4h), Large (4-8h), X-Large (needs splitting)
+- **Non-goals** and **technical constraints**
+
+**PRD bridge:** Brainstorm (WHAT) → **PRD (SPEC)** → Plan (HOW)
+
+#### 3.10.2 Structured Tasks
+
+The `structured-tasks` skill generates machine-parseable `tasks.json` from plans:
+
+```json
+{
+  "tasks": [
+    {
+      "id": "T-001",
+      "title": "Create User model",
+      "description": "Add User schema with auth fields",
+      "status": "done",
+      "priority": 1
+    },
+    {
+      "id": "T-002",
+      "title": "Auth service tests",
+      "description": "Write failing tests for register/login",
+      "status": "in-progress",
+      "priority": 2,
+      "depends_on": ["T-001"]
+    }
+  ]
+}
+```
+
+This is **optional** — supplements Markdown plans for projects needing automated progress tracking.
+
+### 3.11 State & Session Management
+
+Multiple skills work together to maintain continuity across sessions:
+
+| Skill | Purpose | Key File |
+|-------|---------|----------|
+| `state-management` | Track project state | `docs/STATE.md` |
+| `knowledge-compounding` | Accumulate learnings | `docs/progress.md` |
+| `checkpoint-protocol` | Human-in-the-loop gates | In-conversation |
+| `todo-management` | Capture deferred ideas | `docs/TODOS.md` |
+
+#### Session Progress Log
+
+The append-only `docs/progress.md` is your project's **long-term memory**:
+
+```markdown
+## Codebase Patterns
+<!-- Consolidated reusable patterns — kept at the TOP -->
+- Always use Zod for runtime validation in API routes
+- JWT refresh via axios interceptor, not page lifecycle
+
+---
+
+## 2026-02-21 11:30 - Billing Feature
+- **What was done:** Stripe webhook handler + invoice PDF generation
+- **Files changed:** stripe-webhook.ts, invoice-service.ts
+- **Learnings:**
+  - Stripe webhook signature must use raw body, not parsed JSON
+  - PDF generation needs headless Chrome for complex layouts
+```
+
+Codebase Patterns at the top consolidate reusable insights discovered across sessions.
 
 ---
 

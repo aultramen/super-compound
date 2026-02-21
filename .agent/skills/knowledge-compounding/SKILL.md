@@ -175,13 +175,69 @@ Save to: `docs/solutions/patterns/<pattern-name>.md`
 - ❌ Just code dumps without explanation
 - ❌ No prevention guidance
 
+## Session Progress Log
+
+Beyond per-problem solution docs, maintain an **append-only session log** for cumulative project knowledge.
+
+### File: `docs/progress.md`
+
+This file is the project's long-term memory. It accumulates learnings across all work sessions.
+
+### Structure
+
+```markdown
+## Codebase Patterns
+<!-- Consolidated reusable patterns — kept at the TOP -->
+<!-- Add only general, reusable patterns, not session-specific details -->
+- [Pattern]: [Description]
+- [Pattern]: [Description]
+
+---
+
+## [YYYY-MM-DD HH:MM] - [Task/Feature Name]
+- **What was done:** [Summary of work]
+- **Files changed:** [List of key files]
+- **Learnings for future sessions:**
+  - [Pattern discovered, gotcha encountered, useful context]
+---
+```
+
+### Rules
+
+| Rule | Why |
+|------|-----|
+| **Always append** — never replace existing entries | Preserves timeline and context |
+| **Consolidate patterns at the TOP** | Makes reusable knowledge instantly accessible |
+| **Include learnings** in every entry | Future sessions avoid repeating mistakes |
+| **Read Codebase Patterns first** before starting work | Re-use existing knowledge before discovering it again |
+
+### When to Append
+
+- After completing a work session (before `/pause`)
+- After solving a debugging session
+- After implementing a significant feature
+- After discovering a non-obvious codebase convention
+
+### Pattern Consolidation
+
+When you notice a recurring pattern across 2+ session entries:
+
+1. Add it to the `## Codebase Patterns` section at the top
+2. Keep patterns **general and reusable** (not session-specific)
+3. Examples of good patterns:
+   - "Use `sql<number>` template for aggregations"
+   - "Always run migrations before seed in this project"
+   - "Auth middleware must be applied before validation middleware"
+
 ## Integration
 
 **This skill is triggered by:**
 - **systematic-debugging** — After solving a debugging session
 - **executing-plans** — After overcoming a tricky implementation issue
 - **compound workflow** — Explicit knowledge capture
+- **pause workflow** — Append session summary before handoff
 
 **This skill's output is used by:**
 - **writing-plans** — Reference past solutions during planning
 - **brainstorming** — Avoid known pitfalls
+- **resume workflow** — Read progress.md for context restoration

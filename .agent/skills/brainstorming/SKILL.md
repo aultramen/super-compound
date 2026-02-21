@@ -44,10 +44,22 @@ Before asking questions, check the project context:
 
 Ask questions **one at a time** to understand the idea:
 
-- **Prefer multiple choice** when natural options exist (easier to answer)
+- **Use lettered options** when natural choices exist — enables fast responses ("1A, 2C, 3B")
 - Start broad (purpose, users) then narrow (constraints, edge cases)
 - Focus on: purpose, constraints, success criteria
 - Continue until the idea is clear OR user says "proceed"
+
+**Question Format — Lettered Options (Preferred):**
+
+```
+1. What is the primary goal?
+   A. Improve user experience
+   B. Increase performance
+   C. Add new functionality
+   D. Other: [please specify]
+```
+
+This lets users respond with "1A" instead of typing a full answer. Use lettered options when 2-5 natural choices exist. Fall back to open-ended questions when options would be artificial.
 
 **Question Guidelines:**
 - ONE question per message — don't overwhelm
