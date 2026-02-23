@@ -36,47 +36,34 @@ Before responding to ANY user message:
 2. **Quality skills second** (test-driven-development, verification-before-completion) — ensure quality
 3. **Knowledge skills third** (knowledge-compounding) — capture learnings
 
-### Red Flags — STOP and Check for Skills
-
-| Thought | Reality |
-|---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-
 ---
 
 ## 3. Workflow Pipeline
 
 ```
-                    ┌─── Pause ──→ .continue-here.md ──→ Resume ───┐
-                    │                                               │
-Brainstorm → Discuss → Research → PRD → Plan → Work → Review → Compound
-     ↑                                                          ↓
-     └──────────────── Knowledge feeds back ────────────────────┘
+                    ┌─── Pause ──→ .continue-here.md ──→ Status (resume) ───┐
+                    │                                                       │
+Explore → Research → PRD → Plan → Eval → Work → Review → Compound
+   ↑                                                       ↓
+   └────────────────── Knowledge feeds back ───────────────┘
 ```
 
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
-| `brainstorm.md` | New feature idea, unclear requirements | Explore WHAT to build |
-| `discuss.md` | Before planning, need to clarify gray areas | Gather context via structured Q&A |
+| `explore.md` | Rough idea, unclear direction, or gray areas to resolve | Brainstorm + discuss in one (`/explore`, `/explore brainstorm`, `/explore discuss`) |
 | `research.md` | Need domain research before planning | Investigate standard stack, patterns, pitfalls |
 | `prd.md` | Need formal specification before planning | Generate structured PRD with stories |
 | `plan.md` | Clear requirements, approved design | Define HOW to build it (with auto-verification) |
+| `eval.md` | Before implementing — define criteria; after — measure pass@k | Eval-Driven Development (EDD) |
 | `work.md` | Approved plan | Execute the plan |
 | `debug.md` | Bug, error, test failure, unexpected behavior | Diagnose → fix → verify |
 | `review.md` | Completed implementation | Multi-perspective quality review |
 | `compound.md` | Problem solved, issue fixed | Document knowledge for future |
 | `launch.md` | Want full autonomous pipeline | Run all stages sequentially |
-| `pause.md` | Pausing work mid-session | Save state to .continue-here.md |
-| `resume.md` | Returning to paused project | Restore state and route to next action |
-| `progress.md` | Want project status overview | Show state, route to next action |
-| `reload.md` | Updated rules mid-conversation | Re-read all rule files immediately |
-| `init.md`   | New/imported project, empty config | Scan codebase, auto-fill config, generate map |
-| `compatibility.md` | Dependency changes, stack health check | Audit compatibility, report conflicts, suggest fixes |
-| `security.md` | Security audit, vulnerability check, OWASP review | Scan codebase for security vulnerabilities |
+| `pause.md` | Pausing work mid-session | Save state to `.continue-here.md` |
+| `status.md` | Start of session, check status, or resume after `/pause` | Dashboard + smart routing (`/status`, `/resume`, `/progress`) |
+| `audit.md` | Security or dependency health check | OWASP + compat audit (`/audit`, `/audit security`, `/audit compat`) |
+| `init.md` | New/imported project; or reload rules mid-conversation | Scan codebase + auto-fill config; `/init reload` replaces `/reload` |
 | `ui-ux-pro-max.md` | Any frontend/UI work | Generate design system, implement professional UI |
 
 ---
@@ -121,11 +108,13 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | "plan", "design", "architecture" | Brainstorming → Planning pipeline |
 | "landing page", "UI", "frontend", "dashboard", "component" | UI/UX Pro Max skill, design system first |
 | "security", "vulnerability", "audit", "OWASP", "pentest" | Security audit skill |
-| "continue", "resume", "where was I" | Resume workflow, load state |
+| "continue", "resume", "where was I" | Status workflow (auto-resumes from `.continue-here.md`) |
 | "pause", "stop", "save progress" | Pause workflow, create handoff |
-| "status", "progress", "what's next" | Progress workflow, show state |
+| "status", "progress", "what's next" | Status workflow, show dashboard |
 | "PRD", "requirements", "specification", "user stories" | PRD workflow, generate structured PRD |
-| "tasks.json", "structured tasks", "machine-readable" | Structured-tasks skill |
+| "tasks.json", "structured tasks", "machine-readable" | writing-plans skill (Optional tasks.json section) |
+| "explore", "brainstorm", "discuss", "gray areas" | Explore workflow (auto-detect mode) |
+| "audit", "health check", "dependency check" | Audit workflow (`/audit`, `/audit security`, `/audit compat`) |
 
 ### Execution Mode
 
@@ -139,27 +128,25 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | Skill | When to Use |
 |-------|-------------|
 | `brainstorming` | Before any creative work |
-| `writing-plans` | When you need an implementation plan |
+| `writing-plans` | When you need an implementation plan (includes optional tasks.json format) |
 | `executing-plans` | When you have a plan to execute |
 | `test-driven-development` | When implementing any feature or bugfix |
 | `systematic-debugging` | When encountering any bug or unexpected behavior |
-| `verification-before-completion` | Before claiming work is complete (includes goal-backward verification) |
+| `verification-before-completion` | Before claiming work is complete — includes goal-backward verification and cross-component wiring checks |
 | `knowledge-compounding` | After solving a non-trivial problem |
 | `code-review` | When reviewing code changes |
 | `architecture-enforcement` | Before writing code — verify correct folder and imports |
 | `compatibility-check` | Before introducing new deps or auditing existing stack |
 | `ui-ux-pro-max` | When building any frontend UI — pages, dashboards, landing pages |
-| `security-audit` | When auditing code for security, reviewing auth, checking OWASP compliance |
+| `security-audit` | When auditing code for security, reviewing auth, handling secrets, checking OWASP compliance |
 | `secure-code-patterns` | When implementing input validation, cryptography, or secure data handling |
 | `threat-modeling` | Before designing features with sensitive data, auth, or external integrations |
 | `data-privacy` | When processing PII, implementing consent, or handling data subject requests |
-| `secrets-management` | When handling credentials, API keys, tokens, or encryption keys |
 | `state-management` | When starting/ending sessions, making decisions, tracking work progress |
 | `checkpoint-protocol` | When human input, decision, or action is required before proceeding |
 | `plan-verification` | After creating a plan — validates 8 dimensions before execution |
 | `gap-closure` | When verification finds gaps — creates targeted fix plans |
 | `todo-management` | When ideas/tasks surface during work — capture and track |
 | `context-engineering` | When managing AI context budget — selective loading, history digest |
-| `integration-checking` | After multi-component work — verify cross-component wiring |
 | `prd-generator` | When planning a feature — generate structured PRD with user stories |
-| `structured-tasks` | When needing machine-parseable task tracking (tasks.json) |
+| `eval-harness` | Before/after implementing features — define pass/fail criteria, measure with pass@k |

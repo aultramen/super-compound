@@ -4,6 +4,15 @@ description: "Initialize AI context for a new or imported project. Scans codebas
 
 # Init Workflow
 
+## Usage
+
+```
+/init           → Full initialization (scan + auto-fill config + generate docs)
+/init reload    → Re-read all rule files mid-conversation (was /reload)
+```
+
+---
+
 This workflow gives AI full context about an existing codebase. Use it when opening a project for the first time — especially projects imported from another IDE or freshly cloned.
 
 ## Why
@@ -103,3 +112,26 @@ Without initialization, AI treats existing projects as greenfield — generating
 - `--guided` — Interactive Q&A after scan for business context and domain knowledge
 - `--focus [area]` — Regenerate only specific doc (e.g., `--focus testing`)
 
+---
+
+## /init reload
+
+Re-read all rule files so changes take effect in the current conversation.
+*(Previously: `/reload`)*
+
+### Steps
+
+1. **Re-read all rules** — Read every file in `.agent/rules/`:
+   - `.agent/rules/super-compound.md` — Core philosophy, skills, workflows, git
+   - `.agent/rules/project-config.md` — Tech stack config, presets, auto-detect
+   - `.agent/rules/quality-gates.md` — Verification, knowledge, architecture rules
+
+2. **Confirm changes** — Report what changed since last load:
+   > "✅ Rules reloaded. Changes detected in: [list of modified files]"
+
+3. **Apply immediately** — All subsequent responses follow the updated rules.
+
+### When to Use
+- After editing any file in `.agent/rules/`
+- After changing project config (preset, tech stack, commands)
+- Mid-conversation when rules feel outdated

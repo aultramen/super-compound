@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".agent/hooks/suggest-compact.js\"",
+            "async": true,
+            "timeout": 5
+          }
+        ],
+        "description": "Suggest /pause at logical intervals based on tool call count"
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".agent/hooks/pre-compact.js\""
+          }
+        ],
+        "description": "Save STATE.md snapshot before context compaction"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".agent/hooks/session-end.js\""
+          }
+        ],
+        "description": "Persist session state and prompt for knowledge compounding"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const out=i.tool_output?.output||'';if(/console\\.log/.test(out)){console.error('[Hook] Warning: console.log detected in output. Consider removing before commit.');}}catch{}console.log(d)})\"",
+            "async": true,
+            "timeout": 5
+          }
+        ],
+        "description": "Warn about console.log after each response"
+      }
+    ]
+  }
+}

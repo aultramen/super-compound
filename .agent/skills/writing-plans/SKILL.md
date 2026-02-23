@@ -1,6 +1,6 @@
 ﻿---
 name: writing-plans
-description: "Use when you have requirements or a spec for a multi-step task. Creates implementation plans with configurable depth before any code is written."
+description: "Use when you have requirements or a spec for a multi-step task. Creates implementation plans with configurable depth before any code is written. Optionally generates machine-parseable tasks.json for automated progress tracking."
 ---
 
 # Writing Plans
@@ -260,6 +260,7 @@ Split:
 
 **Prerequisite skills:**
 - **brainstorming** — Creates the design this skill plans from
+- **prd-generator** — Creates the product spec this skill turns into a technical plan
 
 **This skill feeds into:**
 - **executing-plans** — Executes the plan task by task
@@ -270,3 +271,80 @@ Split:
 - **compatibility-check** — When new dependencies introduced
 - **threat-modeling** — When auth/data/API features involved
 - **data-privacy** — When PII processing involved
+
+---
+
+## Optional: Machine-Parseable Tasks (tasks.json)
+
+For projects needing automated progress tracking in addition to a Markdown plan, create a `tasks.json` alongside the plan document.
+
+**Use when:**
+- Multi-session feature with many stories (automated tracking helps)
+- Autonomous execution pipeline (machine-readable required)
+- Team handoff where structured format reduces ambiguity
+- Single developer with small feature → **skip** (Markdown alone is enough)
+
+**Save to:** `docs/tasks/tasks-<feature>.json`
+
+### Format
+
+```json
+{
+  "project": "[Project Name]",
+  "feature": "[Feature Name]",
+  "branch": "[git branch name]",
+  "description": "[Brief feature description]",
+  "created": "YYYY-MM-DD",
+  "stories": [
+    {
+      "id": "US-001",
+      "title": "[Short descriptive title]",
+      "description": "As a [user], I want [feature] so that [benefit]",
+      "acceptanceCriteria": [
+        "Specific verifiable criterion",
+        "Typecheck/lint passes"
+      ],
+      "priority": 1,
+      "status": "pending",
+      "notes": ""
+    }
+  ]
+}
+```
+
+### Status Values
+
+| Status | Meaning |
+|--------|---------|
+| `pending` | Not started |
+| `in_progress` | Currently being worked on |
+| `done` | Completed and verified |
+| `blocked` | Cannot proceed (see notes) |
+| `skipped` | Intentionally skipped (see notes) |
+
+### Creating tasks.json from a PRD
+
+If a PRD exists (`docs/prd/prd-<feature>.md`):
+1. Each PRD user story → one JSON story entry
+2. PRD acceptance criteria → `acceptanceCriteria` array
+3. Add `"Typecheck/lint passes"` to every story
+4. Add `"Verify in browser"` to UI stories
+5. Set priority by dependency order (schema → backend → frontend)
+6. Set all statuses to `"pending"`
+
+### Acceptance Criteria Quality
+
+✅ **Good (Verifiable):**
+- `"Add 'status' column to tasks table with default 'pending'"`
+- `"Filter dropdown has options: All, Active, Completed"`
+
+❌ **Bad (Vague — NEVER use):**
+- `"Works correctly"`
+- `"Good UX"`
+
+### Tracking Progress
+
+1. Set current story to `"in_progress"`
+2. Only set to `"done"` after ALL acceptance criteria verified
+3. When all stories are `"done"` — feature is complete
+4. Archive: move to `docs/archive/YYYY-MM-DD-<feature>/tasks.json`

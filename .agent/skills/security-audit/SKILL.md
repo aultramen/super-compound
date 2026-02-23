@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: "Use when auditing code for security vulnerabilities, reviewing auth flows, or checking OWASP Top 10 compliance. Provides comprehensive security checklists per framework."
+description: "Use when auditing code for security vulnerabilities, reviewing auth flows, or checking OWASP Top 10 compliance. Provides comprehensive security checklists per framework. Includes secrets management golden rules, scanning tools, and incident response."
 ---
 
 # Security Audit
@@ -22,7 +22,7 @@ Security concern identified
 │  └─→ Invoke **threat-modeling** skill (STRIDE analysis)
 │
 ├─ Handling credentials, API keys, or secrets?
-│  └─→ Invoke **secrets-management** skill
+│  └─→ See **Secrets Management** section in this skill
 │
 ├─ Implementing input validation or cryptography?
 │  └─→ Invoke **secure-code-patterns** skill
@@ -397,7 +397,142 @@ Before approving code as secure, verify:
 
 ---
 
+## Secrets Management
+
+Ensure all credentials, API keys, tokens, and encryption keys are handled securely throughout the development lifecycle. Zero tolerance for hardcoded secrets.
+
+**Core principle:** If a secret touches code, it's already compromised. Secrets belong in the environment, never in the repository.
+
+### Modes
+
+| Mode | Trigger | Output |
+|------|---------|--------|
+| **Pre-flight** | During `/plan` when adding API integrations, auth, or deployments | Secrets section in plan document |
+| **Scan** | During `/security` workflow or code review | Secrets exposure findings |
+| **Incident** | When a secret is compromised | Rotation + remediation report |
+
+### Golden Rules
+
+**Rule #1 — Never Commit Secrets to Git.** Forbidden in any git-tracked file: passwords, DB credentials, API keys, access tokens, bearer tokens, private keys (.key, .pem, .p12, .jks), JWT signing secrets, OAuth client secrets, webhook secrets, encryption keys.
+
+**Rule #2 — Environment Variables Only.** All secrets injected via: environment variables, secret management services (vault, cloud), encrypted configuration. Never: hardcoded strings, config files in git, comments with credential values, unchanged default passwords.
+
+**Rule #3 — .env Never Committed.**
+```
+# .gitignore must include:
+.env
+.env.local
+.env.*.local
+.env.production
+*.key
+*.pem
+secrets/
+credentials/
+```
+Always provide `.env.example` with placeholder values (safe to commit).
+
+**Rule #4 — Different Secrets Per Environment.**
+
+| Secret | Dev | Staging | Production |
+|--------|-----|---------|------------|
+| DB Password | `dev_pass_123` | `stg_<random>` | `<vault-managed>` |
+| API Key | `test_key` | `stg_key` | `<vault-managed>` |
+| JWT Secret | `dev_jwt_secret` | `<random>` | `<vault-managed>` |
+
+**Rule #5 — Rotate Regularly.** Every 90 days for DB passwords, API keys, JWT signing keys, session secrets. Immediately on any security incident.
+
+### Secret Detection Tools
+
+**Gitleaks (recommended):**
+```bash
+gitleaks detect --source . --verbose
+# As pre-commit hook via .pre-commit-config.yaml
+```
+
+**TruffleHog:**
+```bash
+trufflehog git file://. --since-commit HEAD~10 --only-verified
+```
+
+**CI/CD scanning (GitHub Actions):**
+```yaml
+- name: Gitleaks Scan
+  uses: gitleaks/gitleaks-action@v2
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### Secret Storage by Environment
+
+| Environment | Solution |
+|-------------|----------|
+| Local Development | `.env` file (git-ignored) |
+| CI/CD Pipelines | Platform secrets (GitHub/GitLab/etc.) |
+| Staging | Cloud secrets manager or vault |
+| Production | Vault + auto-rotation |
+
+**Cloud Secrets Managers:**
+```bash
+# AWS Secrets Manager
+aws secretsmanager get-secret-value --secret-id myapp/production/db
+# GCP Secret Manager
+gcloud secrets versions access latest --secret=db-password
+# Azure Key Vault
+az keyvault secret show --vault-name myvault --name db-password
+# HashiCorp Vault
+vault kv get secret/myapp/database
+```
+
+### Secrets Checklist (Code Review)
+
+**Source Code:**
+- [ ] No hardcoded passwords, API keys, tokens in any file
+- [ ] No secrets in code comments
+- [ ] No default/example credentials that could work in production
+
+**Configuration:**
+- [ ] `.env` and secret files in `.gitignore`
+- [ ] `.env.example` exists with placeholder values
+- [ ] Different credentials per environment
+
+**Runtime:**
+- [ ] Secrets loaded from environment variables or vault
+- [ ] Secrets not logged (masked in log output)
+- [ ] Secrets not in error messages or URLs
+
+**Operations:**
+- [ ] Secret rotation schedule defined
+- [ ] Access to production secrets limited (least privilege)
+- [ ] Secret access audited
+
+### Compromise Incident Response
+
+**Immediate (< 1 hour):**
+1. ✅ **Rotate** — Generate new secret immediately
+2. ✅ **Revoke** — Invalidate the compromised secret
+3. ✅ **Deploy** — Update all systems using the secret
+4. ✅ **Verify** — Confirm application health with new secret
+5. ✅ **Alert** — Notify security team
+
+**Investigation (< 24 hours):**
+1. ✅ Determine how the secret was exposed
+2. ✅ Check access logs for unauthorized usage
+3. ✅ Identify blast radius
+4. ✅ Review git history for additional exposures
+
+**If Secret Found in Git History:**
+```bash
+# BFG Repo Cleaner (recommended)
+bfg --replace-text passwords.txt repo.git
+# ALWAYS rotate the exposed secret regardless of history cleanup
+```
+
+> **Warning:** Cleaning git history does NOT make the secret safe. Anyone who cloned the repo before cleanup still has it. **Always rotate.**
+
+---
+
 ## Compliance Framework Quick-Reference
+
 
 Maps security controls checked by this skill to major compliance frameworks:
 
@@ -459,7 +594,6 @@ Verify these documents exist and are current:
 
 **This skill invokes (for deeper analysis):**
 - **threat-modeling** — STRIDE analysis and attack trees
-- **secrets-management** — Deep secrets scan and incident response
 - **secure-code-patterns** — Input validation and crypto implementation guidance
 - **data-privacy** — Privacy compliance check for PII handling
 

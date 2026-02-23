@@ -133,28 +133,30 @@ your-project/
 │   ├── rules/              ← 3 rule files
 │   │   ├── super-compound.md ← Core philosophy, skills, workflows, git
 │   │   ├── project-config.md ← Tech stack configuration + presets
-│   │   └── quality-gates.md  ← Verification, knowledge, architecture
-│   ├── workflows/          ← 18 workflow commands
-│   │   ├── brainstorm.md     ├── discuss.md       ├── research.md
-│   │   ├── prd.md            ├── plan.md          ├── work.md
-│   │   ├── debug.md          ├── review.md        ├── compound.md
-│   │   ├── launch.md         ├── pause.md         ├── resume.md
-│   │   ├── progress.md       ├── reload.md        ├── init.md
-│   │   ├── compatibility.md  ├── ui-ux-pro-max.md └── security.md
-│   └── skills/             ← 25 development skills
-│       ├── architecture-enforcement/  ├── brainstorming/
-│       ├── writing-plans/            ├── executing-plans/
-│       ├── prd-generator/            ├── structured-tasks/
-│       ├── test-driven-development/   ├── systematic-debugging/
+│   │   └── quality-gates.md  ← Process gates, standards, architecture rules
+│   ├── workflows/          ← 15 core workflows + 7 backward-compat aliases
+│   │   ├── explore.md          |─ research.md  |─ prd.md
+│   │   ├── plan.md             |─ eval.md      |─ work.md
+│   │   ├── debug.md            |─ review.md    |─ compound.md
+│   │   ├── launch.md           |─ pause.md     |─ status.md
+│   │   ├── audit.md            |─ init.md      └─ ui-ux-pro-max.md
+│   │   └── aliases: brainstorm→explore, discuss→explore, progress→status,
+│   │             resume→status, security→audit, compatibility→audit, reload→init
+│   ├── agents/             ← 5 dedicated subagents
+│   ├── hooks/              ← 3 event-driven automation scripts
+│   └── skills/             ← 23 development skills
+│       ├── architecture-enforcement/   ├── brainstorming/
+│       ├── writing-plans/              ├── executing-plans/
+│       ├── prd-generator/              ├── eval-harness/
+│       ├── test-driven-development/    ├── systematic-debugging/
 │       ├── verification-before-completion/ ├── knowledge-compounding/
-│       ├── code-review/              ├── compatibility-check/
-│       ├── ui-ux-pro-max/            ├── state-management/
-│       ├── checkpoint-protocol/      ├── plan-verification/
-│       ├── gap-closure/              ├── todo-management/
-│       ├── context-engineering/      ├── integration-checking/
-│       ├── security-audit/           ├── secure-code-patterns/
-│       ├── threat-modeling/           ├── data-privacy/
-│       └── secrets-management/
+│       ├── code-review/                ├── compatibility-check/
+│       ├── ui-ux-pro-max/              ├── state-management/
+│       ├── checkpoint-protocol/        ├── plan-verification/
+│       ├── gap-closure/                ├── todo-management/
+│       ├── context-engineering/        ├── security-audit/
+│       ├── secure-code-patterns/       ├── threat-modeling/
+│       └── data-privacy/
 └── README.md
 ```
 
@@ -308,23 +310,23 @@ Each phase can be run independently or as a full pipeline via `/launch`.
 
 | Phase | Command | Purpose |
 |-------|---------|---------|
-| 💡 Brainstorm | `/brainstorm` | Explore ideas, lettered Q&A (A/B/C/D) |
-| 💬 Discuss | `/discuss` | Pre-planning context gathering |
+| 💡 Explore | `/explore` | Brainstorm ideas + resolve gray areas (aliases: `/brainstorm`, `/discuss`) |
 | 🔬 Research | `/research` | Structured domain research |
 | 📝 PRD | `/prd` | Generate structured PRD with user stories |
 | 📋 Plan | `/plan` | Create implementation plan with auto-verification |
+| 🧪 Eval | `/eval` | Define pass/fail criteria; run pass@k after implementation |
 | ⚡ Work | `/work` | Execute tasks with TDD, incremental commits |
 | 🐛 Debug | `/debug` | Reproduce → diagnose → fix with TDD |
 | 🔍 Review | `/review` | Multi-perspective review, severity classification |
 | 📚 Compound | `/compound` | Document solutions + session progress log |
 | 🚀 Launch | `/launch` | Full pipeline with approval at each gate |
 | ⏸️ Pause | `/pause` | Save session state + archive + progress log |
-| ▶️ Resume | `/resume` | Restore from `.continue-here.md` |
-| 📊 Progress | `/progress` | Show project state + next actions |
-| 🔰 Init | `/init` | Scan codebase, auto-fill config, generate codebase map |
-| 🔍 Compatibility | `/compatibility` | Audit dependency versions, report conflicts |
+| 📊 Status | `/status` | Show project state + resume (aliases: `/progress`, `/resume`) |
+| � Audit | `/audit` | Full health check: OWASP + compat (aliases: `/security`, `/compatibility`) |
+| 🔰 Init | `/init` | Scan codebase, auto-fill config. Use `/init reload` to re-apply rules |
 | 🎨 UI/UX Pro Max | `/ui-ux-pro-max` | Generate design system, build professional UI |
-| 🛡️ Security | `/security` | Full OWASP audit, secrets scan, dependency CVEs, privacy check |
+
+**Aliases still work:** `/brainstorm` → explore, `/discuss` → explore, `/progress` → status, `/resume` → status, `/security` → audit, `/compatibility` → audit, `/reload` → init reload
 
 ### 2.2 Workflow: Brainstorm
 
@@ -757,11 +759,11 @@ AI: I'm using the systematic-debugging skill.
     This was a non-trivial fix. Document with /compound?
 ```
 
-### 2.9 Workflow: Reload
+### 2.9 Workflow: Init Reload
 
-**When to use:** After editing rule files in `.agent/rules/` and you want to apply changes without starting a new chat.
+**When to use:** After editing rule files in `.agent/rules/` mid-conversation to apply changes without starting a new chat.
 
-**Command:** `/reload`
+**Command:** `/init reload` (or `/reload` — backward-compat alias still works)
 
 **Process:**
 
@@ -777,7 +779,7 @@ AI: I'm using the systematic-debugging skill.
 # You edit .agent/rules/project-config.md:
 # tdd_mode: "balanced" → tdd_mode: "relaxed"
 
-You: /reload
+You: /init reload
 
 AI: ✅ Rules reloaded. Changes detected in:
     • project-config.md — tdd_mode changed: "balanced" → "relaxed"
@@ -785,11 +787,11 @@ AI: ✅ Rules reloaded. Changes detected in:
     All subsequent responses will use relaxed TDD mode.
 ```
 
-#### When Is `/reload` Needed
+#### When Is Reload Needed
 
 | Situation | Need Reload? |
-|-----------|--------------|
-| Edit rules mid-conversation | ✅ Yes, `/reload` |
+|-----------|-------------|
+| Edit rules mid-conversation | ✅ Yes, `/init reload` (or `/reload`) |
 | Edit a skill | ❌ Not needed — skills are read on-demand |
 | Edit a workflow | ❌ Not needed — workflows are read when triggered |
 | Start a new chat | ❌ Not needed — rules are automatically read |

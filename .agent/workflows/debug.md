@@ -2,6 +2,8 @@
 description: "Systematically diagnose and fix bugs. Use when encountering errors, test failures, or unexpected behavior."
 ---
 
+// turbo-all
+
 # Debug Workflow
 
 This workflow turns bug reports into root-cause fixes with regression tests. It enforces diagnosis before fixing.

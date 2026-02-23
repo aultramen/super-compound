@@ -2,6 +2,8 @@
 description: Generate a structured Product Requirements Document (PRD) for a feature. Use when planning a feature, starting a new project, or when requirements need formal specification. Sits between /brainstorm and /plan.
 ---
 
+// turbo-all
+
 # PRD Workflow
 
 Generate a structured PRD that bridges brainstorming and planning.

@@ -2,6 +2,8 @@
 description: "Execute an implementation plan task by task. Sequential by default, optional swarm mode for parallel tasks."
 ---
 
+// turbo-all
+
 # Work Workflow
 
 This workflow executes a plan systematically. It handles environment setup, task execution, quality checks, and shipping.

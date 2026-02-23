@@ -1,6 +1,6 @@
 ---
 name: verification-before-completion
-description: "Use BEFORE claiming any work is complete, fixed, or passing. Requires running verification commands and confirming output before making any success claims."
+description: "Use BEFORE claiming any work is complete, fixed, or passing. Requires running verification commands and confirming output before making any success claims. Also covers cross-component integration wiring verification after multi-component work."
 ---
 
 # Verification Before Completion
@@ -196,6 +196,128 @@ When verifying a completed feature or workflow (not just a single task), apply g
 - Bug fixes (just confirm the fix works)
 - Refactoring (just confirm tests still pass)
 
+---
+
+## Integration Checking
+
+Building components that work individually is not the same as building components that work together. After multi-component implementations, apply cross-component wiring verification.
+
+**Core principle:** **Existence ≠ Integration** — A file existing doesn't mean it's wired. An endpoint existing doesn't mean the frontend calls it.
+
+### When to Apply
+
+| Situation | Trigger |
+|-----------|---------|
+| Completed a plan with both frontend + backend tasks | Always |
+| Built multiple services that communicate | Always |
+| Added new API endpoints | Check callers exist |
+| Created new database models | Check migrations + usage |
+| Built event emitters | Check handlers exist |
+| Created shared types/interfaces | Check importers use them |
+| Implemented auth flow | Check all protected routes enforce it |
+
+### Integration Checklists
+
+**1. API Contract Verification**
+```
+For EACH API endpoint created:
+  → Is there a caller (frontend, service, test)?
+  → Does the caller send the correct request format?
+  → Does the caller handle the response format?
+  → Does the caller handle error responses?
+  → Are auth headers included where required?
+```
+
+**2. Data Flow Verification**
+```
+For EACH data entity:
+  → Can it be Created? (form → API → DB)
+  → Can it be Read? (DB → API → UI)
+  → Can it be Updated? (form → API → DB → confirmation)
+  → Can it be Deleted? (action → API → DB → UI update)
+  → Are validation rules consistent across layers?
+```
+
+**3. Event/Message Wiring**
+```
+For EACH event emitted:
+  → Is there at least one handler listening?
+  → Does the handler process the correct event shape?
+  → Are error cases in handlers handled?
+  → Is the event bus/queue properly configured?
+```
+
+**4. Import/Export Wiring**
+```
+For EACH exported module/type/function:
+  → Is it imported where needed?
+  → Are import paths correct (no circular, no stale)?
+  → Are type definitions consistent across import boundaries?
+```
+
+**5. Auth/Permission Wiring**
+```
+For EACH protected route/endpoint:
+  → Is auth middleware applied?
+  → Is role/permission checking enforced?
+  → Does the frontend handle 401/403 responses?
+  → Is token refresh implemented?
+```
+
+**6. Configuration Wiring**
+```
+For EACH environment variable used:
+  → Is it defined in .env.example?
+  → Is it loaded by the config module?
+  → Is it validated at startup?
+  → Does it have a sensible default (where appropriate)?
+```
+
+### Integration Check Report
+
+```markdown
+## Integration Check Report
+
+**Scope:** [what was checked]
+**Date:** YYYY-MM-DD
+
+### API Contracts
+
+| Endpoint | Caller | Request ✓ | Response ✓ | Errors ✓ |
+|----------|--------|-----------|------------|----------|
+| POST /api/users | RegisterForm | ✅ | ✅ | ❌ missing |
+
+### Data Flow
+
+| Entity | Create | Read | Update | Delete |
+|--------|--------|------|--------|--------|
+| User | ✅ | ✅ | ⚠️ no form | ❌ missing |
+
+### Event Wiring
+
+| Event | Emitter | Handler | Status |
+|-------|---------|---------|--------|
+| user.created | AuthService | WelcomeEmail | ✅ |
+
+### Gaps Found
+
+| # | Gap | Type | Severity |
+|---|-----|------|----------|
+| 1 | [description] | contract/data/event/auth/config | critical/important/minor |
+```
+
+### Quick Integration Check (Small Changes)
+
+For 1-3 file changes, use the minimal check:
+```
+1. What did I create/modify?
+2. Who calls this? (check callers exist and work)
+3. What does this call? (check dependencies exist and work)
+4. Did I update all layers? (DB ↔ API ↔ UI)
+```
+
+---
+
 ## Integration
 
 **This skill is used by:**
@@ -206,5 +328,5 @@ When verifying a completed feature or workflow (not just a single task), apply g
 **Pairs with:**
 - **test-driven-development** — TDD verification cycle
 - **systematic-debugging** — Verify fix actually works
-- **integration-checking** — Verify cross-component wiring
+- **gap-closure** — Fix integration gaps found during wiring check
 - **state-management** — Update STATE.md after verification

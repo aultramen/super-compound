@@ -2,6 +2,8 @@
 description: "Capture solved problems as searchable documentation. Use after solving a non-trivial bug or implementation challenge."
 ---
 
+// turbo-all
+
 # Compound Workflow
 
 This workflow captures solved problems as structured knowledge documentation. Each solution documented today saves investigation time in future sessions.

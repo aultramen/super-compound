@@ -24,8 +24,11 @@ Super Compound is a complete AI-assisted development framework for **Antigravity
 | 🛡️ **Security-by-Design** | OWASP Top 10, STRIDE threat modeling, GDPR/UU PDP compliance, secrets management |
 | 📝 **PRD Generator** | Structured Product Requirements Documents with lettered Q&A, user stories, and sizing |
 | 💾 **State & Session Management** | Persistent state tracking, session handoff, progress logs, checkpoints |
-| 📊 **Structured Tasks** | Machine-parseable `tasks.json` with automated progress tracking |
+| 📊 **Structured Tasks** | Machine-parseable `tasks.json` generation built into `writing-plans` skill |
 | 🔬 **Plan Verification** | 8-dimension plan validation with task-sizing discipline before execution |
+| 🧪 **Eval Harness (EDD)** | Define pass/fail criteria before coding, measure pass@k reliability after — Eval-Driven Development |
+| 🤖 **Dedicated Subagents** | 5 isolated agents (architect, code-reviewer, e2e-runner, doc-updater, build-fixer) with model specialization |
+| ⚡ **Hook System** | Event-driven automation — SessionEnd, PreCompact, and suggest-compact hooks run deterministically |
 
 ---
 
@@ -98,35 +101,51 @@ your-project/
 │   │   ├── super-compound.md            ← Core philosophy, skills, workflows, git
 │   │   ├── project-config.md            ← Tech stack config + presets + auto-detect
 │   │   └── quality-gates.md             ← Verification, knowledge, architecture rules
-│   ├── workflows/                       ← 18 workflow commands  
-│   │   ├── brainstorm.md                ← Explore ideas collaboratively
-│   │   ├── discuss.md                   ← Pre-planning context gathering
+│   ├── workflows/                       ← 15 core workflows (+ 7 backward-compat aliases)
+│   │   ├── explore.md                   ← Idea exploration + gray-area resolution (merged)
 │   │   ├── research.md                  ← Structured domain research
 │   │   ├── prd.md                       ← Generate Product Requirements Document
 │   │   ├── plan.md                      ← Create implementation plan
+│   │   ├── eval.md                      ← Eval-Driven Development (define + run pass@k)
 │   │   ├── work.md                      ← Execute plan with TDD
 │   │   ├── debug.md                     ← Systematic debugging
 │   │   ├── review.md                    ← Multi-perspective code review
 │   │   ├── compound.md                  ← Document solutions
 │   │   ├── launch.md                    ← Full autonomous pipeline
 │   │   ├── pause.md                     ← Session handoff with archiving
-│   │   ├── resume.md                    ← Restore state and continue
-│   │   ├── progress.md                  ← Project status overview
-│   │   ├── reload.md                    ← Re-read rules mid-conversation
-│   │   ├── init.md                      ← Scan codebase, generate map
-│   │   ├── compatibility.md             ← Audit tech stack compatibility
+│   │   ├── status.md                    ← Project dashboard + resume (merged)
+│   │   ├── audit.md                     ← Full health audit: security + compat (merged)
+│   │   ├── init.md                      ← Scan codebase; /init reload re-reads rules
 │   │   ├── ui-ux-pro-max.md             ← Design system + professional UI
-│   │   └── security.md                  ← Full security audit
-│   └── skills/                          ← 25 development skills
+│   │   │   ── Aliases (redirect to merged workflows) ──
+│   │   ├── brainstorm.md  → explore     ← /brainstorm still works
+│   │   ├── discuss.md     → explore     ← /discuss still works
+│   │   ├── progress.md    → status      ← /progress still works
+│   │   ├── resume.md      → status      ← /resume still works
+│   │   ├── security.md    → audit       ← /security still works
+│   │   ├── compatibility.md → audit     ← /compatibility still works
+│   │   └── reload.md      → init reload ← /reload still works
+│   ├── agents/                          ← 5 dedicated subagents (isolated context)
+│   │   ├── architect.md                 ← System design, ADRs (opus model)
+│   │   ├── code-reviewer.md             ← P1/P2/P3 severity review (sonnet)
+│   │   ├── e2e-runner.md                ← Playwright E2E tests (sonnet)
+│   │   ├── doc-updater.md               ← Documentation sync (sonnet)
+│   │   └── build-fixer.md               ← Build error resolution (sonnet)
+│   ├── hooks/                           ← Event-driven automation scripts
+│   │   ├── hooks.json                   ← Hook event configuration
+│   │   ├── session-end.js               ← Remind to /compound at session end
+│   │   ├── pre-compact.js               ← Save STATE.md before compaction
+│   │   └── suggest-compact.js           ← Suggest /pause after N tool calls
+│   └── skills/                          ← 23 development skills
 │       ├── architecture-enforcement/    ← Per-framework guides + preset definitions
 │       ├── brainstorming/               ← Idea exploration with lettered Q&A
-│       ├── writing-plans/               ← Implementation plans with task-sizing
+│       ├── writing-plans/               ← Implementation plans with task-sizing + optional tasks.json
 │       ├── executing-plans/             ← Execute plans with revision mode
 │       ├── prd-generator/               ← Structured PRD with user stories
-│       ├── structured-tasks/            ← Machine-parseable tasks.json
+│       ├── eval-harness/                ← EDD framework with pass@k metrics
 │       ├── test-driven-development/     ← Adaptive RED-GREEN-REFACTOR
 │       ├── systematic-debugging/        ← 4-phase root cause diagnosis
-│       ├── verification-before-completion/ ← Evidence-based completion
+│       ├── verification-before-completion/ ← Evidence-based completion + wiring checks
 │       ├── knowledge-compounding/       ← Solution docs + session progress log
 │       ├── code-review/                 ← Multi-perspective P1/P2/P3 review
 │       ├── compatibility-check/         ← Version & dependency validation
@@ -137,12 +156,10 @@ your-project/
 │       ├── gap-closure/                 ← Targeted fix plans from gaps
 │       ├── todo-management/             ← Capture ideas without losing focus
 │       ├── context-engineering/         ← AI context budget management
-│       ├── integration-checking/        ← Cross-component wiring verification
-│       ├── security-audit/              ← OWASP Top 10, compliance mapping
+│       ├── security-audit/              ← OWASP Top 10, secrets, compliance mapping
 │       ├── secure-code-patterns/        ← Input validation, crypto, encryption
 │       ├── threat-modeling/             ← STRIDE, attack trees, trust boundaries
-│       ├── data-privacy/                ← GDPR, UU PDP Indonesia, privacy-by-design
-│       └── secrets-management/          ← Zero hardcoded secrets, vault patterns
+│       └── data-privacy/                ← GDPR, UU PDP Indonesia, privacy-by-design
 ├── SUPER-COMPOUND.md                    ← (Optional) Root copy for Claude Code
 └── README.md
 ```
@@ -157,6 +174,26 @@ your-project/
 > **However, rules still work correctly regardless of whether they appear in the UI.** The AI agent reads and applies all rule files from `.agent/rules/` at the start of every conversation — the UI list is only a visual management layer.
 >
 > If you want your rules to appear in the UI list, ensure filenames use only lowercase letters, numbers, and hyphens and do little changes like add/remove space then save it, after that hit the 3 dots on the top right corner of the IDE, choose "Customizations" then hit "Refresh" after that you will see the rules in the UI list (e.g., `super-compound.md`, `project-config.md`).
+
+### IDE Compatibility
+
+| Feature | Antigravity IDE | Claude Code |
+|---------|:--------------:|:-----------:|
+| **Skills** (`.agent/skills/`) | ✅ Native | ✅ Native |
+| **Workflows** (`.agent/workflows/`) | ✅ Native | ✅ Native |
+| **Rules** (`.agent/rules/`) | ✅ Native | ✅ Via `SUPER-COMPOUND.md` |
+| **Agents** (`.agent/agents/`) | ⚠️ Manual invocation | ✅ Native subagents (copy to `.claude/agents/`) |
+| **Hooks** (`.agent/hooks/`) | ❌ Not supported | ✅ Merge into `~/.claude/settings.json` |
+
+**Antigravity IDE — Agents:** Call them by name ("Use the architect agent") — the AI reads the agent file and follows its instructions within the current context.
+
+**Antigravity IDE — Hooks:** Use `/pause`, `/compound`, and the `context-engineering` skill as manual equivalents.
+
+**Claude Code — Agents:** Copy `.agent/agents/` to `.claude/agents/` for native isolated subagent execution.
+
+**Claude Code — Hooks:** See `.agent/hooks/README.md` for installation.
+
+---
 
 ### Global vs Workspace Scope
 
@@ -397,8 +434,9 @@ Super Compound synthesizes the best ideas from excellent frameworks:
 - **[CIA](https://github.com/Hack23/cia)** by Hack23 — Citizen Intelligence Agency. Open-source intelligence platform analyzing Swedish political activities using AI and data visualization. Tracks politicians, government institutions, and parliamentary data, offering detailed insights, performance metrics, and advanced analytics.
 - **[GET SHIT DONE](https://github.com/gsd-build/get-shit-done)** by glittercowboy TÂCHES — A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code and OpenCode.
 - **[RALPH](https://github.com/snarktank/ralph)** by snarktank — Ralph is an autonomous AI agent loop that runs repeatedly until all PRD items are complete.
+- **[Everything Claude Code](https://github.com/affaan-m/everything-claude-code)** by Affaan Mustafa — Production-ready agents, skills, hooks, commands, rules, and MCP configurations evolved over 10+ months of intensive daily use building real products.
 
-Named after the hypothetical particle that mediates gravity — connecting to the Antigravity IDE name while representing the fundamental building blocks of disciplined AI development.
+Super Compound is the principle that systematic discipline, applied consistently through AI assistance, doesn't just accumulate — it multiplies, turning every solved problem and every rigorous process into compounding returns on future work.
 
 ---
 

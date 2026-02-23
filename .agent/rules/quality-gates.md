@@ -1,6 +1,22 @@
 ﻿# Quality Gates
 
-## Verification Rules
+## Process Gates
+
+### Skill Invocation Gate
+
+**Skills are MANDATORY, not suggestions.** Check for applicable skills BEFORE responding.
+
+| Thought | Reality |
+|---------|---------|
+| "This is just a simple question" | Questions are tasks. Check for skills. |
+| "I need more context first" | Skill check comes BEFORE clarifying questions. |
+| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
+| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "The skill is overkill" | Simple things become complex. Use it. |
+
+---
+
+### Verification Gate
 
 **The Iron Law: NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE.**
 
@@ -57,7 +73,7 @@ Track project state persistently:
 - Update `docs/STATE.md` at session boundaries
 - Record decisions as they're made (locked constraints)
 - Track blockers and deferred ideas
-- Use checkpoints for human-in-the-loop gates
+- Use checkpoints for human-in-the-loop gates (`checkpoint-protocol` skill)
 - Append to `docs/progress.md` before pausing (session progress log)
 - Read Codebase Patterns from `docs/progress.md` before starting new work
 
@@ -83,28 +99,11 @@ Before executing a plan, validate task sizes:
 
 ---
 
-## Knowledge Compounding
+## Standards
 
-When a non-trivial problem is solved, document it.
-
-### Triggers
-- "that worked", "it's fixed", "working now", "problem solved"
-
-### Target
-```
-docs/solutions/<category>/<filename>.md
-```
-
-### Categories
-`build-errors/`, `test-failures/`, `runtime-errors/`, `performance-issues/`, `database-issues/`, `security-issues/`, `ui-bugs/`, `integration-issues/`, `logic-errors/`
-
----
-
-## Secrets & Environment Security
+### Secrets & Environment Security
 
 **The Environment Law: NEVER commit secrets. NEVER log secrets. NEVER hardcode secrets.**
-
-### .env Rules
 
 | Rule | Enforcement |
 |------|------------|
@@ -114,55 +113,26 @@ docs/solutions/<category>/<filename>.md
 | No secrets in logs | P1 Critical in code review |
 | Different secrets per environment | dev ≠ staging ≠ production |
 
-### Secret Patterns to Detect
-
-```
-# Red flags — search codebase for these patterns:
-password = "..."          # Hardcoded password
-api_key = "sk-..."        # API key in source code
-SECRET_KEY = "..."        # Django/Flask secret in source
-PRIVATE_KEY = "..."       # Private key in source
-token = "eyJ..."          # JWT token in source code
-connectionString = "..."  # Database connection string in source
-```
-
-### Environment Configuration
-
-```
-✅ DO:
-- Access secrets via process.env / os.environ / os.Getenv
-- Use .env files for local development only
-- Use vault/secrets manager for production (AWS Secrets Manager, HashiCorp Vault, etc.)
-- Rotate secrets on schedule and after any exposure
-- Use separate database credentials per environment
-
-❌ DON'T:
-- Commit .env files to git
-- Copy production secrets to development
-- Share secrets via chat/email
-- Use the same secret for multiple services
-- Store secrets in frontend code (they are visible to users)
-```
-
-### Verification Checklist (add to standard verification)
-
+**Verification checklist:**
 ```
 □ .env is in .gitignore?
 □ .env.example exists with all required keys?
-□ No secrets in committed code? (grep for patterns above)
+□ No secrets in committed code? (grep for hardcoded passwords/tokens)
 □ No secrets in log output?
 □ Production secrets in vault/secure config?
 ```
 
+> Full golden rules, detection tools (Gitleaks, TruffleHog), storage patterns, and incident response → `security-audit` skill (Secrets Management section).
+
 ---
 
-## Architecture Rules (Universal)
+### Architecture Rules
 
 **Every file MUST follow dependency direction + complexity limits.**
 
 Architectural violations during code review = **P1 Critical**.
 
-### Complexity Limits
+#### Complexity Limits
 
 | Rule | Limit | Action |
 |------|-------|--------|
@@ -173,7 +143,7 @@ Architectural violations during code review = **P1 Critical**.
 | Max module deps | 7 | Module too broad → split |
 | God class | 10+ public methods | Split by responsibility |
 
-### Dependency Direction
+#### Dependency Direction
 
 ```
 ALLOWED:  presentation → application → domain
@@ -184,33 +154,7 @@ FORBIDDEN: domain → infrastructure (business logic ≠ DB)
            application → presentation
 ```
 
-### Naming Conventions
-
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Files | kebab-case or snake_case (per framework) | `user-service.ts` |
-| Classes | PascalCase | `UserService` |
-| Functions | camelCase (JS/TS) or snake_case (Python/PHP) | `getUser()` |
-| Constants | UPPER_SNAKE_CASE | `MAX_RETRIES` |
-| Booleans | is/has/can prefix | `isActive` |
-
-### Anti-Spaghetti Detection
-
-| Pattern | Fix |
-|---------|-----|
-| Circular deps | Extract shared interface |
-| Feature envy | Move function to owning module |
-| Shotgun surgery (5+ file edits) | Missing abstraction |
-| Deep nesting (4+) | Guard clauses, extract methods |
-| Copy-paste code | Extract shared function |
-| Magic numbers/strings | Named constants |
-
-### Framework-Specific Guides
-
-For per-framework folder structure and dependency rules, invoke the `architecture-enforcement` skill. It contains detailed guides for: Next.js, React+Vite, Nuxt, FastAPI, Django, Go Gin, Laravel, SvelteKit, React Native.
-
-### Enforcement Checklist
-
+**Enforcement checklist:**
 ```
 □ File in correct directory per architecture guide?
 □ Imports respect dependency direction?
@@ -218,3 +162,20 @@ For per-framework folder structure and dependency rules, invoke the `architectur
 □ Nesting ≤ 3? No circular deps?
 □ Business logic in service/domain layer only?
 ```
+
+> Per-framework folder structures, naming conventions, and anti-spaghetti patterns → `architecture-enforcement` skill.
+
+---
+
+### Knowledge Compounding
+
+When a non-trivial problem is solved, document it.
+
+**Triggers:** "that worked", "it's fixed", "working now", "problem solved"
+
+**Target:**
+```
+docs/solutions/<category>/<filename>.md
+```
+
+**Categories:** `build-errors/`, `test-failures/`, `runtime-errors/`, `performance-issues/`, `database-issues/`, `security-issues/`, `ui-bugs/`, `integration-issues/`, `logic-errors/`

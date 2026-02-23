@@ -2,6 +2,8 @@
 description: "Multi-perspective code review with severity classification. Use after completing an implementation."
 ---
 
+// turbo-all
+
 # Review Workflow
 
 This workflow reviews completed code changes from multiple perspectives and classifies findings by severity.
