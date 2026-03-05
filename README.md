@@ -29,6 +29,7 @@ Super Compound is a complete AI-assisted development framework for **Antigravity
 | 🧪 **Eval Harness (EDD)** | Define pass/fail criteria before coding, measure pass@k reliability after — Eval-Driven Development |
 | 🤖 **Dedicated Subagents** | 5 isolated agents (architect, code-reviewer, e2e-runner, doc-updater, build-fixer) with model specialization |
 | ⚡ **Hook System** | Event-driven automation — SessionEnd, PreCompact, and suggest-compact hooks run deterministically |
+| 📚 **Context7 MCP Integration** | Up-to-date library/API docs via Context7 MCP — auto-invoked before web search, with graceful fallback |
 
 ---
 
@@ -141,7 +142,7 @@ your-project/
 │       ├── brainstorming/               ← Idea exploration with lettered Q&A
 │       ├── writing-plans/               ← Implementation plans with task-sizing + optional tasks.json
 │       ├── executing-plans/             ← Execute plans with revision mode
-│       ├── prd-generator/               ← Structured PRD with user stories
+│       ├── prd-generator/              ← Structured PRD with user stories
 │       ├── eval-harness/                ← EDD framework with pass@k metrics
 │       ├── test-driven-development/     ← Adaptive RED-GREEN-REFACTOR
 │       ├── systematic-debugging/        ← 4-phase root cause diagnosis
@@ -149,6 +150,7 @@ your-project/
 │       ├── knowledge-compounding/       ← Solution docs + session progress log
 │       ├── code-review/                 ← Multi-perspective P1/P2/P3 review
 │       ├── compatibility-check/         ← Version & dependency validation
+│       ├── context7-docs/               ← Context7 MCP usage + fallback strategy  ← NEW
 │       ├── ui-ux-pro-max/               ← Design intelligence with BM25 engine
 │       ├── state-management/            ← Persistent STATE.md tracking
 │       ├── checkpoint-protocol/         ← 7 human-in-the-loop gate types
@@ -314,6 +316,7 @@ Use the workflow commands in your IDE:
 | **knowledge-compounding** | Document solutions + session log | `docs/solutions/` + append-only `docs/progress.md` |
 | **code-review** | Multi-perspective review | Spec + quality + architecture with P1/P2/P3 |
 | **compatibility-check** | Tech stack validation | Pre-flight during planning + on-demand audit |
+| **context7-docs** | Up-to-date library/API docs via MCP | `resolve-library-id` → `query-docs` with fallback chain |
 | **ui-ux-pro-max** | Design intelligence for frontend UI | 67 styles, 96 palettes, 57 fonts, 13 stacks |
 | **state-management** | Persistent project state | STATE.md tracking, decisions, blockers |
 | **checkpoint-protocol** | Human-in-the-loop gates | 7 checkpoint types for structured decisions |

@@ -540,3 +540,4 @@ Flow: Request → Auth Middleware → Authz Check → Controller → Service →
 **This skill pairs with:**
 - **project-config rules** — Presets reference this skill for full definitions
 - **quality-gates rules** — Universal architecture rules reference this skill for framework specifics
+- **context7-docs** — Use to look up framework-specific conventions and folder structure patterns when you need up-to-date guidance beyond what's documented here

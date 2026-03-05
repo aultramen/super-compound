@@ -115,6 +115,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | "tasks.json", "structured tasks", "machine-readable" | writing-plans skill (Optional tasks.json section) |
 | "explore", "brainstorm", "discuss", "gray areas" | Explore workflow (auto-detect mode) |
 | "audit", "health check", "dependency check" | Audit workflow (`/audit`, `/audit security`, `/audit compat`) |
+| library docs, framework API, version-specific code, "use context7" | context7-docs skill (before web search) |
 
 ### Execution Mode
 
@@ -150,3 +151,4 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `context-engineering` | When managing AI context budget — selective loading, history digest |
 | `prd-generator` | When planning a feature — generate structured PRD with user stories |
 | `eval-harness` | Before/after implementing features — define pass/fail criteria, measure with pass@k |
+| `context7-docs` | When you need up-to-date library/API docs, code examples, or framework conventions — use before web search |

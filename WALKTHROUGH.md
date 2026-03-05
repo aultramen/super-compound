@@ -38,10 +38,11 @@ This tutorial will walk you through installation, basic configuration, and the u
   - [3.5 Knowledge Compounding](#35-knowledge-compounding)
   - [3.6 Code Review](#36-code-review)
   - [3.7 Compatibility Check](#37-compatibility-check)
-  - [3.8 UI/UX Pro Max](#38-uiux-pro-max)
-  - [3.9 Security-by-Design](#39-security-by-design)
-  - [3.10 PRD Generator & Structured Tasks](#310-prd-generator--structured-tasks)
-  - [3.11 State & Session Management](#311-state--session-management)
+  - [3.8 Context7 Docs — Up-to-Date Library Documentation](#38-context7-docs--up-to-date-library-documentation)
+  - [3.9 UI/UX Pro Max](#39-uiux-pro-max)
+  - [3.10 Security-by-Design](#310-security-by-design)
+  - [3.11 PRD Generator & Structured Tasks](#311-prd-generator--structured-tasks)
+  - [3.12 State & Session Management](#312-state--session-management)
 - [Part 4: Real-World Case Studies](#part-4-real-world-case-studies)
   - [Case 1: Building a REST API with FastAPI](#case-1-building-a-rest-api-with-fastapi)
   - [Case 2: Debugging a Production Bug](#case-2-debugging-a-production-bug)
@@ -144,19 +145,19 @@ your-project/
 │   │             resume→status, security→audit, compatibility→audit, reload→init
 │   ├── agents/             ← 5 dedicated subagents
 │   ├── hooks/              ← 3 event-driven automation scripts
-│   └── skills/             ← 23 development skills
+│   └── skills/             ← 24 development skills
 │       ├── architecture-enforcement/   ├── brainstorming/
 │       ├── writing-plans/              ├── executing-plans/
 │       ├── prd-generator/              ├── eval-harness/
 │       ├── test-driven-development/    ├── systematic-debugging/
 │       ├── verification-before-completion/ ├── knowledge-compounding/
 │       ├── code-review/                ├── compatibility-check/
-│       ├── ui-ux-pro-max/              ├── state-management/
-│       ├── checkpoint-protocol/        ├── plan-verification/
-│       ├── gap-closure/                ├── todo-management/
-│       ├── context-engineering/        ├── security-audit/
-│       ├── secure-code-patterns/       ├── threat-modeling/
-│       └── data-privacy/
+│       ├── context7-docs/              ├── ui-ux-pro-max/
+│       ├── state-management/           ├── checkpoint-protocol/
+│       ├── plan-verification/          ├── gap-closure/
+│       ├── todo-management/            ├── context-engineering/
+│       ├── security-audit/             ├── secure-code-patterns/
+│       ├── threat-modeling/            └── data-privacy/
 └── README.md
 ```
 
@@ -1636,9 +1637,101 @@ The audit always ends with an approval gate — you choose which suggestions to 
 | "Peer dep warnings are just warnings" | Peer dep mismatches cause subtle runtime bugs |
 | "I can fix compatibility issues later" | Later = after test failures + wasted time |
 
-### 3.8 UI/UX Pro Max
+### 3.8 Context7 Docs — Up-to-Date Library Documentation
+
+The `context7-docs` skill integrates **Context7 MCP** to pull live, version-specific library documentation and code examples directly into the AI's context — on-demand, without tab-switching.
+
+**Problem it solves:** LLMs rely on stale training data. They hallucinate APIs, suggest deprecated patterns, and produce outdated code examples. Context7 fixes this by fetching current docs at query time.
+
+#### How It Works
+
+```
+1. resolve-library-id  → Find exact Context7 library ID for a library name
+2. query-docs          → Fetch up-to-date docs + code examples for that library
+```
+
+The AI announces: *"I'm using the context7-docs skill to fetch up-to-date documentation."*
+
+#### Fallback Chain
+
+If Context7 is unavailable or the library is not indexed:
+
+```
+Context7 MCP → Official Docs URL → Web Search → Training Knowledge (with caveat)
+```
+
+The AI always announces which fallback it's using so you know the confidence level of the documentation.
+
+#### When It's Automatically Invoked
+
+| Trigger | Where |
+|---------|-------|
+| Library/framework research | `research.md` — Step 3 External Research |
+| New dependency in plan | `writing-plans` — Phase 1.3 Compatibility Pre-flight |
+| Framework convention lookup | `architecture-enforcement` skill |
+| Compatibility check | `compatibility-check` skill — Step 3 |
+
+#### 📌 Example Case: Getting Next.js 14 App Router Docs
+
+```
+You: /research I need to implement middleware for JWT auth in Next.js 14.
+
+AI: I'm using the context7-docs skill to fetch up-to-date documentation.
+
+    Resolving library ID for Next.js...
+    → Found: /vercel/next.js
+
+    Querying docs: "Next.js 14 middleware JWT authentication"...
+    → Retrieved: 3 relevant code examples from Next.js 14 docs
+
+    --- Context7 Docs: Next.js Middleware ---
+    // middleware.ts (App Router, Next.js 14+)
+    import { NextRequest, NextResponse } from 'next/server'
+    import { jwtVerify } from 'jose'
+
+    export async function middleware(request: NextRequest) {
+      const token = request.cookies.get('auth-token')?.value
+      if (!token) {
+        return NextResponse.redirect(new URL('/login', request.url))
+      }
+      // ... verify token with jose
+    }
+
+    export const config = {
+      matcher: ['/dashboard/:path*', '/api/protected/:path*'],
+    }
+    ---
+
+    Research complete. Creating implementation plan with verified patterns.
+```
+
+#### 📌 Example Case: Fallback in Action
+
+```
+You: /plan Add Stripe webhook handling
+
+AI: I'm using the context7-docs skill to fetch up-to-date documentation.
+
+    Resolving library ID for Stripe...
+    → Context7 rate limit reached.
+    Falling back to official Stripe docs URL...
+    → Fetched: https://stripe.com/docs/webhooks
+
+    [Continues with official docs content]
+```
+
+#### When NOT to Use
+
+- Project-specific business logic (not a library)
+- Internal/private packages (not in Context7's index)
+- General programming concepts (not library-specific)
+
+> **Setup:** Get a free API key at [context7.com/dashboard](https://context7.com/dashboard) for higher rate limits. Configure in your AI client's MCP settings — see `SUPER-COMPOUND.md` Section 9 for the config snippet.
+
+### 3.9 UI/UX Pro Max
 
 The ui-ux-pro-max skill provides AI-powered design intelligence for building professional frontend UI.
+
 
 #### How It Works
 

@@ -33,8 +33,9 @@ This skill operates in two modes depending on the trigger:
 1. **Identify new dependencies** — Compare plan requirements against current dependency files
 2. **Read current versions** — Extract versions from `package.json`, `requirements.txt`, `pyproject.toml`, `go.mod`, `composer.json`, `Cargo.toml`, lock files
 3. **Check compatibility** — For each new dependency:
-   - Web search: `"[new-dep] compatibility [existing-framework] [version]"`
-   - Web search: `"[new-dep] peer dependencies requirements"`
+   - **Context7 first**: resolve library ID → query docs for version requirements and compatibility notes (invoke `context7-docs` skill)
+   - Fallback: web search `"[new-dep] compatibility [existing-framework] [version]"`
+   - Fallback: web search `"[new-dep] peer dependencies requirements"`
    - Check minimum runtime version requirements (Node, Python, Go, PHP, etc.)
 4. **Cross-reference with existing stack** — Verify no conflicts with current dependencies listed in `project-config.md`
 5. **Report findings** — Add a `## Compatibility Check` section to the plan document:

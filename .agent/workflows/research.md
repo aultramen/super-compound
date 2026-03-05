@@ -21,6 +21,9 @@ This workflow conducts structured domain research before planning. It investigat
    - `docs/codebase/` for architecture context (if init was run)
 
 3. **External research** — Search for:
+   - **Context7 First (library/API docs)** — If the topic involves a known library or framework:
+     - Invoke `context7-docs` skill: resolve library ID → query docs
+     - Fallback: official docs URL or web search if Context7 unavailable/rate-limited
    - **Standard Stack** — What libraries/tools are commonly used for this?
      - Web search for "[framework] [feature] recommended packages"
      - Check for well-maintained, widely-adopted solutions
@@ -36,7 +39,7 @@ This workflow conducts structured domain research before planning. It investigat
      - Web search for "[technology] [feature] common mistakes"
      - Check for security gotchas, performance traps, edge cases
    - **Code Examples** — Reference implementations
-     - Official documentation examples
+     - Official documentation examples (via Context7 or official docs URL)
      - Well-regarded open-source implementations
 
 4. **Synthesize findings** — Create research document:

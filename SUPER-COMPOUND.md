@@ -123,6 +123,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | "architecture decision", "ADR", "system design" | **Read** `.agent/agents/architect.md` → follow its ADR format |
 | "review my code", "code review" | **Read** `.agent/agents/code-reviewer.md` → apply P1/P2/P3 review process |
 | "docs are outdated", "update documentation" | **Read** `.agent/agents/doc-updater.md` → follow its drift detection process |
+| library docs, framework API, version-specific code, "use context7" | context7-docs skill → `resolve-library-id` + `query-docs` (before web search) |
 
 ### Execution Mode
 
@@ -147,6 +148,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `code-review` | When reviewing code changes |
 | `architecture-enforcement` | Before writing code — verify correct folder and imports |
 | `compatibility-check` | Before introducing new deps or auditing existing stack |
+| `context7-docs` | When you need up-to-date library/API docs, code examples, or framework conventions — use BEFORE web search |
 | `ui-ux-pro-max` | When building any frontend UI — pages, dashboards, landing pages |
 | `state-management` | Track project state persistently across sessions |
 | `checkpoint-protocol` | When human input or decision is required before proceeding |
@@ -225,3 +227,45 @@ See `.agent/hooks/README.md` for full Claude Code installation steps.
 # Quick start: merge .agent/hooks/hooks.json into ~/.claude/settings.json
 # Update script paths to absolute paths in hooks.json first
 ```
+
+---
+
+## 9. Context7 MCP Integration
+
+Super Compound integrates **Context7 MCP** to pull up-to-date, version-specific library documentation directly into the AI context — eliminating hallucinated APIs and outdated code samples.
+
+**MCP tools used:**
+- `mcp_context7_resolve-library-id` — Find Context7 library ID by name
+- `mcp_context7_query-docs` — Retrieve docs and code examples for a specific library
+
+**Fallback chain (when Context7 is unavailable or rate-limited):**
+
+```
+1. Context7 MCP        → mcp_context7_resolve-library-id + mcp_context7_query-docs
+   ↓ if unavailable
+2. Official docs URL   → read_url_content on official documentation
+   ↓ if inaccessible
+3. Web search          → search_web as last resort
+```
+
+**Auto-invoked in:** `research.md`, `plan.md`, `writing-plans` skill, `compatibility-check` skill, `architecture-enforcement` skill.
+
+> Full skill reference: `.agent/skills/context7-docs/SKILL.md`
+
+### Setup
+
+Context7 MCP is already supported — it just needs to be configured in your AI client:
+
+```json
+// Antigravity / Claude Code (add to MCP settings)
+{
+  "mcpServers": {
+    "context7": {
+      "url": "https://mcp.context7.com/mcp",
+      "headers": { "CONTEXT7_API_KEY": "YOUR_API_KEY" }
+    }
+  }
+}
+```
+
+Get a free API key at [context7.com/dashboard](https://context7.com/dashboard) for higher rate limits. Without an API key, Context7 still works but with lower rate limits.

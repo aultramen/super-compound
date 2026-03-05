@@ -179,3 +179,22 @@ docs/solutions/<category>/<filename>.md
 ```
 
 **Categories:** `build-errors/`, `test-failures/`, `runtime-errors/`, `performance-issues/`, `database-issues/`, `security-issues/`, `ui-bugs/`, `integration-issues/`, `logic-errors/`
+
+---
+
+### External Documentation Standard
+
+**Context7 First — before any web search for library/API docs.**
+
+When you need documentation for a library, framework, or package:
+
+```
+PRIORITY ORDER:
+1. Context7 MCP   → mcp_context7_resolve-library-id + mcp_context7_query-docs
+   ↓ if unavailable or library not found
+2. Official docs  → read_url_content on official documentation URL
+   ↓ if inaccessible
+3. Web search     → search_web as last resort
+```
+
+> Full usage pattern and fallback strategy → `context7-docs` skill.

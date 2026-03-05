@@ -39,6 +39,7 @@ Based on findings, decide if external research is needed:
 | Strong local patterns, clear guidance | Skip external research |
 | High-risk topic (security, payments, APIs) | Always research |
 | Unfamiliar territory, new technology | Research |
+| Library/framework API involved | Use `context7-docs` skill (before web search) |
 
 Announce the decision: "Your codebase has solid patterns for this. Proceeding without external research." or "This involves [topic], so I'll research best practices first."
 
@@ -47,10 +48,11 @@ Announce the decision: "Your codebase has solid patterns for this. Proceeding wi
 If the plan introduces **new dependencies or major version changes**:
 
 1. **Invoke** the `compatibility-check` skill in **pre-flight mode**
-2. **Scan** current dependency files for existing versions
-3. **Web search** for compatibility data on new dependencies
-4. **Report** findings in a `## Compatibility Check` section of the plan
-5. **If blockers found** — warn user and suggest alternatives before proceeding
+2. **Invoke** `context7-docs` skill to get version-specific docs for new libraries (before web search)
+3. **Scan** current dependency files for existing versions
+4. **Web search** for compatibility data on new dependencies (if Context7 doesn't have it)
+5. **Report** findings in a `## Compatibility Check` section of the plan
+6. **If blockers found** — warn user and suggest alternatives before proceeding
 
 **Skip if:** No new dependencies are introduced, or changes are internal-only.
 
