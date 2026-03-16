@@ -152,3 +152,6 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `prd-generator` | When planning a feature — generate structured PRD with user stories |
 | `eval-harness` | Before/after implementing features — define pass/fail criteria, measure with pass@k |
 | `context7-docs` | When you need up-to-date library/API docs, code examples, or framework conventions — use before web search |
+| `subagent-orchestration` | When executing plans with independent tasks — dispatches fresh agent per task with 2-stage review (spec compliance then code quality) |
+| `parallel-execution` | When a plan has 5+ independent tasks that don't share files — dispatches multiple agents in isolated git worktrees |
+| `skill-authoring` | When creating new skills, editing existing skills, or verifying skills work before deployment — TDD for documentation |

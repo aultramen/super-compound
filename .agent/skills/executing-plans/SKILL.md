@@ -156,6 +156,22 @@ IF verification gate fails:
 
 ## Phase 4: Ship It
 
+### Pre-Merge Checklist
+
+Before committing or creating a PR, verify:
+
+```
+- [ ] All planned tasks marked completed
+- [ ] All tests pass (fresh run, not cached)
+- [ ] Linting passes with zero errors
+- [ ] No console.log/print debug statements left
+- [ ] No commented-out code blocks
+- [ ] No TODO/FIXME without issue references
+- [ ] No hardcoded credentials or secrets
+- [ ] All new files are tracked by git
+- [ ] No unintended file changes (review git status)
+```
+
 ### Create Commit (if using Git)
 
 ```bash
@@ -165,6 +181,28 @@ git diff --staged  # Check the changes
 
 git commit -m "feat(scope): description of what and why"
 ```
+
+### Branch Cleanup (if on feature branch)
+
+```bash
+# Ensure branch is up to date with target
+git fetch origin main
+git rebase origin/main  # or merge, per project convention
+
+# Verify after rebase
+[run test command]  # Tests must still pass after rebase
+
+# Push for PR
+git push origin feat/<feature-name>
+```
+
+### PR Preparation
+
+When creating a PR/merge request:
+- **Title:** Follow commit convention — `feat(scope): description`
+- **Description:** Link to plan document, summarize what changed and why
+- **Checklist:** Include pre-merge checklist results
+- **Reviewers:** Tag appropriate reviewers
 
 ### Update State
 

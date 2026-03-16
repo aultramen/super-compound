@@ -137,7 +137,7 @@ your-project/
 │   │   ├── session-end.js               ← Remind to /compound at session end
 │   │   ├── pre-compact.js               ← Save STATE.md before compaction
 │   │   └── suggest-compact.js           ← Suggest /pause after N tool calls
-│   └── skills/                          ← 23 development skills
+│   └── skills/                          ← 27 development skills
 │       ├── architecture-enforcement/    ← Per-framework guides + preset definitions
 │       ├── brainstorming/               ← Idea exploration with lettered Q&A
 │       ├── writing-plans/               ← Implementation plans with task-sizing + optional tasks.json
@@ -150,7 +150,10 @@ your-project/
 │       ├── knowledge-compounding/       ← Solution docs + session progress log
 │       ├── code-review/                 ← Multi-perspective P1/P2/P3 review
 │       ├── compatibility-check/         ← Version & dependency validation
-│       ├── context7-docs/               ← Context7 MCP usage + fallback strategy  ← NEW
+│       ├── context7-docs/               ← Context7 MCP usage + fallback strategy
+│       ├── subagent-orchestration/      ← Per-task agent dispatch with 2-stage review
+│       ├── parallel-execution/          ← Multiple agents in isolated worktrees
+│       ├── skill-authoring/             ← TDD methodology for skill documentation
 │       ├── ui-ux-pro-max/               ← Design intelligence with BM25 engine
 │       ├── state-management/            ← Persistent STATE.md tracking
 │       ├── checkpoint-protocol/         ← 7 human-in-the-loop gate types
@@ -317,6 +320,9 @@ Use the workflow commands in your IDE:
 | **code-review** | Multi-perspective review | Spec + quality + architecture with P1/P2/P3 |
 | **compatibility-check** | Tech stack validation | Pre-flight during planning + on-demand audit |
 | **context7-docs** | Up-to-date library/API docs via MCP | `resolve-library-id` → `query-docs` with fallback chain |
+| **subagent-orchestration** | Per-task fresh agent dispatch | 2-stage review (spec compliance then code quality) |
+| **parallel-execution** | Execute independent tasks simultaneously | Worktree isolation prevent conflicts |
+| **skill-authoring** | TDD for process documentation | Baseline failures → write skill → close loopholes |
 | **ui-ux-pro-max** | Design intelligence for frontend UI | 67 styles, 96 palettes, 57 fonts, 13 stacks |
 | **state-management** | Persistent project state | STATE.md tracking, decisions, blockers |
 | **checkpoint-protocol** | Human-in-the-loop gates | 7 checkpoint types for structured decisions |

@@ -96,6 +96,7 @@ Before executing a plan, validate task sizes:
 - Skipping plan verification before execution
 - PRD acceptance criteria saying "works correctly" (must be specific)
 - Creating tasks that can't be described in 2-3 sentences (too big)
+- Skipping spec compliance review before code quality review (subagent orchestration)
 
 ---
 

@@ -145,7 +145,7 @@ your-project/
 │   │             resume→status, security→audit, compatibility→audit, reload→init
 │   ├── agents/             ← 5 dedicated subagents
 │   ├── hooks/              ← 3 event-driven automation scripts
-│   └── skills/             ← 24 development skills
+│   └── skills/             ← 27 development skills
 │       ├── architecture-enforcement/   ├── brainstorming/
 │       ├── writing-plans/              ├── executing-plans/
 │       ├── prd-generator/              ├── eval-harness/
@@ -153,11 +153,13 @@ your-project/
 │       ├── verification-before-completion/ ├── knowledge-compounding/
 │       ├── code-review/                ├── compatibility-check/
 │       ├── context7-docs/              ├── ui-ux-pro-max/
-│       ├── state-management/           ├── checkpoint-protocol/
-│       ├── plan-verification/          ├── gap-closure/
-│       ├── todo-management/            ├── context-engineering/
-│       ├── security-audit/             ├── secure-code-patterns/
-│       ├── threat-modeling/            └── data-privacy/
+│       ├── subagent-orchestration/     ├── parallel-execution/
+│       ├── skill-authoring/            ├── state-management/
+│       ├── checkpoint-protocol/        ├── plan-verification/
+│       ├── gap-closure/                ├── todo-management/
+│       ├── context-engineering/        ├── security-audit/
+│       ├── secure-code-patterns/       ├── threat-modeling/
+│       └── data-privacy/
 └── README.md
 ```
 

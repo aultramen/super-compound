@@ -149,6 +149,9 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
 | `architecture-enforcement` | Before writing code — verify correct folder and imports |
 | `compatibility-check` | Before introducing new deps or auditing existing stack |
 | `context7-docs` | When you need up-to-date library/API docs, code examples, or framework conventions — use BEFORE web search |
+| `subagent-orchestration` | When executing plans with independent tasks — dispatches fresh agent per task with 2-stage review |
+| `parallel-execution` | When a plan has 5+ independent tasks that don't share files — dispatches multiple agents in isolated worktrees |
+| `skill-authoring` | When creating new skills, editing existing skills, or verifying skills work before deployment — TDD for docs |
 | `ui-ux-pro-max` | When building any frontend UI — pages, dashboards, landing pages |
 | `state-management` | Track project state persistently across sessions |
 | `checkpoint-protocol` | When human input or decision is required before proceeding |

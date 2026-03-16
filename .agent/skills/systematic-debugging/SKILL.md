@@ -163,12 +163,64 @@ When you have a large code change that broke something:
 1. Find a known-good state (commit, stash)
 2. Bisect to find the exact change that broke it
 
-### Defense in Depth
+### Root-Cause Tracing (5-Level Backward Trace)
 
-After fixing, add:
-- Input validation at boundaries
-- Assertions for assumptions
-- Logging for future diagnostics
+Don't fix symptoms — trace backward through the call chain to find where the bug originates:
+
+```
+Level 1: SYMPTOM     → What user observes (UI error, wrong data)
+Level 2: IMMEDIATE   → What code produces the symptom (the rendering, the return)
+Level 3: UPSTREAM    → What feeds data to that code (the transformer, the query)
+Level 4: SOURCE      → Where data enters the system (API, DB, user input)
+Level 5: ROOT CAUSE  → Why the source has wrong data (validation gap, race condition)
+```
+
+**Process:**
+1. Start at the symptom (Level 1)
+2. Ask: "What code directly produced this?" → Move to Level 2
+3. Ask: "What fed data into that code?" → Move to Level 3
+4. Continue until you find where correct data becomes incorrect
+5. Fix at THAT level — not at the symptom level
+
+**Red flag:** If your fix is at Level 1 or 2, you're probably fixing symptoms.
+
+### Defense in Depth (4-Layer Validation)
+
+After fixing a bug, make similar bugs impossible by adding validation at multiple layers:
+
+| Layer | What to Add | Example |
+|-------|-------------|---------|
+| **Entry** | Input validation at system boundary | Schema validation, type checks |
+| **Business Logic** | Assertions on assumptions | `assert user.id != null` before query |
+| **Environment** | Runtime checks for prerequisites | Verify config loaded, DB connected |
+| **Debug** | Diagnostic logging for future issues | Log unexpected states with context |
+
+**Principle:** Each layer catches bugs the others miss. One layer is never enough.
+
+### Condition-Based Waiting (Replacing Timeouts)
+
+When tests involve async operations, **never use fixed timeouts**:
+
+```
+❌ BAD:  await sleep(2000); expect(result).toBe(true);
+✅ GOOD: await waitFor(() => expect(result).toBe(true));
+```
+
+**Pattern:**
+1. Define the CONDITION you're waiting for (not a duration)
+2. Poll or subscribe until condition is met
+3. Set a MAXIMUM timeout as safety net (not expected wait)
+4. If timeout triggers, the test fails with a meaningful message
+
+**Common symptoms of timeout issues:**
+- Tests pass locally, fail in CI (slower machines)
+- Tests flaky — pass/fail inconsistently
+- Tests hang or take way too long
+
+**Fixes:**
+- Replace `sleep()` with condition polling
+- Replace fixed delays with event-driven waits
+- Use framework utilities: `waitFor`, `eventually`, `retry`
 
 ## Integration
 

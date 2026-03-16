@@ -125,6 +125,28 @@ docs/brainstorms/YYYY-MM-DD-<topic>-brainstorm.md
 - **Stay focused on WHAT, not HOW** — Implementation details belong in the plan
 - **NEVER CODE** — Just explore and document decisions
 
+## Visual Brainstorming (Optional)
+
+When the idea benefits from visual exploration (architecture diagrams, UI flows, component trees):
+
+1. **Create visual fragments** — Use Mermaid diagrams or ASCII art to sketch:
+   - Component relationships
+   - Data flow between modules
+   - UI layout wireframes
+   - Decision trees
+
+2. **Present visually** — Render diagrams alongside text descriptions
+
+3. **Iterate visually** — Update diagrams as the idea evolves through discussion
+
+**When to use visual companion:**
+- Architecture decisions with multiple components
+- UI/UX flows with user journeys
+- Complex data relationships
+- System integration mapping
+
+**Skip visual companion for:** Simple features, bug fixes, configuration changes.
+
 ## Red Flags
 
 | Thought | Reality |

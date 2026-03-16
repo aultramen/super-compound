@@ -116,6 +116,16 @@ Next failing test for next feature.
 | "Manual test faster" | Manual doesn't prove edge cases. |
 | "Need to explore first" | Fine. Throw away exploration, then start with TDD. |
 
+## Testing Anti-Patterns
+
+| Anti-Pattern | Problem | Fix |
+|-------------|---------|-----|
+| **Testing mock behavior** | Tests verify mocks return what you told them to, not real behavior | Test with real implementations; mock only external services |
+| **Test-only methods** | Adding public methods only for testing exposes internals | Test through public API; if untestable, redesign the interface |
+| **Incomplete mocks** | Mock returns hardcoded data, misses real error paths | Create realistic test fixtures; test error cases explicitly |
+| **Testing implementation** | Tests break when refactoring even though behavior hasn't changed | Assert outcomes and behavior, not internal steps |
+| **Gate function skipping** | Not running full verification before claiming "done" | Always run the full test command; partial verification proves nothing |
+
 ## Red Flags — STOP and Start Over
 
 - Code written before test

@@ -21,17 +21,21 @@ Before reviewing any code:
 2. **Understand the context** — What does this code interact with?
 3. **Check acceptance criteria** — What defines "done"?
 
-### Phase 2: Spec Compliance Review
+### Phase 2: Spec Compliance Review (STAGE 1)
 
 **First pass: Does it match the specification?**
+
+> ⚠️ **This is Stage 1 of a 2-stage review.** Spec compliance MUST pass before proceeding to Stage 2 (Code Quality). Reviewing code quality when spec isn't met wastes everyone's time.
 
 - [ ] All acceptance criteria met
 - [ ] All plan tasks completed
 - [ ] Expected behavior implemented
 - [ ] Edge cases from spec handled
 - [ ] No missing features
+- [ ] No extra unplanned features (scope creep)
 
-**If spec compliance fails:** Stop here. Fix gaps before code quality review.
+**If spec compliance fails → STOP HERE.** Fix gaps before code quality review.
+Do NOT proceed to Phase 3 until all spec items pass.
 
 ### Phase 3: Code Quality Review
 
