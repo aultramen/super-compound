@@ -1,183 +1,131 @@
 ---
 name: prd-generator
-description: "Generate a structured Product Requirements Document (PRD) with clarifying questions. Use when planning a feature, starting a new project, or turning a vague idea into a clear specification. Sits between brainstorming and planning."
+description: "Generate a structured Product Requirements Document (PRD) from a rough idea, prior exploration, or current conversation before implementation planning."
 ---
 
 # PRD Generator
 
-## Overview
+## Purpose
 
-Create detailed Product Requirements Documents that sit between brainstorming (exploration) and planning (execution). A PRD answers "What exactly will we build?" — clearer than a brainstorm, less technical than a plan.
+Define what to build, why it matters, who it serves, and how completion will be judged. A PRD sits between `/explore` and `/plan`.
 
-**Announce:** "I'm using the prd-generator skill to create a structured PRD."
+Announce: "I'm using the prd-generator skill to create a structured PRD."
 
-**Save to:** `docs/prd/prd-<feature-name>.md`
+Save to `docs/prd/prd-<feature-name>.md`.
 
-## The Process
+## Inputs
 
-### Step 1: Check for Existing Context
+Before writing:
 
-Before creating a new PRD, check for related work:
+- Read relevant `docs/brainstorms/`, existing `docs/prd/`, and current conversation context.
+- Check `docs/progress.md`, `docs/STATE.md`, ADRs, and domain notes when present.
+- For UI work, reuse `interface-design` findings or existing design-system artifacts.
+- If an existing PRD covers the topic, ask whether to revise or create a new PRD.
 
-```
-docs/brainstorms/*.md    → recent brainstorm to build on
-docs/prd/*.md            → existing PRD on this topic
-docs/progress.md         → Codebase Patterns for context
-```
+## Clarifying Questions
 
-**If brainstorm found:** Use decisions as input, skip clarifying questions for already-decided aspects.
-**If PRD exists:** Ask user whether to revise existing PRD or create new one.
+Ask 3-5 essential questions only when the answer is not already known.
 
-### Step 2: Clarifying Questions
+Prefer lettered options:
 
-Ask 3-5 essential questions using **lettered options** for fast responses.
-
-**Focus areas:**
-- **Problem/Goal:** What problem does this solve?
-- **Core Functionality:** What are the key actions?
-- **Scope/Boundaries:** What should it NOT do?
-- **Success Criteria:** How do we know it's done?
-
-**Format:**
-
-```
-1. What is the primary goal of this feature?
-   A. Improve user experience
-   B. Increase performance/efficiency
-   C. Add new capability
-   D. Other: [please specify]
-
-2. Who is the target user?
-   A. End users
-   B. Admin users
-   C. All users
-   D. Developers/API consumers
-
-3. What is the initial scope?
-   A. Minimal viable version (core only)
-   B. Full-featured implementation
-   C. Backend/API only
-   D. Frontend/UI only
+```text
+1. What is the initial scope?
+A. Minimal viable version
+B. Full workflow
+C. Backend/API only
+D. Frontend/UI only
+E. Other
 ```
 
-Users can respond with "1A, 2C, 3B" for quick iteration. Always include a "D. Other" option.
+Focus on:
 
-### Step 3: Generate PRD
+- Problem and target user
+- Core user actions
+- Success criteria
+- Non-goals
+- Constraints, risks, and edge cases
 
-**Required Sections:**
+If the user asks to synthesize the current thread, write from known context and place remaining uncertainty under `Open Questions`.
 
-#### 1. Introduction/Overview
-Brief description of the feature and the problem it solves.
-
-#### 2. Goals
-Specific, measurable objectives (bullet list).
-
-#### 3. User Stories
-
-Each story follows this template:
+## Required PRD Sections
 
 ```markdown
-### US-001: [Title]
-**Description:** As a [user], I want [feature] so that [benefit].
+# <Feature> PRD
 
-**Acceptance Criteria:**
-- [ ] Specific verifiable criterion
-- [ ] Another criterion
-- [ ] Typecheck/lint passes
-- [ ] [UI stories only] Verify in browser
+## Overview
+<Problem, target user, and proposed capability.>
+
+## Goals
+- <measurable goal>
+
+## Non-Goals
+- <explicitly out of scope>
+
+## User Stories
+### US-001: <title>
+As a <user>, I want <capability> so that <benefit>.
+
+Acceptance Criteria:
+- [ ] <specific, verifiable behavior>
+
+## Functional Requirements
+- FR-1: <specific system behavior>
+
+## UX And Content Notes
+<Only when UI/user interaction is involved.>
+
+## Technical Constraints
+<Known dependencies, integration points, data contracts, or constraints.>
+
+## Security, Privacy, And Compliance
+<Only when relevant.>
+
+## Success Metrics
+- <observable metric or outcome>
+
+## Open Questions
+- <unresolved question or "None">
 ```
-
-**Story sizing rules:**
-- Each story must be completable in one focused session
-- If a story cannot be described in 2-3 sentences, split it
-- Order by dependency: schema → backend → API → frontend
-
-#### 4. Functional Requirements
-Numbered list of specific functionalities:
-- "FR-1: The system must allow users to..."
-- "FR-2: When a user clicks X, the system must..."
-
-Be explicit and unambiguous. Vague requirements ("works correctly") are not acceptable.
-
-#### 5. Non-Goals (Out of Scope)
-What this feature will NOT include. Critical for managing scope.
-
-#### 6. Design Considerations (Optional)
-- UI/UX requirements
-- Mockups or wireframe references
-- Existing components to reuse
-
-#### 7. Technical Considerations (Optional)
-- Known constraints or dependencies
-- Integration points with existing systems
-- Performance requirements
-
-#### 8. Success Metrics
-How success will be measured:
-- "Reduce time to complete X by 50%"
-- "Increase conversion rate by 10%"
-
-#### 9. Open Questions
-Remaining questions or areas needing clarification.
-
-### Step 4: Validate with User
-
-Present the PRD for review. Ask:
-- "Does this capture what you want to build?"
-- "Should any stories be added, removed, or split?"
-- "Are the non-goals correct?"
-
-### Step 5: Handoff
-
-After user approves:
-
-```
-✓ PRD saved to docs/prd/prd-<feature-name>.md
-
-What next?
-1. Convert to implementation plan → run /plan
-2. Review and refine the PRD
-3. Done for now — return later
-```
-
-## Writing for Clarity
-
-The PRD reader may be a junior developer or AI agent. Therefore:
-
-- Be explicit and unambiguous
-- Avoid jargon or explain it
-- Provide enough detail to understand purpose and core logic
-- Number requirements for easy reference
-- Use concrete examples where helpful
 
 ## Story Sizing
 
-Apply the same sizing discipline as `writing-plans`:
+Each story should fit one focused implementation session.
 
-| Right-Sized | Too Big (Split) |
-|-------------|----------------|
-| "Add a database column and migration" | "Build the entire dashboard" |
-| "Add a UI component to an existing page" | "Add authentication" |
-| "Update a server action with new logic" | "Refactor the API" |
+Split stories when:
 
-## Red Flags
+- They span unrelated user roles
+- They require unrelated systems
+- They have different release risks
+- They need separate verification strategies
+- The acceptance criteria cannot be reviewed at once
 
-| Thought | Reality |
-|---------|---------|
-| "Skip the questions, I know what they want" | Assumptions cause rework. Ask. |
-| "One big story is fine" | Small stories = reliable AI execution |
-| "Acceptance criteria: works correctly" | Must be specific and verifiable |
-| "Non-goals aren't important" | Undefined scope always expands |
+Prefer vertical user value over horizontal layer work.
 
-## Integration
+## Validation
 
-**Prerequisite skills:**
-- **brainstorming** — Optional: provides decisions as input
+Before handoff, check:
 
-**This skill feeds into:**
-- **writing-plans** — Creates the implementation plan from this PRD
-- **plan-verification** — Validates plan coverage against PRD requirements
+- Every goal maps to at least one story or requirement
+- Every story has concrete acceptance criteria
+- Non-goals prevent likely scope creep
+- UI stories include accessibility and responsive expectations
+- Data/security/privacy stories include negative cases
+- Open questions are real blockers, not vague reminders
 
-**Related workflows:**
-- `/prd` — Workflow that invokes this skill
-- `/brainstorm` → `/prd` → `/plan` — Full specification pipeline
+## Handoff
+
+After saving the PRD:
+
+1. Review and refine the PRD
+2. Convert to an implementation plan with `/plan`
+3. Route UI-focused work through `/ui`
+4. Stop with the PRD saved
+
+Current specification pipeline: `/explore` -> `/prd` -> `/plan` -> `/work`.
+
+## Related Skills
+
+- `brainstorming` provides upstream exploration
+- `interface-design` provides UI and design-system guidance
+- `writing-plans` converts the PRD into implementation tasks
+- `plan-verification` checks plan coverage against the PRD

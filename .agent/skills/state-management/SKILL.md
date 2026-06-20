@@ -1,161 +1,133 @@
 ---
 name: state-management
-description: "Use to maintain persistent project memory across sessions. Creates and updates STATE.md to track position, decisions, blockers, completed work, and deferred ideas."
+description: "Use to maintain durable project memory across sessions through STATE.md, progress notes, checkpoints, and pause handoff files."
 ---
 
 # State Management
 
-## Overview
+## Purpose
 
-Maintain persistent project memory so every session starts with full context. STATE.md is the single source of truth for where you are, what you've decided, and what's left to do.
+Keep project state durable, concise, and useful so a future session can run `/status` and continue without guessing.
 
-**Announce:** "I'm using the state-management skill to track project state."
+Announce: "I'm using the state-management skill to track project state."
 
-## The STATE.md File
+## Primary Files
 
-**Location:** `docs/STATE.md` (project root)
+| File | Use |
+|---|---|
+| `docs/STATE.md` | Current position, decisions, blockers, completed work, and next action |
+| `.continue-here.md` | Short handoff created by `/pause` for the next session |
+| `docs/progress.md` | Chronological progress and codebase patterns |
+| `docs/ERROR_LOG.md` | Costly mistakes, root cause, and prevention |
+| `docs/LEARNED_KNOWLEDGE.md` | Confirmed reusable project preferences and conventions |
+| `docs/adr/` | Durable architecture decisions |
+| `docs/tasks/tasks-*.json` | Optional task ledger for long or multi-agent work |
 
-### Template
+Do not create every file by default. Create only what the work needs.
+
+## STATE.md Template
 
 ```markdown
 # Project State
 
-> Last updated: YYYY-MM-DD HH:mm
+Last updated: YYYY-MM-DD HH:mm
 
 ## Current Position
+- Workflow: <init/status/explore/research/prd/plan/eval/work/debug/review/audit/compound/pause/launch/ui/none>
+- Active task: <task or none>
+- Next action: <specific next step>
+- Branch/workspace: <branch or n/a>
 
-| Field | Value |
-|-------|-------|
-| Active Workflow | [brainstorm/plan/work/debug/review/none] |
-| Active Task | [task description or "none"] |
-| Active Step | [step number/name or "none"] |
-| Branch | [current git branch] |
+## Decisions
+- YYYY-MM-DD: <decision and why>
 
-## Decisions Made
-
-Locked decisions — do NOT revisit unless user explicitly requests.
-
-| # | Decision | Context | Date |
-|---|----------|---------|------|
-| 1 | [what was decided] | [why] | YYYY-MM-DD |
-
-## Blockers & Open Questions
-
-| # | Blocker | Status | Since |
-|---|---------|--------|-------|
-| 1 | [description] | [waiting/investigating/resolved] | YYYY-MM-DD |
+## Blockers
+- <blocker, owner, and needed input>
 
 ## Completed Work
-
-| # | What | Files Changed | Date |
-|---|------|---------------|------|
-| 1 | [description] | [key files] | YYYY-MM-DD |
-
-## Quick Tasks Completed
-
-| # | Task | Date |
-|---|------|------|
-| 1 | [description] | YYYY-MM-DD |
+- YYYY-MM-DD: <work completed and important files>
 
 ## Deferred Ideas
-
-Ideas captured during work — NOT in current scope.
-
-| # | Idea | Source | Priority |
-|---|------|--------|----------|
-| 1 | [description] | [brainstorm/work/review] | [high/medium/low] |
+- <idea and why it is out of current scope>
 ```
 
-## When to Create STATE.md
+## When To Create Or Update
 
-**Create automatically when:**
-- Starting any workflow (brainstorm, plan, work, debug)
-- User runs `/init` on a project
-- User runs `/resume` and no STATE.md exists
+Create or update durable state when:
 
-**Never create for:**
-- Simple questions or one-off tasks
-- Prototyping with no-git mode
-- Single-file scripts
+- Starting non-trivial workflow execution
+- Pausing work
+- Completing a planned task
+- Making a decision that future work must respect
+- Encountering a blocker
+- Deferring a user idea
+- Finishing a feature, review, audit, or debug session
 
-## When to Update STATE.md
+Skip state files for one-off questions, tiny edits, or throwaway experiments.
 
-### Mandatory Updates
+## Update Rules
 
-| Event | What to Update |
-|-------|---------------|
-| Starting a workflow | Current Position → active workflow |
-| Making a decision | Add to Decisions Made |
-| Completing a task | Move to Completed Work, update position |
-| Encountering a blocker | Add to Blockers |
-| User mentions future idea | Add to Deferred Ideas |
-| Pausing work (`/pause`) | Full state snapshot |
-| Finishing a workflow | Clear Current Position, update Completed Work |
+- Read before writing.
+- Append or revise the relevant section; do not erase useful history.
+- Keep entries short and dated.
+- Record decisions as constraints unless the user reopens them.
+- Keep state lean; archive noisy old details under `docs/state-archive/` if needed.
+- Never store secrets, credentials, private data, or full sensitive payloads.
 
-### Update Rules
+## Session Start
 
-1. **Read before write** — Always read current STATE.md before modifying
-2. **Append, don't overwrite** — Add new entries, don't remove old ones
-3. **Timestamp everything** — Every entry gets a date
-4. **Lock decisions** — Once in Decisions Made, treat as constraints
-5. **Keep it lean** — Max 20 entries per section; archive old entries to `docs/state-archive/`
+At the beginning of continuation work:
 
-## How to Use STATE.md
+1. Read `docs/STATE.md` if present.
+2. Read `.continue-here.md` if present.
+3. Read the active plan, PRD, brainstorm, or task ledger referenced by state.
+4. Load only the files needed for the next step.
+5. If the route is unclear, run `/status`.
 
-### At Session Start
+## Session End
 
-```
-1. READ docs/STATE.md
-2. LOAD Current Position → resume from where you left off
-3. LOAD Decisions Made → respect all locked decisions
-4. CHECK Blockers → address if possible
-5. ANNOUNCE position to user: "Resuming from [position]. Last worked on [task]."
-```
+Before stopping:
 
-### During Work
+- Update exact next action.
+- Record completed work and decisions.
+- Note blockers and owner.
+- Suggest `/compound` if a reusable solution was discovered.
+- Suggest `/pause` if the user will continue in a later session.
 
-```
-1. After each significant step → update Current Position
-2. After each decision → add to Decisions Made
-3. When user mentions future idea → add to Deferred Ideas with source
-4. When blocked → add to Blockers, suggest checkpoint
-```
+## Error And Learning Capture
 
-### At Session End
+Use `docs/ERROR_LOG.md` for mistakes that caused rework:
 
-```
-1. UPDATE Current Position with exact stopping point
-2. ENSURE all new decisions are recorded
-3. VERIFY Completed Work is up to date
+```markdown
+## YYYY-MM-DD - <category>
+- Symptom: <what happened>
+- Root cause: <why>
+- Correct approach: <what to do next time>
+- Prevention: <short rule>
 ```
 
-## Key Principles
+Use `docs/LEARNED_KNOWLEDGE.md` for durable conventions:
 
-| Principle | Description |
-|-----------|-------------|
-| **State survives sessions** | STATE.md persists across conversations |
-| **Decisions are locked** | Once recorded, don't revisit without explicit request |
-| **Deferred ≠ forgotten** | Capture ideas but don't act on them now |
-| **Position is precise** | "Step 3 of Task 2 in work workflow" not "working on feature" |
-| **Lean state** | Only track what's needed to resume; archive the rest |
+```markdown
+## YYYY-MM-DD - <topic>
+- Learning: <confirmed pattern>
+- Confidence: confirmed | observed | inferred
+- Applies to: <scope>
+```
 
-## Red Flags — STOP
+## Red Flags
 
-| Thought | Reality |
-|---------|---------|
-| "I'll remember where we were" | You won't. Update STATE.md |
-| "This decision doesn't need recording" | If it affects future work, record it |
-| "Too small to track" | Small decisions compound into big confusion |
-| "I'll update state later" | Update NOW or it's lost |
+| Thought | Better Response |
+|---|---|
+| "I'll remember this" | Write the next action |
+| "This decision is obvious" | Record it if future work depends on it |
+| "We can clean state later" | Keep it lean now |
+| "The handoff needs every detail" | Link to durable docs and name the next step |
 
-## Integration
+## Related Skills
 
-**This skill is used by:**
-- **executing-plans** — Tracks task completion and position
-- **brainstorming** — Records decisions and deferred ideas
-- **systematic-debugging** — Tracks investigation state
-
-**Pairs with:**
-- **checkpoint-protocol** — Checkpoints trigger state updates
-- **pause/resume workflows** — State is the handoff mechanism
-- **todo-management** — Deferred ideas feed into todos
+- `context-engineering` for selective loading
+- `checkpoint-protocol` for pause decisions
+- `executing-plans` for task progress
+- `brainstorming` and `prd-generator` for upstream decisions
+- `todo-management` for deferred ideas

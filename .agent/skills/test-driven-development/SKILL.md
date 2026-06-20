@@ -1,4 +1,4 @@
-﻿---
+---
 name: test-driven-development
 description: "Use when implementing any feature or bugfix. Write the test first, watch it fail, write minimal code to pass. Adapts strictness based on project TDD mode."
 ---
@@ -10,6 +10,8 @@ description: "Use when implementing any feature or bugfix. Write the test first,
 Write the test first. Watch it fail. Write minimal code to pass.
 
 **Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
+
+**Behavior principle:** Tests verify behavior through public interfaces, not implementation details. The interface is the test surface.
 
 ## TDD Modes
 
@@ -46,11 +48,28 @@ Write ONE minimal test showing what should happen.
 - One behavior per test
 - Clear, descriptive name
 - Real code (no mocks unless unavoidable)
+- Use the highest public interface that reaches the behavior
+- Describe what the system does, not how internals collaborate
 
 ```
 Good: test('rejects empty email', ...)  → Tests actual behavior
 Bad:  test('test1', ...)                → Vague, meaningless name
 ```
+
+### Anti-Pattern: Horizontal Slices
+
+Do not write all tests first and then all implementation. That locks in imagined behavior before the code teaches you anything.
+
+Correct loop:
+
+```text
+RED -> GREEN: one behavior
+RED -> GREEN: next behavior
+RED -> GREEN: next behavior
+REFACTOR: only after green
+```
+
+Each test is a tracer bullet: a narrow path that proves one observable behavior.
 
 ### Verify RED — Watch It Fail
 
@@ -89,6 +108,9 @@ After green only:
 - Remove duplication
 - Improve names
 - Extract helpers
+- Deepen shallow modules when tests reveal too much setup
+- Move logic toward the interface or data that owns it
+- Delete obsolete tests that only covered old shallow internals
 
 **Keep tests green. Don't add behavior.**
 
@@ -101,8 +123,8 @@ Next failing test for next feature.
 | Problem | Solution |
 |---------|----------|
 | Don't know how to test | Write wished-for API. Write assertion first. Ask for help. |
-| Test too complicated | Design too complicated. Simplify the interface. |
-| Must mock everything | Code too coupled. Use dependency injection. |
+| Test too complicated | Design too complicated. Use `architecture-enforcement` to simplify the interface. |
+| Must mock everything | Code too coupled. Mock only system boundaries; inject dependencies. |
 | Test setup huge | Extract helpers. Still complex? Simplify design. |
 
 ## Common Rationalizations
@@ -125,6 +147,12 @@ Next failing test for next feature.
 | **Incomplete mocks** | Mock returns hardcoded data, misses real error paths | Create realistic test fixtures; test error cases explicitly |
 | **Testing implementation** | Tests break when refactoring even though behavior hasn't changed | Assert outcomes and behavior, not internal steps |
 | **Gate function skipping** | Not running full verification before claiming "done" | Always run the full test command; partial verification proves nothing |
+
+## Mocking Rule
+
+Mock only at system boundaries: external APIs, time/randomness, file systems, and sometimes databases. Do not mock your own modules to force tests through a brittle internal shape.
+
+Prefer local substitutes when they exist: test databases, in-memory adapters, local filesystems, fake clocks, and SDK-style adapters with specific operations.
 
 ## Red Flags — STOP and Start Over
 
@@ -173,3 +201,5 @@ Can't check all boxes? You skipped TDD. Start over.
 
 **This skill pairs with:**
 - **verification-before-completion** — Verify tests actually pass before claiming done
+- **architecture-enforcement** — Improve seams and interfaces when tests are hard to write
+- **state-management** — Keep behavior names aligned with project language

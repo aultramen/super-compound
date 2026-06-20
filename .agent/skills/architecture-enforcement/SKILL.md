@@ -11,6 +11,8 @@ Enforce clean architecture aligned with each framework's best practices. This sk
 
 **Announce:** "I'm using the architecture-enforcement skill to verify code placement and dependencies."
 
+**Scope:** This skill checks placement, dependency direction, and framework conventions. Use `/explore` or `/plan` when the deeper question is whether a module, interface, seam, or adapter is shaped well enough to build.
+
 ## When to Use
 
 - Before creating any new file — verify it goes in the correct directory
@@ -532,6 +534,8 @@ Flow: Request → Auth Middleware → Authz Check → Controller → Service →
 ---
 
 ## Integration
+
+Pair this with `writing-plans` and `code-review` when placement is valid but the module shape, interface, adapter strategy, leverage, or locality needs review.
 
 **This skill is used during:**
 - **executing-plans** — Check file placement before writing code

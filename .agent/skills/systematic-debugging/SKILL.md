@@ -13,6 +13,8 @@ Find the root cause BEFORE implementing fixes. Systematic debugging replaces gue
 
 **Core principle:** If you haven't found the root cause, any fix is a guess.
 
+**Feedback-loop principle:** A tight red-capable loop is 90% of debugging. Before building theories, create one command, script, test, curl, browser script, trace replay, or harness that can reproduce the user's exact symptom.
+
 ## The Non-Negotiable Rule
 
 ```
@@ -23,6 +25,21 @@ Skipping diagnosis causes cascading failures.
 ## Phase 1: Root Cause Investigation
 
 **BEFORE attempting ANY fix:**
+
+### 0. Build a Tight Feedback Loop
+
+Create the smallest agent-runnable signal that can go red on this bug:
+
+1. Failing test at the highest seam that reaches the bug
+2. Curl or HTTP script against a running server
+3. CLI invocation with fixture input and expected output
+4. Headless browser script asserting DOM, console, or network behavior
+5. Captured trace replay
+6. Throwaway harness around the smallest subsystem
+7. Property/fuzz loop for intermittent wrong output
+8. Bisection or differential harness for regressions
+
+Tighten it until it is fast, deterministic, and asserts the exact symptom. If a human must click, create a structured HITL script or checklist so the loop still has repeatable inputs and outputs.
 
 ### 1. Read Error Messages Carefully
 
@@ -101,11 +118,13 @@ Verify output at each boundary
 
 ## Phase 3: Hypothesis and Testing
 
-### Form Hypothesis
+### Form Hypotheses
 
 Based on evidence from Phase 1 and 2:
-- "The bug is caused by [root cause] because [evidence]"
-- If you can't state a specific hypothesis, return to Phase 1
+- Generate 3-5 ranked hypotheses before testing any one of them
+- Each hypothesis must include a falsifiable prediction
+- Format: "If X is the cause, then changing/observing Y will produce Z"
+- If you can't state a prediction, return to Phase 1
 
 ### Test Hypothesis
 
@@ -114,7 +133,7 @@ Based on evidence from Phase 1 and 2:
 3. **Observe** — Did the prediction match?
 4. **Iterate** — If wrong, revise hypothesis and test again
 
-**Max 3 hypotheses.** If 3 fail → question your assumptions from Phase 1.
+Test the top hypotheses one variable at a time. If the top 3 fail, question your assumptions from Phase 1 before burning time on lower-confidence guesses.
 
 ## Phase 4: Implementation
 
@@ -134,6 +153,16 @@ Before fixing the bug, write a test that reproduces it:
 - Fix the actual root cause, not symptoms
 - Don't add workarounds
 - If the fix is larger than expected, create a plan
+
+### Cleanup
+
+Before claiming done:
+
+- Re-run the original feedback loop and the regression test
+- Remove temporary logs, debug probes, and throwaway harnesses
+- If debug logs were added, tag them with a unique prefix and grep for the prefix during cleanup
+- Capture the correct hypothesis in the commit message, PR notes, or solution doc
+- If no correct test seam exists, record that architecture gap and consider `architecture-enforcement`
 
 ### Architecture Questions
 
@@ -230,3 +259,4 @@ When tests involve async operations, **never use fixed timeouts**:
 
 **This skill feeds into:**
 - **knowledge-compounding** — Document the solution after fixing
+- **architecture-enforcement** — When no good regression seam exists

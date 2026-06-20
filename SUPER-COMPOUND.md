@@ -1,274 +1,136 @@
-﻿# Super Compound — AI Development Framework
+# Super Compound Operating Contract
 
-> **"Discipline compounds. Each unit of work makes the next one easier."**
+Super Compound is a disciplined operating layer for AI-assisted engineering. It keeps work small, evidence-driven, and durable.
 
-Super Compound combines systematic engineering discipline with compounding knowledge intelligence for Antigravity IDE and Claude.
+## Core Principles
 
----
+- Plan before code when the work is non-trivial.
+- Evidence before claims: run or name the verification that proves the result.
+- Test-first by default for behavior changes.
+- Prefer simple, local, reversible changes.
+- Keep durable context on disk, not only in conversation memory.
+- Turn reusable solutions into documentation through `/compound`.
+- Do not preserve stale workflow aliases unless they are part of the current public interface.
 
-## 1. Core Philosophy
+## Public Workflows
 
-| Principle | Description |
-|-----------|-------------|
-| **Discipline Compounds** | Rigorous process today saves exponential time tomorrow |
-| **Evidence Before Claims** | Never claim completion without fresh verification output |
-| **Test-First by Default** | Write failing test → minimal code → refactor |
-| **YAGNI + DRY** | Build only what's needed, never duplicate |
-| **Knowledge Compounds** | Every solved problem becomes searchable team knowledge |
-| **Plan Before Code** | Brainstorm → Plan → Execute. Don't jump to implementation |
+Use these workflow names only:
 
----
+| Workflow | Purpose |
+|---|---|
+| `/init` | Initialize or reload project/framework context |
+| `/status` | Inspect state and choose the next route |
+| `/explore` | Shape fuzzy ideas, domain questions, strategy, and prototype decisions |
+| `/research` | Gather evidence before a decision |
+| `/prd` | Write product requirements |
+| `/plan` | Write implementation plans |
+| `/eval` | Define or run evaluation criteria |
+| `/work` | Execute a plan |
+| `/debug` | Diagnose and fix root causes |
+| `/review` | Review changed code/docs |
+| `/audit` | Audit security, compatibility, compliance, agent surface, and readiness |
+| `/compound` | Capture reusable knowledge |
+| `/pause` | Save handoff state |
+| `/launch` | Start a focused project or feature lifecycle |
+| `/ui` | Build or refine frontend interfaces with `interface-design` |
 
-## 2. Skill Invocation Rules
+## Routing
 
-**Skills are MANDATORY, not suggestions.**
+- Fuzzy idea, domain language, strategy, or prototype question: `/explore`
+- Product requirements: `/prd`
+- Issue/task shaping or technical breakdown: `/plan`
+- Implementation, looped work, or safe parallel execution: `/work`
+- Failure or unexpected behavior: `/debug`
+- Changed files need critique: `/review`
+- Security, compatibility, dependency, MCP, agent config, compliance, or release readiness: `/audit`
+- Frontend UI: `/ui`
+- Need to stop and continue later: `/pause`, then `/status` in the next session
 
-Before responding to ANY user message:
+## Skill Loading
 
-1. **CHECK** — Could any skill apply? Even 1% chance = invoke it
-2. **INVOKE** — Read the skill's `SKILL.md` file
-3. **ANNOUNCE** — "I'm using the [skill-name] skill to [purpose]."
-4. **FOLLOW** — Execute the skill exactly as documented
+Load skills only when their detailed procedure is relevant. Announce the skill and follow its `SKILL.md`.
 
-### Skill Priority Order
+Common routes:
 
-1. **Process skills first** (brainstorming, systematic-debugging) — determine HOW to approach
-2. **Quality skills second** (test-driven-development, verification-before-completion) — ensure quality
-3. **Knowledge skills third** (knowledge-compounding) — capture learnings
+- `/explore` -> `brainstorming`
+- `/prd` -> `prd-generator`
+- `/plan` -> `writing-plans`, plus risk skills when needed
+- `/work` -> `executing-plans`, `test-driven-development`, `verification-before-completion`
+- `/debug` -> `systematic-debugging`
+- `/review` -> `code-review`
+- `/audit` -> `security-audit`, `compatibility-check`, `data-privacy`, `threat-modeling`, `secure-code-patterns`
+- `/ui` -> `interface-design`
+- `/pause` and `/status` -> `state-management`, `context-engineering`
 
-> All enforcement red flags and gate checklists live in `.agent/rules/quality-gates.md`.
+## Execution Rules
 
----
+Before editing:
 
-## 3. Workflow Pipeline
+- Read the relevant workflow, skill, and nearby project instructions.
+- Inspect existing code/docs before introducing a new pattern.
+- Check git status before large edits.
+- Preserve user changes and unrelated dirty work.
 
-```
-                    ┌─── Pause ──→ .continue-here.md ──→ Status (resume) ───┐
-                    │                                                    │
-Explore → Research → PRD → Plan → Eval → Work → Review → Compound
-   ↑                                                          ↓
-   └───────────────── Knowledge feeds back ────────────────────┘
-```
+During work:
 
-| Workflow | Trigger | Purpose |
-|----------|---------|---------|
-| `explore.md` | Rough idea, unclear direction, gray areas to resolve | Brainstorm ideas + resolve decisions (replaces `/brainstorm` & `/discuss`) |
-| `research.md` | Need domain research before planning | Investigate standard stack, patterns, pitfalls |
-| `prd.md` | Need formal specification before planning | Generate structured PRD with stories |
-| `plan.md` | Clear requirements, approved design | Define HOW to build it (with auto-verification) |
-| `eval.md` | Before implementing — define pass/fail criteria; after — measure pass@k | Eval-Driven Development (EDD) |
-| `work.md` | Approved plan | Execute the plan |
-| `debug.md` | Bug, error, test failure, unexpected behavior | Diagnose → fix → verify |
-| `review.md` | Completed implementation | Multi-perspective quality review |
-| `compound.md` | Problem solved, issue fixed | Document knowledge for future |
-| `launch.md` | Want full autonomous pipeline | Run all stages sequentially |
-| `pause.md` | Session handoff, save progress | Archive state + progress log |
-| `status.md` | Start of session, check status, or resume after `/pause` | Dashboard + smart routing (replaces `/progress` & `/resume`) |
-| `audit.md` | Security audit, dependency health check, pre-deploy review | OWASP + compat audit (replaces `/security` & `/compatibility`) |
-| `init.md` | New/imported project; or `/init reload` to re-apply rules | Scan codebase, auto-fill config (absorbs `/reload`) |
-| `ui-ux-pro-max.md` | Any frontend/UI work | Generate design system, implement professional UI |
+- Keep edits scoped to the request.
+- Prefer existing helpers, conventions, and tests.
+- Avoid broad rewrites unless the task explicitly asks for cleanup.
+- Add abstractions only when they reduce real complexity.
+- Validate inputs at boundaries and avoid leaking secrets or internals.
 
-**Aliases still work:** `/brainstorm` → explore, `/discuss` → explore, `/progress` → status, `/resume` → status, `/security` → audit, `/compatibility` → audit, `/reload` → init reload
+Before completion:
 
----
+- Run targeted verification first, then broader checks when risk warrants.
+- Report verification results and limitations.
+- Update docs when setup, workflow, behavior, architecture, or commands changed.
+- Review for stale references to removed workflows/skills.
 
-## 4. Git Workflow
+## State And Handoff
 
-### Mode: Branch (Default)
+Use:
 
-```bash
-git checkout -b feat/<feature-name>
-git add <files>
-git commit -m "feat(scope): description"
-```
+- `docs/STATE.md` for current position, decisions, blockers, completed work, and next action
+- `.continue-here.md` for `/pause` handoff
+- `docs/progress.md` for chronological progress and codebase patterns
+- `docs/solutions/` for reusable solved problems
 
-### Mode: Worktree (Parallel Development)
+The next session should be able to run `/status` and continue from disk.
 
-```bash
-git worktree add ../project-feat-name -b feat/<feature-name>
-```
+## UI Work
 
-### Mode: No Git (Prototyping)
+Use `/ui` and `interface-design` for frontend work.
 
-No commits, no branches — TDD relaxed automatically.
-
-### Commit Convention
-
-Format: `<type>(<scope>): <description>`
-Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`
-
----
-
-## 5. Adaptive Behavior
-
-### Context Detection
-
-| Signal | Behavior |
-|--------|----------|
-| "prototype", "mockup", "quick test" | No-Git mode, relaxed TDD |
-| "feature", "implement", "build" | Branch mode, balanced TDD |
-| "parallel", "swarm", "multiple agents" | Worktree mode, ask for confirmation |
-| "debug", "fix", "broken" | Systematic debugging skill |
-| "plan", "design", "architecture" | Brainstorming → Planning pipeline |
-| "landing page", "UI", "frontend", "dashboard", "component" | UI/UX Pro Max skill, design system first |
-| "security", "vulnerability", "audit", "OWASP", "pentest" | Security audit skill |
-| "PRD", "requirements", "specification", "user stories" | PRD workflow, generate structured PRD |
-| "continue", "resume", "where was I" | Resume workflow, load state |
-| "pause", "stop", "save progress" | Pause workflow, create handoff |
-| "status", "progress", "what's next" | Progress workflow, show state |
-| "tasks.json", "structured tasks", "machine-readable" | writing-plans skill (Optional tasks.json section) |
-| "eval", "pass@k", "reliability", "success criteria" | Eval harness skill, define/run evals |
-| "build error", "build failing", "dependency conflict" | **Read** `.agent/agents/build-fixer.md` → follow its diagnostic process |
-| "e2e test", "end-to-end", "Playwright" | **Read** `.agent/agents/e2e-runner.md` → follow its Page Object Model pattern |
-| "architecture decision", "ADR", "system design" | **Read** `.agent/agents/architect.md` → follow its ADR format |
-| "review my code", "code review" | **Read** `.agent/agents/code-reviewer.md` → apply P1/P2/P3 review process |
-| "docs are outdated", "update documentation" | **Read** `.agent/agents/doc-updater.md` → follow its drift detection process |
-| library docs, framework API, version-specific code, "use context7" | context7-docs skill → `resolve-library-id` + `query-docs` (before web search) |
-
-### Execution Mode
-
-- **Default:** Sequential, solo developer, simple branching
-- **Swarm (on request):** Ask before enabling, git worktrees, coordinated task queue
-
----
-
-## 6. Skills Reference
-
-| Skill | When to Use |
-|-------|-------------|
-| `brainstorming` | Before any creative work — lettered Q&A for fast exploration |
-| `writing-plans` | When you need an implementation plan (includes optional tasks.json format) |
-| `executing-plans` | When you have a plan to execute |
-| `prd-generator` | When planning a feature — generate structured PRD with user stories |
-| `eval-harness` | Before implementing — define evals; after — run pass@k reliability checks |
-| `test-driven-development` | When implementing any feature or bugfix |
-| `systematic-debugging` | When encountering any bug or unexpected behavior |
-| `verification-before-completion` | Before claiming work is complete — includes goal-backward verification and cross-component wiring checks |
-| `knowledge-compounding` | After solving a non-trivial problem — + session progress log |
-| `code-review` | When reviewing code changes |
-| `architecture-enforcement` | Before writing code — verify correct folder and imports |
-| `compatibility-check` | Before introducing new deps or auditing existing stack |
-| `context7-docs` | When you need up-to-date library/API docs, code examples, or framework conventions — use BEFORE web search |
-| `subagent-orchestration` | When executing plans with independent tasks — dispatches fresh agent per task with 2-stage review |
-| `parallel-execution` | When a plan has 5+ independent tasks that don't share files — dispatches multiple agents in isolated worktrees |
-| `skill-authoring` | When creating new skills, editing existing skills, or verifying skills work before deployment — TDD for docs |
-| `ui-ux-pro-max` | When building any frontend UI — pages, dashboards, landing pages |
-| `state-management` | Track project state persistently across sessions |
-| `checkpoint-protocol` | When human input or decision is required before proceeding |
-| `plan-verification` | After creating a plan — validates 8 dimensions before execution |
-| `gap-closure` | When verification finds gaps — targeted fix plans |
-| `todo-management` | When ideas/tasks surface during work — capture without losing focus |
-| `context-engineering` | When managing AI context budget — selective loading, history digest |
-| `security-audit` | When auditing code for security, reviewing auth, handling secrets, checking OWASP compliance |
-| `secure-code-patterns` | When implementing input validation, cryptography, or secure data handling |
-| `threat-modeling` | Before designing features with sensitive data, auth, or external integrations |
-| `data-privacy` | When processing PII, implementing consent, or handling data subject requests |
-
----
-
-## 7. Agents
-
-Dedicated agent files in `.agent/agents/`. **Compatibility varies by IDE:**
-
-| Agent | Model | Purpose |
-|-------|-------|----------|
-| `architect` | opus | System design, ADRs, trade-off analysis |
-| `code-reviewer` | sonnet | P1/P2/P3 severity review with confidence filter |
-| `e2e-runner` | sonnet | Playwright E2E tests with Page Object Model |
-| `doc-updater` | sonnet | Detect and fix documentation drift |
-| `build-fixer` | sonnet | Systematic build error diagnosis |
-
-### Antigravity IDE — Manual Invocation
-
-Agents are **not automatically isolated** in Antigravity. Invoke them explicitly:
-
-| Say this | What happens |
-|----------|-------------|
-| "Use the architect agent" | AI reads `.agent/agents/architect.md` as context |
-| "Run the code-reviewer agent" | AI reads `.agent/agents/code-reviewer.md` |
-| "Use build-fixer to diagnose this" | AI reads `.agent/agents/build-fixer.md` |
-
-> **Tip:** Agents in Antigravity behave like skills — the AI reads the agent file and follows its instructions within the current context window.
-
-### Claude Code — Native Subagents
-
-Place agent files in `.claude/agents/` for Claude Code project scope, or `~/.claude/agents/` for global scope. Claude Code will run them as isolated subagents with the declared `model`.
+Command examples:
 
 ```bash
-# Claude Code: copy agents to project scope
-mkdir -p .claude/agents
-copy .agent\agents\* .claude\agents\
+python .agent/skills/interface-design/scripts/search.py "mobile touch target" --domain app
+python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domain web
+python .agent/skills/interface-design/scripts/search.py "performance trackBy" --stack angular
 ```
 
----
+Use the current `interface-design` skill name in active docs and workflows.
 
-## 8. Hook System
+## Breaking Compatibility Notes
 
-Event-driven automation scripts in `.agent/hooks/`. **Claude Code only — not supported in Antigravity IDE.**
+This framework intentionally removed alias and thin workflows from the 2026-06-20 import.
 
-| Hook | Script | Trigger |
-|------|--------|---------|
-| `PreToolUse (Edit/Write)` | `suggest-compact.js` | Suggests `/pause` after N tool calls |
-| `PreCompact` | `pre-compact.js` | Saves STATE.md snapshot before compaction |
-| `SessionEnd` | `session-end.js` | Reminds to `/compound` + `/pause` at session end |
+Current replacements:
 
-### Antigravity IDE — Manual Equivalent
+- Brainstorm/discuss/domain/strategy/prototype intent -> `/explore`
+- Issue/task shaping -> `/plan`
+- Loop/handoff/parallel execution -> `/work`
+- Security/compatibility/MCP/compliance/release readiness -> `/audit`
+- Progress or continuation state -> `/status`
+- Reload -> `/init reload`
+- UI work -> `/ui`
 
-Functions that hooks replace in Claude Code can be done manually in Antigravity:
+## Quality Bar
 
-| Hook Behavior | Antigravity Equivalent |
-|---------------|------------------------|
-| Auto-remind to compound | Run `/compound` after solving problems |
-| Auto-save before compact | Run `/pause` before long breaks |
-| Suggest context reset | Use `context-engineering` skill, `/pause` → `/resume` |
+The work is done when:
 
-### Claude Code — Installation
-
-See `.agent/hooks/README.md` for full Claude Code installation steps.
-
-```bash
-# Quick start: merge .agent/hooks/hooks.json into ~/.claude/settings.json
-# Update script paths to absolute paths in hooks.json first
-```
-
----
-
-## 9. Context7 MCP Integration
-
-Super Compound integrates **Context7 MCP** to pull up-to-date, version-specific library documentation directly into the AI context — eliminating hallucinated APIs and outdated code samples.
-
-**MCP tools used:**
-- `mcp_context7_resolve-library-id` — Find Context7 library ID by name
-- `mcp_context7_query-docs` — Retrieve docs and code examples for a specific library
-
-**Fallback chain (when Context7 is unavailable or rate-limited):**
-
-```
-1. Context7 MCP        → mcp_context7_resolve-library-id + mcp_context7_query-docs
-   ↓ if unavailable
-2. Official docs URL   → read_url_content on official documentation
-   ↓ if inaccessible
-3. Web search          → search_web as last resort
-```
-
-**Auto-invoked in:** `research.md`, `plan.md`, `writing-plans` skill, `compatibility-check` skill, `architecture-enforcement` skill.
-
-> Full skill reference: `.agent/skills/context7-docs/SKILL.md`
-
-### Setup
-
-Context7 MCP is already supported — it just needs to be configured in your AI client:
-
-```json
-// Antigravity / Claude Code (add to MCP settings)
-{
-  "mcpServers": {
-    "context7": {
-      "url": "https://mcp.context7.com/mcp",
-      "headers": { "CONTEXT7_API_KEY": "YOUR_API_KEY" }
-    }
-  }
-}
-```
-
-Get a free API key at [context7.com/dashboard](https://context7.com/dashboard) for higher rate limits. Without an API key, Context7 still works but with lower rate limits.
+- The requested change is implemented or the blocker is explicit.
+- The smallest meaningful verification has been run.
+- User-facing docs and rules agree with the current public interface.
+- No secrets, cache files, stale aliases, or malformed data were introduced.
+- The final response names the changed areas and verification evidence.

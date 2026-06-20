@@ -1,4 +1,4 @@
-﻿---
+---
 name: code-review
 description: "Use when reviewing code changes for quality, correctness, and maintainability. Provides multi-perspective analysis with severity classification."
 ---
@@ -11,6 +11,8 @@ Review code from multiple perspectives systematically, classify findings by seve
 
 **Announce:** "I'm using the code-review skill to review these changes."
 
+**Review axes:** Keep Spec and Standards distinct. A change can follow standards but implement the wrong thing, or match the spec while violating project conventions.
+
 ## The Process
 
 ### Phase 1: Understand the Change
@@ -20,6 +22,7 @@ Before reviewing any code:
 1. **Read the plan/spec** — What was this supposed to accomplish?
 2. **Understand the context** — What does this code interact with?
 3. **Check acceptance criteria** — What defines "done"?
+4. **Read issue/PRD/domain sources** — If work came from an issue, PRD, `CONTEXT.md`, or ADR, treat those as the contract.
 
 ### Phase 2: Spec Compliance Review (STAGE 1)
 
@@ -54,6 +57,9 @@ Do NOT proceed to Phase 3 until all spec items pass.
 - [ ] No unnecessary complexity (YAGNI)
 - [ ] No duplication (DRY)
 - [ ] Proper abstractions at the right level
+- [ ] New interfaces are deep enough for their callers
+- [ ] Seams and adapters are justified by real variation
+- [ ] Tests exercise behavior through public interfaces
 
 #### Architecture Compliance (SUPER-COMPOUND.md Section 10)
 - [ ] Files in correct directory per framework architecture guide
@@ -86,7 +92,7 @@ Do NOT proceed to Phase 3 until all spec items pass.
 
 > For deeper security analysis, invoke the **security-audit** skill.
 > For input validation and crypto patterns, invoke the **secure-code-patterns** skill.
-> For secrets handling, invoke the **secrets-management** skill.
+> For secrets handling, use the **security-audit** skill's secrets section.
 > For PII/privacy compliance, invoke the **data-privacy** skill.
 
 #### Performance
@@ -107,6 +113,7 @@ Do NOT proceed to Phase 3 until all spec items pass.
 - [ ] Tests are readable and maintainable
 - [ ] No flaky test patterns
 - [ ] Test names describe behavior
+- [ ] Tests avoid mocking internal modules
 
 ### Phase 4: Classify Findings
 
