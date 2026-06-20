@@ -167,10 +167,10 @@ DO NOT:
 
 ## Integration with Plan Workflow
 
-This skill auto-activates as the final step in the `plan.md` workflow:
+This skill auto-activates as the final step in the `sc-plan.md` workflow:
 
 ```
-plan.md workflow:
+sc-plan.md workflow:
   1. Read requirements/brainstorm
   2. Create plan (writing-plans skill)
   3. ✅ Verify plan (this skill) ← automatic
@@ -202,7 +202,7 @@ plan.md workflow:
 
 **This skill is used by:**
 - **writing-plans** — Auto-triggered after plan creation
-- **plan.md workflow** — Built-in verification step
+- **sc-plan.md workflow** — Built-in verification step
 
 **Pairs with:**
 - **gap-closure** — When execution reveals more gaps

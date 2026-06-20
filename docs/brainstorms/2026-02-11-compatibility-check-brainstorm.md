@@ -8,7 +8,7 @@ A **compatibility and version check** feature for the Super Compound framework t
 
 **Two delivery mechanisms:**
 
-1. **Skill** (`skills/compatibility-check/SKILL.md`) — Defines the check logic, invoked automatically during `/plan` and available to any workflow
+1. **Skill** (`skills/compatibility-check/SKILL.md`) — Defines the check logic, invoked automatically during `/sc-plan` and available to any workflow
 2. **Workflow** (`workflows/compatibility.md`) — `/compatibility` slash command for on-demand full stack audit
 
 ## Why This Approach
@@ -27,7 +27,7 @@ Mirrors the existing framework pattern (e.g., `brainstorming` skill + `/brainsto
 ## Key Decisions Made
 
 ### 1. Dual Mode Operation
-- **Pre-flight** (automatic) — Invoked during `/plan` Phase 1: Research when new dependencies are introduced
+- **Pre-flight** (automatic) — Invoked during `/sc-plan` Phase 1: Research when new dependencies are introduced
 - **Audit** (on-demand) — Full project scan via `/compatibility` command
 
 ### 2. Data Sources
@@ -58,7 +58,7 @@ Mirrors the existing framework pattern (e.g., `brainstorming` skill + `/brainsto
 
 **File:** `.agent/skills/compatibility-check/SKILL.md`
 
-**Mode 1 — Pre-flight (automatic during `/plan`):**
+**Mode 1 — Pre-flight (automatic during `/sc-plan`):**
 - Triggered in `writing-plans` skill Phase 1: Research
 - Reads project dependency files
 - Identifies new deps the plan introduces
@@ -99,7 +99,7 @@ Mirrors the existing framework pattern (e.g., `brainstorming` skill + `/brainsto
 | `writing-plans` skill | Add step in Phase 1 (Research): invoke compatibility-check in pre-flight mode |
 | `super-compound.md` rule | Add to Skills Reference table and Workflow Pipeline table |
 | `project-config.md` rule | No changes needed (already has stack info) |
-| `launch.md` workflow | No changes needed (inherits from plan) |
+| `sc-launch.md` workflow | No changes needed (inherits from plan) |
 
 ## Open Questions
 

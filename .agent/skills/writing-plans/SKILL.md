@@ -39,7 +39,7 @@ Run only the checks that match the work.
 | Compliance, audit evidence, AI governance, or regulated workflows | Add explicit evidence, owner, and retention requirements in the plan |
 | Frontend UI, dashboard, landing page, or component work | Use `interface-design`; generate or reuse a design-system artifact |
 | Multi-agent or long-running work | Add durable state updates and handoff notes using `state-management` |
-| Unclear product, domain, architecture, or UX decision | Route back through `/explore` before planning, or record an explicit open question |
+| Unclear product, domain, architecture, or UX decision | Route back through `/sc-explore` before planning, or record an explicit open question |
 
 Frontend design search:
 
@@ -153,12 +153,12 @@ Each plan must make completion testable:
 
 After saving the plan, offer operational choices:
 
-1. Execute sequentially with `/work`
+1. Execute sequentially with `/sc-work`
 2. Execute independent slices with parallel agents when safe
 3. Review and refine the plan
 4. Stop with the plan saved
 
-Do not add legacy workflow aliases to the plan. Route by current workflows: `/explore`, `/prd`, `/plan`, `/work`, `/review`, `/audit`, `/ui`.
+Do not add legacy workflow aliases to the plan. Route by current workflows: `/sc-explore`, `/sc-prd`, `/sc-plan`, `/sc-work`, `/sc-review`, `/sc-audit`, `/sc-ui`.
 
 ## Red Flags
 

@@ -7,7 +7,7 @@ description: "Generate a structured Product Requirements Document (PRD) from a r
 
 ## Purpose
 
-Define what to build, why it matters, who it serves, and how completion will be judged. A PRD sits between `/explore` and `/plan`.
+Define what to build, why it matters, who it serves, and how completion will be judged. A PRD sits between `/sc-explore` and `/sc-plan`.
 
 Announce: "I'm using the prd-generator skill to create a structured PRD."
 
@@ -117,11 +117,11 @@ Before handoff, check:
 After saving the PRD:
 
 1. Review and refine the PRD
-2. Convert to an implementation plan with `/plan`
-3. Route UI-focused work through `/ui`
+2. Convert to an implementation plan with `/sc-plan`
+3. Route UI-focused work through `/sc-ui`
 4. Stop with the PRD saved
 
-Current specification pipeline: `/explore` -> `/prd` -> `/plan` -> `/work`.
+Current specification pipeline: `/sc-explore` -> `/sc-prd` -> `/sc-plan` -> `/sc-work`.
 
 ## Related Skills
 

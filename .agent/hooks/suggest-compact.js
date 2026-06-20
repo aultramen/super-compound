@@ -3,7 +3,7 @@
  * Super Compound — Suggest Compact Hook
  * 
  * Runs on PreToolUse (Edit/Write). Tracks tool call count and suggests
- * /pause at logical intervals based on count threshold.
+ * /sc-pause at logical intervals based on count threshold.
  * 
  * Inspired by everything-claude-code's suggest-compact.js
  * 
@@ -67,7 +67,7 @@ if (shouldSuggest) {
     console.error('    → Mid-implementation (would lose file/variable context)');
     console.error('    → Tests actively reference recent code changes');
     console.error('');
-    console.error('  Run: /pause   → save state + create handoff → start fresh session');
+    console.error('  Run: /sc-pause   → save state + create handoff → start fresh session');
     console.error('  Or:  /compact → compact in-place (keep conversation going)');
     console.error('');
 }

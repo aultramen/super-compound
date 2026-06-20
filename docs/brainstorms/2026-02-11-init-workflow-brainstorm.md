@@ -1,4 +1,4 @@
-# Brainstorm: `/init` Workflow — Codebase Context Initialization
+# Brainstorm: `/sc-init` Workflow — Codebase Context Initialization
 
 **Date:** 2026-02-11
 **Trigger:** Project dikerjakan di Cursor, di-import ke Antigravity → output plan kurang berkonteks karena AI belum punya "memory" tentang codebase.
@@ -7,7 +7,7 @@
 
 ## What We're Building
 
-Workflow `/init` yang melakukan **codebase scanning otomatis** untuk memberikan AI konteks tentang project yang sudah ada. Menghasilkan dua output:
+Workflow `/sc-init` yang melakukan **codebase scanning otomatis** untuk memberikan AI konteks tentang project yang sudah ada. Menghasilkan dua output:
 
 1. **Auto-filled `project-config.md`** — tech stack, commands, architecture terdeteksi otomatis
 2. **`docs/codebase-map.md`** — dokumen overview yang menjadi "memory" permanent untuk AI
@@ -128,7 +128,7 @@ Dokumen ini menjadi **referensi utama** bagi AI di semua conversation berikutnya
 ### 4. Workflow Steps
 
 ```
-/init workflow:
+/sc-init workflow:
 
 1. Read project-config.md — Check which fields are already filled
 2. Scan package files — Detect dependencies and tech stack
@@ -152,7 +152,7 @@ Tidak diimplementasi sekarang (YAGNI), tapi structure workflow file-nya tidak me
 
 ## Open Questions
 
-1. **Apakah `codebase-map.md` perlu di-update otomatis** setiap kali ada perubahan besar, atau cukup manual re-run `/init`?
+1. **Apakah `codebase-map.md` perlu di-update otomatis** setiap kali ada perubahan besar, atau cukup manual re-run `/sc-init`?
    - Rekomendasi: Manual re-run. Auto-update terlalu complex dan error-prone.
 
 2. **Dimana menyimpan `codebase-map.md`?**

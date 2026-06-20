@@ -13,7 +13,7 @@ Use this when product behavior needs to be specified before implementation plann
 3. Define users, problem, goals, non-goals, user stories, acceptance criteria, and edge cases.
 4. Mark unresolved questions clearly.
 5. Save the PRD only when a durable artifact is useful.
-6. Route to `plan.md` after approval.
+6. Route to `sc-plan.md` after approval.
 
 ## Output
 

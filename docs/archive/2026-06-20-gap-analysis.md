@@ -60,20 +60,20 @@ The goal is to keep Super Compound as the unified framework while adopting the s
 | Root docs/config | `README.md`, `CONTEXT.md`, `CLAUDE.md`, `docs/invocation.md`, `CHANGELOG.md`, `LICENSE`, `.gitignore` | Small composable skills, user-invoked vs model-invoked taxonomy, domain glossary, skill publication rules | Added origin note; upgraded `skill-authoring`; added domain/issue config |
 | Package/release | `package.json`, `package-lock.json`, `.changeset/*`, `.github/workflows/release.yml` | Private npm package using Changesets; dependency surface is publishing-only | No package workflow copied; release pattern noted as source hygiene only |
 | Plugin/scripts | `.claude-plugin/plugin.json`, `scripts/list-skills.sh`, `scripts/link-skills.sh` | Explicit promoted skill list; deprecated/personal/in-progress excluded from plugin | Adopted curated-skill posture; did not copy symlink installer |
-| Engineering router | `skills/engineering/ask-matt/SKILL.md` | Main flow: grill -> PRD/issues -> implement; prototype/handoff branches | Added `/grill`, `/prototype`, `/issues`, `/handoff`; updated `/launch` |
+| Engineering router | `skills/engineering/ask-matt/SKILL.md` | Main flow: grill -> PRD/issues -> implement; prototype/handoff branches | Added `/grill`, `/prototype`, `/issues`, `/handoff`; updated `/sc-launch` |
 | Grilling | `grill-with-docs`, `productivity/grilling`, `grill-me` | One-question-at-a-time interview, answer from code when possible, pair with domain modeling | Added `grilling` skill and `/grill` workflow |
 | Domain modeling | `domain-modeling/SKILL.md`, `CONTEXT-FORMAT.md`, `ADR-FORMAT.md` | `CONTEXT.md` glossary only; ADRs only for hard-to-reverse surprising trade-offs | Added `domain-modeling` skill and `/domain`; updated state/planning/PRD |
 | Codebase design | `codebase-design/SKILL.md`, `DEEPENING.md`, `DESIGN-IT-TWICE.md` | Deep modules, interface as test surface, seams/adapters, design-it-twice | Added `codebase-design`, `/architecture`; enhanced TDD/review/architecture |
-| Debugging | `diagnosing-bugs/SKILL.md`, `scripts/hitl-loop.template.sh` | Tight red-capable feedback loop before hypotheses; ranked falsifiable hypotheses | Enhanced `systematic-debugging` and `/debug` |
+| Debugging | `diagnosing-bugs/SKILL.md`, `scripts/hitl-loop.template.sh` | Tight red-capable feedback loop before hypotheses; ranked falsifiable hypotheses | Enhanced `systematic-debugging` and `/sc-debug` |
 | TDD | `tdd/SKILL.md`, `tests.md`, `mocking.md`, `refactoring.md` | Public-interface tests, no horizontal RED pile, mock only boundaries, refactor/deepen after green | Enhanced `test-driven-development` |
 | PRD/issues/triage | `to-prd`, `to-issues`, `triage`, `AGENT-BRIEF.md`, `OUT-OF-SCOPE.md`, setup tracker templates | Conversation-to-PRD synthesis, vertical-slice issues, triage states, agent-ready briefs, out-of-scope memory | Added `issue-workflow`, `/triage`, `/issues`; enhanced `prd-generator` |
 | Prototype | `prototype/SKILL.md`, `LOGIC.md`, `UI.md` | Throwaway logic/state TUI or UI `?variant=` route; capture answer then delete/absorb | Added `prototyping` and `/prototype` |
-| Handoff | `productivity/handoff/SKILL.md` | Compact fresh-session doc in OS temp; reference artifacts instead of duplicating; redact sensitive data | Added `handoff-protocol` and `/handoff`; linked from `/pause` |
+| Handoff | `productivity/handoff/SKILL.md` | Compact fresh-session doc in OS temp; reference artifacts instead of duplicating; redact sensitive data | Added `handoff-protocol` and `/handoff`; linked from `/sc-pause` |
 | Teaching | `teach/SKILL.md`, `MISSION/RESOURCES/LEARNING/GLOSSARY` formats | Stateful learning workspace, reusable lesson assets, retrieval practice | Added optional `learning-workspace` skill |
 | Skill writing | `writing-great-skills/SKILL.md`, `GLOSSARY.md` | Predictability, context load, cognitive load, no-op, sediment, sprawl, leading words | Enhanced `skill-authoring` |
 | Misc safety/tooling | `git-guardrails-claude-code`, `setup-pre-commit`, `scaffold-exercises`, `migrate-to-shoehorn` | Git safety hooks, pre-commit automation, course scaffolding, test helper migration | Added `git-safety-guardrails`; kept other tool-specific skills out of core |
 | Merge conflicts | `resolving-merge-conflicts/SKILL.md` | Preserve intent from both sides, inspect primary sources, verify checks | Added `merge-conflict-resolution`, adapted no-commit default to Super Compound rules |
-| In-progress | `decision-mapping`, `review`, `writing-shape`, `writing-beats`, `writing-fragments` | Decision map and two-axis review are useful; writing drafts are not core engineering | Added bounded `decision-mapping`; enhanced `/review`; deferred writing drafts |
+| In-progress | `decision-mapping`, `review`, `writing-shape`, `writing-beats`, `writing-fragments` | Decision map and two-axis review are useful; writing drafts are not core engineering | Added bounded `decision-mapping`; enhanced `/sc-review`; deferred writing drafts |
 | Deprecated | `deprecated/*` | Useful older patterns superseded by domain modeling, codebase design, issue workflow | Did not copy deprecated skills directly |
 | Personal | `personal/*` | Obsidian/article skills are setup-specific | Not adopted except general learning concepts from `teach` |
 | Out-of-scope KB | `.out-of-scope/*` | Durable rejected-feature memory prevents repeated triage | Adopted `.out-of-scope/` in `issue-workflow` and config |
@@ -144,8 +144,8 @@ The goal is to keep Super Compound as the unified framework while adopting the s
 - `SUPER-COMPOUND.md`
 - `WALKTHROUGH.md`
 - `.agent/rules/super-compound.md`
-- `.agent/workflows/launch.md`
-- `.agent/workflows/audit.md`
+- `.agent/workflows/sc-launch.md`
+- `.agent/workflows/sc-audit.md`
 
 ## Deliberately Not Adopted
 

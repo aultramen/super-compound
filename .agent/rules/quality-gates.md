@@ -7,8 +7,8 @@ Keep gates lightweight and evidence-based. Detailed procedures belong in the ref
 - Read the relevant workflow and skill before editing.
 - Check `.agent/rules/project-config.md` and existing project conventions.
 - For UI work, use `interface-design` before implementation.
-- For dependency, security, release, MCP, compliance, or agent-surface risk, use `audit.md` and the security skills.
-- For unclear intent, resolve uncertainty through `explore.md` before planning.
+- For dependency, security, release, MCP, compliance, or agent-surface risk, use `sc-audit.md` and the security skills.
+- For unclear intent, resolve uncertainty through `sc-explore.md` before planning.
 
 ## Before Executing A Plan
 

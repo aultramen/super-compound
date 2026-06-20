@@ -9,42 +9,42 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. It 
 - Test-first by default for behavior changes.
 - Prefer simple, local, reversible changes.
 - Keep durable context on disk, not only in conversation memory.
-- Turn reusable solutions into documentation through `/compound`.
+- Turn reusable solutions into documentation through `/sc-compound`.
 - Do not preserve stale workflow aliases unless they are part of the current public interface.
 
 ## Public Workflows
 
-Use these workflow names only:
+Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound commands do not collide with native Claude Code planning and review commands.
 
 | Workflow | Purpose |
 |---|---|
-| `/init` | Initialize or reload project/framework context |
-| `/status` | Inspect state and choose the next route |
-| `/explore` | Shape fuzzy ideas, domain questions, strategy, and prototype decisions |
-| `/research` | Gather evidence before a decision |
-| `/prd` | Write product requirements |
-| `/plan` | Write implementation plans |
-| `/eval` | Define or run evaluation criteria |
-| `/work` | Execute a plan |
-| `/debug` | Diagnose and fix root causes |
-| `/review` | Review changed code/docs |
-| `/audit` | Audit security, compatibility, compliance, agent surface, and readiness |
-| `/compound` | Capture reusable knowledge |
-| `/pause` | Save handoff state |
-| `/launch` | Start a focused project or feature lifecycle |
-| `/ui` | Build or refine frontend interfaces with `interface-design` |
+| `/sc-init` | Initialize or reload project/framework context |
+| `/sc-status` | Inspect state and choose the next route |
+| `/sc-explore` | Shape fuzzy ideas, domain questions, strategy, and prototype decisions |
+| `/sc-research` | Gather evidence before a decision |
+| `/sc-prd` | Write product requirements |
+| `/sc-plan` | Write implementation plans |
+| `/sc-eval` | Define or run evaluation criteria |
+| `/sc-work` | Execute a plan |
+| `/sc-debug` | Diagnose and fix root causes |
+| `/sc-review` | Review changed code/docs |
+| `/sc-audit` | Audit security, compatibility, compliance, agent surface, and readiness |
+| `/sc-compound` | Capture reusable knowledge |
+| `/sc-pause` | Save handoff state |
+| `/sc-launch` | Start a focused project or feature lifecycle |
+| `/sc-ui` | Build or refine frontend interfaces with `interface-design` |
 
 ## Routing
 
-- Fuzzy idea, domain language, strategy, or prototype question: `/explore`
-- Product requirements: `/prd`
-- Issue/task shaping or technical breakdown: `/plan`
-- Implementation, looped work, or safe parallel execution: `/work`
-- Failure or unexpected behavior: `/debug`
-- Changed files need critique: `/review`
-- Security, compatibility, dependency, MCP, agent config, compliance, or release readiness: `/audit`
-- Frontend UI: `/ui`
-- Need to stop and continue later: `/pause`, then `/status` in the next session
+- Fuzzy idea, domain language, strategy, or prototype question: `/sc-explore`
+- Product requirements: `/sc-prd`
+- Issue/task shaping or technical breakdown: `/sc-plan`
+- Implementation, looped work, or safe parallel execution: `/sc-work`
+- Failure or unexpected behavior: `/sc-debug`
+- Changed files need critique: `/sc-review`
+- Security, compatibility, dependency, MCP, agent config, compliance, or release readiness: `/sc-audit`
+- Frontend UI: `/sc-ui`
+- Need to stop and continue later: `/sc-pause`, then `/sc-status` in the next session
 
 ## Skill Loading
 
@@ -52,15 +52,15 @@ Load skills only when their detailed procedure is relevant. Announce the skill a
 
 Common routes:
 
-- `/explore` -> `brainstorming`
-- `/prd` -> `prd-generator`
-- `/plan` -> `writing-plans`, plus risk skills when needed
-- `/work` -> `executing-plans`, `test-driven-development`, `verification-before-completion`
-- `/debug` -> `systematic-debugging`
-- `/review` -> `code-review`
-- `/audit` -> `security-audit`, `compatibility-check`, `data-privacy`, `threat-modeling`, `secure-code-patterns`
-- `/ui` -> `interface-design`
-- `/pause` and `/status` -> `state-management`, `context-engineering`
+- `/sc-explore` -> `brainstorming`
+- `/sc-prd` -> `prd-generator`
+- `/sc-plan` -> `writing-plans`, plus risk skills when needed
+- `/sc-work` -> `executing-plans`, `test-driven-development`, `verification-before-completion`
+- `/sc-debug` -> `systematic-debugging`
+- `/sc-review` -> `code-review`
+- `/sc-audit` -> `security-audit`, `compatibility-check`, `data-privacy`, `threat-modeling`, `secure-code-patterns`
+- `/sc-ui` -> `interface-design`
+- `/sc-pause` and `/sc-status` -> `state-management`, `context-engineering`
 
 ## Execution Rules
 
@@ -91,15 +91,15 @@ Before completion:
 Use:
 
 - `docs/STATE.md` for current position, decisions, blockers, completed work, and next action
-- `.continue-here.md` for `/pause` handoff
+- `.continue-here.md` for `/sc-pause` handoff
 - `docs/progress.md` for chronological progress and codebase patterns
 - `docs/solutions/` for reusable solved problems
 
-The next session should be able to run `/status` and continue from disk.
+The next session should be able to run `/sc-status` and continue from disk.
 
 ## UI Work
 
-Use `/ui` and `interface-design` for frontend work.
+Use `/sc-ui` and `interface-design` for frontend work.
 
 Command examples:
 
@@ -117,13 +117,13 @@ This framework intentionally removed alias and thin workflows from the 2026-06-2
 
 Current replacements:
 
-- Brainstorm/discuss/domain/strategy/prototype intent -> `/explore`
-- Issue/task shaping -> `/plan`
-- Loop/handoff/parallel execution -> `/work`
-- Security/compatibility/MCP/compliance/release readiness -> `/audit`
-- Progress or continuation state -> `/status`
-- Reload -> `/init reload`
-- UI work -> `/ui`
+- Brainstorm/discuss/domain/strategy/prototype intent -> `/sc-explore`
+- Issue/task shaping -> `/sc-plan`
+- Loop/handoff/parallel execution -> `/sc-work`
+- Security/compatibility/MCP/compliance/release readiness -> `/sc-audit`
+- Progress or continuation state -> `/sc-status`
+- Reload -> `/sc-init reload`
+- UI work -> `/sc-ui`
 
 ## Quality Bar
 

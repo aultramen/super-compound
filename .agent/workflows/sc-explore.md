@@ -20,7 +20,7 @@ Use this when the work is not ready for a plan.
 2. Inspect existing code, docs, issues, ADRs, and related solutions before asking questions.
 3. Resolve the smallest decision that unlocks the next step.
 4. Capture non-goals and deferred ideas without expanding current scope.
-5. Route to `prd.md` when product behavior is clear, or `plan.md` when implementation is clear.
+5. Route to `sc-prd.md` when product behavior is clear, or `sc-plan.md` when implementation is clear.
 
 ## Output
 

@@ -17,8 +17,8 @@ Proactively identify security threats before they become vulnerabilities. Use st
 
 | Mode | Trigger | Scope | Output |
 |------|---------|-------|--------|
-| **Pre-flight** | Automatically during `/plan` when auth/data/API features are involved | Single feature | Threat section in plan document |
-| **Full Model** | Via `/audit security` workflow (step 9) or invoked directly by security-audit skill | Component or system | Standalone threat model document |
+| **Pre-flight** | Automatically during `/sc-plan` when auth/data/API features are involved | Single feature | Threat section in plan document |
+| **Full Model** | Via `/sc-audit security` workflow (step 9) or invoked directly by security-audit skill | Component or system | Standalone threat model document |
 | **Incident Response** | After security incident | Attack vector analysis | Updated threat model + new mitigations |
 
 ---
@@ -316,7 +316,7 @@ For high-risk components:
 
 **This skill is used by:**
 - **writing-plans** — Pre-flight threat check for auth/data features
-- **`/audit security` workflow** — Comprehensive threat assessment (step 9)
+- **`/sc-audit security` workflow** — Comprehensive threat assessment (step 9)
 
 **This skill pairs with:**
 - **security-audit** — Verify mitigations are implemented

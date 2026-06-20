@@ -81,7 +81,7 @@ Run verification at three levels:
 
 Before claiming completion, use `verification-before-completion`.
 
-For release-bound, security-sensitive, dependency-heavy, or agent-surface work, run `/audit` or the relevant audit skill before shipping.
+For release-bound, security-sensitive, dependency-heavy, or agent-surface work, run `/sc-audit` or the relevant audit skill before shipping.
 
 ## Revision Mode
 
@@ -115,9 +115,9 @@ Use durable files when work spans sessions:
 - `docs/STATE.md` for current position and next action
 - `docs/progress.md` for chronological progress
 - `docs/tasks/tasks-*.json` only if a task ledger already exists or the plan requires one
-- `.continue-here.md` only for pause/status handoff created by `/pause`
+- `.continue-here.md` only for pause/status handoff created by `/sc-pause`
 
-The next session should be able to run `/status` and understand where to continue.
+The next session should be able to run `/sc-status` and understand where to continue.
 
 ## Finish Line
 

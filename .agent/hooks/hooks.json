@@ -12,7 +12,7 @@
             "timeout": 5
           }
         ],
-        "description": "Suggest /pause at logical intervals based on tool call count"
+        "description": "Suggest /sc-pause at logical intervals based on tool call count"
       }
     ],
     "PreCompact": [

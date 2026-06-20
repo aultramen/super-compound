@@ -17,7 +17,7 @@ Use this before stopping a session or compacting context.
    - Key decisions and assumptions.
    - Blockers.
    - Verification already run.
-   - Suggested next workflow, usually `status.md`.
+   - Suggested next workflow, usually `sc-status.md`.
 4. Update `docs/progress.md` only for durable project patterns or important session history.
 
 ## Output

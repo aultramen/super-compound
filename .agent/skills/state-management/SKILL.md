@@ -7,7 +7,7 @@ description: "Use to maintain durable project memory across sessions through STA
 
 ## Purpose
 
-Keep project state durable, concise, and useful so a future session can run `/status` and continue without guessing.
+Keep project state durable, concise, and useful so a future session can run `/sc-status` and continue without guessing.
 
 Announce: "I'm using the state-management skill to track project state."
 
@@ -16,7 +16,7 @@ Announce: "I'm using the state-management skill to track project state."
 | File | Use |
 |---|---|
 | `docs/STATE.md` | Current position, decisions, blockers, completed work, and next action |
-| `.continue-here.md` | Short handoff created by `/pause` for the next session |
+| `.continue-here.md` | Short handoff created by `/sc-pause` for the next session |
 | `docs/progress.md` | Chronological progress and codebase patterns |
 | `docs/ERROR_LOG.md` | Costly mistakes, root cause, and prevention |
 | `docs/LEARNED_KNOWLEDGE.md` | Confirmed reusable project preferences and conventions |
@@ -82,7 +82,7 @@ At the beginning of continuation work:
 2. Read `.continue-here.md` if present.
 3. Read the active plan, PRD, brainstorm, or task ledger referenced by state.
 4. Load only the files needed for the next step.
-5. If the route is unclear, run `/status`.
+5. If the route is unclear, run `/sc-status`.
 
 ## Session End
 
@@ -91,8 +91,8 @@ Before stopping:
 - Update exact next action.
 - Record completed work and decisions.
 - Note blockers and owner.
-- Suggest `/compound` if a reusable solution was discovered.
-- Suggest `/pause` if the user will continue in a later session.
+- Suggest `/sc-compound` if a reusable solution was discovered.
+- Suggest `/sc-pause` if the user will continue in a later session.
 
 ## Error And Learning Capture
 

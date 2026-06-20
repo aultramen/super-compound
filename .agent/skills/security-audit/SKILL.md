@@ -11,15 +11,15 @@ Find security risks with evidence, prioritize exploitability and impact, and rec
 
 Announce: "I'm using the security-audit skill to check security risks."
 
-Use this skill directly for security work, or through `/audit security` for a broader framework audit.
+Use this skill directly for security work, or through `/sc-audit security` for a broader framework audit.
 
 ## Modes
 
 | Mode | Trigger | Scope | Output |
 |---|---|---|---|
-| Pre-flight | During `/plan` for auth, data, crypto, payments, uploads, webhooks, or external services | Proposed design | Security requirements and tests |
+| Pre-flight | During `/sc-plan` for auth, data, crypto, payments, uploads, webhooks, or external services | Proposed design | Security requirements and tests |
 | Review | During code review | Changed files | Findings with file and line references |
-| Full audit | `/audit security` or explicit user request | Relevant codebase surface | Prioritized audit report |
+| Full audit | `/sc-audit security` or explicit user request | Relevant codebase surface | Prioritized audit report |
 | Incident response | Suspected secret or data exposure | Specific exposure path | Containment, rotation, and follow-up plan |
 
 ## Routing

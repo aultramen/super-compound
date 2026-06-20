@@ -9,11 +9,11 @@ Use this when risk matters: auth, secrets, dependencies, MCP/tools, agent prompt
 ## Usage
 
 ```text
-/audit
-/audit security
-/audit compat
-/audit release
-/audit agent
+/sc-audit
+/sc-audit security
+/sc-audit compat
+/sc-audit release
+/sc-audit agent
 ```
 
 ## Steps
