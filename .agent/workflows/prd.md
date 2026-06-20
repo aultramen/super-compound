@@ -1,63 +1,22 @@
 ---
-description: Generate a structured Product Requirements Document (PRD) for a feature. Use when planning a feature, starting a new project, or when requirements need formal specification. Sits between /brainstorm and /plan.
+description: "Create a concise Product Requirements Document with scope, stories, acceptance criteria, and open questions."
 ---
-
-// turbo-all
 
 # PRD Workflow
 
-Generate a structured PRD that bridges brainstorming and planning.
-
-## When to Use
-
-- You have a feature idea but need formal specification
-- You want to define scope, stories, and acceptance criteria before planning
-- You need a clear handoff document for implementation
-
-## When to Skip
-
-- Requirements are already crystal clear → go directly to `/plan`
-- You're exploring ideas without commitment → use `/brainstorm`
-- You're executing an existing plan → use `/work`
+Use this when product behavior needs to be specified before implementation planning.
 
 ## Steps
 
-### 1. Check for Context
-// turbo
-Look for related brainstorm documents:
-```
-docs/brainstorms/*.md    (within last 14 days, matching topic)
-docs/progress.md         (read Codebase Patterns section)
-```
+1. Load `skills/prd-generator/SKILL.md`.
+2. Read exploration notes, research, current docs, and related code behavior.
+3. Define users, problem, goals, non-goals, user stories, acceptance criteria, and edge cases.
+4. Mark unresolved questions clearly.
+5. Save the PRD only when a durable artifact is useful.
+6. Route to `plan.md` after approval.
 
-### 2. Invoke PRD Generator Skill
+## Output
 
-Load the `prd-generator` skill and run through its process:
-1. Ask 3-5 clarifying questions with lettered options (A/B/C/D)
-2. Generate structured PRD with: Introduction, Goals, User Stories, Functional Requirements, Non-Goals, Success Metrics
-3. Validate with user
-
-### 3. Save PRD
-
-Save to: `docs/prd/prd-<feature-name>.md`
-
-### 4. Present Next Steps
-
-```
-✓ PRD created: docs/prd/prd-<feature-name>.md
-
-What next?
-1. Proceed to planning → /plan (will auto-detect this PRD)
-2. Review and refine the PRD
-3. Done for now — return later
-```
-
-## Pipeline Position
-
-```
-/brainstorm → /prd → /plan → /work → /review → /compound
-              ^^^^
-         YOU ARE HERE
-```
-
-The `/plan` workflow will automatically detect and use recent PRDs from `docs/prd/`.
+- PRD or PRD summary.
+- Acceptance criteria.
+- Open questions and next workflow.

@@ -1,0 +1,7 @@
+.debug/
+.continue-here.md
+.agent/.tool-call-count
+**/__pycache__/
+*.pyc
+CLAUDE.local.md
+.claude/settings.local.json

@@ -1,260 +1,141 @@
-﻿---
+---
 name: executing-plans
-description: "Use when you have a written implementation plan to execute. Supports sequential (default) and optional swarm mode for parallel execution."
+description: "Use when a written implementation plan is ready to execute. Supports sequential execution by default and parallel execution only for independent, low-conflict tasks."
 ---
 
 # Executing Plans
 
-## Overview
+## Purpose
 
-Load a plan, execute tasks systematically, verify continuously, and ship complete features. Sequential by default with optional swarm mode for independent tasks.
+Execute an approved plan with durable progress, focused edits, continuous verification, and a clear finish line.
 
-**Announce:** "I'm using the executing-plans skill to implement this plan."
+Announce: "I'm using the executing-plans skill to implement this plan."
 
-## Phase 1: Quick Start
+## Before Editing
 
-### 1.1 Read and Clarify
+Read the plan completely, then gather only the context needed for the next task:
 
-- Read the plan document completely
-- Review any references or links in the plan
-- If anything is unclear or ambiguous, **ask clarifying questions NOW**
-- Get user approval to proceed
-- **Do not skip this** — better to ask now than build wrong
+- Files and tests named in the plan
+- Nearby code with similar behavior
+- Project README, package metadata, and local agent instructions
+- `SUPER-COMPOUND.md` and `.agent/rules/super-compound.md`
+- `docs/STATE.md`, `docs/progress.md`, or a task ledger when present
+- Relevant ADRs, domain notes, or design-system artifacts referenced by the plan
 
-### 1.2 Setup Environment
+If acceptance criteria are missing or contradictory, ask one concise question before coding. If the answer can be inferred safely from existing tests and code, proceed and document the assumption.
 
-**Check Git mode from SUPER-COMPOUND.md project config:**
+## Git And Workspace
 
-| Git Workflow | Action |
-|-------------|--------|
-| `branch` (default) | `git checkout -b feat/<feature-name>` |
-| `worktree` | Create isolated worktree: `git worktree add ../<project>-<feat> -b feat/<name>` |
-| `none` | Skip git setup, work directly |
+Respect the project's current state.
 
-**If already on a feature branch:** Ask "Continue on `[branch]`, or create a new branch?"
+- Check `git status` before broad edits.
+- Do not overwrite user changes.
+- Create a branch or worktree only when the user or project config calls for it.
+- Stage related files only when committing is explicitly requested.
+- Never use destructive git commands unless the user asked for them.
 
-### 1.3 Create Task Checklist
+## Task Execution Loop
 
-Break plan into actionable tasks with:
-- Dependencies between tasks
-- Priority order
-- Testing and quality check tasks
-- Specific, completable items
+For each task:
 
-### 1.4 Swarm Decision (Optional)
+1. Mark the task in progress in the plan, task ledger, or conversation checklist.
+2. Read referenced files and nearby patterns.
+3. Confirm boundaries: ownership, dependency direction, public API contracts, data contracts, and UI conventions.
+4. Use `architecture-enforcement` when placement or dependency direction is uncertain.
+5. Use `test-driven-development` for new behavior and regressions.
+6. Make the smallest cohesive edit that satisfies the task.
+7. Run the narrowest useful verification.
+8. Fix failures before moving on.
+9. Mark the task complete and record notable decisions.
+10. Update durable state for multi-session work.
 
-**Only suggest swarm mode when ALL of these are true:**
-- Plan has 5+ independent tasks
-- Tasks don't share files or have tight dependencies
-- User hasn't disabled swarm mode
+Do not turn task execution into opportunistic refactoring. Capture unrelated improvements as follow-up notes.
 
-**Ask:** "This plan has [N] independent tasks. Would you like to use parallel swarm execution, or proceed sequentially?"
+## Parallel Execution
 
-**If user chooses swarm:**
-- Switch to worktree mode for git
-- Create isolated workspaces per agent
-- Coordinate via task queue with dependencies
+Use parallel agents only when all are true:
 
-## Phase 2: Execute
+- The plan has independent tasks with clear file ownership.
+- Tasks do not depend on each other's unmerged output.
+- Verification can be run per task.
+- The user accepts the extra coordination cost.
 
-### Sequential Mode (Default)
+When parallelizing, assign each agent:
 
-```
-while (tasks remain):
-    1. Mark task as in_progress
-    2. Read referenced files from plan
-    3. Look for similar patterns in codebase
-    4. Check SUPER-COMPOUND.md Section 10 — verify file goes in correct directory
-    5. Implement following existing conventions + architecture rules
-    6. Verify dependency direction (no forbidden imports)
-    7. Write tests for new functionality
-    8. Run tests after changes
-    9. Mark task as completed
-    10. Check off task in plan document ([ ] → [x])
-    11. Evaluate for incremental commit
-```
+- One task or tightly related task group
+- Exact files or directories to inspect
+- Expected output and verification command
+- Conflict boundaries and handoff format
 
-### Incremental Commits
+Merge results deliberately, then run shared verification.
 
-| Commit when... | Don't commit when... |
-|----------------|---------------------|
-| Logical unit complete | Small part of larger unit |
-| Tests pass + meaningful progress | Tests failing |
-| About to switch contexts | Purely scaffolding with no behavior |
-| About to attempt risky changes | Would need a "WIP" message |
+## Verification
 
-**Heuristic:** "Can I write a commit message describing a complete, valuable change? If yes, commit."
+Run verification at three levels:
 
-```bash
-# 1. Verify tests pass
-# 2. Stage related files only (not `git add .`)
-git add <files related to this logical unit>
-# 3. Commit with conventional message
-git commit -m "feat(scope): description"
-```
+| Level | When | Examples |
+|---|---|---|
+| Narrow | After each meaningful edit | Single unit test, typecheck for one package, script check |
+| Local integration | After a vertical slice | Related test file, browser check, API smoke test |
+| Completion | Before final response | Relevant lint/typecheck/build/tests, manual checks, stale-reference scans when docs changed |
 
-### Follow Existing Patterns
+Before claiming completion, use `verification-before-completion`.
 
-- Load reference files from the plan
-- Match naming conventions exactly
-- Reuse existing components
-- Follow project coding standards (SUPER-COMPOUND.md config)
-- When in doubt, grep for similar implementations
+For release-bound, security-sensitive, dependency-heavy, or agent-surface work, run `/audit` or the relevant audit skill before shipping.
 
-### Test Continuously
+## Revision Mode
 
-- Run relevant tests after each significant change
-- Don't wait until the end to test
-- Fix failures immediately
-- Add new tests for new functionality
+When verification fails:
 
-## Phase 3: Quality Check
+1. Identify the exact failing check.
+2. Fix only the failing behavior.
+3. Re-run the failed check.
+4. Repeat at most three focused iterations.
+5. If still failing, stop and report the blocker with evidence.
 
-### Core Quality Checks (Always)
+Allowed revisions:
 
-```bash
-# Run full test suite
-[project test_command from SUPER-COMPOUND.md]
+- Fix failing tests
+- Fix lint/type errors
+- Correct broken wiring
+- Add missing boundary validation
+- Adjust docs to match implemented behavior
 
-# Run linting
-[project lint_command from SUPER-COMPOUND.md]
-```
+Avoid during revision:
 
-### Verification Gate
+- New features
+- Broad refactors
+- Scope expansion
+- Cosmetic churn unrelated to the failure
 
-**Before claiming complete, use verification-before-completion skill:**
-1. All tasks marked completed
-2. All tests pass (with fresh output)
-3. Linting passes
-4. Code follows existing patterns
-5. Architecture compliance verified (SUPER-COMPOUND.md Section 10)
-6. No console errors or warnings
-7. For multi-component work: run integration-checking skill
+## Durable State
 
-### Revision Mode
+Use durable files when work spans sessions:
 
-**When verification fails, don't restart — revise:**
+- `docs/STATE.md` for current position and next action
+- `docs/progress.md` for chronological progress
+- `docs/tasks/tasks-*.json` only if a task ledger already exists or the plan requires one
+- `.continue-here.md` only for pause/status handoff created by `/pause`
 
-```
-IF verification gate fails:
-  1. Identify specific failures (which checks failed)
-  2. Enter revision mode:
-     → Fix ONLY the failing aspects
-     → DO NOT touch passing code
-     → DO NOT add new features
-  3. Re-run failed verification checks
-  4. Max 3 revision iterations
-  5. If still failing → checkpoint: needs_review
-```
+The next session should be able to run `/status` and understand where to continue.
 
-| Revision Allowed | Revision NOT Allowed |
-|-----------------|---------------------|
-| Fix failing tests | Add new features |
-| Fix linting errors | Refactor passing code |
-| Fix broken wiring | Change architecture |
-| Add missing error handling | Change scope |
+## Finish Line
 
-## Phase 4: Ship It
+Before the final response:
 
-### Pre-Merge Checklist
+- Planned tasks are complete or explicitly deferred
+- Verification was run, with failures disclosed
+- Docs are updated when behavior, setup, commands, architecture, or user workflows changed
+- No old workflow/skill names were reintroduced
+- `git status` is reviewed for intended and unintended changes
+- The user gets a concise summary of changed files and checks
 
-Before committing or creating a PR, verify:
+## Related Skills
 
-```
-- [ ] All planned tasks marked completed
-- [ ] All tests pass (fresh run, not cached)
-- [ ] Linting passes with zero errors
-- [ ] No console.log/print debug statements left
-- [ ] No commented-out code blocks
-- [ ] No TODO/FIXME without issue references
-- [ ] No hardcoded credentials or secrets
-- [ ] All new files are tracked by git
-- [ ] No unintended file changes (review git status)
-```
-
-### Create Commit (if using Git)
-
-```bash
-git add .
-git status  # Review what's being committed
-git diff --staged  # Check the changes
-
-git commit -m "feat(scope): description of what and why"
-```
-
-### Branch Cleanup (if on feature branch)
-
-```bash
-# Ensure branch is up to date with target
-git fetch origin main
-git rebase origin/main  # or merge, per project convention
-
-# Verify after rebase
-[run test command]  # Tests must still pass after rebase
-
-# Push for PR
-git push origin feat/<feature-name>
-```
-
-### PR Preparation
-
-When creating a PR/merge request:
-- **Title:** Follow commit convention — `feat(scope): description`
-- **Description:** Link to plan document, summarize what changed and why
-- **Checklist:** Include pre-merge checklist results
-- **Reviewers:** Tag appropriate reviewers
-
-### Update State
-
-If `docs/STATE.md` exists:
-1. Mark completed tasks in Completed Work section
-2. Update Current Position (next task or "done")
-3. Record any decisions made during execution
-
-### Notify User
-
-- Summarize what was completed
-- Note any follow-up work needed
-- Suggest next steps (review, compound knowledge)
-
-## Key Principles
-
-| Principle | Description |
-|-----------|-------------|
-| **Start Fast** | Get clarification once, then execute |
-| **Plan is Your Guide** | Follow the plan, don't reinvent |
-| **Test As You Go** | After each change, not end |
-| **Quality Built In** | Patterns, tests, linting |
-| **Ship Complete** | Don't leave features 80% done |
-| **Revise, Don't Restart** | When checks fail, fix specifically |
-
-## Red Flags
-
-| Thought | Reality |
-|---------|---------|
-| "Skip clarifying questions" | Ask now, not after building wrong thing |
-| "Ignore plan references" | The plan has references for a reason |
-| "Test at the end" | Test continuously or suffer later |
-| "80% done is fine" | Finish the feature. Ship complete. |
-| "Tests pass, we're done" | Use verification-before-completion skill |
-| "Verification failed, start over" | Use revision mode — fix specific failures |
-
-## Integration
-
-**Prerequisite skills:**
-- **writing-plans** — Creates the plan this skill executes
-
-**Skills used during execution:**
-- **test-driven-development** — Each task follows TDD
-- **verification-before-completion** — Before claiming done (includes goal-backward)
-- **systematic-debugging** — When things break during execution
-- **checkpoint-protocol** — When human input is needed during execution
-- **state-management** — Track progress in STATE.md
-- **context-engineering** — Load files strategically per task
-- **integration-checking** — Verify cross-component wiring
-
-**This skill feeds into:**
-- **code-review** — Review completed implementation
-- **knowledge-compounding** — Document learnings
-- **gap-closure** — When verification reveals gaps
-
+- `writing-plans` creates the input plan
+- `test-driven-development` shapes behavior changes
+- `architecture-enforcement` protects module boundaries
+- `systematic-debugging` handles failures
+- `state-management` keeps long work durable
+- `integration-checking` verifies cross-component behavior
+- `code-review` and `verification-before-completion` close the loop

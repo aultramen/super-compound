@@ -200,5 +200,5 @@ Not everything can be automated. When human input, decisions, or actions are nee
 
 **Pairs with:**
 - **state-management** — Checkpoints trigger state updates
-- **pause/resume workflows** — Checkpoints can trigger pause
+- **pause/status workflows** — Checkpoints can trigger pause and route the next session
 - **verification-before-completion** — `needs_testing` for manual verification

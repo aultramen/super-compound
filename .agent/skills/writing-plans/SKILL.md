@@ -1,352 +1,181 @@
-﻿---
+---
 name: writing-plans
-description: "Use when you have requirements or a spec for a multi-step task. Creates implementation plans with configurable depth before any code is written. Optionally generates machine-parseable tasks.json for automated progress tracking."
+description: "Use when requirements or a PRD need a clear implementation plan before code is written. Produces scoped tasks, risk checks, verification commands, and optional task ledgers."
 ---
 
 # Writing Plans
 
-## Overview
+## Purpose
 
-Write implementation plans that are clear enough for any engineer — or AI agent — to follow. Plans break work into bite-sized tasks with exact file paths, complete code, and verification steps.
+Turn a requirement, PRD, issue, or explored idea into an implementation plan that is small enough to execute and specific enough to verify.
 
-**Announce:** "I'm using the writing-plans skill to create the implementation plan."
+Announce: "I'm using the writing-plans skill to create the implementation plan."
 
-**Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>-plan.md`
+Save plans to `docs/plans/YYYY-MM-DD-<feature-name>-plan.md`.
 
-## Phase 0: Check for Brainstorm
+## Inputs
 
-Before starting, look for recent brainstorm documents:
+Read the most relevant sources before writing:
 
+- User request and current conversation context
+- `docs/prds/`, `docs/plans/`, `docs/STATE.md`, and `docs/progress.md` when present
+- Recent `docs/brainstorms/` files when the plan follows exploration
+- `SUPER-COMPOUND.md`, `.agent/rules/super-compound.md`, and project-specific guidance
+- Existing code, tests, package metadata, and similar implementations
+- `docs/solutions/`, `docs/ERROR_LOG.md`, and `docs/LEARNED_KNOWLEDGE.md` when present
+
+Do not create a plan from memory when local evidence exists.
+
+## Pre-Flight Checks
+
+Run only the checks that match the work.
+
+| Signal | What To Do |
+|---|---|
+| New dependency, runtime, vendor, or major version change | Use `compatibility-check`; verify source legitimacy, lockfiles, version support, and rollback path |
+| Framework or API behavior is uncertain | Use `context7-docs` first; browse only when local and primary docs are insufficient |
+| Auth, authorization, crypto, uploads, webhooks, payments, or sensitive operations | Use `threat-modeling`, `security-audit`, and `secure-code-patterns` |
+| PII, consent, retention, deletion, export, or data sharing | Use `data-privacy`; add privacy acceptance criteria |
+| Compliance, audit evidence, AI governance, or regulated workflows | Add explicit evidence, owner, and retention requirements in the plan |
+| Frontend UI, dashboard, landing page, or component work | Use `interface-design`; generate or reuse a design-system artifact |
+| Multi-agent or long-running work | Add durable state updates and handoff notes using `state-management` |
+| Unclear product, domain, architecture, or UX decision | Route back through `/explore` before planning, or record an explicit open question |
+
+Frontend design search:
+
+```bash
+python .agent/skills/interface-design/scripts/search.py "<product type> <industry>" --design-system -p "<Project>"
 ```
-docs/brainstorms/*.md  (within last 14 days, matching topic)
-```
 
-**If found:** Use brainstorm decisions as input, skip idea refinement.
-**If not found:** Briefly confirm requirements with user before planning.
+## Plan Depth
 
-## Phase 1: Research
+Choose the smallest depth that handles the risk.
 
-### 1.1 Local Research (Always)
-- Review existing codebase for similar patterns
-- Check project documentation and SUPER-COMPOUND.md config
-- Search `docs/solutions/` for related past solutions
+| Depth | Use When | Plan Contains |
+|---|---|---|
+| Quick | Small bug, minor cleanup, obvious change | Goal, acceptance criteria, short task list, verification |
+| Standard | Normal feature, refactor, API/UI change | Background, file paths, task sequence, risk checks, tests |
+| Comprehensive | Architecture, data migration, security-sensitive, multi-agent, or release-bound work | Alternatives, rollout, compatibility, observability, rollback, documentation |
 
-### 1.2 Research Decision
-Based on findings, decide if external research is needed:
+Ask one concise question only if the scope or acceptance criteria cannot be inferred safely.
 
-| Signal | Action |
-|--------|--------|
-| Strong local patterns, clear guidance | Skip external research |
-| High-risk topic (security, payments, APIs) | Always research |
-| Unfamiliar territory, new technology | Research |
-| Library/framework API involved | Use `context7-docs` skill (before web search) |
+## Required Plan Shape
 
-Announce the decision: "Your codebase has solid patterns for this. Proceeding without external research." or "This involves [topic], so I'll research best practices first."
-
-### 1.3 Compatibility Pre-flight
-
-If the plan introduces **new dependencies or major version changes**:
-
-1. **Invoke** the `compatibility-check` skill in **pre-flight mode**
-2. **Invoke** `context7-docs` skill to get version-specific docs for new libraries (before web search)
-3. **Scan** current dependency files for existing versions
-4. **Web search** for compatibility data on new dependencies (if Context7 doesn't have it)
-5. **Report** findings in a `## Compatibility Check` section of the plan
-6. **If blockers found** — warn user and suggest alternatives before proceeding
-
-**Skip if:** No new dependencies are introduced, or changes are internal-only.
-
-### 1.4 UI/UX Design System (if frontend)
-
-If the plan involves creating or modifying frontend UI:
-
-1. **Check** for existing `design-system/MASTER.md` — reuse if available
-2. **Generate** new design system if none exists:
-   ```bash
-   python3 skills/ui-ux-pro-max/scripts/search.py "<product_type> <industry>" --design-system -p "<Project>"
-   ```
-3. **Include** design system recommendations in plan document
-4. **Add** pre-delivery checklist items as acceptance criteria
-
-**Skip if:** Plan is backend-only or has no UI changes.
-
-### 1.5 Privacy Pre-flight (if PII handling)
-
-If the plan involves processing personal data (PII):
-
-1. **Invoke** the `data-privacy` skill in **pre-flight mode**
-2. **Check** if consent mechanism is needed
-3. **Verify** data minimization (collect only what's needed)
-4. **Add** privacy requirements to plan acceptance criteria
-5. **Include** `## Privacy Considerations` section in plan if applicable
-
-**Skip if:** No personal data processing involved.
-
-## Phase 2: Choose Depth Level
-
-### 📄 QUICK (Simple tasks)
-
-**Best for:** Small bugs, minor improvements, clear features
+Every plan starts with:
 
 ```markdown
----
-title: [Title]
-type: [feat|fix|refactor]
-date: YYYY-MM-DD
-depth: quick
----
+# <Feature> Implementation Plan
 
-# [Title]
-
-[Brief description]
-
-## Acceptance Criteria
-- [ ] Requirement 1
-- [ ] Requirement 2
-
-## Tasks
-- [ ] Task 1
-- [ ] Task 2
-
-## Context
-[Any critical information]
-```
-
-### 📋 STANDARD (Most features)
-
-**Best for:** Medium features, complex bugs, team collaboration
-
-Includes everything from QUICK plus:
-- Detailed background and motivation
-- Technical considerations
-- Dependencies and risks
-- File paths and code snippets
-
-### 📚 COMPREHENSIVE (Major features)
-
-**Best for:** Major features, architectural changes, complex integrations
-
-Includes everything from STANDARD plus:
-- Phased implementation plan
-- Alternative approaches considered
-- Non-functional requirements
-- Risk mitigation strategies
-- Documentation plan
-
-## Phase 3: Write the Plan
-
-### Bite-Sized Task Granularity
-
-**Each step is one action (2-5 minutes):**
-
-```markdown
-### Task N: [Component Name]
-
-**Files:**
-- Create: `exact/path/to/file.ext`
-- Modify: `exact/path/to/existing.ext`
-- Test: `tests/exact/path/to/test.ext`
-
-**Step 1: Write the failing test**
-[Complete test code]
-
-**Step 2: Run test to verify it fails**
-Run: `[test command] [specific test]`
-Expected: FAIL with "[expected message]"
-
-**Step 3: Write minimal implementation**
-[Complete implementation code]
-
-**Step 4: Run test to verify it passes**
-Run: `[test command] [specific test]`
-Expected: PASS
-
-**Step 5: Commit**
-git add [files]
-git commit -m "feat: [description]"
-```
-
-### Plan Document Header
-
-Every plan MUST start with:
-
-```markdown
-# [Feature Name] Implementation Plan
-
-**Goal:** [One sentence]
-**Architecture:** [2-3 sentences about approach]
-**Tech Stack:** [Key technologies]
-**Depth:** [quick|standard|comprehensive]
-**TDD Mode:** [strict|balanced|relaxed]
+**Goal:** <one sentence>
+**Scope:** <included and excluded work>
+**Depth:** quick | standard | comprehensive
+**Risk Level:** low | medium | high
+**Primary Verification:** <commands or manual checks>
 
 ---
 ```
 
-## Phase 4: Handoff
+Then include the sections that apply:
 
-After saving the plan, present execution options:
+- `## Context` with paths and findings that shaped the plan
+- `## Decisions` for assumptions already resolved
+- `## Open Questions` only for blockers or genuine uncertainty
+- `## Compatibility And Risk` for dependencies, migrations, contracts, security, privacy, or release concerns
+- `## Design System` for frontend work, including source CSV/search result when used
+- `## Tasks` with ordered, checkable steps
+- `## Verification` with exact commands and expected outcomes
+- `## Rollback` for database, deployment, external service, or risky behavior changes
+- `## Documentation` when setup, user behavior, API contracts, or operations change
 
-**"Plan saved to `docs/plans/<filename>.md`. How would you like to proceed?"**
+## Task Discipline
 
-1. **Execute sequentially** — Work through tasks one at a time with checkpoints
-2. **Execute with swarm** — Parallel execution with multiple agents (for independent tasks)
-3. **Review and refine** — Improve the plan document
-4. **Done for now** — Come back later
+Tasks should be independently verifiable. Prefer thin vertical slices over broad layer-only chunks.
 
-## Task-Sizing Discipline
+Good task examples:
 
-**The #1 rule:** Each task must be completable in one focused session (one AI context window).
+- Add one migration and its rollback check
+- Update one endpoint and its tests
+- Add one UI state and browser verification
+- Refactor one module boundary and update callers
+- Add one audit/logging behavior with assertions
 
-### Right-Sized Tasks (DO)
+Split tasks when:
 
-| Example | Why It Works |
-|---------|-------------|
-| "Add a database column and migration" | One schema change, verifiable |
-| "Add a UI component to an existing page" | One visual change, verifiable in browser |
-| "Update a server action with new logic" | One endpoint, verifiable with test |
-| "Add a filter dropdown to a list" | One interaction, verifiable in browser |
-| "Create a validation middleware" | One concern, testable in isolation |
+- The change touches unrelated domains
+- The task cannot be described in two or three sentences
+- The verification would only happen after several later tasks
+- Multiple agents would edit the same files
+- A task feels larger than one focused session
 
-### Too-Big Tasks (SPLIT THESE)
+## Optional Task Ledger
 
-| Too Big | Split Into |
-|---------|-----------|
-| "Build the entire dashboard" | Schema → queries → UI components → filters → layout |
-| "Add authentication" | Schema → middleware → login UI → session handling → guards |
-| "Refactor the API" | One story per endpoint or pattern |
-| "Add notification system" | DB table → service → bell icon → dropdown → mark-as-read → preferences |
+Use a JSON task ledger only when it helps operation, not by default.
 
-### Sizing Rules
+Use when:
 
-1. **2-3 sentence test:** If you cannot describe the change in 2-3 sentences, it is too big — split it
-2. **Single concern:** Each task should modify ONE layer (DB, backend, or frontend) — not all three
-3. **Dependency order:** Schema → backend logic → API → frontend UI → integration tests
-4. **Independent verification:** Each task must be independently verifiable (not "verify after task 5")
-5. **Time estimate:** If a task feels like >2 hours of work, split it
+- The plan spans many sessions
+- Multiple agents will execute independent slices
+- A user needs machine-readable progress tracking
 
-### Auto-Splitting Guidance
+Save to `docs/tasks/tasks-<feature>.json` and keep it synchronized with the Markdown plan.
 
-When a requirement is too broad, split using this pattern:
-
-```
-Original: "Add [complex feature]"
-Split:
-  1. DB/Schema changes + migration
-  2. Backend service/logic
-  3. API endpoint/route
-  4. UI component (minimal)
-  5. UI interaction + validation
-  6. Integration test
-```
-
-## Remember
-
-- Exact file paths always
-- Complete code in plan (not "add validation here")
-- Exact commands with expected output
-- DRY, YAGNI, TDD, frequent commits
-- Don't skip the depth selection — ask the user
-- Reference `docs/solutions/` learnings when relevant
-- Read `docs/progress.md` Codebase Patterns before planning
-
-## Red Flags
-
-| Thought | Reality |
-|---------|---------|
-| "The plan is clear in my head" | Write it down. Memory is unreliable. |
-| "Too detailed" | Details prevent rework. Be specific. |
-| "Skip TDD for this plan" | Unless prototyping, always include tests. |
-| "One big task is fine" | 2-5 minute tasks. Break it down. |
-
-## Integration
-
-**Prerequisite skills:**
-- **brainstorming** — Creates the design this skill plans from
-- **prd-generator** — Creates the product spec this skill turns into a technical plan
-
-**This skill feeds into:**
-- **executing-plans** — Executes the plan task by task
-- **test-driven-development** — Each task follows TDD cycle
-- **ui-ux-pro-max** — Design system generation for frontend plans
-
-**Pre-flight skills (invoked conditionally):**
-- **compatibility-check** — When new dependencies introduced
-- **threat-modeling** — When auth/data/API features involved
-- **data-privacy** — When PII processing involved
-
----
-
-## Optional: Machine-Parseable Tasks (tasks.json)
-
-For projects needing automated progress tracking in addition to a Markdown plan, create a `tasks.json` alongside the plan document.
-
-**Use when:**
-- Multi-session feature with many stories (automated tracking helps)
-- Autonomous execution pipeline (machine-readable required)
-- Team handoff where structured format reduces ambiguity
-- Single developer with small feature → **skip** (Markdown alone is enough)
-
-**Save to:** `docs/tasks/tasks-<feature>.json`
-
-### Format
+Minimal shape:
 
 ```json
 {
-  "project": "[Project Name]",
-  "feature": "[Feature Name]",
-  "branch": "[git branch name]",
-  "description": "[Brief feature description]",
+  "feature": "Feature name",
   "created": "YYYY-MM-DD",
-  "stories": [
+  "status": "planned",
+  "tasks": [
     {
-      "id": "US-001",
-      "title": "[Short descriptive title]",
-      "description": "As a [user], I want [feature] so that [benefit]",
-      "acceptanceCriteria": [
-        "Specific verifiable criterion",
-        "Typecheck/lint passes"
-      ],
-      "priority": 1,
+      "id": "T001",
+      "title": "Short task title",
       "status": "pending",
-      "notes": ""
+      "files": [],
+      "verification": []
     }
   ]
 }
 ```
 
-### Status Values
+## Acceptance Criteria
 
-| Status | Meaning |
-|--------|---------|
-| `pending` | Not started |
-| `in_progress` | Currently being worked on |
-| `done` | Completed and verified |
-| `blocked` | Cannot proceed (see notes) |
-| `skipped` | Intentionally skipped (see notes) |
+Each plan must make completion testable:
 
-### Creating tasks.json from a PRD
+- User-visible behavior is stated plainly
+- Edge cases and failure modes are named
+- Tests or checks map to each risky behavior
+- UI work includes accessibility and responsive verification
+- Security/privacy work includes negative cases
+- Data changes include migration, rollback, and compatibility notes
 
-If a PRD exists (`docs/prd/prd-<feature>.md`):
-1. Each PRD user story → one JSON story entry
-2. PRD acceptance criteria → `acceptanceCriteria` array
-3. Add `"Typecheck/lint passes"` to every story
-4. Add `"Verify in browser"` to UI stories
-5. Set priority by dependency order (schema → backend → frontend)
-6. Set all statuses to `"pending"`
+## Handoff
 
-### Acceptance Criteria Quality
+After saving the plan, offer operational choices:
 
-✅ **Good (Verifiable):**
-- `"Add 'status' column to tasks table with default 'pending'"`
-- `"Filter dropdown has options: All, Active, Completed"`
+1. Execute sequentially with `/work`
+2. Execute independent slices with parallel agents when safe
+3. Review and refine the plan
+4. Stop with the plan saved
 
-❌ **Bad (Vague — NEVER use):**
-- `"Works correctly"`
-- `"Good UX"`
+Do not add legacy workflow aliases to the plan. Route by current workflows: `/explore`, `/prd`, `/plan`, `/work`, `/review`, `/audit`, `/ui`.
 
-### Tracking Progress
+## Red Flags
 
-1. Set current story to `"in_progress"`
-2. Only set to `"done"` after ALL acceptance criteria verified
-3. When all stories are `"done"` — feature is complete
-4. Archive: move to `docs/archive/YYYY-MM-DD-<feature>/tasks.json`
+| Thought | Better Response |
+|---|---|
+| "The plan is obvious" | Write the exact files, commands, and criteria |
+| "Tests can wait" | Put verification beside the task that needs it |
+| "One big task is simpler" | Split into verifiable slices |
+| "We can add the package later" | Check compatibility and supply-chain risk before committing to it |
+| "The UI copy can be generic" | Use `interface-design` and domain-specific product language |
+
+## Related Skills
+
+- `brainstorming` and `prd-generator` provide upstream product context
+- `executing-plans` consumes this plan
+- `test-driven-development` shapes task-level implementation
+- `interface-design` supports frontend and design-system planning
+- `compatibility-check`, `security-audit`, `threat-modeling`, and `data-privacy` cover risk pre-flight
+- `state-management` keeps long work durable
+- `verification-before-completion` defines the completion bar

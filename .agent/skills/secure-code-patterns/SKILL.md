@@ -287,7 +287,7 @@ Generating tokens/IDs?
 - **writing-plans** — Include secure patterns in implementation
 
 **This skill pairs with:**
-- **secrets-management** — Key storage and credential handling
+- **security-audit** — Key storage and credential handling
 - **threat-modeling** — Implement mitigations from threat analysis
 - **architecture-enforcement** — Validation middleware placement
 

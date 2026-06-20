@@ -22,6 +22,17 @@ description: "Use when [triggering conditions]"  # Max 1024 chars, third person
 ---
 ```
 
+## Invocation Design
+
+Pick the invocation mode deliberately:
+
+| Mode | Use When | Cost |
+|------|----------|------|
+| Model-invoked | The agent should reach for it automatically, or another skill depends on it | Context load from the description |
+| User-invoked | Only the human should intentionally run it | Cognitive load on the human |
+
+If user-invoked skills multiply, add a router workflow/skill that tells the human which one fits. Do not make everything model-invoked just because it is useful.
+
 **Critical:** Description = WHEN to use, NOT what the skill does. Summaries in descriptions cause agents to skip reading the full skill.
 
 ```yaml
@@ -83,6 +94,17 @@ Write code before test? Delete it. Start over.
 
 **Build rationalization table from all test iterations.**
 
+## Pruning And No-Op Test
+
+Every line must change behavior versus the default. Delete:
+
+- No-ops: generic advice the model already follows
+- Duplication: the same rule in multiple places
+- Sediment: stale rules from old versions
+- Sprawl: reference that belongs behind a context pointer
+
+Prefer strong leading words over repeated explanations. Examples: "tracer bullet", "tight loop", "deep module", "handoff".
+
 ## Pressure Types for Testing
 
 | Pressure | Example |
@@ -118,6 +140,9 @@ Skills enforcing discipline benefit from these research-backed techniques:
 - [ ] Red flags table covers common rationalizations
 - [ ] Integration section links to related skills
 - [ ] Token-efficient: < 500 words for most skills
+- [ ] Invocation mode is deliberate
+- [ ] No-op, duplication, sediment, and sprawl have been pruned
+- [ ] Long reference moved behind a context pointer when only some branches need it
 
 ## Red Flags
 
