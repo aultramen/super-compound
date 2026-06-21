@@ -18,7 +18,7 @@ function getTimestamp() {
 }
 
 const timestamp = getTimestamp();
-const marker = `## Last Compaction\n\n**When:** ${timestamp}\n**Note:** Context was compacted. STATE.md, .continue-here.md, and docs/ are preserved on disk.\n**After compaction:** Run /init reload, then /status to restore context.\n`;
+const marker = `## Last Compaction\n\n**When:** ${timestamp}\n**Note:** Context was compacted. STATE.md, .continue-here.md, and docs/ are preserved on disk.\n**After compaction:** Run /sc-init reload, then /sc-status to restore context.\n`;
 
 if (fs.existsSync(stateFile)) {
     try {
@@ -36,17 +36,17 @@ if (fs.existsSync(stateFile)) {
         console.error(`[Super Compound] Pre-compact: Could not update STATE.md: ${error.message}`);
     }
 } else {
-    console.error('[Super Compound] Pre-compact: No STATE.md found. Run /pause before compacting for best results.');
+    console.error('[Super Compound] Pre-compact: No STATE.md found. Run /sc-pause before compacting for best results.');
 }
 
 if (fs.existsSync(continueFile)) {
-    console.error('[Super Compound] Pre-compact: .continue-here.md present - /status can route the next session');
+    console.error('[Super Compound] Pre-compact: .continue-here.md present - /sc-status can route the next session');
 }
 
 console.error('');
 console.error(`[Super Compound] Context compaction starting at ${timestamp}`);
 console.error('  Files preserved: STATE.md, .continue-here.md, docs/');
-console.error('  After new session: /init reload, then /status');
+console.error('  After new session: /sc-init reload, then /sc-status');
 console.error('');
 
 let input = '';

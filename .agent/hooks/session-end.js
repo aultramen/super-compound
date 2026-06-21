@@ -20,21 +20,21 @@ console.error('[Super Compound] Session ending. Checklist:');
 console.error('');
 
 if (!hasState) {
-    console.error('  [ ] Consider /pause to create a durable handoff');
-    console.error('  [ ] Consider /compound if you solved a reusable problem');
+    console.error('  [ ] Consider /sc-pause to create a durable handoff');
+    console.error('  [ ] Consider /sc-compound if you solved a reusable problem');
 } else {
     console.error('  [OK] STATE.md exists - state is tracked');
-    console.error('  [ ] If you solved non-trivial problems, run /compound');
+    console.error('  [ ] If you solved non-trivial problems, run /sc-compound');
 }
 
 if (hasContinue) {
-    console.error('  [OK] .continue-here.md exists - /status can route the next session');
+    console.error('  [OK] .continue-here.md exists - /sc-status can route the next session');
 }
 
 console.error('');
 console.error('[Super Compound] To preserve context across sessions:');
-console.error('  - Run /pause before closing');
-console.error('  - Run /compound to document reusable solutions');
+console.error('  - Run /sc-pause before closing');
+console.error('  - Run /sc-compound to document reusable solutions');
 console.error('');
 
 let input = '';

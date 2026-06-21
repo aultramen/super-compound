@@ -15,8 +15,8 @@ Announce: "I'm using the compatibility-check skill to validate tech stack compat
 
 | Mode | Trigger | Scope | Output |
 |---|---|---|---|
-| Pre-flight | `/plan` introduces dependencies, vendors, runtimes, containers, or major version changes | Proposed changes | Compatibility section in the plan |
-| Audit | `/audit compat` or explicit request | Current project stack | Read-only compatibility report |
+| Pre-flight | `/sc-plan` introduces dependencies, vendors, runtimes, containers, or major version changes | Proposed changes | Compatibility section in the plan |
+| Audit | `/sc-audit compat` or explicit request | Current project stack | Read-only compatibility report |
 | Debug support | A failure looks version-related | Suspect dependency pair | Root-cause note and fix options |
 
 Audit mode is read-only unless the user explicitly approves changes.

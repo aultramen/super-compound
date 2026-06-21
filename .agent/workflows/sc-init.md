@@ -7,8 +7,8 @@ description: "Initialize or refresh project context by scanning the codebase, co
 ## Usage
 
 ```text
-/init
-/init reload
+/sc-init
+/sc-init reload
 ```
 
 ## Steps
@@ -18,7 +18,7 @@ description: "Initialize or refresh project context by scanning the codebase, co
 3. Infer stack, commands, architecture, dependency manager, database, and deployment hints.
 4. Suggest updates to project config instead of guessing silently.
 5. Create or refresh concise codebase notes when useful.
-6. For `/init reload`, re-read rules/workflows/skills that changed and summarize what matters.
+6. For `/sc-init reload`, re-read rules/workflows/skills that changed and summarize what matters.
 
 ## Output
 

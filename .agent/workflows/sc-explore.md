@@ -18,9 +18,12 @@ Use this when the work is not ready for a plan.
 
 1. Load `skills/brainstorming/SKILL.md`.
 2. Inspect existing code, docs, issues, ADRs, and related solutions before asking questions.
-3. Resolve the smallest decision that unlocks the next step.
-4. Capture non-goals and deferred ideas without expanding current scope.
-5. Route to `prd.md` when product behavior is clear, or `plan.md` when implementation is clear.
+3. Load `skills/domain-modeling/SKILL.md` when terms, roles, or domain boundaries are fuzzy.
+4. Load `skills/codebase-design/SKILL.md` when the decision is about seams, module shape, or testability.
+5. Load `skills/prototyping/SKILL.md` only when runnable evidence is cheaper than debate.
+6. Resolve the smallest decision that unlocks the next step.
+7. Capture non-goals and deferred ideas without expanding current scope.
+8. Route to `sc-prd.md` when product behavior is clear, or `sc-plan.md` when implementation is clear.
 
 ## Output
 

@@ -1,13 +1,13 @@
 ---
 name: parallel-execution
-description: "Use when a plan has 5+ independent tasks that don't share files. Dispatches multiple agents working simultaneously in isolated git worktrees. Requires tasks with no file-level dependencies."
+description: "Use when a plan or issue board has 5+ independent tasks that don't share files. Dispatches multiple agents working simultaneously in isolated git worktrees. Requires no unresolved blockers or file-level dependencies."
 ---
 
 # Parallel Execution
 
 ## Overview
 
-Execute independent plan tasks simultaneously using isolated git worktrees per agent. Combines parallel agent dispatch with worktree isolation to prevent merge conflicts.
+Execute independent plan tasks or issue files simultaneously using isolated git worktrees per agent. Combines parallel agent dispatch with worktree isolation to prevent merge conflicts.
 
 **Announce:** "I'm using the parallel-execution skill to run independent tasks in parallel."
 
@@ -16,7 +16,7 @@ Execute independent plan tasks simultaneously using isolated git worktrees per a
 ## Prerequisites
 
 - Git repository initialized
-- Plan with 5+ tasks
+- Plan or `.scratch/` issue board with 5+ tasks or issues
 - Tasks identified as independent (no shared files)
 - `git_workflow` set to `worktree` in project-config.md
 
@@ -24,7 +24,7 @@ Execute independent plan tasks simultaneously using isolated git worktrees per a
 
 | Use When | Don't Use When |
 |----------|---------------|
-| 5+ independent tasks | Tasks share files |
+| 5+ independent tasks or ready issues | Tasks share files |
 | Tasks modify different modules | Sequential dependencies |
 | Time savings justify overhead | Small plan (< 5 tasks) |
 | Clean git state | Uncommitted changes |
@@ -33,7 +33,7 @@ Execute independent plan tasks simultaneously using isolated git worktrees per a
 
 ### Phase 1: Independence Analysis
 
-For each pair of tasks, check:
+For each pair of tasks or issue files, check:
 
 ```
 Task A files ∩ Task B files = ∅  →  Independent ✅
@@ -50,6 +50,8 @@ Task 5: src/api/*  → Sequential with Task 3 (shared files)
 ```
 
 **Result:** Parallel groups = {[1,2], [3,5], [4]} → Run 3 parallel streams.
+
+For issue boards, schedule only issues whose `Blocked by` entries are `None` or already `done`.
 
 ### Phase 2: Create Worktrees
 

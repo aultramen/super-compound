@@ -4,12 +4,12 @@ description: "Execute an approved implementation plan with tests, verification, 
 
 # Work Workflow
 
-Use this only after there is a clear plan or task contract.
+Use this only after there is a clear plan, issue file, or task contract.
 
 ## Steps
 
 1. Load `skills/executing-plans/SKILL.md`.
-2. Read the plan and confirm tasks, dependencies, verification, and done conditions.
+2. Read the plan or `.scratch/<feature>/issues/<NN>-<slug>.md` issue and confirm tasks, blockers, verification, and done conditions.
 3. Set up the branch/worktree strategy only if requested or configured.
 4. Execute one task at a time by default.
 5. Use `skills/parallel-execution/SKILL.md` only when tasks are independent and isolated.
@@ -21,5 +21,6 @@ Use this only after there is a clear plan or task contract.
 ## Output
 
 - Implemented plan.
+- Updated issue status when work came from `.scratch/`.
 - Verification results.
 - Any remaining risks or follow-up tasks.

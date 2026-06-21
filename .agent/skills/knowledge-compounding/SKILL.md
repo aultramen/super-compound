@@ -213,7 +213,7 @@ This file is the project's long-term memory. It accumulates learnings across all
 
 ### When to Append
 
-- After completing a work session (before `/pause`)
+- After completing a work session (before `/sc-pause`)
 - After solving a debugging session
 - After implementing a significant feature
 - After discovering a non-obvious codebase convention

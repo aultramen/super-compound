@@ -11,7 +11,7 @@ Enforce clean architecture aligned with each framework's best practices. This sk
 
 **Announce:** "I'm using the architecture-enforcement skill to verify code placement and dependencies."
 
-**Scope:** This skill checks placement, dependency direction, and framework conventions. Use `/explore` or `/plan` when the deeper question is whether a module, interface, seam, or adapter is shaped well enough to build.
+**Scope:** This skill checks placement, dependency direction, and framework conventions. Use `/sc-explore` or `/sc-plan` when the deeper question is whether a module, interface, seam, or adapter is shaped well enough to build.
 
 ## When to Use
 

@@ -21,7 +21,7 @@ Use this skill when:
 - Several implementation paths seem plausible
 - The request risks becoming overbuilt without scope choices
 
-Skip it when the user already provided a concrete spec, exact files, and acceptance criteria. In that case, move to `/plan`.
+Skip it when the user already provided a concrete spec, exact files, and acceptance criteria. In that case, move to `/sc-plan`.
 
 ## Process
 
@@ -122,10 +122,10 @@ Skip diagrams for small bugs or straightforward copy/config changes.
 
 After brainstorming, route to:
 
-- `/prd` for product requirements
-- `/plan` for implementation planning
-- `/ui` for interface-focused work
-- `/work` only if requirements are already concrete enough
+- `/sc-prd` for product requirements
+- `/sc-plan` for implementation planning
+- `/sc-ui` for interface-focused work
+- `/sc-work` only if requirements are already concrete enough
 
 ## Related Skills
 

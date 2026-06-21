@@ -30,7 +30,7 @@ Invoke this skill whenever you need:
 | Package compatibility info | "Drizzle ORM version requirements" |
 
 **Triggers in other skills:**
-- `research.md` — Step 3 External Research: library/framework involved
+- `sc-research.md` — Step 3 External Research: library/framework involved
 - `writing-plans` — Phase 1.2 Research Decision: high-risk API/library topic
 - `compatibility-check` — Pre-flight: checking version docs for new dependencies
 - `architecture-enforcement` — Looking up framework-specific conventions
@@ -91,7 +91,7 @@ FALLBACK ORDER:
 ## Integration
 
 **This skill is invoked by:**
-- `research.md` workflow — Step 3: External research, before web search
+- `sc-research.md` workflow — Step 3: External research, before web search
 - `writing-plans` skill — Phase 1.2 Research Decision (library/API topics)
 - `compatibility-check` skill — Step 3: Pre-flight compatibility check
 - `architecture-enforcement` skill — Framework convention lookup

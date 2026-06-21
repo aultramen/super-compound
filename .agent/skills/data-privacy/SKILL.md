@@ -17,9 +17,9 @@ Ensure applications comply with data privacy regulations when processing persona
 
 | Mode | Trigger | Scope | Output |
 |------|---------|-------|--------|
-| **Pre-flight** | During `/plan` when features involve PII or user data | Feature-specific | Privacy section in plan document |
+| **Pre-flight** | During `/sc-plan` when features involve PII or user data | Feature-specific | Privacy section in plan document |
 | **Review** | During code review when PII handling changes | Changed files | Privacy findings in review report |
-| **Audit** | Via `/audit privacy` or `security-audit` | Codebase-wide | Privacy compliance findings |
+| **Audit** | Via `/sc-audit privacy` or `security-audit` | Codebase-wide | Privacy compliance findings |
 
 ---
 
@@ -359,7 +359,7 @@ Required when processing involves high risk to individuals:
 - **security-audit** — Privacy compliance check during audit
 - **code-review** — Privacy perspective of code review
 - **writing-plans** — Pre-flight privacy check for PII features
-- **`/audit security` workflow** — Data privacy verification step
+- **`/sc-audit security` workflow** — Data privacy verification step
 
 **This skill pairs with:**
 - **secure-code-patterns** — Encryption and data masking patterns

@@ -37,11 +37,11 @@ When returning to work:
 2. Read `.continue-here.md` if present.
 3. Read the active plan, PRD, or brainstorm.
 4. Load only files needed for the current next step.
-5. Run `/status` to route the session if the next action is unclear.
+5. Run `/sc-status` to route the session if the next action is unclear.
 
 ## Fresh Context Signals
 
-Suggest `/pause` and a fresh session when:
+Suggest `/sc-pause` and a fresh session when:
 
 - The task is switching to a different feature or domain
 - Debugging has accumulated many failed hypotheses
@@ -49,7 +49,7 @@ Suggest `/pause` and a fresh session when:
 - The assistant is relying on stale memory instead of current files
 - The conversation is long enough that important details are being compressed
 
-After a fresh session, use `/status` to recover from disk.
+After a fresh session, use `/sc-status` to recover from disk.
 
 ## Checkpoints
 

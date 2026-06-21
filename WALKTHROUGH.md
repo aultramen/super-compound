@@ -2,6 +2,8 @@
 
 This walkthrough shows the current Super Compound flow after the 2026-06-20 cleanup. It uses the small public workflow surface and avoids legacy aliases.
 
+Every command starts with `/sc-*` so it stays separate from native Claude Code slash commands.
+
 ## Scenario
 
 You want to add a usage analytics dashboard to an existing SaaS app.
@@ -9,20 +11,20 @@ You want to add a usage analytics dashboard to an existing SaaS app.
 The ideal path:
 
 ```text
-/init
-/explore analytics dashboard for account admins
-/prd
-/plan
-/work
-/review
-/audit
-/compound
+/sc-init
+/sc-explore analytics dashboard for account admins
+/sc-prd
+/sc-plan --issues
+/sc-work .scratch/analytics-dashboard/issues/01-account-usage-summary.md
+/sc-review
+/sc-audit
+/sc-compound
 ```
 
 For UI-heavy work, add:
 
 ```text
-/ui analytics dashboard for a B2B SaaS admin team
+/sc-ui analytics dashboard for a B2B SaaS admin team
 ```
 
 ## 1. Initialize
@@ -30,7 +32,7 @@ For UI-heavy work, add:
 Run:
 
 ```text
-/init
+/sc-init
 ```
 
 What happens:
@@ -40,17 +42,17 @@ What happens:
 - Checks existing docs and state files
 - Routes the next step
 
-Use `/init reload` when framework files changed and the session needs to refresh its mental model.
+Use `/sc-init reload` when framework files changed and the session needs to refresh its mental model.
 
 ## 2. Explore
 
 Run:
 
 ```text
-/explore analytics dashboard for account admins
+/sc-explore analytics dashboard for account admins
 ```
 
-Use `/explore` when the idea is still fuzzy, strategic, domain-heavy, or needs a lightweight prototype decision.
+Use `/sc-explore` when the idea is still fuzzy, strategic, domain-heavy, or needs a lightweight prototype decision.
 
 The agent should:
 
@@ -74,7 +76,7 @@ Build a focused account-admin dashboard around activation, usage, and risk signa
 - Defer export and alerting.
 
 ## Recommended Next Step
-Run `/prd` to turn this into requirements.
+Run `/sc-prd` to turn this into requirements.
 ```
 
 ## 3. Write A PRD
@@ -82,7 +84,7 @@ Run `/prd` to turn this into requirements.
 Run:
 
 ```text
-/prd analytics dashboard
+/sc-prd analytics dashboard
 ```
 
 The PRD defines what will be built:
@@ -116,7 +118,7 @@ Good acceptance criteria are observable:
 Run:
 
 ```text
-/plan docs/prd/prd-analytics-dashboard.md
+/sc-plan docs/prd/prd-analytics-dashboard.md
 ```
 
 The plan should:
@@ -125,6 +127,7 @@ The plan should:
 - Run compatibility/security/privacy pre-flight checks when relevant
 - Use `interface-design` for frontend work
 - Split work into verifiable vertical slices
+- Use `issue-workflow` for Journey/Kanban/PRD-to-issues requests
 - Include exact verification commands
 - Document rollback when data or deployment risk exists
 
@@ -152,21 +155,47 @@ Steps:
 4. Verify responsive layout in browser.
 ```
 
+For a local Journey board, run:
+
+```text
+/sc-plan --issues docs/prd/prd-analytics-dashboard.md
+```
+
+This should review the proposed vertical slices with you, then create:
+
+```text
+.scratch/analytics-dashboard/
+  PRD.md
+  issues/
+    01-account-usage-summary.md
+    02-dashboard-empty-state.md
+```
+
+Each issue includes `Status`, `Parent`, `Blocked by`, user stories, acceptance criteria, verification, and comments. `Blocked by` links form an acyclic dependency graph so ready work can be picked up in parallel.
+
 ## 5. Work
 
 Run:
 
 ```text
-/work docs/plans/2026-06-20-analytics-dashboard-plan.md
+/sc-work docs/plans/2026-06-20-analytics-dashboard-plan.md
+```
+
+Or execute one issue slice:
+
+```text
+/sc-work .scratch/analytics-dashboard/issues/01-account-usage-summary.md
 ```
 
 The agent should execute sequentially by default:
 
 - Mark one task in progress
+- Respect `Blocked by` before starting issue files
 - Read only relevant files
 - Write failing tests for behavior changes
 - Implement the smallest cohesive change
 - Run targeted verification
+- Mark issue status when work came from `.scratch/`
 - Update durable state for long work
 
 Parallel execution is reserved for independent tasks with non-overlapping files and clear verification.
@@ -176,7 +205,7 @@ Parallel execution is reserved for independent tasks with non-overlapping files 
 If something fails, run:
 
 ```text
-/debug <symptom or failing command>
+/sc-debug <symptom or failing command>
 ```
 
 Debugging should:
@@ -194,7 +223,7 @@ Do not patch blindly.
 Run:
 
 ```text
-/review
+/sc-review
 ```
 
 Review focuses on findings first:
@@ -213,10 +242,10 @@ Findings should include file and line references when possible.
 Run:
 
 ```text
-/audit
+/sc-audit
 ```
 
-Use `/audit` for:
+Use `/sc-audit` for:
 
 - Security review
 - Dependency and runtime compatibility
@@ -228,10 +257,10 @@ Use `/audit` for:
 Specific routes are allowed:
 
 ```text
-/audit security
-/audit compat
-/audit privacy
-/audit release
+/sc-audit security
+/sc-audit compat
+/sc-audit privacy
+/sc-audit release
 ```
 
 Audit mode is read-only unless the user asks for fixes.
@@ -241,7 +270,7 @@ Audit mode is read-only unless the user asks for fixes.
 Run:
 
 ```text
-/ui analytics dashboard for B2B SaaS
+/sc-ui analytics dashboard for B2B SaaS
 ```
 
 The UI workflow uses `interface-design`, not the old UI skill name.
@@ -267,7 +296,7 @@ python .agent/skills/interface-design/scripts/search.py "bauhaus geometric" --do
 When stopping mid-work:
 
 ```text
-/pause
+/sc-pause
 ```
 
 This creates or updates:
@@ -279,7 +308,7 @@ This creates or updates:
 Next session:
 
 ```text
-/status
+/sc-status
 ```
 
 The agent should read durable state and route to the next action.
@@ -289,7 +318,7 @@ The agent should read durable state and route to the next action.
 Run:
 
 ```text
-/compound
+/sc-compound
 ```
 
 Use this after solving something reusable:
@@ -306,21 +335,21 @@ Save concise knowledge under `docs/solutions/` or related project docs.
 
 | Need | Workflow |
 |---|---|
-| Initialize or reload | `/init` |
-| Resume from disk state | `/status` |
-| Shape fuzzy ideas | `/explore` |
-| Gather evidence | `/research` |
-| Write requirements | `/prd` |
-| Plan implementation | `/plan` |
-| Define or run evals | `/eval` |
-| Execute plan | `/work` |
-| Fix failures | `/debug` |
-| Review changes | `/review` |
-| Audit risk/readiness | `/audit` |
-| Capture learnings | `/compound` |
-| Save handoff | `/pause` |
-| Start lifecycle | `/launch` |
-| Build interface | `/ui` |
+| Initialize or reload | `/sc-init` |
+| Resume from disk state | `/sc-status` |
+| Shape fuzzy ideas | `/sc-explore` |
+| Gather evidence | `/sc-research` |
+| Write requirements | `/sc-prd` |
+| Plan implementation | `/sc-plan` |
+| Define or run evals | `/sc-eval` |
+| Execute plan | `/sc-work` |
+| Fix failures | `/sc-debug` |
+| Review changes | `/sc-review` |
+| Audit risk/readiness | `/sc-audit` |
+| Capture learnings | `/sc-compound` |
+| Save handoff | `/sc-pause` |
+| Start lifecycle | `/sc-launch` |
+| Build interface | `/sc-ui` |
 
 ## Removed Routes
 
@@ -330,13 +359,13 @@ Use these replacements:
 
 | Old Intent | New Route |
 |---|---|
-| brainstorm, discuss, domain, strategy, prototype | `/explore` |
-| issue shaping, triage, task breakdown | `/plan` |
-| loop execution, handoff, swarm work | `/work` |
-| security, compatibility, MCP, compliance, release readiness | `/audit` |
-| progress or resume | `/status` |
-| reload | `/init reload` |
-| UI design/build | `/ui` |
+| brainstorm, discuss, domain, strategy, prototype | `/sc-explore` |
+| issue shaping, triage, Kanban, Journey, task breakdown | `/sc-plan` |
+| loop execution, handoff, swarm work | `/sc-work` |
+| security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
+| progress or resume | `/sc-status` |
+| reload | `/sc-init reload` |
+| UI design/build | `/sc-ui` |
 
 ## Quality Checklist
 

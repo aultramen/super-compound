@@ -51,7 +51,7 @@ cat ~/.claude/settings.json
           "async": true,
           "timeout": 5
         }],
-        "description": "Suggest /pause at logical intervals"
+        "description": "Suggest /sc-pause at logical intervals"
       }
     ],
     "PreCompact": [
@@ -71,7 +71,7 @@ cat ~/.claude/settings.json
           "type": "command",
           "command": "node \"C:\\path\\to\\your-project\\.agent\\hooks\\session-end.js\""
         }],
-        "description": "Remind to /compound at session end"
+        "description": "Remind to /sc-compound at session end"
       }
     ]
   }
@@ -89,7 +89,7 @@ node .agent/hooks/suggest-compact.js
 
 | Env Variable | Default | Description |
 |---|---|---|
-| `COMPACT_THRESHOLD` | `50` | Tool calls before first `/pause` suggestion |
+| `COMPACT_THRESHOLD` | `50` | Tool calls before first `/sc-pause` suggestion |
 | `COMPACT_REMINDER_INTERVAL` | `25` | Calls between reminders |
 
 ---
@@ -98,8 +98,8 @@ node .agent/hooks/suggest-compact.js
 
 Hooks don't run automatically in Antigravity. Instead, **equivalent behavior** is achieved through:
 
-1. **`/pause`** — Run manually when you want to save state before a long break
-2. **`/compound`** — Run manually after solving a non-trivial problem
+1. **`/sc-pause`** — Run manually when you want to save state before a long break
+2. **`/sc-compound`** — Run manually after solving a non-trivial problem
 3. **`context-engineering` skill** — Guides you on when to pause for fresh context
 
 The AI will remind you to use these at natural breakpoints based on rules in `SUPER-COMPOUND.md`.

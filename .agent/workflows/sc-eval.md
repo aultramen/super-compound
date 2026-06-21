@@ -9,9 +9,9 @@ Use this when a feature needs measurable pass/fail behavior, reliability checks,
 ## Usage
 
 ```text
-/eval define <feature>
-/eval check <feature>
-/eval report <feature>
+/sc-eval define <feature>
+/sc-eval check <feature>
+/sc-eval report <feature>
 ```
 
 ## Steps

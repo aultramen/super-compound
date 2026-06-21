@@ -8,6 +8,7 @@ It keeps the public command surface small, pushes detailed procedures into skill
 
 - 15 public workflows for common development operations
 - Modular skills for planning, execution, debugging, review, audit, UI, state, and verification
+- Local Markdown Journey boards under `.scratch/<feature>/issues/`
 - Concise always-on rules under `.agent/rules/`
 - Deterministic local hooks under `.agent/hooks/`
 - Data-backed interface design search through `interface-design`
@@ -34,29 +35,31 @@ For Antigravity IDE, keep `.agent/rules/super-compound.md` lowercase. The root `
 
 ## Quick Start
 
+All public commands use the `/sc-*` prefix to avoid collisions with native Claude Code planning and review slash commands.
+
 ```text
-/init
-/explore <idea>
-/prd <feature>
-/plan <approved PRD or request>
-/work <plan>
-/review
-/audit
-/compound
+/sc-init
+/sc-explore <idea>
+/sc-prd <feature>
+/sc-plan <approved PRD or request>
+/sc-work <plan>
+/sc-review
+/sc-audit
+/sc-compound
 ```
 
 For UI work:
 
 ```text
-/ui Build an analytics dashboard for a fintech SaaS
+/sc-ui Build an analytics dashboard for a fintech SaaS
 ```
 
 For continuation:
 
 ```text
-/pause
+/sc-pause
 # next session
-/status
+/sc-status
 ```
 
 ## Public Workflows
@@ -65,32 +68,32 @@ Only these workflow files are public:
 
 | Workflow | Use When |
 |---|---|
-| `/init` | Set up or reload framework context |
-| `/status` | Inspect current state and route the next action |
-| `/explore` | Shape fuzzy ideas, product direction, domain questions, strategy, and lightweight prototypes |
-| `/research` | Gather evidence before making technical or product decisions |
-| `/prd` | Write product requirements from an idea or explored direction |
-| `/plan` | Produce implementation plans with risk checks and verification |
-| `/eval` | Define and run evaluation criteria before or after implementation |
-| `/work` | Execute an approved plan sequentially or with safe parallel slices |
-| `/debug` | Reproduce, isolate, and fix root causes |
-| `/review` | Review changes for correctness, maintainability, and missing tests |
-| `/audit` | Check security, compatibility, compliance, agent surface, and release readiness |
-| `/compound` | Capture reusable solutions and lessons |
-| `/pause` | Save durable handoff state |
-| `/launch` | Start a focused project or feature lifecycle |
-| `/ui` | Use interface-design guidance for frontend work |
+| `/sc-init` | Set up or reload framework context |
+| `/sc-status` | Inspect current state and route the next action |
+| `/sc-explore` | Shape fuzzy ideas, product direction, domain questions, strategy, and lightweight prototypes |
+| `/sc-research` | Gather evidence before making technical or product decisions |
+| `/sc-prd` | Write product requirements from an idea or explored direction |
+| `/sc-plan` | Produce implementation plans, issue-ready Journey boards, risk checks, and verification |
+| `/sc-eval` | Define and run evaluation criteria before or after implementation |
+| `/sc-work` | Execute an approved plan or issue file sequentially or with safe parallel slices |
+| `/sc-debug` | Reproduce, isolate, and fix root causes |
+| `/sc-review` | Review changes for correctness, maintainability, and missing tests |
+| `/sc-audit` | Check security, compatibility, compliance, agent surface, and release readiness |
+| `/sc-compound` | Capture reusable solutions and lessons |
+| `/sc-pause` | Save durable handoff state |
+| `/sc-launch` | Start a focused project or feature lifecycle |
+| `/sc-ui` | Use interface-design guidance for frontend work |
 
 Removed workflows are intentionally not aliases. Route them this way:
 
 | Old Intent | Current Route |
 |---|---|
-| brainstorm, discuss, domain, strategy, prototype | `/explore` |
-| issues, triage, task shaping | `/plan` |
-| loop, handoff, parallel execution | `/work` |
-| security, compatibility, MCP, compliance, release readiness | `/audit` |
-| progress, resume | `/status` |
-| reload | `/init reload` |
+| brainstorm, discuss, domain, strategy, prototype | `/sc-explore` |
+| issues, triage, Kanban, Journey, task shaping | `/sc-plan` |
+| loop, handoff, parallel execution | `/sc-work` |
+| security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
+| progress, resume | `/sc-status` |
+| reload | `/sc-init reload` |
 
 ## Skills
 
@@ -99,9 +102,14 @@ Skills live in `.agent/skills/<name>/SKILL.md`. They are loaded only when releva
 Core operational skills:
 
 - `brainstorming`
+- `codebase-design`
+- `domain-modeling`
 - `prd-generator`
+- `issue-workflow`
+- `triage-workflow`
 - `writing-plans`
 - `executing-plans`
+- `prototyping`
 - `systematic-debugging`
 - `test-driven-development`
 - `code-review`
@@ -165,14 +173,16 @@ WALKTHROUGH.md
 
 Runtime/cache files such as `.debug/`, `.continue-here.md`, `.agent/.tool-call-count`, `__pycache__/`, and `*.pyc` are ignored. `docs/` is not ignored; durable documentation should be tracked when it is part of the framework or project history.
 
+Local Journey boards live under `.scratch/<feature>/`. They are not ignored by default because teams may choose to track PRDs and issue files as durable work contracts.
+
 ## Compatibility Notes
 
 This version intentionally breaks the imported 2026-06-20 surface area.
 
-- The legacy UI workflow is now `/ui`
+- The legacy UI workflow is now `/sc-ui`
 - The legacy UI skill directory is now `.agent/skills/interface-design/`
 - Alias workflows for exploration, security, continuation, progress, reload, and compatibility were removed
-- Thin workflows were folded into `/explore`, `/plan`, `/work`, and `/audit`
+- Thin workflows were folded into `/sc-explore`, `/sc-plan`, `/sc-work`, and `/sc-audit`
 - Archived analysis moved to `docs/archive/2026-06-20-gap-analysis.md`
 
 The framework now favors clear operational defaults over preserving every imported idea as a standalone command.

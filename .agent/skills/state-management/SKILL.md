@@ -7,7 +7,7 @@ description: "Use to maintain durable project memory across sessions through STA
 
 ## Purpose
 
-Keep project state durable, concise, and useful so a future session can run `/status` and continue without guessing.
+Keep project state durable, concise, and useful so a future session can run `/sc-status` and continue without guessing.
 
 Announce: "I'm using the state-management skill to track project state."
 
@@ -16,12 +16,13 @@ Announce: "I'm using the state-management skill to track project state."
 | File | Use |
 |---|---|
 | `docs/STATE.md` | Current position, decisions, blockers, completed work, and next action |
-| `.continue-here.md` | Short handoff created by `/pause` for the next session |
+| `.continue-here.md` | Short handoff created by `/sc-pause` for the next session |
 | `docs/progress.md` | Chronological progress and codebase patterns |
 | `docs/ERROR_LOG.md` | Costly mistakes, root cause, and prevention |
 | `docs/LEARNED_KNOWLEDGE.md` | Confirmed reusable project preferences and conventions |
 | `docs/adr/` | Durable architecture decisions |
 | `docs/tasks/tasks-*.json` | Optional task ledger for long or multi-agent work |
+| `.scratch/<feature>/issues/*.md` | Local issue board for Journey and agent-ready slices |
 
 Do not create every file by default. Create only what the work needs.
 
@@ -80,9 +81,10 @@ At the beginning of continuation work:
 
 1. Read `docs/STATE.md` if present.
 2. Read `.continue-here.md` if present.
-3. Read the active plan, PRD, brainstorm, or task ledger referenced by state.
-4. Load only the files needed for the next step.
-5. If the route is unclear, run `/status`.
+3. Read the active plan, PRD, brainstorm, issue file, or task ledger referenced by state.
+4. Scan `.scratch/*/issues/*.md` when continuing issue-driven work.
+5. Load only the files needed for the next step.
+6. If the route is unclear, run `/sc-status`.
 
 ## Session End
 
@@ -91,8 +93,8 @@ Before stopping:
 - Update exact next action.
 - Record completed work and decisions.
 - Note blockers and owner.
-- Suggest `/compound` if a reusable solution was discovered.
-- Suggest `/pause` if the user will continue in a later session.
+- Suggest `/sc-compound` if a reusable solution was discovered.
+- Suggest `/sc-pause` if the user will continue in a later session.
 
 ## Error And Learning Capture
 
@@ -129,5 +131,6 @@ Use `docs/LEARNED_KNOWLEDGE.md` for durable conventions:
 - `context-engineering` for selective loading
 - `checkpoint-protocol` for pause decisions
 - `executing-plans` for task progress
+- `issue-workflow` for local issue boards
 - `brainstorming` and `prd-generator` for upstream decisions
 - `todo-management` for deferred ideas

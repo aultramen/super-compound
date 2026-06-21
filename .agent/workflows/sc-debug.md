@@ -15,7 +15,7 @@ Use this for errors, failing tests, regressions, performance surprises, or behav
 5. Test the most likely hypothesis with the smallest feedback loop.
 6. Fix the root cause, preferably with a regression test.
 7. Run verification and report evidence.
-8. Use `compound.md` if the root cause or fix is reusable knowledge.
+8. Use `sc-compound.md` if the root cause or fix is reusable knowledge.
 
 ## Output
 
