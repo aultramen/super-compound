@@ -14,14 +14,28 @@
 
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
+const {
+    atomicWriteFile,
+    passThroughStdin,
+    readPositiveInteger,
+    resolveHookProjectRoot,
+    safeProjectFile,
+} = require('./lib/hook-utils');
 
-const THRESHOLD = parseInt(process.env.COMPACT_THRESHOLD || '50', 10);
-const REMINDER_INTERVAL = parseInt(process.env.COMPACT_REMINDER_INTERVAL || '25', 10);
+const THRESHOLD = readPositiveInteger('COMPACT_THRESHOLD', 50);
+const REMINDER_INTERVAL = readPositiveInteger('COMPACT_REMINDER_INTERVAL', 25);
 
 // Counter file stored per-project in .agent/
-const projectRoot = process.cwd();
-const counterFile = path.join(projectRoot, '.agent', '.tool-call-count');
+let counterFile;
+
+try {
+    const projectRoot = resolveHookProjectRoot(path.resolve(__dirname, '..', '..'));
+    counterFile = safeProjectFile(projectRoot, ['.agent', '.tool-call-count']);
+} catch (error) {
+    console.error(`[Super Compound] Suggest compact: ${error.message}`);
+    passThroughStdin();
+    return;
+}
 
 function readCount() {
     try {
@@ -38,9 +52,7 @@ function readCount() {
 
 function writeCount(count) {
     try {
-        const dir = path.dirname(counterFile);
-        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-        fs.writeFileSync(counterFile, JSON.stringify({ count, date: new Date().toDateString() }), 'utf8');
+        atomicWriteFile(counterFile, JSON.stringify({ count, date: new Date().toDateString() }));
     } catch { }
 }
 
@@ -73,8 +85,4 @@ if (shouldSuggest) {
 }
 
 // Pass through stdin unchanged
-let input = '';
-process.stdin.on('data', chunk => input += chunk);
-process.stdin.on('end', () => {
-    console.log(input || '{}');
-});
+passThroughStdin();

@@ -73,10 +73,13 @@ npm test && echo "✅ TESTS PASSED"
 
 ### Missing Dependency
 ```bash
+npm ls <package>               # Confirm whether the package is already present
+npm explain <package>          # Understand why a transitive package exists
 npm install <package>           # Runtime dep
 npm install -D <package>        # Dev dep
-npm install --legacy-peer-deps  # If peer conflict
 ```
+
+Use `--legacy-peer-deps` only as a last resort after documenting the peer conflict and getting approval. It can hide real compatibility problems.
 
 ### ESM/CJS Mismatch
 ```json
@@ -104,17 +107,21 @@ resolve: { alias: { '@': path.resolve(__dirname, './src') } }
 ```bash
 # Windows
 netstat -ano | findstr :3000
-taskkill /PID <PID> /F
+# Review the owning process before stopping it.
+# Use taskkill /PID <PID> only with explicit approval.
 
 # Linux/macOS  
-lsof -ti :3000 | xargs kill -9
+lsof -i :3000
+# Use kill <PID> only with explicit approval; avoid kill -9 unless graceful stop fails.
 ```
 
 ### Corrupted Node Modules
 ```bash
-rm -rf node_modules package-lock.json
-npm install
+npm ci                         # Prefer reproducible install from lockfile
+npm cache verify               # Check local npm cache health
 ```
+
+Deleting `node_modules` or a lockfile is destructive. Do it only after confirming the absolute target path, preserving the lockfile unless the root cause is a lockfile conflict, and getting approval.
 
 ## Output Format
 

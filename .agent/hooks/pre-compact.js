@@ -8,30 +8,42 @@
 
 const fs = require('fs');
 const path = require('path');
+const {
+    atomicWriteFile,
+    buildCompactionMarker,
+    passThroughStdin,
+    replaceCompactionMarker,
+    resolveHookProjectRoot,
+    safeProjectFile,
+} = require('./lib/hook-utils');
 
-const projectRoot = process.cwd();
-const stateFile = path.join(projectRoot, 'docs', 'STATE.md');
-const continueFile = path.join(projectRoot, '.continue-here.md');
+let projectRoot;
+let stateFile;
+let continueFile;
+
+try {
+    projectRoot = resolveHookProjectRoot(path.resolve(__dirname, '..', '..'));
+    stateFile = safeProjectFile(projectRoot, ['docs', 'STATE.md']);
+    continueFile = safeProjectFile(projectRoot, ['.continue-here.md']);
+} catch (error) {
+    console.error(`[Super Compound] Pre-compact: ${error.message}`);
+    passThroughStdin();
+    return;
+}
 
 function getTimestamp() {
     return new Date().toISOString().slice(0, 16).replace('T', ' ');
 }
 
 const timestamp = getTimestamp();
-const marker = `## Last Compaction\n\n**When:** ${timestamp}\n**Note:** Context was compacted. STATE.md, .continue-here.md, and docs/ are preserved on disk.\n**After compaction:** Run /sc-init reload, then /sc-status to restore context.\n`;
+const marker = buildCompactionMarker(timestamp);
 
 if (fs.existsSync(stateFile)) {
     try {
         const content = fs.readFileSync(stateFile, 'utf8');
-
-        if (!content.includes('## Last Compaction')) {
-            fs.writeFileSync(stateFile, `${content}\n\n---\n${marker}`, 'utf8');
-            console.error('[Super Compound] Pre-compact: Updated STATE.md with compaction marker');
-        } else {
-            const updated = content.replace(/## Last Compaction[\s\S]*?(?=\n---|\n##|$)/, marker);
-            fs.writeFileSync(stateFile, updated, 'utf8');
-            console.error('[Super Compound] Pre-compact: Updated compaction timestamp in STATE.md');
-        }
+        const updated = replaceCompactionMarker(content, marker);
+        atomicWriteFile(stateFile, updated);
+        console.error('[Super Compound] Pre-compact: Updated STATE.md with compaction marker');
     } catch (error) {
         console.error(`[Super Compound] Pre-compact: Could not update STATE.md: ${error.message}`);
     }
@@ -49,10 +61,4 @@ console.error('  Files preserved: STATE.md, .continue-here.md, docs/');
 console.error('  After new session: /sc-init reload, then /sc-status');
 console.error('');
 
-let input = '';
-process.stdin.on('data', (chunk) => {
-    input += chunk;
-});
-process.stdin.on('end', () => {
-    console.log(input || '{}');
-});
+passThroughStdin();

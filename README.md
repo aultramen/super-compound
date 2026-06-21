@@ -148,6 +148,7 @@ Use:
 python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domain web
 python .agent/skills/interface-design/scripts/search.py "mobile touch target" --domain app
 python .agent/skills/interface-design/scripts/search.py "performance trackBy" --stack angular
+python .agent/skills/interface-design/scripts/search.py "SaaS dashboard" --design-system --persist -p "Acme CRM" --page dashboard --overwrite
 ```
 
 Domains include `product`, `style`, `color`, `typography`, `landing`, `chart`, `ux`, `web`, `app`, `icons`, `react`, and `google-fonts`.
@@ -195,6 +196,10 @@ Recommended checks after editing the framework:
 python -m py_compile .agent/skills/interface-design/scripts/core.py .agent/skills/interface-design/scripts/search.py .agent/skills/interface-design/scripts/design_system.py
 node --check .agent/hooks/pre-compact.js
 node --check .agent/hooks/session-end.js
+node --check .agent/hooks/suggest-compact.js
+node --check .agent/hooks/stop-check.js
+node .agent/hooks/test-hooks-security.js
+python .agent/skills/interface-design/scripts/test_design_system_security.py
 python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domain web
 ```
 
@@ -203,5 +208,7 @@ Also check:
 - Every workflow has frontmatter `description` and an H1
 - Every skill directory matches its `name`
 - Interface CSV rows match header widths
+- Design-system persistence rejects path traversal and requires `--overwrite` for existing files
+- Global Claude hook settings use absolute script paths, not project-relative `.agent/hooks/...` commands
 - Old workflow and skill names are not referenced in active docs
 - `docs/engineering-standards.md` and archive docs are not ignored

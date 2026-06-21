@@ -1,105 +1,84 @@
-# Super Compound Hooks — Installation Guide
+# Super Compound Hooks Installation Guide
 
 ## Compatibility
 
 | Feature | Antigravity IDE | Claude Code |
-|---------|----------------|-------------|
-| Hook System | ❌ Not supported | ✅ Supported |
-| Subagents | ⚠️ Via manual invocation | ✅ Native subagents |
-| Skills & Workflows | ✅ Native | ✅ Native |
+|---|---|---|
+| Hook system | Not supported | Supported |
+| Subagents | Manual invocation | Native subagents |
+| Skills and workflows | Native | Native |
 
----
+## Claude Code: How To Install Hooks
 
-## Claude Code: How to Install Hooks
+The hook scripts in this directory are designed for Claude Code only.
 
-The hook scripts in this directory are designed for **Claude Code** only.
+### Step 1: Keep Hook Scripts In The Project
 
-### Step 1: Copy hook scripts
+Recommended layout:
 
-The JS scripts can be placed anywhere; we recommend keeping them in your project:
-```
+```text
 your-project/
-└── .agent/hooks/
-    ├── session-end.js
-    ├── pre-compact.js
-    └── suggest-compact.js
+  .agent/hooks/
+    lib/hook-utils.js
+    pre-compact.js
+    session-end.js
+    stop-check.js
+    suggest-compact.js
 ```
 
-### Step 2: Merge hooks.json into Claude Code settings
+### Step 2: Choose A Settings Template
 
-Open (or create) `~/.claude/settings.json` and add the hooks block.
+Use one of the two templates:
 
-**Windows (PowerShell):**
+- `hooks.json` is the safe global template for `~/.claude/settings.json`. Replace `<ABSOLUTE_PROJECT_PATH>` with a real absolute project path before use.
+- `hooks.project.json` is for project-local settings evaluated from the project root. Do not copy it into global settings.
+
+The hook scripts derive the project root from their own script path, so global hooks do not rely on the current working directory.
+
+Open or create `~/.claude/settings.json` and merge the hooks block from `hooks.json`.
+
 ```powershell
 # View current settings
 cat ~/.claude/settings.json
 
-# Then manually merge the hooks from .agent/hooks/hooks.json
-# Key: update the script paths to absolute project paths
+# Then manually merge the hooks from .agent/hooks/hooks.json.
+# Replace <ABSOLUTE_PROJECT_PATH> with a real absolute project path.
 ```
 
-**Updated hooks.json for Claude Code** — replace relative paths with absolute:
+Example global command shape:
+
 ```json
 {
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [{
-          "type": "command",
-          "command": "node \"C:\\path\\to\\your-project\\.agent\\hooks\\suggest-compact.js\"",
-          "async": true,
-          "timeout": 5
-        }],
-        "description": "Suggest /sc-pause at logical intervals"
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "*",
-        "hooks": [{
-          "type": "command",
-          "command": "node \"C:\\path\\to\\your-project\\.agent\\hooks\\pre-compact.js\""
-        }],
-        "description": "Save STATE.md before compaction"
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "*",
-        "hooks": [{
-          "type": "command",
-          "command": "node \"C:\\path\\to\\your-project\\.agent\\hooks\\session-end.js\""
-        }],
-        "description": "Remind to /sc-compound at session end"
-      }
-    ]
-  }
+  "type": "command",
+  "command": "node \"C:/path/to/your-project/.agent/hooks/suggest-compact.js\"",
+  "async": true,
+  "timeout": 5
 }
 ```
 
-### Step 3: Verify hooks work
+### Step 3: Verify Hooks Work
 
 ```bash
 node .agent/hooks/suggest-compact.js
-# Should print nothing (no threshold hit yet)
+# Should print nothing when the threshold is not hit.
+
+node .agent/hooks/test-hooks-security.js
+# Should print: hook security tests passed
 ```
 
 ### Configuration
 
 | Env Variable | Default | Description |
-|---|---|---|
+|---|---:|---|
 | `COMPACT_THRESHOLD` | `50` | Tool calls before first `/sc-pause` suggestion |
 | `COMPACT_REMINDER_INTERVAL` | `25` | Calls between reminders |
 
----
-
 ## Antigravity IDE: Equivalent Behavior
 
-Hooks don't run automatically in Antigravity. Instead, **equivalent behavior** is achieved through:
+Hooks do not run automatically in Antigravity. Equivalent behavior is manual:
 
-1. **`/sc-pause`** — Run manually when you want to save state before a long break
-2. **`/sc-compound`** — Run manually after solving a non-trivial problem
-3. **`context-engineering` skill** — Guides you on when to pause for fresh context
+1. Run `/sc-pause` when you want to save state before a long break.
+2. Run `/sc-compound` after solving a non-trivial problem.
+3. Use the `context-engineering` skill to decide when to pause for fresh context.
 
 The AI will remind you to use these at natural breakpoints based on rules in `SUPER-COMPOUND.md`.

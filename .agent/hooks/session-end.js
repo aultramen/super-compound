@@ -7,13 +7,21 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveHookProjectRoot, safeProjectFile } = require('./lib/hook-utils');
 
-const projectRoot = process.cwd();
-const stateFile = path.join(projectRoot, 'docs', 'STATE.md');
-const continueFile = path.join(projectRoot, '.continue-here.md');
+let stateFile;
+let continueFile;
 
-const hasState = fs.existsSync(stateFile);
-const hasContinue = fs.existsSync(continueFile);
+try {
+    const projectRoot = resolveHookProjectRoot(path.resolve(__dirname, '..', '..'));
+    stateFile = safeProjectFile(projectRoot, ['docs', 'STATE.md']);
+    continueFile = safeProjectFile(projectRoot, ['.continue-here.md']);
+} catch (error) {
+    console.error(`[Super Compound] Session end: ${error.message}`);
+}
+
+const hasState = stateFile ? fs.existsSync(stateFile) : false;
+const hasContinue = continueFile ? fs.existsSync(continueFile) : false;
 
 console.error('');
 console.error('[Super Compound] Session ending. Checklist:');
