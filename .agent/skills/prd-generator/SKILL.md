@@ -21,6 +21,8 @@ Before writing:
 - Check `docs/progress.md`, `docs/STATE.md`, ADRs, and domain notes when present.
 - For UI work, reuse `interface-design` findings or existing design-system artifacts.
 - If an existing PRD covers the topic, ask whether to revise or create a new PRD.
+- Use `domain-modeling` when names, roles, or glossary terms are fuzzy.
+- Use `codebase-design` when testing seams or module interfaces must be agreed before the PRD is reliable.
 
 ## Clarifying Questions
 
@@ -77,6 +79,9 @@ Acceptance Criteria:
 ## Technical Constraints
 <Known dependencies, integration points, data contracts, or constraints.>
 
+## Testing Decisions
+<Public interfaces, seams, or behavior checks that should verify the feature.>
+
 ## Security, Privacy, And Compliance
 <Only when relevant.>
 
@@ -110,6 +115,7 @@ Before handoff, check:
 - Non-goals prevent likely scope creep
 - UI stories include accessibility and responsive expectations
 - Data/security/privacy stories include negative cases
+- Testing decisions name the highest practical public seam
 - Open questions are real blockers, not vague reminders
 
 ## Handoff
@@ -118,8 +124,9 @@ After saving the PRD:
 
 1. Review and refine the PRD
 2. Convert to an implementation plan with `/sc-plan`
-3. Route UI-focused work through `/sc-ui`
-4. Stop with the PRD saved
+3. Convert to a local issue board with `/sc-plan --issues <prd>` when work needs a Journey, Kanban board, or multi-agent slices
+4. Route UI-focused work through `/sc-ui`
+5. Stop with the PRD saved
 
 Current specification pipeline: `/sc-explore` -> `/sc-prd` -> `/sc-plan` -> `/sc-work`.
 
@@ -128,4 +135,7 @@ Current specification pipeline: `/sc-explore` -> `/sc-prd` -> `/sc-plan` -> `/sc
 - `brainstorming` provides upstream exploration
 - `interface-design` provides UI and design-system guidance
 - `writing-plans` converts the PRD into implementation tasks
+- `issue-workflow` converts PRDs into issue-ready vertical slices
+- `domain-modeling` keeps glossary terms precise
+- `codebase-design` shapes testing seams
 - `plan-verification` checks plan coverage against the PRD

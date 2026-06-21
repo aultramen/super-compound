@@ -18,7 +18,7 @@ Save plans to `docs/plans/YYYY-MM-DD-<feature-name>-plan.md`.
 Read the most relevant sources before writing:
 
 - User request and current conversation context
-- `docs/prds/`, `docs/plans/`, `docs/STATE.md`, and `docs/progress.md` when present
+- `docs/prd/`, `docs/plans/`, `.scratch/`, `docs/STATE.md`, and `docs/progress.md` when present
 - Recent `docs/brainstorms/` files when the plan follows exploration
 - `SUPER-COMPOUND.md`, `.agent/rules/super-compound.md`, and project-specific guidance
 - Existing code, tests, package metadata, and similar implementations
@@ -39,6 +39,10 @@ Run only the checks that match the work.
 | Compliance, audit evidence, AI governance, or regulated workflows | Add explicit evidence, owner, and retention requirements in the plan |
 | Frontend UI, dashboard, landing page, or component work | Use `interface-design`; generate or reuse a design-system artifact |
 | Multi-agent or long-running work | Add durable state updates and handoff notes using `state-management` |
+| Issues, Journey, Kanban, PRD-to-issues, or agent-ready slices | Use `issue-workflow`; create `.scratch/<feature>/issues/*.md` after review |
+| Incoming bugs, raw requests, stale issues, or label/state decisions | Use `triage-workflow`; classify before planning implementation |
+| Domain terms, roles, or glossary conflicts | Use `domain-modeling`; update `CONTEXT.md` or ADRs only when decisions are real |
+| Test seams, module interfaces, or architecture shape | Use `codebase-design`; prefer deep modules and high public seams |
 | Unclear product, domain, architecture, or UX decision | Route back through `/sc-explore` before planning, or record an explicit open question |
 
 Frontend design search:
@@ -83,6 +87,7 @@ Then include the sections that apply:
 - `## Compatibility And Risk` for dependencies, migrations, contracts, security, privacy, or release concerns
 - `## Design System` for frontend work, including source CSV/search result when used
 - `## Tasks` with ordered, checkable steps
+- `## Issue Board` with `.scratch/<feature>/issues/*.md` links when `issue-workflow` is used
 - `## Verification` with exact commands and expected outcomes
 - `## Rollback` for database, deployment, external service, or risky behavior changes
 - `## Documentation` when setup, user behavior, API contracts, or operations change
@@ -91,6 +96,8 @@ Then include the sections that apply:
 
 Tasks should be independently verifiable. Prefer thin vertical slices over broad layer-only chunks.
 
+A vertical slice may cross database, API, UI, and tests when that is the smallest complete path for one behavior. Do not split a tracer bullet into horizontal layer tasks unless the slice is too large or incoherent.
+
 Good task examples:
 
 - Add one migration and its rollback check
@@ -98,6 +105,7 @@ Good task examples:
 - Add one UI state and browser verification
 - Refactor one module boundary and update callers
 - Add one audit/logging behavior with assertions
+- Add one end-to-end issue slice with schema, handler, UI state, and verification when the behavior needs all layers
 
 Split tasks when:
 
@@ -131,6 +139,10 @@ Minimal shape:
       "id": "T001",
       "title": "Short task title",
       "status": "pending",
+      "parent": "docs/prd/prd-feature.md",
+      "blocked_by": [],
+      "user_stories": ["US-001"],
+      "issue_path": ".scratch/feature/issues/01-short-task.md",
       "files": [],
       "verification": []
     }
@@ -155,8 +167,9 @@ After saving the plan, offer operational choices:
 
 1. Execute sequentially with `/sc-work`
 2. Execute independent slices with parallel agents when safe
-3. Review and refine the plan
-4. Stop with the plan saved
+3. Create or review a local issue board with `issue-workflow`
+4. Review and refine the plan
+5. Stop with the plan saved
 
 Do not add legacy workflow aliases to the plan. Route by current workflows: `/sc-explore`, `/sc-prd`, `/sc-plan`, `/sc-work`, `/sc-review`, `/sc-audit`, `/sc-ui`.
 
@@ -173,6 +186,9 @@ Do not add legacy workflow aliases to the plan. Route by current workflows: `/sc
 ## Related Skills
 
 - `brainstorming` and `prd-generator` provide upstream product context
+- `issue-workflow` turns PRDs and plans into local Markdown issue boards
+- `triage-workflow` shapes incoming work into agent-ready issues
+- `domain-modeling` and `codebase-design` sharpen vocabulary and seams
 - `executing-plans` consumes this plan
 - `test-driven-development` shapes task-level implementation
 - `interface-design` supports frontend and design-system planning

@@ -23,7 +23,7 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 | `/sc-explore` | Shape fuzzy ideas, domain questions, strategy, and prototype decisions |
 | `/sc-research` | Gather evidence before a decision |
 | `/sc-prd` | Write product requirements |
-| `/sc-plan` | Write implementation plans |
+| `/sc-plan` | Write implementation plans and issue-ready Journey boards |
 | `/sc-eval` | Define or run evaluation criteria |
 | `/sc-work` | Execute a plan |
 | `/sc-debug` | Diagnose and fix root causes |
@@ -38,7 +38,7 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 
 - Fuzzy idea, domain language, strategy, or prototype question: `/sc-explore`
 - Product requirements: `/sc-prd`
-- Issue/task shaping or technical breakdown: `/sc-plan`
+- Issue/task shaping, triage, Kanban, Journey, or technical breakdown: `/sc-plan`
 - Implementation, looped work, or safe parallel execution: `/sc-work`
 - Failure or unexpected behavior: `/sc-debug`
 - Changed files need critique: `/sc-review`
@@ -52,9 +52,9 @@ Load skills only when their detailed procedure is relevant. Announce the skill a
 
 Common routes:
 
-- `/sc-explore` -> `brainstorming`
-- `/sc-prd` -> `prd-generator`
-- `/sc-plan` -> `writing-plans`, plus risk skills when needed
+- `/sc-explore` -> `brainstorming`, plus `domain-modeling`, `codebase-design`, or `prototyping` when needed
+- `/sc-prd` -> `prd-generator`, plus `domain-modeling` and `codebase-design` when needed
+- `/sc-plan` -> `writing-plans`, `issue-workflow` or `triage-workflow` when requested, plus risk skills when needed
 - `/sc-work` -> `executing-plans`, `test-driven-development`, `verification-before-completion`
 - `/sc-debug` -> `systematic-debugging`
 - `/sc-review` -> `code-review`
@@ -93,6 +93,7 @@ Use:
 - `docs/STATE.md` for current position, decisions, blockers, completed work, and next action
 - `.continue-here.md` for `/sc-pause` handoff
 - `docs/progress.md` for chronological progress and codebase patterns
+- `.scratch/<feature>/issues/*.md` for local Journey boards and agent-ready issue slices
 - `docs/solutions/` for reusable solved problems
 
 The next session should be able to run `/sc-status` and continue from disk.
@@ -118,7 +119,7 @@ This framework intentionally removed alias and thin workflows from the 2026-06-2
 Current replacements:
 
 - Brainstorm/discuss/domain/strategy/prototype intent -> `/sc-explore`
-- Issue/task shaping -> `/sc-plan`
+- Issue/task shaping, triage, Kanban, Journey -> `/sc-plan`
 - Loop/handoff/parallel execution -> `/sc-work`
 - Security/compatibility/MCP/compliance/release readiness -> `/sc-audit`
 - Progress or continuation state -> `/sc-status`

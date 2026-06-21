@@ -7,22 +7,23 @@ description: "Use when a written implementation plan is ready to execute. Suppor
 
 ## Purpose
 
-Execute an approved plan with durable progress, focused edits, continuous verification, and a clear finish line.
+Execute an approved plan or issue file with durable progress, focused edits, continuous verification, and a clear finish line.
 
 Announce: "I'm using the executing-plans skill to implement this plan."
 
 ## Before Editing
 
-Read the plan completely, then gather only the context needed for the next task:
+Read the plan or issue file completely, then gather only the context needed for the next task:
 
 - Files and tests named in the plan
+- `.scratch/<feature>/issues/<NN>-<slug>.md` issue files and their `Blocked by` issues when present
 - Nearby code with similar behavior
 - Project README, package metadata, and local agent instructions
 - `SUPER-COMPOUND.md` and `.agent/rules/super-compound.md`
 - `docs/STATE.md`, `docs/progress.md`, or a task ledger when present
 - Relevant ADRs, domain notes, or design-system artifacts referenced by the plan
 
-If acceptance criteria are missing or contradictory, ask one concise question before coding. If the answer can be inferred safely from existing tests and code, proceed and document the assumption.
+If a blocking issue is not done, stop and report the blocker unless the user explicitly reorders the work. If acceptance criteria are missing or contradictory, ask one concise question before coding. If the answer can be inferred safely from existing tests and code, proceed and document the assumption.
 
 ## Git And Workspace
 
@@ -38,7 +39,7 @@ Respect the project's current state.
 
 For each task:
 
-1. Mark the task in progress in the plan, task ledger, or conversation checklist.
+1. Mark the task in progress in the plan, issue file, task ledger, or conversation checklist.
 2. Read referenced files and nearby patterns.
 3. Confirm boundaries: ownership, dependency direction, public API contracts, data contracts, and UI conventions.
 4. Use `architecture-enforcement` when placement or dependency direction is uncertain.
@@ -46,7 +47,7 @@ For each task:
 6. Make the smallest cohesive edit that satisfies the task.
 7. Run the narrowest useful verification.
 8. Fix failures before moving on.
-9. Mark the task complete and record notable decisions.
+9. Mark the task or issue complete and record notable decisions.
 10. Update durable state for multi-session work.
 
 Do not turn task execution into opportunistic refactoring. Capture unrelated improvements as follow-up notes.
@@ -57,6 +58,7 @@ Use parallel agents only when all are true:
 
 - The plan has independent tasks with clear file ownership.
 - Tasks do not depend on each other's unmerged output.
+- For issue boards, each parallel issue has `Blocked by: None` or all blockers are done.
 - Verification can be run per task.
 - The user accepts the extra coordination cost.
 
@@ -115,6 +117,7 @@ Use durable files when work spans sessions:
 - `docs/STATE.md` for current position and next action
 - `docs/progress.md` for chronological progress
 - `docs/tasks/tasks-*.json` only if a task ledger already exists or the plan requires one
+- `.scratch/<feature>/issues/*.md` when execution is issue-driven
 - `.continue-here.md` only for pause/status handoff created by `/sc-pause`
 
 The next session should be able to run `/sc-status` and understand where to continue.
@@ -124,6 +127,7 @@ The next session should be able to run `/sc-status` and understand where to cont
 Before the final response:
 
 - Planned tasks are complete or explicitly deferred
+- Source issue status is updated when work came from `.scratch/`
 - Verification was run, with failures disclosed
 - Docs are updated when behavior, setup, commands, architecture, or user workflows changed
 - No old workflow/skill names were reintroduced
@@ -133,6 +137,7 @@ Before the final response:
 ## Related Skills
 
 - `writing-plans` creates the input plan
+- `issue-workflow` creates issue-file task contracts
 - `test-driven-development` shapes behavior changes
 - `architecture-enforcement` protects module boundaries
 - `systematic-debugging` handles failures

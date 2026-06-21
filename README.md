@@ -8,6 +8,7 @@ It keeps the public command surface small, pushes detailed procedures into skill
 
 - 15 public workflows for common development operations
 - Modular skills for planning, execution, debugging, review, audit, UI, state, and verification
+- Local Markdown Journey boards under `.scratch/<feature>/issues/`
 - Concise always-on rules under `.agent/rules/`
 - Deterministic local hooks under `.agent/hooks/`
 - Data-backed interface design search through `interface-design`
@@ -72,9 +73,9 @@ Only these workflow files are public:
 | `/sc-explore` | Shape fuzzy ideas, product direction, domain questions, strategy, and lightweight prototypes |
 | `/sc-research` | Gather evidence before making technical or product decisions |
 | `/sc-prd` | Write product requirements from an idea or explored direction |
-| `/sc-plan` | Produce implementation plans with risk checks and verification |
+| `/sc-plan` | Produce implementation plans, issue-ready Journey boards, risk checks, and verification |
 | `/sc-eval` | Define and run evaluation criteria before or after implementation |
-| `/sc-work` | Execute an approved plan sequentially or with safe parallel slices |
+| `/sc-work` | Execute an approved plan or issue file sequentially or with safe parallel slices |
 | `/sc-debug` | Reproduce, isolate, and fix root causes |
 | `/sc-review` | Review changes for correctness, maintainability, and missing tests |
 | `/sc-audit` | Check security, compatibility, compliance, agent surface, and release readiness |
@@ -88,7 +89,7 @@ Removed workflows are intentionally not aliases. Route them this way:
 | Old Intent | Current Route |
 |---|---|
 | brainstorm, discuss, domain, strategy, prototype | `/sc-explore` |
-| issues, triage, task shaping | `/sc-plan` |
+| issues, triage, Kanban, Journey, task shaping | `/sc-plan` |
 | loop, handoff, parallel execution | `/sc-work` |
 | security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
 | progress, resume | `/sc-status` |
@@ -101,9 +102,14 @@ Skills live in `.agent/skills/<name>/SKILL.md`. They are loaded only when releva
 Core operational skills:
 
 - `brainstorming`
+- `codebase-design`
+- `domain-modeling`
 - `prd-generator`
+- `issue-workflow`
+- `triage-workflow`
 - `writing-plans`
 - `executing-plans`
+- `prototyping`
 - `systematic-debugging`
 - `test-driven-development`
 - `code-review`
@@ -166,6 +172,8 @@ WALKTHROUGH.md
 ```
 
 Runtime/cache files such as `.debug/`, `.continue-here.md`, `.agent/.tool-call-count`, `__pycache__/`, and `*.pyc` are ignored. `docs/` is not ignored; durable documentation should be tracked when it is part of the framework or project history.
+
+Local Journey boards live under `.scratch/<feature>/`. They are not ignored by default because teams may choose to track PRDs and issue files as durable work contracts.
 
 ## Compatibility Notes
 

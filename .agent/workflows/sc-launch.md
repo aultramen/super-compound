@@ -12,7 +12,7 @@ Use this when the user wants the whole lifecycle from idea to verified delivery.
 2. `sc-explore.md` - resolve intent, constraints, non-goals, and open decisions.
 3. `sc-research.md` - investigate unfamiliar tech or domain risks.
 4. `sc-prd.md` - define user-visible behavior and acceptance criteria.
-5. `sc-plan.md` - create implementation tasks and verification.
+5. `sc-plan.md` - create implementation tasks, optional issue board, and verification.
 6. `sc-eval.md` - define measurable pass/fail checks when useful.
 7. `sc-work.md` - execute the approved plan.
 8. `sc-review.md` - review against spec and standards.

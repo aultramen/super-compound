@@ -14,8 +14,8 @@ The ideal path:
 /sc-init
 /sc-explore analytics dashboard for account admins
 /sc-prd
-/sc-plan
-/sc-work
+/sc-plan --issues
+/sc-work .scratch/analytics-dashboard/issues/01-account-usage-summary.md
 /sc-review
 /sc-audit
 /sc-compound
@@ -127,6 +127,7 @@ The plan should:
 - Run compatibility/security/privacy pre-flight checks when relevant
 - Use `interface-design` for frontend work
 - Split work into verifiable vertical slices
+- Use `issue-workflow` for Journey/Kanban/PRD-to-issues requests
 - Include exact verification commands
 - Document rollback when data or deployment risk exists
 
@@ -154,6 +155,24 @@ Steps:
 4. Verify responsive layout in browser.
 ```
 
+For a local Journey board, run:
+
+```text
+/sc-plan --issues docs/prd/prd-analytics-dashboard.md
+```
+
+This should review the proposed vertical slices with you, then create:
+
+```text
+.scratch/analytics-dashboard/
+  PRD.md
+  issues/
+    01-account-usage-summary.md
+    02-dashboard-empty-state.md
+```
+
+Each issue includes `Status`, `Parent`, `Blocked by`, user stories, acceptance criteria, verification, and comments. `Blocked by` links form an acyclic dependency graph so ready work can be picked up in parallel.
+
 ## 5. Work
 
 Run:
@@ -162,13 +181,21 @@ Run:
 /sc-work docs/plans/2026-06-20-analytics-dashboard-plan.md
 ```
 
+Or execute one issue slice:
+
+```text
+/sc-work .scratch/analytics-dashboard/issues/01-account-usage-summary.md
+```
+
 The agent should execute sequentially by default:
 
 - Mark one task in progress
+- Respect `Blocked by` before starting issue files
 - Read only relevant files
 - Write failing tests for behavior changes
 - Implement the smallest cohesive change
 - Run targeted verification
+- Mark issue status when work came from `.scratch/`
 - Update durable state for long work
 
 Parallel execution is reserved for independent tasks with non-overlapping files and clear verification.
@@ -333,7 +360,7 @@ Use these replacements:
 | Old Intent | New Route |
 |---|---|
 | brainstorm, discuss, domain, strategy, prototype | `/sc-explore` |
-| issue shaping, triage, task breakdown | `/sc-plan` |
+| issue shaping, triage, Kanban, Journey, task breakdown | `/sc-plan` |
 | loop execution, handoff, swarm work | `/sc-work` |
 | security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
 | progress or resume | `/sc-status` |

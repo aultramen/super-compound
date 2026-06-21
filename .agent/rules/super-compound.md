@@ -21,7 +21,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 | `sc-explore.md` | Fuzzy ideas, domain alignment, strategy, prototypes, and open decisions |
 | `sc-research.md` | Technical or domain research before planning |
 | `sc-prd.md` | Product requirements and acceptance criteria |
-| `sc-plan.md` | Implementation plan, task shaping, issue-ready slices |
+| `sc-plan.md` | Implementation plan, task shaping, issue-ready slices, and local Journey boards |
 | `sc-eval.md` | Eval-driven success criteria and reliability checks |
 | `sc-work.md` | Execute approved plans, including optional parallel execution |
 | `sc-debug.md` | Reproduce, diagnose root cause, fix, and verify bugs |
@@ -38,15 +38,17 @@ Super Compound is a compact agent framework for disciplined software work: under
 - Bugs, failures, regressions -> `sc-debug.md` and `systematic-debugging`.
 - Security, dependency, release, MCP, compliance, or agent config risk -> `sc-audit.md`.
 - Open product/domain/architecture uncertainty -> `sc-explore.md`; convert resolved work through `sc-prd.md` or `sc-plan.md`.
+- Issue shaping, triage, Kanban, Journey, or PRD-to-issues work -> `sc-plan.md` with `issue-workflow` or `triage-workflow`.
 - Implementation with an approved plan -> `sc-work.md`.
 - Session boundary -> `sc-pause.md`; new session starts with `sc-status.md`.
 
 ## Skill Priority
 
-1. Process skills: `brainstorming`, `systematic-debugging`, `writing-plans`, `executing-plans`.
-2. Quality skills: `test-driven-development`, `verification-before-completion`, `code-review`, `architecture-enforcement`.
-3. Security and compatibility skills: `security-audit`, `compatibility-check`, `secure-code-patterns`, `threat-modeling`, `data-privacy`.
-4. Context and memory skills: `state-management`, `context-engineering`, `knowledge-compounding`.
+1. Process skills: `brainstorming`, `systematic-debugging`, `writing-plans`, `executing-plans`, `issue-workflow`, `triage-workflow`.
+2. Product and design skills: `domain-modeling`, `codebase-design`, `prototyping`, `interface-design`.
+3. Quality skills: `test-driven-development`, `verification-before-completion`, `code-review`, `architecture-enforcement`.
+4. Security and compatibility skills: `security-audit`, `compatibility-check`, `secure-code-patterns`, `threat-modeling`, `data-privacy`.
+5. Context and memory skills: `state-management`, `context-engineering`, `knowledge-compounding`.
 
 ## Completion Bar
 

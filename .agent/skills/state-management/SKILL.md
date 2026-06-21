@@ -22,6 +22,7 @@ Announce: "I'm using the state-management skill to track project state."
 | `docs/LEARNED_KNOWLEDGE.md` | Confirmed reusable project preferences and conventions |
 | `docs/adr/` | Durable architecture decisions |
 | `docs/tasks/tasks-*.json` | Optional task ledger for long or multi-agent work |
+| `.scratch/<feature>/issues/*.md` | Local issue board for Journey and agent-ready slices |
 
 Do not create every file by default. Create only what the work needs.
 
@@ -80,9 +81,10 @@ At the beginning of continuation work:
 
 1. Read `docs/STATE.md` if present.
 2. Read `.continue-here.md` if present.
-3. Read the active plan, PRD, brainstorm, or task ledger referenced by state.
-4. Load only the files needed for the next step.
-5. If the route is unclear, run `/sc-status`.
+3. Read the active plan, PRD, brainstorm, issue file, or task ledger referenced by state.
+4. Scan `.scratch/*/issues/*.md` when continuing issue-driven work.
+5. Load only the files needed for the next step.
+6. If the route is unclear, run `/sc-status`.
 
 ## Session End
 
@@ -129,5 +131,6 @@ Use `docs/LEARNED_KNOWLEDGE.md` for durable conventions:
 - `context-engineering` for selective loading
 - `checkpoint-protocol` for pause decisions
 - `executing-plans` for task progress
+- `issue-workflow` for local issue boards
 - `brainstorming` and `prd-generator` for upstream decisions
 - `todo-management` for deferred ideas
