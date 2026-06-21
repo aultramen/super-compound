@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"<ABSOLUTE_PROJECT_PATH>/.agent/hooks/suggest-compact.js\"",
+            "command": "node \".agent/hooks/suggest-compact.js\"",
             "async": true,
             "timeout": 5
           }
@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"<ABSOLUTE_PROJECT_PATH>/.agent/hooks/pre-compact.js\""
+            "command": "node \".agent/hooks/pre-compact.js\""
           }
         ],
         "description": "Save STATE.md snapshot before context compaction"
@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"<ABSOLUTE_PROJECT_PATH>/.agent/hooks/session-end.js\""
+            "command": "node \".agent/hooks/session-end.js\""
           }
         ],
         "description": "Persist session state and prompt for knowledge compounding"
@@ -45,12 +45,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"<ABSOLUTE_PROJECT_PATH>/.agent/hooks/stop-check.js\"",
+            "command": "node \".agent/hooks/stop-check.js\"",
             "async": true,
             "timeout": 5
           }
         ],
-        "description": "Warn about console.log after each response"
+        "description": "Warn about console.log and sensitive-looking output after each response"
       }
     ]
   }

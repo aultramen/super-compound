@@ -4,7 +4,7 @@
 Interface Design Search - BM25 search engine for UI/UX design guidance
 Usage: python search.py "<query>" [--domain <domain>] [--stack <stack>] [--max-results 3]
        python search.py "<query>" --design-system [-p "Project Name"]
-       python search.py "<query>" --design-system --persist [-p "Project Name"] [--page "dashboard"]
+       python search.py "<query>" --design-system --persist [-p "Project Name"] [--page "dashboard"] [--overwrite]
 
 Domains: style, color, chart, landing, product, ux, web, app, typography, icons, react, google-fonts
 Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtjs, nuxt-ui, html-tailwind, shadcn, jetpack-compose, threejs
@@ -12,6 +12,7 @@ Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtj
 Persistence (Master + Overrides pattern):
   --persist    Save design system to design-system/MASTER.md
   --page       Also create a page-specific override file in design-system/pages/
+  --overwrite  Replace existing persisted files
 """
 
 import argparse
@@ -68,6 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--persist", action="store_true", help="Save design system to design-system/MASTER.md (creates hierarchical structure)")
     parser.add_argument("--page", type=str, default=None, help="Create page-specific override file in design-system/pages/")
     parser.add_argument("--output-dir", "-o", type=str, default=None, help="Output directory for persisted files (default: current directory)")
+    parser.add_argument("--overwrite", action="store_true", help="Replace existing persisted design-system files")
 
     args = parser.parse_args()
 
@@ -79,18 +81,20 @@ if __name__ == "__main__":
             args.format,
             persist=args.persist,
             page=args.page,
-            output_dir=args.output_dir
+            output_dir=args.output_dir,
+            overwrite=args.overwrite
         )
         print(result)
         
         # Print persistence confirmation
         if args.persist:
-            project_slug = args.project_name.lower().replace(' ', '-') if args.project_name else "default"
+            from design_system import _slugify_path_part
+            project_slug = _slugify_path_part(args.project_name or args.query, "project_name")
             print("\n" + "=" * 60)
             print(f"OK: Design system persisted to design-system/{project_slug}/")
             print(f"   - design-system/{project_slug}/MASTER.md (global source of truth)")
             if args.page:
-                page_filename = args.page.lower().replace(' ', '-')
+                page_filename = _slugify_path_part(args.page, "page")
                 print(f"   - design-system/{project_slug}/pages/{page_filename}.md (page overrides)")
             print("")
             print(f"Usage: When building a page, check design-system/{project_slug}/pages/[page].md first.")

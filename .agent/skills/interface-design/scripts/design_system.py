@@ -16,6 +16,7 @@ Usage:
 import csv
 import json
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 from core import search, DATA_DIR
@@ -23,6 +24,7 @@ from core import search, DATA_DIR
 
 # ============ CONFIGURATION ============
 REASONING_FILE = "ui-reasoning.csv"
+SAFE_SLUG_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]{0,80}$")
 
 SEARCH_CONFIG = {
     "product": {"max_results": 1},
@@ -529,8 +531,9 @@ def format_markdown(design_system: dict) -> str:
 
 
 # ============ MAIN ENTRY POINT ============
-def generate_design_system(query: str, project_name: str = None, output_format: str = "ascii", 
-                           persist: bool = False, page: str = None, output_dir: str = None) -> str:
+def generate_design_system(query: str, project_name: str = None, output_format: str = "ascii",
+                           persist: bool = False, page: str = None, output_dir: str = None,
+                           overwrite: bool = False) -> str:
     """
     Main entry point for design system generation.
 
@@ -541,6 +544,7 @@ def generate_design_system(query: str, project_name: str = None, output_format: 
         persist: If True, save design system to design-system/ folder
         page: Optional page name for page-specific override file
         output_dir: Optional output directory (defaults to current working directory)
+        overwrite: Replace existing files when persisting
 
     Returns:
         Formatted design system string
@@ -550,7 +554,7 @@ def generate_design_system(query: str, project_name: str = None, output_format: 
     
     # Persist to files if requested
     if persist:
-        persist_design_system(design_system, page, output_dir, query)
+        persist_design_system(design_system, page, output_dir, query, overwrite=overwrite)
 
     if output_format == "markdown":
         return format_markdown(design_system)
@@ -558,7 +562,43 @@ def generate_design_system(query: str, project_name: str = None, output_format: 
 
 
 # ============ PERSISTENCE FUNCTIONS ============
-def persist_design_system(design_system: dict, page: str = None, output_dir: str = None, page_query: str = None) -> dict:
+def _slugify_path_part(value: str, field_name: str) -> str:
+    """Create a filesystem-safe slug, rejecting path-like input."""
+    raw = str(value or "default").strip()
+    if not raw:
+        raw = "default"
+    if any(part in raw for part in ("/", "\\", ":")) or ".." in raw:
+        raise ValueError(f"Invalid {field_name}: path separators and traversal are not allowed")
+
+    slug = re.sub(r"[^a-z0-9]+", "-", raw.lower()).strip("-")
+    if not SAFE_SLUG_PATTERN.fullmatch(slug):
+        raise ValueError(
+            f"Invalid {field_name}: use letters, numbers, spaces, or hyphens only "
+            f"(max {SAFE_SLUG_PATTERN.pattern})"
+        )
+    return slug
+
+
+def _resolve_within_base(base_dir: Path, *parts: str) -> Path:
+    """Resolve a child path and verify it remains inside base_dir."""
+    base = base_dir.expanduser().resolve()
+    target = base.joinpath(*parts).resolve()
+    try:
+        target.relative_to(base)
+    except ValueError as exc:
+        raise ValueError(f"Refusing to write outside output directory: {target}") from exc
+    return target
+
+
+def _write_new_file(path: Path, content: str, overwrite: bool) -> None:
+    if path.exists() and not overwrite:
+        raise FileExistsError(f"Refusing to overwrite existing file without --overwrite: {path}")
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+
+def persist_design_system(design_system: dict, page: str = None, output_dir: str = None,
+                          page_query: str = None, overwrite: bool = False) -> dict:
     """
     Persist design system to design-system/<project>/ folder using Master + Overrides pattern.
     
@@ -567,17 +607,18 @@ def persist_design_system(design_system: dict, page: str = None, output_dir: str
         page: Optional page name for page-specific override file
         output_dir: Optional output directory (defaults to current working directory)
         page_query: Optional query string for intelligent page override generation
+        overwrite: Replace existing files when True
     
     Returns:
         dict with created file paths and status
     """
-    base_dir = Path(output_dir) if output_dir else Path.cwd()
+    base_dir = Path(output_dir).expanduser().resolve() if output_dir else Path.cwd().resolve()
     
     # Use project name for project-specific folder
     project_name = design_system.get("project_name", "default")
-    project_slug = project_name.lower().replace(' ', '-')
+    project_slug = _slugify_path_part(project_name, "project_name")
     
-    design_system_dir = base_dir / "design-system" / project_slug
+    design_system_dir = _resolve_within_base(base_dir, "design-system", project_slug)
     pages_dir = design_system_dir / "pages"
     
     created_files = []
@@ -590,16 +631,15 @@ def persist_design_system(design_system: dict, page: str = None, output_dir: str
     
     # Generate and write MASTER.md
     master_content = format_master_md(design_system)
-    with open(master_file, 'w', encoding='utf-8') as f:
-        f.write(master_content)
+    _write_new_file(master_file, master_content, overwrite)
     created_files.append(str(master_file))
     
     # If page is specified, create page override file with intelligent content
     if page:
-        page_file = pages_dir / f"{page.lower().replace(' ', '-')}.md"
+        page_slug = _slugify_path_part(page, "page")
+        page_file = _resolve_within_base(base_dir, "design-system", project_slug, "pages", f"{page_slug}.md")
         page_content = format_page_override_md(design_system, page, page_query)
-        with open(page_file, 'w', encoding='utf-8') as f:
-            f.write(page_content)
+        _write_new_file(page_file, page_content, overwrite)
         created_files.append(str(page_file))
     
     return {
