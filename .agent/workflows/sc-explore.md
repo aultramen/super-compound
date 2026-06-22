@@ -1,10 +1,10 @@
 ---
-description: "Resolve fuzzy ideas, product direction, domain language, architecture questions, prototypes, and open decisions before PRD or planning."
+description: "Resolve fuzzy ideas into a BRD with business objectives, constraints, policies, and business acceptance before PRD."
 ---
 
 # Explore Workflow
 
-Use this when the work is not ready for a plan.
+Use this when the work is not ready for product requirements or technical planning. The canonical output is a BRD.
 
 ## Modes
 
@@ -16,17 +16,20 @@ Use this when the work is not ready for a plan.
 
 ## Steps
 
-1. Load `skills/brainstorming/SKILL.md`.
-2. Inspect existing code, docs, issues, ADRs, and related solutions before asking questions.
-3. Load `skills/domain-modeling/SKILL.md` when terms, roles, or domain boundaries are fuzzy.
-4. Load `skills/codebase-design/SKILL.md` when the decision is about seams, module shape, or testability.
-5. Load `skills/prototyping/SKILL.md` only when runnable evidence is cheaper than debate.
-6. Resolve the smallest decision that unlocks the next step.
-7. Capture non-goals and deferred ideas without expanding current scope.
-8. Route to `sc-prd.md` when product behavior is clear, or `sc-plan.md` when implementation is clear.
+1. Load `skills/agentic-delivery/SKILL.md`.
+2. Load `skills/brainstorming/SKILL.md`.
+3. Inspect existing code, docs, issues, accepted ADRs in `docs/solutions/`, and related solutions before asking questions.
+4. Load `skills/domain-modeling/SKILL.md` when terms, roles, or domain boundaries are fuzzy.
+5. Load `skills/codebase-design/SKILL.md` when a business decision depends on a major seam, module shape, or testability tradeoff.
+6. Load `skills/prototyping/SKILL.md` only when runnable evidence is cheaper than debate.
+7. Resolve the smallest business decision that unlocks the next step.
+8. Capture objectives, scope, non-goals, business rules, policies, constraints, acceptance gates, and `OPEN-*` blockers.
+9. Save a BRD to `docs/brd/brd-<feature>.md` when a durable artifact is useful, using the BRD template only as a reference.
+10. Route to `sc-prd.md` when the BRD is approved or the user explicitly accepts its assumptions.
 
 ## Output
 
-- Decisions made.
-- Remaining unknowns.
-- Recommended next workflow.
+- BRD or BRD summary.
+- Business acceptance criteria.
+- `OPEN-*` blockers and owner/gate when known.
+- Recommended next workflow: `/sc-prd`.

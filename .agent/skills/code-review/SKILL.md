@@ -22,7 +22,7 @@ Before reviewing any code:
 1. **Read the plan/spec** — What was this supposed to accomplish?
 2. **Understand the context** — What does this code interact with?
 3. **Check acceptance criteria** — What defines "done"?
-4. **Read issue/PRD/domain sources** — If work came from an issue, PRD, `CONTEXT.md`, or ADR, treat those as the contract.
+4. **Read issue/FSD/PRD/domain sources** — If work came from a goal issue, FSD, PRD, BRD, `CONTEXT.md`, or linked accepted ADR, treat those as the contract.
 
 ### Phase 2: Spec Compliance Review (STAGE 1)
 
@@ -36,6 +36,7 @@ Before reviewing any code:
 - [ ] Edge cases from spec handled
 - [ ] No missing features
 - [ ] No extra unplanned features (scope creep)
+- [ ] No schema, API, authorization, workflow, role, state, or UI behavior was invented outside the FSD and linked accepted ADRs
 
 **If spec compliance fails → STOP HERE.** Fix gaps before code quality review.
 Do NOT proceed to Phase 3 until all spec items pass.

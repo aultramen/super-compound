@@ -1,13 +1,13 @@
 ---
 name: plan-verification
-description: "After creating a plan, validates requirements, task quality, dependencies, issue-board DAGs, sizing, and verification before execution."
+description: "After creating an FSD and goal issue board, validates requirement coverage, goal quality, dependencies, issue-board DAGs, sizing, and verification before execution."
 ---
 
 # Plan Verification
 
 ## Overview
 
-Plans are hypotheses about how to achieve a goal. Verify them before execution so expensive gaps are caught while they are cheap to fix.
+FSDs are implementation contracts. Verify the FSD and goal issue board before execution so expensive gaps are caught while they are cheap to fix.
 
 Announce: "I'm using the plan-verification skill to validate this plan before execution."
 
@@ -15,37 +15,37 @@ Announce: "I'm using the plan-verification skill to validate this plan before ex
 
 ### 1. Requirement Coverage
 
-For each requirement or acceptance criterion:
+For each BRD/PRD requirement or acceptance criterion:
 
-- Is there at least one task or issue that addresses it?
-- If missing, flag: `Requirement <X> has no corresponding task`.
+- Is there at least one FSD requirement, test, and goal issue pointer that addresses it?
+- If missing, flag: `Requirement <X> has no corresponding FSD goal`.
 
 ### 2. Task Completeness
 
-For each task or issue:
+For each FSD goal or issue pointer:
 
 - Does it have a clear action?
 - Does it have a verification step?
 - Does it have done criteria?
-- If missing, flag: `Task <X> missing action/verify/done`.
+- If missing, flag: `Goal <X> missing action/verify/done`.
 
 ### 3. Dependency Correctness
 
-For each task or issue with dependencies:
+For each goal or issue with dependencies:
 
-- Do dependencies actually exist in the plan, ledger, or issue board?
+- Do dependencies actually exist in the FSD, ledger, or issue board?
 - Do dependencies come before dependents?
 - Are there circular dependencies?
 - If using issue files, do `Blocked by` paths exist and form a DAG?
-- If invalid, flag: `Task <X> depends on <Y> which does not exist, comes after, or creates a cycle`.
+- If invalid, flag: `Goal <X> depends on <Y> which does not exist, comes after, or creates a cycle`.
 
 ### 4. Key Links
 
 For key component connections:
 
-- Are API endpoints that frontend calls planned?
-- Are database changes planned before code that uses them?
-- Are shared types or interfaces planned before modules that import them?
+- Are API endpoints that frontend calls specified in the FSD?
+- Are database changes specified before code that uses them?
+- Are shared types or interfaces specified before modules that import them?
 - If missing, flag: `Key link missing: <A> depends on <B> which is not in the plan`.
 
 ### 5. Scope Sanity
@@ -68,7 +68,7 @@ From the goal, derive what must exist:
 
 ### 7. Complexity And Sizing
 
-For each task or issue:
+For each goal or issue:
 
 - Is it too broad? A focused task should fit one session.
 - Is it too narrow? Tiny mechanical changes should be merged.
@@ -106,9 +106,9 @@ For each critical path:
 3. Produce a report:
 
 ```markdown
-## Plan Verification Report
+## FSD Verification Report
 
-**Plan:** <plan or issue board>
+**FSD:** <fsd or issue board>
 **Verdict:** PASS | PASS WITH NOTES | NEEDS REVISION
 
 ### Findings
@@ -142,7 +142,7 @@ This skill is the final check in `/sc-plan`.
 
 Use it with:
 
-- `writing-plans` for implementation plans
+- `writing-plans` for FSDs
 - `issue-workflow` for `.scratch/<feature>/issues/*.md` boards
 - `gap-closure` when execution reveals missing work
 - `verification-before-completion` after implementation

@@ -9,6 +9,7 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. It 
 - Test-first by default for behavior changes.
 - Prefer simple, local, reversible changes.
 - Keep durable context on disk, not only in conversation memory.
+- Use the canonical delivery path for product work: `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`.
 - Turn reusable solutions into documentation through `/sc-compound`.
 - Do not preserve stale workflow aliases unless they are part of the current public interface.
 
@@ -20,12 +21,12 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 |---|---|
 | `/sc-init` | Initialize or reload project/framework context |
 | `/sc-status` | Inspect state and choose the next route |
-| `/sc-explore` | Shape fuzzy ideas, domain questions, strategy, and prototype decisions |
+| `/sc-explore` | Shape fuzzy ideas into a BRD with business objectives, constraints, and acceptance |
 | `/sc-research` | Gather evidence before a decision |
-| `/sc-prd` | Write product requirements |
-| `/sc-plan` | Write implementation plans and issue-ready Journey boards |
+| `/sc-prd` | Write PRD product requirements from an approved BRD |
+| `/sc-plan` | Write the FSD, decide ADR applicability, and create goal issue pointers |
 | `/sc-eval` | Define or run evaluation criteria |
-| `/sc-work` | Execute a plan |
+| `/sc-work` | Execute an approved FSD goal or issue pointer |
 | `/sc-debug` | Diagnose and fix root causes |
 | `/sc-review` | Review changed code/docs |
 | `/sc-audit` | Audit security, compatibility, compliance, agent surface, and readiness |
@@ -36,10 +37,10 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 
 ## Routing
 
-- Fuzzy idea, domain language, strategy, or prototype question: `/sc-explore`
-- Product requirements: `/sc-prd`
-- Issue/task shaping, triage, Kanban, Journey, or technical breakdown: `/sc-plan`
-- Implementation, looped work, or safe parallel execution: `/sc-work`
+- Fuzzy idea, domain language, strategy, or prototype question: `/sc-explore` to produce a BRD
+- Product requirements from an approved BRD: `/sc-prd`
+- FSD creation, ADR applicability, goal slicing, triage, Kanban, Journey, or technical breakdown: `/sc-plan`
+- Implementation, looped work, or safe parallel execution from an approved FSD goal: `/sc-work`
 - Failure or unexpected behavior: `/sc-debug`
 - Changed files need critique: `/sc-review`
 - Security, compatibility, dependency, MCP, agent config, compliance, or release readiness: `/sc-audit`
@@ -52,10 +53,10 @@ Load skills only when their detailed procedure is relevant. Announce the skill a
 
 Common routes:
 
-- `/sc-explore` -> `brainstorming`, plus `domain-modeling`, `codebase-design`, or `prototyping` when needed
-- `/sc-prd` -> `prd-generator`, plus `domain-modeling` and `codebase-design` when needed
-- `/sc-plan` -> `writing-plans`, `issue-workflow` or `triage-workflow` when requested, plus risk skills when needed
-- `/sc-work` -> `executing-plans`, `test-driven-development`, `verification-before-completion`
+- `/sc-explore` -> `agentic-delivery`, `brainstorming`, plus `domain-modeling`, `codebase-design`, or `prototyping` when needed
+- `/sc-prd` -> `agentic-delivery`, `prd-generator`, plus `domain-modeling` and `codebase-design` when needed
+- `/sc-plan` -> `agentic-delivery`, `writing-plans`, `issue-workflow` or `triage-workflow`, `plan-verification`, plus risk skills when needed
+- `/sc-work` -> `agentic-delivery`, `context-engineering`, `executing-plans`, `test-driven-development`, `verification-before-completion`
 - `/sc-debug` -> `systematic-debugging`
 - `/sc-review` -> `code-review`
 - `/sc-audit` -> `security-audit`, `compatibility-check`, `data-privacy`, `threat-modeling`, `secure-code-patterns`
@@ -70,6 +71,7 @@ Before editing:
 - Inspect existing code/docs before introducing a new pattern.
 - Check git status before large edits.
 - Preserve user changes and unrelated dirty work.
+- For product work, read only the necessary BRD, PRD, FSD, goal issue, and accepted ADR references before editing.
 
 During work:
 
@@ -78,6 +80,8 @@ During work:
 - Avoid broad rewrites unless the task explicitly asks for cleanup.
 - Add abstractions only when they reduce real complexity.
 - Validate inputs at boundaries and avoid leaking secrets or internals.
+- Do not invent schema, APIs, authorization, workflows, roles, state transitions, or UI behavior outside the approved FSD and linked accepted ADRs.
+- Keep `.scratch/<feature>/issues/*.md` lightweight: use qualified refs, not copied BRD/PRD/FSD/ADR prose.
 
 Before completion:
 
@@ -93,8 +97,9 @@ Use:
 - `docs/STATE.md` for current position, decisions, blockers, completed work, and next action
 - `.continue-here.md` for `/sc-pause` handoff
 - `docs/progress.md` for chronological progress and codebase patterns
-- `.scratch/<feature>/issues/*.md` for local Journey boards and agent-ready issue slices
-- `docs/solutions/` for reusable solved problems
+- `docs/brd/`, `docs/prd/`, and `docs/fsd/` for durable delivery artifacts
+- `.scratch/<feature>/issues/*.md` for local FSD goal issue pointers
+- `docs/solutions/` for reusable solved problems and optional linked accepted ADRs
 
 The next session should be able to run `/sc-status` and continue from disk.
 

@@ -7,7 +7,7 @@ description: "Use before creative product, feature, UI, or behavior work. Explor
 
 ## Purpose
 
-Turn a rough idea into a clear direction before writing a PRD, plan, or code.
+Turn a rough idea into a clear business direction before writing a BRD, PRD, FSD, or code.
 
 Announce: "I'm using the brainstorming skill to explore and refine this idea."
 
@@ -122,14 +122,14 @@ Skip diagrams for small bugs or straightforward copy/config changes.
 
 After brainstorming, route to:
 
-- `/sc-prd` for product requirements
-- `/sc-plan` for implementation planning
+- `/sc-prd` for product requirements after a BRD exists or is summarized
+- `/sc-plan` for FSD creation after PRD approval
 - `/sc-ui` for interface-focused work
 - `/sc-work` only if requirements are already concrete enough
 
 ## Related Skills
 
 - `prd-generator` turns decisions into requirements
-- `writing-plans` turns decisions into implementation tasks
+- `writing-plans` turns approved PRDs into FSD goals
 - `interface-design` supports frontend exploration
 - `knowledge-compounding` preserves reusable lessons

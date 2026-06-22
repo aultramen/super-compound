@@ -39,7 +39,7 @@ Avoid vague substitutes such as boundary, helper, service, or component when the
 
 ### 1. Find The Candidate Seam
 
-Read `CONTEXT.md`, ADRs, similar code, tests, and the planned behavior.
+Read `CONTEXT.md`, the relevant FSD `TDEC-*` records, linked accepted ADRs in `docs/solutions/`, similar code, tests, and the planned behavior.
 
 Look for:
 
@@ -62,13 +62,14 @@ Recommend the smallest interface that preserves behavior and improves locality.
 
 ### 3. Feed The Plan
 
-Record in the PRD, plan, or issue:
+Record in the PRD when behavior needs clarification, in the FSD when implementation authority is needed, or in the goal issue pointer by qualified reference:
 
 - The chosen seam
 - Existing interfaces to reuse
 - New interface shape only when necessary
 - What tests should cross the seam
 - What stays out of scope
+- Any material technical decision as an FSD `TDEC-*` unless ADR criteria from `agentic-delivery` are met
 
 Do not introduce abstraction for imagined future variation.
 
