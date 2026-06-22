@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: "Use when work needs shared domain language, CONTEXT.md updates, ADR decisions, glossary cleanup, or terminology checks during exploration, PRDs, triage, planning, architecture, or issue shaping."
+description: "Use when work needs shared domain language, CONTEXT.md updates, conditional ADR decisions, glossary cleanup, or terminology checks during BRD, PRD, FSD, triage, architecture, or goal shaping."
 ---
 
 # Domain Modeling
@@ -17,7 +17,7 @@ Use the simplest layout that fits the project:
 
 ```text
 CONTEXT.md
-docs/adr/
+docs/solutions/adr-####-<slug>.md
 ```
 
 For monorepos or multiple bounded contexts, use:
@@ -25,7 +25,7 @@ For monorepos or multiple bounded contexts, use:
 ```text
 CONTEXT-MAP.md
 <context>/CONTEXT.md
-<context>/docs/adr/
+docs/solutions/adr-####-<context>-<slug>.md
 ```
 
 Create files only when there is something real to record.
@@ -34,9 +34,9 @@ Create files only when there is something real to record.
 
 ### 1. Read Existing Language
 
-Before changing language, read the relevant `CONTEXT.md`, `CONTEXT-MAP.md`, and ADRs.
+Before changing language, read the relevant `CONTEXT.md`, `CONTEXT-MAP.md`, FSD Technical Decision Register entries, and linked accepted ADRs.
 
-If no domain docs exist, infer terms from code, tests, PRDs, issues, and user language.
+If no domain docs exist, infer terms from code, tests, BRDs, PRDs, FSDs, goal issues, and user language.
 
 ### 2. Challenge Fuzzy Terms
 
@@ -61,23 +61,26 @@ Use this shape:
 _Avoid_: <synonyms or misleading terms>
 ```
 
-Keep `CONTEXT.md` free of implementation details. It is a glossary, not a PRD, scratchpad, or design document.
+Keep `CONTEXT.md` free of implementation details. It is a glossary, not a BRD, PRD, FSD, scratchpad, or design document.
 
-### 4. Record ADRs Sparingly
+### 4. Record Technical Decisions Sparingly
 
-Offer an ADR only when the decision is:
+Default to an FSD `TDEC-*` record for project-local technical decisions. Offer an ADR only when the decision is:
 
 - Hard to reverse
 - Surprising without context
 - A real tradeoff between plausible options
+- Cross-system, platform-level, high-risk, security/privacy-sensitive, materially costly, vendor-locking, or policy-required
 
-Use this shape:
+Store linked ADRs under `docs/solutions/adr-####-<slug>.md`, use the agentic ADR template, and do not treat them as executable authority until their status is `ACCEPTED`.
+
+For smaller decisions, feed this shape into the FSD Technical Decision Register instead:
 
 ```markdown
-# ADR-0001: <Decision>
+# TDEC-001: <Decision>
 
 ## Status
-Accepted
+Approved
 
 ## Context
 <Why this decision exists.>
@@ -95,6 +98,6 @@ Use this skill from:
 
 - `/sc-explore` for domain alignment and strategy
 - `/sc-prd` for story and requirement vocabulary
-- `/sc-plan` and `issue-workflow` for issue titles and acceptance criteria
+- `/sc-plan` and `issue-workflow` for FSD goals and issue pointer titles
 - `triage-workflow` for incoming requests
 - `codebase-design` for naming seams and deep modules

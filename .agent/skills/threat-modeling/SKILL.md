@@ -297,7 +297,7 @@ For high-risk components:
 
 1. Save threat model document
 2. Create security requirements from open risks
-3. Feed into implementation plan
+3. Feed into the PRD or FSD, depending on whether the risk changes product behavior or implementation controls
 
 ---
 

@@ -52,22 +52,23 @@ Run:
 /sc-explore analytics dashboard for account admins
 ```
 
-Use `/sc-explore` when the idea is still fuzzy, strategic, domain-heavy, or needs a lightweight prototype decision.
+Use `/sc-explore` when the idea is still fuzzy, strategic, domain-heavy, or needs a lightweight prototype decision. Its durable output is a BRD under `docs/brd/`.
 
 The agent should:
 
 - Read nearby project context
 - Ask one concise question at a time
 - Offer 2-3 practical approaches
-- Name non-goals
+- Name objectives, constraints, policies, non-goals, and business acceptance
 - Capture decisions in `docs/brainstorms/` when useful
+- Save a BRD when the work needs durable business authority
 
 Example output shape:
 
 ```markdown
-# Analytics Dashboard Exploration
+# Analytics Dashboard BRD Summary
 
-## Direction
+## Business Direction
 Build a focused account-admin dashboard around activation, usage, and risk signals.
 
 ## Decisions
@@ -76,7 +77,13 @@ Build a focused account-admin dashboard around activation, usage, and risk signa
 - Defer export and alerting.
 
 ## Recommended Next Step
-Run `/sc-prd` to turn this into requirements.
+Run `/sc-prd` to turn the approved BRD into product requirements.
+```
+
+Save the BRD to:
+
+```text
+docs/brd/brd-analytics-dashboard.md
 ```
 
 ## 3. Write A PRD
@@ -87,7 +94,7 @@ Run:
 /sc-prd analytics dashboard
 ```
 
-The PRD defines what will be built:
+The PRD consumes the approved BRD and defines observable product behavior:
 
 - Problem and target users
 - Goals and non-goals
@@ -97,6 +104,7 @@ The PRD defines what will be built:
 - Security/privacy considerations
 - Success metrics
 - Open questions
+- Qualified BRD references
 
 Save it to:
 
@@ -121,13 +129,16 @@ Run:
 /sc-plan docs/prd/prd-analytics-dashboard.md
 ```
 
-The plan should:
+`/sc-plan` creates the FSD and slices FSD goals into lightweight issue pointers. The FSD should:
 
 - Inspect existing code and tests
 - Run compatibility/security/privacy pre-flight checks when relevant
 - Use `interface-design` for frontend work
-- Split work into verifiable vertical slices
-- Use `issue-workflow` for Journey/Kanban/PRD-to-issues requests
+- Decide ADR applicability
+- Capture local technical decisions as FSD `TDEC-*`
+- Link only accepted ADRs under `docs/solutions/adr-####-<slug>.md` when ADR criteria are met
+- Split work into verifiable `GOAL-*` packets
+- Use `issue-workflow` for Journey/Kanban/goal issue pointer requests
 - Include exact verification commands
 - Document rollback when data or deployment risk exists
 
@@ -139,20 +150,15 @@ python .agent/skills/interface-design/scripts/search.py "performance trackBy" --
 python .agent/skills/interface-design/scripts/search.py "mobile touch target" --domain app
 ```
 
-Example task:
+Example FSD goal:
 
 ```markdown
-### Task 3: Render Account Usage Summary
+### GOAL-003 - Render Account Usage Summary
 
-Files:
-- Modify: `src/features/accounts/usage-summary.tsx`
-- Test: `src/features/accounts/usage-summary.test.tsx`
-
-Steps:
-1. Add a failing test for the empty state.
-2. Implement the empty state using the existing panel component.
-3. Run the targeted test.
-4. Verify responsive layout in browser.
+Objective: Admins can see account usage summary for the selected date range.
+Requirement refs: PRD-ANALYTICS#FR-003, PRD-ANALYTICS#AC-004
+Technical refs: FSD-ANALYTICS#TDEC-001
+Verification refs: FSD-ANALYTICS#TEST-003
 ```
 
 For a local Journey board, run:
@@ -161,44 +167,45 @@ For a local Journey board, run:
 /sc-plan --issues docs/prd/prd-analytics-dashboard.md
 ```
 
-This should review the proposed vertical slices with you, then create:
+This should review the proposed FSD goals with you, then create:
 
 ```text
 .scratch/analytics-dashboard/
-  PRD.md
+  FSD.md
   issues/
     01-account-usage-summary.md
     02-dashboard-empty-state.md
 ```
 
-Each issue includes `Status`, `Parent`, `Blocked by`, user stories, acceptance criteria, verification, and comments. `Blocked by` links form an acyclic dependency graph so ready work can be picked up in parallel.
+Each issue includes `Status`, `Parent FSD`, `Goal ID`, `Blocked by`, qualified upstream refs, technical refs, optional ADR refs, verification refs, stop conditions, and comments. It must not copy BRD, PRD, FSD, or ADR paragraphs. `Blocked by` links form an acyclic dependency graph so ready goals can be picked up in parallel.
 
 ## 5. Work
 
 Run:
 
 ```text
-/sc-work docs/plans/2026-06-20-analytics-dashboard-plan.md
+/sc-work .scratch/analytics-dashboard/issues/01-account-usage-summary.md
 ```
 
-Or execute one issue slice:
+Or execute a direct FSD goal:
 
 ```text
-/sc-work .scratch/analytics-dashboard/issues/01-account-usage-summary.md
+/sc-work docs/fsd/fsd-analytics-dashboard.md#GOAL-001
 ```
 
 The agent should execute sequentially by default:
 
-- Mark one task in progress
+- Mark one goal in progress
 - Respect `Blocked by` before starting issue files
-- Read only relevant files
+- Use `context-engineering` to read only the issue pointer, referenced FSD sections, upstream BRD/PRD IDs, linked accepted ADRs, and relevant files
+- Stop with `OPEN-*` instead of inventing missing schema, APIs, authorization, workflows, roles, states, or UI behavior
 - Write failing tests for behavior changes
 - Implement the smallest cohesive change
 - Run targeted verification
 - Mark issue status when work came from `.scratch/`
 - Update durable state for long work
 
-Parallel execution is reserved for independent tasks with non-overlapping files and clear verification.
+Parallel execution is reserved for independent FSD goals with non-overlapping files and clear verification.
 
 ## 6. Debug
 
@@ -303,7 +310,7 @@ This creates or updates:
 
 - `docs/STATE.md`
 - `.continue-here.md`
-- Any active plan/task progress
+- Any active FSD/goal progress
 
 Next session:
 
@@ -339,10 +346,10 @@ Save concise knowledge under `docs/solutions/` or related project docs.
 | Resume from disk state | `/sc-status` |
 | Shape fuzzy ideas | `/sc-explore` |
 | Gather evidence | `/sc-research` |
-| Write requirements | `/sc-prd` |
-| Plan implementation | `/sc-plan` |
+| Write PRD product requirements | `/sc-prd` |
+| Create FSD and goal issue pointers | `/sc-plan` |
 | Define or run evals | `/sc-eval` |
-| Execute plan | `/sc-work` |
+| Execute FSD goal | `/sc-work` |
 | Fix failures | `/sc-debug` |
 | Review changes | `/sc-review` |
 | Audit risk/readiness | `/sc-audit` |

@@ -1,29 +1,34 @@
 ---
 name: executing-plans
-description: "Use when a written implementation plan is ready to execute. Supports sequential execution by default and parallel execution only for independent, low-conflict tasks."
+description: "Use when an approved FSD goal or lightweight issue pointer is ready to execute. Supports sequential execution by default and parallel execution only for independent, low-conflict goals."
 ---
 
 # Executing Plans
 
 ## Purpose
 
-Execute an approved plan or issue file with durable progress, focused edits, continuous verification, and a clear finish line.
+Execute an approved FSD goal or `.scratch/<feature>/issues/` pointer with durable progress, focused edits, continuous verification, and a clear finish line.
 
-Announce: "I'm using the executing-plans skill to implement this plan."
+Announce: "I'm using the executing-plans skill to implement this FSD goal."
 
 ## Before Editing
 
-Read the plan or issue file completely, then gather only the context needed for the next task:
+Read the goal issue pointer or FSD goal completely, then gather only the context needed for the next task:
 
-- Files and tests named in the plan
+- Parent FSD sections referenced by the goal
+- Upstream BRD and PRD IDs referenced by the FSD goal
+- Linked accepted ADRs under `docs/solutions/adr-####-<slug>.md`, if any
+- Files and tests named in the FSD or issue pointer
 - `.scratch/<feature>/issues/<NN>-<slug>.md` issue files and their `Blocked by` issues when present
 - Nearby code with similar behavior
 - Project README, package metadata, and local agent instructions
 - `SUPER-COMPOUND.md` and `.agent/rules/super-compound.md`
 - `docs/STATE.md`, `docs/progress.md`, or a task ledger when present
-- Relevant ADRs, domain notes, or design-system artifacts referenced by the plan
+- Relevant domain notes or design-system artifacts referenced by the FSD
 
-If a blocking issue is not done, stop and report the blocker unless the user explicitly reorders the work. If acceptance criteria are missing or contradictory, ask one concise question before coding. If the answer can be inferred safely from existing tests and code, proceed and document the assumption.
+If a blocking issue is not done, stop and report the blocker unless the user explicitly reorders the work. If acceptance criteria, FSD authority, `TDEC-*`, or linked ADR status is missing or contradictory, stop and report `OPEN-*` instead of coding. If the answer can be inferred safely from repository conventions and the FSD explicitly delegates it, proceed and document the assumption.
+
+Do not invent schema, APIs, authorization, workflows, roles, state transitions, business rules, or UI behavior outside the approved FSD and linked accepted ADRs.
 
 ## Git And Workspace
 
@@ -37,17 +42,17 @@ Respect the project's current state.
 
 ## Task Execution Loop
 
-For each task:
+For each goal:
 
-1. Mark the task in progress in the plan, issue file, task ledger, or conversation checklist.
+1. Mark the goal in progress in the issue file, task ledger, or conversation checklist.
 2. Read referenced files and nearby patterns.
-3. Confirm boundaries: ownership, dependency direction, public API contracts, data contracts, and UI conventions.
+3. Confirm FSD boundaries: ownership, dependency direction, public API contracts, data contracts, UI conventions, `TDEC-*`, and linked ADRs.
 4. Use `architecture-enforcement` when placement or dependency direction is uncertain.
 5. Use `test-driven-development` for new behavior and regressions.
-6. Make the smallest cohesive edit that satisfies the task.
+6. Make the smallest cohesive edit that satisfies the goal.
 7. Run the narrowest useful verification.
 8. Fix failures before moving on.
-9. Mark the task or issue complete and record notable decisions.
+9. Mark the goal or issue complete and record notable decisions.
 10. Update durable state for multi-session work.
 
 Do not turn task execution into opportunistic refactoring. Capture unrelated improvements as follow-up notes.
@@ -56,15 +61,15 @@ Do not turn task execution into opportunistic refactoring. Capture unrelated imp
 
 Use parallel agents only when all are true:
 
-- The plan has independent tasks with clear file ownership.
-- Tasks do not depend on each other's unmerged output.
+- The FSD has independent goals with clear file ownership.
+- Goals do not depend on each other's unmerged output.
 - For issue boards, each parallel issue has `Blocked by: None` or all blockers are done.
-- Verification can be run per task.
+- Verification can be run per goal.
 - The user accepts the extra coordination cost.
 
 When parallelizing, assign each agent:
 
-- One task or tightly related task group
+- One goal or tightly related goal group
 - Exact files or directories to inspect
 - Expected output and verification command
 - Conflict boundaries and handoff format
@@ -116,7 +121,8 @@ Use durable files when work spans sessions:
 
 - `docs/STATE.md` for current position and next action
 - `docs/progress.md` for chronological progress
-- `docs/tasks/tasks-*.json` only if a task ledger already exists or the plan requires one
+- `docs/tasks/tasks-*.json` only if a task ledger already exists or the FSD requires one
+- `docs/fsd/fsd-*.md` only when execution evidence or approved corrections must update the FSD
 - `.scratch/<feature>/issues/*.md` when execution is issue-driven
 - `.continue-here.md` only for pause/status handoff created by `/sc-pause`
 
@@ -126,7 +132,7 @@ The next session should be able to run `/sc-status` and understand where to cont
 
 Before the final response:
 
-- Planned tasks are complete or explicitly deferred
+- Planned goals are complete or explicitly deferred
 - Source issue status is updated when work came from `.scratch/`
 - Verification was run, with failures disclosed
 - Docs are updated when behavior, setup, commands, architecture, or user workflows changed
@@ -136,8 +142,9 @@ Before the final response:
 
 ## Related Skills
 
-- `writing-plans` creates the input plan
-- `issue-workflow` creates issue-file task contracts
+- `agentic-delivery` defines artifact authority and stop conditions
+- `writing-plans` creates the input FSD
+- `issue-workflow` creates lightweight goal issue pointers
 - `test-driven-development` shapes behavior changes
 - `architecture-enforcement` protects module boundaries
 - `systematic-debugging` handles failures

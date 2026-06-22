@@ -4,7 +4,7 @@ Shared operating instructions for Codex, Claude Code, Gemini, Cursor, Windsurf, 
 
 ## Purpose
 
-Super Compound is an AI-assisted development framework for Antigravity IDE and Claude Code. It packages rules, workflows, agents, hooks, and skills under `.agent/` so they can be copied into other projects.
+Super Compound is an AI-assisted development framework for Antigravity IDE and Claude Code. It packages rules, workflows, agents, hooks, skills, and templates under `.agent/` so they can be copied into other projects.
 
 Keep this file concise. It is startup context for many agents. Long-form standards belong in `docs/engineering-standards.md` and detailed Super Compound behavior belongs in `SUPER-COMPOUND.md` plus `.agent/`.
 
@@ -13,6 +13,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - `.agent/rules/`: Antigravity workspace rules. Keep each rule file small enough for Antigravity's rule-size constraints.
 - `.agent/workflows/`: command-style workflows such as explore, plan, work, review, audit, status, and pause.
 - `.agent/skills/`: progressive instruction packs. Each skill owns its detailed procedure in `SKILL.md`.
+- `.agent/templates/`: reusable BRD, PRD, FSD, and optional ADR templates loaded on demand.
 - `.agent/agents/`: dedicated agent prompts for architecture, review, E2E, docs, and build fixes.
 - `.agent/hooks/`: deterministic hook configuration and scripts.
 - `SUPER-COMPOUND.md`: concise root rules for Claude-style usage.
@@ -40,7 +41,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 ## Working Agreement
 
 - Inspect the relevant `.agent/` rule, workflow, skill, or agent file before changing it.
-- Preserve the framework's core promise: plan before code, evidence before claims, test-first by default, knowledge compounds, and verification gates.
+- Preserve the framework's core promise: BRD -> PRD -> FSD -> GOAL before product code, evidence before claims, test-first by default, knowledge compounds, and verification gates.
 - Keep edits scoped. Avoid broad rewrites, formatting churn, or renaming established workflows unless the user asks.
 - Preserve the documented public workflow names. Compatibility aliases may be removed when a breaking cleanup explicitly approves it.
 - Do not overwrite user changes or generated local state such as `.debug/`, `docs/progress.md`, `docs/STATE.md`, or `.continue-here.md`.

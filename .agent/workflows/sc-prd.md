@@ -1,24 +1,26 @@
 ---
-description: "Create a concise Product Requirements Document with scope, stories, acceptance criteria, and open questions."
+description: "Create a Product Requirements Document from an approved BRD, focused on observable product behavior and acceptance."
 ---
 
 # PRD Workflow
 
-Use this when product behavior needs to be specified before implementation planning.
+Use this when approved business requirements need to become product behavior before FSD planning.
 
 ## Steps
 
-1. Load `skills/prd-generator/SKILL.md`.
-2. Read exploration notes, research, current docs, and related code behavior.
-3. Use `skills/domain-modeling/SKILL.md` when user stories need project vocabulary or glossary updates.
-4. Use `skills/codebase-design/SKILL.md` when test seams or module interfaces need to be settled before requirements are durable.
-5. Define users, problem, goals, non-goals, user stories, acceptance criteria, edge cases, and testing decisions.
-6. Mark unresolved questions clearly.
-7. Save the PRD only when a durable artifact is useful.
-8. Route to `sc-plan.md` after approval; use `/sc-plan --issues <prd>` when a Journey board is needed.
+1. Load `skills/agentic-delivery/SKILL.md`.
+2. Load `skills/prd-generator/SKILL.md`.
+3. Read the approved BRD, exploration notes, research, current docs, and related code behavior.
+4. Use `skills/domain-modeling/SKILL.md` when user stories need project vocabulary or glossary updates.
+5. Use `skills/codebase-design/SKILL.md` only when product requirements need a known test seam or interface constraint to be reliable.
+6. Define users, observable behavior, feature scope, non-goals, user stories, functional requirements, acceptance criteria, edge cases, negative behavior, and product-level security/privacy/compliance requirements.
+7. Do not specify database schema, internal architecture, implementation modules, or technical mechanisms unless they are existing constraints inherited from the BRD or repository.
+8. Use qualified BRD references such as `BRD-CCC#BREQ-001`; mark unresolved product decisions as `OPEN-*`.
+9. Save the PRD to `docs/prd/prd-<feature>.md` when a durable artifact is useful, using the PRD template only as a reference.
+10. Route to `sc-plan.md` after approval.
 
 ## Output
 
 - PRD or PRD summary.
 - Acceptance criteria.
-- Open questions and next workflow.
+- `OPEN-*` blockers and next workflow: `/sc-plan`.

@@ -7,8 +7,10 @@ It keeps the public command surface small, pushes detailed procedures into skill
 ## What It Provides
 
 - 15 public workflows for common development operations
-- Modular skills for planning, execution, debugging, review, audit, UI, state, and verification
-- Local Markdown Journey boards under `.scratch/<feature>/issues/`
+- Canonical product delivery path: `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`
+- Modular skills for agentic delivery, planning, execution, debugging, review, audit, UI, state, and verification
+- Full BRD/PRD/FSD/optional ADR templates under `.agent/templates/agentic-delivery/`
+- Local Markdown goal issue pointers under `.scratch/<feature>/issues/`
 - Concise always-on rules under `.agent/rules/`
 - Deterministic local hooks under `.agent/hooks/`
 - Data-backed interface design search through `interface-design`
@@ -41,8 +43,8 @@ All public commands use the `/sc-*` prefix to avoid collisions with native Claud
 /sc-init
 /sc-explore <idea>
 /sc-prd <feature>
-/sc-plan <approved PRD or request>
-/sc-work <plan>
+/sc-plan <approved PRD>
+/sc-work <goal issue or FSD goal>
 /sc-review
 /sc-audit
 /sc-compound
@@ -70,12 +72,12 @@ Only these workflow files are public:
 |---|---|
 | `/sc-init` | Set up or reload framework context |
 | `/sc-status` | Inspect current state and route the next action |
-| `/sc-explore` | Shape fuzzy ideas, product direction, domain questions, strategy, and lightweight prototypes |
+| `/sc-explore` | Shape fuzzy ideas into a BRD with business objectives, constraints, policies, and acceptance |
 | `/sc-research` | Gather evidence before making technical or product decisions |
-| `/sc-prd` | Write product requirements from an idea or explored direction |
-| `/sc-plan` | Produce implementation plans, issue-ready Journey boards, risk checks, and verification |
+| `/sc-prd` | Write PRD product requirements from an approved BRD |
+| `/sc-plan` | Produce the FSD, ADR applicability decision, goal issue pointers, risk checks, and verification |
 | `/sc-eval` | Define and run evaluation criteria before or after implementation |
-| `/sc-work` | Execute an approved plan or issue file sequentially or with safe parallel slices |
+| `/sc-work` | Execute an approved FSD goal or goal issue pointer sequentially or with safe parallel slices |
 | `/sc-debug` | Reproduce, isolate, and fix root causes |
 | `/sc-review` | Review changes for correctness, maintainability, and missing tests |
 | `/sc-audit` | Check security, compatibility, compliance, agent surface, and release readiness |
@@ -101,6 +103,7 @@ Skills live in `.agent/skills/<name>/SKILL.md`. They are loaded only when releva
 
 Core operational skills:
 
+- `agentic-delivery`
 - `brainstorming`
 - `codebase-design`
 - `domain-modeling`
@@ -163,6 +166,7 @@ The CSV loader fails fast when a row does not match its header width, so malform
   hooks/        deterministic local hook scripts
   rules/        concise always-on framework rules
   skills/       modular task procedures
+  templates/    BRD, PRD, FSD, and optional ADR templates
   workflows/    15 public workflows
 .claude/        Claude Code path-scoped rules
 docs/           engineering standards, archives, and runtime project docs
@@ -174,7 +178,7 @@ WALKTHROUGH.md
 
 Runtime/cache files such as `.debug/`, `.continue-here.md`, `.agent/.tool-call-count`, `__pycache__/`, and `*.pyc` are ignored. `docs/` is not ignored; durable documentation should be tracked when it is part of the framework or project history.
 
-Local Journey boards live under `.scratch/<feature>/`. They are not ignored by default because teams may choose to track PRDs and issue files as durable work contracts.
+Local goal issue boards live under `.scratch/<feature>/`. They are not ignored by default because teams may choose to track goal pointers as durable work contracts. Issue files should link to BRD/PRD/FSD/ADR IDs instead of copying their text.
 
 ## Compatibility Notes
 
@@ -207,6 +211,9 @@ Also check:
 
 - Every workflow has frontmatter `description` and an H1
 - Every skill directory matches its `name`
+- Agentic delivery templates exist under `.agent/templates/agentic-delivery/`
+- FSD goal issue examples use qualified references and do not duplicate BRD/PRD/FSD/ADR prose
+- Active docs use `docs/solutions/adr-####-<slug>.md` for linked ADRs
 - Interface CSV rows match header widths
 - Design-system persistence rejects path traversal and requires `--overwrite` for existing files
 - Global Claude hook settings use absolute script paths, not project-relative `.agent/hooks/...` commands

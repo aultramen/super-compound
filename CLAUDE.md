@@ -19,7 +19,7 @@ This file is intentionally small. Shared cross-agent guidance lives in `AGENTS.m
 - Personal local preferences: `CLAUDE.local.md` in this directory.
 - Claude path-specific rules: `.claude/rules/*.md`.
 - Long engineering standards: `docs/engineering-standards.md`, read on demand.
-- Super Compound framework behavior: `SUPER-COMPOUND.md`, `.agent/rules/`, `.agent/workflows/`, `.agent/skills/`, `.agent/agents/`, and `.agent/hooks/`.
+- Super Compound framework behavior: `SUPER-COMPOUND.md`, `.agent/rules/`, `.agent/workflows/`, `.agent/skills/`, `.agent/templates/`, `.agent/agents/`, and `.agent/hooks/`.
 
 ## Claude Workflow
 

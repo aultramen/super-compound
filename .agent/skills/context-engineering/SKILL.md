@@ -23,8 +23,8 @@ Announce: "I'm applying context engineering to keep the working context focused.
 
 | Task | Start With | Add Only If Needed |
 |---|---|---|
-| Planning | Request, PRD, prior brainstorm, README, package metadata | Similar code, ADRs, docs/solutions |
-| Execution | Plan, target files, tests, local instructions | Callers, interfaces, fixtures |
+| BRD/PRD/FSD Planning | Request, BRD/PRD, prior brainstorm, README, package metadata | Similar code, accepted ADRs in `docs/solutions/`, related solutions |
+| Execution | Goal issue pointer, parent FSD refs, target files, tests, local instructions | Upstream BRD/PRD refs, linked accepted ADRs, callers, interfaces, fixtures |
 | Debugging | Error output, failing test, implicated files | Related config, recent changes |
 | Review | Diff, tests, requirements | Nearby code for behavior comparison |
 | UI work | Existing design system, components, target route | `interface-design` search results |
@@ -35,7 +35,7 @@ When returning to work:
 
 1. Read `docs/STATE.md` if present.
 2. Read `.continue-here.md` if present.
-3. Read the active plan, PRD, or brainstorm.
+3. Read the active BRD, PRD, FSD, goal issue pointer, or brainstorm.
 4. Load only files needed for the current next step.
 5. Run `/sc-status` to route the session if the next action is unclear.
 
@@ -72,7 +72,8 @@ At natural breaks, ask internally:
 ## Related Skills
 
 - `state-management` for durable state files
-- `executing-plans` for task-by-task loading
+- `agentic-delivery` for qualified artifact references and zero context bloat rules
+- `executing-plans` for goal-by-goal loading
 - `systematic-debugging` for investigation scope
 - `brainstorming` for lightweight product context
 - `checkpoint-protocol` for pause and handoff decisions
