@@ -6,7 +6,7 @@ It keeps the public command surface small, pushes detailed procedures into skill
 
 ## What It Provides
 
-- 16 public workflows for common development operations
+- 17 public workflows for common development operations
 - Canonical product delivery path: `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`
 - Modular skills for agentic delivery, planning, execution, debugging, review, audit, UI, state, and verification
 - Full BRD/PRD/FSD/optional ADR templates under `.agent/templates/agentic-delivery/`
@@ -44,6 +44,7 @@ All public commands use the `/sc-*` prefix to avoid collisions with native Claud
 
 ```text
 /sc-init
+/sc-geniusloop <scope>
 /sc-explore <idea>
 /sc-prd <feature>
 /sc-plan <approved PRD>
@@ -79,6 +80,7 @@ Only these workflow files are public:
 |---|---|
 | `/sc-init` | Set up or reload framework context |
 | `/sc-status` | Inspect current state and route the next action |
+| `/sc-geniusloop` | Generate and filter proactive improvement ideas when goal queues are empty |
 | `/sc-explore` | Shape fuzzy ideas into a BRD with business objectives, constraints, policies, and acceptance |
 | `/sc-research` | Gather evidence before making technical or product decisions |
 | `/sc-prd` | Write PRD product requirements from an approved BRD |
@@ -214,7 +216,7 @@ The CSV loader fails fast when a row does not match its header width, so malform
   skills/       modular task procedures
   templates/    BRD, PRD, FSD, and optional ADR templates
   tools/        deterministic local framework utilities
-  workflows/    16 public workflows
+  workflows/    17 public workflows
 .claude/        Claude Code path-scoped rules
 docs/           engineering standards, archives, and runtime project docs
 SUPER-COMPOUND.md
@@ -257,7 +259,7 @@ python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domai
 node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --require-reduction 90 --repeat 3
 ```
 
-The token benchmark covers the full framework load, all 16 public workflows, artifact generation surfaces, and related hotspots such as skills, templates, interface-design data/scripts, hooks, agent prompts, workflows, and rules.
+The token benchmark covers the full framework load, all 17 public workflows, artifact generation surfaces, and related hotspots such as skills, templates, interface-design data/scripts, hooks, agent prompts, workflows, and rules.
 
 Also check:
 

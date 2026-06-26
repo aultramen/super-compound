@@ -16,6 +16,7 @@ Use this file as the compact first stop for Super Compound routing. Load a full 
 |---|---|---|
 | `/sc-init` | `workflows/sc-init.contract.md` | stack summary |
 | `/sc-status` | `workflows/sc-status.contract.md` | next workflow |
+| `/sc-geniusloop` | `workflows/sc-geniusloop.contract.md` | filtered improvement ideas |
 | `/sc-explore` | `workflows/sc-explore.contract.md` | BRD or summary |
 | `/sc-research` | `workflows/sc-research.contract.md` | research note |
 | `/sc-prd` | `workflows/sc-prd.contract.md` | PRD |

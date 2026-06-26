@@ -5,6 +5,7 @@ Budgets use `.agent/tools/token-benchmark.mjs` with `deterministic_estimated_tok
 | Scenario | Baseline gate | Runtime rule |
 |---|---:|---|
 | full-framework-load | <= 10% of baseline | load rules plus compact indexes |
+| sc-geniusloop | <= 10% of baseline | load route contract and scoped evidence before Brain |
 | sc-plan | <= 10% of baseline | use route contract and skeletons before full skills/templates |
 | sc-go | <= 10% of baseline | use route contract and Git helper previews before full skill |
 | sc-work | <= 10% of baseline | load issue pointer, referenced FSD sections, target files, tests |

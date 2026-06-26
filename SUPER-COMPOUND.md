@@ -21,6 +21,7 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 |---|---|
 | `/sc-init` | Initialize or reload project/framework context |
 | `/sc-status` | Inspect state and choose the next route |
+| `/sc-geniusloop` | Generate and filter proactive improvement ideas when goal queues are empty |
 | `/sc-explore` | Shape fuzzy ideas into a BRD with business objectives, constraints, and acceptance |
 | `/sc-research` | Gather evidence before a decision |
 | `/sc-prd` | Write PRD product requirements from an approved BRD |
@@ -39,6 +40,7 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 ## Routing
 
 - Fuzzy idea, domain language, strategy, or prototype question: `/sc-explore` to produce a BRD
+- Empty goal queue with no active handoff, blocker, or failing verification: `/sc-geniusloop`
 - Product requirements from an approved BRD: `/sc-prd`
 - FSD creation, ADR applicability, goal slicing, triage, Kanban, Journey, or technical breakdown: `/sc-plan`
 - Git branch, worktree, commit, push, or Pull Request operation: `/sc-go`
@@ -58,6 +60,7 @@ Load skills only when their detailed procedure is relevant. Announce the skill a
 Common routes:
 
 - `/sc-explore` -> `agentic-delivery`, `brainstorming`, plus `domain-modeling`, `codebase-design`, or `prototyping` when needed
+- `/sc-geniusloop` -> `brainstorming`, `codebase-design`, `domain-modeling`, `subagent-orchestration`, and the `brain` agent prompt
 - `/sc-prd` -> `agentic-delivery`, `prd-generator`, plus `domain-modeling` and `codebase-design` when needed
 - `/sc-plan` -> `agentic-delivery`, `writing-plans`, `issue-workflow` or `triage-workflow`, `plan-verification`, plus risk skills when needed
 - `/sc-go` -> `git-workflow-operation`

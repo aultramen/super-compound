@@ -72,6 +72,7 @@ test("default benchmark covers all workflows and related hotspots", () => {
   const workflows = [
     "sc-init",
     "sc-status",
+    "sc-geniusloop",
     "sc-explore",
     "sc-research",
     "sc-prd",

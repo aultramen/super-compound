@@ -34,6 +34,7 @@ This is the compact skill contract. Each `SKILL.md` keeps YAML `name` and `descr
 | `plan-verification` | FSD/goal quality gate |
 | `integration-checking` | cross-component wiring |
 | `knowledge-compounding` | durable solved-problem notes |
+| `subagent-orchestration` | isolated subagent dispatch, including Brain evaluation for genius loop |
 | Other support skills | load only when their description matches the active risk |
 
 ## Contract Rule

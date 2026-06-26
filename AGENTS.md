@@ -12,7 +12,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 
 - `.agent/rules/`: Antigravity workspace rules. Keep each rule file small enough for Antigravity's rule-size constraints.
 - `.agent/context/`: compact routing, skill, template, and budget contracts for low-token runtime loading.
-- `.agent/workflows/`: command-style workflows such as explore, plan, work, review, audit, status, and pause.
+- `.agent/workflows/`: command-style workflows such as geniusloop, explore, plan, work, review, audit, status, and pause.
 - `.agent/skills/`: progressive instruction packs. Each skill owns its detailed procedure in `SKILL.md`.
 - `.agent/templates/`: reusable BRD, PRD, FSD, and optional ADR templates loaded on demand.
 - `.agent/agents/`: dedicated agent prompts for architecture, review, E2E, docs, and build fixes.
