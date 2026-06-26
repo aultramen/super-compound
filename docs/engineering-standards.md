@@ -972,7 +972,7 @@ Use these to measure delivery health. MUST track for any production system.
 
 ## 17. Master Principle Index
 
-Complete reference of all 163 principles across 27 categories.
+Complete reference covering 163 principles across 27 categories.
 
 | # | Category | Principle | Source | Priority |
 |---|---|---|---|---|

@@ -54,6 +54,22 @@ const WORKFLOW_SCENARIOS = [
     after: [".agent/context/workflows/sc-status.contract.md"],
   },
   {
+    name: "sc-geniusloop",
+    description: "/sc-geniusloop proactive improvement ideation and Brain filtering.",
+    before: [
+      ".agent/workflows/sc-geniusloop.md",
+      ".agent/skills/brainstorming/SKILL.md",
+      ".agent/skills/codebase-design/SKILL.md",
+      ".agent/skills/domain-modeling/SKILL.md",
+      ".agent/skills/subagent-orchestration/SKILL.md",
+      ".agent/agents/brain.md",
+    ],
+    after: [
+      ".agent/context/workflows/sc-geniusloop.contract.md",
+      ".agent/context/agent-index.md",
+    ],
+  },
+  {
     name: "sc-explore",
     description: "/sc-explore BRD exploration and open-decision capture.",
     before: [
@@ -702,7 +718,7 @@ function usage() {
   node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.json --require-reduction 90 --repeat 3
 
 Default suite:
-  full framework load, all 16 public workflows, artifact surfaces, skills,
+  full framework load, all 17 public workflows, artifact surfaces, skills,
   templates, interface-design data/scripts, hooks, agents, workflows, and rules.
 
 Options:

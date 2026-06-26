@@ -20,6 +20,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 |----------|---------|
 | `sc-init.md` | New/imported project scan and rule reload via `/sc-init reload` |
 | `sc-status.md` | Session orientation and saved handoff resume |
+| `sc-geniusloop.md` | Proactive improvement ideation when goal queues are empty |
 | `sc-explore.md` | Fuzzy ideas, business direction, BRD creation, prototypes, and open decisions |
 | `sc-research.md` | Technical or domain research before planning |
 | `sc-prd.md` | PRD creation from an approved BRD |
@@ -38,6 +39,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 ## Routing
 
 - UI/frontend/mobile/chart work -> `sc-ui.md` and `interface-design`.
+- Empty goal queue with no active handoff, blockers, or failing verification -> `sc-geniusloop.md`.
 - Low-token routing -> `.agent/context/routing-index.md`, then a route contract when available.
 - Bugs, failures, regressions -> `sc-debug.md` and `systematic-debugging`.
 - Git branch, worktree, commit, push, or PR request -> `sc-go.md` and `git-workflow-operation`.
@@ -49,7 +51,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 
 ## Skill Priority
 
-1. Process skills: `agentic-delivery`, `brainstorming`, `systematic-debugging`, `writing-plans`, `executing-plans`, `issue-workflow`, `triage-workflow`.
+1. Process skills: `agentic-delivery`, `brainstorming`, `systematic-debugging`, `writing-plans`, `executing-plans`, `issue-workflow`, `triage-workflow`, `subagent-orchestration`.
 2. Product and design skills: `domain-modeling`, `codebase-design`, `prototyping`, `interface-design`.
 3. Quality skills: `test-driven-development`, `verification-before-completion`, `code-review`, `architecture-enforcement`.
 4. Git operation skills: `git-workflow-operation`.

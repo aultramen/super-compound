@@ -48,7 +48,27 @@ What happens:
 
 Use `/sc-init reload` when framework files changed and the session needs to refresh its mental model.
 
-## 2. Explore
+## 2. Genius Loop
+
+Run manually when you want proactive improvement ideas:
+
+```text
+/sc-geniusloop analytics dashboard
+```
+
+`/sc-status` can also recommend `/sc-geniusloop` when `.scratch/*/issues/` has no ready goal issues and there is no active handoff, blocker, or failing verification.
+
+The agent should:
+
+- Benchmark the current system against the user's stated intent
+- Generate at least 10 numbered `GL-*` improvement ideas
+- Dispatch read-only Brain evaluation through Beta, Alpha, Theta, and Delta filters
+- Keep only 1-2 Delta ideas
+- Route selected ideas back through `/sc-explore`, `/sc-prd`, `/sc-plan`, `/sc-ui`, `/sc-research`, or `/sc-audit`
+
+`/sc-geniusloop` does not implement code or bypass `BRD -> PRD -> FSD -> GOAL`.
+
+## 3. Explore
 
 Run:
 
@@ -90,7 +110,7 @@ Save the BRD to:
 docs/brd/brd-analytics-dashboard.md
 ```
 
-## 3. Write A PRD
+## 4. Write A PRD
 
 Run:
 
@@ -125,7 +145,7 @@ Good acceptance criteria are observable:
 - [ ] Dashboard works at desktop and mobile breakpoints.
 ```
 
-## 4. Plan
+## 5. Plan
 
 Run:
 
@@ -183,7 +203,7 @@ This should review the proposed FSD goals with you, then create:
 
 Each issue includes `Status`, `Parent FSD`, `Goal ID`, `Blocked by`, qualified upstream refs, technical refs, optional ADR refs, verification refs, stop conditions, and comments. It must not copy BRD, PRD, FSD, or ADR paragraphs. `Blocked by` links form an acyclic dependency graph so ready goals can be picked up in parallel.
 
-## 5. Git Start
+## 6. Git Start
 
 Before editing, preview the branch workflow:
 
@@ -205,7 +225,7 @@ Use worktrees only when parallel agents or multi-branch review need isolated fol
 /sc-go worktree feature/analytics-dashboard --path ../analytics-dashboard
 ```
 
-## 6. Work
+## 7. Work
 
 Run:
 
@@ -233,7 +253,7 @@ The agent should execute sequentially by default:
 
 Parallel execution is reserved for independent FSD goals with non-overlapping files and clear verification.
 
-## 7. Debug
+## 8. Debug
 
 If something fails, run:
 
@@ -251,7 +271,7 @@ Debugging should:
 
 Do not patch blindly.
 
-## 8. Review
+## 9. Review
 
 Run:
 
@@ -270,7 +290,7 @@ Review focuses on findings first:
 
 Findings should include file and line references when possible.
 
-## 9. Audit
+## 10. Audit
 
 Run:
 
@@ -298,7 +318,7 @@ Specific routes are allowed:
 
 Audit mode is read-only unless the user asks for fixes.
 
-## 10. Git Finish
+## 11. Git Finish
 
 After verification, review the finish workflow:
 
@@ -310,7 +330,7 @@ After verification, review the finish workflow:
 
 The preview includes `git status`, `git diff`, a sensitive-file warning before `git add .`, first push with `git push -u origin <branch>`, and the Pull Request template.
 
-## 11. UI
+## 12. UI
 
 Run:
 
@@ -336,7 +356,7 @@ python .agent/skills/interface-design/scripts/search.py "neo brutalism mobile" -
 python .agent/skills/interface-design/scripts/search.py "bauhaus geometric" --domain typography
 ```
 
-## 12. Pause And Continue
+## 13. Pause And Continue
 
 When stopping mid-work:
 
@@ -358,7 +378,7 @@ Next session:
 
 The agent should read durable state and route to the next action.
 
-## 13. Compound
+## 14. Compound
 
 Run:
 
@@ -382,6 +402,7 @@ Save concise knowledge under `docs/solutions/` or related project docs.
 |---|---|
 | Initialize or reload | `/sc-init` |
 | Resume from disk state | `/sc-status` |
+| Generate proactive improvement ideas | `/sc-geniusloop` |
 | Shape fuzzy ideas | `/sc-explore` |
 | Gather evidence | `/sc-research` |
 | Write PRD product requirements | `/sc-prd` |
