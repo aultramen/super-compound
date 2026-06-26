@@ -49,6 +49,8 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 
 ## Skill Loading
 
+Use `.agent/context/` as the compact runtime layer before full workflow/skill/template reads. Load full `SKILL.md` files only when their detailed procedure is active, when editing/reviewing the skill, or when compact contracts are insufficient.
+
 Load skills only when their detailed procedure is relevant. Announce the skill and follow its `SKILL.md`.
 
 Common routes:
@@ -72,6 +74,7 @@ Before editing:
 - Check git status before large edits.
 - Preserve user changes and unrelated dirty work.
 - For product work, read only the necessary BRD, PRD, FSD, goal issue, and accepted ADR references before editing.
+- For framework work, prefer `.agent/context/routing-index.md`, route contracts, skill contracts, and template skeletons before full skills/templates.
 
 During work:
 
@@ -116,6 +119,8 @@ python .agent/skills/interface-design/scripts/search.py "performance trackBy" --
 ```
 
 Use the current `interface-design` skill name in active docs and workflows.
+
+Interface-design data must be retrieved through `scripts/search.py`; do not preload CSV files into model context.
 
 ## Breaking Compatibility Notes
 

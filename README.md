@@ -12,7 +12,9 @@ It keeps the public command surface small, pushes detailed procedures into skill
 - Full BRD/PRD/FSD/optional ADR templates under `.agent/templates/agentic-delivery/`
 - Local Markdown goal issue pointers under `.scratch/<feature>/issues/`
 - Concise always-on rules under `.agent/rules/`
+- Compact runtime contracts under `.agent/context/` for routing, skill selection, template skeletons, and context budget gates
 - Deterministic local hooks under `.agent/hooks/`
+- Deterministic token benchmark harness under `.agent/tools/`
 - Data-backed interface design search through `interface-design`
 - Durable project memory through `docs/STATE.md`, `.continue-here.md`, and `docs/solutions/`
 
@@ -156,6 +158,8 @@ python .agent/skills/interface-design/scripts/search.py "SaaS dashboard" --desig
 
 Domains include `product`, `style`, `color`, `typography`, `landing`, `chart`, `ux`, `web`, `app`, `icons`, `react`, and `google-fonts`.
 
+Use interface-design by retrieval: run targeted searches and read the returned rows. Do not preload `.agent/skills/interface-design/data/**/*.csv` into agent context.
+
 The CSV loader fails fast when a row does not match its header width, so malformed reference data is caught during validation rather than silently producing bad search results.
 
 ## Repository Layout
@@ -163,10 +167,13 @@ The CSV loader fails fast when a row does not match its header width, so malform
 ```text
 .agent/
   agents/       dedicated agent prompts
+  context/      compact runtime routing, skill, template, and budget contracts
+  benchmarks/   reproducible token baseline and benchmark evidence
   hooks/        deterministic local hook scripts
   rules/        concise always-on framework rules
   skills/       modular task procedures
   templates/    BRD, PRD, FSD, and optional ADR templates
+  tools/        deterministic local framework utilities
   workflows/    15 public workflows
 .claude/        Claude Code path-scoped rules
 docs/           engineering standards, archives, and runtime project docs
@@ -205,7 +212,10 @@ node --check .agent/hooks/stop-check.js
 node .agent/hooks/test-hooks-security.js
 python .agent/skills/interface-design/scripts/test_design_system_security.py
 python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domain web
+node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --require-reduction 90 --repeat 3
 ```
+
+The token benchmark covers the full framework load, all 15 public workflows, artifact generation surfaces, and related hotspots such as skills, templates, interface-design data/scripts, hooks, agent prompts, workflows, and rules.
 
 Also check:
 
@@ -215,7 +225,9 @@ Also check:
 - FSD goal issue examples use qualified references and do not duplicate BRD/PRD/FSD/ADR prose
 - Active docs use `docs/solutions/adr-####-<slug>.md` for linked ADRs
 - Interface CSV rows match header widths
+- Interface-design runtime guidance uses search-only retrieval, not CSV preload
 - Design-system persistence rejects path traversal and requires `--overwrite` for existing files
 - Global Claude hook settings use absolute script paths, not project-relative `.agent/hooks/...` commands
 - Old workflow and skill names are not referenced in active docs
+- Comprehensive token benchmark PASS is observed 3 consecutive times with every scenario above 90% reduction
 - `docs/engineering-standards.md` and archive docs are not ignored
