@@ -11,6 +11,10 @@ Use data-backed interface design guidance before implementing UI. This skill sea
 
 **Announce:** "I'm using the interface-design skill to ground this UI work in the design guidance database."
 
+## Runtime Data Loading
+
+Use this skill by retrieval. Run `scripts/search.py` and read the returned rows; do not paste or preload `.agent/skills/interface-design/data/**/*.csv` into model context. Load raw CSV files only when editing or validating the data itself.
+
 ## Workflow
 
 1. Identify the product type, audience, platform, page/screen, stack, and any style constraints from the request and project config.

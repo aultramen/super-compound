@@ -11,11 +11,13 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 ## Repository Map
 
 - `.agent/rules/`: Antigravity workspace rules. Keep each rule file small enough for Antigravity's rule-size constraints.
+- `.agent/context/`: compact routing, skill, template, and budget contracts for low-token runtime loading.
 - `.agent/workflows/`: command-style workflows such as explore, plan, work, review, audit, status, and pause.
 - `.agent/skills/`: progressive instruction packs. Each skill owns its detailed procedure in `SKILL.md`.
 - `.agent/templates/`: reusable BRD, PRD, FSD, and optional ADR templates loaded on demand.
 - `.agent/agents/`: dedicated agent prompts for architecture, review, E2E, docs, and build fixes.
 - `.agent/hooks/`: deterministic hook configuration and scripts.
+- `.agent/tools/`: deterministic local framework utilities such as token benchmarking.
 - `SUPER-COMPOUND.md`: concise root rules for Claude-style usage.
 - `README.md`: installation, features, compatibility, and user-facing setup.
 - `WALKTHROUGH.md`: extended walkthrough and examples.
@@ -37,6 +39,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - `.claude/rules/*.md` is for Claude Code instructions that should load only for matching paths.
 - `docs/engineering-standards.md` preserves the long engineering reference from the old monolithic `CLAUDE.md`; read it only when broad standards guidance is needed.
 - Use skills, workflows, and normal docs for long procedures instead of expanding startup memory.
+- Use `.agent/context/` contracts as the first runtime layer; load full workflows, skills, templates, or CSV data only when the active task needs their detail.
 
 ## Working Agreement
 
@@ -50,6 +53,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 ## Super Compound Conventions
 
 - Rules in `.agent/rules/` are high-level and always-on for Antigravity; keep them focused.
+- Context contracts in `.agent/context/` are compact runtime indexes; keep them shorter than the full workflows/skills/templates they route to.
 - Skills in `.agent/skills/*/SKILL.md` hold detailed, task-specific procedures and may be longer.
 - Workflows in `.agent/workflows/` should route work clearly and avoid thin aliases unless they are explicitly part of the public interface.
 - Agent prompts in `.agent/agents/` should remain role-specific and compatible with the model notes already present.

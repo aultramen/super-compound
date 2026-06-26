@@ -1,0 +1,577 @@
+{
+  "metric": "deterministic_estimated_tokens_v1",
+  "generatedAt": "2026-06-26T15:07:42.202Z",
+  "scenarios": {
+    "full-framework-load": {
+      "tokens": 516436,
+      "chars": 2045234,
+      "bytes": 2051961,
+      "fileCount": 98,
+      "files": [
+        ".agent/rules/project-config.md",
+        ".agent/rules/quality-gates.md",
+        ".agent/rules/super-compound.md",
+        ".agent/workflows/sc-audit.md",
+        ".agent/workflows/sc-compound.md",
+        ".agent/workflows/sc-debug.md",
+        ".agent/workflows/sc-eval.md",
+        ".agent/workflows/sc-explore.md",
+        ".agent/workflows/sc-init.md",
+        ".agent/workflows/sc-launch.md",
+        ".agent/workflows/sc-pause.md",
+        ".agent/workflows/sc-plan.md",
+        ".agent/workflows/sc-prd.md",
+        ".agent/workflows/sc-research.md",
+        ".agent/workflows/sc-review.md",
+        ".agent/workflows/sc-status.md",
+        ".agent/workflows/sc-ui.md",
+        ".agent/workflows/sc-work.md",
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/architecture-enforcement/SKILL.md",
+        ".agent/skills/brainstorming/SKILL.md",
+        ".agent/skills/checkpoint-protocol/SKILL.md",
+        ".agent/skills/code-review/SKILL.md",
+        ".agent/skills/codebase-design/SKILL.md",
+        ".agent/skills/compatibility-check/SKILL.md",
+        ".agent/skills/context-engineering/SKILL.md",
+        ".agent/skills/context7-docs/SKILL.md",
+        ".agent/skills/data-privacy/SKILL.md",
+        ".agent/skills/domain-modeling/SKILL.md",
+        ".agent/skills/eval-harness/SKILL.md",
+        ".agent/skills/executing-plans/SKILL.md",
+        ".agent/skills/gap-closure/SKILL.md",
+        ".agent/skills/integration-checking/SKILL.md",
+        ".agent/skills/interface-design/SKILL.md",
+        ".agent/skills/issue-workflow/SKILL.md",
+        ".agent/skills/knowledge-compounding/SKILL.md",
+        ".agent/skills/parallel-execution/SKILL.md",
+        ".agent/skills/plan-verification/SKILL.md",
+        ".agent/skills/prd-generator/SKILL.md",
+        ".agent/skills/prototyping/SKILL.md",
+        ".agent/skills/secure-code-patterns/SKILL.md",
+        ".agent/skills/security-audit/SKILL.md",
+        ".agent/skills/skill-authoring/SKILL.md",
+        ".agent/skills/state-management/SKILL.md",
+        ".agent/skills/subagent-orchestration/SKILL.md",
+        ".agent/skills/systematic-debugging/SKILL.md",
+        ".agent/skills/test-driven-development/SKILL.md",
+        ".agent/skills/threat-modeling/SKILL.md",
+        ".agent/skills/todo-management/SKILL.md",
+        ".agent/skills/triage-workflow/SKILL.md",
+        ".agent/skills/verification-before-completion/SKILL.md",
+        ".agent/skills/writing-plans/SKILL.md",
+        ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+        ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+        ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+        ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md",
+        ".agent/hooks/lib/hook-utils.js",
+        ".agent/hooks/pre-compact.js",
+        ".agent/hooks/session-end.js",
+        ".agent/hooks/stop-check.js",
+        ".agent/hooks/suggest-compact.js",
+        ".agent/hooks/test-hooks-security.js",
+        ".agent/hooks/hooks.json",
+        ".agent/hooks/hooks.project.json",
+        ".agent/agents/architect.md",
+        ".agent/agents/build-fixer.md",
+        ".agent/agents/code-reviewer.md",
+        ".agent/agents/doc-updater.md",
+        ".agent/agents/e2e-runner.md",
+        ".agent/skills/interface-design/data/app-interface.csv",
+        ".agent/skills/interface-design/data/charts.csv",
+        ".agent/skills/interface-design/data/colors.csv",
+        ".agent/skills/interface-design/data/google-fonts.csv",
+        ".agent/skills/interface-design/data/icons.csv",
+        ".agent/skills/interface-design/data/landing.csv",
+        ".agent/skills/interface-design/data/products.csv",
+        ".agent/skills/interface-design/data/react-performance.csv",
+        ".agent/skills/interface-design/data/stacks/angular.csv",
+        ".agent/skills/interface-design/data/stacks/astro.csv",
+        ".agent/skills/interface-design/data/stacks/flutter.csv",
+        ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+        ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+        ".agent/skills/interface-design/data/stacks/laravel.csv",
+        ".agent/skills/interface-design/data/stacks/nextjs.csv",
+        ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+        ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+        ".agent/skills/interface-design/data/stacks/react-native.csv",
+        ".agent/skills/interface-design/data/stacks/react.csv",
+        ".agent/skills/interface-design/data/stacks/shadcn.csv",
+        ".agent/skills/interface-design/data/stacks/svelte.csv",
+        ".agent/skills/interface-design/data/stacks/swiftui.csv",
+        ".agent/skills/interface-design/data/stacks/threejs.csv",
+        ".agent/skills/interface-design/data/stacks/vue.csv",
+        ".agent/skills/interface-design/data/styles.csv",
+        ".agent/skills/interface-design/data/typography.csv",
+        ".agent/skills/interface-design/data/ui-reasoning.csv",
+        ".agent/skills/interface-design/data/ux-guidelines.csv",
+        ".agent/skills/interface-design/data/web-interface.csv"
+      ]
+    },
+    "sc-init": {
+      "tokens": 4490,
+      "chars": 19269,
+      "bytes": 19269,
+      "fileCount": 4,
+      "files": [
+        ".agent/rules/project-config.md",
+        ".agent/workflows/sc-init.md",
+        "README.md",
+        "AGENTS.md"
+      ]
+    },
+    "sc-status": {
+      "tokens": 2015,
+      "chars": 8287,
+      "bytes": 8287,
+      "fileCount": 3,
+      "files": [
+        ".agent/workflows/sc-status.md",
+        ".agent/skills/state-management/SKILL.md",
+        ".agent/skills/context-engineering/SKILL.md"
+      ]
+    },
+    "sc-explore": {
+      "tokens": 32334,
+      "chars": 120216,
+      "bytes": 120419,
+      "fileCount": 7,
+      "files": [
+        ".agent/workflows/sc-explore.md",
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/brainstorming/SKILL.md",
+        ".agent/skills/domain-modeling/SKILL.md",
+        ".agent/skills/codebase-design/SKILL.md",
+        ".agent/skills/prototyping/SKILL.md",
+        ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md"
+      ]
+    },
+    "sc-research": {
+      "tokens": 2263,
+      "chars": 9679,
+      "bytes": 9727,
+      "fileCount": 3,
+      "files": [
+        ".agent/workflows/sc-research.md",
+        ".agent/skills/context7-docs/SKILL.md",
+        ".agent/skills/compatibility-check/SKILL.md"
+      ]
+    },
+    "sc-prd": {
+      "tokens": 23435,
+      "chars": 89028,
+      "bytes": 89186,
+      "fileCount": 6,
+      "files": [
+        ".agent/workflows/sc-prd.md",
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/prd-generator/SKILL.md",
+        ".agent/skills/domain-modeling/SKILL.md",
+        ".agent/skills/codebase-design/SKILL.md",
+        ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+      ]
+    },
+    "sc-plan": {
+      "tokens": 59150,
+      "chars": 225015,
+      "bytes": 225443,
+      "fileCount": 12,
+      "files": [
+        ".agent/rules/super-compound.md",
+        ".agent/rules/quality-gates.md",
+        ".agent/workflows/sc-plan.md",
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/writing-plans/SKILL.md",
+        ".agent/skills/issue-workflow/SKILL.md",
+        ".agent/skills/triage-workflow/SKILL.md",
+        ".agent/skills/plan-verification/SKILL.md",
+        ".agent/skills/domain-modeling/SKILL.md",
+        ".agent/skills/codebase-design/SKILL.md",
+        ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+        ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md"
+      ]
+    },
+    "sc-eval": {
+      "tokens": 1886,
+      "chars": 6657,
+      "bytes": 6725,
+      "fileCount": 2,
+      "files": [
+        ".agent/workflows/sc-eval.md",
+        ".agent/skills/eval-harness/SKILL.md"
+      ]
+    },
+    "sc-work": {
+      "tokens": 11412,
+      "chars": 47064,
+      "bytes": 47346,
+      "fileCount": 10,
+      "files": [
+        ".agent/rules/super-compound.md",
+        ".agent/rules/quality-gates.md",
+        ".agent/workflows/sc-work.md",
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/context-engineering/SKILL.md",
+        ".agent/skills/executing-plans/SKILL.md",
+        ".agent/skills/test-driven-development/SKILL.md",
+        ".agent/skills/verification-before-completion/SKILL.md",
+        ".agent/skills/parallel-execution/SKILL.md",
+        ".agent/skills/integration-checking/SKILL.md"
+      ]
+    },
+    "sc-debug": {
+      "tokens": 2271,
+      "chars": 9590,
+      "bytes": 9666,
+      "fileCount": 2,
+      "files": [
+        ".agent/workflows/sc-debug.md",
+        ".agent/skills/systematic-debugging/SKILL.md"
+      ]
+    },
+    "sc-review": {
+      "tokens": 1942,
+      "chars": 8091,
+      "bytes": 8151,
+      "fileCount": 2,
+      "files": [
+        ".agent/workflows/sc-review.md",
+        ".agent/skills/code-review/SKILL.md"
+      ]
+    },
+    "sc-audit": {
+      "tokens": 11903,
+      "chars": 47723,
+      "bytes": 48535,
+      "fileCount": 6,
+      "files": [
+        ".agent/workflows/sc-audit.md",
+        ".agent/skills/security-audit/SKILL.md",
+        ".agent/skills/compatibility-check/SKILL.md",
+        ".agent/skills/threat-modeling/SKILL.md",
+        ".agent/skills/data-privacy/SKILL.md",
+        ".agent/skills/secure-code-patterns/SKILL.md"
+      ]
+    },
+    "sc-compound": {
+      "tokens": 1879,
+      "chars": 7738,
+      "bytes": 7792,
+      "fileCount": 2,
+      "files": [
+        ".agent/workflows/sc-compound.md",
+        ".agent/skills/knowledge-compounding/SKILL.md"
+      ]
+    },
+    "sc-pause": {
+      "tokens": 1980,
+      "chars": 8253,
+      "bytes": 8253,
+      "fileCount": 3,
+      "files": [
+        ".agent/workflows/sc-pause.md",
+        ".agent/skills/state-management/SKILL.md",
+        ".agent/skills/context-engineering/SKILL.md"
+      ]
+    },
+    "sc-launch": {
+      "tokens": 112816,
+      "chars": 425157,
+      "bytes": 426060,
+      "fileCount": 28,
+      "files": [
+        ".agent/workflows/sc-audit.md",
+        ".agent/workflows/sc-compound.md",
+        ".agent/workflows/sc-debug.md",
+        ".agent/workflows/sc-eval.md",
+        ".agent/workflows/sc-explore.md",
+        ".agent/workflows/sc-init.md",
+        ".agent/workflows/sc-launch.md",
+        ".agent/workflows/sc-pause.md",
+        ".agent/workflows/sc-plan.md",
+        ".agent/workflows/sc-prd.md",
+        ".agent/workflows/sc-research.md",
+        ".agent/workflows/sc-review.md",
+        ".agent/workflows/sc-status.md",
+        ".agent/workflows/sc-ui.md",
+        ".agent/workflows/sc-work.md",
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/brainstorming/SKILL.md",
+        ".agent/skills/prd-generator/SKILL.md",
+        ".agent/skills/writing-plans/SKILL.md",
+        ".agent/skills/issue-workflow/SKILL.md",
+        ".agent/skills/executing-plans/SKILL.md",
+        ".agent/skills/code-review/SKILL.md",
+        ".agent/skills/security-audit/SKILL.md",
+        ".agent/skills/knowledge-compounding/SKILL.md",
+        ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+        ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+        ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+        ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+      ]
+    },
+    "sc-ui": {
+      "tokens": 374638,
+      "chars": 1501050,
+      "bytes": 1504497,
+      "fileCount": 36,
+      "files": [
+        ".agent/rules/super-compound.md",
+        ".agent/workflows/sc-ui.md",
+        ".agent/skills/interface-design/SKILL.md",
+        ".agent/skills/interface-design/scripts/core.py",
+        ".agent/skills/interface-design/scripts/design_system.py",
+        ".agent/skills/interface-design/scripts/search.py",
+        ".agent/skills/interface-design/scripts/test_design_system_security.py",
+        ".agent/skills/interface-design/data/app-interface.csv",
+        ".agent/skills/interface-design/data/charts.csv",
+        ".agent/skills/interface-design/data/colors.csv",
+        ".agent/skills/interface-design/data/google-fonts.csv",
+        ".agent/skills/interface-design/data/icons.csv",
+        ".agent/skills/interface-design/data/landing.csv",
+        ".agent/skills/interface-design/data/products.csv",
+        ".agent/skills/interface-design/data/react-performance.csv",
+        ".agent/skills/interface-design/data/stacks/angular.csv",
+        ".agent/skills/interface-design/data/stacks/astro.csv",
+        ".agent/skills/interface-design/data/stacks/flutter.csv",
+        ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+        ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+        ".agent/skills/interface-design/data/stacks/laravel.csv",
+        ".agent/skills/interface-design/data/stacks/nextjs.csv",
+        ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+        ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+        ".agent/skills/interface-design/data/stacks/react-native.csv",
+        ".agent/skills/interface-design/data/stacks/react.csv",
+        ".agent/skills/interface-design/data/stacks/shadcn.csv",
+        ".agent/skills/interface-design/data/stacks/svelte.csv",
+        ".agent/skills/interface-design/data/stacks/swiftui.csv",
+        ".agent/skills/interface-design/data/stacks/threejs.csv",
+        ".agent/skills/interface-design/data/stacks/vue.csv",
+        ".agent/skills/interface-design/data/styles.csv",
+        ".agent/skills/interface-design/data/typography.csv",
+        ".agent/skills/interface-design/data/ui-reasoning.csv",
+        ".agent/skills/interface-design/data/ux-guidelines.csv",
+        ".agent/skills/interface-design/data/web-interface.csv"
+      ]
+    },
+    "artifact-output-brd-prd-fsd-issue": {
+      "tokens": 98427,
+      "chars": 362553,
+      "bytes": 363342,
+      "fileCount": 6,
+      "files": [
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/issue-workflow/SKILL.md",
+        ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+        ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md",
+        ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+        ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md"
+      ]
+    },
+    "related-all-skills": {
+      "tokens": 52186,
+      "chars": 211670,
+      "bytes": 214177,
+      "fileCount": 34,
+      "files": [
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/architecture-enforcement/SKILL.md",
+        ".agent/skills/brainstorming/SKILL.md",
+        ".agent/skills/checkpoint-protocol/SKILL.md",
+        ".agent/skills/code-review/SKILL.md",
+        ".agent/skills/codebase-design/SKILL.md",
+        ".agent/skills/compatibility-check/SKILL.md",
+        ".agent/skills/context-engineering/SKILL.md",
+        ".agent/skills/context7-docs/SKILL.md",
+        ".agent/skills/data-privacy/SKILL.md",
+        ".agent/skills/domain-modeling/SKILL.md",
+        ".agent/skills/eval-harness/SKILL.md",
+        ".agent/skills/executing-plans/SKILL.md",
+        ".agent/skills/gap-closure/SKILL.md",
+        ".agent/skills/integration-checking/SKILL.md",
+        ".agent/skills/interface-design/SKILL.md",
+        ".agent/skills/issue-workflow/SKILL.md",
+        ".agent/skills/knowledge-compounding/SKILL.md",
+        ".agent/skills/parallel-execution/SKILL.md",
+        ".agent/skills/plan-verification/SKILL.md",
+        ".agent/skills/prd-generator/SKILL.md",
+        ".agent/skills/prototyping/SKILL.md",
+        ".agent/skills/secure-code-patterns/SKILL.md",
+        ".agent/skills/security-audit/SKILL.md",
+        ".agent/skills/skill-authoring/SKILL.md",
+        ".agent/skills/state-management/SKILL.md",
+        ".agent/skills/subagent-orchestration/SKILL.md",
+        ".agent/skills/systematic-debugging/SKILL.md",
+        ".agent/skills/test-driven-development/SKILL.md",
+        ".agent/skills/threat-modeling/SKILL.md",
+        ".agent/skills/todo-management/SKILL.md",
+        ".agent/skills/triage-workflow/SKILL.md",
+        ".agent/skills/verification-before-completion/SKILL.md",
+        ".agent/skills/writing-plans/SKILL.md"
+      ]
+    },
+    "related-delivery-planning-skills": {
+      "tokens": 7795,
+      "chars": 33077,
+      "bytes": 33077,
+      "fileCount": 5,
+      "files": [
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/writing-plans/SKILL.md",
+        ".agent/skills/issue-workflow/SKILL.md",
+        ".agent/skills/plan-verification/SKILL.md",
+        ".agent/skills/prd-generator/SKILL.md"
+      ]
+    },
+    "related-execution-verification-skills": {
+      "tokens": 6800,
+      "chars": 28166,
+      "bytes": 28408,
+      "fileCount": 5,
+      "files": [
+        ".agent/skills/executing-plans/SKILL.md",
+        ".agent/skills/test-driven-development/SKILL.md",
+        ".agent/skills/verification-before-completion/SKILL.md",
+        ".agent/skills/context-engineering/SKILL.md",
+        ".agent/skills/integration-checking/SKILL.md"
+      ]
+    },
+    "related-risk-audit-skills": {
+      "tokens": 11572,
+      "chars": 46344,
+      "bytes": 47156,
+      "fileCount": 5,
+      "files": [
+        ".agent/skills/security-audit/SKILL.md",
+        ".agent/skills/compatibility-check/SKILL.md",
+        ".agent/skills/threat-modeling/SKILL.md",
+        ".agent/skills/data-privacy/SKILL.md",
+        ".agent/skills/secure-code-patterns/SKILL.md"
+      ]
+    },
+    "related-agentic-templates": {
+      "tokens": 95066,
+      "chars": 348899,
+      "bytes": 349688,
+      "fileCount": 4,
+      "files": [
+        ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+        ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+        ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+        ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+      ]
+    },
+    "related-interface-data": {
+      "tokens": 353236,
+      "chars": 1420447,
+      "bytes": 1423698,
+      "fileCount": 29,
+      "files": [
+        ".agent/skills/interface-design/data/app-interface.csv",
+        ".agent/skills/interface-design/data/charts.csv",
+        ".agent/skills/interface-design/data/colors.csv",
+        ".agent/skills/interface-design/data/google-fonts.csv",
+        ".agent/skills/interface-design/data/icons.csv",
+        ".agent/skills/interface-design/data/landing.csv",
+        ".agent/skills/interface-design/data/products.csv",
+        ".agent/skills/interface-design/data/react-performance.csv",
+        ".agent/skills/interface-design/data/stacks/angular.csv",
+        ".agent/skills/interface-design/data/stacks/astro.csv",
+        ".agent/skills/interface-design/data/stacks/flutter.csv",
+        ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+        ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+        ".agent/skills/interface-design/data/stacks/laravel.csv",
+        ".agent/skills/interface-design/data/stacks/nextjs.csv",
+        ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+        ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+        ".agent/skills/interface-design/data/stacks/react-native.csv",
+        ".agent/skills/interface-design/data/stacks/react.csv",
+        ".agent/skills/interface-design/data/stacks/shadcn.csv",
+        ".agent/skills/interface-design/data/stacks/svelte.csv",
+        ".agent/skills/interface-design/data/stacks/swiftui.csv",
+        ".agent/skills/interface-design/data/stacks/threejs.csv",
+        ".agent/skills/interface-design/data/stacks/vue.csv",
+        ".agent/skills/interface-design/data/styles.csv",
+        ".agent/skills/interface-design/data/typography.csv",
+        ".agent/skills/interface-design/data/ui-reasoning.csv",
+        ".agent/skills/interface-design/data/ux-guidelines.csv",
+        ".agent/skills/interface-design/data/web-interface.csv"
+      ]
+    },
+    "related-interface-scripts": {
+      "tokens": 19013,
+      "chars": 70874,
+      "bytes": 71070,
+      "fileCount": 4,
+      "files": [
+        ".agent/skills/interface-design/scripts/core.py",
+        ".agent/skills/interface-design/scripts/design_system.py",
+        ".agent/skills/interface-design/scripts/search.py",
+        ".agent/skills/interface-design/scripts/test_design_system_security.py"
+      ]
+    },
+    "related-hooks": {
+      "tokens": 4559,
+      "chars": 17222,
+      "bytes": 17248,
+      "fileCount": 8,
+      "files": [
+        ".agent/hooks/lib/hook-utils.js",
+        ".agent/hooks/pre-compact.js",
+        ".agent/hooks/session-end.js",
+        ".agent/hooks/stop-check.js",
+        ".agent/hooks/suggest-compact.js",
+        ".agent/hooks/test-hooks-security.js",
+        ".agent/hooks/hooks.json",
+        ".agent/hooks/hooks.project.json"
+      ]
+    },
+    "related-agents": {
+      "tokens": 5442,
+      "chars": 21551,
+      "bytes": 21705,
+      "fileCount": 5,
+      "files": [
+        ".agent/agents/architect.md",
+        ".agent/agents/build-fixer.md",
+        ".agent/agents/code-reviewer.md",
+        ".agent/agents/doc-updater.md",
+        ".agent/agents/e2e-runner.md"
+      ]
+    },
+    "related-all-workflows": {
+      "tokens": 4022,
+      "chars": 17079,
+      "bytes": 17079,
+      "fileCount": 15,
+      "files": [
+        ".agent/workflows/sc-audit.md",
+        ".agent/workflows/sc-compound.md",
+        ".agent/workflows/sc-debug.md",
+        ".agent/workflows/sc-eval.md",
+        ".agent/workflows/sc-explore.md",
+        ".agent/workflows/sc-init.md",
+        ".agent/workflows/sc-launch.md",
+        ".agent/workflows/sc-pause.md",
+        ".agent/workflows/sc-plan.md",
+        ".agent/workflows/sc-prd.md",
+        ".agent/workflows/sc-research.md",
+        ".agent/workflows/sc-review.md",
+        ".agent/workflows/sc-status.md",
+        ".agent/workflows/sc-ui.md",
+        ".agent/workflows/sc-work.md"
+      ]
+    },
+    "related-rules": {
+      "tokens": 1925,
+      "chars": 8366,
+      "bytes": 8366,
+      "fileCount": 3,
+      "files": [
+        ".agent/rules/project-config.md",
+        ".agent/rules/quality-gates.md",
+        ".agent/rules/super-compound.md"
+      ]
+    }
+  }
+}

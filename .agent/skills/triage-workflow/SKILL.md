@@ -11,7 +11,7 @@ Move raw requests and existing issue files through a small state machine until e
 
 Announce: "I'm using the triage-workflow skill to classify and prepare issues."
 
-Use this behind `/sc-plan` and `/sc-status`; do not add `/sc-triage`.
+Use this behind `/sc-plan` and `/sc-status`; do not add a standalone triage command.
 
 ## State Model
 

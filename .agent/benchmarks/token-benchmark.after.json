@@ -1,0 +1,3108 @@
+{
+  "metric": "deterministic_estimated_tokens_v1",
+  "generatedAt": "2026-06-26T15:15:34.905Z",
+  "repeat": 3,
+  "runs": [
+    {
+      "metric": "deterministic_estimated_tokens_v1",
+      "threshold": 90,
+      "generatedAt": "2026-06-26T15:15:34.607Z",
+      "scenarios": [
+        {
+          "name": "full-framework-load",
+          "description": "Always-on framework bootstrap without task-specific work.",
+          "before": {
+            "tokens": 516436,
+            "chars": 2045234,
+            "bytes": 2051961,
+            "fileCount": 98,
+            "files": [
+              ".agent/rules/project-config.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/rules/super-compound.md",
+              ".agent/workflows/sc-audit.md",
+              ".agent/workflows/sc-compound.md",
+              ".agent/workflows/sc-debug.md",
+              ".agent/workflows/sc-eval.md",
+              ".agent/workflows/sc-explore.md",
+              ".agent/workflows/sc-init.md",
+              ".agent/workflows/sc-launch.md",
+              ".agent/workflows/sc-pause.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/workflows/sc-prd.md",
+              ".agent/workflows/sc-research.md",
+              ".agent/workflows/sc-review.md",
+              ".agent/workflows/sc-status.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/workflows/sc-work.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/architecture-enforcement/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/checkpoint-protocol/SKILL.md",
+              ".agent/skills/code-review/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/context7-docs/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/eval-harness/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/gap-closure/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md",
+              ".agent/skills/interface-design/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/knowledge-compounding/SKILL.md",
+              ".agent/skills/parallel-execution/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/prototyping/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/skill-authoring/SKILL.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/subagent-orchestration/SKILL.md",
+              ".agent/skills/systematic-debugging/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/todo-management/SKILL.md",
+              ".agent/skills/triage-workflow/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/hooks/lib/hook-utils.js",
+              ".agent/hooks/pre-compact.js",
+              ".agent/hooks/session-end.js",
+              ".agent/hooks/stop-check.js",
+              ".agent/hooks/suggest-compact.js",
+              ".agent/hooks/test-hooks-security.js",
+              ".agent/hooks/hooks.json",
+              ".agent/hooks/hooks.project.json",
+              ".agent/agents/architect.md",
+              ".agent/agents/build-fixer.md",
+              ".agent/agents/code-reviewer.md",
+              ".agent/agents/doc-updater.md",
+              ".agent/agents/e2e-runner.md",
+              ".agent/skills/interface-design/data/app-interface.csv",
+              ".agent/skills/interface-design/data/charts.csv",
+              ".agent/skills/interface-design/data/colors.csv",
+              ".agent/skills/interface-design/data/google-fonts.csv",
+              ".agent/skills/interface-design/data/icons.csv",
+              ".agent/skills/interface-design/data/landing.csv",
+              ".agent/skills/interface-design/data/products.csv",
+              ".agent/skills/interface-design/data/react-performance.csv",
+              ".agent/skills/interface-design/data/stacks/angular.csv",
+              ".agent/skills/interface-design/data/stacks/astro.csv",
+              ".agent/skills/interface-design/data/stacks/flutter.csv",
+              ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+              ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+              ".agent/skills/interface-design/data/stacks/laravel.csv",
+              ".agent/skills/interface-design/data/stacks/nextjs.csv",
+              ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+              ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+              ".agent/skills/interface-design/data/stacks/react-native.csv",
+              ".agent/skills/interface-design/data/stacks/react.csv",
+              ".agent/skills/interface-design/data/stacks/shadcn.csv",
+              ".agent/skills/interface-design/data/stacks/svelte.csv",
+              ".agent/skills/interface-design/data/stacks/swiftui.csv",
+              ".agent/skills/interface-design/data/stacks/threejs.csv",
+              ".agent/skills/interface-design/data/stacks/vue.csv",
+              ".agent/skills/interface-design/data/styles.csv",
+              ".agent/skills/interface-design/data/typography.csv",
+              ".agent/skills/interface-design/data/ui-reasoning.csv",
+              ".agent/skills/interface-design/data/ux-guidelines.csv",
+              ".agent/skills/interface-design/data/web-interface.csv"
+            ]
+          },
+          "after": {
+            "tokens": 1792,
+            "chars": 6851,
+            "bytes": 6851,
+            "fileCount": 6,
+            "files": [
+              ".agent/context/rule-index.md",
+              ".agent/context/workflow-dispatch.md",
+              ".agent/context/routing-index.md",
+              ".agent/context/skill-index.md",
+              ".agent/context/template-index.md",
+              ".agent/context/token-budget-gates.md"
+            ]
+          },
+          "reductionPercent": 99.65300637445878,
+          "pass": true
+        },
+        {
+          "name": "sc-init",
+          "description": "/sc-init project scan and config orientation.",
+          "before": {
+            "tokens": 4490,
+            "chars": 19269,
+            "bytes": 19269,
+            "fileCount": 4,
+            "files": [
+              ".agent/rules/project-config.md",
+              ".agent/workflows/sc-init.md",
+              "README.md",
+              "AGENTS.md"
+            ]
+          },
+          "after": {
+            "tokens": 57,
+            "chars": 296,
+            "bytes": 296,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-init.contract.md"
+            ]
+          },
+          "reductionPercent": 98.73051224944321,
+          "pass": true
+        },
+        {
+          "name": "sc-status",
+          "description": "/sc-status handoff, state, issue dashboard, and route selection.",
+          "before": {
+            "tokens": 2015,
+            "chars": 8287,
+            "bytes": 8287,
+            "fileCount": 3,
+            "files": [
+              ".agent/workflows/sc-status.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 79,
+            "chars": 299,
+            "bytes": 299,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-status.contract.md"
+            ]
+          },
+          "reductionPercent": 96.07940446650124,
+          "pass": true
+        },
+        {
+          "name": "sc-explore",
+          "description": "/sc-explore BRD exploration and open-decision capture.",
+          "before": {
+            "tokens": 32334,
+            "chars": 120216,
+            "bytes": 120419,
+            "fileCount": 7,
+            "files": [
+              ".agent/workflows/sc-explore.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/skills/prototyping/SKILL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 217,
+            "chars": 1044,
+            "bytes": 1044,
+            "fileCount": 2,
+            "files": [
+              ".agent/context/workflows/sc-explore.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 99.32887981691098,
+          "pass": true
+        },
+        {
+          "name": "sc-research",
+          "description": "/sc-research local and official-doc evidence gathering.",
+          "before": {
+            "tokens": 2263,
+            "chars": 9679,
+            "bytes": 9727,
+            "fileCount": 3,
+            "files": [
+              ".agent/workflows/sc-research.md",
+              ".agent/skills/context7-docs/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 54,
+            "chars": 280,
+            "bytes": 280,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-research.contract.md"
+            ]
+          },
+          "reductionPercent": 97.61378700839593,
+          "pass": true
+        },
+        {
+          "name": "sc-prd",
+          "description": "/sc-prd PRD generation from approved BRD.",
+          "before": {
+            "tokens": 23435,
+            "chars": 89028,
+            "bytes": 89186,
+            "fileCount": 6,
+            "files": [
+              ".agent/workflows/sc-prd.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 234,
+            "chars": 1059,
+            "bytes": 1059,
+            "fileCount": 2,
+            "files": [
+              ".agent/context/workflows/sc-prd.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 99.00149349263921,
+          "pass": true
+        },
+        {
+          "name": "sc-plan",
+          "description": "/sc-plan FSD planning and issue pointer routing.",
+          "before": {
+            "tokens": 59150,
+            "chars": 225015,
+            "bytes": 225443,
+            "fileCount": 12,
+            "files": [
+              ".agent/rules/super-compound.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/triage-workflow/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md"
+            ]
+          },
+          "after": {
+            "tokens": 1373,
+            "chars": 5456,
+            "bytes": 5456,
+            "fileCount": 6,
+            "files": [
+              ".agent/workflows/sc-plan.md",
+              ".agent/context/workflows/sc-plan.contract.md",
+              ".agent/context/skills/sc-plan.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 97.67878275570583,
+          "pass": true
+        },
+        {
+          "name": "sc-eval",
+          "description": "/sc-eval measurable pass/fail criteria and eval runs.",
+          "before": {
+            "tokens": 1886,
+            "chars": 6657,
+            "bytes": 6725,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-eval.md",
+              ".agent/skills/eval-harness/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 55,
+            "chars": 251,
+            "bytes": 251,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-eval.contract.md"
+            ]
+          },
+          "reductionPercent": 97.08377518557795,
+          "pass": true
+        },
+        {
+          "name": "sc-work",
+          "description": "/sc-work goal execution with focused context.",
+          "before": {
+            "tokens": 11412,
+            "chars": 47064,
+            "bytes": 47346,
+            "fileCount": 10,
+            "files": [
+              ".agent/rules/super-compound.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/workflows/sc-work.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/parallel-execution/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 453,
+            "chars": 1706,
+            "bytes": 1706,
+            "fileCount": 3,
+            "files": [
+              ".agent/context/workflows/sc-work.contract.md",
+              ".agent/context/skills/sc-work.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 96.03049421661409,
+          "pass": true
+        },
+        {
+          "name": "sc-debug",
+          "description": "/sc-debug reproduce, root cause, fix, and verify.",
+          "before": {
+            "tokens": 2271,
+            "chars": 9590,
+            "bytes": 9666,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-debug.md",
+              ".agent/skills/systematic-debugging/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 51,
+            "chars": 272,
+            "bytes": 272,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-debug.contract.md"
+            ]
+          },
+          "reductionPercent": 97.75429326287978,
+          "pass": true
+        },
+        {
+          "name": "sc-review",
+          "description": "/sc-review findings-first review.",
+          "before": {
+            "tokens": 1942,
+            "chars": 8091,
+            "bytes": 8151,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-review.md",
+              ".agent/skills/code-review/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 45,
+            "chars": 251,
+            "bytes": 251,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-review.contract.md"
+            ]
+          },
+          "reductionPercent": 97.68280123583935,
+          "pass": true
+        },
+        {
+          "name": "sc-audit",
+          "description": "/sc-audit security, compatibility, compliance, and readiness audit.",
+          "before": {
+            "tokens": 11903,
+            "chars": 47723,
+            "bytes": 48535,
+            "fileCount": 6,
+            "files": [
+              ".agent/workflows/sc-audit.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 65,
+            "chars": 314,
+            "bytes": 314,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-audit.contract.md"
+            ]
+          },
+          "reductionPercent": 99.45391918003864,
+          "pass": true
+        },
+        {
+          "name": "sc-compound",
+          "description": "/sc-compound reusable knowledge capture.",
+          "before": {
+            "tokens": 1879,
+            "chars": 7738,
+            "bytes": 7792,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-compound.md",
+              ".agent/skills/knowledge-compounding/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 53,
+            "chars": 253,
+            "bytes": 253,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-compound.contract.md"
+            ]
+          },
+          "reductionPercent": 97.17935071846728,
+          "pass": true
+        },
+        {
+          "name": "sc-pause",
+          "description": "/sc-pause durable handoff before stopping.",
+          "before": {
+            "tokens": 1980,
+            "chars": 8253,
+            "bytes": 8253,
+            "fileCount": 3,
+            "files": [
+              ".agent/workflows/sc-pause.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 59,
+            "chars": 280,
+            "bytes": 280,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-pause.contract.md"
+            ]
+          },
+          "reductionPercent": 97.02020202020202,
+          "pass": true
+        },
+        {
+          "name": "sc-launch",
+          "description": "/sc-launch complete lifecycle routing.",
+          "before": {
+            "tokens": 112816,
+            "chars": 425157,
+            "bytes": 426060,
+            "fileCount": 28,
+            "files": [
+              ".agent/workflows/sc-audit.md",
+              ".agent/workflows/sc-compound.md",
+              ".agent/workflows/sc-debug.md",
+              ".agent/workflows/sc-eval.md",
+              ".agent/workflows/sc-explore.md",
+              ".agent/workflows/sc-init.md",
+              ".agent/workflows/sc-launch.md",
+              ".agent/workflows/sc-pause.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/workflows/sc-prd.md",
+              ".agent/workflows/sc-research.md",
+              ".agent/workflows/sc-review.md",
+              ".agent/workflows/sc-status.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/workflows/sc-work.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/code-review/SKILL.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/knowledge-compounding/SKILL.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 494,
+            "chars": 1786,
+            "bytes": 1786,
+            "fileCount": 3,
+            "files": [
+              ".agent/context/workflows/sc-launch.contract.md",
+              ".agent/context/workflow-dispatch.md",
+              ".agent/context/template-index.md"
+            ]
+          },
+          "reductionPercent": 99.5621188483903,
+          "pass": true
+        },
+        {
+          "name": "sc-ui",
+          "description": "/sc-ui interface-design search-only guidance.",
+          "before": {
+            "tokens": 374638,
+            "chars": 1501050,
+            "bytes": 1504497,
+            "fileCount": 36,
+            "files": [
+              ".agent/rules/super-compound.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/skills/interface-design/SKILL.md",
+              ".agent/skills/interface-design/scripts/core.py",
+              ".agent/skills/interface-design/scripts/design_system.py",
+              ".agent/skills/interface-design/scripts/search.py",
+              ".agent/skills/interface-design/scripts/test_design_system_security.py",
+              ".agent/skills/interface-design/data/app-interface.csv",
+              ".agent/skills/interface-design/data/charts.csv",
+              ".agent/skills/interface-design/data/colors.csv",
+              ".agent/skills/interface-design/data/google-fonts.csv",
+              ".agent/skills/interface-design/data/icons.csv",
+              ".agent/skills/interface-design/data/landing.csv",
+              ".agent/skills/interface-design/data/products.csv",
+              ".agent/skills/interface-design/data/react-performance.csv",
+              ".agent/skills/interface-design/data/stacks/angular.csv",
+              ".agent/skills/interface-design/data/stacks/astro.csv",
+              ".agent/skills/interface-design/data/stacks/flutter.csv",
+              ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+              ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+              ".agent/skills/interface-design/data/stacks/laravel.csv",
+              ".agent/skills/interface-design/data/stacks/nextjs.csv",
+              ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+              ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+              ".agent/skills/interface-design/data/stacks/react-native.csv",
+              ".agent/skills/interface-design/data/stacks/react.csv",
+              ".agent/skills/interface-design/data/stacks/shadcn.csv",
+              ".agent/skills/interface-design/data/stacks/svelte.csv",
+              ".agent/skills/interface-design/data/stacks/swiftui.csv",
+              ".agent/skills/interface-design/data/stacks/threejs.csv",
+              ".agent/skills/interface-design/data/stacks/vue.csv",
+              ".agent/skills/interface-design/data/styles.csv",
+              ".agent/skills/interface-design/data/typography.csv",
+              ".agent/skills/interface-design/data/ui-reasoning.csv",
+              ".agent/skills/interface-design/data/ux-guidelines.csv",
+              ".agent/skills/interface-design/data/web-interface.csv"
+            ]
+          },
+          "after": {
+            "tokens": 1700,
+            "chars": 6994,
+            "bytes": 6994,
+            "fileCount": 4,
+            "files": [
+              ".agent/workflows/sc-ui.md",
+              ".agent/context/workflows/sc-ui.contract.md",
+              ".agent/context/skills/interface-design.contract.md",
+              ".agent/skills/interface-design/SKILL.md"
+            ]
+          },
+          "reductionPercent": 99.54622862603367,
+          "pass": true
+        },
+        {
+          "name": "artifact-output-brd-prd-fsd-issue",
+          "description": "Generated BRD/PRD/FSD/ADR artifact and goal issue surfaces.",
+          "before": {
+            "tokens": 98427,
+            "chars": 362553,
+            "bytes": 363342,
+            "fileCount": 6,
+            "files": [
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md"
+            ]
+          },
+          "after": {
+            "tokens": 1150,
+            "chars": 4607,
+            "bytes": 4607,
+            "fileCount": 6,
+            "files": [
+              ".agent/context/template-index.md",
+              ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 98.83162140469587,
+          "pass": true
+        },
+        {
+          "name": "related-all-skills",
+          "description": "All skill procedures as a single preload hotspot.",
+          "before": {
+            "tokens": 52186,
+            "chars": 211670,
+            "bytes": 214177,
+            "fileCount": 34,
+            "files": [
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/architecture-enforcement/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/checkpoint-protocol/SKILL.md",
+              ".agent/skills/code-review/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/context7-docs/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/eval-harness/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/gap-closure/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md",
+              ".agent/skills/interface-design/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/knowledge-compounding/SKILL.md",
+              ".agent/skills/parallel-execution/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/prototyping/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/skill-authoring/SKILL.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/subagent-orchestration/SKILL.md",
+              ".agent/skills/systematic-debugging/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/todo-management/SKILL.md",
+              ".agent/skills/triage-workflow/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 441,
+            "chars": 1963,
+            "bytes": 1963,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skill-index.md"
+            ]
+          },
+          "reductionPercent": 99.1549457708964,
+          "pass": true
+        },
+        {
+          "name": "related-delivery-planning-skills",
+          "description": "Agentic delivery, PRD/FSD planning, issue, and verification skills.",
+          "before": {
+            "tokens": 7795,
+            "chars": 33077,
+            "bytes": 33077,
+            "fileCount": 5,
+            "files": [
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 74,
+            "chars": 305,
+            "bytes": 305,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/delivery-planning.contract.md"
+            ]
+          },
+          "reductionPercent": 99.05067350865939,
+          "pass": true
+        },
+        {
+          "name": "related-execution-verification-skills",
+          "description": "Execution, context, TDD, verification, and integration skills.",
+          "before": {
+            "tokens": 6800,
+            "chars": 28166,
+            "bytes": 28408,
+            "fileCount": 5,
+            "files": [
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 58,
+            "chars": 334,
+            "bytes": 334,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/execution-verification.contract.md"
+            ]
+          },
+          "reductionPercent": 99.1470588235294,
+          "pass": true
+        },
+        {
+          "name": "related-risk-audit-skills",
+          "description": "Security, compatibility, threat, privacy, and secure-code skills.",
+          "before": {
+            "tokens": 11572,
+            "chars": 46344,
+            "bytes": 47156,
+            "fileCount": 5,
+            "files": [
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 64,
+            "chars": 309,
+            "bytes": 309,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/risk-audit.contract.md"
+            ]
+          },
+          "reductionPercent": 99.44694089180781,
+          "pass": true
+        },
+        {
+          "name": "related-agentic-templates",
+          "description": "Full BRD/PRD/FSD/ADR templates as a preload hotspot.",
+          "before": {
+            "tokens": 95066,
+            "chars": 348899,
+            "bytes": 349688,
+            "fileCount": 4,
+            "files": [
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 1150,
+            "chars": 4607,
+            "bytes": 4607,
+            "fileCount": 6,
+            "files": [
+              ".agent/context/template-index.md",
+              ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 98.79031409757431,
+          "pass": true
+        },
+        {
+          "name": "related-interface-data",
+          "description": "Interface-design CSV data preload hotspot.",
+          "before": {
+            "tokens": 353236,
+            "chars": 1420447,
+            "bytes": 1423698,
+            "fileCount": 29,
+            "files": [
+              ".agent/skills/interface-design/data/app-interface.csv",
+              ".agent/skills/interface-design/data/charts.csv",
+              ".agent/skills/interface-design/data/colors.csv",
+              ".agent/skills/interface-design/data/google-fonts.csv",
+              ".agent/skills/interface-design/data/icons.csv",
+              ".agent/skills/interface-design/data/landing.csv",
+              ".agent/skills/interface-design/data/products.csv",
+              ".agent/skills/interface-design/data/react-performance.csv",
+              ".agent/skills/interface-design/data/stacks/angular.csv",
+              ".agent/skills/interface-design/data/stacks/astro.csv",
+              ".agent/skills/interface-design/data/stacks/flutter.csv",
+              ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+              ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+              ".agent/skills/interface-design/data/stacks/laravel.csv",
+              ".agent/skills/interface-design/data/stacks/nextjs.csv",
+              ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+              ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+              ".agent/skills/interface-design/data/stacks/react-native.csv",
+              ".agent/skills/interface-design/data/stacks/react.csv",
+              ".agent/skills/interface-design/data/stacks/shadcn.csv",
+              ".agent/skills/interface-design/data/stacks/svelte.csv",
+              ".agent/skills/interface-design/data/stacks/swiftui.csv",
+              ".agent/skills/interface-design/data/stacks/threejs.csv",
+              ".agent/skills/interface-design/data/stacks/vue.csv",
+              ".agent/skills/interface-design/data/styles.csv",
+              ".agent/skills/interface-design/data/typography.csv",
+              ".agent/skills/interface-design/data/ui-reasoning.csv",
+              ".agent/skills/interface-design/data/ux-guidelines.csv",
+              ".agent/skills/interface-design/data/web-interface.csv"
+            ]
+          },
+          "after": {
+            "tokens": 151,
+            "chars": 567,
+            "bytes": 567,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/interface-design.contract.md"
+            ]
+          },
+          "reductionPercent": 99.95725237518259,
+          "pass": true
+        },
+        {
+          "name": "related-interface-scripts",
+          "description": "Interface-design script preload hotspot.",
+          "before": {
+            "tokens": 19013,
+            "chars": 70874,
+            "bytes": 71070,
+            "fileCount": 4,
+            "files": [
+              ".agent/skills/interface-design/scripts/core.py",
+              ".agent/skills/interface-design/scripts/design_system.py",
+              ".agent/skills/interface-design/scripts/search.py",
+              ".agent/skills/interface-design/scripts/test_design_system_security.py"
+            ]
+          },
+          "after": {
+            "tokens": 151,
+            "chars": 567,
+            "bytes": 567,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/interface-design.contract.md"
+            ]
+          },
+          "reductionPercent": 99.20580655341082,
+          "pass": true
+        },
+        {
+          "name": "related-hooks",
+          "description": "Hook script/config preload hotspot.",
+          "before": {
+            "tokens": 4559,
+            "chars": 17222,
+            "bytes": 17248,
+            "fileCount": 8,
+            "files": [
+              ".agent/hooks/lib/hook-utils.js",
+              ".agent/hooks/pre-compact.js",
+              ".agent/hooks/session-end.js",
+              ".agent/hooks/stop-check.js",
+              ".agent/hooks/suggest-compact.js",
+              ".agent/hooks/test-hooks-security.js",
+              ".agent/hooks/hooks.json",
+              ".agent/hooks/hooks.project.json"
+            ]
+          },
+          "after": {
+            "tokens": 97,
+            "chars": 377,
+            "bytes": 377,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/hook-index.md"
+            ]
+          },
+          "reductionPercent": 97.87234042553192,
+          "pass": true
+        },
+        {
+          "name": "related-agents",
+          "description": "Specialized agent prompt preload hotspot.",
+          "before": {
+            "tokens": 5442,
+            "chars": 21551,
+            "bytes": 21705,
+            "fileCount": 5,
+            "files": [
+              ".agent/agents/architect.md",
+              ".agent/agents/build-fixer.md",
+              ".agent/agents/code-reviewer.md",
+              ".agent/agents/doc-updater.md",
+              ".agent/agents/e2e-runner.md"
+            ]
+          },
+          "after": {
+            "tokens": 85,
+            "chars": 332,
+            "bytes": 332,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/agent-index.md"
+            ]
+          },
+          "reductionPercent": 98.43807423741272,
+          "pass": true
+        },
+        {
+          "name": "related-all-workflows",
+          "description": "All public workflow files as a preload hotspot.",
+          "before": {
+            "tokens": 4022,
+            "chars": 17079,
+            "bytes": 17079,
+            "fileCount": 15,
+            "files": [
+              ".agent/workflows/sc-audit.md",
+              ".agent/workflows/sc-compound.md",
+              ".agent/workflows/sc-debug.md",
+              ".agent/workflows/sc-eval.md",
+              ".agent/workflows/sc-explore.md",
+              ".agent/workflows/sc-init.md",
+              ".agent/workflows/sc-launch.md",
+              ".agent/workflows/sc-pause.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/workflows/sc-prd.md",
+              ".agent/workflows/sc-research.md",
+              ".agent/workflows/sc-review.md",
+              ".agent/workflows/sc-status.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/workflows/sc-work.md"
+            ]
+          },
+          "after": {
+            "tokens": 129,
+            "chars": 363,
+            "bytes": 363,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflow-dispatch.md"
+            ]
+          },
+          "reductionPercent": 96.79264047737443,
+          "pass": true
+        },
+        {
+          "name": "related-rules",
+          "description": "All always-on rules as a preload hotspot.",
+          "before": {
+            "tokens": 1925,
+            "chars": 8366,
+            "bytes": 8366,
+            "fileCount": 3,
+            "files": [
+              ".agent/rules/project-config.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/rules/super-compound.md"
+            ]
+          },
+          "after": {
+            "tokens": 77,
+            "chars": 321,
+            "bytes": 321,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/rule-index.md"
+            ]
+          },
+          "reductionPercent": 96,
+          "pass": true
+        }
+      ],
+      "summary": {
+        "pass": true,
+        "totalBeforeTokens": 1820893,
+        "totalAfterTokens": 10408,
+        "totalReductionPercent": 99.4284123229646
+      }
+    },
+    {
+      "metric": "deterministic_estimated_tokens_v1",
+      "threshold": 90,
+      "generatedAt": "2026-06-26T15:15:34.763Z",
+      "scenarios": [
+        {
+          "name": "full-framework-load",
+          "description": "Always-on framework bootstrap without task-specific work.",
+          "before": {
+            "tokens": 516436,
+            "chars": 2045234,
+            "bytes": 2051961,
+            "fileCount": 98,
+            "files": [
+              ".agent/rules/project-config.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/rules/super-compound.md",
+              ".agent/workflows/sc-audit.md",
+              ".agent/workflows/sc-compound.md",
+              ".agent/workflows/sc-debug.md",
+              ".agent/workflows/sc-eval.md",
+              ".agent/workflows/sc-explore.md",
+              ".agent/workflows/sc-init.md",
+              ".agent/workflows/sc-launch.md",
+              ".agent/workflows/sc-pause.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/workflows/sc-prd.md",
+              ".agent/workflows/sc-research.md",
+              ".agent/workflows/sc-review.md",
+              ".agent/workflows/sc-status.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/workflows/sc-work.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/architecture-enforcement/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/checkpoint-protocol/SKILL.md",
+              ".agent/skills/code-review/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/context7-docs/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/eval-harness/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/gap-closure/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md",
+              ".agent/skills/interface-design/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/knowledge-compounding/SKILL.md",
+              ".agent/skills/parallel-execution/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/prototyping/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/skill-authoring/SKILL.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/subagent-orchestration/SKILL.md",
+              ".agent/skills/systematic-debugging/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/todo-management/SKILL.md",
+              ".agent/skills/triage-workflow/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/hooks/lib/hook-utils.js",
+              ".agent/hooks/pre-compact.js",
+              ".agent/hooks/session-end.js",
+              ".agent/hooks/stop-check.js",
+              ".agent/hooks/suggest-compact.js",
+              ".agent/hooks/test-hooks-security.js",
+              ".agent/hooks/hooks.json",
+              ".agent/hooks/hooks.project.json",
+              ".agent/agents/architect.md",
+              ".agent/agents/build-fixer.md",
+              ".agent/agents/code-reviewer.md",
+              ".agent/agents/doc-updater.md",
+              ".agent/agents/e2e-runner.md",
+              ".agent/skills/interface-design/data/app-interface.csv",
+              ".agent/skills/interface-design/data/charts.csv",
+              ".agent/skills/interface-design/data/colors.csv",
+              ".agent/skills/interface-design/data/google-fonts.csv",
+              ".agent/skills/interface-design/data/icons.csv",
+              ".agent/skills/interface-design/data/landing.csv",
+              ".agent/skills/interface-design/data/products.csv",
+              ".agent/skills/interface-design/data/react-performance.csv",
+              ".agent/skills/interface-design/data/stacks/angular.csv",
+              ".agent/skills/interface-design/data/stacks/astro.csv",
+              ".agent/skills/interface-design/data/stacks/flutter.csv",
+              ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+              ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+              ".agent/skills/interface-design/data/stacks/laravel.csv",
+              ".agent/skills/interface-design/data/stacks/nextjs.csv",
+              ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+              ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+              ".agent/skills/interface-design/data/stacks/react-native.csv",
+              ".agent/skills/interface-design/data/stacks/react.csv",
+              ".agent/skills/interface-design/data/stacks/shadcn.csv",
+              ".agent/skills/interface-design/data/stacks/svelte.csv",
+              ".agent/skills/interface-design/data/stacks/swiftui.csv",
+              ".agent/skills/interface-design/data/stacks/threejs.csv",
+              ".agent/skills/interface-design/data/stacks/vue.csv",
+              ".agent/skills/interface-design/data/styles.csv",
+              ".agent/skills/interface-design/data/typography.csv",
+              ".agent/skills/interface-design/data/ui-reasoning.csv",
+              ".agent/skills/interface-design/data/ux-guidelines.csv",
+              ".agent/skills/interface-design/data/web-interface.csv"
+            ]
+          },
+          "after": {
+            "tokens": 1792,
+            "chars": 6851,
+            "bytes": 6851,
+            "fileCount": 6,
+            "files": [
+              ".agent/context/rule-index.md",
+              ".agent/context/workflow-dispatch.md",
+              ".agent/context/routing-index.md",
+              ".agent/context/skill-index.md",
+              ".agent/context/template-index.md",
+              ".agent/context/token-budget-gates.md"
+            ]
+          },
+          "reductionPercent": 99.65300637445878,
+          "pass": true
+        },
+        {
+          "name": "sc-init",
+          "description": "/sc-init project scan and config orientation.",
+          "before": {
+            "tokens": 4490,
+            "chars": 19269,
+            "bytes": 19269,
+            "fileCount": 4,
+            "files": [
+              ".agent/rules/project-config.md",
+              ".agent/workflows/sc-init.md",
+              "README.md",
+              "AGENTS.md"
+            ]
+          },
+          "after": {
+            "tokens": 57,
+            "chars": 296,
+            "bytes": 296,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-init.contract.md"
+            ]
+          },
+          "reductionPercent": 98.73051224944321,
+          "pass": true
+        },
+        {
+          "name": "sc-status",
+          "description": "/sc-status handoff, state, issue dashboard, and route selection.",
+          "before": {
+            "tokens": 2015,
+            "chars": 8287,
+            "bytes": 8287,
+            "fileCount": 3,
+            "files": [
+              ".agent/workflows/sc-status.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 79,
+            "chars": 299,
+            "bytes": 299,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-status.contract.md"
+            ]
+          },
+          "reductionPercent": 96.07940446650124,
+          "pass": true
+        },
+        {
+          "name": "sc-explore",
+          "description": "/sc-explore BRD exploration and open-decision capture.",
+          "before": {
+            "tokens": 32334,
+            "chars": 120216,
+            "bytes": 120419,
+            "fileCount": 7,
+            "files": [
+              ".agent/workflows/sc-explore.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/skills/prototyping/SKILL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 217,
+            "chars": 1044,
+            "bytes": 1044,
+            "fileCount": 2,
+            "files": [
+              ".agent/context/workflows/sc-explore.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 99.32887981691098,
+          "pass": true
+        },
+        {
+          "name": "sc-research",
+          "description": "/sc-research local and official-doc evidence gathering.",
+          "before": {
+            "tokens": 2263,
+            "chars": 9679,
+            "bytes": 9727,
+            "fileCount": 3,
+            "files": [
+              ".agent/workflows/sc-research.md",
+              ".agent/skills/context7-docs/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 54,
+            "chars": 280,
+            "bytes": 280,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-research.contract.md"
+            ]
+          },
+          "reductionPercent": 97.61378700839593,
+          "pass": true
+        },
+        {
+          "name": "sc-prd",
+          "description": "/sc-prd PRD generation from approved BRD.",
+          "before": {
+            "tokens": 23435,
+            "chars": 89028,
+            "bytes": 89186,
+            "fileCount": 6,
+            "files": [
+              ".agent/workflows/sc-prd.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 234,
+            "chars": 1059,
+            "bytes": 1059,
+            "fileCount": 2,
+            "files": [
+              ".agent/context/workflows/sc-prd.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 99.00149349263921,
+          "pass": true
+        },
+        {
+          "name": "sc-plan",
+          "description": "/sc-plan FSD planning and issue pointer routing.",
+          "before": {
+            "tokens": 59150,
+            "chars": 225015,
+            "bytes": 225443,
+            "fileCount": 12,
+            "files": [
+              ".agent/rules/super-compound.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/triage-workflow/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md"
+            ]
+          },
+          "after": {
+            "tokens": 1373,
+            "chars": 5456,
+            "bytes": 5456,
+            "fileCount": 6,
+            "files": [
+              ".agent/workflows/sc-plan.md",
+              ".agent/context/workflows/sc-plan.contract.md",
+              ".agent/context/skills/sc-plan.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 97.67878275570583,
+          "pass": true
+        },
+        {
+          "name": "sc-eval",
+          "description": "/sc-eval measurable pass/fail criteria and eval runs.",
+          "before": {
+            "tokens": 1886,
+            "chars": 6657,
+            "bytes": 6725,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-eval.md",
+              ".agent/skills/eval-harness/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 55,
+            "chars": 251,
+            "bytes": 251,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-eval.contract.md"
+            ]
+          },
+          "reductionPercent": 97.08377518557795,
+          "pass": true
+        },
+        {
+          "name": "sc-work",
+          "description": "/sc-work goal execution with focused context.",
+          "before": {
+            "tokens": 11412,
+            "chars": 47064,
+            "bytes": 47346,
+            "fileCount": 10,
+            "files": [
+              ".agent/rules/super-compound.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/workflows/sc-work.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/parallel-execution/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 453,
+            "chars": 1706,
+            "bytes": 1706,
+            "fileCount": 3,
+            "files": [
+              ".agent/context/workflows/sc-work.contract.md",
+              ".agent/context/skills/sc-work.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 96.03049421661409,
+          "pass": true
+        },
+        {
+          "name": "sc-debug",
+          "description": "/sc-debug reproduce, root cause, fix, and verify.",
+          "before": {
+            "tokens": 2271,
+            "chars": 9590,
+            "bytes": 9666,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-debug.md",
+              ".agent/skills/systematic-debugging/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 51,
+            "chars": 272,
+            "bytes": 272,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-debug.contract.md"
+            ]
+          },
+          "reductionPercent": 97.75429326287978,
+          "pass": true
+        },
+        {
+          "name": "sc-review",
+          "description": "/sc-review findings-first review.",
+          "before": {
+            "tokens": 1942,
+            "chars": 8091,
+            "bytes": 8151,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-review.md",
+              ".agent/skills/code-review/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 45,
+            "chars": 251,
+            "bytes": 251,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-review.contract.md"
+            ]
+          },
+          "reductionPercent": 97.68280123583935,
+          "pass": true
+        },
+        {
+          "name": "sc-audit",
+          "description": "/sc-audit security, compatibility, compliance, and readiness audit.",
+          "before": {
+            "tokens": 11903,
+            "chars": 47723,
+            "bytes": 48535,
+            "fileCount": 6,
+            "files": [
+              ".agent/workflows/sc-audit.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 65,
+            "chars": 314,
+            "bytes": 314,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-audit.contract.md"
+            ]
+          },
+          "reductionPercent": 99.45391918003864,
+          "pass": true
+        },
+        {
+          "name": "sc-compound",
+          "description": "/sc-compound reusable knowledge capture.",
+          "before": {
+            "tokens": 1879,
+            "chars": 7738,
+            "bytes": 7792,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-compound.md",
+              ".agent/skills/knowledge-compounding/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 53,
+            "chars": 253,
+            "bytes": 253,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-compound.contract.md"
+            ]
+          },
+          "reductionPercent": 97.17935071846728,
+          "pass": true
+        },
+        {
+          "name": "sc-pause",
+          "description": "/sc-pause durable handoff before stopping.",
+          "before": {
+            "tokens": 1980,
+            "chars": 8253,
+            "bytes": 8253,
+            "fileCount": 3,
+            "files": [
+              ".agent/workflows/sc-pause.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 59,
+            "chars": 280,
+            "bytes": 280,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-pause.contract.md"
+            ]
+          },
+          "reductionPercent": 97.02020202020202,
+          "pass": true
+        },
+        {
+          "name": "sc-launch",
+          "description": "/sc-launch complete lifecycle routing.",
+          "before": {
+            "tokens": 112816,
+            "chars": 425157,
+            "bytes": 426060,
+            "fileCount": 28,
+            "files": [
+              ".agent/workflows/sc-audit.md",
+              ".agent/workflows/sc-compound.md",
+              ".agent/workflows/sc-debug.md",
+              ".agent/workflows/sc-eval.md",
+              ".agent/workflows/sc-explore.md",
+              ".agent/workflows/sc-init.md",
+              ".agent/workflows/sc-launch.md",
+              ".agent/workflows/sc-pause.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/workflows/sc-prd.md",
+              ".agent/workflows/sc-research.md",
+              ".agent/workflows/sc-review.md",
+              ".agent/workflows/sc-status.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/workflows/sc-work.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/code-review/SKILL.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/knowledge-compounding/SKILL.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 494,
+            "chars": 1786,
+            "bytes": 1786,
+            "fileCount": 3,
+            "files": [
+              ".agent/context/workflows/sc-launch.contract.md",
+              ".agent/context/workflow-dispatch.md",
+              ".agent/context/template-index.md"
+            ]
+          },
+          "reductionPercent": 99.5621188483903,
+          "pass": true
+        },
+        {
+          "name": "sc-ui",
+          "description": "/sc-ui interface-design search-only guidance.",
+          "before": {
+            "tokens": 374638,
+            "chars": 1501050,
+            "bytes": 1504497,
+            "fileCount": 36,
+            "files": [
+              ".agent/rules/super-compound.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/skills/interface-design/SKILL.md",
+              ".agent/skills/interface-design/scripts/core.py",
+              ".agent/skills/interface-design/scripts/design_system.py",
+              ".agent/skills/interface-design/scripts/search.py",
+              ".agent/skills/interface-design/scripts/test_design_system_security.py",
+              ".agent/skills/interface-design/data/app-interface.csv",
+              ".agent/skills/interface-design/data/charts.csv",
+              ".agent/skills/interface-design/data/colors.csv",
+              ".agent/skills/interface-design/data/google-fonts.csv",
+              ".agent/skills/interface-design/data/icons.csv",
+              ".agent/skills/interface-design/data/landing.csv",
+              ".agent/skills/interface-design/data/products.csv",
+              ".agent/skills/interface-design/data/react-performance.csv",
+              ".agent/skills/interface-design/data/stacks/angular.csv",
+              ".agent/skills/interface-design/data/stacks/astro.csv",
+              ".agent/skills/interface-design/data/stacks/flutter.csv",
+              ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+              ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+              ".agent/skills/interface-design/data/stacks/laravel.csv",
+              ".agent/skills/interface-design/data/stacks/nextjs.csv",
+              ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+              ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+              ".agent/skills/interface-design/data/stacks/react-native.csv",
+              ".agent/skills/interface-design/data/stacks/react.csv",
+              ".agent/skills/interface-design/data/stacks/shadcn.csv",
+              ".agent/skills/interface-design/data/stacks/svelte.csv",
+              ".agent/skills/interface-design/data/stacks/swiftui.csv",
+              ".agent/skills/interface-design/data/stacks/threejs.csv",
+              ".agent/skills/interface-design/data/stacks/vue.csv",
+              ".agent/skills/interface-design/data/styles.csv",
+              ".agent/skills/interface-design/data/typography.csv",
+              ".agent/skills/interface-design/data/ui-reasoning.csv",
+              ".agent/skills/interface-design/data/ux-guidelines.csv",
+              ".agent/skills/interface-design/data/web-interface.csv"
+            ]
+          },
+          "after": {
+            "tokens": 1700,
+            "chars": 6994,
+            "bytes": 6994,
+            "fileCount": 4,
+            "files": [
+              ".agent/workflows/sc-ui.md",
+              ".agent/context/workflows/sc-ui.contract.md",
+              ".agent/context/skills/interface-design.contract.md",
+              ".agent/skills/interface-design/SKILL.md"
+            ]
+          },
+          "reductionPercent": 99.54622862603367,
+          "pass": true
+        },
+        {
+          "name": "artifact-output-brd-prd-fsd-issue",
+          "description": "Generated BRD/PRD/FSD/ADR artifact and goal issue surfaces.",
+          "before": {
+            "tokens": 98427,
+            "chars": 362553,
+            "bytes": 363342,
+            "fileCount": 6,
+            "files": [
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md"
+            ]
+          },
+          "after": {
+            "tokens": 1150,
+            "chars": 4607,
+            "bytes": 4607,
+            "fileCount": 6,
+            "files": [
+              ".agent/context/template-index.md",
+              ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 98.83162140469587,
+          "pass": true
+        },
+        {
+          "name": "related-all-skills",
+          "description": "All skill procedures as a single preload hotspot.",
+          "before": {
+            "tokens": 52186,
+            "chars": 211670,
+            "bytes": 214177,
+            "fileCount": 34,
+            "files": [
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/architecture-enforcement/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/checkpoint-protocol/SKILL.md",
+              ".agent/skills/code-review/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/context7-docs/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/eval-harness/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/gap-closure/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md",
+              ".agent/skills/interface-design/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/knowledge-compounding/SKILL.md",
+              ".agent/skills/parallel-execution/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/prototyping/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/skill-authoring/SKILL.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/subagent-orchestration/SKILL.md",
+              ".agent/skills/systematic-debugging/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/todo-management/SKILL.md",
+              ".agent/skills/triage-workflow/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 441,
+            "chars": 1963,
+            "bytes": 1963,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skill-index.md"
+            ]
+          },
+          "reductionPercent": 99.1549457708964,
+          "pass": true
+        },
+        {
+          "name": "related-delivery-planning-skills",
+          "description": "Agentic delivery, PRD/FSD planning, issue, and verification skills.",
+          "before": {
+            "tokens": 7795,
+            "chars": 33077,
+            "bytes": 33077,
+            "fileCount": 5,
+            "files": [
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 74,
+            "chars": 305,
+            "bytes": 305,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/delivery-planning.contract.md"
+            ]
+          },
+          "reductionPercent": 99.05067350865939,
+          "pass": true
+        },
+        {
+          "name": "related-execution-verification-skills",
+          "description": "Execution, context, TDD, verification, and integration skills.",
+          "before": {
+            "tokens": 6800,
+            "chars": 28166,
+            "bytes": 28408,
+            "fileCount": 5,
+            "files": [
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 58,
+            "chars": 334,
+            "bytes": 334,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/execution-verification.contract.md"
+            ]
+          },
+          "reductionPercent": 99.1470588235294,
+          "pass": true
+        },
+        {
+          "name": "related-risk-audit-skills",
+          "description": "Security, compatibility, threat, privacy, and secure-code skills.",
+          "before": {
+            "tokens": 11572,
+            "chars": 46344,
+            "bytes": 47156,
+            "fileCount": 5,
+            "files": [
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 64,
+            "chars": 309,
+            "bytes": 309,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/risk-audit.contract.md"
+            ]
+          },
+          "reductionPercent": 99.44694089180781,
+          "pass": true
+        },
+        {
+          "name": "related-agentic-templates",
+          "description": "Full BRD/PRD/FSD/ADR templates as a preload hotspot.",
+          "before": {
+            "tokens": 95066,
+            "chars": 348899,
+            "bytes": 349688,
+            "fileCount": 4,
+            "files": [
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 1150,
+            "chars": 4607,
+            "bytes": 4607,
+            "fileCount": 6,
+            "files": [
+              ".agent/context/template-index.md",
+              ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 98.79031409757431,
+          "pass": true
+        },
+        {
+          "name": "related-interface-data",
+          "description": "Interface-design CSV data preload hotspot.",
+          "before": {
+            "tokens": 353236,
+            "chars": 1420447,
+            "bytes": 1423698,
+            "fileCount": 29,
+            "files": [
+              ".agent/skills/interface-design/data/app-interface.csv",
+              ".agent/skills/interface-design/data/charts.csv",
+              ".agent/skills/interface-design/data/colors.csv",
+              ".agent/skills/interface-design/data/google-fonts.csv",
+              ".agent/skills/interface-design/data/icons.csv",
+              ".agent/skills/interface-design/data/landing.csv",
+              ".agent/skills/interface-design/data/products.csv",
+              ".agent/skills/interface-design/data/react-performance.csv",
+              ".agent/skills/interface-design/data/stacks/angular.csv",
+              ".agent/skills/interface-design/data/stacks/astro.csv",
+              ".agent/skills/interface-design/data/stacks/flutter.csv",
+              ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+              ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+              ".agent/skills/interface-design/data/stacks/laravel.csv",
+              ".agent/skills/interface-design/data/stacks/nextjs.csv",
+              ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+              ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+              ".agent/skills/interface-design/data/stacks/react-native.csv",
+              ".agent/skills/interface-design/data/stacks/react.csv",
+              ".agent/skills/interface-design/data/stacks/shadcn.csv",
+              ".agent/skills/interface-design/data/stacks/svelte.csv",
+              ".agent/skills/interface-design/data/stacks/swiftui.csv",
+              ".agent/skills/interface-design/data/stacks/threejs.csv",
+              ".agent/skills/interface-design/data/stacks/vue.csv",
+              ".agent/skills/interface-design/data/styles.csv",
+              ".agent/skills/interface-design/data/typography.csv",
+              ".agent/skills/interface-design/data/ui-reasoning.csv",
+              ".agent/skills/interface-design/data/ux-guidelines.csv",
+              ".agent/skills/interface-design/data/web-interface.csv"
+            ]
+          },
+          "after": {
+            "tokens": 151,
+            "chars": 567,
+            "bytes": 567,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/interface-design.contract.md"
+            ]
+          },
+          "reductionPercent": 99.95725237518259,
+          "pass": true
+        },
+        {
+          "name": "related-interface-scripts",
+          "description": "Interface-design script preload hotspot.",
+          "before": {
+            "tokens": 19013,
+            "chars": 70874,
+            "bytes": 71070,
+            "fileCount": 4,
+            "files": [
+              ".agent/skills/interface-design/scripts/core.py",
+              ".agent/skills/interface-design/scripts/design_system.py",
+              ".agent/skills/interface-design/scripts/search.py",
+              ".agent/skills/interface-design/scripts/test_design_system_security.py"
+            ]
+          },
+          "after": {
+            "tokens": 151,
+            "chars": 567,
+            "bytes": 567,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/interface-design.contract.md"
+            ]
+          },
+          "reductionPercent": 99.20580655341082,
+          "pass": true
+        },
+        {
+          "name": "related-hooks",
+          "description": "Hook script/config preload hotspot.",
+          "before": {
+            "tokens": 4559,
+            "chars": 17222,
+            "bytes": 17248,
+            "fileCount": 8,
+            "files": [
+              ".agent/hooks/lib/hook-utils.js",
+              ".agent/hooks/pre-compact.js",
+              ".agent/hooks/session-end.js",
+              ".agent/hooks/stop-check.js",
+              ".agent/hooks/suggest-compact.js",
+              ".agent/hooks/test-hooks-security.js",
+              ".agent/hooks/hooks.json",
+              ".agent/hooks/hooks.project.json"
+            ]
+          },
+          "after": {
+            "tokens": 97,
+            "chars": 377,
+            "bytes": 377,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/hook-index.md"
+            ]
+          },
+          "reductionPercent": 97.87234042553192,
+          "pass": true
+        },
+        {
+          "name": "related-agents",
+          "description": "Specialized agent prompt preload hotspot.",
+          "before": {
+            "tokens": 5442,
+            "chars": 21551,
+            "bytes": 21705,
+            "fileCount": 5,
+            "files": [
+              ".agent/agents/architect.md",
+              ".agent/agents/build-fixer.md",
+              ".agent/agents/code-reviewer.md",
+              ".agent/agents/doc-updater.md",
+              ".agent/agents/e2e-runner.md"
+            ]
+          },
+          "after": {
+            "tokens": 85,
+            "chars": 332,
+            "bytes": 332,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/agent-index.md"
+            ]
+          },
+          "reductionPercent": 98.43807423741272,
+          "pass": true
+        },
+        {
+          "name": "related-all-workflows",
+          "description": "All public workflow files as a preload hotspot.",
+          "before": {
+            "tokens": 4022,
+            "chars": 17079,
+            "bytes": 17079,
+            "fileCount": 15,
+            "files": [
+              ".agent/workflows/sc-audit.md",
+              ".agent/workflows/sc-compound.md",
+              ".agent/workflows/sc-debug.md",
+              ".agent/workflows/sc-eval.md",
+              ".agent/workflows/sc-explore.md",
+              ".agent/workflows/sc-init.md",
+              ".agent/workflows/sc-launch.md",
+              ".agent/workflows/sc-pause.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/workflows/sc-prd.md",
+              ".agent/workflows/sc-research.md",
+              ".agent/workflows/sc-review.md",
+              ".agent/workflows/sc-status.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/workflows/sc-work.md"
+            ]
+          },
+          "after": {
+            "tokens": 129,
+            "chars": 363,
+            "bytes": 363,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflow-dispatch.md"
+            ]
+          },
+          "reductionPercent": 96.79264047737443,
+          "pass": true
+        },
+        {
+          "name": "related-rules",
+          "description": "All always-on rules as a preload hotspot.",
+          "before": {
+            "tokens": 1925,
+            "chars": 8366,
+            "bytes": 8366,
+            "fileCount": 3,
+            "files": [
+              ".agent/rules/project-config.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/rules/super-compound.md"
+            ]
+          },
+          "after": {
+            "tokens": 77,
+            "chars": 321,
+            "bytes": 321,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/rule-index.md"
+            ]
+          },
+          "reductionPercent": 96,
+          "pass": true
+        }
+      ],
+      "summary": {
+        "pass": true,
+        "totalBeforeTokens": 1820893,
+        "totalAfterTokens": 10408,
+        "totalReductionPercent": 99.4284123229646
+      }
+    },
+    {
+      "metric": "deterministic_estimated_tokens_v1",
+      "threshold": 90,
+      "generatedAt": "2026-06-26T15:15:34.904Z",
+      "scenarios": [
+        {
+          "name": "full-framework-load",
+          "description": "Always-on framework bootstrap without task-specific work.",
+          "before": {
+            "tokens": 516436,
+            "chars": 2045234,
+            "bytes": 2051961,
+            "fileCount": 98,
+            "files": [
+              ".agent/rules/project-config.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/rules/super-compound.md",
+              ".agent/workflows/sc-audit.md",
+              ".agent/workflows/sc-compound.md",
+              ".agent/workflows/sc-debug.md",
+              ".agent/workflows/sc-eval.md",
+              ".agent/workflows/sc-explore.md",
+              ".agent/workflows/sc-init.md",
+              ".agent/workflows/sc-launch.md",
+              ".agent/workflows/sc-pause.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/workflows/sc-prd.md",
+              ".agent/workflows/sc-research.md",
+              ".agent/workflows/sc-review.md",
+              ".agent/workflows/sc-status.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/workflows/sc-work.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/architecture-enforcement/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/checkpoint-protocol/SKILL.md",
+              ".agent/skills/code-review/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/context7-docs/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/eval-harness/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/gap-closure/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md",
+              ".agent/skills/interface-design/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/knowledge-compounding/SKILL.md",
+              ".agent/skills/parallel-execution/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/prototyping/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/skill-authoring/SKILL.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/subagent-orchestration/SKILL.md",
+              ".agent/skills/systematic-debugging/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/todo-management/SKILL.md",
+              ".agent/skills/triage-workflow/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/hooks/lib/hook-utils.js",
+              ".agent/hooks/pre-compact.js",
+              ".agent/hooks/session-end.js",
+              ".agent/hooks/stop-check.js",
+              ".agent/hooks/suggest-compact.js",
+              ".agent/hooks/test-hooks-security.js",
+              ".agent/hooks/hooks.json",
+              ".agent/hooks/hooks.project.json",
+              ".agent/agents/architect.md",
+              ".agent/agents/build-fixer.md",
+              ".agent/agents/code-reviewer.md",
+              ".agent/agents/doc-updater.md",
+              ".agent/agents/e2e-runner.md",
+              ".agent/skills/interface-design/data/app-interface.csv",
+              ".agent/skills/interface-design/data/charts.csv",
+              ".agent/skills/interface-design/data/colors.csv",
+              ".agent/skills/interface-design/data/google-fonts.csv",
+              ".agent/skills/interface-design/data/icons.csv",
+              ".agent/skills/interface-design/data/landing.csv",
+              ".agent/skills/interface-design/data/products.csv",
+              ".agent/skills/interface-design/data/react-performance.csv",
+              ".agent/skills/interface-design/data/stacks/angular.csv",
+              ".agent/skills/interface-design/data/stacks/astro.csv",
+              ".agent/skills/interface-design/data/stacks/flutter.csv",
+              ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+              ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+              ".agent/skills/interface-design/data/stacks/laravel.csv",
+              ".agent/skills/interface-design/data/stacks/nextjs.csv",
+              ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+              ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+              ".agent/skills/interface-design/data/stacks/react-native.csv",
+              ".agent/skills/interface-design/data/stacks/react.csv",
+              ".agent/skills/interface-design/data/stacks/shadcn.csv",
+              ".agent/skills/interface-design/data/stacks/svelte.csv",
+              ".agent/skills/interface-design/data/stacks/swiftui.csv",
+              ".agent/skills/interface-design/data/stacks/threejs.csv",
+              ".agent/skills/interface-design/data/stacks/vue.csv",
+              ".agent/skills/interface-design/data/styles.csv",
+              ".agent/skills/interface-design/data/typography.csv",
+              ".agent/skills/interface-design/data/ui-reasoning.csv",
+              ".agent/skills/interface-design/data/ux-guidelines.csv",
+              ".agent/skills/interface-design/data/web-interface.csv"
+            ]
+          },
+          "after": {
+            "tokens": 1792,
+            "chars": 6851,
+            "bytes": 6851,
+            "fileCount": 6,
+            "files": [
+              ".agent/context/rule-index.md",
+              ".agent/context/workflow-dispatch.md",
+              ".agent/context/routing-index.md",
+              ".agent/context/skill-index.md",
+              ".agent/context/template-index.md",
+              ".agent/context/token-budget-gates.md"
+            ]
+          },
+          "reductionPercent": 99.65300637445878,
+          "pass": true
+        },
+        {
+          "name": "sc-init",
+          "description": "/sc-init project scan and config orientation.",
+          "before": {
+            "tokens": 4490,
+            "chars": 19269,
+            "bytes": 19269,
+            "fileCount": 4,
+            "files": [
+              ".agent/rules/project-config.md",
+              ".agent/workflows/sc-init.md",
+              "README.md",
+              "AGENTS.md"
+            ]
+          },
+          "after": {
+            "tokens": 57,
+            "chars": 296,
+            "bytes": 296,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-init.contract.md"
+            ]
+          },
+          "reductionPercent": 98.73051224944321,
+          "pass": true
+        },
+        {
+          "name": "sc-status",
+          "description": "/sc-status handoff, state, issue dashboard, and route selection.",
+          "before": {
+            "tokens": 2015,
+            "chars": 8287,
+            "bytes": 8287,
+            "fileCount": 3,
+            "files": [
+              ".agent/workflows/sc-status.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 79,
+            "chars": 299,
+            "bytes": 299,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-status.contract.md"
+            ]
+          },
+          "reductionPercent": 96.07940446650124,
+          "pass": true
+        },
+        {
+          "name": "sc-explore",
+          "description": "/sc-explore BRD exploration and open-decision capture.",
+          "before": {
+            "tokens": 32334,
+            "chars": 120216,
+            "bytes": 120419,
+            "fileCount": 7,
+            "files": [
+              ".agent/workflows/sc-explore.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/skills/prototyping/SKILL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 217,
+            "chars": 1044,
+            "bytes": 1044,
+            "fileCount": 2,
+            "files": [
+              ".agent/context/workflows/sc-explore.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 99.32887981691098,
+          "pass": true
+        },
+        {
+          "name": "sc-research",
+          "description": "/sc-research local and official-doc evidence gathering.",
+          "before": {
+            "tokens": 2263,
+            "chars": 9679,
+            "bytes": 9727,
+            "fileCount": 3,
+            "files": [
+              ".agent/workflows/sc-research.md",
+              ".agent/skills/context7-docs/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 54,
+            "chars": 280,
+            "bytes": 280,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-research.contract.md"
+            ]
+          },
+          "reductionPercent": 97.61378700839593,
+          "pass": true
+        },
+        {
+          "name": "sc-prd",
+          "description": "/sc-prd PRD generation from approved BRD.",
+          "before": {
+            "tokens": 23435,
+            "chars": 89028,
+            "bytes": 89186,
+            "fileCount": 6,
+            "files": [
+              ".agent/workflows/sc-prd.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 234,
+            "chars": 1059,
+            "bytes": 1059,
+            "fileCount": 2,
+            "files": [
+              ".agent/context/workflows/sc-prd.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 99.00149349263921,
+          "pass": true
+        },
+        {
+          "name": "sc-plan",
+          "description": "/sc-plan FSD planning and issue pointer routing.",
+          "before": {
+            "tokens": 59150,
+            "chars": 225015,
+            "bytes": 225443,
+            "fileCount": 12,
+            "files": [
+              ".agent/rules/super-compound.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/triage-workflow/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md"
+            ]
+          },
+          "after": {
+            "tokens": 1373,
+            "chars": 5456,
+            "bytes": 5456,
+            "fileCount": 6,
+            "files": [
+              ".agent/workflows/sc-plan.md",
+              ".agent/context/workflows/sc-plan.contract.md",
+              ".agent/context/skills/sc-plan.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 97.67878275570583,
+          "pass": true
+        },
+        {
+          "name": "sc-eval",
+          "description": "/sc-eval measurable pass/fail criteria and eval runs.",
+          "before": {
+            "tokens": 1886,
+            "chars": 6657,
+            "bytes": 6725,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-eval.md",
+              ".agent/skills/eval-harness/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 55,
+            "chars": 251,
+            "bytes": 251,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-eval.contract.md"
+            ]
+          },
+          "reductionPercent": 97.08377518557795,
+          "pass": true
+        },
+        {
+          "name": "sc-work",
+          "description": "/sc-work goal execution with focused context.",
+          "before": {
+            "tokens": 11412,
+            "chars": 47064,
+            "bytes": 47346,
+            "fileCount": 10,
+            "files": [
+              ".agent/rules/super-compound.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/workflows/sc-work.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/parallel-execution/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 453,
+            "chars": 1706,
+            "bytes": 1706,
+            "fileCount": 3,
+            "files": [
+              ".agent/context/workflows/sc-work.contract.md",
+              ".agent/context/skills/sc-work.contract.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 96.03049421661409,
+          "pass": true
+        },
+        {
+          "name": "sc-debug",
+          "description": "/sc-debug reproduce, root cause, fix, and verify.",
+          "before": {
+            "tokens": 2271,
+            "chars": 9590,
+            "bytes": 9666,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-debug.md",
+              ".agent/skills/systematic-debugging/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 51,
+            "chars": 272,
+            "bytes": 272,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-debug.contract.md"
+            ]
+          },
+          "reductionPercent": 97.75429326287978,
+          "pass": true
+        },
+        {
+          "name": "sc-review",
+          "description": "/sc-review findings-first review.",
+          "before": {
+            "tokens": 1942,
+            "chars": 8091,
+            "bytes": 8151,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-review.md",
+              ".agent/skills/code-review/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 45,
+            "chars": 251,
+            "bytes": 251,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-review.contract.md"
+            ]
+          },
+          "reductionPercent": 97.68280123583935,
+          "pass": true
+        },
+        {
+          "name": "sc-audit",
+          "description": "/sc-audit security, compatibility, compliance, and readiness audit.",
+          "before": {
+            "tokens": 11903,
+            "chars": 47723,
+            "bytes": 48535,
+            "fileCount": 6,
+            "files": [
+              ".agent/workflows/sc-audit.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 65,
+            "chars": 314,
+            "bytes": 314,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-audit.contract.md"
+            ]
+          },
+          "reductionPercent": 99.45391918003864,
+          "pass": true
+        },
+        {
+          "name": "sc-compound",
+          "description": "/sc-compound reusable knowledge capture.",
+          "before": {
+            "tokens": 1879,
+            "chars": 7738,
+            "bytes": 7792,
+            "fileCount": 2,
+            "files": [
+              ".agent/workflows/sc-compound.md",
+              ".agent/skills/knowledge-compounding/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 53,
+            "chars": 253,
+            "bytes": 253,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-compound.contract.md"
+            ]
+          },
+          "reductionPercent": 97.17935071846728,
+          "pass": true
+        },
+        {
+          "name": "sc-pause",
+          "description": "/sc-pause durable handoff before stopping.",
+          "before": {
+            "tokens": 1980,
+            "chars": 8253,
+            "bytes": 8253,
+            "fileCount": 3,
+            "files": [
+              ".agent/workflows/sc-pause.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 59,
+            "chars": 280,
+            "bytes": 280,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflows/sc-pause.contract.md"
+            ]
+          },
+          "reductionPercent": 97.02020202020202,
+          "pass": true
+        },
+        {
+          "name": "sc-launch",
+          "description": "/sc-launch complete lifecycle routing.",
+          "before": {
+            "tokens": 112816,
+            "chars": 425157,
+            "bytes": 426060,
+            "fileCount": 28,
+            "files": [
+              ".agent/workflows/sc-audit.md",
+              ".agent/workflows/sc-compound.md",
+              ".agent/workflows/sc-debug.md",
+              ".agent/workflows/sc-eval.md",
+              ".agent/workflows/sc-explore.md",
+              ".agent/workflows/sc-init.md",
+              ".agent/workflows/sc-launch.md",
+              ".agent/workflows/sc-pause.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/workflows/sc-prd.md",
+              ".agent/workflows/sc-research.md",
+              ".agent/workflows/sc-review.md",
+              ".agent/workflows/sc-status.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/workflows/sc-work.md",
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/code-review/SKILL.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/knowledge-compounding/SKILL.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 494,
+            "chars": 1786,
+            "bytes": 1786,
+            "fileCount": 3,
+            "files": [
+              ".agent/context/workflows/sc-launch.contract.md",
+              ".agent/context/workflow-dispatch.md",
+              ".agent/context/template-index.md"
+            ]
+          },
+          "reductionPercent": 99.5621188483903,
+          "pass": true
+        },
+        {
+          "name": "sc-ui",
+          "description": "/sc-ui interface-design search-only guidance.",
+          "before": {
+            "tokens": 374638,
+            "chars": 1501050,
+            "bytes": 1504497,
+            "fileCount": 36,
+            "files": [
+              ".agent/rules/super-compound.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/skills/interface-design/SKILL.md",
+              ".agent/skills/interface-design/scripts/core.py",
+              ".agent/skills/interface-design/scripts/design_system.py",
+              ".agent/skills/interface-design/scripts/search.py",
+              ".agent/skills/interface-design/scripts/test_design_system_security.py",
+              ".agent/skills/interface-design/data/app-interface.csv",
+              ".agent/skills/interface-design/data/charts.csv",
+              ".agent/skills/interface-design/data/colors.csv",
+              ".agent/skills/interface-design/data/google-fonts.csv",
+              ".agent/skills/interface-design/data/icons.csv",
+              ".agent/skills/interface-design/data/landing.csv",
+              ".agent/skills/interface-design/data/products.csv",
+              ".agent/skills/interface-design/data/react-performance.csv",
+              ".agent/skills/interface-design/data/stacks/angular.csv",
+              ".agent/skills/interface-design/data/stacks/astro.csv",
+              ".agent/skills/interface-design/data/stacks/flutter.csv",
+              ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+              ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+              ".agent/skills/interface-design/data/stacks/laravel.csv",
+              ".agent/skills/interface-design/data/stacks/nextjs.csv",
+              ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+              ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+              ".agent/skills/interface-design/data/stacks/react-native.csv",
+              ".agent/skills/interface-design/data/stacks/react.csv",
+              ".agent/skills/interface-design/data/stacks/shadcn.csv",
+              ".agent/skills/interface-design/data/stacks/svelte.csv",
+              ".agent/skills/interface-design/data/stacks/swiftui.csv",
+              ".agent/skills/interface-design/data/stacks/threejs.csv",
+              ".agent/skills/interface-design/data/stacks/vue.csv",
+              ".agent/skills/interface-design/data/styles.csv",
+              ".agent/skills/interface-design/data/typography.csv",
+              ".agent/skills/interface-design/data/ui-reasoning.csv",
+              ".agent/skills/interface-design/data/ux-guidelines.csv",
+              ".agent/skills/interface-design/data/web-interface.csv"
+            ]
+          },
+          "after": {
+            "tokens": 1700,
+            "chars": 6994,
+            "bytes": 6994,
+            "fileCount": 4,
+            "files": [
+              ".agent/workflows/sc-ui.md",
+              ".agent/context/workflows/sc-ui.contract.md",
+              ".agent/context/skills/interface-design.contract.md",
+              ".agent/skills/interface-design/SKILL.md"
+            ]
+          },
+          "reductionPercent": 99.54622862603367,
+          "pass": true
+        },
+        {
+          "name": "artifact-output-brd-prd-fsd-issue",
+          "description": "Generated BRD/PRD/FSD/ADR artifact and goal issue surfaces.",
+          "before": {
+            "tokens": 98427,
+            "chars": 362553,
+            "bytes": 363342,
+            "fileCount": 6,
+            "files": [
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md"
+            ]
+          },
+          "after": {
+            "tokens": 1150,
+            "chars": 4607,
+            "bytes": 4607,
+            "fileCount": 6,
+            "files": [
+              ".agent/context/template-index.md",
+              ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 98.83162140469587,
+          "pass": true
+        },
+        {
+          "name": "related-all-skills",
+          "description": "All skill procedures as a single preload hotspot.",
+          "before": {
+            "tokens": 52186,
+            "chars": 211670,
+            "bytes": 214177,
+            "fileCount": 34,
+            "files": [
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/architecture-enforcement/SKILL.md",
+              ".agent/skills/brainstorming/SKILL.md",
+              ".agent/skills/checkpoint-protocol/SKILL.md",
+              ".agent/skills/code-review/SKILL.md",
+              ".agent/skills/codebase-design/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/context7-docs/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/domain-modeling/SKILL.md",
+              ".agent/skills/eval-harness/SKILL.md",
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/gap-closure/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md",
+              ".agent/skills/interface-design/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/knowledge-compounding/SKILL.md",
+              ".agent/skills/parallel-execution/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md",
+              ".agent/skills/prototyping/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md",
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/skill-authoring/SKILL.md",
+              ".agent/skills/state-management/SKILL.md",
+              ".agent/skills/subagent-orchestration/SKILL.md",
+              ".agent/skills/systematic-debugging/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/todo-management/SKILL.md",
+              ".agent/skills/triage-workflow/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 441,
+            "chars": 1963,
+            "bytes": 1963,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skill-index.md"
+            ]
+          },
+          "reductionPercent": 99.1549457708964,
+          "pass": true
+        },
+        {
+          "name": "related-delivery-planning-skills",
+          "description": "Agentic delivery, PRD/FSD planning, issue, and verification skills.",
+          "before": {
+            "tokens": 7795,
+            "chars": 33077,
+            "bytes": 33077,
+            "fileCount": 5,
+            "files": [
+              ".agent/skills/agentic-delivery/SKILL.md",
+              ".agent/skills/writing-plans/SKILL.md",
+              ".agent/skills/issue-workflow/SKILL.md",
+              ".agent/skills/plan-verification/SKILL.md",
+              ".agent/skills/prd-generator/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 74,
+            "chars": 305,
+            "bytes": 305,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/delivery-planning.contract.md"
+            ]
+          },
+          "reductionPercent": 99.05067350865939,
+          "pass": true
+        },
+        {
+          "name": "related-execution-verification-skills",
+          "description": "Execution, context, TDD, verification, and integration skills.",
+          "before": {
+            "tokens": 6800,
+            "chars": 28166,
+            "bytes": 28408,
+            "fileCount": 5,
+            "files": [
+              ".agent/skills/executing-plans/SKILL.md",
+              ".agent/skills/test-driven-development/SKILL.md",
+              ".agent/skills/verification-before-completion/SKILL.md",
+              ".agent/skills/context-engineering/SKILL.md",
+              ".agent/skills/integration-checking/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 58,
+            "chars": 334,
+            "bytes": 334,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/execution-verification.contract.md"
+            ]
+          },
+          "reductionPercent": 99.1470588235294,
+          "pass": true
+        },
+        {
+          "name": "related-risk-audit-skills",
+          "description": "Security, compatibility, threat, privacy, and secure-code skills.",
+          "before": {
+            "tokens": 11572,
+            "chars": 46344,
+            "bytes": 47156,
+            "fileCount": 5,
+            "files": [
+              ".agent/skills/security-audit/SKILL.md",
+              ".agent/skills/compatibility-check/SKILL.md",
+              ".agent/skills/threat-modeling/SKILL.md",
+              ".agent/skills/data-privacy/SKILL.md",
+              ".agent/skills/secure-code-patterns/SKILL.md"
+            ]
+          },
+          "after": {
+            "tokens": 64,
+            "chars": 309,
+            "bytes": 309,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/risk-audit.contract.md"
+            ]
+          },
+          "reductionPercent": 99.44694089180781,
+          "pass": true
+        },
+        {
+          "name": "related-agentic-templates",
+          "description": "Full BRD/PRD/FSD/ADR templates as a preload hotspot.",
+          "before": {
+            "tokens": 95066,
+            "chars": 348899,
+            "bytes": 349688,
+            "fileCount": 4,
+            "files": [
+              ".agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
+              ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+              ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+            ]
+          },
+          "after": {
+            "tokens": 1150,
+            "chars": 4607,
+            "bytes": 4607,
+            "fileCount": 6,
+            "files": [
+              ".agent/context/template-index.md",
+              ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+              ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+              ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+            ]
+          },
+          "reductionPercent": 98.79031409757431,
+          "pass": true
+        },
+        {
+          "name": "related-interface-data",
+          "description": "Interface-design CSV data preload hotspot.",
+          "before": {
+            "tokens": 353236,
+            "chars": 1420447,
+            "bytes": 1423698,
+            "fileCount": 29,
+            "files": [
+              ".agent/skills/interface-design/data/app-interface.csv",
+              ".agent/skills/interface-design/data/charts.csv",
+              ".agent/skills/interface-design/data/colors.csv",
+              ".agent/skills/interface-design/data/google-fonts.csv",
+              ".agent/skills/interface-design/data/icons.csv",
+              ".agent/skills/interface-design/data/landing.csv",
+              ".agent/skills/interface-design/data/products.csv",
+              ".agent/skills/interface-design/data/react-performance.csv",
+              ".agent/skills/interface-design/data/stacks/angular.csv",
+              ".agent/skills/interface-design/data/stacks/astro.csv",
+              ".agent/skills/interface-design/data/stacks/flutter.csv",
+              ".agent/skills/interface-design/data/stacks/html-tailwind.csv",
+              ".agent/skills/interface-design/data/stacks/jetpack-compose.csv",
+              ".agent/skills/interface-design/data/stacks/laravel.csv",
+              ".agent/skills/interface-design/data/stacks/nextjs.csv",
+              ".agent/skills/interface-design/data/stacks/nuxt-ui.csv",
+              ".agent/skills/interface-design/data/stacks/nuxtjs.csv",
+              ".agent/skills/interface-design/data/stacks/react-native.csv",
+              ".agent/skills/interface-design/data/stacks/react.csv",
+              ".agent/skills/interface-design/data/stacks/shadcn.csv",
+              ".agent/skills/interface-design/data/stacks/svelte.csv",
+              ".agent/skills/interface-design/data/stacks/swiftui.csv",
+              ".agent/skills/interface-design/data/stacks/threejs.csv",
+              ".agent/skills/interface-design/data/stacks/vue.csv",
+              ".agent/skills/interface-design/data/styles.csv",
+              ".agent/skills/interface-design/data/typography.csv",
+              ".agent/skills/interface-design/data/ui-reasoning.csv",
+              ".agent/skills/interface-design/data/ux-guidelines.csv",
+              ".agent/skills/interface-design/data/web-interface.csv"
+            ]
+          },
+          "after": {
+            "tokens": 151,
+            "chars": 567,
+            "bytes": 567,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/interface-design.contract.md"
+            ]
+          },
+          "reductionPercent": 99.95725237518259,
+          "pass": true
+        },
+        {
+          "name": "related-interface-scripts",
+          "description": "Interface-design script preload hotspot.",
+          "before": {
+            "tokens": 19013,
+            "chars": 70874,
+            "bytes": 71070,
+            "fileCount": 4,
+            "files": [
+              ".agent/skills/interface-design/scripts/core.py",
+              ".agent/skills/interface-design/scripts/design_system.py",
+              ".agent/skills/interface-design/scripts/search.py",
+              ".agent/skills/interface-design/scripts/test_design_system_security.py"
+            ]
+          },
+          "after": {
+            "tokens": 151,
+            "chars": 567,
+            "bytes": 567,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/skills/interface-design.contract.md"
+            ]
+          },
+          "reductionPercent": 99.20580655341082,
+          "pass": true
+        },
+        {
+          "name": "related-hooks",
+          "description": "Hook script/config preload hotspot.",
+          "before": {
+            "tokens": 4559,
+            "chars": 17222,
+            "bytes": 17248,
+            "fileCount": 8,
+            "files": [
+              ".agent/hooks/lib/hook-utils.js",
+              ".agent/hooks/pre-compact.js",
+              ".agent/hooks/session-end.js",
+              ".agent/hooks/stop-check.js",
+              ".agent/hooks/suggest-compact.js",
+              ".agent/hooks/test-hooks-security.js",
+              ".agent/hooks/hooks.json",
+              ".agent/hooks/hooks.project.json"
+            ]
+          },
+          "after": {
+            "tokens": 97,
+            "chars": 377,
+            "bytes": 377,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/hook-index.md"
+            ]
+          },
+          "reductionPercent": 97.87234042553192,
+          "pass": true
+        },
+        {
+          "name": "related-agents",
+          "description": "Specialized agent prompt preload hotspot.",
+          "before": {
+            "tokens": 5442,
+            "chars": 21551,
+            "bytes": 21705,
+            "fileCount": 5,
+            "files": [
+              ".agent/agents/architect.md",
+              ".agent/agents/build-fixer.md",
+              ".agent/agents/code-reviewer.md",
+              ".agent/agents/doc-updater.md",
+              ".agent/agents/e2e-runner.md"
+            ]
+          },
+          "after": {
+            "tokens": 85,
+            "chars": 332,
+            "bytes": 332,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/agent-index.md"
+            ]
+          },
+          "reductionPercent": 98.43807423741272,
+          "pass": true
+        },
+        {
+          "name": "related-all-workflows",
+          "description": "All public workflow files as a preload hotspot.",
+          "before": {
+            "tokens": 4022,
+            "chars": 17079,
+            "bytes": 17079,
+            "fileCount": 15,
+            "files": [
+              ".agent/workflows/sc-audit.md",
+              ".agent/workflows/sc-compound.md",
+              ".agent/workflows/sc-debug.md",
+              ".agent/workflows/sc-eval.md",
+              ".agent/workflows/sc-explore.md",
+              ".agent/workflows/sc-init.md",
+              ".agent/workflows/sc-launch.md",
+              ".agent/workflows/sc-pause.md",
+              ".agent/workflows/sc-plan.md",
+              ".agent/workflows/sc-prd.md",
+              ".agent/workflows/sc-research.md",
+              ".agent/workflows/sc-review.md",
+              ".agent/workflows/sc-status.md",
+              ".agent/workflows/sc-ui.md",
+              ".agent/workflows/sc-work.md"
+            ]
+          },
+          "after": {
+            "tokens": 129,
+            "chars": 363,
+            "bytes": 363,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/workflow-dispatch.md"
+            ]
+          },
+          "reductionPercent": 96.79264047737443,
+          "pass": true
+        },
+        {
+          "name": "related-rules",
+          "description": "All always-on rules as a preload hotspot.",
+          "before": {
+            "tokens": 1925,
+            "chars": 8366,
+            "bytes": 8366,
+            "fileCount": 3,
+            "files": [
+              ".agent/rules/project-config.md",
+              ".agent/rules/quality-gates.md",
+              ".agent/rules/super-compound.md"
+            ]
+          },
+          "after": {
+            "tokens": 77,
+            "chars": 321,
+            "bytes": 321,
+            "fileCount": 1,
+            "files": [
+              ".agent/context/rule-index.md"
+            ]
+          },
+          "reductionPercent": 96,
+          "pass": true
+        }
+      ],
+      "summary": {
+        "pass": true,
+        "totalBeforeTokens": 1820893,
+        "totalAfterTokens": 10408,
+        "totalReductionPercent": 99.4284123229646
+      }
+    }
+  ],
+  "consecutivePasses": 3,
+  "pass": true
+}

@@ -8,6 +8,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 - Keep the workflow surface small. Public workflows live in `.agent/workflows/` and are limited to the core set below.
 - Use the `sc-` workflow prefix for all command triggers to avoid collisions with native agent commands.
 - Keep detailed procedures in skills. Rules stay short because they are always-on context.
+- Use `.agent/context/` for compact runtime routing, skill contracts, template skeletons, and token budget gates before loading full files.
 - Prefer existing project conventions, tools, and architecture over new abstractions.
 - Treat hooks, prompts, skills, workflows, MCP config, and dependency changes as security-sensitive.
 - Preserve user work. Do not overwrite unrelated local changes.
@@ -35,6 +36,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 ## Routing
 
 - UI/frontend/mobile/chart work -> `sc-ui.md` and `interface-design`.
+- Low-token routing -> `.agent/context/routing-index.md`, then a route contract when available.
 - Bugs, failures, regressions -> `sc-debug.md` and `systematic-debugging`.
 - Security, dependency, release, MCP, compliance, or agent config risk -> `sc-audit.md`.
 - Open product/domain/architecture uncertainty -> `sc-explore.md`; convert resolved work through BRD, PRD, then FSD.
