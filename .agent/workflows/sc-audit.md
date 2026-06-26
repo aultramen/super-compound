@@ -23,9 +23,10 @@ Use this when risk matters: auth, secrets, dependencies, MCP/tools, agent prompt
 3. Load `skills/compatibility-check/SKILL.md` for dependency/runtime compatibility.
 4. Load `skills/threat-modeling/SKILL.md`, `skills/data-privacy/SKILL.md`, or `skills/secure-code-patterns/SKILL.md` only when the scope needs that depth.
 5. Inspect project manifests, env examples, lockfiles, CI/deploy config, hooks, MCP config, and relevant source files.
-6. Run available read-only checks: tests, lint, build, dependency audit, secret scan, or targeted grep.
-7. Report findings by severity with evidence, affected files, and recommended fixes.
-8. Stop for approval before applying changes.
+6. For release or PR readiness, inspect Git state read-only for direct-main risk, dirty tree, unpushed branch, and secret-looking files; route fixes or pushes through `/sc-go`.
+7. Run available read-only checks: tests, lint, build, dependency audit, secret scan, or targeted grep.
+8. Report findings by severity with evidence, affected files, and recommended fixes.
+9. Stop for approval before applying changes.
 
 ## Output
 

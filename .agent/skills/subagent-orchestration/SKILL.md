@@ -139,7 +139,7 @@ Max 2 revision cycles per goal. If still failing, escalate to the user.
 | Fresh context per goal | Prevents accumulated confusion |
 | Only relevant files | Keeps context focused |
 | Do not carry over debug state | Each goal starts clean |
-| Commit after each accepted goal, when commits are requested | Creates rollback points |
+| Route commits through `/sc-go` after each accepted goal, when commits are requested | Creates rollback points with preview-first Git safety |
 
 ## Red Flags
 

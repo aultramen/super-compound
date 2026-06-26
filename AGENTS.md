@@ -45,6 +45,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 
 - Inspect the relevant `.agent/` rule, workflow, skill, or agent file before changing it.
 - Preserve the framework's core promise: BRD -> PRD -> FSD -> GOAL before product code, evidence before claims, test-first by default, knowledge compounds, and verification gates.
+- Route branch, worktree, commit, push, and Pull Request operations through `/sc-go` and `git-workflow-operation`.
 - Keep edits scoped. Avoid broad rewrites, formatting churn, or renaming established workflows unless the user asks.
 - Preserve the documented public workflow names. Compatibility aliases may be removed when a breaking cleanup explicitly approves it.
 - Do not overwrite user changes or generated local state such as `.debug/`, `docs/progress.md`, `docs/STATE.md`, or `.continue-here.md`.

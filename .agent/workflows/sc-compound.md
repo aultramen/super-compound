@@ -11,8 +11,9 @@ Use this after a non-obvious fix, debugging session, migration, integration repa
 1. Load `skills/knowledge-compounding/SKILL.md`.
 2. Confirm the problem was actually solved with evidence.
 3. Capture symptoms, root cause, fix, failed attempts, prevention, and related files.
-4. Save concise documentation under `docs/solutions/<category>/`.
-5. Update `docs/progress.md` only when the pattern is likely to help future sessions.
+4. Mention branch or PR references only as context; do not mutate Git state.
+5. Save concise documentation under `docs/solutions/<category>/`.
+6. Update `docs/progress.md` only when the pattern is likely to help future sessions.
 
 ## Skip
 

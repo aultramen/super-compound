@@ -13,7 +13,7 @@ Use this only after there is an approved FSD goal or `.scratch/<feature>/issues/
 3. Read the `.scratch/<feature>/issues/<NN>-<slug>.md` issue or direct FSD goal, then dynamically load only the referenced FSD sections, upstream BRD/PRD IDs, linked accepted ADRs, blockers, verification refs, and relevant code/tests.
 4. Confirm the FSD is approved, every referenced `TDEC-*` is approved, every linked ADR is `ACCEPTED`, and no `OPEN-* BLOCKER` affects the goal.
 5. If authority is missing, stop and report `OPEN-xxx` instead of inventing schema, APIs, authorization, workflows, roles, or state transitions.
-6. Set up the branch/worktree strategy only if requested or configured.
+6. If `gitWorkflow.enabled` is true, load `skills/git-workflow-operation/SKILL.md`, block direct work on protected base branches, and preview `/sc-go start <branch>` commands before edits when the task is feature, refactor, docs, or chore work.
 7. Execute one FSD goal at a time by default.
 8. Use `skills/parallel-execution/SKILL.md` only when goals are independent, unblocked, and isolated.
 9. For UI tasks, follow `skills/interface-design/SKILL.md`.

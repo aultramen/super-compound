@@ -21,6 +21,7 @@ Use this file as the compact first stop for Super Compound routing. Load a full 
 | `/sc-prd` | `workflows/sc-prd.contract.md` | PRD |
 | `/sc-plan` | `workflows/sc-plan.contract.md` | FSD + issue pointers |
 | `/sc-eval` | `workflows/sc-eval.contract.md` | pass/fail report |
+| `/sc-go` | `workflows/sc-go.contract.md` | Git preview + PR template |
 | `/sc-work` | `workflows/sc-work.contract.md` | implementation + verification |
 | `/sc-debug` | `workflows/sc-debug.contract.md` | fix evidence |
 | `/sc-review` | `workflows/sc-review.contract.md` | findings |
@@ -38,3 +39,4 @@ Use this file as the compact first stop for Super Compound routing. Load a full 
 - Issue files stay pointers; they do not duplicate artifact prose.
 - Interface-design data is retrieved by search scripts, not model preload.
 - Verification commands remain mapped before completion.
+- Git operations remain preview-first and route through `/sc-go`.

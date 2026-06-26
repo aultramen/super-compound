@@ -13,9 +13,10 @@ Use this for errors, failing tests, regressions, performance surprises, or behav
 3. Capture the exact failing command, logs, stack trace, request, or UI path.
 4. Form ranked hypotheses from evidence.
 5. Test the most likely hypothesis with the smallest feedback loop.
-6. Fix the root cause, preferably with a regression test.
-7. Run verification and report evidence.
-8. Use `sc-compound.md` if the root cause or fix is reusable knowledge.
+6. If `gitWorkflow.enabled` is true and edits are needed, load `skills/git-workflow-operation/SKILL.md` and preview `/sc-go start fix/<slug>` or `/sc-go start hotfix/<slug>` after reproduction and before fixing.
+7. Fix the root cause, preferably with a regression test.
+8. Run verification and report evidence.
+9. Use `sc-compound.md` if the root cause or fix is reusable knowledge.
 
 ## Output
 

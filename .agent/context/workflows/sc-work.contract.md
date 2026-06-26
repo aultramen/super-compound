@@ -7,7 +7,10 @@ Load only:
 - The goal issue pointer or exact FSD `GOAL-*` section.
 - Referenced FSD sections, upstream BRD/PRD IDs, accepted ADR obligations, target files, and tests.
 - `.agent/context/skills/sc-work.contract.md`.
+- `.agent/context/skills/git-workflow-operation.contract.md` only when branch/worktree setup is configured or requested.
 
 Stop with `OPEN-*` when authority is missing, a linked ADR is not accepted, or implementation would invent schema, APIs, auth, workflow, role, state, security, privacy, or data-integrity behavior.
+
+When Git workflow is enabled, block direct protected-base work and preview branch/worktree setup before edits.
 
 Run mapped verification before claiming completion.

@@ -14,6 +14,7 @@ const FULL_FRAMEWORK_SCENARIOS = [
       ".agent/workflows/*.md",
       ".agent/skills/**/SKILL.md",
       ".agent/templates/agentic-delivery/*.md",
+      ".agent/templates/git-workflow/*.md",
       ".agent/hooks/**/*.js",
       ".agent/hooks/*.json",
       ".agent/agents/*.md",
@@ -129,6 +130,20 @@ const WORKFLOW_SCENARIOS = [
       ".agent/skills/eval-harness/SKILL.md",
     ],
     after: [".agent/context/workflows/sc-eval.contract.md"],
+  },
+  {
+    name: "sc-go",
+    description: "/sc-go preview-first Git branch, worktree, commit, push, and PR operations.",
+    before: [
+      ".agent/workflows/sc-go.md",
+      ".agent/skills/git-workflow-operation/SKILL.md",
+      ".agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md",
+      ".agent/tools/git-workflow.mjs",
+    ],
+    after: [
+      ".agent/context/workflows/sc-go.contract.md",
+      ".agent/context/skills/git-workflow-operation.contract.md",
+    ],
   },
   {
     name: "sc-work",
@@ -316,6 +331,19 @@ const RELATED_HOTSPOT_SCENARIOS = [
       ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
       ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
       ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md",
+    ],
+  },
+  {
+    name: "related-git-workflow",
+    description: "Git workflow skill, template, and helper as a preload hotspot.",
+    before: [
+      ".agent/skills/git-workflow-operation/SKILL.md",
+      ".agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md",
+      ".agent/tools/git-workflow.mjs",
+    ],
+    after: [
+      ".agent/context/workflows/sc-go.contract.md",
+      ".agent/context/skills/git-workflow-operation.contract.md",
     ],
   },
   {
@@ -674,7 +702,7 @@ function usage() {
   node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.json --require-reduction 90 --repeat 3
 
 Default suite:
-  full framework load, all 15 public workflows, artifact surfaces, skills,
+  full framework load, all 16 public workflows, artifact surfaces, skills,
   templates, interface-design data/scripts, hooks, agents, workflows, and rules.
 
 Options:

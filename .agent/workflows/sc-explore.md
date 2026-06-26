@@ -24,8 +24,9 @@ Use this when the work is not ready for product requirements or technical planni
 6. Load `skills/prototyping/SKILL.md` only when runnable evidence is cheaper than debate.
 7. Resolve the smallest business decision that unlocks the next step.
 8. Capture objectives, scope, non-goals, business rules, policies, constraints, acceptance gates, and `OPEN-*` blockers.
-9. Save a BRD to `docs/brd/brd-<feature>.md` when a durable artifact is useful, using the BRD template only as a reference.
-10. Route to `sc-prd.md` when the BRD is approved or the user explicitly accepts its assumptions.
+9. Capture Git workflow constraints only when they affect delivery scope; do not mutate Git state.
+10. Save a BRD to `docs/brd/brd-<feature>.md` when a durable artifact is useful, using the BRD template only as a reference.
+11. Route to `sc-prd.md` when the BRD is approved or the user explicitly accepts its assumptions.
 
 ## Output
 
