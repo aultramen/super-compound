@@ -21,6 +21,7 @@ This is the compact skill contract. Each `SKILL.md` keeps YAML `name` and `descr
 | `executing-plans` | execute one approved goal |
 | `test-driven-development` | behavior changes and regressions |
 | `verification-before-completion` | final evidence gate |
+| `git-workflow-operation` | preview-first branch, worktree, commit, push, and PR operations |
 | `context-engineering` | selective loading and handoff |
 | `interface-design` | UI guidance through search-only data retrieval |
 | `systematic-debugging` | reproduce, isolate, fix root cause |

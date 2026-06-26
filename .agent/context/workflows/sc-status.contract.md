@@ -2,4 +2,4 @@
 
 Purpose: orient a session and choose the next workflow.
 
-Load `.continue-here.md`, `docs/STATE.md`, `docs/progress.md`, `.scratch/*/issues/*.md`, and git status only when present. Report current position, blockers, verification status, and one recommended next route.
+Load `.continue-here.md`, `docs/STATE.md`, `docs/progress.md`, `.scratch/*/issues/*.md`, and Git status/branch/worktree state only when present. Report current position, blockers, verification status, Git state, and one recommended next route.

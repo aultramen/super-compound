@@ -23,12 +23,14 @@ Use this when approved product requirements are ready to become a technical impl
 10. Load `skills/issue-workflow/SKILL.md` for goal issue files under `.scratch/<feature>/issues/`.
 11. Load `skills/triage-workflow/SKILL.md` when shaping incoming, stale, or raw issues into agent-ready work.
 12. Shape FSD `GOAL-*` packets into vertical, independently verifiable issue pointers without copying BRD/PRD/FSD/ADR prose.
-13. Include blocker relationships, qualified refs, verification refs, and stop conditions.
-14. Use `skills/plan-verification/SKILL.md` before execution.
+13. Include suggested branch names per GOAL and identify optional worktree candidates for independent parallel goals; do not checkout or mutate Git state during planning.
+14. Include blocker relationships, qualified refs, verification refs, and stop conditions.
+15. Use `skills/plan-verification/SKILL.md` before execution.
 
 ## Output
 
 - FSD technical contract.
 - `.scratch/<feature>/issues/*.md` goal issue pointers when work will be delegated or executed incrementally.
 - Verification plan.
+- Suggested Git branch names and optional worktree candidates when useful.
 - Risks, assumptions, and out-of-scope notes.

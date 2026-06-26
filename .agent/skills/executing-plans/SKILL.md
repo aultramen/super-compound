@@ -36,8 +36,10 @@ Respect the project's current state.
 
 - Check `git status` before broad edits.
 - Do not overwrite user changes.
-- Create a branch or worktree only when the user or project config calls for it.
-- Stage related files only when committing is explicitly requested.
+- Use `git-workflow-operation` and `/sc-go` for branch, worktree, commit, push, and PR operations.
+- Create a branch or worktree only when the user or `gitWorkflow` config calls for it, and preview commands first.
+- Stage related files only when committing is explicitly requested through `/sc-go`.
+- Do not work directly on the configured protected base branch.
 - Never use destructive git commands unless the user asked for them.
 
 ## Task Execution Loop
@@ -138,6 +140,7 @@ Before the final response:
 - Docs are updated when behavior, setup, commands, architecture, or user workflows changed
 - No old workflow/skill names were reintroduced
 - `git status` is reviewed for intended and unintended changes
+- Commit, push, and PR preparation were routed through `/sc-go` when requested
 - The user gets a concise summary of changed files and checks
 
 ## Related Skills
@@ -151,3 +154,4 @@ Before the final response:
 - `state-management` keeps long work durable
 - `integration-checking` verifies cross-component behavior
 - `code-review` and `verification-before-completion` close the loop
+- `git-workflow-operation` handles preview-first branch, worktree, commit, push, and PR operations

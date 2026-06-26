@@ -15,9 +15,13 @@ The ideal path:
 /sc-explore analytics dashboard for account admins
 /sc-prd
 /sc-plan --issues
+/sc-go start feature/analytics-dashboard
 /sc-work .scratch/analytics-dashboard/issues/01-account-usage-summary.md
 /sc-review
 /sc-audit
+/sc-go commit "Implement analytics dashboard"
+/sc-go push
+/sc-go pr
 /sc-compound
 ```
 
@@ -179,7 +183,29 @@ This should review the proposed FSD goals with you, then create:
 
 Each issue includes `Status`, `Parent FSD`, `Goal ID`, `Blocked by`, qualified upstream refs, technical refs, optional ADR refs, verification refs, stop conditions, and comments. It must not copy BRD, PRD, FSD, or ADR paragraphs. `Blocked by` links form an acyclic dependency graph so ready goals can be picked up in parallel.
 
-## 5. Work
+## 5. Git Start
+
+Before editing, preview the branch workflow:
+
+```text
+/sc-go start feature/analytics-dashboard
+```
+
+The standard preview is:
+
+```bash
+git checkout main
+git pull --ff-only origin main
+git checkout -b feature/analytics-dashboard
+```
+
+Use worktrees only when parallel agents or multi-branch review need isolated folders:
+
+```text
+/sc-go worktree feature/analytics-dashboard --path ../analytics-dashboard
+```
+
+## 6. Work
 
 Run:
 
@@ -207,7 +233,7 @@ The agent should execute sequentially by default:
 
 Parallel execution is reserved for independent FSD goals with non-overlapping files and clear verification.
 
-## 6. Debug
+## 7. Debug
 
 If something fails, run:
 
@@ -225,7 +251,7 @@ Debugging should:
 
 Do not patch blindly.
 
-## 7. Review
+## 8. Review
 
 Run:
 
@@ -244,7 +270,7 @@ Review focuses on findings first:
 
 Findings should include file and line references when possible.
 
-## 8. Audit
+## 9. Audit
 
 Run:
 
@@ -272,7 +298,19 @@ Specific routes are allowed:
 
 Audit mode is read-only unless the user asks for fixes.
 
-## 9. UI
+## 10. Git Finish
+
+After verification, review the finish workflow:
+
+```text
+/sc-go commit "Implement analytics dashboard"
+/sc-go push
+/sc-go pr
+```
+
+The preview includes `git status`, `git diff`, a sensitive-file warning before `git add .`, first push with `git push -u origin <branch>`, and the Pull Request template.
+
+## 11. UI
 
 Run:
 
@@ -298,7 +336,7 @@ python .agent/skills/interface-design/scripts/search.py "neo brutalism mobile" -
 python .agent/skills/interface-design/scripts/search.py "bauhaus geometric" --domain typography
 ```
 
-## 10. Pause And Continue
+## 12. Pause And Continue
 
 When stopping mid-work:
 
@@ -320,7 +358,7 @@ Next session:
 
 The agent should read durable state and route to the next action.
 
-## 11. Compound
+## 13. Compound
 
 Run:
 
@@ -349,6 +387,7 @@ Save concise knowledge under `docs/solutions/` or related project docs.
 | Write PRD product requirements | `/sc-prd` |
 | Create FSD and goal issue pointers | `/sc-plan` |
 | Define or run evals | `/sc-eval` |
+| Branch, worktree, commit, push, or PR | `/sc-go` |
 | Execute FSD goal | `/sc-work` |
 | Fix failures | `/sc-debug` |
 | Review changes | `/sc-review` |
@@ -369,6 +408,7 @@ Use these replacements:
 | brainstorm, discuss, domain, strategy, prototype | `/sc-explore` |
 | issue shaping, triage, Kanban, Journey, task breakdown | `/sc-plan` |
 | loop execution, handoff, swarm work | `/sc-work` |
+| branch, worktree, commit, push, PR | `/sc-go` |
 | security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
 | progress or resume | `/sc-status` |
 | reload | `/sc-init reload` |
@@ -380,6 +420,7 @@ Before finishing any meaningful work:
 
 - The requested outcome is implemented or the blocker is named.
 - Tests or equivalent verification ran.
+- Branch, commit, push, and PR operations used `/sc-go` when requested.
 - Docs changed when user behavior, commands, setup, or architecture changed.
 - Stale workflow/skill names were not reintroduced.
 - No secrets, cache files, or malformed data were introduced.

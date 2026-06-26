@@ -14,8 +14,9 @@ Use this workflow for any UI build, redesign, or UI quality review.
 4. Generate or read the project design system before implementation.
 5. Run targeted domain searches only for the UI risks in scope: `web`, `app`, `ux`, `chart`, `typography`, `icons`, or stack-specific guidance.
 6. Read search results only; do not preload interface CSV files into model context.
-7. Implement with existing components and project conventions.
-8. Verify responsive behavior, accessibility, text overflow, interaction states, loading/empty/error states, and stack-specific risks.
+7. For implementation work, inherit Git branch/worktree setup from `/sc-work` or `/sc-go`; do not mutate Git state directly from `/sc-ui`.
+8. Implement with existing components and project conventions.
+9. Verify responsive behavior, accessibility, text overflow, interaction states, loading/empty/error states, and stack-specific risks.
 
 ## Output
 

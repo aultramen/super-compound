@@ -9,6 +9,7 @@ Keep gates lightweight and evidence-based. Detailed procedures belong in the ref
 - For UI work, use `interface-design` before implementation.
 - For dependency, security, release, MCP, compliance, or agent-surface risk, use `sc-audit.md` and the security skills.
 - For unclear intent, resolve uncertainty through `sc-explore.md` before planning.
+- For branch, commit, push, worktree, or Pull Request operations, use `sc-go.md` and preview commands before execution.
 
 ## Before Executing A Plan
 
@@ -25,6 +26,7 @@ Keep gates lightweight and evidence-based. Detailed procedures belong in the ref
 - Validate inputs at boundaries and preserve dependency direction.
 - Capture deferred ideas instead of expanding scope mid-task.
 - Do not run destructive or publishing Git commands unless explicitly requested.
+- Do not work directly on a protected base branch. Use a configured Git workflow branch or optional worktree.
 
 ## Before Completion
 
@@ -34,6 +36,7 @@ Use `verification-before-completion` for non-trivial work.
 - Run broader checks when shared behavior, security, data, or UI workflows changed.
 - Check integration, not just file existence.
 - Report commands run, important output, and any residual risk.
+- Before commit, push, or PR creation, run mapped verification and review `git status` plus `git diff`.
 
 ## Red Flags
 

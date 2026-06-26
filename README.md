@@ -6,7 +6,7 @@ It keeps the public command surface small, pushes detailed procedures into skill
 
 ## What It Provides
 
-- 15 public workflows for common development operations
+- 16 public workflows for common development operations
 - Canonical product delivery path: `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`
 - Modular skills for agentic delivery, planning, execution, debugging, review, audit, UI, state, and verification
 - Full BRD/PRD/FSD/optional ADR templates under `.agent/templates/agentic-delivery/`
@@ -15,6 +15,7 @@ It keeps the public command surface small, pushes detailed procedures into skill
 - Compact runtime contracts under `.agent/context/` for routing, skill selection, template skeletons, and context budget gates
 - Deterministic local hooks under `.agent/hooks/`
 - Deterministic token benchmark harness under `.agent/tools/`
+- Preview-first Git Workflow Operation through `/sc-go`
 - Data-backed interface design search through `interface-design`
 - Durable project memory through `docs/STATE.md`, `.continue-here.md`, and `docs/solutions/`
 
@@ -46,7 +47,11 @@ All public commands use the `/sc-*` prefix to avoid collisions with native Claud
 /sc-explore <idea>
 /sc-prd <feature>
 /sc-plan <approved PRD>
+/sc-go start feature/<name>
 /sc-work <goal issue or FSD goal>
+/sc-go commit "Describe the change"
+/sc-go push
+/sc-go pr
 /sc-review
 /sc-audit
 /sc-compound
@@ -79,6 +84,7 @@ Only these workflow files are public:
 | `/sc-prd` | Write PRD product requirements from an approved BRD |
 | `/sc-plan` | Produce the FSD, ADR applicability decision, goal issue pointers, risk checks, and verification |
 | `/sc-eval` | Define and run evaluation criteria before or after implementation |
+| `/sc-go` | Preview branch, worktree, commit, push, and Pull Request operations |
 | `/sc-work` | Execute an approved FSD goal or goal issue pointer sequentially or with safe parallel slices |
 | `/sc-debug` | Reproduce, isolate, and fix root causes |
 | `/sc-review` | Review changes for correctness, maintainability, and missing tests |
@@ -95,6 +101,7 @@ Removed workflows are intentionally not aliases. Route them this way:
 | brainstorm, discuss, domain, strategy, prototype | `/sc-explore` |
 | issues, triage, Kanban, Journey, task shaping | `/sc-plan` |
 | loop, handoff, parallel execution | `/sc-work` |
+| branch, commit, push, PR, worktree | `/sc-go` |
 | security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
 | progress, resume | `/sc-status` |
 | reload | `/sc-init reload` |
@@ -121,6 +128,7 @@ Core operational skills:
 - `security-audit`
 - `state-management`
 - `verification-before-completion`
+- `git-workflow-operation`
 
 Supporting skills:
 
@@ -142,6 +150,38 @@ Supporting skills:
 - `subagent-orchestration`
 - `threat-modeling`
 - `todo-management`
+
+## Git Workflow Operation
+
+Use `/sc-go` when starting a branch, using an optional worktree, committing, pushing, or preparing a Pull Request. The default mode is preview-first: Super Compound shows safety checks and exact commands before mutating Git state.
+
+Standard branch preview:
+
+```bash
+git checkout main
+git pull --ff-only origin main
+git checkout -b feature/login
+```
+
+Optional worktree preview:
+
+```bash
+git fetch origin
+git worktree add -b feature/login ../project-feature origin/main
+cd ../project-feature
+```
+
+Finish preview:
+
+```bash
+git status
+git diff
+git add .
+git commit -m "Implement login workflow"
+git push -u origin feature/login
+```
+
+Branch names should use `feature/`, `fix/`, `hotfix/`, `refactor/`, `docs/`, or `chore/`. Do not work directly on `main` or the configured base branch. Review sensitive paths such as `.env`, credentials, logs, cache, and build output before `git add .`. Pull Requests use `.agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md`.
 
 ## Interface Design
 
@@ -174,7 +214,7 @@ The CSV loader fails fast when a row does not match its header width, so malform
   skills/       modular task procedures
   templates/    BRD, PRD, FSD, and optional ADR templates
   tools/        deterministic local framework utilities
-  workflows/    15 public workflows
+  workflows/    16 public workflows
 .claude/        Claude Code path-scoped rules
 docs/           engineering standards, archives, and runtime project docs
 SUPER-COMPOUND.md
@@ -209,13 +249,15 @@ node --check .agent/hooks/pre-compact.js
 node --check .agent/hooks/session-end.js
 node --check .agent/hooks/suggest-compact.js
 node --check .agent/hooks/stop-check.js
+node --check .agent/tools/git-workflow.mjs
+node --test .agent/tools/git-workflow.test.mjs .agent/tools/token-benchmark.test.mjs
 node .agent/hooks/test-hooks-security.js
 python .agent/skills/interface-design/scripts/test_design_system_security.py
 python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domain web
 node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --require-reduction 90 --repeat 3
 ```
 
-The token benchmark covers the full framework load, all 15 public workflows, artifact generation surfaces, and related hotspots such as skills, templates, interface-design data/scripts, hooks, agent prompts, workflows, and rules.
+The token benchmark covers the full framework load, all 16 public workflows, artifact generation surfaces, and related hotspots such as skills, templates, interface-design data/scripts, hooks, agent prompts, workflows, and rules.
 
 Also check:
 

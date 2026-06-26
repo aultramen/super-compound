@@ -45,6 +45,24 @@ conventions:
   tdd_mode: "balanced"        # strict | balanced | relaxed
   default_execution: "sequential"
 
+gitWorkflow:
+  enabled: true
+  defaultBaseBranch: "main"
+  remote: "origin"
+  requireCleanWorkingTree: true
+  useFastForwardOnly: true
+  allowWorktree: true
+  branchPrefixes:
+    - feature
+    - fix
+    - hotfix
+    - refactor
+    - docs
+    - chore
+  protectMainBranch: true
+  warnBeforeGitAddAll: true
+  previewFirst: true
+
 design_system:
   master_path: "design-system/MASTER.md"
   page_overrides_path: "design-system/pages/"

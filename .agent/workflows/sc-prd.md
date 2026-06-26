@@ -16,8 +16,9 @@ Use this when approved business requirements need to become product behavior bef
 6. Define users, observable behavior, feature scope, non-goals, user stories, functional requirements, acceptance criteria, edge cases, negative behavior, and product-level security/privacy/compliance requirements.
 7. Do not specify database schema, internal architecture, implementation modules, or technical mechanisms unless they are existing constraints inherited from the BRD or repository.
 8. Use qualified BRD references such as `BRD-CCC#BREQ-001`; mark unresolved product decisions as `OPEN-*`.
-9. Save the PRD to `docs/prd/prd-<feature>.md` when a durable artifact is useful, using the PRD template only as a reference.
-10. Route to `sc-plan.md` after approval.
+9. Mention Git workflow constraints only when they affect release or collaboration expectations; do not mutate Git state.
+10. Save the PRD to `docs/prd/prd-<feature>.md` when a durable artifact is useful, using the PRD template only as a reference.
+11. Route to `sc-plan.md` after approval.
 
 ## Output
 

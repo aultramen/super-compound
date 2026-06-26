@@ -12,7 +12,8 @@ Use this when local knowledge is insufficient or library/API behavior may have c
 2. Search local code, docs, tests, and solution notes first.
 3. Use `skills/context7-docs/SKILL.md` or official docs for library/API behavior.
 4. Check compatibility and migration risks for dependency changes.
-5. Summarize recommended approach, rejected options, and implications for the plan.
+5. Note Git workflow implications only when they affect implementation sequencing; do not mutate Git state.
+6. Summarize recommended approach, rejected options, and implications for the plan.
 
 ## Output
 
