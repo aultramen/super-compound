@@ -1,154 +1,39 @@
 ---
 name: skill-authoring
-description: "Use when creating new skills, editing existing skills, or verifying skills work before deployment. Applies TDD methodology to documentation — test with pressure scenarios before deploying."
+description: "Use when creating, editing, or verifying a skill before deployment."
 ---
 
 # Skill Authoring
 
-## Overview
+Treat process documentation as code: create pressure tests, observe failure, teach the minimum behavior, then close demonstrated loopholes. Announce use before authoring.
 
-**Writing skills IS Test-Driven Development applied to process documentation.** Write pressure scenarios (tests), watch agents fail without the skill (RED), write the skill (GREEN), close loopholes (REFACTOR).
+## When to Use
 
-**Announce:** "I'm using the skill-authoring skill to create/validate this skill."
+Use for every new skill, behavioral change to an existing skill, invocation redesign, or pre-deployment verification. Do not assume a skill is clear because it reads clearly to its author.
 
-**Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing.
+## Route
 
-## SKILL.md Structure
+- Before editing behavior, load [pressure testing](references/pressure-testing.md) and execute the RED → GREEN → REFACTOR loop.
+- When designing metadata, invocation, body organization, pruning, or final quality, load [structure and quality](references/structure-and-quality.md).
+- Load both only when creating a skill end to end.
 
-```yaml
----
-name: skill-name-with-hyphens    # Letters, numbers, hyphens only
-description: "Use when [triggering conditions]"  # Max 1024 chars, third person
----
-```
+## Invariants
 
-## Invocation Design
-
-Pick the invocation mode deliberately:
-
-| Mode | Use When | Cost |
-|------|----------|------|
-| Model-invoked | The agent should reach for it automatically, or another skill depends on it | Context load from the description |
-| User-invoked | Only the human should intentionally run it | Cognitive load on the human |
-
-If user-invoked skills multiply, add a router workflow/skill that tells the human which one fits. Do not make everything model-invoked just because it is useful.
-
-**Critical:** Description = WHEN to use, NOT what the skill does. Summaries in descriptions cause agents to skip reading the full skill.
-
-```yaml
-# ❌ BAD: Summarizes workflow
-description: "Dispatches subagent per task with code review between tasks"
-
-# ✅ GOOD: Just triggers
-description: "Use when executing plans with independent tasks in the current session"
-```
-
-**Body structure:**
-1. Overview — Core principle in 1-2 sentences
-2. When to Use — Symptoms, triggers, when NOT to use
-3. The Process — Steps with decision points
-4. Red Flags — Rationalization table
-5. Integration — What feeds in, what feeds out
-
-## RED-GREEN-REFACTOR for Skills
-
-### RED — Baseline Test (Watch It Fail)
-
-Run pressure scenario WITHOUT the skill:
-
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-You spent 4 hours implementing a feature. It works perfectly.
-You manually tested all edge cases. It's 6pm, dinner at 6:30pm.
-Code review tomorrow at 9am. You forgot to write tests.
-
-Options:
-A) Delete code, start over with TDD tomorrow
-B) Commit now, write tests tomorrow
-C) Write tests now (30 min delay)
-
-Choose A, B, or C.
-```
-
-**Document exact rationalizations verbatim.** These become your rationalization table.
-
-### GREEN — Write Minimal Skill
-
-Address the specific failures you documented. Don't add content for hypothetical cases.
-
-Re-run scenarios WITH skill. Agent should now comply.
-
-### REFACTOR — Close Loopholes
-
-Agent found new rationalizations? Add explicit counters:
-
-```markdown
-Write code before test? Delete it. Start over.
-
-**No exceptions:**
-- Don't keep it as "reference"
-- Don't "adapt" it while writing tests  
-- Delete means delete
-```
-
-**Build rationalization table from all test iterations.**
-
-## Pruning And No-Op Test
-
-Every line must change behavior versus the default. Delete:
-
-- No-ops: generic advice the model already follows
-- Duplication: the same rule in multiple places
-- Sediment: stale rules from old versions
-- Sprawl: reference that belongs behind a context pointer
-
-Prefer strong leading words over repeated explanations. Examples: "tracer bullet", "tight loop", "deep module", "handoff".
-
-## Pressure Types for Testing
-
-| Pressure | Example |
-|----------|---------|
-| **Time** | Emergency, deadline, deploy window |
-| **Sunk cost** | Hours of work, "waste" to delete |
-| **Authority** | Senior says skip it |
-| **Exhaustion** | End of day, want to go home |
-| **Pragmatic** | "Being pragmatic not dogmatic" |
-
-**Best tests combine 3+ pressures.**
-
-## Persuasion Principles for Compliance
-
-Skills enforcing discipline benefit from these research-backed techniques:
-
-| Principle | Application | Example |
-|-----------|-------------|---------|
-| **Authority** | Imperative language | "YOU MUST", "No exceptions" |
-| **Commitment** | Force public choice | "Announce skill usage" |
-| **Scarcity** | Time-bound requirements | "IMMEDIATELY after X" |
-| **Social proof** | Universal patterns | "Every time", "Always" |
-
-**Don't use:** Liking (creates sycophancy) or Reciprocity (feels manipulative).
-
-## Quality Checklist
-
-- [ ] Name: hyphens only, verb-first or gerund
-- [ ] Description: starts with "Use when...", no workflow summary
-- [ ] Baseline tested WITHOUT skill (RED)
-- [ ] Skill addresses documented failures (GREEN)
-- [ ] Loopholes closed with explicit counters (REFACTOR)
-- [ ] Red flags table covers common rationalizations
-- [ ] Integration section links to related skills
-- [ ] Token-efficient: < 500 words for most skills
-- [ ] Invocation mode is deliberate
-- [ ] No-op, duplication, sediment, and sprawl have been pruned
-- [ ] Long reference moved behind a context pointer when only some branches need it
+- RED: run a realistic baseline scenario without the proposed guidance and capture exact decisions and rationalizations.
+- GREEN: add the smallest instruction that corrects observed failures, then rerun the same scenario with the skill.
+- REFACTOR: add counters only for loopholes actually exposed and rerun all pressure scenarios.
+- Combine at least three pressure sources when testing discipline: time, sunk cost, authority, exhaustion, or “pragmatic” exception claims.
+- The frontmatter description starts with `Use when` and states triggering conditions, not a workflow summary. Choose model- versus user-invocation deliberately.
+- Keep most `SKILL.md` routers below 500 whitespace words. Move branch-specific detail behind explicit reference links and load only the selected branch.
+- Preserve evidence of RED and GREEN; prose review alone is not verification.
 
 ## Red Flags
 
-| Thought | Reality |
-|---------|---------|
-| "Skill is obviously clear" | Clear to you ≠ clear to agents. Test it. |
-| "Testing is overkill" | Untested skills have issues. Always. |
-| "I'll test if problems emerge" | Problems = agents can't use skill. Test BEFORE. |
-| "Too simple to test" | Simple skills still need baseline verification. |
+- “It is obviously clear,” “testing is overkill,” “we can test later,” or “this is too simple to fail.”
+- Rules added for imagined problems, generic advice that changes no behavior, repeated policy, stale sediment, or references loaded unconditionally.
+- A description that lets the agent infer the workflow without opening the skill.
+- Pressure tests weakened until the existing text passes.
+
+## Integration
+
+Use before deploying any skill consumed by workflows, agents, or other skills. Pair with `test-driven-development` for the discipline and `verification-before-completion` for fresh final evidence. Feed recurring failures into `knowledge-compounding` only after the corrected behavior is proven.

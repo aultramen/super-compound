@@ -198,7 +198,7 @@ python .agent/skills/interface-design/scripts/search.py "performance trackBy" --
 python .agent/skills/interface-design/scripts/search.py "SaaS dashboard" --design-system --persist -p "Acme CRM" --page dashboard --overwrite
 ```
 
-Domains include `product`, `style`, `color`, `typography`, `landing`, `chart`, `ux`, `web`, `app`, `icons`, `react`, and `google-fonts`.
+Domains include `product`, `style`, `color`, `typography`, `landing`, `chart`, `ux`, `web`, `app`, `icons`, `gsap`, `react`, and `google-fonts`.
 
 Use interface-design by retrieval: run targeted searches and read the returned rows. Do not preload `.agent/skills/interface-design/data/**/*.csv` into agent context.
 
@@ -225,9 +225,11 @@ CLAUDE.md
 WALKTHROUGH.md
 ```
 
-Runtime/cache files such as `.debug/`, `.continue-here.md`, `.agent/.tool-call-count`, `__pycache__/`, and `*.pyc` are ignored. `docs/` is not ignored; durable documentation should be tracked when it is part of the framework or project history.
+Runtime/cache files such as `.debug/`, `.continue-here.md`, `.agent/.compact-state/`, `__pycache__/`, and `*.pyc` are ignored. `docs/` is not ignored; durable documentation should be tracked when it is part of the framework or project history.
 
 Local goal issue boards live under `.scratch/<feature>/`. They are not ignored by default because teams may choose to track goal pointers as durable work contracts. Issue files should link to BRD/PRD/FSD/ADR IDs instead of copying their text.
+
+Ephemeral multi-agent handoffs live under `.scratch/work-packages/`. They are ignored because briefs, diffs, reports, and review ledgers may contain large or sensitive working context; durable outcomes belong in the FSD, issue board, state, or solution docs.
 
 ## Compatibility Notes
 
@@ -252,14 +254,19 @@ node --check .agent/hooks/session-end.js
 node --check .agent/hooks/suggest-compact.js
 node --check .agent/hooks/stop-check.js
 node --check .agent/tools/git-workflow.mjs
-node --test .agent/tools/git-workflow.test.mjs .agent/tools/token-benchmark.test.mjs
+node --test .agent/tools/framework-audit.test.mjs .agent/tools/git-workflow.test.mjs .agent/tools/token-benchmark.test.mjs .agent/tools/transcript-usage.test.mjs .agent/tools/work-package.test.mjs
 node .agent/hooks/test-hooks-security.js
 python .agent/skills/interface-design/scripts/test_design_system_security.py
+python .agent/skills/interface-design/scripts/test_search_regressions.py
+python .agent/skills/interface-design/scripts/test_upstream_provenance.py
 python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domain web
-node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --require-reduction 90 --repeat 3
+node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --require-reduction 90 --repeat 3 --output .agent/benchmarks/token-benchmark.after.json
+node .agent/tools/framework-audit.mjs --output .agent/benchmarks/framework-audit.after.json
 ```
 
-The token benchmark covers the full framework load, all 17 public workflows, artifact generation surfaces, and related hotspots such as skills, templates, interface-design data/scripts, hooks, agent prompts, workflows, and rules.
+The benchmark separates historical eager-preload reduction from real repository-owned startup budgets for Codex, Claude Code, Antigravity, and native skill metadata. It also covers all 17 public workflow contracts and related hotspots. These are deterministic static estimates, not host-observed model usage. When a Claude JSONL transcript is available, attach it with `--transcript <session.jsonl>` or summarize it with `node .agent/tools/transcript-usage.mjs <session.jsonl>`.
+
+The framework audit reads every repository file (text and binary), validates UTF-8, JSON, CSV shape, Markdown links, workflow/skill contracts, duplicate content, output budgets, and benchmark evidence. It never prints duplicated or invalid payload content into its findings.
 
 Also check:
 
@@ -271,7 +278,8 @@ Also check:
 - Interface CSV rows match header widths
 - Interface-design runtime guidance uses search-only retrieval, not CSV preload
 - Design-system persistence rejects path traversal and requires `--overwrite` for existing files
-- Global Claude hook settings use absolute script paths, not project-relative `.agent/hooks/...` commands
+- Claude hook settings use exec-form `node` plus `${CLAUDE_PROJECT_DIR}` script args, so cwd changes and spaces do not break paths
 - Old workflow and skill names are not referenced in active docs
-- Comprehensive token benchmark PASS is observed 3 consecutive times with every scenario above 90% reduction
+- The benchmark is deterministic across 3 runs, every reduction gate exceeds 90%, and every absolute startup budget passes
+- The full-file framework audit passes with fresh benchmark evidence
 - `docs/engineering-standards.md` and archive docs are not ignored

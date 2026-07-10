@@ -3,6 +3,7 @@
 Status: ready-for-agent  
 Parent FSD: ../../../docs/fsd/fsd-{{feature}}.md  
 Goal ID: FSD-{{PROJECT}}#GOAL-{{NNN}}  
+Blocked by: None / {{RELATIVE_ISSUE_PATHS}}
 Upstream refs: BRD-{{PROJECT}}#{{IDS}}, PRD-{{PROJECT}}#{{IDS}}  
 Technical refs: FSD-{{PROJECT}}#{{IDS}}  
 ADR refs: None / ADR-{{NNNN}}#{{IDS}}  

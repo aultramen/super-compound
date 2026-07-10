@@ -1,14 +1,25 @@
 #!/usr/bin/env node
-import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import {
+  lstat,
+  mkdir,
+  readFile,
+  readdir,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { analyzeTranscript } from "./transcript-usage.mjs";
+
 export const METRIC = "deterministic_estimated_tokens_v1";
 
-const FULL_FRAMEWORK_SCENARIOS = [
+const LEGACY_PRELOAD_SCENARIOS = [
   {
-    name: "full-framework-load",
-    description: "Always-on framework bootstrap without task-specific work.",
+    name: "legacy-eager-preload",
+    description:
+      "Historical anti-pattern that eagerly preloaded every framework surface; not a harness startup claim.",
     before: [
       ".agent/rules/*.md",
       ".agent/workflows/*.md",
@@ -28,6 +39,40 @@ const FULL_FRAMEWORK_SCENARIOS = [
       ".agent/context/template-index.md",
       ".agent/context/token-budget-gates.md",
     ],
+  },
+];
+
+const STARTUP_BUDGET_SCENARIOS = [
+  {
+    name: "startup-codex-repository",
+    description: "Repository-owned Codex startup instructions.",
+    before: ["AGENTS.md"],
+    after: ["AGENTS.md"],
+    maxAfterTokens: 2000,
+  },
+  {
+    name: "startup-claude-repository",
+    description:
+      "Worst-case repository-owned Claude startup context while editing framework/docs paths.",
+    before: ["CLAUDE.md", "AGENTS.md", ".claude/rules/*.md"],
+    after: ["CLAUDE.md", "AGENTS.md", ".claude/rules/*.md"],
+    maxAfterTokens: 3000,
+  },
+  {
+    name: "startup-antigravity-rules",
+    description: "Antigravity always-on .agent/rules context.",
+    before: [".agent/rules/*.md"],
+    after: [".agent/rules/*.md"],
+    maxAfterTokens: 2750,
+  },
+  {
+    name: "startup-installed-skill-metadata",
+    description:
+      "Repository-owned native skill discovery metadata (name and description only).",
+    before: [".agent/skills/**/SKILL.md"],
+    after: [".agent/skills/**/SKILL.md"],
+    measure: "skill-metadata",
+    maxAfterTokens: 2500,
   },
 ];
 
@@ -401,7 +446,8 @@ const RELATED_HOTSPOT_SCENARIOS = [
 ];
 
 export const DEFAULT_SCENARIOS = [
-  ...FULL_FRAMEWORK_SCENARIOS,
+  ...LEGACY_PRELOAD_SCENARIOS,
+  ...STARTUP_BUDGET_SCENARIOS,
   ...WORKFLOW_SCENARIOS,
   ...RELATED_HOTSPOT_SCENARIOS,
 ];
@@ -414,13 +460,14 @@ export function estimateTokens(text) {
   return pieces ? pieces.length : 0;
 }
 
-export async function expandPatterns(root, patterns) {
+export async function expandPatterns(root, patterns, options = {}) {
   const allFiles = await listFiles(root);
   const selected = new Set();
   const ordered = [];
 
   for (const pattern of patterns) {
     const normalizedPattern = normalizePath(pattern);
+    let matched = false;
 
     if (!hasGlob(normalizedPattern)) {
       const absolute = path.join(root, normalizedPattern);
@@ -428,22 +475,27 @@ export async function expandPatterns(root, patterns) {
 
       if (info?.isFile()) {
         addSelected(selected, ordered, normalizedPattern);
+        matched = true;
       } else if (info?.isDirectory()) {
         for (const file of allFiles) {
           if (file.startsWith(`${normalizedPattern}/`)) {
             addSelected(selected, ordered, file);
+            matched = true;
           }
         }
       }
-
-      continue;
+    } else {
+      const matcher = globToRegExp(normalizedPattern);
+      for (const file of allFiles) {
+        if (matcher.test(file)) {
+          addSelected(selected, ordered, file);
+          matched = true;
+        }
+      }
     }
 
-    const matcher = globToRegExp(normalizedPattern);
-    for (const file of allFiles) {
-      if (matcher.test(file)) {
-        addSelected(selected, ordered, file);
-      }
+    if (options.requireEveryPattern && !matched) {
+      throw new Error(`Benchmark pattern matched no files: ${normalizedPattern}`);
     }
   }
 
@@ -457,28 +509,100 @@ function addSelected(selected, ordered, file) {
   }
 }
 
-export async function countScenarioTokens(root, patterns) {
-  const files = await expandPatterns(root, patterns);
+export async function countScenarioTokens(root, patterns, options = {}) {
+  const files = await expandPatterns(root, patterns, options);
   let tokens = 0;
   let chars = 0;
   let bytes = 0;
+  const digest = createHash("sha256");
 
   for (const file of files) {
     const absolute = path.join(root, file);
-    const content = await readFile(absolute, "utf8");
+    const buffer = await readFile(absolute);
+    const content = buffer.toString("utf8");
     tokens += estimateTokens(content);
     chars += content.length;
-    bytes += Buffer.byteLength(content, "utf8");
+    bytes += buffer.length;
+    digest.update(file);
+    digest.update("\0");
+    digest.update(buffer);
+    digest.update("\0");
   }
 
-  return { tokens, chars, bytes, fileCount: files.length, files };
+  return {
+    tokens,
+    chars,
+    bytes,
+    fileCount: files.length,
+    files,
+    contentDigest: digest.digest("hex"),
+  };
+}
+
+export async function countSkillMetadataTokens(root) {
+  const files = await expandPatterns(
+    root,
+    [".agent/skills/**/SKILL.md"],
+    { requireEveryPattern: true },
+  );
+  const metadata = [];
+  const digest = createHash("sha256");
+
+  for (const file of files) {
+    const content = await readFile(path.join(root, file), "utf8");
+    const normalized = content.replace(/\r\n/g, "\n");
+    const end = normalized.startsWith("---\n")
+      ? normalized.indexOf("\n---\n", 4)
+      : -1;
+    const frontmatter = end >= 0 ? normalized.slice(4, end) : "";
+    const name = readFrontmatterValue(frontmatter, "name");
+    const description = readFrontmatterValue(frontmatter, "description");
+    const entry = `${name}\n${description}`;
+    metadata.push(entry);
+    digest.update(file);
+    digest.update("\0");
+    digest.update(entry);
+    digest.update("\0");
+  }
+
+  const text = metadata.join("\n");
+  return {
+    tokens: estimateTokens(text),
+    chars: text.length,
+    bytes: Buffer.byteLength(text, "utf8"),
+    fileCount: files.length,
+    files,
+    contentDigest: digest.digest("hex"),
+  };
+}
+
+function readFrontmatterValue(frontmatter, key) {
+  const line = frontmatter
+    .split("\n")
+    .find((candidate) => candidate.startsWith(`${key}:`));
+  return line
+    ? line.slice(key.length + 1).trim().replace(/^['"]|['"]$/g, "")
+    : "";
+}
+
+async function countScenarioSurface(root, scenario, side) {
+  if (scenario.measure === "skill-metadata") {
+    return countSkillMetadataTokens(root);
+  }
+  return countScenarioTokens(root, scenario[side], {
+    requireEveryPattern: true,
+  });
 }
 
 export async function createBaseline(root, scenarios = DEFAULT_SCENARIOS) {
   const baseline = {};
 
   for (const scenario of scenarios) {
-    baseline[scenario.name] = await countScenarioTokens(root, scenario.before);
+    baseline[scenario.name] = await countScenarioSurface(
+      root,
+      scenario,
+      "before",
+    );
   }
 
   return {
@@ -494,16 +618,19 @@ export async function evaluateScenarios(
   baseline = {},
   threshold = DEFAULT_THRESHOLD,
 ) {
+  validateThreshold(threshold);
   const baselineScenarios = baseline.scenarios ?? baseline;
   const results = [];
 
   for (const scenario of scenarios) {
     const before =
       baselineScenarios[scenario.name] ??
-      (await countScenarioTokens(root, scenario.before));
-    const after = await countScenarioTokens(root, scenario.after);
-    const reductionPercent =
-      before.tokens === 0
+      (await countScenarioSurface(root, scenario, "before"));
+    const after = await countScenarioSurface(root, scenario, "after");
+    const isBudget = Number.isFinite(scenario.maxAfterTokens);
+    const reductionPercent = isBudget
+      ? null
+      : before.tokens === 0
         ? 0
         : ((before.tokens - after.tokens) / before.tokens) * 100;
 
@@ -512,10 +639,27 @@ export async function evaluateScenarios(
       description: scenario.description,
       before,
       after,
+      gateType: isBudget ? "budget" : "reduction",
+      maxAfterTokens: isBudget ? scenario.maxAfterTokens : undefined,
       reductionPercent,
-      pass: reductionPercent > threshold,
+      pass: isBudget
+        ? after.tokens <= scenario.maxAfterTokens
+        : reductionPercent > threshold,
     });
   }
+
+  const reductionResults = results.filter(
+    (result) => result.gateType === "reduction",
+  );
+  const budgetResults = results.filter((result) => result.gateType === "budget");
+  const totalBeforeTokens = sum(
+    reductionResults,
+    (result) => result.before.tokens,
+  );
+  const totalAfterTokens = sum(
+    reductionResults,
+    (result) => result.after.tokens,
+  );
 
   return {
     metric: baseline.metric ?? METRIC,
@@ -524,11 +668,84 @@ export async function evaluateScenarios(
     scenarios: results,
     summary: {
       pass: results.every((result) => result.pass),
-      totalBeforeTokens: sum(results, (result) => result.before.tokens),
-      totalAfterTokens: sum(results, (result) => result.after.tokens),
-      totalReductionPercent: reduction(
-        sum(results, (result) => result.before.tokens),
-        sum(results, (result) => result.after.tokens),
+      reductionScenarioCount: reductionResults.length,
+      budgetScenarioCount: budgetResults.length,
+      totalBeforeTokens,
+      totalAfterTokens,
+      totalReductionPercent: reduction(totalBeforeTokens, totalAfterTokens),
+    },
+  };
+}
+
+export function buildBenchmarkReport(runs, options = {}) {
+  if (!Array.isArray(runs) || runs.length === 0) {
+    throw new Error("At least one benchmark run is required");
+  }
+
+  const compactRuns = runs.map(compactBenchmarkResult);
+  const digestCounts = new Map();
+  for (const run of compactRuns) {
+    const digest = createHash("sha256")
+      .update(JSON.stringify(run))
+      .digest("hex");
+    digestCounts.set(digest, (digestCounts.get(digest) ?? 0) + 1);
+  }
+
+  let consecutivePasses = 0;
+  for (let index = runs.length - 1; index >= 0; index -= 1) {
+    if (!runs[index].summary.pass) {
+      break;
+    }
+    consecutivePasses += 1;
+  }
+
+  const deterministic = digestCounts.size === 1;
+  return {
+    schema: "token_benchmark_report_v2",
+    metric: runs[0].metric ?? METRIC,
+    generatedAt: options.generatedAt ?? new Date().toISOString(),
+    observedRuntimeTokens: options.observedRuntimeTokens ?? "unknown",
+    hostInjectedSurfaceTokens: options.hostInjectedSurfaceTokens ?? "unknown",
+    repeat: runs.length,
+    deterministic,
+    runDigests: [...digestCounts].map(([digest, count]) => ({ digest, count })),
+    result: compactRuns[0],
+    consecutivePasses,
+    pass: deterministic && runs.every((run) => run.summary.pass),
+  };
+}
+
+function compactBenchmarkResult(result) {
+  return {
+    threshold: result.threshold,
+    scenarios: result.scenarios.map((scenario) => {
+      const compact = {
+        name: scenario.name,
+        beforeTokens: scenario.before.tokens,
+        afterTokens: scenario.after.tokens,
+        pass: scenario.pass,
+      };
+      if (scenario.after.contentDigest) {
+        compact.afterDigest = scenario.after.contentDigest;
+      }
+      if (scenario.gateType === "budget") {
+        compact.gateType = "budget";
+        compact.maxAfterTokens = scenario.maxAfterTokens;
+      } else {
+        compact.reductionPercent = Number(
+          scenario.reductionPercent.toFixed(4),
+        );
+      }
+      return compact;
+    }),
+    summary: {
+      pass: result.summary.pass,
+      reductionScenarioCount: result.summary.reductionScenarioCount,
+      budgetScenarioCount: result.summary.budgetScenarioCount,
+      totalBeforeTokens: result.summary.totalBeforeTokens,
+      totalAfterTokens: result.summary.totalAfterTokens,
+      totalReductionPercent: Number(
+        result.summary.totalReductionPercent.toFixed(4),
       ),
     },
   };
@@ -619,9 +836,45 @@ async function readJson(root, relativePath) {
 }
 
 async function writeJson(root, relativePath, value) {
-  const absolute = path.resolve(root, relativePath);
+  const absolute = await resolveBenchmarkOutputPath(root, relativePath);
   await mkdir(path.dirname(absolute), { recursive: true });
   await writeFile(absolute, `${JSON.stringify(value, null, 2)}\n`);
+}
+
+export async function resolveRepositoryPath(root, candidate) {
+  if (typeof candidate !== "string" || !candidate.trim()) {
+    throw new Error("Output path is required");
+  }
+  const safeRoot = path.resolve(root);
+  const absolute = path.resolve(safeRoot, candidate);
+  const relative = path.relative(safeRoot, absolute);
+  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+    throw new Error("Output path resolves outside repository root");
+  }
+
+  let current = safeRoot;
+  for (const part of relative.split(path.sep).filter(Boolean)) {
+    current = path.join(current, part);
+    const info = await lstat(current).catch(() => null);
+    if (info?.isSymbolicLink()) {
+      throw new Error(`Output path contains a symlink: ${current}`);
+    }
+  }
+  return absolute;
+}
+
+export async function resolveBenchmarkOutputPath(root, candidate) {
+  const absolute = await resolveRepositoryPath(root, candidate);
+  const relative = path
+    .relative(path.resolve(root), absolute)
+    .replace(/\\/g, "/");
+  if (
+    !relative.startsWith(".agent/benchmarks/") ||
+    !relative.endsWith(".json")
+  ) {
+    throw new Error("Output must be a JSON file under .agent/benchmarks/");
+  }
+  return absolute;
 }
 
 function parseArgs(argv) {
@@ -649,6 +902,10 @@ function parseArgs(argv) {
     } else if (arg === "--repeat") {
       options.repeat = Number(next);
       index += 1;
+    } else if (arg === "--transcript") {
+      if (!next) throw new Error("--transcript requires a JSONL path");
+      options.transcript = next;
+      index += 1;
     } else if (arg === "--json") {
       options.json = true;
     } else if (arg === "--help" || arg === "-h") {
@@ -658,41 +915,55 @@ function parseArgs(argv) {
     }
   }
 
-  if (!Number.isFinite(options.threshold)) {
-    throw new Error("--require-reduction must be a number");
-  }
+  validateThreshold(options.threshold);
 
   if (!Number.isInteger(options.repeat) || options.repeat < 1) {
     throw new Error("--repeat must be a positive integer");
+  }
+  if (options.transcript !== undefined && !options.transcript) {
+    throw new Error("--transcript requires a JSONL path");
   }
 
   return options;
 }
 
-function formatTable(result, runLabel = "") {
+function validateThreshold(value) {
+  if (!Number.isFinite(value) || value < DEFAULT_THRESHOLD || value >= 100) {
+    throw new Error("--require-reduction must be between 90 and 100 (exclusive)");
+  }
+}
+
+export function formatTable(result, runLabel = "") {
   const lines = [];
   const suffix = runLabel ? ` ${runLabel}` : "";
   lines.push(`Token benchmark${suffix}`);
   lines.push(`Metric: ${result.metric}`);
-  lines.push(`Gate: every scenario must reduce by >${result.threshold}%`);
+  lines.push(`Reduction gates: >${result.threshold}%`);
+  if (result.scenarios.some((scenario) => scenario.gateType === "budget")) {
+    lines.push("Budget gates: scenario-specific maximum");
+  }
   lines.push("");
   lines.push(
     [
       "Scenario".padEnd(34),
       "Before".padStart(8),
       "After".padStart(8),
-      "Reduce".padStart(9),
+      "Gate".padStart(9),
       "Result".padStart(7),
     ].join("  "),
   );
 
   for (const scenario of result.scenarios) {
+    const gate =
+      scenario.gateType === "budget"
+        ? `<=${scenario.maxAfterTokens}`
+        : `${scenario.reductionPercent.toFixed(2)}%`;
     lines.push(
       [
         scenario.name.padEnd(34),
         String(scenario.before.tokens).padStart(8),
         String(scenario.after.tokens).padStart(8),
-        `${scenario.reductionPercent.toFixed(2)}%`.padStart(9),
+        gate.padStart(9),
         (scenario.pass ? "PASS" : "FAIL").padStart(7),
       ].join("  "),
     );
@@ -701,7 +972,7 @@ function formatTable(result, runLabel = "") {
   lines.push("");
   lines.push(
     [
-      "TOTAL".padEnd(34),
+      "REDUCTION TOTAL".padEnd(34),
       String(result.summary.totalBeforeTokens).padStart(8),
       String(result.summary.totalAfterTokens).padStart(8),
       `${result.summary.totalReductionPercent.toFixed(2)}%`.padStart(9),
@@ -718,7 +989,8 @@ function usage() {
   node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.json --require-reduction 90 --repeat 3
 
 Default suite:
-  full framework load, all 17 public workflows, artifact surfaces, skills,
+  legacy eager-preload reduction, real repository-owned startup budgets for
+  Codex/Claude/Antigravity, all 17 public workflows, artifact surfaces, skills,
   templates, interface-design data/scripts, hooks, agents, workflows, and rules.
 
 Options:
@@ -727,6 +999,7 @@ Options:
   --output <path>             Write compare result JSON.
   --require-reduction <n>     Required strict reduction percentage. Default: 90.
   --repeat <n>                Run compare mode repeatedly. Default: 1.
+  --transcript <jsonl>        Attach observed main/subagent runtime token totals.
   --json                      Print JSON instead of a table.
 `;
 }
@@ -779,14 +1052,10 @@ async function main() {
     }
   }
 
-  const payload = {
-    metric: METRIC,
-    generatedAt: new Date().toISOString(),
-    repeat: options.repeat,
-    runs,
-    consecutivePasses: runs.filter((run) => run.summary.pass).length,
-    pass: runs.every((run) => run.summary.pass),
-  };
+  const observedRuntimeTokens = options.transcript
+    ? (await analyzeTranscript(path.resolve(root, options.transcript))).totals
+    : "unknown";
+  const payload = buildBenchmarkReport(runs, { observedRuntimeTokens });
 
   if (options.output) {
     await writeJson(root, options.output, payload);

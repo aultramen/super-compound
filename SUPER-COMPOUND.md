@@ -53,7 +53,7 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 
 ## Skill Loading
 
-Use `.agent/context/` as the compact runtime layer before full workflow/skill/template reads. Load full `SKILL.md` files only when their detailed procedure is active, when editing/reviewing the skill, or when compact contracts are insufficient.
+Use `.agent/context/` as the compact runtime layer before full workflow/skill/template reads. Load a full `SKILL.md` only when its procedure is active or being edited/reviewed. When that entrypoint routes to `references/`, load only the branch needed for the current decision; never preload the whole reference directory.
 
 Load skills only when their detailed procedure is relevant. Announce the skill and follow its `SKILL.md`.
 
@@ -76,7 +76,7 @@ Common routes:
 Before editing:
 
 - Read the relevant workflow, skill, and nearby project instructions.
-- Inspect existing code/docs before introducing a new pattern.
+- Search symbols, paths, tests, and nearby implementations before introducing a new pattern or declaring a capability absent.
 - Check git status before large edits.
 - Use `/sc-go` and `git-workflow-operation` for branch, worktree, commit, push, and Pull Request operations.
 - Preserve user changes and unrelated dirty work.
@@ -92,12 +92,14 @@ During work:
 - Validate inputs at boundaries and avoid leaking secrets or internals.
 - Do not invent schema, APIs, authorization, workflows, roles, state transitions, or UI behavior outside the approved FSD and linked accepted ADRs.
 - Keep `.scratch/<feature>/issues/*.md` lightweight: use qualified refs, not copied BRD/PRD/FSD/ADR prose.
+- For independent multi-agent goals, exchange file-backed packages under `.scratch/work-packages/`; keep chat handoffs to paths and short verdicts, and serialize shared-file validation.
 
 Before completion:
 
 - Run targeted verification first, then broader checks when risk warrants.
 - Before commit, push, or PR creation, review `git status`, `git diff`, and sensitive-file warnings.
 - Report verification results and limitations.
+- Keep the response inside the route's output envelope; write full evidence to disk and return paths plus decisive findings.
 - Update docs when setup, workflow, behavior, architecture, or commands changed.
 - Review for stale references to removed workflows/skills.
 

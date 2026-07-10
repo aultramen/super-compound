@@ -13,7 +13,9 @@ let stateFile;
 let continueFile;
 
 try {
-    const projectRoot = resolveHookProjectRoot(path.resolve(__dirname, '..', '..'));
+    const projectRoot = resolveHookProjectRoot(
+        process.env.SUPER_COMPOUND_PROJECT_ROOT || path.resolve(__dirname, '..', '..')
+    );
     stateFile = safeProjectFile(projectRoot, ['docs', 'STATE.md']);
     continueFile = safeProjectFile(projectRoot, ['.continue-here.md']);
 } catch (error) {
@@ -44,11 +46,3 @@ console.error('[Super Compound] To preserve context across sessions:');
 console.error('  - Run /sc-pause before closing');
 console.error('  - Run /sc-compound to document reusable solutions');
 console.error('');
-
-let input = '';
-process.stdin.on('data', (chunk) => {
-    input += chunk;
-});
-process.stdin.on('end', () => {
-    console.log(input || '{}');
-});

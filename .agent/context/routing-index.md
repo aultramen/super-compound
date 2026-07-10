@@ -41,3 +41,4 @@ Use this file as the compact first stop for Super Compound routing. Load a full 
 - Interface-design data is retrieved by search scripts, not model preload.
 - Verification commands remain mapped before completion.
 - Git operations remain preview-first and route through `/sc-go`.
+- Chat returns follow `token-budget-gates.md`; full evidence stays in artifacts.

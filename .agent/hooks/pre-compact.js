@@ -11,7 +11,6 @@ const path = require('path');
 const {
     atomicWriteFile,
     buildCompactionMarker,
-    passThroughStdin,
     replaceCompactionMarker,
     resolveHookProjectRoot,
     safeProjectFile,
@@ -22,12 +21,13 @@ let stateFile;
 let continueFile;
 
 try {
-    projectRoot = resolveHookProjectRoot(path.resolve(__dirname, '..', '..'));
+    projectRoot = resolveHookProjectRoot(
+        process.env.SUPER_COMPOUND_PROJECT_ROOT || path.resolve(__dirname, '..', '..')
+    );
     stateFile = safeProjectFile(projectRoot, ['docs', 'STATE.md']);
     continueFile = safeProjectFile(projectRoot, ['.continue-here.md']);
 } catch (error) {
     console.error(`[Super Compound] Pre-compact: ${error.message}`);
-    passThroughStdin();
     return;
 }
 
@@ -60,5 +60,3 @@ console.error(`[Super Compound] Context compaction starting at ${timestamp}`);
 console.error('  Files preserved: STATE.md, .continue-here.md, docs/');
 console.error('  After new session: /sc-init reload, then /sc-status');
 console.error('');
-
-passThroughStdin();

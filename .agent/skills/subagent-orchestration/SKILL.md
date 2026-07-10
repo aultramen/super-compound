@@ -1,164 +1,76 @@
 ---
 name: subagent-orchestration
-description: "Use when executing FSD goals with independent work packages. Dispatches fresh subagent per goal with 2-stage review (spec compliance then code quality). Prevents context pollution across goals."
+description: "Use when executing FSD goals with independent work packages. Dispatches a fresh subagent per goal with file-backed handoff and bounded review."
 ---
 
-# Subagent-Driven Development
+# Subagent Orchestration
 
-## Overview
+Dispatch a fresh agent per independent FSD goal while the primary agent remains
+a scheduler. Full briefs, reports, diffs, and review evidence stay on disk;
+messages carry paths and short verdicts.
 
-Dispatch a fresh subagent for each independent FSD goal. Each subagent gets clean context with only the issue pointer, referenced FSD sections, qualified upstream refs, linked accepted ADRs when needed, and files it must inspect. After implementation, run a 2-stage review: spec compliance first, then code quality.
+Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
 
-**Announce:** "I'm using the subagent-orchestration skill to dispatch agents per FSD goal."
+## Preconditions
 
-**Core principle:** Fresh context per goal prevents accumulated confusion. Review spec compliance before code quality to avoid wasted effort.
+- Goal has approved FSD authority, exact acceptance/test refs, and no unresolved
+  `OPEN-*` blocker.
+- Parallel goals do not share unmerged files or mutable validation resources.
+- Search existing code/tests before assuming anything is absent.
 
-## When to Use
+## File-Backed Process
 
-- Executing an FSD with 3+ independent goals
-- Goals modify different files/modules
-- Goals have `Blocked by: None` or completed blockers
-- You want isolation between implementation steps
+1. The scheduler writes a JSON array of allowed repository-relative target
+   paths, then creates one package from the lightweight issue pointer and that
+   scheduler-owned scope:
 
-## The Process
+   ```bash
+   node .agent/tools/work-package.mjs create \
+     --run <run-id> --goal <goal-id> --brief <issue-path> \
+     --paths-file <scheduler-scope.json>
+   ```
 
-### Phase 1: Prepare Goal Package
+2. Send the implementer only the returned `briefPath`, `reportPath`,
+   read-only `pathsPath`, exact target paths, and this constraint: implement one
+   goal, use TDD when behavior changes, never edit the scheduler-owned scope,
+   keep full evidence in `reportPath`, and return at most 15 lines containing
+   outcome, paths, verification status, and blockers.
+3. Run parallel goals only in isolated worktrees/workspaces. Review rejects a
+   changed scope digest and any new working-tree edit outside the allowlist.
+4. After implementation, freeze one working-tree review package:
 
-For each goal, create a focused context package:
+   ```bash
+   node .agent/tools/work-package.mjs review \
+     --run <run-id> --goal <goal-id> --base <review-base>
+   ```
 
-```text
-Goal Package:
-  - Goal ID and objective from the FSD
-  - Parent FSD path and qualified refs
-  - Relevant file paths, only files this goal touches
-  - Acceptance and verification refs
-  - Architecture constraints from FSD TDEC-* or accepted ADR
-  - Test requirements
-```
+   The scheduler-owned allowlist is mandatory. A parallel goal without an
+   isolated workspace must fall back to sequential execution.
 
-Rules:
+5. One fresh reviewer reads the brief, report, and patch once, then writes two
+   separate verdicts: `SPEC` and `QUALITY`. Use
+   `references/review-contract.md` for the detailed checklist.
+6. Batch critical/important fixes into one correction wave. Rebuild the patch
+   and re-review once. After two failed revision cycles, escalate.
+7. Record the result:
 
-- Include only files relevant to this goal.
-- Never dump entire codebase context.
-- Reference existing patterns by file path.
-- Do not copy BRD, PRD, FSD, or ADR prose into the prompt when qualified refs are enough.
-- Do not assign goals with unresolved `OPEN-*` blockers.
+   ```bash
+   node .agent/tools/work-package.mjs record \
+     --run <run-id> --goal <goal-id> --status verified \
+     --verification "<short command result>"
+   ```
 
-### Phase 2: Dispatch Implementer
+## Invariants
 
-Send the goal package to a fresh agent with this prompt structure:
+- Never paste whole BRD/PRD/FSD/ADR or diff bodies into dispatch messages.
+- Never invent schema, API, authorization, workflow, role, state, or UI behavior.
+- Shared builds/tests run serially; safe search and isolated edits may fan out.
+- Commits remain routed through `/sc-go` and only when requested.
+- A spec failure and a quality failure remain distinct even though one reviewer
+  reads the package once.
 
-```markdown
-## Your Goal
-[Exact FSD goal ID and objective]
+## Related Skills
 
-## Source Of Truth
-- FSD: [path and FSD-<PROJECT>#GOAL-xxx]
-- Upstream refs: [qualified BRD/PRD refs]
-- Technical refs: [FSD-<PROJECT>#TDEC-xxx or accepted ADR refs]
-
-## Files to Modify
-- [exact/path/to/file.ext] - [what to change]
-
-## Files to Create
-- [exact/path/to/new-file.ext] - [purpose]
-
-## Acceptance References
-- [FSD-<PROJECT>#TEST-xxx]
-- [PRD-<PROJECT>#AC-xxx]
-
-## Architecture Rules
-- [Relevant FSD TDEC, accepted ADR, or project-config rule]
-
-## Test Requirements
-- Write failing test FIRST when behavior changes
-- Test file: [exact/path/to/test.ext]
-
-## Process
-1. Read all referenced files.
-2. Stop with OPEN-* if FSD authority is missing or contradictory.
-3. Write failing test when behavior changes.
-4. Implement minimal code to pass.
-5. Self-review against acceptance refs.
-6. Report what you built and any concerns.
-```
-
-Key rules for implementers:
-
-- Ask questions or report `OPEN-*` before building the wrong thing.
-- Follow existing patterns exactly.
-- Do not invent schema, APIs, authorization, workflows, roles, state transitions, or UI behavior outside the FSD.
-- Self-review before reporting completion.
-- Flag anything that deviates from the FSD.
-
-### Phase 3: 2-Stage Review
-
-#### Stage 1 - Spec Compliance Review
-
-Ask: "Did the implementer build exactly what the FSD goal requested?"
-
-```markdown
-## Spec Compliance Checklist
-
-- [ ] All acceptance refs satisfied
-- [ ] All specified files created/modified
-- [ ] No missing functionality
-- [ ] No extra functionality or scope creep
-- [ ] Tests exist for new behavior
-- [ ] Tests pass
-- [ ] No unapproved deviation from FSD/TDEC/accepted ADR
-```
-
-If spec compliance fails, stop. Fix gaps before moving to code quality.
-
-#### Stage 2 - Code Quality Review
-
-Only after spec compliance passes. Check:
-
-- [ ] Code follows existing patterns
-- [ ] Clean implementation with no unnecessary complexity
-- [ ] Error handling present
-- [ ] No security issues from `code-review`
-- [ ] Architecture rules followed
-- [ ] No dead code or debug artifacts
-
-### Phase 4: Accept or Revise
-
-| Stage 1 Result | Stage 2 Result | Action |
-|---|---|---|
-| Pass | Pass | Accept and move to next goal |
-| Fail | N/A | Fix spec gaps, re-review Stage 1 |
-| Pass | Fail | Fix quality issues, re-review Stage 2 |
-
-Max 2 revision cycles per goal. If still failing, escalate to the user.
-
-## Goal Isolation Rules
-
-| Rule | Why |
-|---|---|
-| Fresh context per goal | Prevents accumulated confusion |
-| Only relevant files | Keeps context focused |
-| Do not carry over debug state | Each goal starts clean |
-| Route commits through `/sc-go` after each accepted goal, when commits are requested | Creates rollback points with preview-first Git safety |
-
-## Red Flags
-
-| Thought | Reality |
-|---|---|
-| "Skip spec review, code looks fine" | Spec compliance first. Always. |
-| "One agent for all goals" | Context pollution causes cascading errors |
-| "Review both stages at once" | Spec fails, so quality review is wasted effort |
-| "Skip review for simple goals" | Simple goals still need spec verification |
-
-## Integration
-
-This skill is used by:
-
-- `executing-plans` for per-goal dispatch during FSD execution
-
-This skill uses:
-
-- `context-engineering` for focused reference loading
-- `test-driven-development` for behavior changes
-- `code-review` for Stage 2 quality review
-- `verification-before-completion` before accepting a goal
+Use `context-engineering`, `executing-plans`, `test-driven-development`,
+`code-review`, and `verification-before-completion` as their active branches
+require.

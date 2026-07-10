@@ -1,0 +1,24 @@
+{
+  "schema": "output_budgets_v1",
+  "metric": "deterministic_estimated_tokens_v1",
+  "routes": {
+    "sc-init": { "maxEstimatedTokens": 400, "maxCharacters": 1600 },
+    "sc-status": { "maxEstimatedTokens": 400, "maxCharacters": 1600 },
+    "sc-geniusloop": { "maxEstimatedTokens": 600, "maxCharacters": 2400 },
+    "sc-explore": { "maxEstimatedTokens": 500, "maxCharacters": 2000 },
+    "sc-research": { "maxEstimatedTokens": 400, "maxCharacters": 1600 },
+    "sc-prd": { "maxEstimatedTokens": 500, "maxCharacters": 2000 },
+    "sc-plan": { "maxEstimatedTokens": 500, "maxCharacters": 2000 },
+    "sc-eval": { "maxEstimatedTokens": 400, "maxCharacters": 1600 },
+    "sc-go": { "maxEstimatedTokens": 500, "maxCharacters": 2000 },
+    "sc-work": { "maxEstimatedTokens": 500, "maxCharacters": 2000 },
+    "sc-debug": { "maxEstimatedTokens": 500, "maxCharacters": 2000 },
+    "sc-review": { "maxEstimatedTokens": 900, "maxCharacters": 3600 },
+    "sc-audit": { "maxEstimatedTokens": 900, "maxCharacters": 3600 },
+    "sc-compound": { "maxEstimatedTokens": 320, "maxCharacters": 1280 },
+    "sc-pause": { "maxEstimatedTokens": 320, "maxCharacters": 1280 },
+    "sc-launch": { "maxEstimatedTokens": 500, "maxCharacters": 2000 },
+    "sc-ui": { "maxEstimatedTokens": 500, "maxCharacters": 2000 }
+  },
+  "exceptions": "Never truncate blockers, failed gates, required decisions, or P0/P1 findings. Runtime enforcement requires host-attributed telemetry."
+}

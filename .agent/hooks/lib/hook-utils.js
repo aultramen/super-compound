@@ -82,14 +82,23 @@ function readPositiveInteger(name, fallback) {
     return Number.isInteger(value) && value > 0 ? value : fallback;
 }
 
-function passThroughStdin() {
-    let input = '';
-    process.stdin.on('data', (chunk) => {
-        input += chunk;
-    });
-    process.stdin.on('end', () => {
-        console.log(input || '{}');
-    });
+function readStdinJson(maxBytes = 1024 * 1024) {
+    const chunks = [];
+    let total = 0;
+
+    while (true) {
+        const buffer = Buffer.alloc(64 * 1024);
+        const bytesRead = fs.readSync(0, buffer, 0, buffer.length, null);
+        if (bytesRead === 0) break;
+        total += bytesRead;
+        if (total > maxBytes) {
+            throw new Error(`Hook input exceeds ${maxBytes} bytes`);
+        }
+        chunks.push(buffer.subarray(0, bytesRead));
+    }
+
+    const input = Buffer.concat(chunks).toString('utf8').trim();
+    return input ? JSON.parse(input) : {};
 }
 
 module.exports = {
@@ -97,8 +106,8 @@ module.exports = {
     START_MARKER,
     atomicWriteFile,
     buildCompactionMarker,
-    passThroughStdin,
     readPositiveInteger,
+    readStdinJson,
     redactSensitiveText,
     replaceCompactionMarker,
     resolveHookProjectRoot,

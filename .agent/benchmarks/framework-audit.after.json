@@ -1,0 +1,24 @@
+{
+  "schema": "super_compound_framework_audit_v1",
+  "pass": true,
+  "summary": {
+    "filesRead": 301,
+    "textFiles": 301,
+    "binaryFiles": 0,
+    "bytesRead": 2765125,
+    "linesRead": 33000,
+    "contentDigest": "a4e13fa5645b005e05040d1c71278dc763cec470ef04a034ec85052725792286",
+    "skillEntrypoints": 35,
+    "skillEntrypointWords": 13275,
+    "maxSkillEntrypointWords": 498,
+    "skillEntrypointWordLimit": 500,
+    "findings": 0,
+    "severityCounts": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    }
+  },
+  "findings": []
+}

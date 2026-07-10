@@ -244,6 +244,7 @@ The agent should execute sequentially by default:
 - Mark one goal in progress
 - Respect `Blocked by` before starting issue files
 - Use `context-engineering` to read only the issue pointer, referenced FSD sections, upstream BRD/PRD IDs, linked accepted ADRs, and relevant files
+- Search symbols, paths, tests, and nearby implementations before declaring anything missing
 - Stop with `OPEN-*` instead of inventing missing schema, APIs, authorization, workflows, roles, states, or UI behavior
 - Write failing tests for behavior changes
 - Implement the smallest cohesive change
@@ -251,7 +252,24 @@ The agent should execute sequentially by default:
 - Mark issue status when work came from `.scratch/`
 - Update durable state for long work
 
-Parallel execution is reserved for independent FSD goals with non-overlapping files and clear verification.
+Parallel execution is reserved for independent FSD goals with non-overlapping files and clear verification. For multi-agent runs, create file-backed handoffs instead of pasting briefs and diffs through chat:
+
+```bash
+node .agent/tools/work-package.mjs create --run analytics --goal GOAL-001 --brief .scratch/analytics-dashboard/issues/01-account-usage-summary.md --paths-file .scratch/analytics-dashboard/issues/GOAL-001-scope.json
+```
+
+Before dispatch, the scheduler writes the scope JSON, for example
+`["src/usage.ts", "tests/usage.test.ts"]`. `create` seals that allowlist into
+`review-paths.json`; the implementer must not edit it. Parallel goals require
+isolated worktrees/workspaces, and review rejects scope changes or new edits
+outside the scheduler-owned allowlist.
+
+```bash
+node .agent/tools/work-package.mjs review --run analytics --goal GOAL-001 --base HEAD
+node .agent/tools/work-package.mjs record --run analytics --goal GOAL-001 --status verified --verification "targeted tests pass"
+```
+
+Implementers return the package/report paths. A reviewer reads the package once and writes separate spec-compliance and code-quality verdicts; full evidence remains on disk.
 
 ## 8. Debug
 

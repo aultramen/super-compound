@@ -9,6 +9,9 @@ Load only:
 - `.agent/context/skills/sc-work.contract.md`.
 - `.agent/context/skills/git-workflow-operation.contract.md` only when branch/worktree setup is configured or requested.
 
+Search existing symbols, paths, tests, and nearby implementations before
+creating or declaring anything missing; a narrow search miss is not absence.
+
 Stop with `OPEN-*` when authority is missing, a linked ADR is not accepted, or implementation would invent schema, APIs, auth, workflow, role, state, security, privacy, or data-integrity behavior.
 
 When Git workflow is enabled, block direct protected-base work and preview branch/worktree setup before edits.

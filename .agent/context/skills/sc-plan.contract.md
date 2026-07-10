@@ -11,4 +11,5 @@ Use compact contracts until a step needs the full procedure.
 | plan quality gate | `plan-verification` |
 | vocabulary/seams still unclear | `domain-modeling`, `codebase-design` |
 
-Always preserve: qualified refs, ADR applicability, OPEN blockers, verification refs, and zero-context-bloat issue pointers.
+Always preserve: qualified refs, ADR applicability, exact `TDEC/ADR -> GOAL -> TEST`
+coverage, OPEN blockers, verification refs, and zero-context-bloat issue pointers.
