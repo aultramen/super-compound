@@ -55,6 +55,11 @@ CSV_CONFIG = {
         "search_cols": ["Category", "Icon Name", "Keywords", "Best For"],
         "output_cols": ["Category", "Icon Name", "Keywords", "Library", "Import Code", "Usage", "Best For", "Style"]
     },
+    "gsap": {
+        "file": "motion.csv",
+        "search_cols": ["Category", "Intensity Tier", "Keywords", "Trigger"],
+        "output_cols": ["Category", "Intensity Tier", "Trigger", "Duration", "Easing", "GSAP Snippet", "Framework Notes", "Do", "Don't", "Performance Notes"]
+    },
     "react": {
         "file": "react-performance.csv",
         "search_cols": ["Category", "Issue", "Keywords", "Description"],
@@ -94,6 +99,12 @@ STACK_CONFIG = {
     "threejs":          {"file": "stacks/threejs.csv"},
     "angular":          {"file": "stacks/angular.csv"},
     "laravel":          {"file": "stacks/laravel.csv"},
+    "javafx":           {"file": "stacks/javafx.csv"},
+    "wpf":              {"file": "stacks/wpf.csv"},
+    "winui":            {"file": "stacks/winui.csv"},
+    "avalonia":         {"file": "stacks/avalonia.csv"},
+    "uno":              {"file": "stacks/uno.csv"},
+    "uwp":              {"file": "stacks/uwp.csv"},
 }
 
 # Common columns for all stacks
@@ -103,6 +114,10 @@ _STACK_COLS = {
 }
 
 AVAILABLE_STACKS = list(STACK_CONFIG.keys())
+
+_QUERY_STOPWORDS = {
+    "a", "an", "and", "for", "from", "in", "of", "on", "or", "the", "to", "with"
+}
 
 
 # ============ BM25 IMPLEMENTATION ============
@@ -122,7 +137,7 @@ class BM25:
     def tokenize(self, text):
         """Lowercase, split, remove punctuation, filter short words"""
         text = re.sub(r'[^\w\s]', ' ', str(text).lower())
-        return [w for w in text.split() if len(w) > 2]
+        return [w for w in text.split() if len(w) >= 2]
 
     def fit(self, documents):
         """Build BM25 index from documents"""
@@ -145,7 +160,10 @@ class BM25:
 
     def score(self, query):
         """Score all documents against query"""
-        query_tokens = self.tokenize(query)
+        query_tokens = [
+            token for token in self.tokenize(query) if token not in _QUERY_STOPWORDS
+        ]
+        has_multiple_terms = len(query_tokens) > 1
         scores = []
 
         for idx, doc in enumerate(self.corpus):
@@ -161,7 +179,10 @@ class BM25:
                     idf = self.idf[token]
                     numerator = tf * (self.k1 + 1)
                     denominator = tf + self.k1 * (1 - self.b + self.b * doc_len / self.avgdl)
-                    score += idf * numerator / denominator
+                    # Two-character acronyms are meaningful alone (AI, UI, AR),
+                    # but should not overpower longer intent terms in a phrase.
+                    weight = 0.25 if has_multiple_terms and len(token) == 2 else 1.0
+                    score += weight * idf * numerator / denominator
 
             scores.append((idx, score))
 

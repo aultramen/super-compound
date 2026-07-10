@@ -1,144 +1,51 @@
 ---
 name: gap-closure
-description: "When verification finds gaps — creates targeted fix plans instead of full replanning. Focuses effort on what's missing, not what's already done."
+description: "Use when verification, review, or manual testing identifies concrete gaps in otherwise planned or completed work."
 ---
 
 # Gap Closure
 
 ## Overview
 
-When verification reveals that completed work has gaps — missing features, broken wiring, failing tests — don't start over. Create targeted fix plans that address only the gaps.
+Announce: "I'm using the gap-closure skill to create targeted fixes for the identified gaps."
 
-**Announce:** "I'm using the gap-closure skill to create targeted fixes for the identified gaps."
+Close only evidenced gaps; do not restart planning or turn repair into enhancement work.
 
-## When to Activate
+## When to Use
 
-This skill activates when:
-- `verification-before-completion` reports Goal-Backward gaps
-- Code review finds P1/P2 issues
-- Integration checking finds broken wiring
-- Manual testing reveals missing functionality
+Activate for goal-backward truth/artifact/wiring gaps, P1/P2 review findings, broken integration wiring, failing verification, or missing behavior exposed by manual testing.
 
-## The Gap Closure Process
+- When converting evidence into bounded work, load [Gap Analysis and Plan](references/gap-analysis-and-plan.md).
+- When implementing an approved closure plan, load [Execute and Re-Verify](references/execute-and-reverify.md).
 
-### Step 1: Parse Gaps
+Do not use when requirements or architecture are genuinely undecided; return to the appropriate planning/decision workflow instead.
 
-From the verification report, extract specific gap items:
+## Closure Gate
 
-```
-For EACH gap:
-  → What's missing or broken? (specific description)
-  → What category? (truth / artifact / wiring)
-  → What severity? (critical / important / minor)
-  → What's the root cause? (missing task / incorrect implementation / missing wiring)
-```
+**Gaps only:** every fix task must trace to a specific source finding and include files plus a proving check.
 
-### Step 2: Cluster Related Gaps
+1. Parse each gap's symptom, category, severity, and root cause.
+2. Cluster gaps sharing a component, file, cause, or verification dimension.
+3. Create minimal fix tasks and explicit out-of-scope boundaries.
+4. Execute through `test-driven-development` and focused edits.
+5. Re-run the ORIGINAL verification, then relevant regression checks.
+6. If new gaps appear, stop after max 2 additional closure iterations and report what remains.
 
-Group gaps that share:
-- Same component or file
-- Same root cause
-- Same verification dimension
+An enhancement is not gap closure. Finish the bounded closure before routing improvements separately.
 
-```markdown
-## Gap Clusters
+## Red Flags
 
-### Cluster 1: [Component/Area]
-- Gap: [description]
-- Gap: [description]
-- Root cause: [shared reason]
-
-### Cluster 2: [Component/Area]
-- Gap: [description]
-- Root cause: [reason]
-```
-
-### Step 3: Generate Fix Plan
-
-For each cluster, create a focused fix plan:
-
-```markdown
-## Gap Closure Plan
-
-**Source:** [verification report / review / manual test]
-**Type:** gap_closure
-
-### Fix Tasks
-
-- [ ] **Fix 1:** [specific action]
-  - Files: [files to modify]
-  - Verify: [how to confirm fix]
-
-- [ ] **Fix 2:** [specific action]
-  - Files: [files to modify]
-  - Verify: [how to confirm fix]
-
-### Out of Scope
-- [Things that are NOT gaps — new features, enhancements]
-```
-
-### Step 4: Execute with Minimal Overhead
-
-Gap closure plans skip:
-- ❌ Brainstorming (problem is already understood)
-- ❌ Full research (we already built the feature)
-- ❌ Architecture decisions (architecture is already set)
-
-Gap closure plans keep:
-- ✅ TDD (write test first → fix → verify)
-- ✅ Verification (re-run original verification after fixes)
-- ✅ State updates (track in STATE.md)
-
-### Step 5: Re-Verify
-
-After all fixes are applied:
-
-```
-1. Re-run the ORIGINAL verification that found the gaps
-2. Confirm all gaps are now closed
-3. Check for regressions (fixes didn't break working features)
-4. If new gaps found → max 2 more closure iterations
-```
-
-## Scope Discipline
-
-| Allowed | Not Allowed |
-|---------|-------------|
-| Fix identified gaps | Add new features |
-| Correct broken wiring | Refactor architecture |
-| Add missing tests | Improve existing tests |
-| Fix failing verification | Enhance passing features |
-
-**If user requests enhancements during gap closure:**
-> "That's an enhancement, not a gap closure. Let's finish closing these gaps first, then address enhancements separately."
-
-## Key Principles
-
-| Principle | Description |
-|-----------|-------------|
-| **Gaps only** | Fix what's broken/missing, nothing more |
-| **Cluster first** | Group related gaps to fix efficiently |
-| **Skip overhead** | No brainstorming or research for gaps |
-| **Re-verify always** | Confirm gaps are actually closed |
-| **Max 2 re-iterations** | Prevent infinite gap-closure loops |
-
-## Red Flags — STOP
-
-| Thought | Reality |
-|---------|---------|
-| "While I'm here, let me also improve..." | That's scope creep, not gap closure |
-| "Let me rewrite this component" | Fix the specific gap, don't rewrite |
-| "No need to re-verify" | Always re-verify after closure |
-| "Start from scratch" | Gap closure, not full replanning |
+| Thought | Required response |
+|---|---|
+| "While I'm here, improve..." | Record separately; fix only sourced gaps. |
+| "Rewrite the component" | Target the root cause with the smallest repair. |
+| "Start planning from scratch" | Preserve verified work and plan only gaps. |
+| "The new test passes, so done" | Re-run the original verification and regressions. |
+| "One more closure loop" beyond the cap | Stop and escalate remaining evidence. |
 
 ## Integration
 
-**This skill is triggered by:**
-- **verification-before-completion** — Goal-backward verification finds truth/artifact/wiring gaps
-- **code-review** — P1/P2 findings need closure
-- **integration-checking** — Cross-component wiring gaps
-
-**This skill uses:**
-- **executing-plans** — Execute fix tasks
-- **test-driven-development** — Write failing test → fix → pass
-- **verification-before-completion** — Re-verify after fixes
+- Triggered by `verification-before-completion`, `code-review`, `integration-checking`, or manual evidence.
+- Uses `executing-plans` for fix tasks and `test-driven-development` for behavior.
+- Uses `systematic-debugging` when root cause is not yet established.
+- Returns to `verification-before-completion` and `state-management` after repair.

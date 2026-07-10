@@ -7,119 +7,33 @@ description: "Use when you need up-to-date library/API documentation, code examp
 
 ## Overview
 
-Context7 MCP pulls **up-to-date, version-specific documentation and code examples** directly from the source and injects them into your context. It eliminates hallucinated APIs, outdated code samples, and generic answers based on stale training data.
+Use Context7 for current, version-specific library and framework documentation rather than relying on stale API memory.
 
 **Announce:** "I'm using the context7-docs skill to fetch up-to-date documentation."
 
-**MCP Tools available:**
-- `mcp_context7_resolve-library-id` — Find the Context7 library ID for a given library name
-- `mcp_context7_query-docs` — Retrieve documentation/code examples for a specific library
+Logical capabilities (the host may expose them under a namespaced tool name):
 
----
+- `resolve-library-id` finds the Context7 library ID.
+- `query-docs` retrieves documentation and code examples.
 
-## When to Use
+## Reference Router
 
-Invoke this skill whenever you need:
+- Decide whether the request is a Context7 case: [when to use](references/when-to-use.md)
+- Resolve the library and make a focused query: [usage pattern](references/usage-pattern.md)
+- Handle missing libraries, limits, and unavailable tools: [fallback](references/fallback.md)
+- See concise invocation forms: [examples](references/examples.md)
+- Exclude project logic, private libraries, and generic concepts: [exclusions](references/exclusions.md)
 
-| Scenario | Example |
-|----------|---------|
-| Library API documentation | "How does Prisma handle nested writes?" |
-| Version-specific code examples | "Next.js 14 middleware syntax" |
-| Framework setup/configuration | "Configure Vite with React + TypeScript" |
-| Integration patterns | "Supabase auth with Next.js App Router" |
-| Package compatibility info | "Drizzle ORM version requirements" |
+Load usage only for an applicable library question. Load fallback only after the primary attempt fails.
 
-**Triggers in other skills:**
-- `sc-research.md` — Step 3 External Research: library/framework involved
-- `writing-plans` — Phase 1.2 Research Decision: high-risk API/library topic
-- `compatibility-check` — Pre-flight: checking version docs for new dependencies
-- `architecture-enforcement` — Looking up framework-specific conventions
+## Mandatory Gates
 
----
-
-## Usage Pattern
-
-### Step 1: Resolve Library ID
-
-```
-Call: mcp_context7_resolve-library-id
-  libraryName: "[library name]"
-  query: "[your specific question or task]"
-```
-
-Pick the most relevant result based on name match, description, and snippet count.
-
-### Step 2: Query Documentation
-
-```
-Call: mcp_context7_query-docs
-  libraryId: "[resolved ID from Step 1]"
-  query: "[specific question or task]"
-```
-
-> **Tip — Skip Step 1**: If you already know the library ID (e.g., `/vercel/next.js`, `/prisma/prisma`), call `query-docs` directly.
-
-> **Tip — Version-specific**: Include version in your query: `"Next.js 14 app router middleware"` — Context7 will match the correct version.
-
----
-
-## Fallback Strategy
-
-If Context7 is unavailable or limit is reached:
-
-```
-FALLBACK ORDER:
-1. Context7 MCP (primary — always try first)
-   ↓ if unavailable / rate-limited / library not found
-2. Official documentation URL (read_url_content)
-   ↓ if URL not accessible
-3. Web search (search_web) — "site:docs.[library].com [query]"
-   ↓ as last resort
-4. Training knowledge (with explicit caveat that it may be outdated)
-```
-
-**Detecting limit/unavailability:**
-- Tool returns error or empty result → activate fallback immediately
-- Library not found in Context7 → try official docs URL directly
-- Do not retry Context7 more than once per session if limit is hit
-
-**When falling back, always announce:**
-> "Context7 not available for this library — falling back to [web search / official docs]."
-
----
+- **Applicability gate:** Use Context7 for public library/API docs, version-specific examples, framework setup, integrations, conventions, and compatibility information. Search the repository instead for project-specific logic or configuration.
+- **Search-before-missing gate:** Do not claim documentation or a library is missing before retrieval. If the exact library ID is known, use the host-exposed `query-docs` capability directly. Otherwise use `resolve-library-id`, select by name, description, and snippet relevance, then query the resolved ID.
+- **Query gate:** Include the exact task, API surface, and version when known. Retrieve only the documentation needed for the decision; do not flood context with broad library pages.
+- **Evidence gate:** Distinguish retrieved documentation from inference. Preserve the library ID, version context, and the relevant source-supported conclusion in the answer or plan.
+- **Fallback gate:** On error, empty result, rate limit, or no library match, fall back in order to official documentation, targeted official-site web search, then training knowledge with an explicit outdatedness caveat. Announce the fallback and do not retry a session limit more than once.
 
 ## Integration
 
-**This skill is invoked by:**
-- `sc-research.md` workflow — Step 3: External research, before web search
-- `writing-plans` skill — Phase 1.2 Research Decision (library/API topics)
-- `compatibility-check` skill — Step 3: Pre-flight compatibility check
-- `architecture-enforcement` skill — Framework convention lookup
-
-**This skill pairs with:**
-- `compatibility-check` — Context7 for docs, then compatibility-check for version conflict analysis
-- `systematic-debugging` — Use Context7 to verify correct API usage when debugging library-related bugs
-
----
-
-## Example Prompts
-
-```txt
-# With explicit trigger:
-"Implement JWT refresh token rotation with better-auth. use context7"
-
-# With library ID:
-"Set up Drizzle ORM with PostgreSQL. use library /drizzle-team/drizzle-orm"
-
-# Version-specific:
-"React 19 concurrent features — use context7"
-```
-
----
-
-## Do Not Use Context7 When
-
-- The question is about **project-specific business logic** (not a library)
-- The library is **private/internal** (not in Context7's index)
-- You only need **general programming concepts** (not library-specific)
-- The question is about **configuration files specific to the project** (use codebase search instead)
+Invoked by `sc-research.md`, `writing-plans`, `compatibility-check`, and `architecture-enforcement`. Pair with `compatibility-check` for version conflicts and `systematic-debugging` for suspected API misuse.

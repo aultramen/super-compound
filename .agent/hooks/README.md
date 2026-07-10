@@ -26,14 +26,13 @@ your-project/
     suggest-compact.js
 ```
 
-### Step 2: Choose A Settings Template
+### Step 2: Use The Settings Template
 
-Use one of the two templates:
+Use `hooks.json` for either `~/.claude/settings.json` or project-local
+`.claude/settings.json`; merge its `hooks` object rather than replacing unrelated
+settings.
 
-- `hooks.json` is the safe global template for `~/.claude/settings.json`. Replace `<ABSOLUTE_PROJECT_PATH>` with a real absolute project path before use.
-- `hooks.project.json` is for project-local settings evaluated from the project root. Do not copy it into global settings.
-
-The hook scripts derive the project root from their own script path, so global hooks do not rely on the current working directory.
+The template uses Claude Code's `${CLAUDE_PROJECT_DIR}` placeholder with exec-form `args`, so paths remain correct after a `cd` and spaces are not shell-tokenized.
 
 Open or create `~/.claude/settings.json` and merge the hooks block from `hooks.json`.
 
@@ -42,7 +41,6 @@ Open or create `~/.claude/settings.json` and merge the hooks block from `hooks.j
 cat ~/.claude/settings.json
 
 # Then manually merge the hooks from .agent/hooks/hooks.json.
-# Replace <ABSOLUTE_PROJECT_PATH> with a real absolute project path.
 ```
 
 Example global command shape:
@@ -50,11 +48,13 @@ Example global command shape:
 ```json
 {
   "type": "command",
-  "command": "node \"C:/path/to/your-project/.agent/hooks/suggest-compact.js\"",
-  "async": true,
+  "command": "node",
+  "args": ["${CLAUDE_PROJECT_DIR}/.agent/hooks/suggest-compact.js"],
   "timeout": 5
 }
 ```
+
+`suggest-compact.js` must remain synchronous so Claude Code can receive its structured `hookSpecificOutput.additionalContext`. `stop-check.js` is also synchronous so its bounded warning can surface as `systemMessage`. Neither hook emits raw input.
 
 ### Step 3: Verify Hooks Work
 
@@ -72,6 +72,15 @@ node .agent/hooks/test-hooks-security.js
 |---|---:|---|
 | `COMPACT_THRESHOLD` | `50` | Tool calls before first `/sc-pause` suggestion |
 | `COMPACT_REMINDER_INTERVAL` | `25` | Calls between reminders |
+| `COMPACT_CONTEXT_THRESHOLD` | `160000` (`250000` for 1M context) | Input-context tokens before the first context-pressure suggestion; set `0` to disable this signal |
+| `COMPACT_CONTEXT_INTERVAL` | `60000` | Additional context tokens between reminders |
+| `COMPACT_STATE_TTL_DAYS` | `14` | Age after which inactive session state is removed |
+| `CLAUDE_CODE_AUTO_COMPACT_WINDOW` | model-derived | Explicit context-window size used for the percentage label |
+| `SUPER_COMPOUND_PROJECT_ROOT` | script-derived | Optional absolute project-root override |
+
+The latest complete usage record is read from a bounded transcript tail (256 KiB normally, expanding to at most 1 MiB for one large record). A session-scoped tool counter is the fallback when transcript usage is unavailable. State lives under ignored `.agent/.compact-state/<session>.json`; a session ID or hashed transcript path isolates reminders, while legacy payloads that provide neither identity share the `default` fallback.
+
+`pre-compact.js` and `session-end.js` keep stdout silent so they cannot inject accidental context. Diagnostics go to stderr, and all hook stdin is size-bounded and parsed without echoing payloads.
 
 ## Antigravity IDE: Equivalent Behavior
 

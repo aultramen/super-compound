@@ -1,6 +1,6 @@
 ---
 name: compatibility-check
-description: "Use before introducing dependencies or when auditing stack compatibility. Validates runtime support, peer conflicts, deprecations, vulnerability posture, and rollback risk."
+description: "Use when introducing dependencies or auditing runtime support, peer conflicts, deprecations, vulnerability posture, and rollback risk."
 ---
 
 # Compatibility Check
@@ -19,117 +19,28 @@ Announce: "I'm using the compatibility-check skill to validate tech stack compat
 | Audit | `/sc-audit compat` or explicit request | Current project stack | Read-only compatibility report |
 | Debug support | A failure looks version-related | Suspect dependency pair | Root-cause note and fix options |
 
-Audit mode is read-only unless the user explicitly approves changes.
+## Reference Router
 
-## What To Inspect
+Load only the active branch:
 
-- `package.json`, lockfiles, `requirements.txt`, `pyproject.toml`, `go.mod`, `composer.json`, `Cargo.toml`, and equivalent manifests
-- Runtime declarations such as `.node-version`, `.python-version`, `.tool-versions`, `engines`, Docker base images, CI config, and deployment config
-- Framework, build tool, language, and library version pairs
-- Peer dependencies and optional peer dependencies
-- Deprecated APIs or end-of-life runtimes
-- Native extensions, platform constraints, and browser/server compatibility
-- Licenses, install scripts, provenance, and suspicious package names for new dependencies
+- Determine manifests, lockfiles, runtime declarations, platform constraints, provenance, and suspicious names: [inspection surface](references/inspection-surface.md)
+- Proposed dependency, runtime, vendor, container, or major-version change: [pre-flight](references/preflight.md)
+- Existing stack or codebase-wide compatibility review: [audit](references/audit.md)
+- Select ecosystem-native checks: [commands](references/commands.md)
+- Classify and present supported findings: [reporting](references/reporting.md)
+- Counter upgrade and audit shortcuts: [red flags](references/red-flags.md)
 
-## Pre-Flight Steps
+Use `context7-docs` or current primary documentation for version-specific support. Load command and reporting references only when producing or verifying those outputs.
 
-1. List new or changed dependencies and runtimes.
-2. Read current versions from manifests and lockfiles.
-3. Use `context7-docs` for version-specific primary docs when available.
-4. Check peer requirements, runtime minimums, and breaking-change notes.
-5. Run native audit commands when the ecosystem supports them.
-6. Document result in the plan.
-7. If a blocker exists, propose alternatives before implementation.
+## Mandatory Gates
 
-Plan section:
-
-```markdown
-## Compatibility Check
-
-| Item | Current | Proposed | Status | Notes |
-|---|---:|---:|---|---|
-| example-lib | n/a | 3.x | OK | Supports Node 20 and React 19 |
-
-### Required Actions
-- <install, pin, replace, or defer>
-```
-
-## Audit Steps
-
-1. Scan manifests, lockfiles, runtime declarations, CI, and deployment config.
-2. Build a direct dependency map and note critical transitive dependencies.
-3. Check major dependency pairs:
-   - Framework and runtime
-   - Framework and ORM
-   - Library and library
-   - Build tool and plugin
-   - Test framework and runtime
-4. Run ecosystem vulnerability checks where available.
-5. Classify findings by severity.
-6. Present a report and wait for approval before applying fixes.
-
-## Common Commands
-
-Use only commands that fit the project:
-
-| Ecosystem | Commands |
-|---|---|
-| npm | `npm audit --audit-level=high`, `npm ls` |
-| pnpm | `pnpm audit --audit-level=high`, `pnpm list` |
-| yarn | `yarn npm audit --severity high` or project-supported equivalent |
-| Python | `pip-audit`, `python -m pip check` |
-| Go | `govulncheck ./...`, `go list -m all` |
-| PHP | `composer audit`, `composer show` |
-| Rust | `cargo audit`, `cargo tree` |
-
-If a tool is missing, report that limitation instead of inventing a result.
-
-## Severity
-
-| Level | Meaning |
-|---|---|
-| P0 | Known exploitable vulnerability, active breakage, or unsupported production runtime |
-| P1 | Likely build/runtime break, incompatible peer dependency, or high CVE |
-| P2 | Deprecated or near-EOL dependency, medium CVE, risky but workable mismatch |
-| P3 | Upgrade opportunity, cleanup, or low-risk warning |
-
-## Report Format
-
-```markdown
-# Compatibility Audit
-
-## Summary
-- P0: 0
-- P1: 1
-- P2: 2
-- P3: 3
-
-## Findings
-
-### P1: <title>
-Item: <dependency/runtime>
-Evidence: <manifest, lockfile, docs, command output>
-Impact: <what can break>
-Recommendation: <specific action>
-Verification: <command>
-
-## Suggested Order
-1. <highest value fix>
-```
-
-## Red Flags
-
-| Thought | Better Response |
-|---|---|
-| "Latest should work" | Check the version pair |
-| "Peer warnings are harmless" | Confirm runtime behavior and test coverage |
-| "Install first, fix later" | Check compatibility before adding the dependency |
-| "The audit tool is enough" | Also check support policy, docs, and lockfile state |
+- **Mutation gate:** Audit mode is read-only. Present findings and wait for explicit approval before installing, upgrading, pinning, replacing, or editing configuration.
+- **Inventory gate:** Read both manifests and lockfiles plus runtime, CI, container, and deployment declarations. Check direct and critical transitive dependencies, peer and optional-peer requirements, native extensions, platform limits, provenance, licenses, and install scripts as applicable.
+- **Evidence gate:** Record current and proposed versions, exact manifest or lockfile evidence, supported runtime range, primary documentation, command output, vulnerability posture, and rollback path. Never infer support from “latest.”
+- **Tool gate:** If a required tool is missing, report that limitation instead of inventing a result. Separate unverified areas from verified no-findings.
+- **STOP gate:** Do not approve implementation with an unresolved P0 or P1, unsupported production runtime, incompatible peer requirement, active breakage, or missing rollback path. Propose supported alternatives first.
+- **Verification gate:** Run only project-appropriate native checks, inspect breaking-change and deprecation notes, and verify the selected version pair in the project’s actual runtime and build path.
 
 ## Related Skills
 
-- `context7-docs` for version-specific documentation
-- `security-audit` for broader security analysis
-- `writing-plans` for pre-flight planning
-- `systematic-debugging` when failures may be version-related
-- `knowledge-compounding` for documenting resolved compatibility issues
+Use `context7-docs` for version-specific documentation, `security-audit` for broader risk, `writing-plans` for pre-flight decisions, `systematic-debugging` for version failures, and `knowledge-compounding` for resolved compatibility patterns.

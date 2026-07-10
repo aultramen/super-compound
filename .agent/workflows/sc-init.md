@@ -19,10 +19,12 @@ description: "Initialize or refresh project context by scanning the codebase, co
 4. Detect Git defaults such as base branch and remote when useful, then suggest `gitWorkflow` updates instead of guessing silently.
 5. Suggest updates to project config instead of guessing silently.
 6. Create or refresh concise codebase notes when useful.
-7. For `/sc-init reload`, re-read rules/workflows/skills that changed and summarize what matters.
+7. Report enabled MCP/tool schemas and installed skill metadata when the host exposes them. Mark unavailable measurements `unknown`; do not disable capabilities automatically.
+8. For `/sc-init reload`, re-read rules/workflows/skills that changed and summarize what matters.
 
 ## Output
 
 - Current stack and commands.
 - Gaps or recommended config changes.
+- Host-injected context surface: measured values or explicit `unknown`.
 - Next recommended workflow.

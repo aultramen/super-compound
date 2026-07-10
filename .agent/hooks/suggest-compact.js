@@ -1,88 +1,136 @@
 #!/usr/bin/env node
 /**
- * Super Compound — Suggest Compact Hook
- * 
- * Runs on PreToolUse (Edit/Write). Tracks tool call count and suggests
- * /sc-pause at logical intervals based on count threshold.
- * 
- * Inspired by everything-claude-code's suggest-compact.js
- * 
- * Configuration:
- *   COMPACT_THRESHOLD env var — tool calls before first suggestion (default: 50)
- *   COMPACT_REMINDER_INTERVAL — calls between reminders (default: 25)
+ * Suggest compaction from real transcript pressure, with session-scoped
+ * tool-count fallback. Silent unless a structured PreToolUse reminder fires.
  */
 
 const fs = require('fs');
 const path = require('path');
+const { createHash } = require('crypto');
 const {
     atomicWriteFile,
-    passThroughStdin,
     readPositiveInteger,
+    readStdinJson,
     resolveHookProjectRoot,
     safeProjectFile,
 } = require('./lib/hook-utils');
+const {
+    buildContextSuggestion,
+    readLatestContextTokens,
+} = require('./lib/context-pressure');
 
-const THRESHOLD = readPositiveInteger('COMPACT_THRESHOLD', 50);
-const REMINDER_INTERVAL = readPositiveInteger('COMPACT_REMINDER_INTERVAL', 25);
+const TOOL_THRESHOLD = readPositiveInteger('COMPACT_THRESHOLD', 50);
+const TOOL_INTERVAL = readPositiveInteger('COMPACT_REMINDER_INTERVAL', 25);
+const STATE_TTL_MS = readPositiveInteger('COMPACT_STATE_TTL_DAYS', 14) * 86400000;
 
-// Counter file stored per-project in .agent/
-let counterFile;
-
+let input = {};
 try {
-    const projectRoot = resolveHookProjectRoot(path.resolve(__dirname, '..', '..'));
-    counterFile = safeProjectFile(projectRoot, ['.agent', '.tool-call-count']);
+    input = readStdinJson();
 } catch (error) {
     console.error(`[Super Compound] Suggest compact: ${error.message}`);
-    passThroughStdin();
+}
+
+let stateDir;
+let stateFile;
+try {
+    const projectRoot = resolveHookProjectRoot(
+        process.env.SUPER_COMPOUND_PROJECT_ROOT || path.resolve(__dirname, '..', '..')
+    );
+    const sessionId = sanitizeSessionId(
+        input.session_id ||
+        process.env.CLAUDE_SESSION_ID ||
+        transcriptSessionId(input.transcript_path)
+    );
+    stateDir = safeProjectFile(projectRoot, ['.agent', '.compact-state']);
+    stateFile = safeProjectFile(projectRoot, ['.agent', '.compact-state', `${sessionId}.json`]);
+} catch (error) {
+    console.error(`[Super Compound] Suggest compact: ${error.message}`);
     return;
 }
 
-function readCount() {
+cleanupOldState(stateDir, stateFile);
+const state = readState(stateFile);
+state.count += 1;
+
+const messages = [];
+const usage = readLatestContextTokens(input.transcript_path);
+const contextSuggestion = buildContextSuggestion(
+    usage,
+    state.lastContextBucket,
+    process.env
+);
+if (contextSuggestion) {
+    state.lastContextBucket = contextSuggestion.bucket;
+    messages.push(contextSuggestion.message);
+}
+
+if (
+    state.count === TOOL_THRESHOLD ||
+    (state.count > TOOL_THRESHOLD &&
+        (state.count - TOOL_THRESHOLD) % TOOL_INTERVAL === 0)
+) {
+    messages.push(
+        `[Super Compound] Context checkpoint after ${state.count} tool calls. ` +
+        'Use /sc-pause or /compact at the next logical boundary.'
+    );
+}
+
+state.updatedAt = new Date().toISOString();
+try {
+    atomicWriteFile(stateFile, JSON.stringify(state));
+} catch (error) {
+    console.error(`[Super Compound] Suggest compact: state write failed: ${error.message}`);
+}
+
+if (messages.length > 0) {
+    process.stdout.write(JSON.stringify({
+        hookSpecificOutput: {
+            hookEventName: 'PreToolUse',
+            additionalContext:
+                `${messages.join('\n')} Skip compaction while implementation or tests are active.`,
+        },
+    }));
+}
+
+function sanitizeSessionId(value) {
+    return String(value || 'default')
+        .replace(/[^A-Za-z0-9_-]/g, '')
+        .slice(0, 80) || 'default';
+}
+
+function transcriptSessionId(value) {
+    if (typeof value !== 'string' || !value) return '';
+    return `transcript_${createHash('sha256').update(value).digest('hex').slice(0, 24)}`;
+}
+
+function readState(file) {
     try {
-        if (fs.existsSync(counterFile)) {
-            const data = JSON.parse(fs.readFileSync(counterFile, 'utf8'));
-            // Reset count if it's from a different day (new session)
-            const today = new Date().toDateString();
-            if (data.date !== today) return { count: 0, date: today };
-            return data;
+        const parsed = JSON.parse(fs.readFileSync(file, 'utf8'));
+        return {
+            count: Number.isInteger(parsed.count) && parsed.count >= 0 && parsed.count <= 1000000
+                ? parsed.count
+                : 0,
+            lastContextBucket:
+                Number.isInteger(parsed.lastContextBucket) && parsed.lastContextBucket >= -1
+                    ? parsed.lastContextBucket
+                    : -1,
+            updatedAt: parsed.updatedAt,
+        };
+    } catch {
+        return { count: 0, lastContextBucket: -1, updatedAt: null };
+    }
+}
+
+function cleanupOldState(directory, activeFile) {
+    if (!fs.existsSync(directory)) return;
+    const cutoff = Date.now() - STATE_TTL_MS;
+    try {
+        for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+            const candidate = path.join(directory, entry.name);
+            if (!entry.isFile() || candidate === activeFile) continue;
+            if (fs.statSync(candidate).mtimeMs < cutoff) fs.rmSync(candidate, { force: true });
         }
-    } catch { }
-    return { count: 0, date: new Date().toDateString() };
+    } catch {
+        // Cleanup is best-effort; active state still proceeds.
+    }
 }
-
-function writeCount(count) {
-    try {
-        atomicWriteFile(counterFile, JSON.stringify({ count, date: new Date().toDateString() }));
-    } catch { }
-}
-
-const data = readCount();
-const newCount = data.count + 1;
-writeCount(newCount);
-
-// Check if we should suggest compaction
-const shouldSuggest = newCount === THRESHOLD ||
-    (newCount > THRESHOLD && (newCount - THRESHOLD) % REMINDER_INTERVAL === 0);
-
-if (shouldSuggest) {
-    console.error('');
-    console.error(`[Super Compound] 🧠 Context checkpoint — ${newCount} tool calls this session`);
-    console.error('');
-    console.error('  Consider whether to compact context at this logical boundary:');
-    console.error('');
-    console.error('  COMPACT if:');
-    console.error('    → You just finished a planning/research phase');
-    console.error('    → You completed a major milestone');
-    console.error('    → Debug traces are polluting context for new work');
-    console.error('');
-    console.error('  SKIP if:');
-    console.error('    → Mid-implementation (would lose file/variable context)');
-    console.error('    → Tests actively reference recent code changes');
-    console.error('');
-    console.error('  Run: /sc-pause   → save state + create handoff → start fresh session');
-    console.error('  Or:  /compact → compact in-place (keep conversation going)');
-    console.error('');
-}
-
-// Pass through stdin unchanged
-passThroughStdin();

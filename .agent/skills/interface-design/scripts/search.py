@@ -6,8 +6,8 @@ Usage: python search.py "<query>" [--domain <domain>] [--stack <stack>] [--max-r
        python search.py "<query>" --design-system [-p "Project Name"]
        python search.py "<query>" --design-system --persist [-p "Project Name"] [--page "dashboard"] [--overwrite]
 
-Domains: style, color, chart, landing, product, ux, web, app, typography, icons, react, google-fonts
-Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtjs, nuxt-ui, html-tailwind, shadcn, jetpack-compose, threejs
+Domains: style, color, chart, landing, product, ux, web, app, typography, icons, gsap, react, google-fonts
+Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtjs, nuxt-ui, html-tailwind, shadcn, jetpack-compose, threejs, angular, laravel, javafx, wpf, winui, avalonia, uno, uwp
 
 Persistence (Master + Overrides pattern):
   --persist    Save design system to design-system/MASTER.md
@@ -18,6 +18,7 @@ Persistence (Master + Overrides pattern):
 import argparse
 import sys
 import io
+import re
 from core import CSV_CONFIG, AVAILABLE_STACKS, MAX_RESULTS, search, search_stack
 from design_system import generate_design_system, persist_design_system
 
@@ -46,7 +47,8 @@ def format_output(result):
         output.append(f"### Result {i}")
         for key, value in row.items():
             value_str = str(value)
-            if len(value_str) > 300:
+            is_code_field = re.search(r'\b(code|snippet|command)\b', key, re.I)
+            if len(value_str) > 300 and not is_code_field:
                 value_str = value_str[:300] + "..."
             output.append(f"- **{key}:** {value_str}")
         output.append("")

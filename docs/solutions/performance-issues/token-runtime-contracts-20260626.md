@@ -9,13 +9,17 @@ tags: [agent-context, token-budget, super-compound, progressive-disclosure]
 
 ## Symptoms
 
-Full framework and command-specific runtime loads pulled large skills, templates, hooks, agents, and interface-design CSV data into context. Comprehensive baseline evidence in `.agent/benchmarks/token-baseline.before.json` measured:
+The historical eager-preload workload and command-specific modeled routes pulled large skills, templates, hooks, agents, and interface-design CSV data into context. Baseline evidence in `.agent/benchmarks/token-baseline.before.json` measured:
 
-- full framework load: 516436 tokens
+- historical eager-preload workload: 516436 tokens
 - `/sc-ui`: 374638 tokens
 - generated BRD/PRD/FSD/issue surfaces: 98427 tokens
 - interface-design CSV data: 353236 tokens
 - full agentic templates: 95066 tokens
+
+These are static, deterministic workload estimates. They are not observed host
+startup telemetry; absolute startup budgets and any supplied transcript
+measurement are reported separately by the benchmark.
 
 ## Root Cause
 
@@ -52,6 +56,7 @@ node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baselin
 
 ## Related
 
+- [Framework Synchronization and Context-Evidence Integrity](framework-sync-context-integrity-20260710.md)
 - `.agent/benchmarks/workflow-inventory.md`
 - `.agent/benchmarks/hotspot-scan.md`
 - `.agent/benchmarks/token-benchmark.after.json`

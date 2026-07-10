@@ -1,6 +1,6 @@
 ---
 name: integration-checking
-description: "Use after multi-component work to verify cross-component wiring: API contracts, data flow, events, auth, config, UI, background jobs, and tests."
+description: "Use when multi-component work needs cross-component verification of API contracts, data flow, events, auth, config, UI, background jobs, or tests."
 ---
 
 # Integration Checking

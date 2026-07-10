@@ -8,5 +8,6 @@ Use full skills only for the active procedure:
 - `test-driven-development`: write failing behavior/regression test before production code.
 - `verification-before-completion`: run mapped verification and inspect output before claiming done.
 - `integration-checking`: use after multi-component wiring changes.
+- `subagent-orchestration`: use `.agent/tools/work-package.mjs`; exchange paths and bounded verdicts, not copied briefs/diffs; scope shared-worktree review with the generated `review-paths.json` allowlist.
 
 Never bypass authority checks or weaken tests to reduce context.

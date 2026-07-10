@@ -2,7 +2,7 @@
   "metric": "deterministic_estimated_tokens_v1",
   "generatedAt": "2026-06-26T15:07:42.202Z",
   "scenarios": {
-    "full-framework-load": {
+    "legacy-eager-preload": {
       "tokens": 516436,
       "chars": 2045234,
       "bytes": 2051961,

@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "scope": "Selective provenance for active retrieval scripts and assets; files not listed are not claimed to mirror upstream.",
+  "upstream": {
+    "repository": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "commit": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+    "canonical_root": "src/ui-ux-pro-max"
+  },
+  "hash": {
+    "algorithm": "sha256",
+    "normalization": "UTF-8 text with CRLF normalized to LF"
+  },
+  "files": [
+    {
+      "upstream_path": "src/ui-ux-pro-max/scripts/core.py",
+      "upstream_lf_sha256": "ab9f398b493e34404448cefc766239ee86119c7a21d8581ba965cabdc698b0a8",
+      "local_path": "scripts/core.py",
+      "local_lf_sha256": "109321476acab240c0d3f5bf5f588ca47fa6247ddd488f3579e8e9f55ac4feb9",
+      "status": "transformed"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/scripts/search.py",
+      "upstream_lf_sha256": "b38f35395a7ded28a7d5adfd39195d6db01602121aefcdc4a7e67eb1bbdd5a40",
+      "local_path": "scripts/search.py",
+      "local_lf_sha256": "3287075ab65ca6420641032b44f5e7649b0f8fb56d5ccaa0f7351af185f6b094",
+      "status": "transformed"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/scripts/design_system.py",
+      "upstream_lf_sha256": "db272c6649322e383714c73305705101fe1d44c15bd64556d5a515b1c419c2d2",
+      "local_path": "scripts/design_system.py",
+      "local_lf_sha256": "ab3266ad271a66c435f579c2bc82a79424746d5f04905e1525867d10be8ffa1a",
+      "status": "transformed"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/products.csv",
+      "upstream_lf_sha256": "e9749e4fd8f7d4c94919c25ebd347a4adaddb671e7b01d33fbc2c87d447e6667",
+      "local_path": "data/products.csv",
+      "local_lf_sha256": "ac14a85ca548db25e7f144a113f2c110f0d5ba227fada9321e17476f082fc1e6",
+      "status": "transformed"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/colors.csv",
+      "upstream_lf_sha256": "cb26759805217edaaa31b09836aec09eab0fe245c58f5884e9a16ef802c6e26a",
+      "local_path": "data/colors.csv",
+      "local_lf_sha256": "cb26759805217edaaa31b09836aec09eab0fe245c58f5884e9a16ef802c6e26a",
+      "status": "mirrored"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/motion.csv",
+      "upstream_lf_sha256": "6452fbd8028ab71d52993775340e1bc40a150d92be8d4b4cb8710620fd1a7512",
+      "local_path": "data/motion.csv",
+      "local_lf_sha256": "6452fbd8028ab71d52993775340e1bc40a150d92be8d4b4cb8710620fd1a7512",
+      "status": "mirrored"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/javafx.csv",
+      "upstream_lf_sha256": "5545e331b2479eb431ca45203799ce1b0ab1e369045ab7735d5a9f85ec78f956",
+      "local_path": "data/stacks/javafx.csv",
+      "local_lf_sha256": "5545e331b2479eb431ca45203799ce1b0ab1e369045ab7735d5a9f85ec78f956",
+      "status": "mirrored"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/wpf.csv",
+      "upstream_lf_sha256": "ca78b5f28dc50d66900548d602d74856400097284c73e076fcfbb5a38ae5083c",
+      "local_path": "data/stacks/wpf.csv",
+      "local_lf_sha256": "ca78b5f28dc50d66900548d602d74856400097284c73e076fcfbb5a38ae5083c",
+      "status": "mirrored"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/winui.csv",
+      "upstream_lf_sha256": "2d970b08e44509d7afa53ce7feb446930b2d5e0667fa637df9aeeed65c42bbbe",
+      "local_path": "data/stacks/winui.csv",
+      "local_lf_sha256": "2d970b08e44509d7afa53ce7feb446930b2d5e0667fa637df9aeeed65c42bbbe",
+      "status": "mirrored"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/avalonia.csv",
+      "upstream_lf_sha256": "6bfa40ec6609fcb59e52a38281edcc3a3e5b5e56341304fe5628b32cb9b1f875",
+      "local_path": "data/stacks/avalonia.csv",
+      "local_lf_sha256": "6bfa40ec6609fcb59e52a38281edcc3a3e5b5e56341304fe5628b32cb9b1f875",
+      "status": "mirrored"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/uno.csv",
+      "upstream_lf_sha256": "5d2e0f396bb9dc5a2661204264cc0eda7cc4fa3d78152dec89d668704a41b8fc",
+      "local_path": "data/stacks/uno.csv",
+      "local_lf_sha256": "5d2e0f396bb9dc5a2661204264cc0eda7cc4fa3d78152dec89d668704a41b8fc",
+      "status": "mirrored"
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/uwp.csv",
+      "upstream_lf_sha256": "debf669928871261ced9333788d5afd5784377ea1fa1b4f53993dd8f1574c0fc",
+      "local_path": "data/stacks/uwp.csv",
+      "local_lf_sha256": "debf669928871261ced9333788d5afd5784377ea1fa1b4f53993dd8f1574c0fc",
+      "status": "mirrored"
+    }
+  ],
+  "local_transforms": [
+    {
+      "id": "retrieval-token-floor",
+      "files": [
+        "scripts/core.py"
+      ],
+      "description": "Adopt the upstream two-character BM25 token floor while retaining local routing and validation; down-weight short acronyms only inside multi-term queries so longer intent terms remain authoritative."
+    },
+    {
+      "id": "web-app-domain-split",
+      "files": [
+        "scripts/core.py",
+        "data/web-interface.csv",
+        "data/app-interface.csv"
+      ],
+      "description": "Retain separate local web and app retrieval domains instead of replacing them with the upstream routing table."
+    },
+    {
+      "id": "strict-csv-width-validation",
+      "files": [
+        "scripts/core.py"
+      ],
+      "description": "Retain fail-fast header-width validation for every loaded CSV row."
+    },
+    {
+      "id": "safe-design-system-persistence",
+      "files": [
+        "scripts/search.py",
+        "scripts/design_system.py"
+      ],
+      "description": "Retain path confinement, safe slug validation, and explicit --overwrite protection."
+    },
+    {
+      "id": "product-keyword-overrides",
+      "files": [
+        "data/products.csv"
+      ],
+      "description": "Retain existing local keyword enrichments for rows 1-161 and append upstream rows 162-192 unchanged."
+    },
+    {
+      "id": "explicit-motion-retrieval",
+      "files": [
+        "scripts/core.py",
+        "scripts/search.py",
+        "data/motion.csv"
+      ],
+      "description": "Expose upstream GSAP guidance only through the explicit gsap domain; default auto-detection remains unchanged and code/snippet fields are emitted without destructive truncation."
+    }
+  ],
+  "local_only": [
+    {
+      "path": "data/web-interface.csv",
+      "reason": "Local web/app retrieval split."
+    },
+    {
+      "path": "scripts/test_design_system_security.py",
+      "reason": "Regression coverage for local path and overwrite protections."
+    },
+    {
+      "path": "scripts/test_search_regressions.py",
+      "reason": "Regression coverage for selective upstream retrieval behavior."
+    }
+  ],
+  "intentionally_not_imported": [
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/design.csv",
+      "reason": "Not routed by the upstream active search configuration."
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/draft.csv",
+      "reason": "Not routed by the upstream active search configuration."
+    },
+    {
+      "upstream_path": "src/ui-ux-pro-max/data/_sync_all.py",
+      "reason": "Repository maintenance helper, not a runtime retrieval asset."
+    },
+    {
+      "upstream_paths": [
+        "src/ui-ux-pro-max/scripts/search.py",
+        "src/ui-ux-pro-max/scripts/design_system.py"
+      ],
+      "feature": "design dials",
+      "reason": "Deferred because the upstream dial implementation crosses local persistence and formatting protections; existing retrieval defaults remain unchanged."
+    }
+  ]
+}
