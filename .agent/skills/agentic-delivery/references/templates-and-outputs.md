@@ -1,6 +1,11 @@
-## Reference Templates
+## Skeleton-First Authoring
 
-Use the full templates only when creating or reviewing their artifact. Do not paste template content into workflow files, startup files, or goal issues.
+Start with `.agent/templates/agentic-delivery/skeletons/`. Select the compact
+artifact profile and expand only the named section whose risk or review need
+requires more detail. Full templates are reference libraries, never default
+prompt payloads or output shapes; do not load an entire full template.
+
+## Section-On-Demand Reference Libraries
 
 ```text
 .agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md
@@ -8,6 +13,9 @@ Use the full templates only when creating or reviewing their artifact. Do not pa
 .agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md
 .agent/templates/agentic-delivery/ADR-Agentic-Ready-Reusable-Template-OPTIONAL.md
 ```
+
+Search a heading, then read only that section. Do not paste template content
+into workflow files, startup files, artifacts, or goal issues.
 
 ## Artifact Outputs
 

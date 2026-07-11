@@ -22,7 +22,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 | `sc-status.md` | Session orientation and saved handoff resume |
 | `sc-geniusloop.md` | Proactive improvement ideation when goal queues are empty |
 | `sc-explore.md` | Fuzzy ideas, business direction, BRD creation, prototypes, and open decisions |
-| `sc-research.md` | Technical or domain research before planning |
+| `sc-research.md` | Conditional evidence spike for a named factual or technical decision gap |
 | `sc-prd.md` | PRD creation from an approved BRD |
 | `sc-plan.md` | FSD creation, ADR applicability, goal slicing, and local issue pointers |
 | `sc-eval.md` | Eval-driven success criteria and reliability checks |
@@ -43,8 +43,9 @@ Super Compound is a compact agent framework for disciplined software work: under
 - Low-token routing -> `.agent/context/routing-index.md`, then a route contract when available.
 - Bugs, failures, regressions -> `sc-debug.md` and `systematic-debugging`.
 - Git branch, worktree, commit, push, or PR request -> `sc-go.md` and `git-workflow-operation`.
-- Security, dependency, release, MCP, compliance, or agent config risk -> `sc-audit.md`.
+- Security, current-stack dependency posture, release, MCP, compliance, or agent config risk -> `sc-audit.md`.
 - Open product/domain/architecture uncertainty -> `sc-explore.md`; convert resolved work through BRD, PRD, then FSD.
+- Named factual, current-doc, version-support, or option-feasibility gap -> `sc-research.md`, then return its advisory evidence to the workflow that owns the decision.
 - Issue shaping, triage, Kanban, Journey, or PRD-to-FSD-goal work -> `sc-plan.md` with `issue-workflow` or `triage-workflow`.
 - Implementation with an approved FSD goal -> `sc-work.md`.
 - Session boundary -> `sc-pause.md`; new session starts with `sc-status.md`.

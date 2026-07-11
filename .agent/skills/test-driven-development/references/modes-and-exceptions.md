@@ -4,7 +4,7 @@ Load before choosing anything other than the default balanced test-first path.
 
 ## Modes
 
-Read `tdd_mode` from the `SUPER-COMPOUND.md` project configuration.
+Read `conventions.tdd_mode` from `.agent/rules/project-config.md`.
 
 | Mode | Rule |
 |---|---|

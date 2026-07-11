@@ -1,5 +1,6 @@
 ---
 date: 2026-07-10
+last_verified: 2026-07-12
 category: performance-issues
 severity: high
 tags: [framework-sync, progressive-disclosure, token-budget, hooks, provenance, verification]
@@ -66,17 +67,33 @@ technique documented by Geoffrey Huntley.
 | Measure | Before | After | Result |
 |---|---:|---:|---:|
 | All-file audit findings | 44 | 0 | eliminated |
-| `SKILL.md` entrypoint words | 32,244 | 13,275 | -58.82% |
+| `SKILL.md` entrypoint words | 32,244 | 13,424 | -58.37% |
 | Largest skill entrypoint | 2,288 words | 498 words | below 500-word gate |
-| All `SKILL.md` deterministic tokens | 53,489 | 21,927 | -59.01% |
-| Historical eager-preload workload | 516,436 tokens | 2,489 tokens | -99.52% |
-| All reduction-gate scenarios | 1,837,205 tokens | 12,184 tokens | -99.34% |
-| Benchmark artifact | 122,078 bytes / 29,481 tokens | 9,936 bytes / 1,837 tokens | -91.86% / -93.77% |
+| All `SKILL.md` deterministic tokens | 53,489 | 22,190 | -58.51% |
+| Historical eager-preload workload | 516,436 tokens | 2,365 tokens | -99.54% |
+| All reduction-gate scenarios | 1,837,250 tokens | 15,491 tokens | -99.16% |
 
 All 35 entrypoints now route detail into on-demand references while preserving
-behavioral gates. Real repository startup surfaces are measured separately:
-Codex 1,529/2,000, Claude 2,399/3,000, Antigravity 2,197/2,750, and installed
-skill metadata 1,025/2,500 deterministic estimated tokens.
+behavioral gates. Repository startup surfaces are measured separately: Codex
+1,535/2,000, Claude 2,405/3,000, Antigravity 2,324/2,750, native Codex adapter
+metadata 13/200, and bundled skill metadata 1,025/2,500 deterministic estimated
+tokens. Each workflow process scenario also includes the selected 104-token
+Codex adapter body.
+
+The 2026-07-11 evidence-hardening pass separates modeled stages and requires
+both the scenario-weighted aggregate and the weakest scenario in every stage to
+exceed 90%:
+
+| Modeled static stage | Before | After | Weighted reduction | Minimum scenario |
+|---|---:|---:|---:|---:|
+| Input/context entry | 923,783 | 3,204 | 99.6532% | 95.1169% |
+| Process/procedure entry | 719,974 | 9,455 | 98.6868% | 90.1458% |
+| Output-authoring context | 193,493 | 2,832 | 98.5364% | 98.5105% |
+
+The full benchmark suite definition, immutable baseline source content, and
+each repeated run now have independent SHA-256 evidence. Baseline sources must
+be ancestor commits, per-scenario overrides require rationale, and authoritative
+comparison cannot fall back to a mutable working-tree baseline.
 
 `.agent/context/output-budgets.json` is the machine-readable authority for all
 17 route return envelopes. `.agent/tools/framework-audit.mjs` validates that
@@ -94,7 +111,10 @@ fresh benchmark evidence without echoing invalid payload content.
   validation, per-iteration timeout, and combined output limits.
 - Work-package scope is supplied and sealed by the scheduler. Review validates
   its digest and rejects working-tree changes outside the allowlist relative to
-  the creation snapshot. Parallel work requires isolated workspaces.
+  the creation snapshot. Ledger updates use an owned lock directory and atomic
+  replacement; transient Windows `EPERM`/`EBUSY` acquisition races retry within
+  the existing bound, while persistent errors still fail. Parallel work
+  requires isolated workspaces.
 - Interface-design imports carry upstream/local normalized hashes in
   `UPSTREAM.json`. Multi-term queries down-weight short acronyms without
   breaking isolated `AI`, `UI`, `AR`, `VR`, or `3D` retrieval, and code/snippet
@@ -107,14 +127,19 @@ Primary reproducible evidence:
 ```bash
 node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --require-reduction 90 --repeat 3 --output .agent/benchmarks/token-benchmark.after.json
 node .agent/tools/framework-audit.mjs --output .agent/benchmarks/framework-audit.after.json
-node --test .agent/tools/framework-audit.test.mjs .agent/tools/git-workflow.test.mjs .agent/tools/token-benchmark.test.mjs .agent/tools/transcript-usage.test.mjs .agent/tools/work-package.test.mjs
+node .agent/tools/framework-audit.mjs --verify-existing .agent/benchmarks/framework-audit.after.json
+node --test .agent/tools/agent-contracts.test.mjs .agent/tools/artifact-contracts.test.mjs .agent/tools/codex-install.test.mjs .agent/tools/evidence-matrix.test.mjs .agent/tools/framework-audit.test.mjs .agent/tools/git-workflow.test.mjs .agent/tools/token-benchmark.test.mjs .agent/tools/transcript-usage.test.mjs .agent/tools/work-package.test.mjs .agent/tools/workflow-contracts.test.mjs
 node .agent/hooks/test-hooks-security.js
 python -m unittest discover -s .agent/skills/interface-design/scripts -p "test_*.py"
 ```
 
 The three-run benchmark is deterministic and every reduction/budget scenario
-passes. The final all-file audit reads the complete active repository surface
-and reports zero findings. Ralph's separate shell suites cover transactional
+passes. The final audit reads the exact active Git manifest except its declared
+generated report and records its source, `HEAD`, and evidence digest. Its
+verifier binds the recorded `HEAD` as provenance but determines freshness from
+content and manifest state, so committing that excluded report remains
+verifiable. Ralph's
+separate shell suites cover transactional
 state races, official Stop schema, plugin manifests, prompt selection, safe
 permissions, timeout, output caps, and exact completion handling.
 
@@ -134,7 +159,7 @@ permissions, timeout, output caps, and exact completion handling.
 
 ## Prevention
 
-- Re-run the benchmark and all-file audit after any routed surface changes.
+- Re-run the benchmark and active-manifest audit after any routed surface changes.
 - Keep observed runtime and host-injected token fields `unknown` until an
   attributable host transcript exists; static estimates must not impersonate
   telemetry.
@@ -149,6 +174,9 @@ permissions, timeout, output caps, and exact completion handling.
 ## Limitations
 
 The token metric is deterministic static estimation, not observed model usage.
+Stage totals are scenario-weighted and can count shared files more than once;
+output measures authoring context, not generated response tokens. Minimum
+per-scenario gates prevent a large scenario from hiding a weak route.
 Repository storage grows because references, tests, provenance, and evidence
 are retained; the improvement is in active first-hop context, not deletion of
 useful knowledge. `gsd-core-next` targets Node 22 while the available runtime was
@@ -160,6 +188,7 @@ pass.
 
 ## Related
 
+- [2026-07-11 token-efficiency and workflow audit](../../audits/2026-07-11-super-compound-token-efficiency.md)
 - [Contract-First Runtime Loading](token-runtime-contracts-20260626.md)
 - `../../../.agent/benchmarks/token-benchmark.after.json`
 - `../../../.agent/benchmarks/framework-audit.after.json`

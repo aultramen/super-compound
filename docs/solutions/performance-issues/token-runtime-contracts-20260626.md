@@ -56,6 +56,7 @@ node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baselin
 
 ## Related
 
+- [2026-07-11 token-efficiency and workflow audit](../../audits/2026-07-11-super-compound-token-efficiency.md)
 - [Framework Synchronization and Context-Evidence Integrity](framework-sync-context-integrity-20260710.md)
 - `.agent/benchmarks/workflow-inventory.md`
 - `.agent/benchmarks/hotspot-scan.md`

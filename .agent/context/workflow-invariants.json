@@ -1,0 +1,141 @@
+{
+  "schema": "workflow_invariants_v1",
+  "routes": {
+    "sc-init": {
+      "authority": "context-orientation",
+      "mutation": "requested-note-only",
+      "evidenceSink": "requested codebase note or chat",
+      "nextOwners": ["dynamic-public-route"],
+      "workflowMarkers": ["read-only by default", "suggest updates", "unknown"],
+      "contractMarkers": ["Read-only by default", "never config or source", "unknown"]
+    },
+    "sc-status": {
+      "authority": "routing-only",
+      "mutation": "read-only",
+      "evidenceSink": "short dashboard",
+      "nextOwners": ["dynamic-public-route"],
+      "workflowMarkers": ["without reading all issue bodies", "do not mutate Git state", "/sc-geniusloop"],
+      "contractMarkers": ["without reading all issue bodies", "read-only Git state", "one exact"]
+    },
+    "sc-geniusloop": {
+      "authority": "advisory-ideation",
+      "mutation": "geniusloop-report-only",
+      "evidenceSink": "docs/geniusloop/YYYY-MM-DD-<scope>.md",
+      "nextOwners": ["sc-explore", "sc-prd", "sc-plan", "sc-ui", "sc-research", "sc-audit"],
+      "workflowMarkers": ["Do not implement code", "dispatch Brain directly", "only permitted mutation"],
+      "contractMarkers": ["Do not implement", "Beta/Alpha/Theta/Delta", "only permitted mutation"]
+    },
+    "sc-explore": {
+      "authority": "approved-brd-business-authority",
+      "mutation": "brd-or-isolated-prototype-only",
+      "evidenceSink": "docs/brd/brd-<feature>.md",
+      "nextOwners": ["sc-research", "sc-prd"],
+      "workflowMarkers": ["canonical output is a BRD", "Before approval and `/sc-prd`", "non-production"],
+      "contractMarkers": ["BRD skeleton", "before approval and `/sc-prd`", "chat draft"]
+    },
+    "sc-research": {
+      "authority": "advisory-evidence-only",
+      "mutation": "research-note-only",
+      "evidenceSink": "docs/research/YYYY-MM-DD-<slug>.md",
+      "nextOwners": ["sc-explore", "sc-prd", "sc-plan", "sc-audit", "sc-debug"],
+      "workflowMarkers": ["advisory evidence", "Keep the workflow read-only", "OPEN-RESEARCH"],
+      "contractMarkers": ["advisory", "Research-Note-Skeleton", "OPEN-RESEARCH"]
+    },
+    "sc-prd": {
+      "authority": "approved-prd-product-authority",
+      "mutation": "prd-only",
+      "evidenceSink": "docs/prd/prd-<feature>.md",
+      "nextOwners": ["sc-research", "sc-explore", "sc-plan"],
+      "workflowMarkers": ["approved BRD", "Before approval and `/sc-plan`", "OPEN-RESEARCH"],
+      "contractMarkers": ["approved BRD", "before approval and", "chat draft"]
+    },
+    "sc-plan": {
+      "authority": "fsd-and-accepted-adr-implementation-authority",
+      "mutation": "fsd-and-goal-pointers-only",
+      "evidenceSink": "docs/fsd/fsd-<feature>.md",
+      "nextOwners": ["sc-research", "sc-work"],
+      "workflowMarkers": ["implementation authority", "OPEN", "do not checkout or mutate Git state"],
+      "contractMarkers": ["FSD is implementation authority", "Stop with `OPEN", "do not mutate Git state"]
+    },
+    "sc-eval": {
+      "authority": "verification-gate",
+      "mutation": "eval-artifact-only",
+      "evidenceSink": ".agent/evals/<feature>.md",
+      "nextOwners": ["caller", "sc-plan", "sc-debug", "sc-work"],
+      "workflowMarkers": ["commit`, push, PR", ".agent/evals/", "must be saved"],
+      "contractMarkers": ["commit/push/PR", ".agent/evals/", "must be durable"]
+    },
+    "sc-go": {
+      "authority": "explicit-user-git-intent",
+      "mutation": "preview-first-explicit-operation-only",
+      "evidenceSink": "Git preview or PR template",
+      "nextOwners": ["caller"],
+      "workflowMarkers": ["explicit user intent", "fresh preview", "force-push"],
+      "contractMarkers": ["explicit current user intent", "fresh preview", "force-push"]
+    },
+    "sc-work": {
+      "authority": "approved-fsd-goal",
+      "mutation": "goal-scoped-implementation",
+      "evidenceSink": "implementation and verification evidence",
+      "nextOwners": ["sc-review", "sc-audit", "sc-go", "sc-compound", "caller"],
+      "workflowMarkers": ["approved FSD goal", "stop and report `OPEN", "verification evidence"],
+      "contractMarkers": ["approved FSD goal", "Stop with `OPEN", "mapped verification"]
+    },
+    "sc-debug": {
+      "authority": "reproduced-failure-scope",
+      "mutation": "root-cause-fix-only",
+      "evidenceSink": "docs/debug/YYYY-MM-DD-<slug>.md for non-trivial evidence",
+      "nextOwners": ["sc-compound", "caller"],
+      "workflowMarkers": ["root cause", "regression test", "docs/debug/"],
+      "contractMarkers": ["root cause", "regression test", "docs/debug/"]
+    },
+    "sc-review": {
+      "authority": "advisory-findings",
+      "mutation": "read-only",
+      "evidenceSink": "docs/reviews/YYYY-MM-DD-<scope>.md",
+      "nextOwners": ["sc-explore", "sc-prd", "sc-plan", "sc-debug", "sc-work", "sc-go"],
+      "workflowMarkers": ["spec axis first", "strictly read-only", "Exact next owner"],
+      "contractMarkers": ["Spec first", "strictly read-only", "approved fixes"]
+    },
+    "sc-audit": {
+      "authority": "risk-and-readiness-gate",
+      "mutation": "read-only",
+      "evidenceSink": "docs/audits/YYYY-MM-DD-<scope>.md",
+      "nextOwners": ["sc-explore", "sc-prd", "sc-plan", "sc-debug", "sc-work", "sc-go"],
+      "workflowMarkers": ["strictly read-only", "Route remediation", "docs/audits/"],
+      "contractMarkers": ["strictly read-only", "never apply fixes", "docs/audits/"]
+    },
+    "sc-compound": {
+      "authority": "verified-knowledge",
+      "mutation": "solution-note-only",
+      "evidenceSink": "docs/solutions/<category>/",
+      "nextOwners": ["caller"],
+      "workflowMarkers": ["actually solved with evidence", "docs/solutions/", "Skip"],
+      "contractMarkers": ["verified non-trivial solution", "docs/solutions/", "root cause"]
+    },
+    "sc-pause": {
+      "authority": "handoff-state-only",
+      "mutation": "canonical-state-pointer-and-optional-progress-note",
+      "evidenceSink": "docs/STATE.md plus .continue-here.md short pointer",
+      "nextOwners": ["sc-status"],
+      "workflowMarkers": ["do not mutate Git state", "docs/STATE.md", "short pointer"],
+      "contractMarkers": ["before stopping", "docs/STATE.md", "short pointer"]
+    },
+    "sc-launch": {
+      "authority": "orchestration-only",
+      "mutation": "stage-authority-only",
+      "evidenceSink": "stage artifact paths plus docs/STATE.md boundary state",
+      "nextOwners": ["stage-next-route"],
+      "workflowMarkers": ["one active stage at a time", "docs/STATE.md", "Do not treat launch as permission"],
+      "contractMarkers": ["one active stage at a time", "docs/STATE.md", "grants no"]
+    },
+    "sc-ui": {
+      "authority": "approved-fsd-goal-or-read-only-review",
+      "mutation": "implementation-under-sc-work-only",
+      "evidenceSink": "UI changes and verification",
+      "nextOwners": ["sc-explore", "sc-prd", "sc-plan", "sc-work", "caller"],
+      "workflowMarkers": ["approved FSD `GOAL", "remains with `/sc-work`", "Design/review mode is read-only"],
+      "contractMarkers": ["approved FSD `GOAL", "inside active `/sc-work`", "design/review mode is read-only"]
+    }
+  }
+}

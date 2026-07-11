@@ -51,6 +51,11 @@ tags:
 
 ---
 
+> **REFERENCE LIBRARY - skeleton first.** Never load this entire file into
+> working context or copy it as the output shape. Start from
+> `skeletons/ADR-Skeleton-OPTIONAL.md` and read only the named section required
+> for the accepted architectural decision or review gap.
+
 # 0. Kontrak Operasional ADR
 
 ## 0.1 Tujuan Dokumen
@@ -144,7 +149,7 @@ Aturan precedence:
 4. ADR `ACCEPTED`, **bila ada dan linked**, untuk delegated architecture scope;
 5. FSD yang disetujui untuk implementation contract; `TDEC-*` berlaku bila ADR tidak digunakan;
 6. repository convention dan existing implementation untuk pilihan lokal;
-7. task, prompt, atau `/goal` individual.
+7. task, prompt, atau invocation `/sc-work` individual.
 
 ADR tidak sah sebagai mekanisme untuk diam-diam menurunkan requirement BRD/PRD. ADR juga tidak menggantikan FSD: setiap goal tetap harus merujuk FSD, sedangkan ADR hanya menjadi additional authority untuk decision clauses yang ditautkan. Konflik dengan artifact berotoritas lebih tinggi harus memicu change request atau revisi upstream.
 
@@ -1508,12 +1513,12 @@ adr:
 
 - `{{CONDITION_REQUIRING_HUMAN_DECISION}}`
 
-## 13.4 `/goal` Invocation Template
+## 13.4 `/sc-work` Invocation Template
 
 Use this variant only for a goal whose approved FSD explicitly links this ADR.
 
 ```text
-/goal GOAL-{{NNN}}
+/sc-work FSD-{{PROJECT_CODE}}#GOAL-{{NNN}}
 
 Authority:
 - FSD: {{FSD_ID_AND_SECTION}} (status must be APPROVED; primary source)
@@ -1819,7 +1824,7 @@ Tolak ADR bila ditemukan satu atau lebih kondisi berikut tanpa koreksi:
 - fitness function hanya berupa manual code review tanpa cadence/owner;
 - ADR mencoba mengubah product scope atau business rule;
 - manifest machine-readable berbeda dari isi naratif;
-- `/goal` dapat mengganti provider/pattern tanpa blocker;
+- `/sc-work` dapat mengganti provider/pattern tanpa blocker;
 - agent dapat “selesai” dengan mock, TODO, disabled test, silent catch, atau weakened validation;
 - accepted ADR masih memiliki unresolved acceptance blocker;
 - ADR lama diedit material setelah acceptance tanpa supersession.
@@ -1903,22 +1908,22 @@ Recommended directory:
 
 ```text
 docs/
-└── architecture/
+└── solutions/
     ├── README.md
-    ├── ADR-0001-{{slug}}.md
-    ├── ADR-0002-{{slug}}.md
+    ├── adr-0001-{{slug}}.md
+    ├── adr-0002-{{slug}}.md
     └── evidence/
-        ├── ADR-0001/
+        ├── adr-0001/
         │   ├── benchmark.md
         │   ├── spike-results.json
         │   └── diagrams/
-        └── ADR-0002/
+        └── adr-0002/
 ```
 
 File naming:
 
 ```text
-ADR-{{4_DIGIT_ID}}-{{lowercase-kebab-case-title}}.md
+docs/solutions/adr-{{4_DIGIT_ID}}-{{lowercase-kebab-case-title}}.md
 ```
 
 Jangan mengganti nomor ADR lama atau menghapus ADR rejected/superseded dari index.

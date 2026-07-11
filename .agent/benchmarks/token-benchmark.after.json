@@ -1,14 +1,1160 @@
 {
-  "schema": "token_benchmark_report_v2",
+  "schema": "token_benchmark_report_v3",
   "metric": "deterministic_estimated_tokens_v1",
-  "generatedAt": "2026-07-10T14:56:20.323Z",
+  "methodology": {
+    "kind": "modeled-static-first-hop-surface",
+    "stages": {
+      "input": "startup and context-entry surfaces",
+      "process": "workflow and procedure entry surfaces",
+      "output": "artifact authoring surfaces"
+    },
+    "limitation": "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens."
+  },
+  "generatedAt": "2026-07-11T22:06:07.465Z",
   "observedRuntimeTokens": "unknown",
   "hostInjectedSurfaceTokens": "unknown",
+  "claimScope": {
+    "evidenceClass": "repository-owned-static",
+    "repositoryOwnedStatic": true,
+    "runtimeEndToEnd": "not-claimed",
+    "hostTelemetry": "unknown",
+    "generatedOutputTokens": "unknown"
+  },
+  "coverage": {
+    "expectedRoutes": 17,
+    "coveredRoutes": 17,
+    "stagesPerRoute": 3,
+    "expectedCells": 51,
+    "coveredCells": 51,
+    "percent": 100
+  },
+  "workflowMatrix": {
+    "sc-init": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-init",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-init.contract.md"
+        ],
+        "beforeTokens": 4535,
+        "afterTokens": 183,
+        "reductionPercent": 95.9647,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "701a8cf42c42d081da9811a0e463f605646dad7400eaa72f2b69da8057b0a1fd",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-init.md",
+        "contractPath": ".agent/context/workflows/sc-init.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-init",
+        "authority": "context-orientation",
+        "mutationPolicy": "requested-note-only",
+        "evidenceSink": "requested codebase note or chat",
+        "nextOwners": [
+          "dynamic-public-route"
+        ],
+        "workflowMarkers": [
+          "read-only by default",
+          "suggest updates",
+          "unknown"
+        ],
+        "contractMarkers": [
+          "Read-only by default",
+          "never config or source",
+          "unknown"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "requested codebase note or chat",
+        "nextOwners": [
+          "dynamic-public-route"
+        ],
+        "maxEstimatedTokens": 400,
+        "maxCharacters": 1600,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-status": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-status",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-status.contract.md"
+        ],
+        "beforeTokens": 2015,
+        "afterTokens": 198,
+        "reductionPercent": 90.1737,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "6c04a824dca78b04d6e2c8089adbf35a6b284199df66e2a6759e2f3766ccc3e5",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-status.md",
+        "contractPath": ".agent/context/workflows/sc-status.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-status",
+        "authority": "routing-only",
+        "mutationPolicy": "read-only",
+        "evidenceSink": "short dashboard",
+        "nextOwners": [
+          "dynamic-public-route"
+        ],
+        "workflowMarkers": [
+          "without reading all issue bodies",
+          "do not mutate Git state",
+          "/sc-geniusloop"
+        ],
+        "contractMarkers": [
+          "without reading all issue bodies",
+          "read-only Git state",
+          "one exact"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "short dashboard",
+        "nextOwners": [
+          "dynamic-public-route"
+        ],
+        "maxEstimatedTokens": 400,
+        "maxCharacters": 1600,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-geniusloop": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-geniusloop",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-geniusloop.contract.md",
+          ".agent/context/agent-index.md"
+        ],
+        "beforeTokens": 4080,
+        "afterTokens": 368,
+        "reductionPercent": 90.9804,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "daadee3032742e10448df175d17c6af4ced52389d3d68eb175f0b1b1df8c17ba",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-geniusloop.md",
+        "contractPath": ".agent/context/workflows/sc-geniusloop.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-geniusloop",
+        "authority": "advisory-ideation",
+        "mutationPolicy": "geniusloop-report-only",
+        "evidenceSink": "docs/geniusloop/YYYY-MM-DD-<scope>.md",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-ui",
+          "sc-research",
+          "sc-audit"
+        ],
+        "workflowMarkers": [
+          "Do not implement code",
+          "dispatch Brain directly",
+          "only permitted mutation"
+        ],
+        "contractMarkers": [
+          "Do not implement",
+          "Beta/Alpha/Theta/Delta",
+          "only permitted mutation"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/geniusloop/YYYY-MM-DD-<scope>.md",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-ui",
+          "sc-research",
+          "sc-audit"
+        ],
+        "maxEstimatedTokens": 600,
+        "maxCharacters": 2400,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-explore": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-explore",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-explore.contract.md",
+          ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md"
+        ],
+        "beforeTokens": 32334,
+        "afterTokens": 500,
+        "reductionPercent": 98.4536,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "b91c63f2f4d2a25286c12aaf4a732898c9f9fa8349e983b7727d70eacbf6e9f5",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-explore.md",
+        "contractPath": ".agent/context/workflows/sc-explore.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-explore",
+        "authority": "approved-brd-business-authority",
+        "mutationPolicy": "brd-or-isolated-prototype-only",
+        "evidenceSink": "docs/brd/brd-<feature>.md",
+        "nextOwners": [
+          "sc-research",
+          "sc-prd"
+        ],
+        "workflowMarkers": [
+          "canonical output is a BRD",
+          "Before approval and `/sc-prd`",
+          "non-production"
+        ],
+        "contractMarkers": [
+          "BRD skeleton",
+          "before approval and `/sc-prd`",
+          "chat draft"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/brd/brd-<feature>.md",
+        "nextOwners": [
+          "sc-research",
+          "sc-prd"
+        ],
+        "maxEstimatedTokens": 500,
+        "maxCharacters": 2000,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-research": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-research",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-research.contract.md"
+        ],
+        "beforeTokens": 2263,
+        "afterTokens": 223,
+        "reductionPercent": 90.1458,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "fd9626972021df702f61da6588934339dedb9f9445d0a939741542ebb322ea3b",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-research.md",
+        "contractPath": ".agent/context/workflows/sc-research.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-research",
+        "authority": "advisory-evidence-only",
+        "mutationPolicy": "research-note-only",
+        "evidenceSink": "docs/research/YYYY-MM-DD-<slug>.md",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-audit",
+          "sc-debug"
+        ],
+        "workflowMarkers": [
+          "advisory evidence",
+          "Keep the workflow read-only",
+          "OPEN-RESEARCH"
+        ],
+        "contractMarkers": [
+          "advisory",
+          "Research-Note-Skeleton",
+          "OPEN-RESEARCH"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/research/YYYY-MM-DD-<slug>.md",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-audit",
+          "sc-debug"
+        ],
+        "maxEstimatedTokens": 400,
+        "maxCharacters": 1600,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-prd": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-prd",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-prd.contract.md",
+          ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md"
+        ],
+        "beforeTokens": 23435,
+        "afterTokens": 519,
+        "reductionPercent": 97.7854,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "6a104550224845418d8d75fb2f7a09e52f53b7d4dd465417bc2f56b879eb2847",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-prd.md",
+        "contractPath": ".agent/context/workflows/sc-prd.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-prd",
+        "authority": "approved-prd-product-authority",
+        "mutationPolicy": "prd-only",
+        "evidenceSink": "docs/prd/prd-<feature>.md",
+        "nextOwners": [
+          "sc-research",
+          "sc-explore",
+          "sc-plan"
+        ],
+        "workflowMarkers": [
+          "approved BRD",
+          "Before approval and `/sc-plan`",
+          "OPEN-RESEARCH"
+        ],
+        "contractMarkers": [
+          "approved BRD",
+          "before approval and",
+          "chat draft"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/prd/prd-<feature>.md",
+        "nextOwners": [
+          "sc-research",
+          "sc-explore",
+          "sc-plan"
+        ],
+        "maxEstimatedTokens": 500,
+        "maxCharacters": 2000,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-plan": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-plan",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/workflows/sc-plan.md",
+          ".agent/context/workflows/sc-plan.contract.md",
+          ".agent/context/skills/sc-plan.contract.md",
+          ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+          ".agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md",
+          ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+        ],
+        "beforeTokens": 59150,
+        "afterTokens": 1719,
+        "reductionPercent": 97.0938,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "98bec4d59d057a86dfabfc941945d1467c31a6a5ab35779f06097b02199b301c",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-plan.md",
+        "contractPath": ".agent/context/workflows/sc-plan.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-plan",
+        "authority": "fsd-and-accepted-adr-implementation-authority",
+        "mutationPolicy": "fsd-and-goal-pointers-only",
+        "evidenceSink": "docs/fsd/fsd-<feature>.md",
+        "nextOwners": [
+          "sc-research",
+          "sc-work"
+        ],
+        "workflowMarkers": [
+          "implementation authority",
+          "OPEN",
+          "do not checkout or mutate Git state"
+        ],
+        "contractMarkers": [
+          "FSD is implementation authority",
+          "Stop with `OPEN",
+          "do not mutate Git state"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/fsd/fsd-<feature>.md",
+        "nextOwners": [
+          "sc-research",
+          "sc-work"
+        ],
+        "maxEstimatedTokens": 500,
+        "maxCharacters": 2000,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-eval": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-eval",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-eval.contract.md"
+        ],
+        "beforeTokens": 1886,
+        "afterTokens": 162,
+        "reductionPercent": 91.4104,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "bad87c3299ea5916fed0ff2c33f3bef89daaf8a210ca6e209d652547cae6c871",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-eval.md",
+        "contractPath": ".agent/context/workflows/sc-eval.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-eval",
+        "authority": "verification-gate",
+        "mutationPolicy": "eval-artifact-only",
+        "evidenceSink": ".agent/evals/<feature>.md",
+        "nextOwners": [
+          "caller",
+          "sc-plan",
+          "sc-debug",
+          "sc-work"
+        ],
+        "workflowMarkers": [
+          "commit`, push, PR",
+          ".agent/evals/",
+          "must be saved"
+        ],
+        "contractMarkers": [
+          "commit/push/PR",
+          ".agent/evals/",
+          "must be durable"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": ".agent/evals/<feature>.md",
+        "nextOwners": [
+          "caller",
+          "sc-plan",
+          "sc-debug",
+          "sc-work"
+        ],
+        "maxEstimatedTokens": 400,
+        "maxCharacters": 1600,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-go": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-go",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-go.contract.md",
+          ".agent/context/skills/git-workflow-operation.contract.md"
+        ],
+        "beforeTokens": 6322,
+        "afterTokens": 457,
+        "reductionPercent": 92.7713,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "e4d04d9384f09e59cc05b39d43ddbae75e3e608dc7a8f591ef7365d30149f7ca",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-go.md",
+        "contractPath": ".agent/context/workflows/sc-go.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-go",
+        "authority": "explicit-user-git-intent",
+        "mutationPolicy": "preview-first-explicit-operation-only",
+        "evidenceSink": "Git preview or PR template",
+        "nextOwners": [
+          "caller"
+        ],
+        "workflowMarkers": [
+          "explicit user intent",
+          "fresh preview",
+          "force-push"
+        ],
+        "contractMarkers": [
+          "explicit current user intent",
+          "fresh preview",
+          "force-push"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "Git preview or PR template",
+        "nextOwners": [
+          "caller"
+        ],
+        "maxEstimatedTokens": 500,
+        "maxCharacters": 2000,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-work": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-work",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-work.contract.md",
+          ".agent/context/skills/sc-work.contract.md",
+          ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
+        ],
+        "beforeTokens": 11412,
+        "afterTokens": 720,
+        "reductionPercent": 93.6909,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "e62c92d44125ef85f95f26b3fb25997bc5df572347dd46efdd1103ce426a47da",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-work.md",
+        "contractPath": ".agent/context/workflows/sc-work.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-work",
+        "authority": "approved-fsd-goal",
+        "mutationPolicy": "goal-scoped-implementation",
+        "evidenceSink": "implementation and verification evidence",
+        "nextOwners": [
+          "sc-review",
+          "sc-audit",
+          "sc-go",
+          "sc-compound",
+          "caller"
+        ],
+        "workflowMarkers": [
+          "approved FSD goal",
+          "stop and report `OPEN",
+          "verification evidence"
+        ],
+        "contractMarkers": [
+          "approved FSD goal",
+          "Stop with `OPEN",
+          "mapped verification"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "implementation and verification evidence",
+        "nextOwners": [
+          "sc-review",
+          "sc-audit",
+          "sc-go",
+          "sc-compound",
+          "caller"
+        ],
+        "maxEstimatedTokens": 500,
+        "maxCharacters": 2000,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-debug": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-debug",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-debug.contract.md"
+        ],
+        "beforeTokens": 2271,
+        "afterTokens": 200,
+        "reductionPercent": 91.1933,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "c46581686cc36130500e811807f5dcd6356a33d268fc0bdb10564ae991f6089e",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-debug.md",
+        "contractPath": ".agent/context/workflows/sc-debug.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-debug",
+        "authority": "reproduced-failure-scope",
+        "mutationPolicy": "root-cause-fix-only",
+        "evidenceSink": "docs/debug/YYYY-MM-DD-<slug>.md for non-trivial evidence",
+        "nextOwners": [
+          "sc-compound",
+          "caller"
+        ],
+        "workflowMarkers": [
+          "root cause",
+          "regression test",
+          "docs/debug/"
+        ],
+        "contractMarkers": [
+          "root cause",
+          "regression test",
+          "docs/debug/"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/debug/YYYY-MM-DD-<slug>.md for non-trivial evidence",
+        "nextOwners": [
+          "sc-compound",
+          "caller"
+        ],
+        "maxEstimatedTokens": 500,
+        "maxCharacters": 2000,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-review": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-review",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-review.contract.md"
+        ],
+        "beforeTokens": 1942,
+        "afterTokens": 186,
+        "reductionPercent": 90.4222,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "578eda4222a4b19ef2eae322246ba7fd7d129690616e5e862cb80898b86c2e1b",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-review.md",
+        "contractPath": ".agent/context/workflows/sc-review.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-review",
+        "authority": "advisory-findings",
+        "mutationPolicy": "read-only",
+        "evidenceSink": "docs/reviews/YYYY-MM-DD-<scope>.md",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-debug",
+          "sc-work",
+          "sc-go"
+        ],
+        "workflowMarkers": [
+          "spec axis first",
+          "strictly read-only",
+          "Exact next owner"
+        ],
+        "contractMarkers": [
+          "Spec first",
+          "strictly read-only",
+          "approved fixes"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/reviews/YYYY-MM-DD-<scope>.md",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-debug",
+          "sc-work",
+          "sc-go"
+        ],
+        "maxEstimatedTokens": 900,
+        "maxCharacters": 3600,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-audit": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-audit",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-audit.contract.md"
+        ],
+        "beforeTokens": 11903,
+        "afterTokens": 274,
+        "reductionPercent": 97.6981,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "f2d660a2ad6d344d79d1e2ed155837d96a4a61cae9354864cb2726fb8ddcf635",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-audit.md",
+        "contractPath": ".agent/context/workflows/sc-audit.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-audit",
+        "authority": "risk-and-readiness-gate",
+        "mutationPolicy": "read-only",
+        "evidenceSink": "docs/audits/YYYY-MM-DD-<scope>.md",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-debug",
+          "sc-work",
+          "sc-go"
+        ],
+        "workflowMarkers": [
+          "strictly read-only",
+          "Route remediation",
+          "docs/audits/"
+        ],
+        "contractMarkers": [
+          "strictly read-only",
+          "never apply fixes",
+          "docs/audits/"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/audits/YYYY-MM-DD-<scope>.md",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-debug",
+          "sc-work",
+          "sc-go"
+        ],
+        "maxEstimatedTokens": 900,
+        "maxCharacters": 3600,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-compound": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-compound",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-compound.contract.md"
+        ],
+        "beforeTokens": 1879,
+        "afterTokens": 157,
+        "reductionPercent": 91.6445,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "3a17f32e897c2056f85c52a98ed9bd095daec31cf1b43a1c47393dd6aa9af99c",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-compound.md",
+        "contractPath": ".agent/context/workflows/sc-compound.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-compound",
+        "authority": "verified-knowledge",
+        "mutationPolicy": "solution-note-only",
+        "evidenceSink": "docs/solutions/<category>/",
+        "nextOwners": [
+          "caller"
+        ],
+        "workflowMarkers": [
+          "actually solved with evidence",
+          "docs/solutions/",
+          "Skip"
+        ],
+        "contractMarkers": [
+          "verified non-trivial solution",
+          "docs/solutions/",
+          "root cause"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/solutions/<category>/",
+        "nextOwners": [
+          "caller"
+        ],
+        "maxEstimatedTokens": 320,
+        "maxCharacters": 1280,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-pause": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-pause",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-pause.contract.md"
+        ],
+        "beforeTokens": 1980,
+        "afterTokens": 184,
+        "reductionPercent": 90.7071,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "8c7e1b8119de1546029164602559f26cc85035486921eb27beb4a4a3216cd431",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-pause.md",
+        "contractPath": ".agent/context/workflows/sc-pause.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-pause",
+        "authority": "handoff-state-only",
+        "mutationPolicy": "canonical-state-pointer-and-optional-progress-note",
+        "evidenceSink": "docs/STATE.md plus .continue-here.md short pointer",
+        "nextOwners": [
+          "sc-status"
+        ],
+        "workflowMarkers": [
+          "do not mutate Git state",
+          "docs/STATE.md",
+          "short pointer"
+        ],
+        "contractMarkers": [
+          "before stopping",
+          "docs/STATE.md",
+          "short pointer"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "docs/STATE.md plus .continue-here.md short pointer",
+        "nextOwners": [
+          "sc-status"
+        ],
+        "maxEstimatedTokens": 320,
+        "maxCharacters": 1280,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-launch": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-launch",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/context/workflows/sc-launch.contract.md",
+          ".agent/context/workflow-dispatch.md",
+          ".agent/context/template-index.md"
+        ],
+        "beforeTokens": 112816,
+        "afterTokens": 776,
+        "reductionPercent": 99.3122,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "86490b4609752ac60ae4dd731dacd42b295ee90cf9baae8c021fe2a24cacbe85",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-launch.md",
+        "contractPath": ".agent/context/workflows/sc-launch.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-launch",
+        "authority": "orchestration-only",
+        "mutationPolicy": "stage-authority-only",
+        "evidenceSink": "stage artifact paths plus docs/STATE.md boundary state",
+        "nextOwners": [
+          "stage-next-route"
+        ],
+        "workflowMarkers": [
+          "one active stage at a time",
+          "docs/STATE.md",
+          "Do not treat launch as permission"
+        ],
+        "contractMarkers": [
+          "one active stage at a time",
+          "docs/STATE.md",
+          "grants no"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "stage artifact paths plus docs/STATE.md boundary state",
+        "nextOwners": [
+          "stage-next-route"
+        ],
+        "maxEstimatedTokens": 500,
+        "maxCharacters": 2000,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    },
+    "sc-ui": {
+      "input": {
+        "evidenceClass": "modeled-static-context-entry",
+        "scenario": "sc-ui",
+        "benchmarkStage": "process",
+        "surfacePatterns": [
+          ".codex/SKILL.md",
+          ".agent/workflows/sc-ui.md",
+          ".agent/context/workflows/sc-ui.contract.md",
+          ".agent/context/skills/interface-design.contract.md",
+          ".agent/skills/interface-design/SKILL.md"
+        ],
+        "beforeTokens": 374638,
+        "afterTokens": 1585,
+        "reductionPercent": 99.5769,
+        "reductionThresholdExclusive": 90,
+        "afterDigest": "fdcb57aa2276584412069d79c4eb8835f61aa0e80ff626ea25f116f4f103e8de",
+        "observedRuntimeTokens": null,
+        "pass": true
+      },
+      "process": {
+        "evidenceClass": "repository-contract-wiring",
+        "adapterPath": ".codex/SKILL.md",
+        "workflowPath": ".agent/workflows/sc-ui.md",
+        "contractPath": ".agent/context/workflows/sc-ui.contract.md",
+        "semanticContract": "workflow-invariants-v1/sc-ui",
+        "authority": "approved-fsd-goal-or-read-only-review",
+        "mutationPolicy": "implementation-under-sc-work-only",
+        "evidenceSink": "UI changes and verification",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-work",
+          "caller"
+        ],
+        "workflowMarkers": [
+          "approved FSD `GOAL",
+          "remains with `/sc-work`",
+          "Design/review mode is read-only"
+        ],
+        "contractMarkers": [
+          "approved FSD `GOAL",
+          "inside active `/sc-work`",
+          "design/review mode is read-only"
+        ],
+        "workflowWired": true,
+        "contractWired": true,
+        "adapterWired": true,
+        "semanticContractWired": true,
+        "observedRuntimeReasoning": null,
+        "pass": true
+      },
+      "output": {
+        "evidenceClass": "repository-output-contract",
+        "evidenceSink": "UI changes and verification",
+        "nextOwners": [
+          "sc-explore",
+          "sc-prd",
+          "sc-plan",
+          "sc-work",
+          "caller"
+        ],
+        "maxEstimatedTokens": 500,
+        "maxCharacters": 2000,
+        "observedGeneratedTokens": null,
+        "pass": true
+      }
+    }
+  },
+  "gates": {
+    "inputContextReduction": {
+      "expected": 17,
+      "passed": 17,
+      "thresholdExclusive": 90,
+      "minimumReductionPercent": 90.1458,
+      "pass": true
+    },
+    "processWiring": {
+      "expected": 17,
+      "passed": 17,
+      "pass": true
+    },
+    "outputContracts": {
+      "expected": 17,
+      "passed": 17,
+      "pass": true
+    },
+    "runtimeEndToEnd": {
+      "status": "not-evaluated",
+      "expectedPairedTraceCount": 17,
+      "pairedTraceCount": 0,
+      "pass": null
+    }
+  },
+  "evidenceDigests": {
+    "workflowInvariants": "9af8a5e5031b41d304545e31b605f53e21edb37e03ee142b843383aef1747447",
+    "outputBudgets": "2ae096b2e6c6073324302dc8548a79fa2434171d1e825449892f02351da5e635",
+    "workflowMatrix": "3bd7ee21180ceccbcb9a2cfd826ed5e576873656e2c0bc8adae7f64e5e2b5501"
+  },
+  "digests": {
+    "baseline": "2c05cb88406920232a40707e484b51749afe166207078d25026a549dcfdfa732",
+    "suiteDefinition": "9cb1eb9435209514551014418f9e55d072a42f9af38c68ec93cfcb095a1b69d3",
+    "workflowInvariants": "9af8a5e5031b41d304545e31b605f53e21edb37e03ee142b843383aef1747447",
+    "outputBudgets": "2ae096b2e6c6073324302dc8548a79fa2434171d1e825449892f02351da5e635",
+    "workflowMatrix": "3bd7ee21180ceccbcb9a2cfd826ed5e576873656e2c0bc8adae7f64e5e2b5501"
+  },
+  "runtimeEvidence": {
+    "status": "unknown",
+    "expectedPairedTraceCount": 17,
+    "pairedTraceCount": 0,
+    "pairedTraces": []
+  },
+  "runtimePass": null,
+  "staticPass": true,
+  "baselineDigest": "2c05cb88406920232a40707e484b51749afe166207078d25026a549dcfdfa732",
+  "suiteDefinitionDigest": "9cb1eb9435209514551014418f9e55d072a42f9af38c68ec93cfcb095a1b69d3",
+  "authoritative": true,
   "repeat": 3,
   "deterministic": true,
   "runDigests": [
     {
-      "digest": "f95ee8461d437606b5005fc8afda1f3aa727e4e3a33908437c2e486b09e8d194",
+      "digest": "22add26dc897965ef6c482d936fc0bb04a31647be769322c2affc5011bab45f1",
       "count": 3
     }
   ],
@@ -17,41 +1163,56 @@
     "scenarios": [
       {
         "name": "legacy-eager-preload",
+        "stage": "input",
         "beforeTokens": 516436,
-        "afterTokens": 2489,
+        "afterTokens": 2365,
         "pass": true,
-        "afterDigest": "bfd7a79ed6ae4cb09c929edd51d5e77878eae238feebf0cb5939b70c5787cd2a",
-        "reductionPercent": 99.518
+        "afterDigest": "530a715b7ed793473005a0d7b51ee1375956a424a2bcd475812b4d01a350c80f",
+        "reductionPercent": 99.5421
       },
       {
         "name": "startup-codex-repository",
-        "beforeTokens": 1529,
-        "afterTokens": 1529,
+        "stage": "input",
+        "beforeTokens": 1535,
+        "afterTokens": 1535,
         "pass": true,
-        "afterDigest": "3b7e6fc321a70bb4bc4c2aa9c3eb2df3935c75ac3fc260a089cf46a0ccba2c4d",
+        "afterDigest": "fb3fd250ef6712b131262d4f3229c5426e7ee86e4efa0eb0ec020f7ed5494ca9",
         "gateType": "budget",
         "maxAfterTokens": 2000
       },
       {
         "name": "startup-claude-repository",
-        "beforeTokens": 2399,
-        "afterTokens": 2399,
+        "stage": "input",
+        "beforeTokens": 2405,
+        "afterTokens": 2405,
         "pass": true,
-        "afterDigest": "876d9e8c3fc29ac234ba8992e4f59e60cfe131a394eee84af801c658357b76bb",
+        "afterDigest": "13f8ea5fe568182fd1e61f63a6a38888e45191677d1ac84f707474e315ef9f5e",
         "gateType": "budget",
         "maxAfterTokens": 3000
       },
       {
         "name": "startup-antigravity-rules",
-        "beforeTokens": 2197,
-        "afterTokens": 2197,
+        "stage": "input",
+        "beforeTokens": 2324,
+        "afterTokens": 2324,
         "pass": true,
-        "afterDigest": "44fcb2b214ba524a1e5e15381cc4131314da0cdc8c77303b77bd5c049a2b2344",
+        "afterDigest": "a21e82aee771c6f67f32574942de052eb8eefa207a42d2aa7d97e576df7aafad",
         "gateType": "budget",
         "maxAfterTokens": 2750
       },
       {
+        "name": "startup-codex-adapter-metadata",
+        "stage": "input",
+        "beforeTokens": 13,
+        "afterTokens": 13,
+        "pass": true,
+        "afterDigest": "59731439f737dd807ae7d0034dfa08d7e4d42d2e918d4bfd97ee2608335874c0",
+        "gateType": "budget",
+        "maxAfterTokens": 200
+      },
+      {
         "name": "startup-installed-skill-metadata",
+        "stage": "input",
         "beforeTokens": 1025,
         "afterTokens": 1025,
         "pass": true,
@@ -61,158 +1222,178 @@
       },
       {
         "name": "sc-init",
-        "beforeTokens": 4490,
-        "afterTokens": 89,
+        "stage": "process",
+        "beforeTokens": 4535,
+        "afterTokens": 183,
         "pass": true,
-        "afterDigest": "b7691e0930cb6bed9078ace6179c94bd5da269bd1e05fb32f8dfc4bf15416771",
-        "reductionPercent": 98.0178
+        "afterDigest": "701a8cf42c42d081da9811a0e463f605646dad7400eaa72f2b69da8057b0a1fd",
+        "reductionPercent": 95.9647
       },
       {
         "name": "sc-status",
+        "stage": "process",
         "beforeTokens": 2015,
-        "afterTokens": 114,
+        "afterTokens": 198,
         "pass": true,
-        "afterDigest": "98e52b1a78877413ba4353d5598fda1238a3116fb95bbd06b26fc7a54ad4cb2b",
-        "reductionPercent": 94.3424
+        "afterDigest": "6c04a824dca78b04d6e2c8089adbf35a6b284199df66e2a6759e2f3766ccc3e5",
+        "reductionPercent": 90.1737
       },
       {
         "name": "sc-geniusloop",
+        "stage": "process",
         "beforeTokens": 4080,
-        "afterTokens": 240,
+        "afterTokens": 368,
         "pass": true,
-        "afterDigest": "4bea64097bdf6004f04f762ef6b121c9fffe434142d54eab574a331e70a9e995",
-        "reductionPercent": 94.1176
+        "afterDigest": "daadee3032742e10448df175d17c6af4ced52389d3d68eb175f0b1b1df8c17ba",
+        "reductionPercent": 90.9804
       },
       {
         "name": "sc-explore",
+        "stage": "process",
         "beforeTokens": 32334,
-        "afterTokens": 217,
+        "afterTokens": 500,
         "pass": true,
-        "afterDigest": "45387596f6996b7652a8ecce3d14cae73e85d3bfd9e014e0f5839aed39b98fde",
-        "reductionPercent": 99.3289
+        "afterDigest": "b91c63f2f4d2a25286c12aaf4a732898c9f9fa8349e983b7727d70eacbf6e9f5",
+        "reductionPercent": 98.4536
       },
       {
         "name": "sc-research",
+        "stage": "process",
         "beforeTokens": 2263,
-        "afterTokens": 76,
+        "afterTokens": 223,
         "pass": true,
-        "afterDigest": "1f953cfa9884c8ed02f6cfab7c8d919651a74eceb478fa29df2690d0afcb84a7",
-        "reductionPercent": 96.6416
+        "afterDigest": "fd9626972021df702f61da6588934339dedb9f9445d0a939741542ebb322ea3b",
+        "reductionPercent": 90.1458
       },
       {
         "name": "sc-prd",
+        "stage": "process",
         "beforeTokens": 23435,
-        "afterTokens": 234,
+        "afterTokens": 519,
         "pass": true,
-        "afterDigest": "7cefa636d87d29547cc1afbd96189b79c221f36daa612c77bb1b22cf7b05b4bc",
-        "reductionPercent": 99.0015
+        "afterDigest": "6a104550224845418d8d75fb2f7a09e52f53b7d4dd465417bc2f56b879eb2847",
+        "reductionPercent": 97.7854
       },
       {
         "name": "sc-plan",
+        "stage": "process",
         "beforeTokens": 59150,
-        "afterTokens": 1457,
+        "afterTokens": 1719,
         "pass": true,
-        "afterDigest": "add976a23c4fd81ff2ccf0a198db9ed5bf5d873726f5abdd68ba94f74f1d8bdc",
-        "reductionPercent": 97.5368
+        "afterDigest": "98bec4d59d057a86dfabfc941945d1467c31a6a5ab35779f06097b02199b301c",
+        "reductionPercent": 97.0938
       },
       {
         "name": "sc-eval",
+        "stage": "process",
         "beforeTokens": 1886,
-        "afterTokens": 55,
+        "afterTokens": 162,
         "pass": true,
-        "afterDigest": "ff179d0aea4c4088950cc23ad31f836a74d578d619bf7bb0b2653280a39d82cb",
-        "reductionPercent": 97.0838
+        "afterDigest": "bad87c3299ea5916fed0ff2c33f3bef89daaf8a210ca6e209d652547cae6c871",
+        "reductionPercent": 91.4104
       },
       {
         "name": "sc-go",
+        "stage": "process",
         "beforeTokens": 6322,
-        "afterTokens": 301,
+        "afterTokens": 457,
         "pass": true,
-        "afterDigest": "a4348948d278998c7819bce48f5b8f2cc5d3671e2480110712f0507701693a83",
-        "reductionPercent": 95.2388
+        "afterDigest": "e4d04d9384f09e59cc05b39d43ddbae75e3e608dc7a8f591ef7365d30149f7ca",
+        "reductionPercent": 92.7713
       },
       {
         "name": "sc-work",
+        "stage": "process",
         "beforeTokens": 11412,
-        "afterTokens": 616,
+        "afterTokens": 720,
         "pass": true,
-        "afterDigest": "9e68af406a451b333fede075c169891815f07a378b0d791dd022e7d830bb99db",
-        "reductionPercent": 94.6022
+        "afterDigest": "e62c92d44125ef85f95f26b3fb25997bc5df572347dd46efdd1103ce426a47da",
+        "reductionPercent": 93.6909
       },
       {
         "name": "sc-debug",
+        "stage": "process",
         "beforeTokens": 2271,
-        "afterTokens": 83,
+        "afterTokens": 200,
         "pass": true,
-        "afterDigest": "cb9f2e2eea39f396dd819be684ff01fc0b7a73d9c034d683b184a01f20dee185",
-        "reductionPercent": 96.3452
+        "afterDigest": "c46581686cc36130500e811807f5dcd6356a33d268fc0bdb10564ae991f6089e",
+        "reductionPercent": 91.1933
       },
       {
         "name": "sc-review",
+        "stage": "process",
         "beforeTokens": 1942,
-        "afterTokens": 76,
+        "afterTokens": 186,
         "pass": true,
-        "afterDigest": "b08edfa85335b0c2c3ef554e261a493a344feb00c1aef8893bef2726b1e8abfa",
-        "reductionPercent": 96.0865
+        "afterDigest": "578eda4222a4b19ef2eae322246ba7fd7d129690616e5e862cb80898b86c2e1b",
+        "reductionPercent": 90.4222
       },
       {
         "name": "sc-audit",
+        "stage": "process",
         "beforeTokens": 11903,
-        "afterTokens": 93,
+        "afterTokens": 274,
         "pass": true,
-        "afterDigest": "ac2ef7ab58f1fb2b3e2457f7d9dfc6a4bffd92ad51e73eb563c660e947608e96",
-        "reductionPercent": 99.2187
+        "afterDigest": "f2d660a2ad6d344d79d1e2ed155837d96a4a61cae9354864cb2726fb8ddcf635",
+        "reductionPercent": 97.6981
       },
       {
         "name": "sc-compound",
+        "stage": "process",
         "beforeTokens": 1879,
-        "afterTokens": 53,
+        "afterTokens": 157,
         "pass": true,
-        "afterDigest": "4a562ec8dae08d225dabcdf88f0d342d6557e08fb862911465c70323f98f664e",
-        "reductionPercent": 97.1794
+        "afterDigest": "3a17f32e897c2056f85c52a98ed9bd095daec31cf1b43a1c47393dd6aa9af99c",
+        "reductionPercent": 91.6445
       },
       {
         "name": "sc-pause",
+        "stage": "process",
         "beforeTokens": 1980,
-        "afterTokens": 67,
+        "afterTokens": 184,
         "pass": true,
-        "afterDigest": "be5825be03e96b6d34aa2e5068c9d5d4dac82b9efe919d36c4570c661bf342c9",
-        "reductionPercent": 96.6162
+        "afterDigest": "8c7e1b8119de1546029164602559f26cc85035486921eb27beb4a4a3216cd431",
+        "reductionPercent": 90.7071
       },
       {
         "name": "sc-launch",
+        "stage": "process",
         "beforeTokens": 112816,
-        "afterTokens": 571,
+        "afterTokens": 776,
         "pass": true,
-        "afterDigest": "31105f49b17fb573476beb268f819c9b541f26ce43ff7b2cfbc8a122ab9afc85",
-        "reductionPercent": 99.4939
+        "afterDigest": "86490b4609752ac60ae4dd731dacd42b295ee90cf9baae8c021fe2a24cacbe85",
+        "reductionPercent": 99.3122
       },
       {
         "name": "sc-ui",
+        "stage": "process",
         "beforeTokens": 374638,
-        "afterTokens": 1246,
+        "afterTokens": 1585,
         "pass": true,
-        "afterDigest": "ec3518f847ff8d01008b155d1cd3635c858016c5d9045aca65af83bebea77525",
-        "reductionPercent": 99.6674
+        "afterDigest": "fdcb57aa2276584412069d79c4eb8835f61aa0e80ff626ea25f116f4f103e8de",
+        "reductionPercent": 99.5769
       },
       {
         "name": "artifact-output-brd-prd-fsd-issue",
+        "stage": "output",
         "beforeTokens": 98427,
-        "afterTokens": 1198,
+        "afterTokens": 1416,
         "pass": true,
-        "afterDigest": "7c42cade8c6c124e50f43b34f77d0991b10ba9e1934a5c9e0d9f8da8a28de205",
-        "reductionPercent": 98.7829
+        "afterDigest": "2eebe4e69219ef65942a2e63ea43d1a0be8adfd7a2dff2f4c79c8fedc6fe2b12",
+        "reductionPercent": 98.5614
       },
       {
         "name": "related-all-skills",
+        "stage": "input",
         "beforeTokens": 52186,
-        "afterTokens": 481,
+        "afterTokens": 594,
         "pass": true,
-        "afterDigest": "fb28f3e62a129b733bd5c275d46590df0645b76323a261d3b963fde52ebca3d9",
-        "reductionPercent": 99.0783
+        "afterDigest": "a6160369d1f24ee38fb2b33d81fbf0309be9dc873b2c121fd03fca2df015349a",
+        "reductionPercent": 98.8618
       },
       {
         "name": "related-delivery-planning-skills",
+        "stage": "process",
         "beforeTokens": 7795,
         "afterTokens": 74,
         "pass": true,
@@ -221,6 +1402,7 @@
       },
       {
         "name": "related-execution-verification-skills",
+        "stage": "process",
         "beforeTokens": 6800,
         "afterTokens": 58,
         "pass": true,
@@ -229,6 +1411,7 @@
       },
       {
         "name": "related-risk-audit-skills",
+        "stage": "process",
         "beforeTokens": 11572,
         "afterTokens": 64,
         "pass": true,
@@ -237,22 +1420,25 @@
       },
       {
         "name": "related-agentic-templates",
+        "stage": "output",
         "beforeTokens": 95066,
-        "afterTokens": 1198,
+        "afterTokens": 1416,
         "pass": true,
-        "afterDigest": "7c42cade8c6c124e50f43b34f77d0991b10ba9e1934a5c9e0d9f8da8a28de205",
-        "reductionPercent": 98.7398
+        "afterDigest": "2eebe4e69219ef65942a2e63ea43d1a0be8adfd7a2dff2f4c79c8fedc6fe2b12",
+        "reductionPercent": 98.5105
       },
       {
         "name": "related-git-workflow",
+        "stage": "process",
         "beforeTokens": 5910,
-        "afterTokens": 301,
+        "afterTokens": 353,
         "pass": true,
-        "afterDigest": "a4348948d278998c7819bce48f5b8f2cc5d3671e2480110712f0507701693a83",
-        "reductionPercent": 94.9069
+        "afterDigest": "7bc302546c804eaad06bd8e21a83600536bc0e25ae15d710261a13879e344e51",
+        "reductionPercent": 94.0271
       },
       {
         "name": "related-interface-data",
+        "stage": "input",
         "beforeTokens": 353236,
         "afterTokens": 151,
         "pass": true,
@@ -261,6 +1447,7 @@
       },
       {
         "name": "related-interface-scripts",
+        "stage": "process",
         "beforeTokens": 19013,
         "afterTokens": 151,
         "pass": true,
@@ -269,14 +1456,16 @@
       },
       {
         "name": "related-hooks",
+        "stage": "process",
         "beforeTokens": 4559,
-        "afterTokens": 97,
+        "afterTokens": 104,
         "pass": true,
-        "afterDigest": "8df07648aececba06f78629c51eb407e1f8c4cb98bb6f309cd2bccff51910f1f",
-        "reductionPercent": 97.8723
+        "afterDigest": "6564e34bce560146f3c98973e00f1f3e1bfa1f40ee40c050abc2297b4f2ad397",
+        "reductionPercent": 97.7188
       },
       {
         "name": "related-agents",
+        "stage": "process",
         "beforeTokens": 5442,
         "afterTokens": 99,
         "pass": true,
@@ -285,6 +1474,7 @@
       },
       {
         "name": "related-all-workflows",
+        "stage": "process",
         "beforeTokens": 4022,
         "afterTokens": 141,
         "pass": true,
@@ -293,6 +1483,7 @@
       },
       {
         "name": "related-rules",
+        "stage": "input",
         "beforeTokens": 1925,
         "afterTokens": 94,
         "pass": true,
@@ -303,10 +1494,44 @@
     "summary": {
       "pass": true,
       "reductionScenarioCount": 31,
-      "budgetScenarioCount": 4,
-      "totalBeforeTokens": 1837205,
-      "totalAfterTokens": 12184,
-      "totalReductionPercent": 99.3368
+      "budgetScenarioCount": 5,
+      "totalBeforeTokens": 1837250,
+      "totalAfterTokens": 15491,
+      "totalReductionPercent": 99.1568,
+      "minimumReductionPercent": 90.1458,
+      "aggregation": "scenario-weighted",
+      "stages": {
+        "input": {
+          "pass": true,
+          "reductionScenarioCount": 4,
+          "budgetScenarioCount": 5,
+          "totalBeforeTokens": 923783,
+          "totalAfterTokens": 3204,
+          "totalReductionPercent": 99.6532,
+          "minimumReductionPercent": 95.1169,
+          "aggregation": "scenario-weighted"
+        },
+        "process": {
+          "pass": true,
+          "reductionScenarioCount": 25,
+          "budgetScenarioCount": 0,
+          "totalBeforeTokens": 719974,
+          "totalAfterTokens": 9455,
+          "totalReductionPercent": 98.6868,
+          "minimumReductionPercent": 90.1458,
+          "aggregation": "scenario-weighted"
+        },
+        "output": {
+          "pass": true,
+          "reductionScenarioCount": 2,
+          "budgetScenarioCount": 0,
+          "totalBeforeTokens": 193493,
+          "totalAfterTokens": 2832,
+          "totalReductionPercent": 98.5364,
+          "minimumReductionPercent": 98.5105,
+          "aggregation": "scenario-weighted"
+        }
+      }
     }
   },
   "consecutivePasses": 3,

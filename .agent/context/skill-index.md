@@ -9,6 +9,16 @@ This is the compact skill contract. Each `SKILL.md` keeps YAML `name` and `descr
 - The agent is editing that skill.
 - A compact contract conflicts with the full skill or repo rules.
 
+## Cross-Skill Contracts
+
+When the route is known, its workflow contract wins. For an ambiguous natural-
+language task spanning several skills, load exactly one matching group before
+any full skill:
+
+- Delivery/requirements/planning: `.agent/context/skills/delivery-planning.contract.md`
+- Implementation/testing/verification: `.agent/context/skills/execution-verification.contract.md`
+- Security/compatibility/privacy/readiness: `.agent/context/skills/risk-audit.contract.md`
+
 ## Skill Map
 
 | Skill | Use for |
@@ -34,7 +44,7 @@ This is the compact skill contract. Each `SKILL.md` keeps YAML `name` and `descr
 | `plan-verification` | FSD/goal quality gate |
 | `integration-checking` | cross-component wiring |
 | `knowledge-compounding` | durable solved-problem notes |
-| `subagent-orchestration` | file-backed goal dispatch and Brain evaluation |
+| `subagent-orchestration` | file-backed approved-goal dispatch and two-stage review |
 | Other support skills | load only when their description matches the active risk |
 
 ## Contract Rule

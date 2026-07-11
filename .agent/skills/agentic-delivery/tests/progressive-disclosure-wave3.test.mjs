@@ -15,7 +15,7 @@ const specs = {
     frontmatter:
       '---\nname: agentic-delivery\ndescription: "Use when following the Super Compound BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION delivery path, artifact traceability, FSD authority, optional ADR handling, zero context bloat issue slicing, or OPEN-* stop conditions."\n---',
     references: {
-      "templates-and-outputs.md": "facc0339555e330b582c85be59029100638a13a3f5c1765dc9d45fcbb67041d2",
+      "templates-and-outputs.md": "532d3e532cdf5b3ce3628abff9b67c448c60d26b3409a8963fa1b6d26c0b96bd",
       "authority-and-adr.md": "2bca7520c4b11237fe99f8e53f3083f97c4bef88692876d147a4b4c103e22943",
       "qualified-references.md": "a1ea8d7a7e653e5df729540aa1fc42a0a839237051efc52485f200f36a07e228",
       "context-and-issue-pointers.md": "7dd6cec6bd32ea8428d796e46704a8deafa928de30209cb72fa0f28db85f8d88",

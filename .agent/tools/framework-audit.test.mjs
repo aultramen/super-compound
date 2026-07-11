@@ -1,11 +1,17 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { auditRepository, parseCsvRows } from "./framework-audit.mjs";
+import {
+  auditEvidenceFingerprint,
+  auditRepository,
+  parseCsvRows,
+  verifyStoredAuditEvidence,
+} from "./framework-audit.mjs";
 
 test("parseCsvRows preserves quoted commas and newlines", () => {
   const rows = parseCsvRows('name,notes\nalpha,"one,two"\nbeta,"line 1\nline 2"\n');
@@ -70,6 +76,7 @@ test("auditRepository reads every file and reports structural gaps", async () =>
     assert.equal(codes.has("DUPLICATE_PARAGRAPH"), true);
     assert.equal(codes.has("OUTPUT_BUDGET_GAP"), true);
     assert.equal(codes.has("OUTPUT_BUDGET_MANIFEST_MISSING"), true);
+    assert.equal(codes.has("AUDIT_CLASS_MISSING"), true);
     const serializedFindings = JSON.stringify(report.findings);
     assert.equal(serializedFindings.includes(repeated), false);
     assert.equal(serializedFindings.includes("{not-json}"), false);
@@ -139,8 +146,69 @@ test("the current framework passes the all-file audit", async () => {
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
   const report = await auditRepository(root);
 
+  assert.equal(report.schema, "super_compound_framework_audit_v2");
   assert.deepEqual(report.findings, []);
-  assert.ok(report.summary.filesRead >= 170);
+  assert.equal(report.summary.manifestSource, "git-active-manifest");
+  assert.match(report.repositoryHead, /^[a-f0-9]{40}$/);
+  assert.equal(report.evidenceDigest, auditEvidenceFingerprint(report));
+  assert.equal(report.summary.filesRead, report.summary.auditedFiles);
+  assert.equal(
+    report.summary.manifestFiles,
+    report.summary.auditedFiles + report.summary.excludedFiles.length,
+  );
+  assert.deepEqual(report.summary.excludedFiles, [
+    {
+      path: ".agent/benchmarks/framework-audit.after.json",
+      reason: "generated audit output",
+    },
+  ]);
+  assert.deepEqual(report.coverage, {
+    activeManifestEntries: report.summary.manifestFiles,
+    byteContentAuditedEntries: report.summary.auditedFiles,
+    specialVerificationEntries: report.summary.excludedFiles.length,
+    accountedEntries: report.summary.manifestFiles,
+    unaccountedEntries: 0,
+    accountedPercent: 100,
+    byteContentAuditPercent: Number(
+      ((report.summary.auditedFiles / report.summary.manifestFiles) * 100).toFixed(4),
+    ),
+    classifiedEntries: report.summary.manifestFiles,
+    unclassifiedEntries: 0,
+    classCoveragePercent: 100,
+    auditClassCounts: report.coverage.auditClassCounts,
+    auditClassDigest: report.coverage.auditClassDigest,
+    contentDigestScope: "byte-content-audited",
+    specialVerificationRequired: true,
+    specialEntries: [
+      {
+        path: ".agent/benchmarks/framework-audit.after.json",
+        validator: "stored-audit-evidence-v1",
+      },
+    ],
+  });
+  assert.ok(report.coverage.auditClassCounts.workflow >= 17);
+  assert.equal(report.coverage.auditClassCounts.agent, 6);
+  assert.match(report.coverage.auditClassDigest, /^[a-f0-9]{64}$/);
+  assert.equal(
+    report.physicalInventory.files,
+    report.physicalInventory.filesRead,
+  );
+  assert.equal(report.physicalInventory.symlinks, 0);
+  assert.equal(
+    report.physicalInventory.activeManifestEntries,
+    report.summary.manifestFiles,
+  );
+  assert.equal(
+    report.physicalInventory.files,
+    report.physicalInventory.activeManifestEntries +
+      report.physicalInventory.outsideActiveManifestEntries,
+  );
+
+  const changedTimestamp = { ...report, generatedAt: "2099-01-01T00:00:00.000Z" };
+  assert.equal(auditEvidenceFingerprint(changedTimestamp), report.evidenceDigest);
+  const tampered = structuredClone(report);
+  tampered.summary.bytesRead += 1;
+  assert.notEqual(auditEvidenceFingerprint(tampered), report.evidenceDigest);
 });
 
 test("auditRepository rejects non-deterministic benchmark evidence", async () => {
@@ -151,11 +219,12 @@ test("auditRepository rejects non-deterministic benchmark evidence", async () =>
     await writeFile(
       path.join(root, ".agent", "benchmarks", "token-benchmark.after.json"),
       JSON.stringify({
-        schema: "token_benchmark_report_v2",
+        schema: "token_benchmark_report_v3",
         repeat: 3,
         deterministic: false,
         consecutivePasses: 3,
         pass: true,
+        runDigests: [{ digest: "0".repeat(64), count: 3 }],
         result: { threshold: -1, scenarios: [] },
       }),
     );
@@ -180,7 +249,7 @@ test("auditRepository rejects non-deterministic benchmark evidence", async () =>
       report.findings.some(
         (finding) =>
           finding.code === "BENCHMARK_EVIDENCE_INVALID" &&
-          /digest/i.test(finding.message),
+          /run digest/i.test(finding.message),
       ),
       true,
     );
@@ -196,6 +265,7 @@ test("generated audit evidence does not change the audited surface", async () =>
     await mkdir(path.join(root, ".agent", "benchmarks"), { recursive: true });
     await writeFile(path.join(root, "README.md"), "# Fixture\n");
     const before = await auditRepository(root);
+    assert.equal(before.summary.manifestSource, "filesystem-fallback");
     await writeFile(
       path.join(root, ".agent", "benchmarks", "framework-audit.after.json"),
       `${JSON.stringify(before, null, 2)}\n`,
@@ -222,9 +292,133 @@ test("generated audit evidence does not change the audited surface", async () =>
       excludePaths: [".agent/benchmarks/custom-audit.json"],
     });
 
-    assert.deepEqual(after.summary, before.summary);
+    for (const field of [
+      "auditedFiles",
+      "filesRead",
+      "textFiles",
+      "binaryFiles",
+      "bytesRead",
+      "linesRead",
+      "contentDigest",
+      "skillEntrypoints",
+      "skillEntrypointWords",
+      "maxSkillEntrypointWords",
+      "manifestSource",
+      "findings",
+    ]) {
+      assert.deepEqual(after.summary[field], before.summary[field], field);
+    }
+    assert.equal(after.summary.manifestFiles, before.summary.manifestFiles + 2);
+    assert.deepEqual(after.summary.excludedFiles, [
+      {
+        path: ".agent/benchmarks/custom-audit.json",
+        reason: "requested output path",
+      },
+      {
+        path: ".agent/benchmarks/framework-audit.after.json",
+        reason: "generated audit output",
+      },
+    ]);
     assert.deepEqual(after.findings, before.findings);
   } finally {
     await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("stored audit verification accounts for the self-generated report separately", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "framework-audit-"));
+  const target = ".agent/benchmarks/framework-audit.after.json";
+
+  try {
+    await mkdir(path.join(root, ".agent", "benchmarks"), { recursive: true });
+    await writeFile(path.join(root, "README.md"), "# Fixture\n");
+    await writeFile(path.join(root, target), "{}\n");
+    const stored = await auditRepository(root, {
+      excludePaths: [target],
+      requireGitManifest: false,
+    });
+    await writeFile(path.join(root, target), `${JSON.stringify(stored, null, 2)}\n`);
+
+    const envelope = await verifyStoredAuditEvidence(root, target, {
+      requireGitManifest: false,
+    });
+
+    assert.equal(envelope.schema, "framework_audit_verification_v1");
+    assert.equal(envelope.target, target);
+    assert.equal(envelope.specialVerificationPass, true);
+    assert.equal(envelope.accountedPercent, 100);
+    assert.equal(envelope.accountedEntries, envelope.activeManifestEntries);
+    assert.equal(
+      envelope.byteContentAuditedEntries + envelope.speciallyVerifiedEntries,
+      envelope.accountedEntries,
+    );
+    assert.equal(envelope.frameworkAuditPass, stored.pass);
+
+    await writeFile(path.join(root, target), "{\"tampered\":true}\n");
+    await assert.rejects(
+      verifyStoredAuditEvidence(root, target, { requireGitManifest: false }),
+      /digest is invalid/i,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("stored audit verification survives committing unchanged audited content", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "framework-audit-commit-"));
+  const target = ".agent/benchmarks/framework-audit.after.json";
+
+  try {
+    await mkdir(path.join(root, ".agent", "benchmarks"), { recursive: true });
+    await writeFile(path.join(root, "README.md"), "# Fixture\n");
+    await writeFile(path.join(root, target), "{}\n");
+    execFileSync("git", ["init", "-q"], { cwd: root });
+    execFileSync("git", ["config", "user.email", "test@example.invalid"], {
+      cwd: root,
+    });
+    execFileSync("git", ["config", "user.name", "Test"], { cwd: root });
+    execFileSync("git", ["config", "core.autocrlf", "false"], { cwd: root });
+    execFileSync("git", ["add", "."], { cwd: root });
+    execFileSync("git", ["commit", "-qm", "base"], { cwd: root });
+
+    const stored = await auditRepository(root, {
+      excludePaths: [target],
+      requireGitManifest: true,
+    });
+    await writeFile(path.join(root, target), `${JSON.stringify(stored, null, 2)}\n`);
+    execFileSync("git", ["add", target], { cwd: root });
+    execFileSync("git", ["commit", "-qm", "store audit evidence"], {
+      cwd: root,
+    });
+    const committedHead = execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim();
+
+    assert.notEqual(committedHead, stored.repositoryHead);
+    const envelope = await verifyStoredAuditEvidence(root, target, {
+      requireGitManifest: true,
+    });
+    assert.equal(envelope.pass, true);
+    assert.equal(envelope.repositoryHeadMatch, false);
+    assert.equal(envelope.storedRepositoryHead, stored.repositoryHead);
+    assert.equal(envelope.currentRepositoryHead, committedHead);
+    assert.equal(
+      envelope.repositoryHeadPolicy,
+      "digest-bound provenance; content-based freshness",
+    );
+
+    await writeFile(path.join(root, "README.md"), "# Changed fixture\n");
+    await assert.rejects(
+      verifyStoredAuditEvidence(root, target, { requireGitManifest: true }),
+      /stale/i,
+    );
+  } finally {
+    await rm(root, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 50,
+    });
   }
 });

@@ -11,7 +11,7 @@ Find security risks with evidence, prioritize exploitability and impact, and rec
 
 Announce: "I'm using the security-audit skill to check security risks."
 
-Use directly for security work or through `/sc-audit security` for a broader audit. Audit is read-only unless the user explicitly authorizes changes.
+Use directly for security work or through `/sc-audit security` for a broader audit. Audit mode is read-only. Caller boundary: inside `/sc-audit` or `/sc-review`, even explicit approval to fix requires a transition to `/sc-debug`, `/sc-plan`, `/sc-work`, or `/sc-go`; do not mutate inside the review route.
 
 ## Modes
 

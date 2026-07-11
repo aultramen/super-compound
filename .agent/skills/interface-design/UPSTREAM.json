@@ -15,21 +15,21 @@
       "upstream_path": "src/ui-ux-pro-max/scripts/core.py",
       "upstream_lf_sha256": "ab9f398b493e34404448cefc766239ee86119c7a21d8581ba965cabdc698b0a8",
       "local_path": "scripts/core.py",
-      "local_lf_sha256": "109321476acab240c0d3f5bf5f588ca47fa6247ddd488f3579e8e9f55ac4feb9",
+      "local_lf_sha256": "597b4d07ec0368a1ef6a9dc1a1457abb6a489d72ae5b7d628f47ccd03417ceab",
       "status": "transformed"
     },
     {
       "upstream_path": "src/ui-ux-pro-max/scripts/search.py",
       "upstream_lf_sha256": "b38f35395a7ded28a7d5adfd39195d6db01602121aefcdc4a7e67eb1bbdd5a40",
       "local_path": "scripts/search.py",
-      "local_lf_sha256": "3287075ab65ca6420641032b44f5e7649b0f8fb56d5ccaa0f7351af185f6b094",
+      "local_lf_sha256": "ab83b35576ebe728c1287650754b6b3653f8620c7bff880756d9dcbdc1101820",
       "status": "transformed"
     },
     {
       "upstream_path": "src/ui-ux-pro-max/scripts/design_system.py",
       "upstream_lf_sha256": "db272c6649322e383714c73305705101fe1d44c15bd64556d5a515b1c419c2d2",
       "local_path": "scripts/design_system.py",
-      "local_lf_sha256": "ab3266ad271a66c435f579c2bc82a79424746d5f04905e1525867d10be8ffa1a",
+      "local_lf_sha256": "cfea55b17c408efba188772c24ea8861caff9a21033017513d0453b529233da8",
       "status": "transformed"
     },
     {
@@ -57,8 +57,8 @@
       "upstream_path": "src/ui-ux-pro-max/data/stacks/javafx.csv",
       "upstream_lf_sha256": "5545e331b2479eb431ca45203799ce1b0ab1e369045ab7735d5a9f85ec78f956",
       "local_path": "data/stacks/javafx.csv",
-      "local_lf_sha256": "5545e331b2479eb431ca45203799ce1b0ab1e369045ab7735d5a9f85ec78f956",
-      "status": "mirrored"
+      "local_lf_sha256": "69d3adb56ad8124ae0bbf274a63a319b1625d85b8343480db6df7d672743e721",
+      "status": "transformed"
     },
     {
       "upstream_path": "src/ui-ux-pro-max/data/stacks/wpf.csv",
@@ -143,6 +143,29 @@
         "data/motion.csv"
       ],
       "description": "Expose upstream GSAP guidance only through the explicit gsap domain; default auto-detection remains unchanged and code/snippet fields are emitted without destructive truncation."
+    },
+    {
+      "id": "prompt-safe-retrieval-output",
+      "files": [
+        "scripts/core.py",
+        "scripts/search.py"
+      ],
+      "description": "Bound result counts, route truncated human-readable fields to complete JSON output, and emit only a compact artifact manifest in persistence mode."
+    },
+    {
+      "id": "deterministic-design-system-generation",
+      "files": [
+        "scripts/search.py",
+        "scripts/design_system.py"
+      ],
+      "description": "Search the product catalog once, fail with source context on malformed decision rules, and keep generated persistence links project-scoped."
+    },
+    {
+      "id": "standards-compliant-javafx-csv",
+      "files": [
+        "data/stacks/javafx.csv"
+      ],
+      "description": "Replace backslash-escaped quotes with RFC 4180 doubled quotes so Java code cells round-trip through the standard CSV parser."
     }
   ],
   "local_only": [
@@ -157,6 +180,22 @@
     {
       "path": "scripts/test_search_regressions.py",
       "reason": "Regression coverage for selective upstream retrieval behavior."
+    },
+    {
+      "path": "scripts/test_csv_integrity.py",
+      "reason": "Local strict CSV width and semantic round-trip coverage."
+    },
+    {
+      "path": "scripts/test_design_system_efficiency.py",
+      "reason": "Local coverage for single-pass retrieval and actionable reasoning failures."
+    },
+    {
+      "path": "scripts/test_search_cli.py",
+      "reason": "Local end-to-end coverage for bounded and compact CLI output."
+    },
+    {
+      "path": "scripts/test_upstream_provenance.py",
+      "reason": "Local integrity checks for this selective provenance manifest."
     }
   ],
   "intentionally_not_imported": [

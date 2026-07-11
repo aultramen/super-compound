@@ -27,12 +27,12 @@ REASONING_FILE = "ui-reasoning.csv"
 SAFE_SLUG_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]{0,80}$")
 
 SEARCH_CONFIG = {
-    "product": {"max_results": 1},
     "style": {"max_results": 3},
     "color": {"max_results": 2},
     "landing": {"max_results": 2},
     "typography": {"max_results": 2}
 }
+PRODUCT_MAX_RESULTS = 1
 
 
 # ============ DESIGN SYSTEM GENERATOR ============
@@ -104,11 +104,16 @@ class DesignSystemGenerator:
             }
 
         # Parse decision rules JSON
-        decision_rules = {}
+        raw_decision_rules = rule.get("Decision_Rules", "{}").strip() or "{}"
         try:
-            decision_rules = json.loads(rule.get("Decision_Rules", "{}"))
-        except json.JSONDecodeError:
-            pass
+            decision_rules = json.loads(raw_decision_rules)
+        except json.JSONDecodeError as exc:
+            rule_category = rule.get("UI_Category", category)
+            raise ValueError(
+                "Invalid Decision_Rules JSON for UI category "
+                f"'{rule_category}' in {REASONING_FILE}: {exc.msg} "
+                f"at column {exc.colno}"
+            ) from exc
 
         return {
             "pattern": rule.get("Recommended_Pattern", ""),
@@ -165,7 +170,7 @@ class DesignSystemGenerator:
     def generate(self, query: str, project_name: str = None) -> dict:
         """Generate complete design system recommendation."""
         # Step 1: First search product to get category
-        product_result = search(query, "product", 1)
+        product_result = search(query, "product", PRODUCT_MAX_RESULTS)
         product_results = product_result.get("results", [])
         category = "General"
         if product_results:
@@ -666,7 +671,7 @@ def format_master_md(design_system: dict) -> str:
     # Logic header
     lines.append("# Design System Master File")
     lines.append("")
-    lines.append("> **LOGIC:** When building a specific page, first check `design-system/pages/[page-name].md`.")
+    lines.append("> **LOGIC:** When building a specific page, first check `pages/[page-name].md`.")
     lines.append("> If that file exists, its rules **override** this Master file.")
     lines.append("> If not, strictly follow the rules below.")
     lines.append("")
@@ -940,7 +945,7 @@ def format_page_override_md(design_system: dict, page_name: str, page_query: str
     lines.append(f"> **Generated:** {timestamp}")
     lines.append(f"> **Page Type:** {page_overrides.get('page_type', 'General')}")
     lines.append("")
-    lines.append("> ⚠️ **IMPORTANT:** Rules in this file **override** the Master file (`design-system/MASTER.md`).")
+    lines.append("> ⚠️ **IMPORTANT:** Rules in this file **override** the Master file (`../MASTER.md`).")
     lines.append("> Only deviations from the Master are documented here. For all other rules, refer to the Master.")
     lines.append("")
     lines.append("---")
@@ -1122,7 +1127,7 @@ def _generate_intelligent_overrides(page_name: str, page_query: str, design_syst
     
     if not recommendations:
         recommendations = [
-            "Refer to MASTER.md for all design rules",
+            "Refer to ../MASTER.md for all design rules",
             "Add specific overrides as needed for this page"
         ]
     
