@@ -13,6 +13,7 @@ The ideal path:
 ```text
 /sc-init
 /sc-explore analytics dashboard for account admins
+/sc-research Can the current event store support tenant-safe daily metrics with 15-minute freshness?  # conditional
 /sc-prd
 /sc-plan --issues
 /sc-go start feature/analytics-dashboard
@@ -25,10 +26,10 @@ The ideal path:
 /sc-compound
 ```
 
-For UI-heavy work, add:
+For UI-heavy work, start with read-only design/review:
 
 ```text
-/sc-ui analytics dashboard for a B2B SaaS admin team
+/sc-ui review analytics dashboard for a B2B SaaS admin team
 ```
 
 ## 1. Initialize
@@ -109,6 +110,49 @@ Save the BRD to:
 ```text
 docs/brd/brd-analytics-dashboard.md
 ```
+
+## 3A. Research (Conditional)
+
+`/sc-research` is not a required ceremony between Explore and PRD. Run it only when one named factual or technical gap could materially change a decision, the available evidence is stale or conflicting, or downstream work needs a durable source trail.
+
+For the analytics dashboard, Explore owns questions such as who the dashboard serves, which outcomes matter, and what freshness promise is acceptable. Research can test whether that promise is feasible:
+
+```text
+/sc-research Can the current event store produce tenant-safe daily account metrics with 15-minute freshness at the observed volume?
+```
+
+The agent should:
+
+- Name the decision consumer, owner/gate, return workflow, scope, timebox, and freshness requirement.
+- Inspect local schemas, queries, retention settings, volume evidence, tests, and prior solution notes first.
+- Use current primary documentation only for unresolved vendor, library, API, or version claims.
+- Record facts separately from inferences, contradictions, and unknowns.
+- Compare only decision-relevant options and state confidence, rejected options, and a refresh trigger.
+- Keep the note advisory; do not implement code, install a dependency, or silently change BRD/PRD/FSD authority.
+
+For a non-trivial result, save:
+
+```text
+docs/research/2026-07-11-analytics-dashboard-feasibility.md
+```
+
+The note follows `.agent/templates/research/Research-Note-Skeleton.md` and contains an evidence register, recommendation, confidence, `OPEN-RESEARCH-*` gaps, and a caller-aware handoff.
+
+Return routing matters:
+
+| Finding | Return route |
+|---|---|
+| The requested freshness or scope is not feasible and the product promise must change | `/sc-explore`, update and re-approve the BRD |
+| The BRD remains valid and evidence constrains observable behavior | `/sc-prd` |
+| The PRD is approved and an implementation option needs formal selection | `/sc-plan`; record the accepted choice as FSD `TDEC-*` or an accepted ADR |
+| The question is current-stack compatibility, security, compliance, or release severity | `/sc-audit` |
+| A concrete query, build, or runtime failure exists | `/sc-debug` |
+
+Other real examples:
+
+- Before a framework upgrade, compare official migration guidance, runtime support, peer constraints, and rollback evidence; return to `/sc-plan` for the authoritative migration sequence.
+- Before a payment integration, verify provider webhook retry and idempotency semantics; return to `/sc-prd` for observable failure behavior and `/sc-audit` for replay, secret, PII, and compliance risk.
+- After `/sc-geniusloop` proposes replacing a custom queue, research vendor/runtime feasibility only if the user value is already clear; otherwise return to `/sc-explore` first.
 
 ## 4. Write A PRD
 
@@ -334,7 +378,10 @@ Specific routes are allowed:
 /sc-audit release
 ```
 
-Audit mode is read-only unless the user asks for fixes.
+Audit mode is always read-only. If the user approves remediation, leave audit
+and route the finding to its owner: `/sc-debug` for a reproduced defect,
+`/sc-plan` for an authority or design change, or `/sc-work` for an approved fix
+goal.
 
 ## 11. Git Finish
 
@@ -353,16 +400,18 @@ The preview includes `git status`, `git diff`, a sensitive-file warning before `
 Run:
 
 ```text
-/sc-ui analytics dashboard for B2B SaaS
+/sc-ui review analytics dashboard for B2B SaaS
 ```
 
-The UI workflow uses `interface-design`, not the old UI skill name.
+The UI workflow uses `interface-design`, not the old UI skill name. It stays
+read-only until an approved FSD goal hands implementation to `/sc-work`.
 
 It should:
 
 - Reuse an existing design system when present
 - Search domain/style/typography/stack guidance
-- Build the actual requested UI, not a marketing page
+- Design/review the actual requested product UI, not a marketing page;
+  implementation remains owned by `/sc-work`
 - Verify responsive behavior, accessibility, and text fit
 - Keep UI copy domain-specific and concise
 
@@ -382,11 +431,12 @@ When stopping mid-work:
 /sc-pause
 ```
 
-This creates or updates:
-
-- `docs/STATE.md`
-- `.continue-here.md`
-- Any active FSD/goal progress
+For non-trivial work this updates canonical `docs/STATE.md` with the current
+position, exact next action, decisions, blockers/owners, completed outcomes,
+verification, branch/workspace state, and authoritative artifact links. It
+writes `.continue-here.md` only as a short pointer to that state and the next
+route. `docs/progress.md` remains chronological; pause never rewrites active
+FSD/goal authority.
 
 Next session:
 
@@ -422,7 +472,7 @@ Save concise knowledge under `docs/solutions/` or related project docs.
 | Resume from disk state | `/sc-status` |
 | Generate proactive improvement ideas | `/sc-geniusloop` |
 | Shape fuzzy ideas | `/sc-explore` |
-| Gather evidence | `/sc-research` |
+| Answer a named factual or technical decision question with advisory evidence | `/sc-research` |
 | Write PRD product requirements | `/sc-prd` |
 | Create FSD and goal issue pointers | `/sc-plan` |
 | Define or run evals | `/sc-eval` |
@@ -434,7 +484,8 @@ Save concise knowledge under `docs/solutions/` or related project docs.
 | Capture learnings | `/sc-compound` |
 | Save handoff | `/sc-pause` |
 | Start lifecycle | `/sc-launch` |
-| Build interface | `/sc-ui` |
+| Design/review interface | `/sc-ui` |
+| Implement approved interface goal | `/sc-work <approved-goal>` |
 
 ## Removed Routes
 
@@ -451,9 +502,16 @@ Use these replacements:
 | security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
 | progress or resume | `/sc-status` |
 | reload | `/sc-init reload` |
-| UI design/build | `/sc-ui` |
+| UI design/review | `/sc-ui` |
+| UI implementation | `/sc-work <approved-goal>` |
 
 ## Quality Checklist
+
+For framework maintenance, the token benchmark emits 51 static evidence cells:
+input context reduction, process contract/authority wiring, and output
+sink/budget/next-owner coverage for every public workflow. All route reductions
+must exceed 90%. This does not measure hidden reasoning, generated response
+tokens, latency, or billing; those remain unknown without paired host traces.
 
 Before finishing any meaningful work:
 

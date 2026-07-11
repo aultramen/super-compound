@@ -1,6 +1,12 @@
 # /sc-ui Runtime Contract
 
-Purpose: build or review UI using interface-design guidance without loading raw data into model context.
+Purpose: review/design UI read-only or provide interface guidance to an approved goal without loading raw data into model context.
+
+Authority: design/review mode is read-only. For implementation intent, fuzzy UI
+routes to `/sc-explore`; an approved BRD without a PRD routes to `/sc-prd`; an
+approved PRD without an FSD routes to `/sc-plan`; an approved FSD `GOAL-*`
+hands off to `/sc-work <approved-goal>`. `/sc-ui` never edits directly; when
+used inside active `/sc-work`, mutation authority and verification remain there.
 
 Load first:
 

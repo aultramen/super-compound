@@ -17,6 +17,7 @@ import {
   createReviewPackage,
   createWorkPackage,
   recordWorkPackageResult,
+  withLedgerLock,
 } from "./work-package.mjs";
 
 test("createWorkPackage materializes a path-only handoff and ledger", async () => {
@@ -307,7 +308,114 @@ test("concurrent create and record preserve every goal", async () => {
       );
     }
   } finally {
-    await rm(root, { recursive: true, force: true });
+    await rm(root, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 50,
+    });
+  }
+});
+
+test("ledger lock retries transient Windows acquisition errors", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "work-package-lock-retry-"));
+
+  try {
+    for (const code of ["EPERM", "EBUSY"]) {
+      const ledgerPath = path.join(root, code.toLowerCase(), "ledger.json");
+      let attempts = 0;
+      let operations = 0;
+      await withLedgerLock(
+        ledgerPath,
+        async () => {
+          operations += 1;
+        },
+        {
+          mkdirLock: async (lockPath) => {
+            attempts += 1;
+            if (attempts === 1) {
+              throw Object.assign(new Error(`transient ${code}`), { code });
+            }
+            await mkdir(lockPath);
+          },
+          wait: async () => {},
+        },
+      );
+
+      assert.equal(attempts, 2);
+      assert.equal(operations, 1);
+      await assert.rejects(access(`${ledgerPath}.lock`), { code: "ENOENT" });
+    }
+  } finally {
+    await rm(root, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 50,
+    });
+  }
+});
+
+test("ledger lock bounds transient retries and preserves hard failures", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "work-package-lock-bound-"));
+
+  try {
+    const transient = Object.assign(new Error("persistent Windows lock"), {
+      code: "EPERM",
+    });
+    const timestamps = [0, 5_000, 10_000];
+    let transientAttempts = 0;
+    let transientOperations = 0;
+    await assert.rejects(
+      withLedgerLock(
+        path.join(root, "transient", "ledger.json"),
+        async () => {
+          transientOperations += 1;
+        },
+        {
+          mkdirLock: async () => {
+            transientAttempts += 1;
+            throw transient;
+          },
+          now: () => timestamps.shift() ?? 10_000,
+          wait: async () => {},
+        },
+      ),
+      (error) => error === transient,
+    );
+    assert.equal(transientAttempts, 2);
+    assert.equal(transientOperations, 0);
+
+    const hardFailure = Object.assign(new Error("permission denied"), {
+      code: "EACCES",
+    });
+    let hardFailureAttempts = 0;
+    let hardFailureOperations = 0;
+    await assert.rejects(
+      withLedgerLock(
+        path.join(root, "hard", "ledger.json"),
+        async () => {
+          hardFailureOperations += 1;
+        },
+        {
+          mkdirLock: async () => {
+            hardFailureAttempts += 1;
+            throw hardFailure;
+          },
+          wait: async () => {},
+        },
+      ),
+      (error) => error === hardFailure,
+    );
+    assert.equal(hardFailureAttempts, 1);
+    assert.equal(hardFailureOperations, 0);
+  } finally {
+    await rm(root, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 50,
+    });
   }
 });
 

@@ -12,17 +12,23 @@ frontend:
   framework: ""               # react | nextjs | vue | nuxtjs | svelte | angular | none
   language: ""                # typescript | javascript
   styling: ""                 # tailwind | css-modules | styled-components | vanilla-css
+  bundler: ""                 # vite | turbopack | metro | framework-default | none
   component_library: ""       # shadcn | radix | mui | antd | none
 
 backend:
   framework: ""               # fastapi | django | express | nestjs | laravel | gin | none
   language: ""                # python | typescript | go | php | rust | java
   orm: ""                     # prisma | sqlalchemy | typeorm | eloquent | drizzle | gorm
+  api_docs: ""                # swagger | openapi | none
 
 database:
   primary: ""                 # postgresql | mysql | sqlite | mongodb
   cache: ""                   # redis | none
   migration_tool: ""          # prisma-migrate | alembic | knex | artisan | goose | none
+
+auth:
+  method: ""                  # session | jwt | oauth | passkey | none
+  provider: ""                # project-selected provider | custom | none
 
 runtime:
   package_manager: ""         # npm | pnpm | yarn | pip | poetry | uv | cargo | go-mod
@@ -36,6 +42,8 @@ commands:
   format: ""
   build: ""
   migrate: ""
+  seed: ""
+  container_up: ""
 
 conventions:
   architecture: ""            # clean | mvc | hexagonal | layered | modular
@@ -64,8 +72,8 @@ gitWorkflow:
   previewFirst: true
 
 design_system:
-  master_path: "design-system/MASTER.md"
-  page_overrides_path: "design-system/pages/"
+  master_path: "design-system/<project-slug>/MASTER.md"
+  page_overrides_path: "design-system/<project-slug>/pages/"
 ```
 
 ## Presets
@@ -85,4 +93,4 @@ Use presets as starting points, then adapt to the actual project.
 | 9 | React Native | Expo + SQLite | Modular |
 | 10 | General Blank | Empty template | Project-defined |
 
-See `skills/architecture-enforcement/SKILL.md` for folder guidance.
+See `.agent/skills/architecture-enforcement/SKILL.md` for folder guidance.

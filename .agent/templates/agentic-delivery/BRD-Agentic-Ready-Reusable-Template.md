@@ -54,6 +54,11 @@ downstream_artifacts:
 
 ---
 
+> **REFERENCE LIBRARY - skeleton first.** Never load this entire file into
+> working context or copy it as the output shape. Start from
+> `skeletons/BRD-Skeleton.md`, select MINIMAL/STANDARD/HIGH_RISK, and read only
+> the named section needed for a concrete risk, decision, or review gap.
+
 # 0. Kontrak Operasional BRD
 
 ## 0.1 Tujuan Dokumen
@@ -117,7 +122,7 @@ BRD → PRD → FSD → GOAL → IMPLEMENTATION → VERIFICATION
 4. ADR `ACCEPTED`, **bila ada dan linked**, authoritative hanya untuk delegated architecture decision yang tidak mengubah BRD/PRD.
 5. FSD yang disetujui authoritative untuk implementation contract; `TDEC-*` menjadi authority teknis ketika ADR tidak digunakan.
 6. Repository convention berlaku untuk pilihan lokal yang tidak ditentukan artifact di atas.
-7. Task, prompt, atau `/goal` tidak boleh mengubah artifact authority.
+7. Task, prompt, atau invocation `/sc-work` tidak boleh mengubah artifact authority.
 
 PRD, FSD, dan ADR **MUST NOT** mengubah outcome bisnis, capability, scope, business rule, decision rights, compliance obligation, atau acceptance gate BRD tanpa change request yang disetujui. Konflik tidak boleh diselesaikan diam-diam; gunakan **Conflict and Resolution Ledger**.
 

@@ -1,16 +1,21 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
+import { execFile, spawn } from "node:child_process";
 import {
   lstat,
   mkdir,
   readFile,
   readdir,
-  stat,
   writeFile,
 } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  buildWorkflowEvidenceMatrix,
+  createUnattachedWorkflowEvidence,
+  validateWorkflowEvidence,
+} from "./evidence-matrix.mjs";
 import { analyzeTranscript } from "./transcript-usage.mjs";
 
 export const METRIC = "deterministic_estimated_tokens_v1";
@@ -25,7 +30,6 @@ const LEGACY_PRELOAD_SCENARIOS = [
       ".agent/workflows/*.md",
       ".agent/skills/**/SKILL.md",
       ".agent/templates/agentic-delivery/*.md",
-      ".agent/templates/git-workflow/*.md",
       ".agent/hooks/**/*.js",
       ".agent/hooks/*.json",
       ".agent/agents/*.md",
@@ -66,9 +70,17 @@ const STARTUP_BUDGET_SCENARIOS = [
     maxAfterTokens: 2750,
   },
   {
+    name: "startup-codex-adapter-metadata",
+    description: "Native Codex adapter discovery metadata.",
+    before: [".codex/SKILL.md"],
+    after: [".codex/SKILL.md"],
+    measure: "skill-metadata",
+    maxAfterTokens: 200,
+  },
+  {
     name: "startup-installed-skill-metadata",
     description:
-      "Repository-owned native skill discovery metadata (name and description only).",
+      "Worst-case bundled framework skill metadata (name and description only).",
     before: [".agent/skills/**/SKILL.md"],
     after: [".agent/skills/**/SKILL.md"],
     measure: "skill-metadata",
@@ -445,12 +457,38 @@ const RELATED_HOTSPOT_SCENARIOS = [
   },
 ];
 
+const INPUT_STAGE_SCENARIOS = new Set([
+  "legacy-eager-preload",
+  "startup-codex-repository",
+  "startup-codex-adapter-metadata",
+  "startup-claude-repository",
+  "startup-antigravity-rules",
+  "startup-installed-skill-metadata",
+  "related-all-skills",
+  "related-interface-data",
+  "related-rules",
+]);
+const OUTPUT_STAGE_SCENARIOS = new Set([
+  "artifact-output-brd-prd-fsd-issue",
+  "related-agentic-templates",
+]);
+
+function scenarioStage(name) {
+  if (INPUT_STAGE_SCENARIOS.has(name)) return "input";
+  if (OUTPUT_STAGE_SCENARIOS.has(name)) return "output";
+  return "process";
+}
+
 export const DEFAULT_SCENARIOS = [
   ...LEGACY_PRELOAD_SCENARIOS,
   ...STARTUP_BUDGET_SCENARIOS,
-  ...WORKFLOW_SCENARIOS,
+  ...WORKFLOW_SCENARIOS.map((scenario) => ({
+    ...scenario,
+    after: [".codex/SKILL.md", ...scenario.after],
+    semanticContract: `workflow-invariants-v1/${scenario.name}`,
+  })),
   ...RELATED_HOTSPOT_SCENARIOS,
-];
+].map((scenario) => ({ ...scenario, stage: scenarioStage(scenario.name) }));
 
 const DEFAULT_THRESHOLD = 90;
 
@@ -466,13 +504,27 @@ export async function expandPatterns(root, patterns, options = {}) {
   const ordered = [];
 
   for (const pattern of patterns) {
+    if (
+      typeof pattern !== "string" ||
+      !pattern.trim() ||
+      path.isAbsolute(pattern) ||
+      path.win32.isAbsolute(pattern) ||
+      path.posix.isAbsolute(pattern) ||
+      pattern.replace(/\\/g, "/").split("/").includes("..")
+    ) {
+      throw new Error(`Scenario patterns must be repository-relative: ${pattern}`);
+    }
+    await resolveRepositoryPath(root, pattern);
     const normalizedPattern = normalizePath(pattern);
     let matched = false;
 
     if (!hasGlob(normalizedPattern)) {
       const absolute = path.join(root, normalizedPattern);
-      const info = await stat(absolute).catch(() => null);
+      const info = await lstat(absolute).catch(() => null);
 
+      if (info?.isSymbolicLink()) {
+        throw new Error(`Scenario path is a symlink: ${normalizedPattern}`);
+      }
       if (info?.isFile()) {
         addSelected(selected, ordered, normalizedPattern);
         matched = true;
@@ -539,10 +591,13 @@ export async function countScenarioTokens(root, patterns, options = {}) {
   };
 }
 
-export async function countSkillMetadataTokens(root) {
+export async function countSkillMetadataTokens(
+  root,
+  patterns = [".agent/skills/**/SKILL.md"],
+) {
   const files = await expandPatterns(
     root,
-    [".agent/skills/**/SKILL.md"],
+    patterns,
     { requireEveryPattern: true },
   );
   const metadata = [];
@@ -587,7 +642,7 @@ function readFrontmatterValue(frontmatter, key) {
 
 async function countScenarioSurface(root, scenario, side) {
   if (scenario.measure === "skill-metadata") {
-    return countSkillMetadataTokens(root);
+    return countSkillMetadataTokens(root, scenario[side]);
   }
   return countScenarioTokens(root, scenario[side], {
     requireEveryPattern: true,
@@ -597,7 +652,9 @@ async function countScenarioSurface(root, scenario, side) {
 export async function createBaseline(root, scenarios = DEFAULT_SCENARIOS) {
   const baseline = {};
 
-  for (const scenario of scenarios) {
+  for (const scenario of scenarios.filter(
+    (candidate) => !Number.isFinite(candidate.maxAfterTokens),
+  )) {
     baseline[scenario.name] = await countScenarioSurface(
       root,
       scenario,
@@ -606,8 +663,394 @@ export async function createBaseline(root, scenarios = DEFAULT_SCENARIOS) {
   }
 
   return {
+    schema: "token_benchmark_baseline_v2",
     metric: METRIC,
-    generatedAt: new Date().toISOString(),
+    assembledAt: new Date().toISOString(),
+    provenance: { mode: "working-tree" },
+    beforeDefinitionDigest: digestScenarioDefinitions(scenarios),
+    scenarios: baseline,
+  };
+}
+
+export function digestScenarioDefinitions(scenarios) {
+  const definitions = scenarios
+    .filter((scenario) => !Number.isFinite(scenario.maxAfterTokens))
+    .map(({ name, before }) => ({ name, before }));
+  return createHash("sha256").update(JSON.stringify(definitions)).digest("hex");
+}
+
+export function digestBenchmarkSuite(scenarios) {
+  const definitions = scenarios.map((scenario) => ({
+    name: scenario.name,
+    description: scenario.description ?? "",
+    stage: scenario.stage ?? "process",
+    before: scenario.before,
+    after: scenario.after,
+    measure: scenario.measure ?? "full-content",
+    maxAfterTokens: Number.isFinite(scenario.maxAfterTokens)
+      ? scenario.maxAfterTokens
+      : null,
+    semanticContract: scenario.semanticContract ?? null,
+  }));
+  return createHash("sha256").update(JSON.stringify(definitions)).digest("hex");
+}
+
+function baselineScenariosOf(baseline) {
+  return baseline?.scenarios ?? baseline;
+}
+
+function validateBaselineEntries(scenarios, baseline) {
+  const expected = scenarios.filter(
+    (scenario) => !Number.isFinite(scenario.maxAfterTokens),
+  );
+  const entries = baselineScenariosOf(baseline);
+  if (!entries || typeof entries !== "object" || Array.isArray(entries)) {
+    throw new Error("Invalid baseline: scenarios object is required");
+  }
+  const expectedNames = new Set(expected.map(({ name }) => name));
+  const missing = expected.filter(({ name }) => !entries[name]).map(({ name }) => name);
+  const extra = Object.keys(entries).filter((name) => !expectedNames.has(name));
+  if (missing.length > 0) {
+    throw new Error(`Missing baseline scenarios: ${missing.join(", ")}`);
+  }
+  if (extra.length > 0) {
+    throw new Error(`Unexpected baseline scenarios: ${extra.join(", ")}`);
+  }
+
+  const hasGitProvenance = baseline?.provenance?.mode === "git";
+  for (const { name } of expected) {
+    const entry = entries[name];
+    for (const field of ["tokens", "chars", "bytes", "fileCount"]) {
+      if (!Number.isSafeInteger(entry[field]) || entry[field] < 0) {
+        throw new Error(`Invalid baseline ${name}: ${field}`);
+      }
+    }
+    if (
+      !Array.isArray(entry.files) ||
+      entry.files.length === 0 ||
+      entry.fileCount !== entry.files.length ||
+      new Set(entry.files).size !== entry.files.length
+    ) {
+      throw new Error(`Invalid baseline ${name}: files`);
+    }
+    if (
+      !hasGitProvenance &&
+      !/^[a-f0-9]{64}$/.test(String(entry.contentDigest ?? ""))
+    ) {
+      throw new Error(`Invalid baseline ${name}: content digest`);
+    }
+    if (hasGitProvenance && "contentDigest" in entry) {
+      throw new Error(
+        `Invalid baseline ${name}: per-scenario content digest is unsupported; use provenance content digest`,
+      );
+    }
+  }
+  return entries;
+}
+
+function runGit(root, args) {
+  return new Promise((resolve, reject) => {
+    execFile(
+      "git",
+      args,
+      { cwd: root, encoding: "buffer", maxBuffer: 64 * 1024 * 1024 },
+      (error, stdout, stderr) => {
+        if (error) {
+          reject(
+            new Error(
+              `Git ${args[0]} failed: ${Buffer.from(stderr ?? "").toString("utf8").trim()}`,
+            ),
+          );
+          return;
+        }
+        resolve(Buffer.from(stdout));
+      },
+    );
+  });
+}
+
+async function assertGitCommitProvenance(root, commit) {
+  const type = (await runGit(root, ["cat-file", "-t", commit]))
+    .toString("utf8")
+    .trim();
+  if (type !== "commit") {
+    throw new Error(`Invalid baseline provenance: ${commit} is not a commit`);
+  }
+  try {
+    await runGit(root, ["merge-base", "--is-ancestor", commit, "HEAD"]);
+  } catch {
+    throw new Error(
+      `Invalid baseline provenance: ${commit} is not an ancestor of HEAD`,
+    );
+  }
+  const committedAt = (await runGit(root, ["show", "-s", "--format=%cI", commit]))
+    .toString("utf8")
+    .trim();
+  const timestamp = Date.parse(committedAt);
+  if (!Number.isFinite(timestamp)) {
+    throw new Error(`Invalid baseline provenance timestamp for ${commit}`);
+  }
+  return timestamp;
+}
+
+async function listGitFiles(root, commit) {
+  const output = await runGit(root, [
+    "ls-tree",
+    "-r",
+    "--name-only",
+    "-z",
+    commit,
+  ]);
+  return output
+    .toString("utf8")
+    .split("\0")
+    .filter(Boolean)
+    .map(normalizePath)
+    .sort((left, right) => left.localeCompare(right));
+}
+
+function expandPatternsFromList(patterns, allFiles) {
+  const selected = new Set();
+  const ordered = [];
+  for (const rawPattern of patterns) {
+    const pattern = normalizePath(rawPattern);
+    const matcher = hasGlob(pattern) ? globToRegExp(pattern) : null;
+    let matched = false;
+    for (const file of allFiles) {
+      if ((matcher && matcher.test(file)) || (!matcher && file === pattern)) {
+        addSelected(selected, ordered, file);
+        matched = true;
+      }
+    }
+    if (!matched) {
+      throw new Error(`Baseline pattern matched no Git files: ${pattern}`);
+    }
+  }
+  return ordered;
+}
+
+function readGitBlobs(root, specs) {
+  return new Promise((resolve, reject) => {
+    const child = spawn("git", ["cat-file", "--batch"], {
+      cwd: root,
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    const stdout = [];
+    const stderr = [];
+    child.stdout.on("data", (chunk) => stdout.push(chunk));
+    child.stderr.on("data", (chunk) => stderr.push(chunk));
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code !== 0) {
+        reject(new Error(`Git cat-file failed: ${Buffer.concat(stderr).toString("utf8").trim()}`));
+        return;
+      }
+      try {
+        const output = Buffer.concat(stdout);
+        const blobs = new Map();
+        let offset = 0;
+        for (const spec of specs) {
+          const newline = output.indexOf(10, offset);
+          if (newline < 0) throw new Error(`Missing Git header for ${spec}`);
+          const header = output.subarray(offset, newline).toString("utf8");
+          offset = newline + 1;
+          const match = header.match(/^[a-f0-9]{40} blob (\d+)$/);
+          if (!match) throw new Error(`Invalid Git blob for ${spec}: ${header}`);
+          const size = Number(match[1]);
+          const content = output.subarray(offset, offset + size);
+          offset += size;
+          if (output[offset] !== 10) throw new Error(`Invalid Git blob terminator for ${spec}`);
+          offset += 1;
+          blobs.set(spec, content);
+        }
+        resolve(blobs);
+      } catch (error) {
+        reject(error);
+      }
+    });
+    child.stdin.end(`${specs.join("\n")}\n`);
+  });
+}
+
+function measureGitSurface(commit, files, blobs) {
+  let tokens = 0;
+  let chars = 0;
+  let bytes = 0;
+  const digest = createHash("sha256");
+  for (const file of files) {
+    const buffer = blobs.get(`${commit}:${file}`);
+    if (!buffer) throw new Error(`Missing Git content: ${commit}:${file}`);
+    const content = buffer.toString("utf8");
+    tokens += estimateTokens(content);
+    chars += content.length;
+    bytes += buffer.length;
+    digest.update(file);
+    digest.update("\0");
+    digest.update(buffer);
+    digest.update("\0");
+  }
+  return {
+    tokens,
+    chars,
+    bytes,
+    fileCount: files.length,
+    files,
+    contentDigest: digest.digest("hex"),
+  };
+}
+
+export async function validateBaselineProvenance(
+  root,
+  scenarios,
+  baseline,
+  options = {},
+) {
+  if (
+    baseline?.schema !== "token_benchmark_baseline_v2" ||
+    baseline?.metric !== METRIC ||
+    baseline?.provenance?.mode !== "git"
+  ) {
+    throw new Error("Invalid baseline provenance: expected token_benchmark_baseline_v2 Git evidence");
+  }
+  if (baseline.beforeDefinitionDigest !== digestScenarioDefinitions(scenarios)) {
+    throw new Error("Invalid baseline provenance: before definition digest mismatch");
+  }
+  const assembledAt = Date.parse(baseline.assembledAt);
+  if (!Number.isFinite(assembledAt)) {
+    throw new Error("Invalid baseline provenance: assembledAt is required");
+  }
+  const entries = validateBaselineEntries(scenarios, baseline);
+  const reductionScenarios = scenarios.filter(
+    (scenario) => !Number.isFinite(scenario.maxAfterTokens),
+  );
+  const defaultCommit = baseline.provenance.defaultSourceCommit;
+  const overrides = baseline.provenance.scenarioSourceCommits ?? {};
+  const overrideRationales = baseline.provenance.scenarioSourceRationales ?? {};
+  const reductionNames = new Set(reductionScenarios.map(({ name }) => name));
+  for (const name of Object.keys(overrides)) {
+    if (!reductionNames.has(name)) {
+      throw new Error(`Invalid baseline provenance override: ${name}`);
+    }
+    if (
+      typeof overrideRationales[name] !== "string" ||
+      !overrideRationales[name].trim()
+    ) {
+      throw new Error(`Missing baseline provenance rationale for ${name}`);
+    }
+  }
+  for (const name of Object.keys(overrideRationales)) {
+    if (!(name in overrides)) {
+      throw new Error(`Orphan baseline provenance rationale: ${name}`);
+    }
+  }
+  const commits = new Map();
+  const specs = new Set();
+
+  for (const scenario of reductionScenarios) {
+    const commit = overrides[scenario.name] ?? defaultCommit;
+    if (!/^[a-f0-9]{40}$/.test(String(commit ?? ""))) {
+      throw new Error(`Invalid baseline provenance commit for ${scenario.name}`);
+    }
+    if (!commits.has(commit)) {
+      const committedAt = await assertGitCommitProvenance(root, commit);
+      if (committedAt > assembledAt) {
+        throw new Error(
+          `Invalid baseline provenance: assembledAt predates ${commit}`,
+        );
+      }
+      commits.set(commit, await listGitFiles(root, commit));
+    }
+    const files = expandPatternsFromList(scenario.before, commits.get(commit));
+    if (JSON.stringify(files) !== JSON.stringify(entries[scenario.name].files)) {
+      throw new Error(`Invalid baseline ${scenario.name}: Git file set mismatch`);
+    }
+    for (const file of files) specs.add(`${commit}:${file}`);
+  }
+
+  const blobs = await readGitBlobs(root, [...specs]);
+  const sourceDigest = createHash("sha256");
+  for (const scenario of reductionScenarios) {
+    const commit = overrides[scenario.name] ?? defaultCommit;
+    const measured = measureGitSurface(commit, entries[scenario.name].files, blobs);
+    const entry = entries[scenario.name];
+    for (const field of ["tokens", "chars", "bytes", "fileCount"]) {
+      if (entry[field] !== measured[field]) {
+        throw new Error(`Invalid baseline ${scenario.name}: Git ${field} mismatch`);
+      }
+    }
+    sourceDigest.update(scenario.name);
+    sourceDigest.update("\0");
+    sourceDigest.update(commit);
+    sourceDigest.update("\0");
+    sourceDigest.update(measured.contentDigest);
+    sourceDigest.update("\0");
+  }
+  const sourceContentDigest = sourceDigest.digest("hex");
+  if (baseline.provenance.contentDigest !== sourceContentDigest) {
+    throw new Error(
+      `Invalid baseline provenance content digest; expected ${sourceContentDigest}`,
+    );
+  }
+
+  const rawText = options.rawText ?? `${JSON.stringify(baseline, null, 2)}\n`;
+  return {
+    pass: true,
+    reductionScenarioCount: reductionScenarios.length,
+    baselineDigest: createHash("sha256").update(rawText).digest("hex"),
+    sourceContentDigest,
+  };
+}
+
+export async function createGitBaseline(
+  root,
+  sourceCommit,
+  scenarios = DEFAULT_SCENARIOS,
+) {
+  if (!/^[a-f0-9]{40}$/.test(String(sourceCommit ?? ""))) {
+    throw new Error("--source-commit must be a full 40-character Git commit");
+  }
+  await assertGitCommitProvenance(root, sourceCommit);
+  const allFiles = await listGitFiles(root, sourceCommit);
+  const reductionScenarios = scenarios.filter(
+    (scenario) => !Number.isFinite(scenario.maxAfterTokens),
+  );
+  const filesByScenario = new Map();
+  const specs = new Set();
+  for (const scenario of reductionScenarios) {
+    const files = expandPatternsFromList(scenario.before, allFiles);
+    filesByScenario.set(scenario.name, files);
+    for (const file of files) specs.add(`${sourceCommit}:${file}`);
+  }
+  const blobs = await readGitBlobs(root, [...specs]);
+  const baseline = {};
+  const sourceDigest = createHash("sha256");
+  for (const scenario of reductionScenarios) {
+    const measured = measureGitSurface(
+      sourceCommit,
+      filesByScenario.get(scenario.name),
+      blobs,
+    );
+    const { contentDigest: _contentDigest, ...baselineEntry } = measured;
+    baseline[scenario.name] = baselineEntry;
+    sourceDigest.update(scenario.name);
+    sourceDigest.update("\0");
+    sourceDigest.update(sourceCommit);
+    sourceDigest.update("\0");
+    sourceDigest.update(measured.contentDigest);
+    sourceDigest.update("\0");
+  }
+  return {
+    schema: "token_benchmark_baseline_v2",
+    metric: METRIC,
+    assembledAt: new Date().toISOString(),
+    provenance: {
+      mode: "git",
+      defaultSourceCommit: sourceCommit,
+      scenarioSourceCommits: {},
+      scenarioSourceRationales: {},
+      contentDigest: sourceDigest.digest("hex"),
+    },
+    beforeDefinitionDigest: digestScenarioDefinitions(scenarios),
     scenarios: baseline,
   };
 }
@@ -619,15 +1062,15 @@ export async function evaluateScenarios(
   threshold = DEFAULT_THRESHOLD,
 ) {
   validateThreshold(threshold);
-  const baselineScenarios = baseline.scenarios ?? baseline;
+  const baselineScenarios = validateBaselineEntries(scenarios, baseline);
   const results = [];
 
   for (const scenario of scenarios) {
-    const before =
-      baselineScenarios[scenario.name] ??
-      (await countScenarioSurface(root, scenario, "before"));
-    const after = await countScenarioSurface(root, scenario, "after");
     const isBudget = Number.isFinite(scenario.maxAfterTokens);
+    const before = isBudget
+      ? await countScenarioSurface(root, scenario, "before")
+      : baselineScenarios[scenario.name];
+    const after = await countScenarioSurface(root, scenario, "after");
     const reductionPercent = isBudget
       ? null
       : before.tokens === 0
@@ -636,6 +1079,7 @@ export async function evaluateScenarios(
 
     results.push({
       name: scenario.name,
+      stage: scenario.stage ?? "process",
       description: scenario.description,
       before,
       after,
@@ -661,6 +1105,38 @@ export async function evaluateScenarios(
     (result) => result.after.tokens,
   );
 
+  const stageNames = ["input", "process", "output"];
+  const stages = Object.fromEntries(
+    stageNames.map((stage) => {
+      const stageResults = results.filter((result) => result.stage === stage);
+      const stageReductions = stageResults.filter(
+        (result) => result.gateType === "reduction",
+      );
+      const stageBudgets = stageResults.filter(
+        (result) => result.gateType === "budget",
+      );
+      const beforeTokens = sum(stageReductions, (result) => result.before.tokens);
+      const afterTokens = sum(stageReductions, (result) => result.after.tokens);
+      const minimumReductionPercent =
+        stageReductions.length === 0
+          ? null
+          : Math.min(...stageReductions.map((result) => result.reductionPercent));
+      return [
+        stage,
+        {
+          pass: stageResults.length > 0 && stageResults.every((result) => result.pass),
+          reductionScenarioCount: stageReductions.length,
+          budgetScenarioCount: stageBudgets.length,
+          totalBeforeTokens: beforeTokens,
+          totalAfterTokens: afterTokens,
+          totalReductionPercent: reduction(beforeTokens, afterTokens),
+          minimumReductionPercent,
+          aggregation: "scenario-weighted",
+        },
+      ];
+    }),
+  );
+
   return {
     metric: baseline.metric ?? METRIC,
     threshold,
@@ -673,6 +1149,12 @@ export async function evaluateScenarios(
       totalBeforeTokens,
       totalAfterTokens,
       totalReductionPercent: reduction(totalBeforeTokens, totalAfterTokens),
+      minimumReductionPercent:
+        reductionResults.length === 0
+          ? null
+          : Math.min(...reductionResults.map((result) => result.reductionPercent)),
+      aggregation: "scenario-weighted",
+      stages,
     },
   };
 }
@@ -700,18 +1182,66 @@ export function buildBenchmarkReport(runs, options = {}) {
   }
 
   const deterministic = digestCounts.size === 1;
+  const baselineDigest = options.baselineDigest ?? "unknown";
+  const validBaselineDigest = /^[a-f0-9]{64}$/.test(baselineDigest);
+  const suiteDefinitionDigest =
+    options.suiteDefinitionDigest ?? digestBenchmarkSuite(DEFAULT_SCENARIOS);
+  const validSuiteDefinitionDigest = /^[a-f0-9]{64}$/.test(
+    suiteDefinitionDigest,
+  );
+  const authoritative = options.authoritative === true;
+  const staticEvidence =
+    options.staticEvidence ?? createUnattachedWorkflowEvidence();
+  if (options.staticEvidence) {
+    validateWorkflowEvidence(staticEvidence);
+  }
   return {
-    schema: "token_benchmark_report_v2",
+    schema: "token_benchmark_report_v3",
     metric: runs[0].metric ?? METRIC,
+    methodology: {
+      kind: "modeled-static-first-hop-surface",
+      stages: {
+        input: "startup and context-entry surfaces",
+        process: "workflow and procedure entry surfaces",
+        output: "artifact authoring surfaces",
+      },
+      limitation:
+        "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens.",
+    },
     generatedAt: options.generatedAt ?? new Date().toISOString(),
     observedRuntimeTokens: options.observedRuntimeTokens ?? "unknown",
     hostInjectedSurfaceTokens: options.hostInjectedSurfaceTokens ?? "unknown",
+    claimScope: staticEvidence.claimScope,
+    coverage: staticEvidence.coverage,
+    workflowMatrix: staticEvidence.workflowMatrix,
+    gates: staticEvidence.gates,
+    evidenceDigests: staticEvidence.evidenceDigests,
+    digests: {
+      baseline: baselineDigest,
+      suiteDefinition: suiteDefinitionDigest,
+      workflowInvariants: staticEvidence.evidenceDigests.workflowInvariants,
+      outputBudgets: staticEvidence.evidenceDigests.outputBudgets,
+      workflowMatrix: staticEvidence.evidenceDigests.workflowMatrix,
+    },
+    runtimeEvidence: staticEvidence.runtimeEvidence,
+    runtimePass: staticEvidence.runtimePass,
+    staticPass: staticEvidence.staticPass,
+    baselineDigest,
+    suiteDefinitionDigest,
+    authoritative,
     repeat: runs.length,
     deterministic,
     runDigests: [...digestCounts].map(([digest, count]) => ({ digest, count })),
     result: compactRuns[0],
     consecutivePasses,
-    pass: deterministic && runs.every((run) => run.summary.pass),
+    pass:
+      authoritative &&
+      validBaselineDigest &&
+      validSuiteDefinitionDigest &&
+      staticEvidence.staticPass &&
+      staticEvidence.runtimePass !== false &&
+      deterministic &&
+      runs.every((run) => run.summary.pass),
   };
 }
 
@@ -721,6 +1251,7 @@ function compactBenchmarkResult(result) {
     scenarios: result.scenarios.map((scenario) => {
       const compact = {
         name: scenario.name,
+        stage: scenario.stage,
         beforeTokens: scenario.before.tokens,
         afterTokens: scenario.after.tokens,
         pass: scenario.pass,
@@ -746,6 +1277,26 @@ function compactBenchmarkResult(result) {
       totalAfterTokens: result.summary.totalAfterTokens,
       totalReductionPercent: Number(
         result.summary.totalReductionPercent.toFixed(4),
+      ),
+      minimumReductionPercent:
+        result.summary.minimumReductionPercent === null
+          ? null
+          : Number(result.summary.minimumReductionPercent.toFixed(4)),
+      aggregation: result.summary.aggregation,
+      stages: Object.fromEntries(
+        Object.entries(result.summary.stages ?? {}).map(([stage, summary]) => [
+          stage,
+          {
+            ...summary,
+            totalReductionPercent: Number(
+              summary.totalReductionPercent.toFixed(4),
+            ),
+            minimumReductionPercent:
+              summary.minimumReductionPercent === null
+                ? null
+                : Number(summary.minimumReductionPercent.toFixed(4)),
+          },
+        ]),
       ),
     },
   };
@@ -830,9 +1381,12 @@ function normalizePath(value) {
   return value.replace(/\\/g, "/").replace(/^\/+/, "");
 }
 
-async function readJson(root, relativePath) {
+async function readJsonEvidence(root, relativePath) {
   const content = await readFile(path.resolve(root, relativePath), "utf8");
-  return JSON.parse(content);
+  return {
+    value: JSON.parse(content),
+    digest: createHash("sha256").update(content).digest("hex"),
+  };
 }
 
 async function writeJson(root, relativePath, value) {
@@ -890,6 +1444,9 @@ function parseArgs(argv) {
     if (arg === "--write-baseline") {
       options.writeBaseline = next;
       index += 1;
+    } else if (arg === "--source-commit") {
+      options.sourceCommit = next;
+      index += 1;
     } else if (arg === "--baseline") {
       options.baseline = next;
       index += 1;
@@ -923,6 +1480,9 @@ function parseArgs(argv) {
   if (options.transcript !== undefined && !options.transcript) {
     throw new Error("--transcript requires a JSONL path");
   }
+  if (options.writeBaseline && !options.sourceCommit) {
+    throw new Error("--write-baseline requires --source-commit for reproducible evidence");
+  }
 
   return options;
 }
@@ -946,6 +1506,7 @@ export function formatTable(result, runLabel = "") {
   lines.push(
     [
       "Scenario".padEnd(34),
+      "Stage".padEnd(7),
       "Before".padStart(8),
       "After".padStart(8),
       "Gate".padStart(9),
@@ -961,6 +1522,7 @@ export function formatTable(result, runLabel = "") {
     lines.push(
       [
         scenario.name.padEnd(34),
+        String(scenario.stage ?? "process").padEnd(7),
         String(scenario.before.tokens).padStart(8),
         String(scenario.after.tokens).padStart(8),
         gate.padStart(9),
@@ -972,7 +1534,7 @@ export function formatTable(result, runLabel = "") {
   lines.push("");
   lines.push(
     [
-      "REDUCTION TOTAL".padEnd(34),
+      "REDUCTION TOTAL (WEIGHTED)".padEnd(34),
       String(result.summary.totalBeforeTokens).padStart(8),
       String(result.summary.totalAfterTokens).padStart(8),
       `${result.summary.totalReductionPercent.toFixed(2)}%`.padStart(9),
@@ -980,12 +1542,22 @@ export function formatTable(result, runLabel = "") {
     ].join("  "),
   );
 
+  for (const [stage, summary] of Object.entries(result.summary.stages ?? {})) {
+    const minimum =
+      summary.minimumReductionPercent === null
+        ? "n/a"
+        : `${summary.minimumReductionPercent.toFixed(2)}%`;
+    lines.push(
+      `${stage.toUpperCase()} STAGE (WEIGHTED): ${summary.totalBeforeTokens} -> ${summary.totalAfterTokens} (${summary.totalReductionPercent.toFixed(2)}%); MIN ${minimum} ${summary.pass ? "PASS" : "FAIL"}`,
+    );
+  }
+
   return lines.join("\n");
 }
 
 function usage() {
   return `Usage:
-  node .agent/tools/token-benchmark.mjs --write-baseline .agent/benchmarks/token-baseline.json
+  node .agent/tools/token-benchmark.mjs --write-baseline .agent/benchmarks/token-baseline.json --source-commit <full-sha>
   node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.json --require-reduction 90 --repeat 3
 
 Default suite:
@@ -994,13 +1566,17 @@ Default suite:
   templates, interface-design data/scripts, hooks, agents, workflows, and rules.
 
 Options:
-  --write-baseline <path>     Capture current before-token baseline.
+  --write-baseline <path>     Capture reduction surfaces from an immutable commit.
+  --source-commit <full-sha>  Anchor a written baseline to immutable Git blobs.
   --baseline <path>           Compare optimized after surfaces against a baseline.
   --output <path>             Write compare result JSON.
   --require-reduction <n>     Required strict reduction percentage. Default: 90.
   --repeat <n>                Run compare mode repeatedly. Default: 1.
   --transcript <jsonl>        Attach observed main/subagent runtime token totals.
   --json                      Print JSON instead of a table.
+
+The input/process/output stages are modeled static first-hop surfaces. They are
+not host-observed runtime usage unless a transcript is attached.
 `;
 }
 
@@ -1014,25 +1590,31 @@ async function main() {
   }
 
   if (options.writeBaseline) {
-    const baseline = await createBaseline(root);
-    await writeJson(root, options.writeBaseline, baseline);
-    const synthetic = await evaluateScenarios(
+    const baseline = await createGitBaseline(
       root,
-      DEFAULT_SCENARIOS.map((scenario) => ({
-        ...scenario,
-        after: scenario.before,
-      })),
-      baseline,
-      options.threshold,
+      options.sourceCommit,
+      DEFAULT_SCENARIOS,
     );
-    console.log(formatTable(synthetic, "baseline snapshot"));
-    console.log(`\nWrote baseline: ${options.writeBaseline}`);
+    await writeJson(root, options.writeBaseline, baseline);
+    console.log(
+      `Wrote Git-anchored baseline (${Object.keys(baseline.scenarios).length} reduction scenarios): ${options.writeBaseline}`,
+    );
     return;
   }
 
-  const baseline = options.baseline
-    ? await readJson(root, options.baseline)
-    : await createBaseline(root);
+  if (!options.baseline) {
+    throw new Error("--baseline is required for an authoritative comparison");
+  }
+  const baselinePath = await resolveBenchmarkOutputPath(root, options.baseline);
+  const baselineText = await readFile(baselinePath, "utf8");
+  const baseline = JSON.parse(baselineText);
+  const provenance = await validateBaselineProvenance(
+    root,
+    DEFAULT_SCENARIOS,
+    baseline,
+    { rawText: baselineText },
+  );
+  const baselineDigest = provenance.baselineDigest;
   const runs = [];
 
   for (let run = 1; run <= options.repeat; run += 1) {
@@ -1055,7 +1637,35 @@ async function main() {
   const observedRuntimeTokens = options.transcript
     ? (await analyzeTranscript(path.resolve(root, options.transcript))).totals
     : "unknown";
-  const payload = buildBenchmarkReport(runs, { observedRuntimeTokens });
+  const [workflowInvariantSource, outputBudgetSource] = await Promise.all([
+    readJsonEvidence(root, ".agent/context/workflow-invariants.json"),
+    readJsonEvidence(root, ".agent/context/output-budgets.json"),
+  ]);
+  const staticEvidence = buildWorkflowEvidenceMatrix({
+    scenarios: DEFAULT_SCENARIOS,
+    benchmarkResult: runs[0],
+    workflowInvariants: workflowInvariantSource.value,
+    outputBudgets: outputBudgetSource.value,
+    sourceDigests: {
+      workflowInvariants: workflowInvariantSource.digest,
+      outputBudgets: outputBudgetSource.digest,
+    },
+    runtimeEvidence:
+      observedRuntimeTokens === "unknown"
+        ? undefined
+        : {
+            status: "partial-informational",
+            pairedTraces: [],
+            observedTotals: observedRuntimeTokens,
+          },
+  });
+  const payload = buildBenchmarkReport(runs, {
+    observedRuntimeTokens,
+    baselineDigest,
+    suiteDefinitionDigest: digestBenchmarkSuite(DEFAULT_SCENARIOS),
+    authoritative: true,
+    staticEvidence,
+  });
 
   if (options.output) {
     await writeJson(root, options.output, payload);

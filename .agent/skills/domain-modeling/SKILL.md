@@ -30,6 +30,13 @@ docs/solutions/adr-####-<context>-<slug>.md
 
 Create files only when there is something real to record.
 
+## Advisory Read-only Mode
+
+When a read-only caller uses domain modeling only to evaluate ideas, reviews, or
+risks, identify terminology conflicts and return proposed glossary changes, but
+do not update or create `CONTEXT.md`, `CONTEXT-MAP.md`, an FSD, or an ADR. The
+owning write-authorized workflow decides whether to persist them.
+
 ## Process
 
 ### 1. Read Existing Language
@@ -49,7 +56,7 @@ Use concrete scenarios to force clarity.
 
 ### 3. Update The Glossary Inline
 
-When a term is resolved, update `CONTEXT.md` immediately.
+Outside advisory read-only mode, when a term is resolved, update `CONTEXT.md` immediately.
 
 Use this shape:
 

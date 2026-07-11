@@ -16,7 +16,8 @@ Use this for errors, failing tests, regressions, performance surprises, or behav
 6. If `gitWorkflow.enabled` is true and edits are needed, load `skills/git-workflow-operation/SKILL.md` and preview `/sc-go start fix/<slug>` or `/sc-go start hotfix/<slug>` after reproduction and before fixing.
 7. Fix the root cause, preferably with a regression test.
 8. Run verification and report evidence.
-9. Use `sc-compound.md` if the root cause or fix is reusable knowledge.
+9. If a non-trivial investigation would exceed the chat envelope, save the complete reproduction, hypotheses, experiments, root cause, fix, and verification to `docs/debug/YYYY-MM-DD-<slug>.md`; return its path without dropping failed hypotheses or evidence.
+10. Use `sc-compound.md` only if the verified root cause or fix is reusable knowledge.
 
 ## Output
 
@@ -24,3 +25,4 @@ Use this for errors, failing tests, regressions, performance surprises, or behav
 - Root cause.
 - Fix summary.
 - Verification evidence.
+- `docs/debug/YYYY-MM-DD-<slug>.md` when the complete investigation needs a durable sink.

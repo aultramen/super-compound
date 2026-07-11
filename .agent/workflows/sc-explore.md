@@ -14,23 +14,27 @@ Use this when the work is not ready for product requirements or technical planni
 - Architecture exploration: compare module/interface options before committing.
 - Prototype exploration: build throwaway evidence only when a runnable answer is cheaper than debate.
 
+Prototypes stay isolated, non-production, and disposable; they do not become
+implementation without approved PRD/FSD authority and a fresh implementation.
+
 ## Steps
 
 1. Load `skills/agentic-delivery/SKILL.md`.
-2. Load `skills/brainstorming/SKILL.md`.
+2. Load `skills/brainstorming/SKILL.md` in advisory mode while the BRD is the canonical capture; create a separate brainstorm sidecar only when the user explicitly requests it.
 3. Inspect existing code, docs, issues, accepted ADRs in `docs/solutions/`, and related solutions before asking questions.
-4. Load `skills/domain-modeling/SKILL.md` when terms, roles, or domain boundaries are fuzzy.
+4. Load `skills/domain-modeling/SKILL.md` in advisory read-only mode when terms, roles, or domain boundaries are fuzzy; persist glossary changes only through an explicitly authorized owner.
 5. Load `skills/codebase-design/SKILL.md` when a business decision depends on a major seam, module shape, or testability tradeoff.
 6. Load `skills/prototyping/SKILL.md` only when runnable evidence is cheaper than debate.
-7. Resolve the smallest business decision that unlocks the next step.
-8. Capture objectives, scope, non-goals, business rules, policies, constraints, acceptance gates, and `OPEN-*` blockers.
-9. Capture Git workflow constraints only when they affect delivery scope; do not mutate Git state.
-10. Save a BRD to `docs/brd/brd-<feature>.md` when a durable artifact is useful, using the BRD template only as a reference.
-11. Route to `sc-prd.md` when the BRD is approved or the user explicitly accepts its assumptions.
+7. If a named factual or current-doc gap blocks the BRD, record `OPEN-RESEARCH-*`, route that question through `sc-research.md`, then return here. Do not use research to decide a user preference, policy, or business trade-off.
+8. Resolve the smallest business decision that unlocks the next step.
+9. Capture objectives, scope, non-goals, business rules, policies, constraints, acceptance gates, and `OPEN-*` blockers.
+10. Capture Git workflow constraints only when they affect delivery scope; do not mutate Git state.
+11. A chat draft is allowed during exploration. Before approval and `/sc-prd`, save the BRD to `docs/brd/brd-<feature>.md` using the skeleton first and the full template only as a reference.
+12. Route to `sc-prd.md` only after the durable BRD is approved or the user explicitly accepts its recorded assumptions.
 
 ## Output
 
 - BRD or BRD summary.
 - Business acceptance criteria.
 - `OPEN-*` blockers and owner/gate when known.
-- Recommended next workflow: `/sc-prd`.
+- Recommended next workflow: `/sc-research` only for a blocking evidence question; otherwise `/sc-prd`.

@@ -36,6 +36,7 @@ const MAX_VERIFICATION_CHARS = 2000;
 const LOCK_WAIT_TIMEOUT_MS = 10_000;
 const LOCK_RETRY_MS = 10;
 const LOCK_STALE_MS = 60_000;
+const TRANSIENT_LOCK_ACQUIRE_CODES = new Set(["EPERM", "EBUSY"]);
 const SENSITIVE_CONTENT_PATTERNS = [
   /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/i,
   /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/,
@@ -593,16 +594,23 @@ async function writeJsonAtomic(target, value) {
   }
 }
 
-async function withLedgerLock(ledgerPath, operation) {
+export async function withLedgerLock(
+  ledgerPath,
+  operation,
+  dependencies = {},
+) {
   const lockPath = `${ledgerPath}.lock`;
+  const mkdirLock = dependencies.mkdirLock ?? mkdir;
+  const wait = dependencies.wait ?? delay;
+  const now = dependencies.now ?? Date.now;
   await mkdir(path.dirname(ledgerPath), { recursive: true });
-  const deadline = Date.now() + LOCK_WAIT_TIMEOUT_MS;
+  const deadline = now() + LOCK_WAIT_TIMEOUT_MS;
   const owner = randomUUID();
 
   while (true) {
     let created = false;
     try {
-      await mkdir(lockPath);
+      await mkdirLock(lockPath);
       created = true;
       await writeFile(path.join(lockPath, "owner"), owner, {
         encoding: "utf8",
@@ -615,12 +623,17 @@ async function withLedgerLock(ledgerPath, operation) {
         await rm(lockPath, { recursive: true, force: true });
         throw error;
       }
-      if (error?.code !== "EEXIST") throw error;
-      if (await reclaimStaleLedgerLock(lockPath)) continue;
-      if (Date.now() >= deadline) {
+      const code = error?.code;
+      if (code === "EEXIST") {
+        if (await reclaimStaleLedgerLock(lockPath)) continue;
+      } else if (!TRANSIENT_LOCK_ACQUIRE_CODES.has(code)) {
+        throw error;
+      }
+      if (now() >= deadline) {
+        if (code !== "EEXIST") throw error;
         throw new Error(`Timed out waiting for work-package ledger lock: ${lockPath}`);
       }
-      await delay(LOCK_RETRY_MS);
+      await wait(LOCK_RETRY_MS);
     }
   }
 

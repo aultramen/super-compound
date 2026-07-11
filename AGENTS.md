@@ -14,7 +14,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - `.agent/context/`: compact routing, skill, template, and budget contracts for low-token runtime loading.
 - `.agent/workflows/`: command-style workflows such as geniusloop, explore, plan, work, review, audit, status, and pause.
 - `.agent/skills/`: progressive instruction packs. Each skill owns its detailed procedure in `SKILL.md`.
-- `.agent/templates/`: reusable BRD, PRD, FSD, and optional ADR templates loaded on demand.
+- `.agent/templates/`: reusable BRD, PRD, FSD, optional ADR, research-note, and PR templates loaded on demand.
 - `.agent/agents/`: dedicated agent prompts for architecture, review, E2E, docs, and build fixes.
 - `.agent/hooks/`: deterministic hook configuration and scripts.
 - `.agent/tools/`: deterministic local framework utilities such as token benchmarking.

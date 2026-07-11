@@ -2,6 +2,15 @@
 
 Use the full PRD template only for sections that need detailed expansion.
 
+## Minimum Completeness Gate
+
+Every profile keeps: metadata and approver; problem/evidence;
+objective/outcome/metric; scope/non-goal; actors and permission intent;
+canonical business rules/state; requirements and acceptance;
+negative/failure/degraded behavior; security/privacy/AI assessment;
+dependency/risk/open items; UAT/release gate; traceability and FSD handoff
+manifest. Use `N/A - reason` instead of deleting a mandatory decision.
+
 ## Metadata
 
 ID: PRD-{{PROJECT}}  

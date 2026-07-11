@@ -23,7 +23,7 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 | `/sc-status` | Inspect state and choose the next route |
 | `/sc-geniusloop` | Generate and filter proactive improvement ideas when goal queues are empty |
 | `/sc-explore` | Shape fuzzy ideas into a BRD with business objectives, constraints, and acceptance |
-| `/sc-research` | Gather evidence before a decision |
+| `/sc-research` | Resolve a named factual or technical gap with advisory evidence |
 | `/sc-prd` | Write PRD product requirements from an approved BRD |
 | `/sc-plan` | Write the FSD, decide ADR applicability, and create goal issue pointers |
 | `/sc-eval` | Define or run evaluation criteria |
@@ -35,11 +35,12 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 | `/sc-compound` | Capture reusable knowledge |
 | `/sc-pause` | Save handoff state |
 | `/sc-launch` | Start a focused project or feature lifecycle |
-| `/sc-ui` | Build or refine frontend interfaces with `interface-design` |
+| `/sc-ui` | Design/review UI read-only or guide an approved `/sc-work` goal |
 
 ## Routing
 
 - Fuzzy idea, domain language, strategy, or prototype question: `/sc-explore` to produce a BRD
+- Named factual, current-doc, version-support, or option-feasibility gap that could change a decision: `/sc-research`, then return to the workflow that owns that decision
 - Empty goal queue with no active handoff, blocker, or failing verification: `/sc-geniusloop`
 - Product requirements from an approved BRD: `/sc-prd`
 - FSD creation, ADR applicability, goal slicing, triage, Kanban, Journey, or technical breakdown: `/sc-plan`
@@ -47,29 +48,56 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 - Implementation, looped work, or safe parallel execution from an approved FSD goal: `/sc-work`
 - Failure or unexpected behavior: `/sc-debug`
 - Changed files need critique: `/sc-review`
-- Security, compatibility, dependency, MCP, agent config, compliance, or release readiness: `/sc-audit`
-- Frontend UI: `/sc-ui`
+- Security, current-stack compatibility/dependency posture, MCP, agent config, compliance, or release readiness: `/sc-audit`
+- Frontend UI design/review: `/sc-ui`; implementation: `/sc-work <approved-goal>` with UI guidance
 - Need to stop and continue later: `/sc-pause`, then `/sc-status` in the next session
+
+## Explore vs Research
+
+| Dominant question | Workflow | Output and authority |
+|---|---|---|
+| What should we build, why, for whom, and under which policy? | `/sc-explore` | BRD; business authority after approval |
+| What is factually true, current, supported, or feasible for a named decision? | `/sc-research` | Advisory research note; never decision authority |
+| How will approved product behavior be implemented? | `/sc-plan` | FSD/TDEC and optional accepted ADR; implementation authority |
+| What security, compatibility, compliance, or readiness risks exist? | `/sc-audit` | Severity findings and risk gates |
+
+Research is a conditional sidecar, not a mandatory lifecycle stage. Use it only when the evidence gap is material enough to change a downstream decision or needs durable review. Resolve small lookups inline. Accepted findings must be translated into the BRD, PRD, FSD/TDEC, accepted ADR, or audit record that owns the decision.
 
 ## Skill Loading
 
 Use `.agent/context/` as the compact runtime layer before full workflow/skill/template reads. Load a full `SKILL.md` only when its procedure is active or being edited/reviewed. When that entrypoint routes to `references/`, load only the branch needed for the current decision; never preload the whole reference directory.
+
+Framework verification records a static 17-route x 3-cell matrix: context-entry
+reduction, process authority/wiring, and output sink/budget/next owner. This is
+repository evidence, not hidden reasoning or generated-output telemetry; runtime
+claims remain unavailable until paired attributable traces exist for all routes.
 
 Load skills only when their detailed procedure is relevant. Announce the skill and follow its `SKILL.md`.
 
 Common routes:
 
 - `/sc-explore` -> `agentic-delivery`, `brainstorming`, plus `domain-modeling`, `codebase-design`, or `prototyping` when needed
-- `/sc-geniusloop` -> `brainstorming`, `codebase-design`, `domain-modeling`, `subagent-orchestration`, and the `brain` agent prompt
+- `/sc-research` -> `context7-docs` for current public library/API evidence; use formal compatibility gates in `/sc-plan` or `/sc-audit` as appropriate
+- `/sc-geniusloop` -> `brainstorming`, `codebase-design`, and `domain-modeling`
+  in advisory/read-only mode, then direct dispatch of the `brain` agent prompt;
+  do not load FSD-only `subagent-orchestration`
 - `/sc-prd` -> `agentic-delivery`, `prd-generator`, plus `domain-modeling` and `codebase-design` when needed
 - `/sc-plan` -> `agentic-delivery`, `writing-plans`, `issue-workflow` or `triage-workflow`, `plan-verification`, plus risk skills when needed
 - `/sc-go` -> `git-workflow-operation`
 - `/sc-work` -> `agentic-delivery`, `context-engineering`, `executing-plans`, `test-driven-development`, `verification-before-completion`
 - `/sc-debug` -> `systematic-debugging`
 - `/sc-review` -> `code-review`
-- `/sc-audit` -> `security-audit`, `compatibility-check`, `data-privacy`, `threat-modeling`, `secure-code-patterns`
-- `/sc-ui` -> `interface-design`
-- `/sc-pause` and `/sc-status` -> `state-management`, `context-engineering`
+- `/sc-audit` -> select only the matching submode branch: `security-audit` for
+  security/agent-surface findings, `compatibility-check` for compatibility,
+  `data-privacy` for privacy, and `threat-modeling` or `secure-code-patterns`
+  only when that deeper analysis is required; never preload every audit skill
+- `/sc-ui` -> `interface-design`; fuzzy UI returns to `/sc-explore`, an approved
+  BRD without PRD to `/sc-prd`, an approved PRD without FSD to `/sc-plan`, and
+  implementation runs only from an approved goal under `/sc-work`; design and
+  quality review remain read-only
+- `/sc-pause` and `/sc-status` -> load `state-management` or
+  `context-engineering` only when reconciling durable state or a complex handoff;
+  their compact contracts are otherwise self-contained
 
 ## Execution Rules
 
@@ -91,6 +119,9 @@ During work:
 - Add abstractions only when they reduce real complexity.
 - Validate inputs at boundaries and avoid leaking secrets or internals.
 - Do not invent schema, APIs, authorization, workflows, roles, state transitions, or UI behavior outside the approved FSD and linked accepted ADRs.
+- Treat research notes as advisory evidence; do not let them silently override BRD, PRD, FSD, accepted ADR, or audit authority.
+- Keep `/sc-review` and `/sc-audit` strictly read-only. Approval selects an
+  owning remediation workflow; it never authorizes fixes inside review/audit.
 - Keep `.scratch/<feature>/issues/*.md` lightweight: use qualified refs, not copied BRD/PRD/FSD/ADR prose.
 - For independent multi-agent goals, exchange file-backed packages under `.scratch/work-packages/`; keep chat handoffs to paths and short verdicts, and serialize shared-file validation.
 
@@ -107,8 +138,8 @@ Before completion:
 
 Use:
 
-- `docs/STATE.md` for current position, decisions, blockers, completed work, and next action
-- `.continue-here.md` for `/sc-pause` handoff
+- `docs/STATE.md` as the canonical current position, decisions, blockers, completed work, and next action
+- `.continue-here.md` as a short `/sc-pause` pointer to state and the active artifact, never a second state database
 - `docs/progress.md` for chronological progress and codebase patterns
 - `docs/brd/`, `docs/prd/`, and `docs/fsd/` for durable delivery artifacts
 - `.scratch/<feature>/issues/*.md` for local FSD goal issue pointers
@@ -118,7 +149,8 @@ The next session should be able to run `/sc-status` and continue from disk.
 
 ## UI Work
 
-Use `/sc-ui` and `interface-design` for frontend work.
+Use `/sc-ui` and `interface-design` for read-only frontend design/review. Apply
+that guidance to source only inside `/sc-work <approved-goal>`.
 
 Command examples:
 
@@ -145,7 +177,7 @@ Current replacements:
 - Security/compatibility/MCP/compliance/release readiness -> `/sc-audit`
 - Progress or continuation state -> `/sc-status`
 - Reload -> `/sc-init reload`
-- UI work -> `/sc-ui`
+- UI design/review -> `/sc-ui`; approved UI implementation -> `/sc-work <approved-goal>` with interface guidance
 
 ## Quality Bar
 

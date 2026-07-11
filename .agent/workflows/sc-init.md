@@ -18,7 +18,9 @@ description: "Initialize or refresh project context by scanning the codebase, co
 3. Infer stack, commands, architecture, dependency manager, database, and deployment hints.
 4. Detect Git defaults such as base branch and remote when useful, then suggest `gitWorkflow` updates instead of guessing silently.
 5. Suggest updates to project config instead of guessing silently.
-6. Create or refresh concise codebase notes when useful.
+6. Stay read-only by default. Create or refresh a concise codebase note only
+   when the user requested initialization notes; never rewrite config or source
+   from an inference.
 7. Report enabled MCP/tool schemas and installed skill metadata when the host exposes them. Mark unavailable measurements `unknown`; do not disable capabilities automatically.
 8. For `/sc-init reload`, re-read rules/workflows/skills that changed and summarize what matters.
 

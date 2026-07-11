@@ -44,6 +44,11 @@ downstream_artifacts:
 
 ---
 
+> **REFERENCE LIBRARY - skeleton first.** Never load this entire file into
+> working context or copy it as the output shape. Start from
+> `skeletons/PRD-Skeleton.md` and read only the named section required for a
+> concrete product risk, decision, or review gap.
+
 # 0. Kontrak Operasional PRD
 
 ## 0.1 Tujuan Dokumen
@@ -97,7 +102,7 @@ PRD harus dapat di-handoff langsung ke FSD. ADR tidak boleh menjadi dependency t
 4. ADR `ACCEPTED`, **bila ada dan linked**, untuk delegated architecture decision.
 5. FSD `APPROVED` untuk implementation contract; `TDEC-*` berlaku saat ADR tidak digunakan.
 6. Repository convention untuk pilihan lokal yang belum ditetapkan.
-7. Task, prompt, atau `/goal`.
+7. Task, prompt, atau invocation `/sc-work`.
 
 FSD atau ADR tidak boleh mengubah outcome, scope, business rule, role authority, atau acceptance criteria BRD/PRD tanpa approved change request. Konflik antarbagian tidak boleh diselesaikan diam-diam; catat pada **Conflict and Resolution Ledger**.
 

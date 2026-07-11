@@ -10,8 +10,8 @@ Domains: style, color, chart, landing, product, ux, web, app, typography, icons,
 Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtjs, nuxt-ui, html-tailwind, shadcn, jetpack-compose, threejs, angular, laravel, javafx, wpf, winui, avalonia, uno, uwp
 
 Persistence (Master + Overrides pattern):
-  --persist    Save design system to design-system/MASTER.md
-  --page       Also create a page-specific override file in design-system/pages/
+  --persist    Save to design-system/<project-slug>/MASTER.md
+  --page       Also create an override in design-system/<project-slug>/pages/
   --overwrite  Replace existing persisted files
 """
 
@@ -19,7 +19,14 @@ import argparse
 import sys
 import io
 import re
-from core import CSV_CONFIG, AVAILABLE_STACKS, MAX_RESULTS, search, search_stack
+from core import (
+    CSV_CONFIG,
+    AVAILABLE_STACKS,
+    MAX_RESULTS,
+    MAX_RESULTS_LIMIT,
+    search,
+    search_stack,
+)
 from design_system import generate_design_system, persist_design_system
 
 # Force UTF-8 for stdout/stderr to handle emojis on Windows (cp1252 default)
@@ -49,11 +56,27 @@ def format_output(result):
             value_str = str(value)
             is_code_field = re.search(r'\b(code|snippet|command)\b', key, re.I)
             if len(value_str) > 300 and not is_code_field:
-                value_str = value_str[:300] + "..."
+                value_str = (
+                    value_str[:300]
+                    + "... [truncated; rerun with --json for the full value]"
+                )
             output.append(f"- **{key}:** {value_str}")
         output.append("")
 
     return "\n".join(output)
+
+
+def bounded_max_results(value):
+    """Argparse type for result counts safe to include in prompt output."""
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError) as exc:
+        raise argparse.ArgumentTypeError("max results must be an integer") from exc
+    if not 1 <= parsed <= MAX_RESULTS_LIMIT:
+        raise argparse.ArgumentTypeError(
+            f"max results must be between 1 and {MAX_RESULTS_LIMIT}"
+        )
+    return parsed
 
 
 if __name__ == "__main__":
@@ -61,15 +84,30 @@ if __name__ == "__main__":
     parser.add_argument("query", help="Search query")
     parser.add_argument("--domain", "-d", choices=list(CSV_CONFIG.keys()), help="Search domain")
     parser.add_argument("--stack", "-s", choices=AVAILABLE_STACKS, help=f"Stack-specific search. Available: {', '.join(AVAILABLE_STACKS)}")
-    parser.add_argument("--max-results", "-n", type=int, default=MAX_RESULTS, help="Max results (default: 3)")
+    parser.add_argument(
+        "--max-results",
+        "-n",
+        type=bounded_max_results,
+        default=MAX_RESULTS,
+        help=f"Max results (1-{MAX_RESULTS_LIMIT}; default: {MAX_RESULTS})",
+    )
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     # Design system generation
     parser.add_argument("--design-system", "-ds", action="store_true", help="Generate complete design system recommendation")
     parser.add_argument("--project-name", "-p", type=str, default=None, help="Project name for design system output")
     parser.add_argument("--format", "-f", choices=["ascii", "markdown"], default="ascii", help="Output format for design system")
     # Persistence (Master + Overrides pattern)
-    parser.add_argument("--persist", action="store_true", help="Save design system to design-system/MASTER.md (creates hierarchical structure)")
-    parser.add_argument("--page", type=str, default=None, help="Create page-specific override file in design-system/pages/")
+    parser.add_argument(
+        "--persist",
+        action="store_true",
+        help="Save to design-system/<project-slug>/MASTER.md",
+    )
+    parser.add_argument(
+        "--page",
+        type=str,
+        default=None,
+        help="Create an override in design-system/<project-slug>/pages/",
+    )
     parser.add_argument("--output-dir", "-o", type=str, default=None, help="Output directory for persisted files (default: current directory)")
     parser.add_argument("--overwrite", action="store_true", help="Replace existing persisted design-system files")
 
@@ -86,7 +124,8 @@ if __name__ == "__main__":
             output_dir=args.output_dir,
             overwrite=args.overwrite
         )
-        print(result)
+        if not args.persist:
+            print(result)
         
         # Print persistence confirmation
         if args.persist:

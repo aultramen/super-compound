@@ -23,6 +23,11 @@ Static measurements cover repository-owned files only. Parent/system/user instru
 tool schemas, conversation history, and model-specific billing tokens require runtime
 telemetry and must not be inferred from the legacy eager-preload reduction.
 
+The benchmark's 17 x 3 matrix proves static route coverage: modeled context
+entry, process wiring/authority, and output sink/budget/next owner. It does not
+measure hidden reasoning or generated output. Runtime pass stays `null` until
+all 17 routes have paired attributable baseline/current traces.
+
 ## Orchestrator Return Envelopes
 
 These caps apply to the short chat return, not the durable artifact or evidence file.
@@ -42,5 +47,10 @@ usage remains `unknown` until the host supplies attributable transcript telemetr
 | `sc-geniusloop` | 12 ranked ideas/lines |
 | `sc-compound`, `sc-pause` | 8 lines |
 
-Full reports belong in the route's named artifact. Subagents return only outcome,
-artifact path, verification status, and blockers; detailed evidence stays on disk.
+Full reports belong in the route's named artifact. When no normal artifact exists,
+use `docs/geniusloop/YYYY-MM-DD-<scope>.md`, `.agent/evals/<feature>.md`,
+`docs/debug/YYYY-MM-DD-<slug>.md`, `docs/reviews/YYYY-MM-DD-<scope>.md`, or
+`docs/audits/YYYY-MM-DD-<scope>.md`.
+Do not enforce a short cap without a durable sink, and never omit blockers,
+failed gates, required decisions, or findings. Subagents return outcome, artifact
+path, verification, and blockers; detailed evidence stays on disk.

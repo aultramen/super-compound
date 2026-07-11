@@ -19,7 +19,9 @@ Use after an approved BRD exists and before `/sc-plan`. If no BRD is approved, r
 
 ## Invariants
 
-- Save durable output to `docs/prd/prd-<feature-name>.md`; use `.agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md` for full delivery.
+- Save durable output to `docs/prd/prd-<feature-name>.md`; author from
+  `.agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md`, then load only
+  a specific section on demand from the full PRD reference library.
 - Trace requirements with qualified references such as `BRD-CCC#BREQ-001`; do not duplicate source prose when an ID is sufficient.
 - Preserve BRD business policy, scope, acceptance decisions, and domain language. The PRD must not invent technical implementation, schemas, databases, or internal architecture beyond known repository constraints.
 - Every goal maps to at least one story or requirement; every story has specific, verifiable acceptance criteria and negative cases where risk warrants them.

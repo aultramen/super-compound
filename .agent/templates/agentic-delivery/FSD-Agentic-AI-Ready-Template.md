@@ -32,6 +32,11 @@ last_updated: "{{YYYY-MM-DD}}"
 
 ---
 
+> **REFERENCE LIBRARY - skeleton first.** Never load this entire file into
+> working context or copy it as the output shape. Start from
+> `skeletons/FSD-Skeleton.md` and read only the named section required for a
+> concrete technical contract, risk, or review gap.
+
 # 0. FSD Operating Contract
 
 ## 0.1 Purpose
@@ -76,7 +81,7 @@ BRD → PRD → FSD → GOAL → IMPLEMENTATION → VERIFICATION
 - FSD defines implementation authority and is always required before autonomous coding.
 - ADR is optional. It never replaces BRD, PRD, FSD, tests, or bounded goal packets.
 - When no ADR is used, this FSD records material technical decisions as `TDEC-*`.
-- When an ADR is used, this FSD links it, translates it into concrete contracts, and remains the source used by every `/goal`.
+- When an ADR is used, this FSD links it, translates it into concrete contracts, and remains the source used by every `/sc-work` goal execution.
 
 ### 0.4.2 ADR Applicability States
 
@@ -99,9 +104,9 @@ When two statements conflict, do not choose silently. Resolve them in this order
 4. Linked ADR with status `ACCEPTED`, only for its delegated architecture scope.
 5. Approved FSD for implementation behavior and technical contracts; `TDEC-*` governs technical decisions when no ADR is linked.
 6. Repository conventions and existing implementation for local choices not decided above.
-7. Task, prompt, or `/goal` instructions.
+7. Task, prompt, or `/sc-work` invocation instructions.
 
-A lower-precedence artifact MUST NOT silently override a higher-precedence artifact. An ADR cannot change BRD/PRD intent, and a `/goal` cannot change the FSD or linked ADR. Record every conflict in the **Conflict and Resolution Ledger**.
+A lower-precedence artifact MUST NOT silently override a higher-precedence artifact. An ADR cannot change BRD/PRD intent, and a `/sc-work` invocation cannot change the FSD or linked ADR. Record every conflict in the **Conflict and Resolution Ledger**.
 
 ## 0.5 Placeholder and Open-Item Policy
 
@@ -2045,12 +2050,12 @@ Stop and report a blocker only when one of these occurs:
 
 Do not stop for naming, code organization, minor UI composition, or similar choices already covered by repository conventions and approved defaults.
 
-## 16.8 `/goal` Invocation Template
+## 16.8 `/sc-work` Invocation Template
 
 Use the goal packet as the source; do not compress away constraints. The FSD is always mandatory. The ADR line is optional.
 
 ```text
-/goal GOAL-{{NNN}} — {{TITLE}}
+/sc-work GOAL-{{NNN}} — {{TITLE}}
 
 Source of truth:
 - FSD: {{FSD_PATH}}#goal-{{nnn}} (must be APPROVED)

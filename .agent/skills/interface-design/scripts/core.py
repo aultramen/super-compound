@@ -13,6 +13,7 @@ from collections import defaultdict
 # ============ CONFIGURATION ============
 DATA_DIR = Path(__file__).parent.parent / "data"
 MAX_RESULTS = 3
+MAX_RESULTS_LIMIT = 20
 
 CSV_CONFIG = {
     "style": {
@@ -236,6 +237,19 @@ def _search_csv(filepath, search_cols, output_cols, query, max_results):
     return results
 
 
+def _validate_max_results(max_results):
+    """Reject result counts that are invalid or unsafe for prompt output."""
+    if (
+        isinstance(max_results, bool)
+        or not isinstance(max_results, int)
+        or not 1 <= max_results <= MAX_RESULTS_LIMIT
+    ):
+        raise ValueError(
+            f"max_results must be an integer between 1 and {MAX_RESULTS_LIMIT}"
+        )
+    return max_results
+
+
 def detect_domain(query):
     """Auto-detect the most relevant domain from query"""
     query_lower = query.lower()
@@ -268,6 +282,11 @@ def search(query, domain=None, max_results=MAX_RESULTS):
     config = CSV_CONFIG.get(domain, CSV_CONFIG["style"])
     filepath = DATA_DIR / config["file"]
 
+    try:
+        max_results = _validate_max_results(max_results)
+    except ValueError as exc:
+        return {"error": str(exc), "domain": domain}
+
     if not filepath.exists():
         return {"error": f"File not found: {filepath}", "domain": domain}
 
@@ -291,6 +310,11 @@ def search_stack(query, stack, max_results=MAX_RESULTS):
         return {"error": f"Unknown stack: {stack}. Available: {', '.join(AVAILABLE_STACKS)}"}
 
     filepath = DATA_DIR / STACK_CONFIG[stack]["file"]
+
+    try:
+        max_results = _validate_max_results(max_results)
+    except ValueError as exc:
+        return {"error": str(exc), "stack": stack}
 
     if not filepath.exists():
         return {"error": f"Stack file not found: {filepath}", "stack": stack}

@@ -19,14 +19,13 @@ Use this workflow for explicit Git operations after or before Super Compound wor
 
 ## Steps
 
-1. Read `.agent/context/workflows/sc-go.contract.md` and `.agent/context/skills/git-workflow-operation.contract.md`.
-2. Load `skills/git-workflow-operation/SKILL.md` when performing or reviewing Git operations.
-3. Read `.agent/rules/project-config.md` and use `gitWorkflow` defaults unless the user mentions another base branch or remote.
-4. Identify the operation: `status`, `start`, `worktree`, `commit`, `push`, `pr`, or finish flow.
-5. Use `.agent/tools/git-workflow.mjs` to preview safety checks and commands when available.
-6. If the user mentions a branch different from the active branch, stop or preview checkout/worktree commands before commit, push, or PR.
-7. Never commit, push, force-push, create a PR, delete a branch, remove a worktree, reset, or clean without explicit user intent and a fresh preview.
-8. For PRs, use `.agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md`; use `gh` or `glab` only when available and explicitly requested.
+1. Load `skills/git-workflow-operation/SKILL.md` when performing or reviewing Git operations.
+2. Read `.agent/rules/project-config.md` and use `gitWorkflow` defaults unless the user mentions another base branch or remote.
+3. Identify the operation: `status`, `start`, `worktree`, `commit`, `push`, `pr`, or finish flow.
+4. Use `.agent/tools/git-workflow.mjs` to preview safety checks and commands when available.
+5. If the user mentions a branch different from the active branch, stop or preview checkout/worktree commands before commit, push, or PR.
+6. Never commit, push, force-push, create a PR, delete a branch, remove a worktree, reset, or clean without explicit user intent and a fresh preview.
+7. For PRs, use `.agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md`; use `gh` or `glab` only when available and explicitly requested.
 
 ## Output
 

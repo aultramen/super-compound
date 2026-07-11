@@ -36,6 +36,37 @@ class InterfaceDesignCsvIntegrityTests(unittest.TestCase):
 
         self.assertEqual(ids("products.csv"), ids("colors.csv"))
 
+    def test_javafx_quoted_code_cells_round_trip_without_csv_escape_artifacts(self):
+        path = DATA_DIR / "stacks" / "javafx.csv"
+        with path.open("r", encoding="utf-8-sig", newline="") as handle:
+            rows = {row["No"]: row for row in csv.DictReader(handle)}
+
+        self.assertEqual(
+            rows["8"]["Code Good"],
+            'URL view = getClass().getResource("/views/main.fxml"); '
+            "Parent root = FXMLLoader.load(view);",
+        )
+        self.assertEqual(
+            rows["9"]["Code Good"],
+            'button.getStyleClass().add("primary-action");',
+        )
+        self.assertEqual(
+            rows["20"]["Code Good"],
+            'table.setPlaceholder(new Label("No customers match this filter"));',
+        )
+        self.assertEqual(
+            rows["22"]["Code Bad"],
+            'label.textProperty().bind(task.messageProperty()); label.setText("Ready");',
+        )
+        self.assertEqual(
+            rows["26"]["Code Good"],
+            'nameLabel.setLabelFor(nameField); nameField.setPromptText("Jane Doe");',
+        )
+        self.assertEqual(
+            rows["42"]["Code Bad"],
+            'FXMLLoader.load(getClass().getResource("/views/admin.fxml"));',
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

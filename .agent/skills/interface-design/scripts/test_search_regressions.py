@@ -60,6 +60,29 @@ class InterfaceDesignSearchRegressionTests(unittest.TestCase):
         self.assertGreater(len(snippet), 300)
         self.assertIn(snippet, format_output(result))
 
+    def test_truncated_human_output_points_to_the_full_json_route(self):
+        full_value = "x" * 301
+        result = {
+            "domain": "ux",
+            "query": "accessibility",
+            "file": "ux-guidelines.csv",
+            "count": 1,
+            "results": [{"Description": full_value}],
+        }
+
+        formatted = format_output(result)
+
+        self.assertNotIn(full_value, formatted)
+        self.assertIn("rerun with --json", formatted)
+
+    def test_search_rejects_unbounded_result_counts(self):
+        for max_results in (0, -1, 21, 100_000):
+            with self.subTest(max_results=max_results):
+                result = search("accessibility", "ux", max_results=max_results)
+
+                self.assertIn("error", result)
+                self.assertIn("between 1 and 20", result["error"])
+
     def test_desktop_stacks_retrieve_performance_guidance(self):
         for stack in ("javafx", "wpf", "winui", "avalonia", "uno", "uwp"):
             with self.subTest(stack=stack):

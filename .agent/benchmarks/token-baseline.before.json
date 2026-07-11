@@ -1,6 +1,23 @@
 {
+  "schema": "token_benchmark_baseline_v2",
   "metric": "deterministic_estimated_tokens_v1",
-  "generatedAt": "2026-06-26T15:07:42.202Z",
+  "assembledAt": "2026-07-10T20:45:00.000Z",
+  "provenance": {
+    "mode": "git",
+    "defaultSourceCommit": "598b5438939e31eb95f809ec18a612439bef9ce4",
+    "scenarioSourceCommits": {
+      "sc-geniusloop": "f5ee433d977219d56e4786bdbba8fdf9747c58fb",
+      "sc-go": "f5ee433d977219d56e4786bdbba8fdf9747c58fb",
+      "related-git-workflow": "f5ee433d977219d56e4786bdbba8fdf9747c58fb"
+    },
+    "scenarioSourceRationales": {
+      "sc-geniusloop": "Latest complete pre-optimization snapshot containing this route.",
+      "sc-go": "Latest complete pre-optimization snapshot containing this route and Git workflow.",
+      "related-git-workflow": "Latest complete pre-optimization snapshot containing the Git workflow surface."
+    },
+    "contentDigest": "cccde2fefa4840593e1e7cf777808c9b035a1bc84715dcac8f9ca184de3e1de4"
+  },
+  "beforeDefinitionDigest": "bb48a83c556bb7b576047e3c767212f1fc4b7c5484b56127b977c4c8ede3cafd",
   "scenarios": {
     "legacy-eager-preload": {
       "tokens": 516436,
@@ -109,9 +126,9 @@
       ]
     },
     "sc-init": {
-      "tokens": 4490,
-      "chars": 19269,
-      "bytes": 19269,
+      "tokens": 4535,
+      "chars": 19514,
+      "bytes": 19514,
       "fileCount": 4,
       "files": [
         ".agent/rules/project-config.md",
@@ -129,6 +146,20 @@
         ".agent/workflows/sc-status.md",
         ".agent/skills/state-management/SKILL.md",
         ".agent/skills/context-engineering/SKILL.md"
+      ]
+    },
+    "sc-geniusloop": {
+      "tokens": 4080,
+      "chars": 18015,
+      "bytes": 18015,
+      "fileCount": 6,
+      "files": [
+        ".agent/workflows/sc-geniusloop.md",
+        ".agent/skills/brainstorming/SKILL.md",
+        ".agent/skills/codebase-design/SKILL.md",
+        ".agent/skills/domain-modeling/SKILL.md",
+        ".agent/skills/subagent-orchestration/SKILL.md",
+        ".agent/agents/brain.md"
       ]
     },
     "sc-explore": {
@@ -199,6 +230,18 @@
       "files": [
         ".agent/workflows/sc-eval.md",
         ".agent/skills/eval-harness/SKILL.md"
+      ]
+    },
+    "sc-go": {
+      "tokens": 6322,
+      "chars": 23987,
+      "bytes": 23987,
+      "fileCount": 4,
+      "files": [
+        ".agent/workflows/sc-go.md",
+        ".agent/skills/git-workflow-operation/SKILL.md",
+        ".agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md",
+        ".agent/tools/git-workflow.mjs"
       ]
     },
     "sc-work": {
@@ -459,6 +502,17 @@
         ".agent/templates/agentic-delivery/BRD-Agentic-Ready-Reusable-Template.md",
         ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
         ".agent/templates/agentic-delivery/PRD-Agentic-Ready-Reusable-Template.md"
+      ]
+    },
+    "related-git-workflow": {
+      "tokens": 5910,
+      "chars": 22370,
+      "bytes": 22370,
+      "fileCount": 3,
+      "files": [
+        ".agent/skills/git-workflow-operation/SKILL.md",
+        ".agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md",
+        ".agent/tools/git-workflow.mjs"
       ]
     },
     "related-interface-data": {

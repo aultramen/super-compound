@@ -11,17 +11,17 @@ frontend: { framework: "nextjs", language: "typescript", styling: "tailwind", bu
 backend: { framework: "nextjs", language: "typescript", orm: "prisma", api_docs: "none" }
 database: { primary: "postgresql", cache: "none", migration_tool: "prisma-migrate" }
 auth: { method: "jwt", provider: "better-auth" }
-container: "docker"
-package_manager: "pnpm"
-dev_command: "pnpm dev"
-test_command: "pnpm vitest run"
-lint_command: "pnpm eslint . && pnpm tsc --noEmit"
-format_command: "pnpm prettier --write ."
-build_command: "pnpm build"
-migrate_command: "pnpm prisma migrate dev"
-seed_command: "pnpm prisma db seed"
-docker_command: "docker compose up -d"
-architecture: "modular"
+runtime: { package_manager: "pnpm", container: "docker", deployment: "docker-compose" }
+commands:
+  dev: "pnpm dev"
+  test: "pnpm vitest run"
+  lint: "pnpm eslint . && pnpm tsc --noEmit"
+  format: "pnpm prettier --write ."
+  build: "pnpm build"
+  migrate: "pnpm prisma migrate dev"
+  seed: "pnpm prisma db seed"
+  container_up: "docker compose up -d"
+conventions: { architecture: "modular" }
 ```
 
 ### Preset 2: React + Express
@@ -33,17 +33,17 @@ frontend: { framework: "react", language: "typescript", styling: "tailwind", bun
 backend: { framework: "express", language: "typescript", orm: "prisma", api_docs: "swagger" }
 database: { primary: "postgresql", cache: "redis", migration_tool: "prisma-migrate" }
 auth: { method: "jwt", provider: "passport" }
-container: "docker"
-package_manager: "pnpm"
-dev_command: "pnpm dev"
-test_command: "pnpm vitest run && pnpm jest --passWithNoTests"
-lint_command: "pnpm eslint ."
-format_command: "pnpm prettier --write ."
-build_command: "pnpm build"
-migrate_command: "pnpm prisma migrate dev"
-seed_command: "pnpm prisma db seed"
-docker_command: "docker compose up -d"
-architecture: "layered"
+runtime: { package_manager: "pnpm", container: "docker", deployment: "docker-compose" }
+commands:
+  dev: "pnpm dev"
+  test: "pnpm vitest run && pnpm jest --passWithNoTests"
+  lint: "pnpm eslint ."
+  format: "pnpm prettier --write ."
+  build: "pnpm build"
+  migrate: "pnpm prisma migrate dev"
+  seed: "pnpm prisma db seed"
+  container_up: "docker compose up -d"
+conventions: { architecture: "layered" }
 ```
 
 ### Preset 3: Vue / Nuxt Fullstack
@@ -55,17 +55,17 @@ frontend: { framework: "nuxtjs", language: "typescript", styling: "tailwind", bu
 backend: { framework: "nuxtjs", language: "typescript", orm: "prisma", api_docs: "none" }
 database: { primary: "postgresql", cache: "none", migration_tool: "prisma-migrate" }
 auth: { method: "session", provider: "lucia" }
-container: "docker"
-package_manager: "pnpm"
-dev_command: "pnpm dev"
-test_command: "pnpm vitest run"
-lint_command: "pnpm eslint . && pnpm nuxi typecheck"
-format_command: "pnpm prettier --write ."
-build_command: "pnpm build"
-migrate_command: "pnpm prisma migrate dev"
-seed_command: "pnpm prisma db seed"
-docker_command: "docker compose up -d"
-architecture: "modular"
+runtime: { package_manager: "pnpm", container: "docker", deployment: "docker-compose" }
+commands:
+  dev: "pnpm dev"
+  test: "pnpm vitest run"
+  lint: "pnpm eslint . && pnpm nuxi typecheck"
+  format: "pnpm prettier --write ."
+  build: "pnpm build"
+  migrate: "pnpm prisma migrate dev"
+  seed: "pnpm prisma db seed"
+  container_up: "docker compose up -d"
+conventions: { architecture: "modular" }
 ```
 
 ### Preset 4: Python FastAPI
@@ -77,17 +77,17 @@ frontend: { framework: "none" }
 backend: { framework: "fastapi", language: "python", orm: "sqlalchemy", api_docs: "swagger" }
 database: { primary: "postgresql", cache: "redis", migration_tool: "alembic" }
 auth: { method: "jwt", provider: "custom" }
-container: "docker"
-package_manager: "uv"
-dev_command: "uvicorn app.main:app --reload"
-test_command: "pytest -v --cov"
-lint_command: "ruff check . && mypy ."
-format_command: "ruff format ."
-build_command: "docker build -t app ."
-migrate_command: "alembic upgrade head"
-seed_command: "python -m app.seeds"
-docker_command: "docker compose up -d"
-architecture: "clean"
+runtime: { package_manager: "uv", container: "docker", deployment: "docker-compose" }
+commands:
+  dev: "uvicorn app.main:app --reload"
+  test: "pytest -v --cov"
+  lint: "ruff check . && mypy ."
+  format: "ruff format ."
+  build: "docker build -t app ."
+  migrate: "alembic upgrade head"
+  seed: "python -m app.seeds"
+  container_up: "docker compose up -d"
+conventions: { architecture: "clean" }
 ```
 
 ### Preset 5: Python Django
@@ -99,17 +99,17 @@ frontend: { framework: "none" }
 backend: { framework: "django", language: "python", orm: "django-orm", api_docs: "swagger" }
 database: { primary: "postgresql", cache: "redis", migration_tool: "django-migrate" }
 auth: { method: "session", provider: "custom" }
-container: "docker"
-package_manager: "uv"
-dev_command: "python manage.py runserver"
-test_command: "pytest -v --cov"
-lint_command: "ruff check . && mypy ."
-format_command: "ruff format ."
-build_command: "docker build -t app ."
-migrate_command: "python manage.py migrate"
-seed_command: "python manage.py loaddata fixtures/*.json"
-docker_command: "docker compose up -d"
-architecture: "mvc"
+runtime: { package_manager: "uv", container: "docker", deployment: "docker-compose" }
+commands:
+  dev: "python manage.py runserver"
+  test: "pytest -v --cov"
+  lint: "ruff check . && mypy ."
+  format: "ruff format ."
+  build: "docker build -t app ."
+  migrate: "python manage.py migrate"
+  seed: "python manage.py loaddata fixtures/*.json"
+  container_up: "docker compose up -d"
+conventions: { architecture: "mvc" }
 ```
 
 ### Preset 6: Go Gin
@@ -121,17 +121,17 @@ frontend: { framework: "none" }
 backend: { framework: "gin", language: "go", orm: "gorm", api_docs: "swagger" }
 database: { primary: "postgresql", cache: "redis", migration_tool: "goose" }
 auth: { method: "jwt", provider: "custom" }
-container: "docker"
-package_manager: "go-mod"
-dev_command: "air"
-test_command: "go test ./... -v -cover"
-lint_command: "golangci-lint run"
-format_command: "gofmt -w ."
-build_command: "go build -o bin/app ./cmd/server"
-migrate_command: "goose -dir migrations postgres $DB_URL up"
-seed_command: "go run ./cmd/seed"
-docker_command: "docker compose up -d"
-architecture: "clean"
+runtime: { package_manager: "go-mod", container: "docker", deployment: "docker-compose" }
+commands:
+  dev: "air"
+  test: "go test ./... -v -cover"
+  lint: "golangci-lint run"
+  format: "gofmt -w ."
+  build: "go build -o bin/app ./cmd/server"
+  migrate: "goose -dir migrations postgres $DB_URL up"
+  seed: "go run ./cmd/seed"
+  container_up: "docker compose up -d"
+conventions: { architecture: "clean" }
 ```
 
 ### Preset 7: PHP Laravel
@@ -143,17 +143,17 @@ frontend: { framework: "none", language: "javascript", styling: "tailwind", bund
 backend: { framework: "laravel", language: "php", orm: "eloquent", api_docs: "swagger" }
 database: { primary: "mysql", cache: "redis", migration_tool: "artisan" }
 auth: { method: "session", provider: "custom" }
-container: "docker"
-package_manager: "npm"
-dev_command: "php artisan serve & npm run dev"
-test_command: "php artisan test --parallel"
-lint_command: "vendor/bin/phpstan analyse && vendor/bin/pint --test"
-format_command: "vendor/bin/pint"
-build_command: "npm run build"
-migrate_command: "php artisan migrate"
-seed_command: "php artisan db:seed"
-docker_command: "docker compose up -d"
-architecture: "mvc"
+runtime: { package_manager: "npm", container: "docker", deployment: "docker-compose" }
+commands:
+  dev: "php artisan serve & npm run dev"
+  test: "php artisan test --parallel"
+  lint: "vendor/bin/phpstan analyse && vendor/bin/pint --test"
+  format: "vendor/bin/pint"
+  build: "npm run build"
+  migrate: "php artisan migrate"
+  seed: "php artisan db:seed"
+  container_up: "docker compose up -d"
+conventions: { architecture: "mvc" }
 ```
 
 ### Preset 8: SvelteKit Fullstack
@@ -165,16 +165,16 @@ frontend: { framework: "svelte", language: "typescript", styling: "tailwind", bu
 backend: { framework: "svelte", language: "typescript", orm: "drizzle", api_docs: "none" }
 database: { primary: "sqlite", cache: "none", migration_tool: "drizzle-kit" }
 auth: { method: "session", provider: "lucia" }
-container: "none"
-package_manager: "pnpm"
-dev_command: "pnpm dev"
-test_command: "pnpm vitest run"
-lint_command: "pnpm eslint . && pnpm svelte-check"
-format_command: "pnpm prettier --write ."
-build_command: "pnpm build"
-migrate_command: "pnpm drizzle-kit push"
-seed_command: "pnpm tsx scripts/seed.ts"
-architecture: "modular"
+runtime: { package_manager: "pnpm", container: "none", deployment: "none" }
+commands:
+  dev: "pnpm dev"
+  test: "pnpm vitest run"
+  lint: "pnpm eslint . && pnpm svelte-check"
+  format: "pnpm prettier --write ."
+  build: "pnpm build"
+  migrate: "pnpm drizzle-kit push"
+  seed: "pnpm tsx scripts/seed.ts"
+conventions: { architecture: "modular" }
 ```
 
 ### Preset 9: React Native (Mobile)
@@ -186,14 +186,14 @@ frontend: { framework: "react", language: "typescript", styling: "styled-compone
 backend: { framework: "none" }
 database: { primary: "sqlite", cache: "none" }
 auth: { method: "jwt", provider: "custom" }
-container: "none"
-package_manager: "pnpm"
-dev_command: "npx expo start"
-test_command: "pnpm jest --passWithNoTests"
-lint_command: "pnpm eslint . && pnpm tsc --noEmit"
-format_command: "pnpm prettier --write ."
-build_command: "npx eas build --platform all"
-architecture: "modular"
+runtime: { package_manager: "pnpm", container: "none", deployment: "none" }
+commands:
+  dev: "npx expo start"
+  test: "pnpm jest --passWithNoTests"
+  lint: "pnpm eslint . && pnpm tsc --noEmit"
+  format: "pnpm prettier --write ."
+  build: "npx eas build --platform all"
+conventions: { architecture: "modular" }
 ```
 
 ### Preset 10: General (Blank)
