@@ -16,6 +16,7 @@ not cover. A full workflow never reloads its compact contract.
 - FSD and accepted ADRs remain implementation authority.
 - `OPEN-*` blockers stop unsafe invention.
 - Issue files stay pointers; they do not duplicate artifact prose.
+- UI-bearing PRD validation precedes FSD readiness; one real first slice precedes scale-out.
 - Interface-design data is retrieved by search scripts, not model preload.
 - Verification commands remain mapped before completion.
 - Git operations remain preview-first and route through `/sc-go`.

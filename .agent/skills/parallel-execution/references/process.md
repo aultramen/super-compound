@@ -20,7 +20,12 @@ Task 5: src/api/*  → Sequential with Task 3 (shared files)
 
 **Result:** Parallel groups = {[1,2], [3,5], [4]} → Run 3 parallel streams.
 
-For issue boards, schedule only issues whose `Blocked by` entries are `None` or already `done`.
+For issue boards, schedule only issues whose `Blocked by` entries are `None` or
+whose dependencies are already `verified`; `done` is not sufficient.
+
+File separation alone is insufficient. Also compare pinned contract version,
+producer/consumer ordering, schema and fixture ownership, generated artifacts,
+migrations, lockfiles, and registries. UI scale-out starts only after the first vertical slice issue is `verified`; each shared surface has a single writer.
 
 ### Phase 2: Preview Worktrees
 
@@ -35,7 +40,7 @@ git worktree add -b feature/group-c ../project-group-c origin/main
 
 **Rules:**
 - Each worktree gets its own branch
-- Worktree is optional, used only for parallel work or multi-branch review
+- Every parallel stream uses its own isolated worktree
 - Install dependencies in each worktree if needed
 - Never modify the main worktree during parallel work
 - Do not remove worktrees without validating the target path and asking for approval
@@ -48,6 +53,9 @@ Send each group to a separate agent:
 ## Workspace: ../project-group-a
 ## Tasks: [1, 2] (sequential within group)
 ## Branch: feature/group-a
+## Contract version: <pinned version>
+## Contract/fixture/integration refs: <qualified IDs>
+## Single-writer boundaries: <paths or None>
 
 Execute tasks 1 and 2 sequentially in this workspace.
 Follow subagent-orchestration for each task.
@@ -79,3 +87,6 @@ After merging all groups:
 - Run full test suite
 - Use `verification-before-completion` integration checking
 - Verify cross-component wiring
+- Run contract diff and fixture/schema validation
+- Run provider and consumer contract tests against the pinned revision
+- Run real merged-system integration verification; mock-only is insufficient

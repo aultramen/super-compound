@@ -1,13 +1,15 @@
 ---
 template_name: "Functional Specification Document — Standalone Agentic AI Implementation Contract"
-template_version: "2.0.0"
-artifact_contract_version: "1.0.0"
+template_version: "2.1.0"
+artifact_contract_version: "1.1.0"
 document_type: "FSD"
 project_name: "{{PROJECT_NAME}}"
 project_code: "{{PROJECT_CODE}}"
 document_id: "FSD-{{PROJECT_CODE}}"
 version: "{{FSD_VERSION}}"
 status: "DRAFT" # DRAFT | IN_REVIEW | APPROVED | SUPERSEDED
+ui_delivery_profile: "{{NOT_APPLICABLE | STANDARD | HIGH_INTERACTION}}"
+ui_contract_readiness: "{{NOT_APPLICABLE | DRAFT | BLOCKED | READY_FOR_SLICE}}"
 canonical_delivery_path: "BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION"
 brd_sources:
   - "BRD-{{PROJECT_CODE}}"
@@ -162,6 +164,25 @@ Before this FSD becomes `APPROVED`, all items below must be true:
 - [ ] Identity, authentication, authorization, and data-clearance rules are specified.
 - [ ] Data schema includes keys, constraints, indexes, lifecycle, and migration behavior.
 - [ ] API, UI, event, job, and integration contracts cover happy, negative, retry, and degraded paths.
+- [ ] UI-bearing scope is either `READY_FOR_SLICE`, or is `DRAFT/BLOCKED`
+      solely because executable contract assets must be materialized; non-UI
+      scope records `NOT_APPLICABLE` with reason and approver.
+- [ ] When readiness is `DRAFT/BLOCKED`, only a `CONTRACT_ENABLER` may be READY;
+      first-slice and scale-out goals remain blocked. The enabler has complete
+      authority, bounded paths, deterministic verification, and no unrelated
+      blocker.
+- [ ] When readiness is `READY_FOR_SLICE`, score is at least 90, every hard gate
+      passes, and UI states/data/actions map to pinned operation/schema/result/error
+      refs, deterministic fixtures, matching mock/typed-consumer revisions, and
+      provider/consumer/responsive/accessibility/QA verification.
+- [ ] After `CONTRACT_ENABLER` verification, return to `/sc-plan`, update the FSD
+      index, rerun readiness, obtain Technical Manager re-approval, and reach `READY_FOR_SLICE` before
+      `FIRST_VERTICAL_SLICE` may become READY.
+- [ ] Goal roles enforce exactly one real first vertical slice and its verified
+      issue before scale-out.
+- [ ] Exactly one `HARDENING` goal depends on every applicable UI delivery slice
+      and owns merged integration, responsive, accessibility, E2E,
+      visual-regression, and Business Owner UAT evidence.
 - [ ] Date/time, units, locale, ordering, pagination, and rounding semantics are explicit.
 - [ ] Idempotency, concurrency, transaction boundaries, and duplicate-event behavior are explicit.
 - [ ] Security, privacy, audit, retention, backup, and restore requirements are testable.
@@ -237,6 +258,10 @@ Use stable IDs. Do not renumber approved IDs solely because sections move.
 | IFACE | Internal service interface | IFACE-001 |
 | UI | UI behavior/view | UI-001 |
 | UI-ACT | UI action | UI-ACT-001 |
+| UI-STATE | User-visible UI state | UI-STATE-001 |
+| UIMAP | UI-data-operation outcome mapping | UIMAP-001 |
+| SCHEMA | Exact delegated wire schema | SCHEMA-001 |
+| CONTRACT | Versioned executable contract bundle | CONTRACT-001 |
 | EVT | Event/message contract | EVT-001 |
 | JOB | Background job | JOB-001 |
 | INT | External integration | INT-001 |
@@ -811,9 +836,13 @@ Use Given/When/Then and include exact observable outcomes.
 
 ### 5.1.20 Test Fixtures and Evidence
 
-| Fixture ID | Purpose | Setup | Expected Result | Data Classification |
-|---|---|---|---|---|
-| FIX-001 | {{CASE}} | {{SETUP}} | {{RESULT}} | Synthetic / Masked / Approved real data |
+Fixtures are synthetic, schema-valid, and deterministic: pin clocks, IDs,
+ordering, locale, and randomness. Reuse the same scenario ID across mock,
+consumer/component, provider, and E2E setup.
+
+| Fixture ID | Scenario | Contract/schema refs | Setup/data path | Determinism controls | Expected UI/API state | Consumers | Classification |
+|---|---|---|---|---|---|---|---|
+| FIX-001 | {{CASE / UI-STATE ID}} | {{CONTRACT/SCHEMA IDS + REVISION}} | {{SETUP/PATH}} | {{CLOCK/IDS/ORDER/LOCALE}} | {{RESULT}} | {{MOCK/CONSUMER/PROVIDER/E2E}} | Synthetic |
 
 ### 5.1.21 Feature Definition of Done
 
@@ -821,7 +850,9 @@ Use Given/When/Then and include exact observable outcomes.
 - [ ] Happy, negative, boundary, permission, duplicate, concurrency, and dependency-failure tests pass where applicable.
 - [ ] Database constraints and migrations are verified forward and backward or rollback limitations are documented.
 - [ ] API/event schemas and generated clients/contracts are updated.
-- [ ] UI loading, empty, error, forbidden, stale, and success states are implemented.
+- [ ] UI loading, empty, success, validation, error, forbidden, stale/conflict,
+      partial/degraded, offline, and async/in-progress states are implemented or
+      have approved `N/A` reason and approver.
 - [ ] Audit, metrics, logs, alerts, and runbook changes are present.
 - [ ] No unresolved placeholders, disabled tests, unapproved scope expansion, or sensitive logging remain.
 - [ ] Traceability matrix links the feature to tests and goals.
@@ -956,6 +987,9 @@ Migration rules:
 | Field | Contract |
 |---|---|
 | Method and route | `{{METHOD}} {{PATH}}` |
+| `operationId` | `{{STABLE_OPERATION_ID}}` |
+| Contract bundle | `CONTRACT-{{NNN}}` |
+| Schema revision | `SCHEMA-{{NNN}} @ {{REVISION}}` |
 | Purpose | {{PURPOSE}} |
 | Actor / permission | {{ROLE + POLICY ID}} |
 | Classification clearance | {{RULE}} |
@@ -985,7 +1019,7 @@ Migration rules:
 | `Idempotency-Key` | {{YES/NO}} | {{RULE}} |
 | `If-Match` | {{YES/NO}} | {{RULE}} |
 
-**Request body**
+**Request body example (non-authoritative)**
 
 ```json
 {
@@ -997,7 +1031,7 @@ Migration rules:
 |---|---|---:|---|---|---|
 | `field` | string | Yes | {{RULE}} | {{CLASS}} | {{MEANING}} |
 
-**Success response**
+**Success response example (non-authoritative)**
 
 ```json
 {
@@ -1016,6 +1050,14 @@ Migration rules:
 | 403 | `FORBIDDEN` | {{CONDITION}} | No sensitive existence disclosure | None |
 | 409 | `CONFLICT` | {{CONDITION}} | Current version/state may be returned if authorized | None |
 | 503 | `DEPENDENCY_UNAVAILABLE` | {{CONDITION}} | Retry-after where applicable | {{SAFE STATE}} |
+
+**Wire schema bindings**
+
+| Outcome | SCHEMA ref | Delegated path | Revision |
+|---|---|---|---|
+| Request | SCHEMA-{{NNN}} | `{{REPOSITORY_RELATIVE_PATH}}` | `{{REVISION}}` |
+| Success | SCHEMA-{{NNN}} | `{{REPOSITORY_RELATIVE_PATH}}` | `{{REVISION}}` |
+| Error: `{{CODE}}` | SCHEMA-{{NNN}} | `{{REPOSITORY_RELATIVE_PATH}}` | `{{REVISION}}` |
 
 **Side effects and ordering**
 
@@ -1066,15 +1108,66 @@ Consumer rules:
 |---|---|---|---|---|---|---|---|
 | IFACE-001 | `{{METHOD}}` | {{TYPE}} | {{TYPE}} | {{TYPED ERRORS}} | {{TIMEOUT}} | {{RULE}} | {{ADAPTERS}} |
 
+## 7.6 Machine-Readable UI/API Contract Manifest
+
+This manifest is an index, not semantic authority. FSD tables own semantic
+mappings; delegated OpenAPI/JSON Schema/AsyncAPI or approved equivalents own
+exact wire shape. A conflict creates blocking `OPEN-*`.
+
+```yaml
+ui_api_contract:
+  id: "CONTRACT-001"
+  profile: "STANDARD"
+  applicability:
+    reason: "{{REQUIRED_WHEN_NOT_APPLICABLE_OTHERWISE_NA}}"
+    approved_by: "{{ROLE_OR_DECISION_REF}}"
+  ui_contract_readiness: "READY_FOR_SLICE"
+  version: "1.0.0"
+  fsd_snapshot_ref: "FSD-{{PROJECT_CODE}}@{{FSD_VERSION}}#CONTRACT-001"
+  authority:
+    behavior_refs: ["PRD-{{PROJECT_CODE}}#JOURNEY-001", "PRD-{{PROJECT_CODE}}#AC-001"]
+    technical_refs: ["FSD-{{PROJECT_CODE}}#API-001", "FSD-{{PROJECT_CODE}}#UI-001"]
+    mapping_refs: ["FSD-{{PROJECT_CODE}}#UIMAP-001"]
+  wire_contracts:
+    - schema_ref: "FSD-{{PROJECT_CODE}}#SCHEMA-001"
+      kind: "openapi-3.1"
+      path: "{{REPOSITORY_RELATIVE_PATH}}"
+      revision: "sha256:{{DIGEST}}"
+      operation_refs: ["FSD-{{PROJECT_CODE}}#API-001"]
+  fixtures:
+    catalog_refs: ["FSD-{{PROJECT_CODE}}#FIX-001"]
+    paths: ["{{REPOSITORY_RELATIVE_PATH}}"]
+    schema_revision: "sha256:{{DIGEST}}"
+  derived_assets:
+    mock: { path: "{{REPOSITORY_RELATIVE_PATH}}", generated_from: "SCHEMA-001@{{REVISION}}" }
+    typed_consumer: { path: "{{REPOSITORY_RELATIVE_PATH}}", generated_from: "SCHEMA-001@{{REVISION}}" }
+  verification:
+    schema_lint_refs: ["FSD-{{PROJECT_CODE}}#TEST-001"]
+    fixture_validation_refs: ["FSD-{{PROJECT_CODE}}#TEST-002"]
+    provider_contract_refs: ["FSD-{{PROJECT_CODE}}#TEST-003"]
+    consumer_contract_refs: ["FSD-{{PROJECT_CODE}}#TEST-004"]
+    responsive_accessibility_qa_refs: ["FSD-{{PROJECT_CODE}}#TEST-005"]
+  first_vertical_slice:
+    goal_ref: "FSD-{{PROJECT_CODE}}#GOAL-002"
+    real_integration_test_refs: ["FSD-{{PROJECT_CODE}}#TEST-006"]
+  governance:
+    owners: { technical: "{{ROLE}}", provider: "{{ROLE}}", consumer: "{{ROLE}}", qa: "{{ROLE}}" }
+    approvers: { business: "{{ROLE}}", technical: "{{ROLE}}" }
+  readiness:
+    score: 90
+    hard_gates_passed: ["{{GATE IDS}}"]
+    blocking_open_refs: []
+```
+
 ---
 
-# 8. User Interface and Interaction Design
+# 8. Screen & Interaction Contract
 
 ## 8.1 Route and View Inventory
 
-| UI ID | Route / Surface | Purpose | Actors | Data Source | Primary Actions | Release |
-|---|---|---|---|---|---|---|
-| UI-001 | `{{ROUTE}}` | {{PURPOSE}} | {{ROLES}} | {{API/QUERY}} | {{ACTIONS}} | {{RELEASE}} |
+| UI ID | Route / Surface | Purpose | Actors | Journey/AC refs | Visual evidence refs | Component/token refs | Contract refs | Release |
+|---|---|---|---|---|---|---|---|---|
+| UI-001 | `{{ROUTE}}` | {{PURPOSE}} | {{ROLES}} | {{JOURNEY/AC IDS}} | {{EVIDENCE}} | {{COMPONENT/TOKEN IDS}} | {{CONTRACT/UIMAP IDS}} | {{RELEASE}} |
 
 ## 8.2 Page Specification Template
 
@@ -1083,30 +1176,37 @@ Consumer rules:
 **Route:** `{{ROUTE}}`  
 **Actors:** `{{ROLES}}`  
 **Requirement trace:** `{{FR/SEC/NFR IDS}}`
+**Journey/AC refs:** `{{JOURNEY/AC IDS}}`
+**Experience evidence refs:** `{{EVIDENCE REFS}}`
+**Design-system/component/token refs:** `{{REFS}}`
+**Contract bundle refs:** `{{CONTRACT/UIMAP/SCHEMA REFS}}`
 
 #### Information Architecture
 
-| Region / Component | Data | Behavior | Permission / Redaction | Accessibility Name |
+| Region / Component | Data / Schema refs | Behavior | Permission / Redaction | Accessibility Name |
 |---|---|---|---|---|
 | {{REGION}} | {{DATA}} | {{BEHAVIOR}} | {{RULE}} | {{LABEL}} |
 
 #### Actions
 
-| Action ID | Control | Actor | Preconditions | Confirmation | API / Command | Success | Failure |
-|---|---|---|---|---|---|---|---|
-| UI-ACT-001 | {{CONTROL}} | {{ROLE}} | {{GUARDS}} | {{COPY/NO}} | {{API}} | {{STATE}} | {{STATE}} |
+| Action ID | Control | Actor | Preconditions | Confirmation | Operation/Event refs | Request Schema refs | Success UI-state ref | Failure UI-state refs | AC/Test refs |
+|---|---|---|---|---|---|---|---|---|---|
+| UI-ACT-001 | {{CONTROL}} | {{ROLE}} | {{GUARDS}} | {{COPY/NO}} | {{API/EVT IDS}} | {{SCHEMA IDS}} | UI-STATE-{{NNN}} | {{UI-STATE IDS}} | {{AC/TEST IDS}} |
 
 #### View-State Matrix
 
-| State | Trigger | Required Display | Allowed Actions | Accessibility / Focus Behavior |
-|---|---|---|---|---|
-| Loading | Initial/query refresh | Skeleton or progress with label | Cancel if relevant | Announce busy state |
-| Empty | Zero authorized records | Instructive empty copy | Primary next action | Heading and action reachable |
-| Partial | Some dependency/data unavailable | Show valid data + explicit stale/degraded banner | Safe actions only | Banner announced |
-| Error | Request failed | Error code/reference + safe retry | Retry / support link | Focus moves to error summary |
-| Forbidden | Insufficient permission/clearance | Non-leaking message | Back/navigation | Do not expose hidden metadata |
-| Stale/conflict | Version changed | Explain conflict and reload/compare | Reload / retry | Preserve user input when safe |
-| Success | Operation complete | Confirm authoritative result | Next action | Live-region announcement |
+| UI-state ID | State | Trigger | Response/error contract | Required data/fixture refs | Required display | Allowed actions | Accessibility/focus behavior | AC/Test refs |
+|---|---|---|---|---|---|---|---|---|
+| UI-STATE-001 | Loading | Initial/query refresh | {{OPERATION/OUTCOME}} | {{DATA/FIX IDS}} | Skeleton/progress label | Cancel if relevant | Announce busy state | {{AC/TEST IDS}} |
+| UI-STATE-002 | Empty | Zero authorized records | {{EMPTY SEMANTICS}} | {{DATA/FIX IDS}} | Instructive empty copy | Primary next action | Heading/action reachable | {{AC/TEST IDS}} |
+| UI-STATE-003 | Success | Operation complete | {{SUCCESS SCHEMA}} | {{DATA/FIX IDS}} | Authoritative confirmation | Next action | Live-region announcement | {{AC/TEST IDS}} |
+| UI-STATE-004 | Validation | Invalid input | `VALIDATION_FAILED` | {{FIELD/FIX IDS}} | Field and summary errors | Correct/resubmit | Error association + focus summary | {{AC/TEST IDS}} |
+| UI-STATE-005 | Error | Request failed | {{ERROR SCHEMA/CODE}} | {{FIX IDS}} | Safe message/reference | Retry/support | Focus error summary | {{AC/TEST IDS}} |
+| UI-STATE-006 | Forbidden | Insufficient permission | `FORBIDDEN` | {{FIX IDS}} | Non-leaking message | Back/navigation | No hidden metadata | {{AC/TEST IDS}} |
+| UI-STATE-007 | Stale/conflict | Version changed | `CONFLICT` | {{VERSION/FIX IDS}} | Conflict and recovery | Reload/compare/retry | Preserve input when safe | {{AC/TEST IDS}} |
+| UI-STATE-008 | Partial/degraded | Dependency/data partial | {{DEGRADED OUTCOME}} | {{DATA/FIX IDS}} | Valid data + banner | Safe actions only | Announce banner | {{AC/TEST IDS}} |
+| UI-STATE-009 | Offline | Connectivity unavailable | {{OFFLINE CONTRACT}} | {{CACHE/FIX IDS}} | Offline status/recovery | Retry/queued action | Announce connectivity | {{AC/TEST IDS}} |
+| UI-STATE-010 | Async/in-progress | Long-running operation | {{JOB/EVENT OUTCOME}} | {{JOB/FIX IDS}} | Progress/polling state | Cancel if safe | Status announcement | {{AC/TEST IDS}} |
 
 #### Filtering, Sorting, and Pagination
 
@@ -1125,21 +1225,36 @@ Consumer rules:
 |---|---|---|---|---:|
 | `{{FIELD}}` | {{RULE}} | {{AUTHORITATIVE RULE}} | {{COPY}} | Yes |
 
-#### Responsive and Accessibility Requirements
+#### Responsive Requirements
 
-- Minimum supported viewport: `{{WIDTH}}`.
-- Keyboard order and shortcuts: `{{RULE}}`.
-- Focus management after modal/navigation/error: `{{RULE}}`.
-- Screen-reader labels and table semantics: `{{RULE}}`.
-- Contrast target: `{{WCAG LEVEL}}`.
-- Status is never conveyed by color alone.
-- Reduced-motion and zoom behavior: `{{RULE}}`.
+| Mode/breakpoint | Layout/reflow | Content priority | Control adaptation | Overflow/truncation | Test ref |
+|---|---|---|---|---|---|
+| {{MODE/WIDTH}} | {{REFLOW}} | {{PRIORITY}} | {{ADAPTATION}} | {{RULE}} | {{TEST ID}} |
+
+#### Accessibility Requirements
+
+| Concern | Required behavior | State/action refs | Test/evidence ref |
+|---|---|---|---|
+| Keyboard | {{ORDER/SHORTCUT/NO TRAP}} | {{REFS}} | {{TEST}} |
+| Focus | {{NAVIGATION/MODAL/ERROR RULE}} | {{REFS}} | {{TEST}} |
+| Semantics/name | {{LABEL/ROLE/TABLE RULE}} | {{REFS}} | {{TEST}} |
+| Announcement | {{BUSY/STATUS/LIVE REGION}} | {{REFS}} | {{TEST}} |
+| Error association | {{FIELD/SUMMARY LINK}} | {{REFS}} | {{TEST}} |
+| Contrast/non-color cue | {{WCAG TARGET}} | {{REFS}} | {{TEST}} |
+| Zoom/reflow | {{ZOOM/TEXT REFLOW RULE}} | {{REFS}} | {{TEST}} |
+| Reduced motion | {{MOTION RULE}} | {{REFS}} | {{TEST}} |
 
 #### Localization and Content
 
 | Content Key | Bahasa / Primary Locale | English / Secondary | Notes |
 |---|---|---|---|
 | `{{KEY}}` | {{COPY}} | {{COPY}} | {{DOMAIN TERM / VARIABLE}} |
+
+#### UI-API Mapping
+
+| UIMAP ID | Journey/AC refs | UI ref | Action ref | UI-state ref | Data refs | Operation refs | Schema refs | Response/error outcome | Fixture refs | Test refs |
+|---|---|---|---|---|---|---|---|---|---|---|
+| UIMAP-001 | {{JOURNEY/AC IDS}} | UI-001 | UI-ACT-001 | UI-STATE-001 | {{DATA IDS}} | {{API/EVT IDS}} | {{SCHEMA IDS}} | {{RESULT/ERROR}} | {{FIX IDS}} | {{TEST IDS}} |
 
 ## 8.3 Export and Download UX
 
@@ -1686,9 +1801,9 @@ A backup requirement is incomplete without a tested restore procedure.
 
 ## 14.2 Requirement-to-Test Matrix
 
-| Requirement | Test ID | Layer | Fixture | Expected Evidence | Automated? | Goal |
-|---|---|---|---|---|---:|---|
-| FR-001 | TEST-001 | Integration | FIX-001 | {{ASSERTION}} | Yes | GOAL-001 |
+| Requirement | UI/action/state/mapping refs | Contract/schema refs | Test ID | Layer | Fixture | Expected Evidence | Automated? | Goal |
+|---|---|---|---|---|---|---|---:|---|
+| FR-001 | UI-001 / UI-ACT-001 / UI-STATE-001 / UIMAP-001 | CONTRACT-001 / SCHEMA-001 | TEST-001 | Integration | FIX-001 | {{ASSERTION}} | Yes | GOAL-001 |
 
 Every MUST requirement needs at least one deterministic verification. Security and negative requirements should not rely only on UAT.
 
@@ -1879,15 +1994,17 @@ Avoid goals such as “implement backend,” “build dashboard,” “add secur
 
 ```mermaid
 flowchart LR
-    G001[GOAL-001 Contract and schema] --> G002[GOAL-002 Domain behavior]
-    G002 --> G003[GOAL-003 API]
-    G003 --> G004[GOAL-004 UI vertical slice]
-    G002 --> G005[GOAL-005 Worker/job]
-    G004 --> G006[GOAL-006 E2E and rollout]
-    G005 --> G006
+    G001[GOAL-001 CONTRACT_ENABLER] --> G002[GOAL-002 FIRST_VERTICAL_SLICE]
+    G002 --> G003[GOAL-003 SCALE_OUT_SLICE A]
+    G002 --> G004[GOAL-004 SCALE_OUT_SLICE B]
+    G003 --> G005[GOAL-005 HARDENING and UAT]
+    G004 --> G005
 ```
 
 The graph MUST be acyclic. Parallel goals must not edit the same migration, generated artifact, or high-conflict module without an explicit integration strategy.
+For UI-bearing scope, create exactly one `FIRST_VERTICAL_SLICE`. Every
+`SCALE_OUT_SLICE` depends on its issue reaching `verified` and the derived gate
+`FIRST_VERTICAL_SLICE_VERIFIED`; `EXCEPTION_APPROVED` cannot open scale-out.
 
 ## 16.6 Machine-Readable Goal Manifest
 
@@ -1898,6 +2015,8 @@ goals:
   - id: GOAL-001
     title: "{{ATOMIC OUTCOME}}"
     status: DRAFT # DRAFT | READY | BLOCKED | IN_PROGRESS | DONE | VERIFIED
+    ui_delivery_role: "CONTRACT_ENABLER | FIRST_VERTICAL_SLICE | SCALE_OUT_SLICE | HARDENING | NOT_APPLICABLE"
+    required_gate: "NOT_APPLICABLE | READY_FOR_SLICE | FIRST_VERTICAL_SLICE_VERIFIED"
     requirement_ids: [FR-001, DATA-001, TEST-001]
     upstream_refs:
       - "BRD-{{PROJECT_CODE}}#BREQ-001"
@@ -1907,6 +2026,11 @@ goals:
       fsd_id: "FSD-{{PROJECT_CODE}}"
       tdec_ids: [TDEC-001]
       adr_ids: [] # Optional; only ACCEPTED linked ADRs
+    contract_refs:
+      bundle: "FSD-{{PROJECT_CODE}}@{{FSD_VERSION}}#CONTRACT-001"
+      mappings: ["FSD-{{PROJECT_CODE}}@{{FSD_VERSION}}#UIMAP-001"]
+      schemas: ["FSD-{{PROJECT_CODE}}@{{FSD_VERSION}}#SCHEMA-001"]
+      fixtures: ["FSD-{{PROJECT_CODE}}@{{FSD_VERSION}}#FIX-001"]
     depends_on: []
     blocks: [GOAL-002]
     preconditions:
@@ -1953,6 +2077,9 @@ goals:
 |---|---|
 | Status | DRAFT / READY / BLOCKED / IN_PROGRESS / DONE / VERIFIED |
 | Objective | {{ONE OBSERVABLE OUTCOME}} |
+| UI delivery role | NOT_APPLICABLE / CONTRACT_ENABLER / FIRST_VERTICAL_SLICE / SCALE_OUT_SLICE / HARDENING |
+| Required gate | NOT_APPLICABLE / READY_FOR_SLICE / FIRST_VERTICAL_SLICE_VERIFIED |
+| Contract refs | {{QUALIFIED CONTRACT/UIMAP/SCHEMA/FIXTURE/TEST REFS OR NOT_APPLICABLE}} |
 | Requirement IDs | {{FR/DATA/API/UI/SEC/NFR/TEST IDS}} |
 | FSD authority | `{{FSD_ID_AND_SECTION}}` |
 | Technical decision IDs | `{{TDEC_IDS_OR_NONE}}` |
@@ -1975,6 +2102,9 @@ goals:
 - [ ] {{REQUIRED GOAL/SCHEMA/SECRET/SANDBOX}}.
 - [ ] All linked `OPEN-xxx BLOCKER` items are resolved.
 - [ ] FSD status is `APPROVED`.
+- [ ] The declared UI delivery role, required gate, qualified contract refs, and
+      dependency status are proven; `HARDENING` waits for every applicable UI
+      delivery slice to be `VERIFIED`.
 - [ ] Every referenced `TDEC-*` is `APPROVED`.
 - [ ] Every referenced ADR, if any, is `ACCEPTED` and not superseded.
 
@@ -2077,6 +2207,17 @@ Stop only on the listed stop conditions; otherwise use approved defaults and rep
 
 Adapt this sequence to the project; do not force it when unnecessary.
 
+For UI-bearing scope, preserve this dependency spine; omit only roles that are
+not applicable. A `CONTRACT_ENABLER` is followed by `/sc-plan` re-indexing and
+Technical Manager approval before `FIRST_VERTICAL_SLICE` becomes ready.
+
+| Order | UI Delivery Role | Release condition |
+|---:|---|---|
+| 1 | `CONTRACT_ENABLER` | Bounded contract assets verified; return to `/sc-plan` |
+| 2 | `FIRST_VERTICAL_SLICE` | FSD is re-approved at `READY_FOR_SLICE` |
+| 3 | `SCALE_OUT_SLICE` | First-slice issue is `verified` and PRD baseline is `VALIDATED` |
+| 4 | `HARDENING` | Integrated slices satisfy their required gates |
+
 | Order | Goal Type | Output | Independent Verification |
 |---:|---|---|---|
 | 1 | Compatibility/smoke spike | Confirm real external/repository assumptions; no production shortcut | Script/test evidence |
@@ -2096,9 +2237,9 @@ Adapt this sequence to the project; do not force it when unnecessary.
 
 ## 17.1 End-to-End Traceability Matrix
 
-| BRD Source | PRD Source | FSD Requirement | Decision Authority (`TDEC` / ADR optional) | Design / Invariant | Data | API/Event/Job | UI | Security/NFR | Test | Goal | Status |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| BRD-{{PROJECT_CODE}}#BREQ-001 / BRD-{{PROJECT_CODE}}#BAC-001 | PRD-{{PROJECT_CODE}}#FR-001 / PRD-{{PROJECT_CODE}}#AC-001 | FSD-{{PROJECT_CODE}}#FR-001 | FSD-{{PROJECT_CODE}}#TDEC-001 / N/A | INV-001 | DATA-001 | API-001 | UI-001 | SEC-001 | TEST-001 | GOAL-001 | COVERED |
+| BRD Source | PRD Source | FSD Requirement | Decision Authority (`TDEC` / ADR optional) | Design / Invariant | Data | API/Event/Job | UI/action/state/mapping | Wire Contract | Security/NFR | Test | Goal | Status |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| BRD-{{PROJECT_CODE}}#BREQ-001 / BRD-{{PROJECT_CODE}}#BAC-001 | PRD-{{PROJECT_CODE}}#FR-001 / PRD-{{PROJECT_CODE}}#AC-001 | FSD-{{PROJECT_CODE}}#FR-001 | FSD-{{PROJECT_CODE}}#TDEC-001 / N/A | INV-001 | DATA-001 | API-001 | UI-001 / UI-ACT-001 / UI-STATE-001 / UIMAP-001 | CONTRACT-001 / SCHEMA-001 | SEC-001 | TEST-001 | GOAL-001 | COVERED |
 
 Coverage rules:
 
@@ -2154,7 +2295,9 @@ Technical debt may not be used to hide incomplete MUST requirements.
 
 - [ ] Each feature covers main, negative, boundary, permission, concurrency, duplicate, and recovery flows.
 - [ ] APIs/events/jobs define schemas, errors, auth, idempotency, retries, and compatibility.
-- [ ] UI covers loading, empty, partial, error, forbidden, stale, and success states.
+- [ ] UI covers loading, empty, success, validation, error, forbidden,
+      stale/conflict, partial/degraded, offline, and async/in-progress states, or
+      records approved `N/A` reason and approver.
 - [ ] External integrations have real compatibility evidence or an explicit blocker.
 
 ### Security and AI

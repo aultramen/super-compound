@@ -21,6 +21,8 @@ Each issue must point to one `FSD-<PROJECT>#GOAL-xxx` packet that:
 - bounds allowed and prohibited scope in the FSD
 - states data/API/UI/job/security impact in the FSD
 - includes verification references or exact commands
+- for UI-integrated work, pins UI delivery role, `CONTRACT-*`, `UIMAP-*`,
+  `SCHEMA-*`, fixture/test refs, contract version, and required gate
 - has no unresolved blocker
 
 Use foundational goals only for contracts, migrations, adapters, or infrastructure that are independently testable.
@@ -36,6 +38,8 @@ For every issue, assign:
 - `technical_refs`: `FSD-*#TDEC-*` refs when relevant
 - `adr_refs`: linked `ADR-*#DEC-*` refs or `None`
 - `verification_refs`: FSD test or command IDs
+- `contract_refs`: versioned FSD contract/mapping/schema/fixture IDs when applicable
+- `contract_gate`: `NOT_APPLICABLE`, `READY_FOR_SLICE`, or `FIRST_VERTICAL_SLICE_VERIFIED`
 
 Validate before publishing:
 
@@ -43,6 +47,12 @@ Validate before publishing:
 - Blockers come before dependents.
 - No circular dependencies exist.
 - Parallel candidates do not require the same unmerged files unless the FSD states an integration strategy.
+- UI DAG order is optional `CONTRACT_ENABLER` -> `/sc-plan` re-approval -> exactly
+  one active real `FIRST_VERTICAL_SLICE` per pinned revision -> dependent
+  `SCALE_OUT_SLICE` issues -> one `HARDENING` issue blocked by all applicable UI
+  delivery slices. Scale-out also requires a `VALIDATED` PRD baseline.
+- Shared schemas, generated clients, fixtures, migrations, lockfiles, and
+  registries are an explicit dependency or single-writer stream.
 - Every ADR ref points to an accepted linked ADR.
 
 If there is a cycle, missing authority, or unresolved decision, revise the FSD or create an `OPEN-*` blocker before writing ready issues.
@@ -52,9 +62,9 @@ If there is a cycle, missing authority, or unresolved decision, revise the FSD o
 Before writing issue files, present the proposed board:
 
 ```markdown
-| Goal | Title | Blocked by | Upstream refs | Technical refs | Verification refs |
-|---|---|---|---|---|---|
-| GOAL-001 | <title> | None | PRD-CCC#FR-001 | FSD-CCC#TDEC-001 | FSD-CCC#TEST-001 |
+| Goal | Title | Blocked by | Contract refs/gate | Upstream refs | Technical refs | Verification refs |
+|---|---|---|---|---|---|---|
+| GOAL-001 | <title> | None | FSD-CCC@1.1.0#CONTRACT-001 / READY_FOR_SLICE | PRD-CCC#FR-001 | FSD-CCC#TDEC-001 | FSD-CCC#TEST-001 |
 ```
 
 Ask whether the granularity and blocking relationships are correct. Revise until approved or clearly state any assumption if the user asked to proceed without review.

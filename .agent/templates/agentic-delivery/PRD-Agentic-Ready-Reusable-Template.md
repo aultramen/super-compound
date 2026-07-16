@@ -1,13 +1,15 @@
 ---
 template_name: "Product Requirements Document — BRD→PRD→FSD Agentic Delivery Ready"
-template_version: "2.0.0"
-artifact_contract_version: "1.0.0"
+template_version: "2.1.0"
+artifact_contract_version: "1.1.0"
 document_type: "PRD"
 project_name: "{{PROJECT_NAME}}"
 project_code: "{{PROJECT_CODE}}"
 document_id: "PRD-{{PROJECT_CODE}}"
 version: "{{PRD_VERSION}}"
 status: "DRAFT" # DRAFT | IN_REVIEW | APPROVED | SUPERSEDED
+ui_delivery_profile: "{{NOT_APPLICABLE | STANDARD | HIGH_INTERACTION}}"
+experience_baseline_status: "{{NOT_APPLICABLE | DRAFT | VALIDATED | EXCEPTION_APPROVED}}"
 product_owner: "{{NAME_OR_ROLE}}"
 business_owner: "{{NAME_OR_ROLE}}"
 security_compliance_owner: "{{NAME_OR_ROLE_OR_NA}}"
@@ -228,6 +230,8 @@ PRD hanya dapat berstatus `APPROVED` jika:
 - [ ] Semua feature memiliki stable ID dan priority.
 - [ ] Business rule, canonical state, enum, date/unit semantics, dan precedence tidak bertentangan.
 - [ ] Acceptance criteria mencakup happy, negative, authorization, empty, duplicate, stale, dan failure path yang relevan.
+- [ ] `ui_delivery_profile` dan `experience_baseline_status` telah ditetapkan; setiap UI state `COVERED` atau `N/A - reason + approver`.
+- [ ] UI-bearing scope memiliki responsive/accessibility intent, evidence sesuai risiko, dan Business Owner approver; `HIGH_INTERACTION` memiliki interactive evidence, dengan runnable evidence untuk timing, runtime responsive, keyboard/focus, realtime, atau offline risk, atau exception eksplisit.
 - [ ] Security, privacy, compliance, audit, classification, retention, dan AI authority boundary telah dinilai.
 - [ ] NFR memiliki target terukur dan konteks beban/penggunaan.
 - [ ] Dependency, constraint, assumption, risk, dan degraded behavior tercatat.
@@ -923,6 +927,40 @@ Isi `N/A — alasan` bila feature tidak memakai AI/automation.
 | Empty state | {{WHAT_USER_CAN_DO_NEXT}} |
 | Date/number format | {{LOCALE_RULE}} |
 
+#### UI Experience Gate
+
+PRD adalah authority untuk experience baseline dan observable UI behavior.
+Evidence visual/prototype mendukung keputusan; evidence itu bukan authority atau
+production seed.
+
+| Field | Contract |
+|---|---|
+| `ui_delivery_profile` | `NOT_APPLICABLE / STANDARD / HIGH_INTERACTION` |
+| `experience_baseline_status` | `NOT_APPLICABLE / DRAFT / VALIDATED / EXCEPTION_APPROVED` |
+| Critical journey/feature/AC refs | `{{JOURNEY/FEAT/AC IDS}}` |
+| Responsive/accessibility intent refs | `{{NFR/AC IDS}}` |
+| Validation evidence refs | `{{SRC/DESIGN/PROTOTYPE REFS}}` |
+| Approver | `{{BUSINESS_OWNER + DECISION REF}}` |
+| Blocking `OPEN-*` refs | `{{IDS_OR_NONE}}` |
+
+##### State Applicability Matrix
+
+Every row is `COVERED` or `N/A - reason + approver`. Material edge cases are
+named scenarios, not a generic `Edge` state.
+
+| State | Applicability | Observable behavior / recovery | AC refs | N/A reason + approver |
+|---|---|---|---|---|
+| Loading | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Empty | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Success | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Validation | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Error | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Permission denied | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Stale/conflict | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Partial/degraded | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Offline | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Async/in-progress | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+
 ### 9.1.20 Feature Metrics
 
 | Metric ID | Metric | Definition | Numerator | Denominator | Segments | Source | Target | Decision Enabled |
@@ -943,6 +981,8 @@ Isi `N/A — alasan` bila feature tidak memakai AI/automation.
 - [ ] Main, alternative, negative, dan recovery flow tersedia.
 - [ ] State transition serta role authority tidak ambigu.
 - [ ] Acceptance criteria memiliki observable oracle.
+- [ ] UI Experience Gate profile, state applicability, evidence, and approver are complete or `NOT_APPLICABLE` with approved reason.
+- [ ] `HIGH_INTERACTION` evidence covers the material runtime interaction risk or records an explicit exception.
 - [ ] Input/output product semantics dan classification jelas.
 - [ ] AI/human authority boundary dinyatakan atau N/A.
 - [ ] NFR dan dependency yang relevan telah ditautkan.
@@ -1325,6 +1365,18 @@ prd_handoff:
     brd_ids: ["BRD-{{PROJECT_CODE}}"]
     brd_requirement_refs: ["BRD-{{PROJECT_CODE}}#BREQ-001"]
     brd_acceptance_refs: ["BRD-{{PROJECT_CODE}}#BAC-001", "BRD-{{PROJECT_CODE}}#BAT-001"]
+
+  ui_experience:
+    profile: "STANDARD"
+    baseline_status: "VALIDATED"
+    not_applicable_reason: "{{REQUIRED_FOR_NOT_APPLICABLE_OTHERWISE_NA}}"
+    critical_journey_refs: ["PRD-{{PROJECT_CODE}}#JOURNEY-001"]
+    feature_refs: ["PRD-{{PROJECT_CODE}}#FEAT-001"]
+    state_applicability_refs: ["PRD-{{PROJECT_CODE}}#AC-001"]
+    responsive_accessibility_refs: ["PRD-{{PROJECT_CODE}}#NFR-001"]
+    validation_evidence_refs: ["PRD-{{PROJECT_CODE}}#SRC-010"]
+    blocking_open_refs: []
+    approved_by: "{{BUSINESS_OWNER}}"
 
   artifact_governance:
     canonical_path: "BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION"

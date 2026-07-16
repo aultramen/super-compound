@@ -1,0 +1,48 @@
+# UI Contract Readiness Eval Run History
+
+Date: 2026-07-16
+Baseline: 943706f0b1eca5d42df0a0ede77a5943cde45050
+
+## Calibration (not scored)
+
+Three fresh-context calibration attempts returned 13/13 apparent passes. They
+were not scored because CAP-UI-002 and CAP-UI-003 did not yet state the required
+`experience_baseline_status` value even though the response contract required
+it. The definition was corrected to make every compared field binary before the
+final attempts. No implementation was changed in response to attempt output.
+
+## Final Attempt 1
+
+Reset: fresh agent context; no prior-attempt answer supplied.
+
+```jsonl
+{"eval_id":"CAP-UI-001","profile":"STANDARD","experience_baseline_status":"VALIDATED","ui_contract_readiness":"READY_FOR_SLICE","verdict":"PASS","blocking_reasons":[],"next_owner":"/sc-plan","scale_out":"BLOCKED_PENDING_FIRST_SLICE"}
+{"eval_id":"CAP-UI-002","profile":"STANDARD","experience_baseline_status":"DRAFT","ui_contract_readiness":"BLOCKED","verdict":"NEEDS_REVISION","blocking_reasons":["forbidden behavior has neither coverage nor approved N/A","stale/conflict behavior has neither coverage nor approved N/A"],"next_owner":"/sc-prd","scale_out":"BLOCKED"}
+{"eval_id":"CAP-UI-003","profile":"HIGH_INTERACTION","experience_baseline_status":"VALIDATED","ui_contract_readiness":"BLOCKED","verdict":"NEEDS_REVISION","blocking_reasons":["missing runnable evidence for keyboard/focus risk","missing runnable evidence for realtime/offline risk","missing runnable evidence for responsive risk"],"next_owner":"/sc-prd","scale_out":"BLOCKED"}
+```
+
+Regression: REG-UI-001..010 PASS (10/10). Structural grader: 29/29 PASS.
+
+## Final Attempt 2
+
+Reset: fresh agent context; no prior-attempt answer supplied.
+
+```jsonl
+{"eval_id":"CAP-UI-001","profile":"STANDARD","experience_baseline_status":"VALIDATED","ui_contract_readiness":"READY_FOR_SLICE","verdict":"PASS","blocking_reasons":[],"next_owner":"/sc-plan","scale_out":"BLOCKED_PENDING_FIRST_SLICE"}
+{"eval_id":"CAP-UI-002","profile":"STANDARD","experience_baseline_status":"DRAFT","ui_contract_readiness":"BLOCKED","verdict":"NEEDS_REVISION","blocking_reasons":["forbidden state has neither coverage nor approved N/A","stale/conflict state has neither coverage nor approved N/A"],"next_owner":"/sc-prd","scale_out":"BLOCKED"}
+{"eval_id":"CAP-UI-003","profile":"HIGH_INTERACTION","experience_baseline_status":"VALIDATED","ui_contract_readiness":"BLOCKED","verdict":"NEEDS_REVISION","blocking_reasons":["missing runnable evidence for keyboard/focus risk","missing runnable evidence for realtime/offline risk","missing runnable evidence for responsive risk"],"next_owner":"/sc-prd","scale_out":"BLOCKED"}
+```
+
+Regression: REG-UI-001..010 PASS (10/10). Structural grader: 29/29 PASS.
+
+## Final Attempt 3
+
+Reset: fresh agent context; no prior-attempt answer supplied.
+
+```jsonl
+{"eval_id":"CAP-UI-001","profile":"STANDARD","experience_baseline_status":"VALIDATED","ui_contract_readiness":"READY_FOR_SLICE","verdict":"PASS","blocking_reasons":[],"next_owner":"/sc-plan","scale_out":"BLOCKED_PENDING_FIRST_SLICE"}
+{"eval_id":"CAP-UI-002","profile":"STANDARD","experience_baseline_status":"DRAFT","ui_contract_readiness":"BLOCKED","verdict":"NEEDS_REVISION","blocking_reasons":["forbidden","stale/conflict"],"next_owner":"/sc-prd","scale_out":"BLOCKED"}
+{"eval_id":"CAP-UI-003","profile":"HIGH_INTERACTION","experience_baseline_status":"VALIDATED","ui_contract_readiness":"BLOCKED","verdict":"NEEDS_REVISION","blocking_reasons":["missing runnable evidence: keyboard/focus","missing runnable evidence: realtime/offline","missing runnable evidence: responsive"],"next_owner":"/sc-prd","scale_out":"BLOCKED"}
+```
+
+Regression: REG-UI-001..010 PASS (10/10). Structural grader: 29/29 PASS.

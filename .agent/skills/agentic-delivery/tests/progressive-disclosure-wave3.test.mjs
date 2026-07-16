@@ -15,27 +15,29 @@ const specs = {
     frontmatter:
       '---\nname: agentic-delivery\ndescription: "Use when following the Super Compound BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION delivery path, artifact traceability, FSD authority, optional ADR handling, zero context bloat issue slicing, or OPEN-* stop conditions."\n---',
     references: {
-      "templates-and-outputs.md": "532d3e532cdf5b3ce3628abff9b67c448c60d26b3409a8963fa1b6d26c0b96bd",
+      "templates-and-outputs.md": "cec84629151a691f394f780c32997795bedb04a8650073a4ca3230d37a9e9a73",
       "authority-and-adr.md": "2bca7520c4b11237fe99f8e53f3083f97c4bef88692876d147a4b4c103e22943",
-      "qualified-references.md": "a1ea8d7a7e653e5df729540aa1fc42a0a839237051efc52485f200f36a07e228",
-      "context-and-issue-pointers.md": "7dd6cec6bd32ea8428d796e46704a8deafa928de30209cb72fa0f28db85f8d88",
-      "open-stop-conditions.md": "eff4e4880df0d1f1a60a43d86b97e1403d1c48df6a183a76b85d11759a2d3938",
-      "workflow-integration.md": "8d77ac27debf5773b11306c62cc218b1942858bed13c781975c534033a800ee5",
+      "qualified-references.md": "bc5f8b87bb0333347f291087ae7a28858b5326ebfd12c09094e5532f21c110eb",
+      "context-and-issue-pointers.md": "68c0d02211cd46b95845c2555e0d680075e61e72d3793eae3678a07d69cf8b1d",
+      "open-stop-conditions.md": "d063fff88d47101ae5c331abe7d51dce53cc36d41d80195f4f0132a797bbf7b0",
+      "workflow-integration.md": "c1442ade732078dbda78f121d1dab271227f885a2158bce8a4c42e18862e841a",
+      "ui-contract-readiness.md": "6749ee9e753a912b675df0d4cc619c82fe5acc5df6dbd79062db0c0f8b8bdcca",
     },
     invariants: [
       /BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION/,
       /FSD authority/,
       /\.agent\/templates\/agentic-delivery\/skeletons\/Issue-Pointer-Skeleton\.md/,
       /OPEN-\* gate:/,
+      /UI delivery gate:/,
     ],
   },
   "issue-workflow": {
     frontmatter:
       '---\nname: issue-workflow\ndescription: "Use when /sc-plan needs FSD GOAL-* packets turned into lightweight issue pointers, local Markdown Kanban boards, blocker DAGs, or multi-agent task contracts."\n---',
     references: {
-      "zero-context.md": "ff8f306457e45a42bd0e0f5e68d0e3aa96344842bc18a8fda5eb028f7094cc4a",
-      "process.md": "7d7d96f53b14c96097f4d8a8175a5df9d95237b6d7828bc69bae62fba83cac59",
-      "status-and-done.md": "eaec9a69434c2e720043680211b9fbe1d1995e8dc25f8b32068b728e29c34264",
+      "zero-context.md": "60efe561a41dcf40ffe1f9fe88f94b64aebad51fb2ac7dd5b50d6b54a15007e7",
+      "process.md": "7cd02af6cb6e8bdf5ac7c1aba875542b02a5a05c86e82ee7f089412db9dc5cb0",
+      "status-and-done.md": "6a13d0ab2b0bf3e6fcacadbab6c622eedea4809002c27e93116d49ffbac8c4a4",
     },
     invariants: [
       /Issue files are references, not specifications/,
@@ -48,30 +50,31 @@ const specs = {
     frontmatter:
       '---\nname: plan-verification\ndescription: "Use when an FSD and goal issue board need requirement coverage, goal quality, dependency DAG, sizing, and verification validated before execution."\n---',
     references: {
-      "coverage-and-dependencies.md": "6a5368eeaea2c1641be9f532ad1977f3a24d541603daa78e293bad3ea7750ae1",
+      "coverage-and-dependencies.md": "16bea51fefafeca4ba4d4e4186e7cf7f52105f33fe7deb22f4e6394115fd4347",
       "links-scope-and-must-haves.md": "d73c1b53afe2bab7a3b5bd8221b3ef62f1705490eb18abba300d6f1218157b7d",
       "sizing.md": "449d2058678489910fbd8d56e839bcd132db1025927ad267f94c2b52d559edb0",
-      "tests-and-decisions.md": "efa3114f5c8eee1ce150d94c5f2bc0a7d0e574c7e2030bd7781d632641ab1017",
-      "verification-process.md": "769f27e3b85743a43c8f52bd043966d8717350afca860c3115d12a51d402705d",
+      "tests-and-decisions.md": "63985afa660fd9d2b6412f66a40175f72029e1018bf833c42763e7111f7f1ce0",
+      "verification-process.md": "0183c6bcf5d3ac4da6b82cd18e6e8056e63d69aeb264205673a763046d3a4034",
       "revision-rules.md": "541a5a8061f13aeeb69156486bd4f63d7b48766c30a69c1f99824f7ece66c97a",
     },
     invariants: [
       /Decision gate:/,
       /approved `TDEC-\*`.*linked `ACCEPTED` ADR.*exact ID.*`GOAL-\*`.*`TEST-\*`/s,
       /Fuzzy text similarity.*never.*blocking/is,
-      /nine verification dimensions/i,
+      /ten verification dimensions/i,
     ],
   },
   "parallel-execution": {
     frontmatter:
-      '---\nname: parallel-execution\ndescription: "Use when a plan or issue board has 5+ independent tasks that don\'t share files. Dispatches multiple agents working simultaneously in isolated git worktrees. Requires no unresolved blockers or file-level dependencies."\n---',
+      '---\nname: parallel-execution\ndescription: "Use when a plan or issue board has 2+ independent execution streams whose time saving exceeds coordination overhead. Dispatches agents in isolated git worktrees only after required delivery gates pass."\n---',
     references: {
-      "prerequisites-and-selection.md": "fed1536b19e634d5a4e4700f7f13907d8e93f47651609cc0334349eb6e5e967a",
-      "process.md": "a491dd3c640bdef68ac5926d631152e403ca3eac72d57864433cb19389281c7b",
-      "red-flags.md": "b8e1b1fbb3fef8c6ca9e9759a082ee370d5635cb27293fc7116a1920a84b6166",
+      "prerequisites-and-selection.md": "2c7d5aa0b744589b4b836cfcb6184b06145894f7bff9f8a2200e0020da4042d4",
+      "process.md": "627644836d56defb1c6aacd37edadcf32dee5a8be5195c3c17ab0dc21f654ac7",
+      "red-flags.md": "502f2124f04f37f5871757706288f2c8875e2f9ff5b0e8a889a6eea4e3a6c8a1",
     },
     invariants: [
-      /5\+ independent/,
+      /2\+ independent execution streams/,
+      /first vertical slice.*verified/is,
       /One shared file = sequential/,
       /Approval gate:/,
       /Integration gate:/,

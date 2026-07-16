@@ -187,6 +187,27 @@ test("installs an exact, hashed Codex bundle from canonical .agent sources", (t)
   assert.match(readFileSync(fullResearch, "utf8"), /skills\/context7-docs\/SKILL\.md/);
   assert.equal(statSync(context7Skill).isFile(), true);
 
+  const uiReadinessReference = join(
+    target,
+    "references",
+    "skills",
+    "agentic-delivery",
+    "references",
+    "ui-contract-readiness.md",
+  );
+  assert.equal(statSync(uiReadinessReference).isFile(), true);
+  assert.match(readFileSync(uiReadinessReference, "utf8"), /READY_FOR_SLICE/);
+
+  for (const [relativePath, marker] of [
+    ["references/workflows/sc-prd.md", /experience_baseline_status/],
+    ["references/workflows/sc-ui.md", /PRD_CHANGE_REQUIRED/],
+    ["references/workflows/sc-plan.md", /FIRST_VERTICAL_SLICE/],
+    ["references/templates/agentic-delivery/skeletons/PRD-Skeleton.md", /UI Experience Gate/],
+    ["references/templates/agentic-delivery/skeletons/FSD-Skeleton.md", /Screen & Interaction Contract/],
+  ]) {
+    assert.match(readFileSync(join(target, ...relativePath.split("/")), "utf8"), marker);
+  }
+
   const installedExplore = readFileSync(
     join(target, "references", "workflows", "sc-explore.md"),
     "utf8",

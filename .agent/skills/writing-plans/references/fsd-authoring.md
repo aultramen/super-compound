@@ -25,6 +25,7 @@ Run only branches supported by a signal:
 | PII, consent, retention, deletion, export, sharing | `data-privacy` and negative acceptance cases |
 | Compliance or AI governance | Evidence path, owner, retention, review gate |
 | Frontend/UI | Existing design system or targeted `interface-design` retrieval |
+| UI-bearing delivery | `agentic-delivery/references/ui-contract-readiness.md`; PRD baseline, Section 8 contract, readiness score/hard gates |
 | Domain or module-seam ambiguity | `domain-modeling` or `codebase-design` |
 | Missing product/architecture authority | Return to `/sc-explore` or `/sc-prd`, or record a blocking `OPEN-*` |
 
@@ -49,6 +50,9 @@ Every FSD includes or marks not applicable:
 - Atomic `GOAL-*` packets and their affected paths.
 - Only genuine blocking `OPEN-*` records.
 - Deterministic verification commands, expected evidence, and release gates.
+- For UI-bearing work: versioned `UI-STATE-*`/`UIMAP-*`/`SCHEMA-*`/`CONTRACT-*`
+  mappings, deterministic fixtures, derived consumer refs, contract tests, goal
+  roles, and the first-real-slice barrier.
 
 An optional `docs/plans/` note may summarize context, resolved decisions, risks, design-system evidence, goal/issue links, verification, rollback, and docs. It never replaces or overrides the FSD.
 

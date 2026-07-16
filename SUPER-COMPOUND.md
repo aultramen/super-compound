@@ -13,6 +13,43 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. It 
 - Turn reusable solutions into documentation through `/sc-compound`.
 - Do not preserve stale workflow aliases unless they are part of the current public interface.
 
+## Default UI-Aware Lifecycle
+
+When the scope has an interactive user surface, use:
+
+```text
+BRD -> PRD draft -> /sc-ui validation -> approved PRD
+    -> FSD Screen/Interaction + delegated wire contract
+    -> optional CONTRACT_ENABLER -> FIRST_VERTICAL_SLICE
+    -> controlled SCALE_OUT_SLICE work -> verification/UAT
+```
+
+Set `ui_delivery_profile` to `NOT_APPLICABLE`, `STANDARD`, or
+`HIGH_INTERACTION`. An unclassified interactive surface defaults to `STANDARD`.
+PRD owns observable experience behavior; FSD Section 8 owns semantic UI/API
+mappings; OpenAPI/JSON Schema/approved equivalent owns exact wire shape. Goal
+issues remain pointers to these authorities.
+
+`READY_FOR_SLICE` requires score >=90 and every canonical hard gate. A score,
+business preference, or `EXCEPTION_APPROVED` cannot waive security,
+accessibility baseline, contract conformance, data integrity, or a blocking
+`OPEN-*`. Exceptions permit only the first slice. Parallel scale-out waits for a
+`VALIDATED` baseline and a first-slice issue verified against the real provider;
+mock-only evidence is not integration proof.
+
+When contract assets are absent, the only executable goal is the bounded
+`CONTRACT_ENABLER`. After it is verified, return to `/sc-plan` to pin exact
+revisions, rerun the gate, and obtain Technical Manager re-approval before the
+first slice. A verified first slice returns to `/sc-plan` for dependent pointer
+promotion. One final `HARDENING` goal owns merged integration, responsive,
+accessibility, E2E, visual-regression, and Business Owner UAT evidence;
+`/sc-review` audits that evidence rather than creating it.
+
+Do not claim the outcome target from framework structure alone. Measure greater
+than 90% reduction in preventable alignment rework only after at least three
+comparable pilot features; exclude new scope, market learning, and new
+stakeholder preferences from preventable rework.
+
 ## Public Workflows
 
 Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound commands do not collide with native Claude Code planning and review commands.
@@ -42,10 +79,12 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 - Fuzzy idea, domain language, strategy, or prototype question: `/sc-explore` to produce a BRD
 - Named factual, current-doc, version-support, or option-feasibility gap that could change a decision: `/sc-research`, then return to the workflow that owns that decision
 - Empty goal queue with no active handoff, blocker, or failing verification: `/sc-geniusloop`
-- Product requirements from an approved BRD: `/sc-prd`
+- Product requirements from an approved BRD: `/sc-prd`; UI-bearing drafts route
+  through read-only `/sc-ui` before PRD approval
 - FSD creation, ADR applicability, goal slicing, triage, Kanban, Journey, or technical breakdown: `/sc-plan`
 - Git branch, worktree, commit, push, or Pull Request operation: `/sc-go`
-- Implementation, looped work, or safe parallel execution from an approved FSD goal: `/sc-work`
+- Implementation or controlled parallel execution from an approved FSD goal:
+  `/sc-work`; first prove a real vertical slice and the pinned contract
 - Failure or unexpected behavior: `/sc-debug`
 - Changed files need critique: `/sc-review`
 - Security, current-stack compatibility/dependency posture, MCP, agent config, compliance, or release readiness: `/sc-audit`
@@ -123,6 +162,9 @@ During work:
 - Keep `/sc-review` and `/sc-audit` strictly read-only. Approval selects an
   owning remediation workflow; it never authorizes fixes inside review/audit.
 - Keep `.scratch/<feature>/issues/*.md` lightweight: use qualified refs, not copied BRD/PRD/FSD/ADR prose.
+- Classify changes before editing authority: scope/policy -> `/sc-explore`;
+  observable behavior/AC -> `/sc-prd`; data/API/schema -> `/sc-plan`;
+  implementation divergence -> owning `/sc-work`; new preference -> backlog.
 - For independent multi-agent goals, exchange file-backed packages under `.scratch/work-packages/`; keep chat handoffs to paths and short verdicts, and serialize shared-file validation.
 
 Before completion:
@@ -151,6 +193,11 @@ The next session should be able to run `/sc-status` and continue from disk.
 
 Use `/sc-ui` and `interface-design` for read-only frontend design/review. Apply
 that guidance to source only inside `/sc-work <approved-goal>`.
+
+`/sc-ui` returns exactly one read-only classification: `EVIDENCE`,
+`PRD_CHANGE_REQUIRED`, `FSD_CHANGE_REQUIRED`, or `VERIFICATION_FINDING`.
+Accepted evidence is absorbed into the owning PRD/FSD. Prototypes remain
+throwaway decision evidence and are never production seeds.
 
 Command examples:
 

@@ -357,6 +357,268 @@ test("ui work has explicit read-only and sc-work implementation modes", async ()
   assert.doesNotMatch(walkthrough, /Build the actual requested UI/i);
 });
 
+test("UI-bearing PRDs validate an experience baseline before approval", async () => {
+  const [prd, prdContract, launch, launchContract, invariants] = await Promise.all([
+    readRepositoryFile(".agent/workflows/sc-prd.md"),
+    readRepositoryFile(".agent/context/workflows/sc-prd.contract.md"),
+    readRepositoryFile(".agent/workflows/sc-launch.md"),
+    readRepositoryFile(".agent/context/workflows/sc-launch.contract.md"),
+    readRepositoryFile(".agent/context/workflow-invariants.json"),
+  ]);
+
+  for (const text of [prd, prdContract]) {
+    assert.match(text, /ui_delivery_profile/i);
+    assert.match(text, /NOT_APPLICABLE[\s\S]*STANDARD[\s\S]*HIGH_INTERACTION/i);
+    assert.match(text, /experience_baseline_status/i);
+    assert.match(text, /DRAFT[\s\S]*VALIDATED[\s\S]*EXCEPTION_APPROVED/i);
+    assert.match(text, /\/sc-ui[\s\S]*before[\s\S]*(?:approve|approval)|before[\s\S]*(?:approve|approval)[\s\S]*\/sc-ui/i);
+    assert.match(text, /HIGH_INTERACTION[\s\S]*(?:interactive|runnable)[\s\S]*evidence/i);
+  }
+
+  for (const text of [launch, launchContract]) {
+    assert.match(text, /PRD draft[\s\S]*\/sc-ui[\s\S]*approved PRD/i);
+    assert.match(text, /contract enabler[\s\S]*first vertical slice[\s\S]*(?:controlled )?scale-out/i);
+  }
+
+  const routes = JSON.parse(invariants).routes;
+  assert.equal(Object.keys(routes).length, 17);
+  assert.ok(routes["sc-prd"].nextOwners.includes("sc-ui"));
+  assert.match(
+    prd,
+    /Output[\s\S]*(?:DRAFT|draft)[\s\S]*\/sc-ui[\s\S]*(?:VALIDATED|EXCEPTION_APPROVED|approval)/i,
+  );
+  for (const text of [launch, launchContract]) {
+    assert.match(
+      text,
+      /contract enabler[\s\S]*\/sc-plan[\s\S]*(?:re-approve|approval|approved)[\s\S]*first vertical slice/i,
+    );
+  }
+});
+
+test("sc-ui classifies evidence and routes changes without mutating authority", async () => {
+  const [ui, uiContract] = await Promise.all([
+    readRepositoryFile(".agent/workflows/sc-ui.md"),
+    readRepositoryFile(".agent/context/workflows/sc-ui.contract.md"),
+  ]);
+
+  for (const text of [ui, uiContract]) {
+    for (const classification of [
+      "EVIDENCE",
+      "PRD_CHANGE_REQUIRED",
+      "FSD_CHANGE_REQUIRED",
+      "VERIFICATION_FINDING",
+    ]) {
+      assert.match(text, new RegExp(classification));
+    }
+    assert.match(text, /scope[\s\S]*\/sc-explore/i);
+    assert.match(text, /observable|user-visible/i);
+    assert.match(text, /(?:data|API|technical interaction)[\s\S]*\/sc-plan/i);
+    assert.match(text, /implementation diverges[\s\S]*\/sc-work/i);
+    assert.match(text, /preference[\s\S]*(?:backlog|change request)/i);
+    assert.match(text, /read-only/i);
+    assert.match(text, /ui-contract-readiness\.md/i);
+    assert.match(text, /runnable[\s\S]*(?:timing|keyboard\/focus|realtime|offline)/i);
+    assert.match(
+      text,
+      /EVIDENCE[\s\S]*(?:PRD[^\n]*\/sc-prd|\/sc-prd[^\n]*PRD)[\s\S]*(?:FSD[^\n]*\/sc-plan|\/sc-plan[^\n]*FSD)/i,
+    );
+  }
+});
+
+test("UI evidence has a durable supporting locator and deterministic return owner", async () => {
+  const [explore, exploreContract, canonical] = await Promise.all([
+    readRepositoryFile(".agent/workflows/sc-explore.md"),
+    readRepositoryFile(".agent/context/workflows/sc-explore.contract.md"),
+    readRepositoryFile(
+      ".agent/skills/agentic-delivery/references/ui-contract-readiness.md",
+    ),
+  ]);
+
+  for (const text of [explore, exploreContract]) {
+    assert.match(text, /(?:external URL|repository-relative)[\s\S]*(?:revision|digest)/i);
+    assert.match(text, /decision question[\s\S]*reviewer[\s\S]*date[\s\S]*disposition/i);
+    assert.match(text, /UI[\s\S]*evidence[\s\S]*\/sc-ui/i);
+  }
+  assert.match(canonical, /static image[\s\S]*wireframe[\s\S]*state diagram[\s\S]*runnable/i);
+  assert.match(canonical, /supporting evidence[\s\S]*(?:external URL|repository-relative)/i);
+});
+
+test("UI delivery uses a contract enabler and a real first vertical slice before scale-out", async () => {
+  const [plan, planContract, work, workContract, integration, planVerification] = await Promise.all([
+    readRepositoryFile(".agent/workflows/sc-plan.md"),
+    readRepositoryFile(".agent/context/workflows/sc-plan.contract.md"),
+    readRepositoryFile(".agent/workflows/sc-work.md"),
+    readRepositoryFile(".agent/context/workflows/sc-work.contract.md"),
+    readRepositoryFile(".agent/skills/integration-checking/SKILL.md"),
+    readRepositoryFile(".agent/skills/plan-verification/SKILL.md"),
+  ]);
+
+  for (const text of [plan, planContract]) {
+    assert.match(text, /ui_contract_readiness/i);
+    assert.match(text, /READY_FOR_SLICE/);
+    assert.match(text, /CONTRACT_ENABLER/);
+    assert.match(text, /exactly one[\s\S]*FIRST_VERTICAL_SLICE/i);
+    assert.match(text, /SCALE_OUT_SLICE[\s\S]*FIRST_VERTICAL_SLICE_VERIFIED/i);
+    assert.match(
+      text,
+      /exactly one[\s\S]*HARDENING[\s\S]*depends on[\s\S]*(?:all|every)[\s\S]*(?:UI|delivery) slice/i,
+    );
+    assert.match(text, /only[\s\S]*(?:FSD|issue pointer)|(?:FSD|issue pointer)[\s\S]*only/i);
+  }
+
+  for (const text of [work, workContract]) {
+    assert.match(text, /pinned contract version/i);
+    assert.match(text, /real provider|real backend/i);
+    assert.match(text, /auth|permission/i);
+    assert.match(text, /success/i);
+    assert.match(text, /representative failure/i);
+    assert.match(text, /mock-only[\s\S]*(?:reject|does not|cannot)[\s\S]*scale-out|scale-out[\s\S]*(?:reject|does not|cannot)[\s\S]*mock-only/i);
+    assert.match(text, /integration-checking/);
+    assert.match(text, /scale-out[\s\S]*baseline[\s\S]*VALIDATED|VALIDATED[\s\S]*scale-out/i);
+    assert.match(
+      text,
+      /FIRST_VERTICAL_SLICE[\s\S]*verified[\s\S]*\/sc-plan[\s\S]*(?:promote|ready)[\s\S]*SCALE_OUT/i,
+    );
+  }
+
+  assert.match(integration, /mock[\s\S]*not[\s\S]*(?:real provider|integration proof)|not[\s\S]*(?:real provider|integration proof)[\s\S]*mock/i);
+  assert.match(
+    planVerification,
+    /enabler-only[\s\S]*CONTRACT_ENABLER[\s\S]*(?:DRAFT|BLOCKED)[\s\S]*first vertical slice[\s\S]*blocked/i,
+  );
+  assert.match(
+    planVerification,
+    /exactly one[\s\S]*HARDENING[\s\S]*depends on[\s\S]*(?:all|every)[\s\S]*(?:UI|delivery) slice/i,
+  );
+});
+
+test("parallel UI scale-out starts with two independent streams only after the first slice", async () => {
+  const [parallel, prerequisites, process, work] = await Promise.all([
+    readRepositoryFile(".agent/skills/parallel-execution/SKILL.md"),
+    readRepositoryFile(".agent/skills/parallel-execution/references/prerequisites-and-selection.md"),
+    readRepositoryFile(".agent/skills/parallel-execution/references/process.md"),
+    readRepositoryFile(".agent/workflows/sc-work.md"),
+  ]);
+
+  for (const text of [parallel, prerequisites]) {
+    assert.match(text, /2\+ independent (?:execution )?streams/i);
+    assert.match(text, /coordination overhead[\s\S]*time sav/i);
+  }
+  for (const text of [parallel, prerequisites, process, work]) {
+    assert.match(text, /first vertical slice[\s\S]*verified/i);
+    assert.match(text, /contract version/i);
+    assert.match(text, /single writer/i);
+    assert.match(text, /isolated (?:git )?worktree/i);
+  }
+  assert.doesNotMatch(process, /Blocked by[^\n]*(?:done|DONE)(?!\s*\/\s*verified)/i);
+  assert.doesNotMatch(process, /worktree is optional/i);
+  assert.match(process, /merged-system integration verification/i);
+});
+
+test("direct subagent dispatch and triage cannot bypass UI contract gates", async () => {
+  const [subagents, triage] = await Promise.all([
+    readRepositoryFile(".agent/skills/subagent-orchestration/SKILL.md"),
+    readRepositoryFile(".agent/skills/triage-workflow/SKILL.md"),
+  ]);
+
+  for (const text of [subagents, triage]) {
+    assert.match(text, /ui_delivery_role/i);
+    assert.match(text, /required_gate/i);
+    assert.match(text, /pinned contract/i);
+    assert.match(text, /FIRST_VERTICAL_SLICE_VERIFIED/i);
+  }
+  assert.match(
+    subagents,
+    /FIRST_VERTICAL_SLICE[\s\S]*real (?:provider|backend)[\s\S]*integration-checking[\s\S]*verified/i,
+  );
+  assert.match(
+    triage,
+    /ready-for-agent[\s\S]*READY_FOR_SLICE[\s\S]*SCALE_OUT_SLICE[\s\S]*first[- ]slice[\s\S]*verified/i,
+  );
+  assert.match(triage, /issue-workflow[\s\S]*needs-info/i);
+  assert.match(
+    triage,
+    /issue pointer[\s\S]*(?:qualified references|authority refs)[\s\S]*(?:must not|never|do not)[\s\S]*(?:copy|duplicate)[\s\S]*(?:requirements|acceptance prose)/i,
+  );
+  assert.doesNotMatch(triage, /- What to build or fix/i);
+  assert.doesNotMatch(triage, /- Acceptance criteria/i);
+  for (const text of [subagents, triage]) {
+    assert.match(
+      text,
+      /HARDENING[\s\S]*(?:all|every)[\s\S]*(?:UI|delivery) slice[\s\S]*verified[\s\S]*(?:UAT|Business Owner)/i,
+    );
+  }
+});
+
+test("full and compact work entry fail closed on pointer state, dependencies, and role gate", async () => {
+  const [workflow, compact] = await Promise.all([
+    readRepositoryFile(".agent/workflows/sc-work.md"),
+    readRepositoryFile(".agent/context/workflows/sc-work.contract.md"),
+  ]);
+
+  for (const text of [workflow, compact]) {
+    assert.match(text, /ready-for-agent/i);
+    assert.match(text, /Blocked by[\s\S]*(?:verified|satisfied)/i);
+    assert.match(text, /before[\s\S]*(?:edit|execution|implement)/i);
+    assert.match(text, /ui_delivery_role/i);
+    assert.match(text, /required_gate/i);
+    assert.match(
+      text,
+      /(?:missing|unsatisfied|stale|mismatch)[\s\S]*(?:needs-info|blocked|OPEN-)/i,
+    );
+    assert.match(
+      text,
+      /HARDENING[\s\S]*(?:all|every)[\s\S]*(?:UI|delivery) slice[\s\S]*verified/i,
+    );
+  }
+});
+
+test("UI contract revisions invalidate stale derived scale-out gates", async () => {
+  const [canonical, qualityGates] = await Promise.all([
+    readRepositoryFile(
+      ".agent/skills/agentic-delivery/references/ui-contract-readiness.md",
+    ),
+    readRepositoryFile(".agent/rules/quality-gates.md"),
+  ]);
+
+  assert.match(
+    canonical,
+    /contract (?:version|revision)[\s\S]*(?:invalidate|stale)[\s\S]*FIRST_VERTICAL_SLICE_VERIFIED[\s\S]*(?:rerun|re-verify)/i,
+  );
+  for (const text of [canonical, qualityGates]) {
+    assert.match(text, /EXCEPTION_APPROVED[\s\S]*first vertical slice/i);
+    assert.match(text, /scale-out[\s\S]*VALIDATED|VALIDATED[\s\S]*scale-out/i);
+    assert.match(
+      text,
+      /EXCEPTION_APPROVED[\s\S]*(?:cannot|never)[\s\S]*scale-out|scale-out[\s\S]*blocked[\s\S]*VALIDATED/i,
+    );
+  }
+});
+
+test("UI contract readiness capability eval covers the three delivery archetypes", async () => {
+  const evaluation = await readRepositoryFile(
+    ".agent/evals/ui-contract-readiness.md",
+  );
+
+  for (const archetype of ["simple CRUD", "multi-role approval", "realtime/offline"]) {
+    assert.match(evaluation, new RegExp(archetype, "i"));
+  }
+  assert.match(evaluation, /score 100[\s\S]*hard gate[\s\S]*(?:BLOCKED|fail)/i);
+  assert.match(evaluation, /mock-only[\s\S]*scale-out[\s\S]*(?:BLOCKED|reject)/i);
+  assert.match(evaluation, /NOT_APPLICABLE[\s\S]*(?:backend-only|CLI)/i);
+  assert.match(evaluation, /Reset condition[\s\S]*fresh agent context/i);
+  assert.match(
+    evaluation,
+    /Response Contract[\s\S]*eval_id[\s\S]*blocking_reasons[\s\S]*scale_out/i,
+  );
+  for (const id of ["CAP-UI-001", "CAP-UI-002", "CAP-UI-003", "REG-UI-010"]) {
+    assert.match(evaluation, new RegExp(id));
+  }
+  assert.match(evaluation, /Task input:[\s\S]*Binary pass criteria:/i);
+  assert.match(evaluation, /three independent attempts/i);
+  assert.match(evaluation, /pass@3\s*(?:>=|≥)\s*90%/i);
+});
+
 test("downstream approval and eval gates consume durable artifacts, not chat drafts", async () => {
   const [explore, exploreContract, prd, prdContract, evalFlow, evalContract, readme] =
     await Promise.all([

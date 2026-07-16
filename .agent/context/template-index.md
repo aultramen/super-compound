@@ -20,6 +20,9 @@ Use skeletons first. Load full templates only for the specific section being aut
 - Expand only the section needed for the artifact under active edit.
 - Keep `OPEN-*` records for unresolved decisions.
 - Keep BRD business, PRD product, FSD technical, and ADR decision authority separate.
+- UI experience stays in PRD; Screen/Interaction mappings stay in FSD Section 8;
+  exact delegated wire shape stays in the linked machine contract.
 - Keep research notes advisory; translate accepted conclusions into the artifact that owns the decision.
 - Goal issue files must point to IDs and paths; do not copy BRD/PRD/FSD/ADR paragraphs.
+- UI issue pointers add only versioned contract refs and required gate.
 - Pull Request text uses the Git workflow template after local verification and push.

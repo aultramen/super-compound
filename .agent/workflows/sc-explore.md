@@ -16,6 +16,16 @@ Use this when the work is not ready for product requirements or technical planni
 
 Prototypes stay isolated, non-production, and disposable; they do not become
 implementation without approved PRD/FSD authority and a fresh implementation.
+Each prototype answers one decision question, records an evidence ref, and ends
+with disposition `discard`, `revise`, or `promote decision`. A promoted decision
+must be absorbed into its BRD, PRD, or FSD authority; prototype code is never a
+production seed. For brownfield scope, current behavior is evidence rather than
+product authority.
+
+The supporting evidence ref is an external URL plus revision, or a
+repository-relative throwaway path plus digest. Record the decision question,
+reviewer, review date, and disposition with that locator. It is evidence only,
+not a new authority artifact.
 
 ## Steps
 
@@ -25,6 +35,10 @@ implementation without approved PRD/FSD authority and a fresh implementation.
 4. Load `skills/domain-modeling/SKILL.md` in advisory read-only mode when terms, roles, or domain boundaries are fuzzy; persist glossary changes only through an explicitly authorized owner.
 5. Load `skills/codebase-design/SKILL.md` when a business decision depends on a major seam, module shape, or testability tradeoff.
 6. Load `skills/prototyping/SKILL.md` only when runnable evidence is cheaper than debate.
+   When `/sc-ui` requests `HIGH_INTERACTION` evidence, use a throwaway
+   interactive prototype for the named decision; make it runnable when timing,
+   runtime responsive, keyboard/focus, realtime, or offline behavior is the risk.
+   Return the evidence to `/sc-ui` or `/sc-prd`.
 7. If a named factual or current-doc gap blocks the BRD, record `OPEN-RESEARCH-*`, route that question through `sc-research.md`, then return here. Do not use research to decide a user preference, policy, or business trade-off.
 8. Resolve the smallest business decision that unlocks the next step.
 9. Capture objectives, scope, non-goals, business rules, policies, constraints, acceptance gates, and `OPEN-*` blockers.
@@ -37,4 +51,5 @@ implementation without approved PRD/FSD authority and a fresh implementation.
 - BRD or BRD summary.
 - Business acceptance criteria.
 - `OPEN-*` blockers and owner/gate when known.
-- Recommended next workflow: `/sc-research` only for a blocking evidence question; otherwise `/sc-prd`.
+- Recommended next workflow: `/sc-research` only for a blocking evidence
+  question; UI validation evidence returns to `/sc-ui`; otherwise `/sc-prd`.

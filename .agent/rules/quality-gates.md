@@ -7,6 +7,10 @@ Keep gates lightweight and evidence-based. Detailed procedures belong in the ref
 - Read the relevant workflow and skill before editing.
 - Check `.agent/rules/project-config.md` and existing project conventions.
 - For UI work, use `interface-design` before implementation.
+- `EXCEPTION_APPROVED` may release only a first vertical slice; a `VALIDATED`
+  baseline may also release it when the FSD is `READY_FOR_SLICE`. Parallel
+  scale-out requires the baseline to be `VALIDATED` plus verified real
+  first-slice proof; `EXCEPTION_APPROVED` cannot release scale-out.
 - For dependency, security, release, MCP, compliance, or agent-surface risk, use `sc-audit.md` and the security skills.
 - For unclear intent, resolve uncertainty through `sc-explore.md` before planning.
 - For branch, commit, push, worktree, or Pull Request operations, use `sc-go.md` and preview commands before execution.

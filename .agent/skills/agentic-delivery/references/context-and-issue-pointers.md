@@ -9,8 +9,17 @@ Issue files must not duplicate paragraphs from BRD, PRD, FSD, or ADR. They may i
 - qualified upstream references
 - blocker and dependency paths
 - verification command references or command names
+- pinned contract refs and the required contract gate
 - stop-condition notes
 - concise implementation boundaries from the FSD by ID, not copied prose
+
+For UI-integrated goals, `Contract refs` points to qualified versioned
+`CONTRACT-*`, `UIMAP-*`, `SCHEMA-*`, and fixture refs as needed. `Contract gate`
+is `NOT_APPLICABLE`, `READY_FOR_SLICE`, or
+`FIRST_VERTICAL_SLICE_VERIFIED`. Never copy schema, mapping tables, or behavior
+prose into the pointer. Promote an issue to `ready-for-agent` only after its
+required gate is proven. Scale-out additionally requires a `VALIDATED` PRD
+baseline; the final `HARDENING` pointer depends on all applicable UI slices.
 
 During `/sc-work`, use `context-engineering` to load only the issue, parent FSD sections, referenced PRD/BRD IDs, linked accepted ADRs, and directly relevant repository files.
 

@@ -26,6 +26,11 @@ Use after BRD/PRD approval and before implementation. Do not plan from memory, i
 - Prefer a thin vertical slice that delivers one independently verifiable behavior.
 - A wide refactor is an exception: name the shared seam, enumerate affected callers, bound the file surface, and provide verification covering every caller plus migration/rollback. “Many files” alone is not justification.
 - Never defer compatibility, security, privacy, data, or UI evidence until implementation.
+- For UI-bearing scope, use the canonical UI readiness reference, make FSD
+  Section 8 the Screen & Interaction Contract, and keep exact wire shape in a
+  delegated versioned machine contract.
+- Define a contract enabler when executable assets are missing, then exactly one
+  first real vertical slice before any dependent scale-out goals.
 
 ## Red Flags
 
