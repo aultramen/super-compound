@@ -1,4 +1,4 @@
-## The 9 Verification Dimensions
+## The 10 Verification Dimensions
 
 ### 1. Requirement Coverage
 

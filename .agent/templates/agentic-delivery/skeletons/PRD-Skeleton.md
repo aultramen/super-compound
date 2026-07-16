@@ -16,6 +16,8 @@ manifest. Use `N/A - reason` instead of deleting a mandatory decision.
 ID: PRD-{{PROJECT}}  
 Status: DRAFT / APPROVED  
 Upstream: BRD-{{PROJECT}}#{{IDS}}
+ui_delivery_profile: NOT_APPLICABLE / STANDARD / HIGH_INTERACTION
+experience_baseline_status: NOT_APPLICABLE / DRAFT / VALIDATED / EXCEPTION_APPROVED
 
 ## Product Contract
 
@@ -23,6 +25,15 @@ Upstream: BRD-{{PROJECT}}#{{IDS}}
 - Functional requirements, acceptance criteria, edge/negative/recovery behavior.
 - Product rules, states, permissions, notifications, reporting, analytics.
 - Product-level security, privacy, compliance, accessibility, and NFR intent.
+
+## UI Experience Gate
+
+- Critical journey and feature/AC refs.
+- State applicability: loading, empty, success, validation, error, forbidden,
+  stale/conflict, partial/degraded, offline, and async; each is `COVERED` or
+  `N/A - reason + approver`.
+- Responsive/accessibility intent and validation evidence refs.
+- Business approver and blocking OPEN (`OPEN-*`) refs.
 
 ## Traceability
 

@@ -446,6 +446,7 @@ function classifyAuditPath(file) {
   if (/^\.agent\/tools\/.*\.test\.(?:mjs|js|py)$/.test(file)) return "test";
   if (/^\.agent\/tools\//.test(file)) return "tool";
   if (/^\.agent\/benchmarks\//.test(file)) return "benchmark-evidence";
+  if (/^\.agent\/evals\//.test(file)) return "eval-evidence";
   if (/^\.agent\/rules\//.test(file)) return "rule";
   if (/^\.codex\//.test(file)) return "host-adapter";
   if (/^\.claude\//.test(file)) return "host-rule";

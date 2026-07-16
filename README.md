@@ -62,6 +62,7 @@ All public commands use the `/sc-*` prefix to avoid collisions with native Claud
 /sc-explore <idea>
 /sc-research "<specific evidence question>"  # optional
 /sc-prd <feature>
+/sc-ui review <PRD draft>  # required for UI-bearing scope
 /sc-plan <approved PRD>
 /sc-go start feature/<name>
 /sc-work <goal issue or FSD goal>
@@ -72,6 +73,29 @@ All public commands use the `/sc-*` prefix to avoid collisions with native Claud
 /sc-go pr
 /sc-compound
 ```
+
+For product work with an interactive surface, the default hybrid lifecycle is:
+
+```text
+BRD -> PRD draft -> UI validation -> approved PRD
+    -> FSD/UI-API contract -> contract enabler (when needed)
+    -> /sc-plan re-index + Technical Manager re-approval
+    -> first real vertical slice -> /sc-plan dependent promotion
+    -> controlled parallel scale-out -> hardening
+    -> integration/responsive/accessibility/E2E/visual + Business Owner UAT
+```
+
+Use `NOT_APPLICABLE` for backend-only/CLI work, `STANDARD` for canonical
+page/form/CRUD interactions, and `HIGH_INTERACTION` for conditional multi-step,
+optimistic, realtime, offline, gesture, complex keyboard/focus, dense responsive,
+or long-running async behavior. The gate is automatic when an interactive user
+surface is detected.
+
+If executable contract assets already match the pinned revision, skip the
+enabler loop. Otherwise only the bounded enabler may run while readiness is
+`DRAFT/BLOCKED`; the first slice stays blocked until `/sc-plan` reaches
+`READY_FOR_SLICE` again. `EXCEPTION_APPROVED` can release that first slice but
+never parallel scale-out.
 
 For read-only UI design/review, then implementation from approved authority:
 
@@ -87,6 +111,45 @@ For continuation:
 # next session
 /sc-status
 ```
+
+## UI-Aware Delivery Gates
+
+- PRD owns `ui_delivery_profile`, the validated experience baseline, critical
+  journey, observable states, responsive/accessibility intent, and evidence refs.
+- FSD Section 8 owns the Screen & Interaction Contract and stable
+  `UI-STATE-*`/`UIMAP-*` mappings. OpenAPI/JSON Schema/AsyncAPI owns the exact
+  delegated wire shape; `ui_api_contract` only indexes those authorities.
+- Readiness needs at least 90/100 and every hard gate. Missing state coverage,
+  data/action mapping, revision consistency, verification refs, risk-appropriate
+  evidence, or any blocking `OPEN-*` still blocks a score of 100.
+- `/sc-plan` writes only FSD and issue pointers. `/sc-work` materializes missing
+  schemas, fixtures, mock, typed consumer, and contract tests through a
+  `CONTRACT_ENABLER` goal.
+- Exactly one `FIRST_VERTICAL_SLICE` proves real-provider auth/permission,
+  success, and a representative failure. Mock-only evidence cannot open
+  `SCALE_OUT_SLICE` work.
+- Parallelism starts at 2+ genuinely independent streams only when saved time
+  exceeds coordination overhead, the first slice is verified, contract versions
+  match, shared/generated surfaces have one writer, and worktrees are isolated.
+
+Existing artifact contract 1.0 remains readable. New/changed UI work uses the
+1.1 additive fields; completed goals are not revalidated retroactively and no
+automatic project migration is performed.
+
+Pilot outcome claims require at least three comparable features with a baseline.
+Track preventable alignment rework hours after implementation starts, UAT
+rejections caused by behavior mismatch, late state/permission/payload/error
+defects, post-baseline breaking contract changes, first-pass real-integration
+success, and pre-ready critical-state/AC-test coverage. Calculate:
+
+```text
+rework_reduction =
+  (baseline_preventable_rework_hours - pilot_preventable_rework_hours)
+  / baseline_preventable_rework_hours * 100
+```
+
+The target is greater than 90%. New scope, market learning, and new stakeholder
+preferences are healthy iteration and are excluded from preventable rework.
 
 ## Public Workflows
 

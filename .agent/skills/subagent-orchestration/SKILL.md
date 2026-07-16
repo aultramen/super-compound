@@ -5,9 +5,8 @@ description: "Use when executing FSD goals with independent work packages. Dispa
 
 # Subagent Orchestration
 
-Dispatch a fresh agent per independent FSD goal while the primary agent remains
-a scheduler. Full briefs, reports, diffs, and review evidence stay on disk;
-messages carry paths and short verdicts.
+Dispatch one fresh agent per independent FSD goal. Keep briefs, reports, diffs,
+and review evidence on disk; messages carry paths and verdicts.
 
 Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
 
@@ -15,6 +14,13 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
 
 - Goal has approved FSD authority, exact acceptance/test refs, and no unresolved
   `OPEN-*` blocker.
+- For UI scope, the pointer includes `ui_delivery_role`, `required_gate`, and
+  qualified pinned contract refs. `CONTRACT_ENABLER` is the only bounded
+  DRAFT/BLOCKED exception; `FIRST_VERTICAL_SLICE` requires `READY_FOR_SLICE`;
+  `SCALE_OUT_SLICE` requires a `VALIDATED` baseline and the pinned first-slice
+  issue at `FIRST_VERTICAL_SLICE_VERIFIED`.
+- `HARDENING` requires every applicable UI delivery slice dependency to be
+  `verified`, final verification refs, and a named Business Owner for UAT.
 - Parallel goals do not share unmerged files or mutable validation resources.
 - Search existing code/tests before assuming anything is absent.
 
@@ -53,6 +59,13 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
 6. Batch critical/important fixes into one correction wave. Rebuild the patch
    and re-review once. After two failed revision cycles, escalate.
 7. Record the result:
+
+   A `FIRST_VERTICAL_SLICE` must use a real provider or backend to prove
+   auth/permission, success, and representative failure, with
+   `integration-checking` evidence. Only then may its status be recorded
+   `verified`; mock-only evidence is insufficient. Recheck `ui_delivery_role`,
+   `required_gate`, and pinned contract revision immediately before recording any
+   UI result.
 
    ```bash
    node .agent/tools/work-package.mjs record \

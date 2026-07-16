@@ -25,6 +25,7 @@ Load only the branch required by the active stage:
 - Context loading, issue-pointer fields, statuses, and canonical skeleton: [context and issue pointers](references/context-and-issue-pointers.md)
 - Missing authority, conflicts, or unavailable prerequisites: [OPEN stop conditions](references/open-stop-conditions.md)
 - Stage-to-workflow handoff: [workflow integration](references/workflow-integration.md)
+- UI-bearing profiles, readiness, contract boundaries, first-slice proof, scale-out, and compatibility: [UI contract readiness](references/ui-contract-readiness.md)
 
 Do not preload templates or downstream procedures before their artifact or stage is active.
 
@@ -36,6 +37,7 @@ Do not preload templates or downstream procedures before their artifact or stage
 - **Issue-pointer gate:** Goal issues are pointers, not specifications. Use the canonical `.agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md`; never restate it or copy BRD, PRD, FSD, or ADR prose. During `/sc-work`, load only referenced sections and relevant repository files.
 - **OPEN-* gate:** Stop and report `OPEN-xxx` instead of inventing when authority conflicts or is missing, an ADR is invalid, required behavior is unspecified, architecture contradicts the FSD, access is unavailable, or mandatory risk obligations cannot be met. Include the missing decision, impacted qualified refs, reason, owner/gate, approved fallback, and `Status: OPEN`.
 - **Verification gate:** Execute only an approved goal and its referenced tests; retain implementation and verification evidence before advancing status.
+- **UI delivery gate:** For UI-bearing scope, apply the routed experience and contract readiness gates. Scale-out requires a `VALIDATED` baseline and a verified real first slice; mock-only evidence is not integration proof.
 
 ## Related Skills
 

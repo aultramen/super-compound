@@ -13,6 +13,9 @@ Super Compound is a compact agent framework for disciplined software work: under
 - Treat hooks, prompts, skills, workflows, MCP config, and dependency changes as security-sensitive.
 - Preserve user work. Do not overwrite unrelated local changes.
 - Route branch, commit, push, worktree, and Pull Request operations through `sc-go.md` and `git-workflow-operation`.
+- For UI-bearing work, PRD owns the experience baseline, FSD Section 8 owns the
+  Screen & Interaction Contract, and delegated OpenAPI/JSON Schema owns exact
+  wire shape. Mock-only is never real integration proof.
 
 ## Core Workflows
 
@@ -27,7 +30,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 | `sc-plan.md` | FSD creation, ADR applicability, goal slicing, and local issue pointers |
 | `sc-eval.md` | Eval-driven success criteria and reliability checks |
 | `sc-go.md` | Preview-first Git branch, commit, push, worktree, and Pull Request operations |
-| `sc-work.md` | Execute approved FSD goals, including optional parallel execution |
+| `sc-work.md` | Execute approved FSD goals; prove a real first slice before controlled parallel scale-out |
 | `sc-debug.md` | Reproduce, diagnose root cause, fix, and verify bugs |
 | `sc-review.md` | Spec and standards review of code changes |
 | `sc-audit.md` | Security, compatibility, dependency, agent surface, MCP, compliance, and release-readiness audit |
@@ -38,7 +41,9 @@ Super Compound is a compact agent framework for disciplined software work: under
 
 ## Routing
 
-- UI/frontend/mobile/chart work -> `sc-ui.md` and `interface-design`.
+- UI/frontend/mobile/chart design/review -> read-only `sc-ui.md`; approved
+  implementation -> `sc-work.md`. A UI-bearing PRD draft returns from `/sc-ui`
+  validation before FSD planning.
 - Empty goal queue with no active handoff, blockers, or failing verification -> `sc-geniusloop.md`.
 - Low-token routing -> `.agent/context/routing-index.md`, then a route contract when available.
 - Bugs, failures, regressions -> `sc-debug.md` and `systematic-debugging`.

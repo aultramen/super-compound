@@ -23,7 +23,7 @@ any full skill:
 
 | Skill | Use for |
 |---|---|
-| `agentic-delivery` | BRD -> PRD -> FSD -> GOAL authority, traceability, OPEN stop conditions |
+| `agentic-delivery` | BRD -> PRD -> FSD -> GOAL authority, UI contract readiness, traceability, OPEN stops |
 | `brainstorming` | fuzzy ideas, options, constraints |
 | `prd-generator` | PRD from approved BRD |
 | `writing-plans` | FSD and technical plan |
@@ -41,8 +41,9 @@ any full skill:
 | `architecture-enforcement` | placement and dependency direction |
 | `domain-modeling` | shared vocabulary and invariants |
 | `codebase-design` | module seams and interface shape |
-| `plan-verification` | FSD/goal quality gate |
+| `plan-verification` | ten-dimension FSD/goal gate including conditional UI/API readiness |
 | `integration-checking` | cross-component wiring |
+| `parallel-execution` | 2+ independent gated streams in isolated worktrees after required first-slice proof |
 | `knowledge-compounding` | durable solved-problem notes |
 | `subagent-orchestration` | file-backed approved-goal dispatch and two-stage review |
 | Other support skills | load only when their description matches the active risk |

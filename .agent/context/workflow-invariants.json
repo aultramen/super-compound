@@ -29,9 +29,9 @@
       "authority": "approved-brd-business-authority",
       "mutation": "brd-or-isolated-prototype-only",
       "evidenceSink": "docs/brd/brd-<feature>.md",
-      "nextOwners": ["sc-research", "sc-prd"],
-      "workflowMarkers": ["canonical output is a BRD", "Before approval and `/sc-prd`", "non-production"],
-      "contractMarkers": ["BRD skeleton", "before approval and `/sc-prd`", "chat draft"]
+      "nextOwners": ["sc-research", "sc-prd", "sc-ui"],
+      "workflowMarkers": ["canonical output is a BRD", "Before approval and `/sc-prd`", "non-production", "HIGH_INTERACTION"],
+      "contractMarkers": ["BRD skeleton", "before approval and `/sc-prd`", "chat draft", "HIGH_INTERACTION"]
     },
     "sc-research": {
       "authority": "advisory-evidence-only",
@@ -45,17 +45,17 @@
       "authority": "approved-prd-product-authority",
       "mutation": "prd-only",
       "evidenceSink": "docs/prd/prd-<feature>.md",
-      "nextOwners": ["sc-research", "sc-explore", "sc-plan"],
-      "workflowMarkers": ["approved BRD", "Before approval and `/sc-plan`", "OPEN-RESEARCH"],
-      "contractMarkers": ["approved BRD", "before approval and", "chat draft"]
+      "nextOwners": ["sc-research", "sc-explore", "sc-ui", "sc-plan"],
+      "workflowMarkers": ["approved BRD", "Before approval and `/sc-plan`", "OPEN-RESEARCH", "experience_baseline_status"],
+      "contractMarkers": ["approved BRD", "before approval and", "chat draft", "experience_baseline_status"]
     },
     "sc-plan": {
       "authority": "fsd-and-accepted-adr-implementation-authority",
       "mutation": "fsd-and-goal-pointers-only",
       "evidenceSink": "docs/fsd/fsd-<feature>.md",
-      "nextOwners": ["sc-research", "sc-work"],
-      "workflowMarkers": ["implementation authority", "OPEN", "do not checkout or mutate Git state"],
-      "contractMarkers": ["FSD is implementation authority", "Stop with `OPEN", "do not mutate Git state"]
+      "nextOwners": ["sc-research", "sc-explore", "sc-prd", "sc-ui", "sc-work"],
+      "workflowMarkers": ["implementation authority", "OPEN", "do not checkout or mutate Git state", "READY_FOR_SLICE"],
+      "contractMarkers": ["FSD is implementation authority", "Stop with `OPEN", "do not mutate Git state", "READY_FOR_SLICE"]
     },
     "sc-eval": {
       "authority": "verification-gate",
@@ -77,9 +77,9 @@
       "authority": "approved-fsd-goal",
       "mutation": "goal-scoped-implementation",
       "evidenceSink": "implementation and verification evidence",
-      "nextOwners": ["sc-review", "sc-audit", "sc-go", "sc-compound", "caller"],
-      "workflowMarkers": ["approved FSD goal", "stop and report `OPEN", "verification evidence"],
-      "contractMarkers": ["approved FSD goal", "Stop with `OPEN", "mapped verification"]
+      "nextOwners": ["sc-explore", "sc-prd", "sc-plan", "sc-debug", "sc-review", "sc-audit", "sc-go", "sc-compound", "caller"],
+      "workflowMarkers": ["approved FSD goal", "stop and report `OPEN", "verification evidence", "pinned contract version"],
+      "contractMarkers": ["approved FSD goal", "Stop with `OPEN", "mapped verification", "pinned contract version"]
     },
     "sc-debug": {
       "authority": "reproduced-failure-scope",
@@ -126,16 +126,16 @@
       "mutation": "stage-authority-only",
       "evidenceSink": "stage artifact paths plus docs/STATE.md boundary state",
       "nextOwners": ["stage-next-route"],
-      "workflowMarkers": ["one active stage at a time", "docs/STATE.md", "Do not treat launch as permission"],
-      "contractMarkers": ["one active stage at a time", "docs/STATE.md", "grants no"]
+      "workflowMarkers": ["one active stage at a time", "docs/STATE.md", "Do not treat launch as permission", "first vertical slice"],
+      "contractMarkers": ["one active stage at a time", "docs/STATE.md", "grants no", "first vertical slice"]
     },
     "sc-ui": {
       "authority": "approved-fsd-goal-or-read-only-review",
       "mutation": "implementation-under-sc-work-only",
-      "evidenceSink": "UI changes and verification",
+      "evidenceSink": "read-only UI evidence or sc-work-owned implementation verification",
       "nextOwners": ["sc-explore", "sc-prd", "sc-plan", "sc-work", "caller"],
-      "workflowMarkers": ["approved FSD `GOAL", "remains with `/sc-work`", "Design/review mode is read-only"],
-      "contractMarkers": ["approved FSD `GOAL", "inside active `/sc-work`", "design/review mode is read-only"]
+      "workflowMarkers": ["approved FSD `GOAL", "remains with `/sc-work`", "Design/review mode is read-only", "PRD_CHANGE_REQUIRED"],
+      "contractMarkers": ["approved FSD `GOAL", "inside active `/sc-work`", "design/review mode is read-only", "PRD_CHANGE_REQUIRED"]
     }
   }
 }

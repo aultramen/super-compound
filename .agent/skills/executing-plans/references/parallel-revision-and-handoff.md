@@ -4,9 +4,18 @@ Load only for the matching execution branch.
 
 ## Parallel Execution
 
-Parallel agents are allowed only when goals have independent file ownership, no dependency on unmerged output, all `Blocked by` entries are done or absent, verification runs per goal, and the user accepts coordination cost.
+Parallel agents are allowed only when 2+ streams have independent file and
+semantic ownership, no dependency on unmerged output, all `Blocked by` entries
+are verified or absent, verification runs per goal, and time saving exceeds
+coordination cost. UI scale-out additionally requires the first real vertical
+slice verified, the same pinned contract version, a `VALIDATED` baseline, and a
+single writer for schemas/generated artifacts/migrations/lockfiles.
 
-Assign each agent one goal or cohesive group, exact paths, expected output, verification command, conflict boundaries, and handoff format. Merge deliberately and run shared verification afterward.
+Assign each agent one goal or cohesive group, exact paths, contract and fixture
+refs, pinned revision, single-writer boundary, expected output, verification
+command, conflict boundaries, and handoff format. Use isolated Git worktrees.
+Merge deliberately and run real merged-system verification afterward; mock-only
+evidence is not integration proof.
 
 ## Revision Mode
 

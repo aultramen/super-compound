@@ -15,9 +15,15 @@ The ideal path:
 /sc-explore analytics dashboard for account admins
 /sc-research Can the current event store support tenant-safe daily metrics with 15-minute freshness?  # conditional
 /sc-prd
+/sc-ui review docs/prd/prd-analytics-dashboard.md
 /sc-plan --issues
 /sc-go start feature/analytics-dashboard
-/sc-work .scratch/analytics-dashboard/issues/01-account-usage-summary.md
+/sc-work .scratch/analytics-dashboard/issues/01-materialize-analytics-contract.md
+/sc-plan --issues  # re-index exact revisions and obtain technical re-approval
+/sc-work .scratch/analytics-dashboard/issues/02-account-usage-vertical-slice.md
+/sc-plan --issues  # promote only eligible dependents after real-slice verification
+/sc-work .scratch/analytics-dashboard/issues/03-comparison-export-slices.md
+/sc-work .scratch/analytics-dashboard/issues/04-ui-hardening-and-uat.md
 /sc-review
 /sc-audit
 /sc-go commit "Implement analytics dashboard"
@@ -189,6 +195,40 @@ Good acceptance criteria are observable:
 - [ ] Dashboard works at desktop and mobile breakpoints.
 ```
 
+Because this brownfield feature has an interactive surface, the PRD also records
+current UI/API/design-system characterization as evidence (not product
+authority), then sets:
+
+```yaml
+ui_delivery_profile: STANDARD
+experience_baseline_status: DRAFT
+```
+
+## 4A. Validate The UI Experience
+
+Run read-only validation before PRD approval:
+
+```text
+/sc-ui review docs/prd/prd-analytics-dashboard.md
+```
+
+For this standard dashboard, a wireframe/clickable flow can be enough. If the
+dashboard introduced realtime refresh, optimistic edits, offline recovery, or
+complex keyboard/focus behavior, classify it `HIGH_INTERACTION` and provide
+interactive evidence, and runnable evidence when timing, runtime responsive,
+keyboard/focus, realtime, or offline behavior is the material risk.
+
+The reviewer checks the critical journey and each named state: loading, empty,
+success, validation, error, forbidden, stale/conflict, partial/degraded,
+offline, and async/in-progress. Every state is `COVERED` or has an approved N/A
+reason. `/sc-ui` returns exactly one of `EVIDENCE`, `PRD_CHANGE_REQUIRED`,
+`FSD_CHANGE_REQUIRED`, or `VERIFICATION_FINDING`; it never edits authority.
+
+Accepted evidence is referenced by the PRD. The Business Owner sets
+`experience_baseline_status: VALIDATED`, then `/sc-plan` may begin. A prototype
+is discarded after its decision is absorbed; it is not reused as production
+code.
+
 ## 5. Plan
 
 Run:
@@ -202,6 +242,11 @@ Run:
 - Inspect existing code and tests
 - Run compatibility/security/privacy pre-flight checks when relevant
 - Use `interface-design` for frontend work
+- Make FSD Section 8 the Screen & Interaction Contract with `UI-STATE-*` and
+  `UIMAP-*` traceability
+- Pin delegated `SCHEMA-*`/`CONTRACT-*`, deterministic fixtures, mock, typed
+  consumer, provider/consumer tests, responsive/accessibility refs, and owners
+- Reach `ui_contract_readiness: READY_FOR_SLICE` with score >=90 and every hard gate
 - Decide ADR applicability
 - Capture local technical decisions as FSD `TDEC-*`
 - Link only accepted ADRs under `docs/solutions/adr-####-<slug>.md` when ADR criteria are met
@@ -218,16 +263,38 @@ python .agent/skills/interface-design/scripts/search.py "performance trackBy" --
 python .agent/skills/interface-design/scripts/search.py "mobile touch target" --domain app
 ```
 
-Example FSD goal:
+Example FSD goal sequence:
 
 ```markdown
-### GOAL-003 - Render Account Usage Summary
+### GOAL-001 - Materialize The Analytics Contract
+UI delivery role: CONTRACT_ENABLER
+Contract gate: NOT_APPLICABLE
+Contract refs: FSD-ANALYTICS@1.1.0#CONTRACT-001
+
+### GOAL-002 - Prove Account Usage Vertical Slice
+UI delivery role: FIRST_VERTICAL_SLICE
+Contract gate: READY_FOR_SLICE
 
 Objective: Admins can see account usage summary for the selected date range.
 Requirement refs: PRD-ANALYTICS#FR-003, PRD-ANALYTICS#AC-004
-Technical refs: FSD-ANALYTICS#TDEC-001
-Verification refs: FSD-ANALYTICS#TEST-003
+Contract refs: FSD-ANALYTICS@1.1.0#CONTRACT-001, FSD-ANALYTICS@1.1.0#UIMAP-001
+Verification refs: FSD-ANALYTICS#TEST-003, FSD-ANALYTICS#TEST-004
+
+### GOAL-003 - Add Comparison And Export Slices
+UI delivery role: SCALE_OUT_SLICE
+Contract gate: FIRST_VERTICAL_SLICE_VERIFIED
+Blocked by: GOAL-002 issue status verified
+
+### GOAL-004 - Harden Analytics UI And Record UAT
+UI delivery role: HARDENING
+Contract gate: FIRST_VERTICAL_SLICE_VERIFIED
+Blocked by: GOAL-002 and all applicable scale-out issues verified
 ```
+
+If the pinned executable assets already exist and pass the contract gate,
+`GOAL-001` may be omitted. Otherwise, after `GOAL-001` is verified, `/sc-plan`
+must update the FSD contract index, rerun readiness, and obtain Technical Manager
+re-approval before `GOAL-002` can become ready.
 
 For a local Journey board, run:
 
@@ -241,11 +308,18 @@ This should review the proposed FSD goals with you, then create:
 .scratch/analytics-dashboard/
   FSD.md
   issues/
-    01-account-usage-summary.md
-    02-dashboard-empty-state.md
+    01-materialize-analytics-contract.md
+    02-account-usage-vertical-slice.md
+    03-comparison-export-slices.md
+    04-ui-hardening-and-uat.md
 ```
 
-Each issue includes `Status`, `Parent FSD`, `Goal ID`, `Blocked by`, qualified upstream refs, technical refs, optional ADR refs, verification refs, stop conditions, and comments. It must not copy BRD, PRD, FSD, or ADR paragraphs. `Blocked by` links form an acyclic dependency graph so ready goals can be picked up in parallel.
+Each issue includes `Status`, `Parent FSD`, `Goal ID`, `Blocked by`, qualified
+upstream/technical/optional ADR/verification refs, `UI delivery role`, versioned
+`Contract refs`, and `Contract gate`. It must not copy BRD, PRD, FSD, ADR, schema,
+or mapping prose. The DAG is contract enabler -> `/sc-plan` re-approval -> exactly
+one first vertical slice -> `/sc-plan` dependent promotion -> scale-out ->
+hardening; only verified dependencies can release ready work.
 
 ## 6. Git Start
 
@@ -274,7 +348,7 @@ Use worktrees only when parallel agents or multi-branch review need isolated fol
 Run:
 
 ```text
-/sc-work .scratch/analytics-dashboard/issues/01-account-usage-summary.md
+/sc-work .scratch/analytics-dashboard/issues/01-materialize-analytics-contract.md
 ```
 
 Or execute a direct FSD goal:
@@ -296,10 +370,21 @@ The agent should execute sequentially by default:
 - Mark issue status when work came from `.scratch/`
 - Update durable state for long work
 
-Parallel execution is reserved for independent FSD goals with non-overlapping files and clear verification. For multi-agent runs, create file-backed handoffs instead of pasting briefs and diffs through chat:
+After `GOAL-001` verifies the executable assets, return to `/sc-plan` to pin
+their revisions and re-approve `READY_FOR_SLICE`. Then `GOAL-002` verifies the pinned contract against the real backend,
+including auth/permission, success, and a representative failure. It runs
+`integration-checking`; a mock-only result cannot produce
+`FIRST_VERTICAL_SLICE_VERIFIED`. Return to `/sc-plan` again so issue planning,
+not the active implementation goal, promotes eligible dependents.
+
+Parallel execution starts only with 2+ independent streams when coordination
+cost is lower than saved time, `GOAL-002` is verified, every stream pins the same
+contract revision, the PRD baseline is `VALIDATED`, shared/generated artifacts have a single writer, and each
+stream has an isolated worktree. For multi-agent runs, create file-backed
+handoffs instead of pasting briefs and diffs through chat:
 
 ```bash
-node .agent/tools/work-package.mjs create --run analytics --goal GOAL-001 --brief .scratch/analytics-dashboard/issues/01-account-usage-summary.md --paths-file .scratch/analytics-dashboard/issues/GOAL-001-scope.json
+node .agent/tools/work-package.mjs create --run analytics --goal GOAL-003 --brief .scratch/analytics-dashboard/issues/03-comparison-export-slices.md --paths-file .scratch/analytics-dashboard/issues/GOAL-003-scope.json
 ```
 
 Before dispatch, the scheduler writes the scope JSON, for example
@@ -309,8 +394,8 @@ isolated worktrees/workspaces, and review rejects scope changes or new edits
 outside the scheduler-owned allowlist.
 
 ```bash
-node .agent/tools/work-package.mjs review --run analytics --goal GOAL-001 --base HEAD
-node .agent/tools/work-package.mjs record --run analytics --goal GOAL-001 --status verified --verification "targeted tests pass"
+node .agent/tools/work-package.mjs review --run analytics --goal GOAL-003 --base HEAD
+node .agent/tools/work-package.mjs record --run analytics --goal GOAL-003 --status verified --verification "mapped slice and contract tests pass"
 ```
 
 Implementers return the package/report paths. A reviewer reads the package once and writes separate spec-compliance and code-quality verdicts; full evidence remains on disk.

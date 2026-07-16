@@ -27,3 +27,12 @@ into workflow files, startup files, artifacts, or goal issues.
 | `/sc-work` | implementation and verification evidence | source tree plus updated issue status | approved FSD goal issue |
 
 `/sc-plan` may still produce a short companion execution note only when useful, but the FSD is the implementation authority.
+
+## UI-Bearing Output Rule
+
+Classify each scope as `NOT_APPLICABLE`, `STANDARD`, or `HIGH_INTERACTION`.
+Keep the experience baseline in the PRD and the Screen & Interaction Contract
+in FSD Section 8; do not create a standalone UX brief, screen contract, UI
+acceptance matrix, or vertical-slice plan by default. OpenAPI, JSON Schema,
+AsyncAPI, or an approved equivalent is a linked machine asset for exact wire
+shape. Load `ui-contract-readiness.md` only for UI-bearing scope.

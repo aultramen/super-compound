@@ -1,6 +1,6 @@
 ---
 name: parallel-execution
-description: "Use when a plan or issue board has 5+ independent tasks that don't share files. Dispatches multiple agents working simultaneously in isolated git worktrees. Requires no unresolved blockers or file-level dependencies."
+description: "Use when a plan or issue board has 2+ independent execution streams whose time saving exceeds coordination overhead. Dispatches agents in isolated git worktrees only after required delivery gates pass."
 ---
 
 # Parallel Execution
@@ -23,13 +23,25 @@ Load the full process only after the selection gate passes. Every parallel strea
 
 ## Mandatory Gates
 
-- **Selection gate:** Require a Git repository, a plan or board with 5+ independent ready tasks, clean state, `gitWorkflow.allowWorktree: true`, and enough time savings to justify overhead. No unresolved blockers or file-level dependencies may remain.
-- **Independence gate:** Inspect actual target files pairwise. Shared files, sequential data contracts, or unresolved integration ordering place tasks in the same sequential stream. For issue boards, schedule only `Blocked by: None` or already-`done` dependencies.
+- **Selection gate:** Require a Git repository, 2+ independent execution streams,
+  clean state, `gitWorkflow.allowWorktree: true`, and time savings greater than
+  coordination overhead. No unresolved blocker or dependency may remain.
+- **UI scale-out gate:** For UI-bearing streams, the first vertical slice must be
+  verified against the real provider, the experience baseline must be
+  `VALIDATED`, every stream must pin the same contract version, and mock-only
+  evidence cannot satisfy the gate.
+- **Independence gate:** Inspect actual target files and semantic dependencies
+  pairwise. Shared files, schemas, generated artifacts, migrations, lockfiles,
+  sequential contracts, or integration ordering stay in one sequential stream
+  with a single writer. Schedule only `Blocked by: None` or verified dependencies.
 - **Preview gate:** Route remote, base, branch, clean-state, and worktree commands through `git-workflow-operation`. Each parallel stream uses its own branch and workspace; never modify the main worktree during parallel work.
 - **Dispatch gate:** Give each agent its workspace, branch, ordered tasks, FSD/issue authority, verification contract, and required orchestration skill. Tasks inside one dependency group remain sequential.
 - **Approval gate:** Never remove a worktree until its resolved target path is validated and the user approves. Preview merge, rebase, cleanup, push, and PR operations before mutation.
 - **Conflict gate:** Never auto-resolve conflicts. A conflict invalidates the independence assumption; resolve manually and rerun the full suite.
-- **Integration gate:** Inspect every branch, integrate using the FSD strategy, then run full tests and `verification-before-completion` cross-component checks. Do not claim the streams complete independently of merged-system verification.
+- **Integration gate:** Inspect every branch, integrate using the FSD strategy,
+  then run full tests, contract/fixture/provider/consumer checks, and
+  `verification-before-completion`. Do not claim completion without
+  merged-system integration verification.
 
 ## Integration
 

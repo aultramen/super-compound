@@ -16,6 +16,17 @@ Examples:
 
 Split when domains are unrelated, the outcome needs more than a focused session, verification depends on later goals, or parallel agents would edit the same files.
 
+For UI-integrated scope, create an optional `CONTRACT_ENABLER`, then exactly one
+active `FIRST_VERTICAL_SLICE` per pinned contract revision for the highest-risk
+critical flow. After an enabler, `/sc-plan` refreshes the FSD index and obtains
+Technical Manager approval before releasing that slice. It must prove the real
+provider, auth/permission, success, and representative failure. Every
+`SCALE_OUT_SLICE` depends on its verified issue, pins the same contract version,
+and requires a `VALIDATED` PRD baseline; mock-only evidence cannot release the
+dependency. Create one final `HARDENING` goal blocked by all applicable UI
+delivery slices for merged integration, responsive, accessibility, E2E, visual,
+and Business Owner UAT evidence.
+
 ## Measured Wide-Refactor Exception
 
 A wide or horizontal refactor is allowed only when vertical slicing would duplicate work or leave a shared seam inconsistent. The goal must record:

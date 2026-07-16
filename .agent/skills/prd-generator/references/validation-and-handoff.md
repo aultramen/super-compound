@@ -13,6 +13,10 @@ Confirm:
 - BRD IDs and requirement IDs provide complete traceability.
 - Canonical rules and state semantics do not conflict.
 - UI work specifies accessibility, responsive behavior, and important states.
+- Every UI state is covered or has `N/A - reason + approver`; the Experience
+  Baseline is `VALIDATED`, `EXCEPTION_APPROVED`, or `NOT_APPLICABLE`.
+- `HIGH_INTERACTION` has interactive evidence; timing, runtime responsive,
+  keyboard/focus, realtime, or offline risk has runnable evidence.
 - Data, security, privacy, compliance, and AI behavior includes applicable negative, degraded, and abuse cases.
 - Testing decisions identify observable behavior or the highest practical public seam.
 - Open questions are named `OPEN-*` blockers with an owner or decision path.
@@ -23,8 +27,9 @@ Confirm:
 Save the PRD, report its path and unresolved blockers, and stop. Available next routes are:
 
 1. Review and refine the PRD.
-2. Convert it to an FSD with `/sc-plan` and `writing-plans`.
-3. Convert approved FSD goals to issue pointers with `/sc-plan --issues <prd>` when a Journey, Kanban board, or multi-agent slices are needed.
-4. Route UI-focused work through `/sc-ui`.
+2. For a UI-bearing draft, validate it read-only with `/sc-ui`, absorb accepted
+   evidence into the PRD, then approve it.
+3. Convert the approved PRD to an FSD with `/sc-plan` and `writing-plans`.
+4. Convert approved FSD goals to issue pointers with `/sc-plan --issues <prd>` when a Journey, Kanban board, or multi-agent slices are needed.
 
 Do not skip directly from PRD to implementation.

@@ -25,6 +25,15 @@ Search symbols, paths, tests, and nearby implementations before creating or decl
 
 Stop with `OPEN-*` when acceptance criteria, FSD authority, `TDEC-*`, accepted ADR status, or required behavior is missing or contradictory. Stop on unfinished blockers unless the user explicitly reorders work. Never invent schema, APIs, authorization, roles, workflows, state transitions, business rules, or UI behavior outside approved authority.
 
+For UI-integrated work, validate the issue's pinned contract version and
+required gate. Before editing an issue-backed goal, require `ready-for-agent`
+and every `Blocked by` dependency at `verified`; missing, stale, or unsatisfied
+evidence returns to `needs-info`/`blocked` with `OPEN-*`. `HARDENING` requires
+every applicable UI delivery slice verified. A first slice must prove the real
+provider with auth/permission, success, and representative failure through
+`integration-checking`. Parallel scale-out is forbidden until that issue is
+`verified`; mock-only evidence never opens the gate.
+
 Before product code, verify placement and dependency direction with `architecture-enforcement`; implement behavior through `test-driven-development`.
 
 ## Execution Gate
