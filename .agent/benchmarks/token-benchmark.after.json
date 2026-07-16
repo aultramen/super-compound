@@ -10,7 +10,7 @@
     },
     "limitation": "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens."
   },
-  "generatedAt": "2026-07-16T06:19:55.980Z",
+  "generatedAt": "2026-07-16T06:33:04.286Z",
   "observedRuntimeTokens": "unknown",
   "hostInjectedSurfaceTokens": "unknown",
   "claimScope": {
