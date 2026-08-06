@@ -1,0 +1,24 @@
+---
+description: "Cluster high-confidence learnings into draft framework proposals for human approval."
+---
+
+# Evolve Workflow
+
+Use this when `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, or `docs/solutions/` accumulate repeated high-confidence entries worth promoting into framework guidance.
+
+## Steps
+
+1. Read the Quick Reference tables in `docs/ERROR_LOG.md` and `docs/LEARNED_KNOWLEDGE.md`; run `node .agent/tools/knowledge-search.mjs "<area>"` for the target area.
+2. Cluster entries: the same category or prevention rule appearing 3+ times with confidence Observed or Confirmed.
+3. For each cluster, write one DRAFT proposal at `docs/proposals/<YYYY-MM-DD>-<slug>.md`: current behavior, evidence references (entry IDs and paths), the proposed diff to the target rule, skill, or workflow, expected effect, and a rollback note.
+4. Validate every proposal with `node .agent/tools/validate-doc-claims.mjs <proposal>`.
+5. Present the proposal list and stop. Human approval and application happen outside this route.
+
+## Skip
+
+- Single observations, unverified hypotheses, or style preferences.
+
+## Guardrails
+
+- `/sc-evolve` writes DRAFT proposals only; it must not modify prompts, model weights, goals, policy, budgets, verifier definitions, framework source, operating rules, or the public workflow inventory.
+- A proposal grants no implementation, source-write, Git, external-write, or release authority. Approval and apply are explicit human actions in a later session.

@@ -7,7 +7,7 @@ description: "Use when managing AI context budget, selective file loading, histo
 
 ## Purpose
 
-Load the minimum useful context for the current task, preserve durable state on disk, and recommend fresh sessions before context quality degrades.
+Load minimum useful context, keep durable state on disk, and recommend fresh sessions before quality degrades.
 
 Announce: "I'm applying context engineering to keep the working context focused."
 
@@ -40,6 +40,9 @@ When returning to work:
 5. Run `/sc-status` to route the session if the next action is unclear.
 
 ## Fresh Context Signals
+
+Phase-end moves (continue/clear/handoff/subagent/compact, compact last):
+[phase boundaries](references/phase-boundaries.md).
 
 Suggest `/sc-pause` and a fresh session when:
 

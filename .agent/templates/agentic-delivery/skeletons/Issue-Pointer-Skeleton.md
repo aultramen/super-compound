@@ -1,5 +1,6 @@
 # GOAL-{{NNN}} - {{ATOMIC_OUTCOME}}
 
+Artifact contract version: `2.0.0`
 Status: needs-info
 Parent FSD: ../../../docs/fsd/fsd-{{feature}}.md  
 Goal ID: FSD-{{PROJECT}}#GOAL-{{NNN}}  
@@ -14,8 +15,8 @@ Contract gate: NOT_APPLICABLE / READY_FOR_SLICE / FIRST_VERTICAL_SLICE_VERIFIED
 
 ## Scope
 
-Implement only the referenced FSD goal. Do not copy BRD/PRD/FSD/ADR prose here.
+Implement referenced FSD goal only; do not copy authority prose.
 
 ## Stop
 
-Report `OPEN-*` for missing authority, blockers, or unsafe invention.
+Report `OPEN-*` for missing authority, blockers, or invention.

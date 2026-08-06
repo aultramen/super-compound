@@ -25,7 +25,8 @@ const SKIP_DIRECTORIES = new Set([
 ]);
 const SKIP_RUNTIME_DIRECTORIES = new Set([
   ".agent/.compact-state",
-  ".scratch/work-packages",
+  ".scratch",
+  ".sc-worktrees",
 ]);
 const GENERATED_AUDIT_PATH = ".agent/benchmarks/framework-audit.after.json";
 const SEVERITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
@@ -454,8 +455,13 @@ function classifyAuditPath(file) {
   if (["AGENTS.md", "CLAUDE.md", "SUPER-COMPOUND.md"].includes(file)) {
     return "startup-contract";
   }
-  if (["README.md", "WALKTHROUGH.md"].includes(file)) return "documentation";
-  if ([".gitattributes", ".gitignore"].includes(file)) return "repository-config";
+  if (["README.md", "WALKTHROUGH.md", "CHANGELOG.md"].includes(file)) {
+    return "documentation";
+  }
+  if ([".gitattributes", ".gitignore", ".mcp.json", "package.json"].includes(file)) {
+    return "repository-config";
+  }
+  if (/^\.github\//.test(file)) return "repository-config";
   return null;
 }
 
@@ -478,7 +484,12 @@ async function readPhysicalInventory(root, activeManifest) {
       const relative = normalizePath(
         current ? path.join(current, entry.name) : entry.name,
       );
-      if (relative === ".git" || relative.startsWith(".git/")) {
+      if (
+        relative === ".git" ||
+        relative.startsWith(".git/") ||
+        SKIP_DIRECTORIES.has(entry.name) ||
+        SKIP_RUNTIME_DIRECTORIES.has(relative)
+      ) {
         continue;
       }
       if (entry.isSymbolicLink()) {
@@ -503,7 +514,7 @@ async function readPhysicalInventory(root, activeManifest) {
   }
 
   return {
-    scope: "physical-worktree-excluding-.git",
+    scope: "physical-authority-worktree-excluding-runtime-roots",
     files,
     filesRead,
     symlinks,
@@ -785,7 +796,7 @@ function validateWorkflowInvariants(contents, findings) {
     return;
   }
   if (
-    manifest.schema !== "workflow_invariants_v1" ||
+    manifest.schema !== "workflow_invariants_v2" ||
     !manifest.routes ||
     typeof manifest.routes !== "object" ||
     Array.isArray(manifest.routes)
@@ -795,7 +806,7 @@ function validateWorkflowInvariants(contents, findings) {
         "P1",
         "WORKFLOW_INVARIANT_MANIFEST_INVALID",
         manifestPath,
-        "Expected workflow_invariants_v1 with a routes object.",
+        "Expected workflow_invariants_v2 with a routes object.",
       ),
     );
     return;
@@ -826,6 +837,119 @@ function validateWorkflowInvariants(contents, findings) {
           ),
         );
       }
+    }
+    if (
+      ![
+        "READ_ONLY",
+        "ADVISORY",
+        "AUTHORITY",
+        "IMPLEMENTATION",
+        "ORCHESTRATION",
+        "EXTERNAL_DELIVERY",
+        "GUIDANCE",
+      ].includes(spec.loopRuntimeRole)
+    ) {
+      findings.push(
+        finding(
+          "P1",
+          "WORKFLOW_RUNTIME_ROLE_INVALID",
+          manifestPath,
+          `${route} requires a valid loopRuntimeRole.`,
+        ),
+      );
+    }
+    const allowedWriteClasses = new Set([
+      "runtime_audit_write",
+      "authority_write",
+      "implementation_write",
+      "external_write",
+    ]);
+    if (
+      !Array.isArray(spec.writeClasses) ||
+      new Set(spec.writeClasses).size !== spec.writeClasses.length ||
+      spec.writeClasses.some((value) => !allowedWriteClasses.has(value))
+    ) {
+      findings.push(
+        finding(
+          "P1",
+          "WORKFLOW_WRITE_CLASSES_INVALID",
+          manifestPath,
+          `${route} requires unique allowlisted writeClasses.`,
+        ),
+      );
+    }
+    if (
+      ![
+        "NEVER",
+        "WHEN_IMPLEMENTATION_WRITE",
+        "START_AND_RESUME",
+        "BEFORE_FIX",
+        "PER_IMPLEMENTATION_HANDOFF",
+        "BEFORE_EXTERNAL_WRITE",
+        "CONSUME_ACTIVE_WORK_GATE",
+      ].includes(spec.wizardPolicy)
+    ) {
+      findings.push(
+        finding(
+          "P1",
+          "WORKFLOW_WIZARD_POLICY_INVALID",
+          manifestPath,
+          `${route} requires a valid wizardPolicy.`,
+        ),
+      );
+    }
+    const allowedOperationGates = new Set([
+      "source-write",
+      "work",
+      "commit",
+      "push",
+      "pr",
+      "queue-claim",
+    ]);
+    if (
+      !Array.isArray(spec.requiredOperationGate) ||
+      new Set(spec.requiredOperationGate).size !==
+        spec.requiredOperationGate.length ||
+      spec.requiredOperationGate.some(
+        (value) => !allowedOperationGates.has(value),
+      )
+    ) {
+      findings.push(
+        finding(
+          "P1",
+          "WORKFLOW_OPERATION_GATE_INVALID",
+          manifestPath,
+          `${route} requires unique allowlisted operation gates.`,
+        ),
+      );
+    }
+    if (!["READ_ONLY", "CONTROLLER_MEDIATED"].includes(spec.loopStateAccess)) {
+      findings.push(
+        finding(
+          "P1",
+          "WORKFLOW_STATE_ACCESS_INVALID",
+          manifestPath,
+          `${route} requires a valid loopStateAccess.`,
+        ),
+      );
+    }
+    if (
+      Array.isArray(spec.writeClasses) &&
+      spec.writeClasses.some((value) =>
+        ["implementation_write", "external_write"].includes(value),
+      ) &&
+      (spec.wizardPolicy === "NEVER" ||
+        !Array.isArray(spec.requiredOperationGate) ||
+        spec.requiredOperationGate.length === 0)
+    ) {
+      findings.push(
+        finding(
+          "P0",
+          "WORKFLOW_GATE_BYPASS",
+          manifestPath,
+          `${route} declares a gated write without wizard and operation gates.`,
+        ),
+      );
     }
     if (!Array.isArray(spec.nextOwners) || spec.nextOwners.length === 0) {
       findings.push(
@@ -1416,7 +1540,7 @@ async function validateBenchmarkEvidence(root, contents, findings) {
           "P1",
           "WORKFLOW_EVIDENCE_MATRIX_STALE",
           reportPath,
-          "Rerun benchmark; the 17x3 workflow evidence matrix is stale.",
+          "Rerun benchmark; the 18x3 workflow evidence matrix is stale.",
         ),
       );
     }

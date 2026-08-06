@@ -45,6 +45,7 @@ any full skill:
 | `integration-checking` | cross-component wiring |
 | `parallel-execution` | 2+ independent gated streams in isolated worktrees after required first-slice proof |
 | `knowledge-compounding` | durable solved-problem notes |
+| `knowledge-refresh` | audit and prune the knowledge store against the current tree |
 | `subagent-orchestration` | file-backed approved-goal dispatch and two-stage review |
 | Other support skills | load only when their description matches the active risk |
 

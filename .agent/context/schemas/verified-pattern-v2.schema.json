@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:verified-pattern-v2",
+  "title": "Verified Pattern v2",
+  "type": "object",
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "route": {
+      "enum": [
+        "sc-init", "sc-status", "sc-geniusloop", "sc-explore", "sc-research",
+        "sc-prd", "sc-plan", "sc-eval", "sc-go", "sc-work", "sc-debug",
+        "sc-review", "sc-audit", "sc-compound", "sc-evolve", "sc-pause", "sc-launch", "sc-ui"
+      ]
+    }
+  },
+  "properties": {
+    "schema": { "const": "verified_pattern_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "status": { "const": "VERIFIED" },
+    "pattern_id": { "$ref": "#/$defs/identifier" },
+    "dedupe_key": { "$ref": "#/$defs/digest" },
+    "source_run_id": { "$ref": "#/$defs/identifier" },
+    "source_outcome_id": { "$ref": "#/$defs/identifier" },
+    "source_run_head_digest": { "$ref": "#/$defs/digest" },
+    "authority_digest": { "$ref": "#/$defs/digest" },
+    "verifier_digest": { "$ref": "#/$defs/digest" },
+    "evidence_digest": { "$ref": "#/$defs/digest" },
+    "problem_fingerprint": { "$ref": "#/$defs/digest" },
+    "context_fingerprint": { "$ref": "#/$defs/digest" },
+    "approach_id": { "$ref": "#/$defs/identifier" },
+    "hypothesis_digest": { "$ref": "#/$defs/digest" },
+    "verifier_status": { "const": "PASS" },
+    "checker_status": { "const": "PASS" },
+    "finding_status": { "const": "CLOSED" },
+    "human_approval": { "const": "HOST_ATTESTED" },
+    "attribution_status": { "const": "COMPLETE" },
+    "applicability": {
+      "type": "object",
+      "properties": {
+        "risk_profiles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] }
+        },
+        "workflow_routes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 17,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/route" }
+        }
+      },
+      "required": ["risk_profiles", "workflow_routes"],
+      "additionalProperties": false
+    },
+    "owner": { "$ref": "#/$defs/identifier" },
+    "verified_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "status",
+    "pattern_id",
+    "dedupe_key",
+    "source_run_id",
+    "source_outcome_id",
+    "source_run_head_digest",
+    "authority_digest",
+    "verifier_digest",
+    "evidence_digest",
+    "problem_fingerprint",
+    "context_fingerprint",
+    "approach_id",
+    "hypothesis_digest",
+    "verifier_status",
+    "checker_status",
+    "finding_status",
+    "human_approval",
+    "attribution_status",
+    "applicability",
+    "owner",
+    "verified_at",
+    "expires_at"
+  ],
+  "additionalProperties": false
+}

@@ -4,6 +4,8 @@ description: "Run the complete Super Compound lifecycle through BRD, PRD, FSD, g
 
 # Launch Workflow
 
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
 Use this when the user wants the whole lifecycle from idea to verified delivery.
 
 ## Pipeline
@@ -33,6 +35,13 @@ gate refs/version plus a non-authoritative status snapshot, verification refs,
 and next route; use `.continue-here.md` only as a short pointer
 when stopping. Release prior-stage detail before loading the next contract. UI implementation
 is a capability of an approved goal under `sc-work.md`, not a parallel authority.
+
+Carry the exact `run_id` and current run head at every implementation handoff,
+then route the handoff through `/sc-work`; launch never manufactures approval or
+mutates implementation directly. A `docs/STATE.md` update is itself a classified
+write and needs the active run's source-write gate. Store only a
+non-authoritative run pointer and refresh it with `loop-run.mjs show`; never copy
+the event log, counters, approval envelope, or confirmation digest into STATE.
 
 ## Rules
 

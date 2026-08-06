@@ -8,7 +8,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $SkillName = "super-compound"
-$CanonicalDirectories = @("context", "workflows", "skills", "templates", "rules", "agents", "hooks", "tools")
+$CanonicalDirectories = @("context", "workflows", "skills", "templates", "rules", "agents", "evals", "hooks", "tools")
 
 function Get-NormalizedFullPath {
     param([Parameter(Mandatory = $true)][string]$Path)

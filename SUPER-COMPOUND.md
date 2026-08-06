@@ -13,6 +13,10 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. It 
 - Turn reusable solutions into documentation through `/sc-compound`.
 - Do not preserve stale workflow aliases unless they are part of the current public interface.
 
+## Loop Runtime Boundary
+
+Protected execution follows `docs/loop-runtime-v2.md`: a human-confirmed Budget & Stop Wizard gates START, RESUME, and implementation or external writes; hooks are advisory; and the machine-authoritative surface remains 18 workflows without `/loop`.
+
 ## Default UI-Aware Lifecycle
 
 When the scope has an interactive user surface, use:
@@ -70,6 +74,7 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 | `/sc-review` | Review changed code/docs |
 | `/sc-audit` | Audit security, compatibility, compliance, agent surface, and readiness |
 | `/sc-compound` | Capture reusable knowledge |
+| `/sc-evolve` | Cluster verified learnings into draft framework proposals for human approval |
 | `/sc-pause` | Save handoff state |
 | `/sc-launch` | Start a focused project or feature lifecycle |
 | `/sc-ui` | Design/review UI read-only or guide an approved `/sc-work` goal |
@@ -106,7 +111,7 @@ Research is a conditional sidecar, not a mandatory lifecycle stage. Use it only 
 
 Use `.agent/context/` as the compact runtime layer before full workflow/skill/template reads. Load a full `SKILL.md` only when its procedure is active or being edited/reviewed. When that entrypoint routes to `references/`, load only the branch needed for the current decision; never preload the whole reference directory.
 
-Framework verification records a static 17-route x 3-cell matrix: context-entry
+Framework verification records a static 18-route x 3-cell matrix: context-entry
 reduction, process authority/wiring, and output sink/budget/next owner. This is
 repository evidence, not hidden reasoning or generated-output telemetry; runtime
 claims remain unavailable until paired attributable traces exist for all routes.

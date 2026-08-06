@@ -6,6 +6,16 @@ description: "Define and run eval-driven success criteria before or after implem
 
 Use this when a feature needs measurable pass/fail behavior, reliability checks, or repeatable quality measurement.
 
+## Loop Runtime v2 Boundary
+
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
+Defining or recording `.agent/evals/` criteria is an `authority_write` and needs
+no Budget & Stop Wizard. Eval stays read-only toward product/source state:
+classify the target and block any `implementation_write`. A checker may consume
+a run pointer and evidence, but it cannot create approval, alter counters, close
+a finding by self-report, or mutate the implementation it grades.
+
 ## Usage
 
 ```text

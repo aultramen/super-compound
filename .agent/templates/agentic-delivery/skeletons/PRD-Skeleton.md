@@ -14,6 +14,7 @@ manifest. Use `N/A - reason` instead of deleting a mandatory decision.
 ## Metadata
 
 ID: PRD-{{PROJECT}}  
+Artifact contract version: `2.0.0`
 Status: DRAFT / APPROVED  
 Upstream: BRD-{{PROJECT}}#{{IDS}}
 ui_delivery_profile: NOT_APPLICABLE / STANDARD / HIGH_INTERACTION

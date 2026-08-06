@@ -1,0 +1,500 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:eval-result-v2",
+  "title": "Loop Runtime Eval Result v2",
+  "type": "object",
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "gitSha": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "verifierRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9@._:#-]+$"
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "pattern": "^[A-Za-z0-9._/-]+$"
+      },
+      "uniqueItems": true
+    },
+    "passMetrics": {
+      "type": "object",
+      "properties": {
+        "attempts_total": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "attempts_passed": { "type": "integer", "minimum": 0, "maximum": 1000 },
+        "pass_at_k_basis_points": { "type": "integer", "minimum": 0, "maximum": 10000 },
+        "pass_power_k_basis_points": { "type": "integer", "minimum": 0, "maximum": 10000 }
+      },
+      "required": [
+        "attempts_total",
+        "attempts_passed",
+        "pass_at_k_basis_points",
+        "pass_power_k_basis_points"
+      ],
+      "additionalProperties": false
+    },
+    "regressionOutcome": {
+      "type": "object",
+      "properties": {
+        "verifier_digest": { "$ref": "#/$defs/digest" },
+        "verdict": { "enum": ["PASS", "FAIL", "ERROR"] },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" }
+      },
+      "required": ["verifier_digest", "verdict", "evidence_refs"],
+      "additionalProperties": false
+    },
+    "attempt": {
+      "type": "object",
+      "properties": {
+        "attempt_number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "reset_id": { "$ref": "#/$defs/identifier" },
+        "reset_attestation": { "const": "HOST_ATTESTED_CLEAN_RESET" },
+        "run_head_digest": { "$ref": "#/$defs/digest" },
+        "workspace_head_git_sha": { "$ref": "#/$defs/gitSha" },
+        "verifier_digest": { "$ref": "#/$defs/digest" },
+        "verdict": { "enum": ["PASS", "FAIL", "ERROR"] },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" },
+        "regression": {
+          "oneOf": [
+            { "$ref": "#/$defs/regressionOutcome" },
+            { "type": "null" }
+          ]
+        },
+        "started_at": { "type": "string", "format": "date-time" },
+        "completed_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "attempt_number",
+        "reset_id",
+        "reset_attestation",
+        "run_head_digest",
+        "workspace_head_git_sha",
+        "verifier_digest",
+        "verdict",
+        "evidence_refs",
+        "regression",
+        "started_at",
+        "completed_at"
+      ],
+      "additionalProperties": false
+    },
+    "humanGate": {
+      "type": "object",
+      "properties": {
+        "gate_id": { "$ref": "#/$defs/identifier" },
+        "status": { "enum": ["PENDING", "PASS", "FAIL", "NOT_APPLICABLE"] },
+        "approver_id": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+        },
+        "evidence_digest": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "evidence_ref": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._/-]+$"
+        },
+        "attestation": { "enum": ["HOST_ATTESTED_HUMAN", null] },
+        "run_id": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+        },
+        "goal_ref": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9@._:#-]+$"
+        },
+        "eval_definition_digest": {
+          "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+        },
+        "run_head_digest": {
+          "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+        },
+        "workspace_head_git_sha": {
+          "type": ["string", "null"],
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "risk_profile": {
+          "type": ["string", "null"],
+          "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL", null]
+        },
+        "final_attempt_number": { "type": ["integer", "null"], "minimum": 1, "maximum": 1000 },
+        "final_attempt_digest": {
+          "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+        },
+        "approved_at": { "type": ["string", "null"], "format": "date-time" },
+        "expires_at": { "type": ["string", "null"], "format": "date-time" }
+      },
+      "required": [
+        "gate_id",
+        "status",
+        "approver_id",
+        "evidence_digest",
+        "evidence_ref",
+        "attestation",
+        "run_id",
+        "goal_ref",
+        "eval_definition_digest",
+        "run_head_digest",
+        "workspace_head_git_sha",
+        "risk_profile",
+        "final_attempt_number",
+        "final_attempt_digest",
+        "approved_at",
+        "expires_at"
+      ],
+      "additionalProperties": false
+    },
+    "checker": {
+      "type": "object",
+      "properties": {
+        "checker_id": { "$ref": "#/$defs/identifier" },
+        "verdict": { "enum": ["PASS", "FAIL", "ERROR", "NOT_RUN"] },
+        "read_only": { "const": true },
+        "attestation": { "const": "HOST_ATTESTED_INDEPENDENT_READ_ONLY" },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._/-]+$"
+        },
+        "run_id": { "$ref": "#/$defs/identifier" },
+        "goal_ref": { "$ref": "#/$defs/verifierRef" },
+        "eval_definition_digest": { "$ref": "#/$defs/digest" },
+        "run_head_digest": { "$ref": "#/$defs/digest" },
+        "workspace_head_git_sha": { "$ref": "#/$defs/gitSha" },
+        "final_attempt_number": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "final_attempt_digest": { "$ref": "#/$defs/digest" },
+        "verified_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "checker_id",
+        "verdict",
+        "read_only",
+        "attestation",
+        "evidence_digest",
+        "evidence_ref",
+        "run_id",
+        "goal_ref",
+        "eval_definition_digest",
+        "run_head_digest",
+        "workspace_head_git_sha",
+        "final_attempt_number",
+        "final_attempt_digest",
+        "verified_at"
+      ],
+      "additionalProperties": false
+    },
+    "originalVerifier": {
+      "type": "object",
+      "properties": {
+        "ref": { "$ref": "#/$defs/verifierRef" },
+        "digest": { "$ref": "#/$defs/digest" },
+        "actor_id": { "$ref": "#/$defs/identifier" }
+      },
+      "required": ["ref", "digest", "actor_id"],
+      "additionalProperties": false
+    },
+    "returnGate": {
+      "type": "object",
+      "properties": {
+        "closure_cycle": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "verifier_ref": { "$ref": "#/$defs/verifierRef" },
+        "verifier_digest": { "$ref": "#/$defs/digest" },
+        "verifier_actor_id": { "$ref": "#/$defs/identifier" },
+        "verdict": { "enum": ["PASS", "FAIL", "ERROR", "NOT_RUN", "STALE"] },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._/-]+$"
+        },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "attestation": { "const": "HOST_ATTESTED_ORIGINAL_VERIFIER" },
+        "run_id": { "$ref": "#/$defs/identifier" },
+        "goal_ref": { "$ref": "#/$defs/verifierRef" },
+        "eval_definition_digest": { "$ref": "#/$defs/digest" },
+        "run_head_digest": { "$ref": "#/$defs/digest" },
+        "workspace_head_git_sha": { "$ref": "#/$defs/gitSha" },
+        "source_finding_id": { "$ref": "#/$defs/identifier" },
+        "source_run_id": { "$ref": "#/$defs/identifier" },
+        "final_attempt_number": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "final_attempt_digest": { "$ref": "#/$defs/digest" },
+        "verified_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "closure_cycle",
+        "verifier_ref",
+        "verifier_digest",
+        "verifier_actor_id",
+        "verdict",
+        "evidence_refs",
+        "evidence_ref",
+        "evidence_digest",
+        "attestation",
+        "run_id",
+        "goal_ref",
+        "eval_definition_digest",
+        "run_head_digest",
+        "workspace_head_git_sha",
+        "source_finding_id",
+        "source_run_id",
+        "final_attempt_number",
+        "final_attempt_digest",
+        "verified_at"
+      ],
+      "additionalProperties": false
+    },
+    "finding": {
+      "type": "object",
+      "properties": {
+        "finding_id": { "$ref": "#/$defs/identifier" },
+        "source_finding_id": { "$ref": "#/$defs/identifier" },
+        "source_run_id": { "$ref": "#/$defs/identifier" },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" },
+        "owner_id": { "$ref": "#/$defs/identifier" },
+        "original_verifier": { "$ref": "#/$defs/originalVerifier" },
+        "return_gate": {
+          "oneOf": [
+            { "$ref": "#/$defs/returnGate" },
+            { "type": "null" }
+          ]
+        },
+        "max_closure_cycles": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "outcome": { "enum": ["OPEN", "CLOSED"] }
+      },
+      "required": [
+        "finding_id",
+        "source_finding_id",
+        "source_run_id",
+        "evidence_refs",
+        "owner_id",
+        "original_verifier",
+        "return_gate",
+        "max_closure_cycles",
+        "outcome"
+      ],
+      "additionalProperties": false
+    },
+    "sourceRecord": {
+      "type": "object",
+      "properties": {
+        "source_finding_id": { "$ref": "#/$defs/identifier" },
+        "source_run_id": { "$ref": "#/$defs/identifier" },
+        "original_verifier_ref": { "$ref": "#/$defs/verifierRef" },
+        "original_verifier_digest": { "$ref": "#/$defs/digest" },
+        "original_verifier_actor_id": { "$ref": "#/$defs/identifier" }
+      },
+      "required": [
+        "source_finding_id",
+        "source_run_id",
+        "original_verifier_ref",
+        "original_verifier_digest",
+        "original_verifier_actor_id"
+      ],
+      "additionalProperties": false
+    },
+    "findingInventory": {
+      "type": "object",
+      "properties": {
+        "attestation": { "const": "HOST_ATTESTED_COMPLETE_FINDING_SET" },
+        "run_id": { "$ref": "#/$defs/identifier" },
+        "goal_ref": { "$ref": "#/$defs/verifierRef" },
+        "eval_definition_digest": { "$ref": "#/$defs/digest" },
+        "run_head_digest": { "$ref": "#/$defs/digest" },
+        "workspace_head_git_sha": { "$ref": "#/$defs/gitSha" },
+        "final_attempt_number": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "final_attempt_digest": { "$ref": "#/$defs/digest" },
+        "source_records": {
+          "type": "array",
+          "maxItems": 256,
+          "items": { "$ref": "#/$defs/sourceRecord" },
+          "uniqueItems": true
+        },
+        "finding_set_digest": { "$ref": "#/$defs/digest" },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._/-]+$"
+        },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "attestation",
+        "run_id",
+        "goal_ref",
+        "eval_definition_digest",
+        "run_head_digest",
+        "workspace_head_git_sha",
+        "final_attempt_number",
+        "final_attempt_digest",
+        "source_records",
+        "finding_set_digest",
+        "evidence_ref",
+        "evidence_digest",
+        "recorded_at"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "eval_result_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "eval_result_id": { "$ref": "#/$defs/identifier" },
+    "run_id": { "$ref": "#/$defs/identifier" },
+    "goal_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9@._:#-]+$"
+    },
+    "eval_definition_digest": { "$ref": "#/$defs/digest" },
+    "verifier_digest": { "$ref": "#/$defs/digest" },
+    "base_git_sha": { "$ref": "#/$defs/gitSha" },
+    "eval_class": { "enum": ["CAPABILITY", "REGRESSION", "CRITICAL_SAFETY"] },
+    "success_threshold": {
+      "type": "object",
+      "properties": {
+        "metric": { "enum": ["PASS_AT_K", "PASS_POWER_K"] },
+        "k": { "const": 3 },
+        "minimum_basis_points": { "type": "integer", "minimum": 9000, "maximum": 10000 }
+      },
+      "required": ["metric", "k", "minimum_basis_points"],
+      "additionalProperties": false
+    },
+    "evaluation_mode": { "enum": ["DETERMINISTIC", "SUBJECTIVE"] },
+    "risk_profile": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "maker_actor_id": { "$ref": "#/$defs/identifier" },
+    "checker": {
+      "oneOf": [
+        { "$ref": "#/$defs/checker" },
+        { "type": "null" }
+      ]
+    },
+    "findings": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "finding_inventory": { "$ref": "#/$defs/findingInventory" },
+    "attempts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000,
+      "items": { "$ref": "#/$defs/attempt" }
+    },
+    "pass_metrics": { "$ref": "#/$defs/passMetrics" },
+    "regression_pass_metrics": {
+      "oneOf": [
+        { "$ref": "#/$defs/passMetrics" },
+        { "type": "null" }
+      ]
+    },
+    "human_gates": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/humanGate" }
+    },
+    "artifact_revision": {
+      "type": "object",
+      "properties": {
+        "artifact_type": { "enum": ["PRD", "FSD", "ISSUE", "EVAL"] },
+        "artifact_id": { "$ref": "#/$defs/identifier" },
+        "artifact_version": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)$"
+        },
+        "artifact_contract_version": { "const": "2.0.0" },
+        "digest": { "$ref": "#/$defs/digest" }
+      },
+      "required": [
+        "artifact_type",
+        "artifact_id",
+        "artifact_version",
+        "artifact_contract_version",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "workspace_revision": {
+      "type": "object",
+      "properties": {
+        "base_git_sha": { "$ref": "#/$defs/gitSha" },
+        "head_git_sha": {
+          "type": ["string", "null"],
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        }
+      },
+      "required": ["base_git_sha", "head_git_sha"],
+      "additionalProperties": false
+    },
+    "verdict": { "enum": ["NOT_RUN", "PASS", "FAIL", "ERROR", "STALE"] },
+    "fresh": { "type": "boolean" },
+    "run_head_digest": { "$ref": "#/$defs/digest" },
+    "recorded_at": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "eval_result_id",
+    "run_id",
+    "goal_ref",
+    "eval_definition_digest",
+    "verifier_digest",
+    "base_git_sha",
+    "eval_class",
+    "success_threshold",
+    "evaluation_mode",
+    "risk_profile",
+    "maker_actor_id",
+    "checker",
+    "findings",
+    "finding_inventory",
+    "attempts",
+    "pass_metrics",
+    "regression_pass_metrics",
+    "human_gates",
+    "artifact_revision",
+    "workspace_revision",
+    "verdict",
+    "fresh",
+    "run_head_digest",
+    "recorded_at"
+  ],
+  "additionalProperties": false
+}

@@ -35,7 +35,7 @@ Load the full process only after the selection gate passes. Every parallel strea
   sequential contracts, or integration ordering stay in one sequential stream
   with a single writer. Schedule only `Blocked by: None` or verified dependencies.
 - **Preview gate:** Route remote, base, branch, clean-state, and worktree commands through `git-workflow-operation`. Each parallel stream uses its own branch and workspace; never modify the main worktree during parallel work.
-- **Dispatch gate:** Give each agent its workspace, branch, ordered tasks, FSD/issue authority, verification contract, and required orchestration skill. Tasks inside one dependency group remain sequential.
+- **Dispatch gate:** Give each agent its workspace, branch, ordered tasks, FSD/issue authority, verification contract, and required orchestration skill. Tasks inside one dependency group remain sequential. Compute the wave plan first: `node .agent/tools/goal-waves.mjs --issues-dir .scratch/<feature>/issues` groups goals into dependency waves; dispatch one wave at a time, capped by its `maxWorkers`. Shared-state writes during a wave hold `docs/STATE.md.lock` (see `goal-waves.mjs` lock helpers).
 - **Approval gate:** Never remove a worktree until its resolved target path is validated and the user approves. Preview merge, rebase, cleanup, push, and PR operations before mutation.
 - **Conflict gate:** Never auto-resolve conflicts. A conflict invalidates the independence assumption; resolve manually and rerun the full suite.
 - **Integration gate:** Inspect every branch, integrate using the FSD strategy,

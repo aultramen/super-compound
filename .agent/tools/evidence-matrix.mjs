@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-const EXPECTED_WORKFLOW_ROUTES = 17;
+const EXPECTED_WORKFLOW_ROUTES = 18;
 const STAGES_PER_ROUTE = 3;
 const HEX_DIGEST = /^[a-f0-9]{64}$/;
 const RUNTIME_STATUSES = new Set([
@@ -40,7 +40,7 @@ function assertExactRouteSet(label, actualRoutes, expectedRoutes) {
     ]
       .filter(Boolean)
       .join("; ");
-    throw new Error(`${label} must cover the same 17 workflow routes${details ? `: ${details}` : ""}`);
+    throw new Error(`${label} must cover the same 18 workflow routes${details ? `: ${details}` : ""}`);
   }
 }
 
@@ -212,7 +212,7 @@ export function buildWorkflowEvidenceMatrix({
   const routeNames = workflows.map(({ name }) => name);
   const invariants = routeMap(
     workflowInvariants,
-    "workflow_invariants_v1",
+    "workflow_invariants_v2",
     "workflow invariants",
     routeNames,
   );
@@ -460,7 +460,7 @@ export function validateWorkflowEvidence(evidence) {
     coverage?.coveredCells !== EXPECTED_WORKFLOW_ROUTES * STAGES_PER_ROUTE ||
     coverage?.percent !== 100
   ) {
-    throw new Error("staticEvidence coverage must be 17 routes x 3 stages (51/51)");
+    throw new Error("staticEvidence coverage must be 18 routes x 3 stages (54/54)");
   }
   if (
     evidence.claimScope?.evidenceClass !== "repository-owned-static" ||

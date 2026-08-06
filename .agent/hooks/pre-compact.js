@@ -6,6 +6,10 @@
  * so the next session can recover context from disk.
  */
 
+if ((process.env.SC_DISABLED_HOOKS || '').split(',').map((s) => s.trim()).includes('pre-compact')) {
+    process.exit(0);
+}
+
 const fs = require('fs');
 const path = require('path');
 const {

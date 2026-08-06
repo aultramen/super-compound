@@ -1,7 +1,6 @@
-# /sc-debug Runtime Contract
-
-Reproduce expected vs actual with the smallest failing path. Rank hypotheses;
-prove root cause. If Git workflow is enabled, preview `fix/*` or `hotfix/*`.
-Add a regression test, fix, and verify. When evidence exceeds the cap, save
-reproduction, experiments, root cause, fix, and checks at
-`docs/debug/YYYY-MM-DD-<slug>.md`; compound only verified reusable lessons.
+Writes: `.agent/tools/workflow-admission.mjs`.
+Diagnosis is read-only; no wizard. Without an active FSD-authorized run, return
+`OPEN-LOOP-AUTHORITY` before any test or fix: no write. Else require the
+`START`/`RESUME` wizard, `ACTION_INTENDED`, and `source-write`. Reproduce, prove
+root cause, add a regression test, fix/verify, and save non-trivial evidence at
+`docs/debug/YYYY-MM-DD-<slug>.md`.

@@ -15,9 +15,9 @@
       "sc-go": "Latest complete pre-optimization snapshot containing this route and Git workflow.",
       "related-git-workflow": "Latest complete pre-optimization snapshot containing the Git workflow surface."
     },
-    "contentDigest": "cccde2fefa4840593e1e7cf777808c9b035a1bc84715dcac8f9ca184de3e1de4"
+    "contentDigest": "243fe72cad7ee6ab7ea86405a62bda0edc88f6cd5286e159f4b70c7f036e3ae4"
   },
-  "beforeDefinitionDigest": "bb48a83c556bb7b576047e3c767212f1fc4b7c5484b56127b977c4c8ede3cafd",
+  "beforeDefinitionDigest": "be026a35df5bbc4ad8e25b7134179f16319acff97aeda0c707bf392c3eae7c3c",
   "scenarios": {
     "legacy-eager-preload": {
       "tokens": 516436,
@@ -303,6 +303,30 @@
       "fileCount": 2,
       "files": [
         ".agent/workflows/sc-compound.md",
+        ".agent/skills/knowledge-compounding/SKILL.md"
+      ]
+    },
+    "sc-evolve": {
+      "tokens": 5748,
+      "chars": 24135,
+      "bytes": 24189,
+      "fileCount": 16,
+      "files": [
+        ".agent/workflows/sc-audit.md",
+        ".agent/workflows/sc-compound.md",
+        ".agent/workflows/sc-debug.md",
+        ".agent/workflows/sc-eval.md",
+        ".agent/workflows/sc-explore.md",
+        ".agent/workflows/sc-init.md",
+        ".agent/workflows/sc-launch.md",
+        ".agent/workflows/sc-pause.md",
+        ".agent/workflows/sc-plan.md",
+        ".agent/workflows/sc-prd.md",
+        ".agent/workflows/sc-research.md",
+        ".agent/workflows/sc-review.md",
+        ".agent/workflows/sc-status.md",
+        ".agent/workflows/sc-ui.md",
+        ".agent/workflows/sc-work.md",
         ".agent/skills/knowledge-compounding/SKILL.md"
       ]
     },

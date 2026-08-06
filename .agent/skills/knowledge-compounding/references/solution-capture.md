@@ -16,7 +16,17 @@ Include failed investigations, environment versions, and file/line locations whe
 
 ## 2. Search and classify
 
-Search `docs/solutions/**/*.md` for the symptom, error, component, and root cause before creating a file. If a match has the same cause, update or cross-reference it. Create a separate record only when the cause differs.
+Search mechanically before creating a file:
+
+```bash
+node .agent/tools/knowledge-search.mjs "<symptom or root cause>" --dir docs/solutions
+```
+
+Score overlap with each hit on five dimensions: problem, root cause, solution,
+files touched, prevention. High overlap (4-5 dimensions) means update the
+existing record and set `last_updated:`; moderate overlap (2-3) means create a
+new record and add a consolidation note in `Related`; otherwise create freely.
+Two records describing the same problem will drift apart - prefer update.
 
 Choose the closest category:
 
@@ -68,8 +78,28 @@ tags: [tag1, tag2]
 
 Good records are specific, searchable, reproducible, and explanatory. Never include credentials or real customer data.
 
+## 3b. Ground the record
+
+Run the mechanical validator before finishing:
+
+```bash
+node .agent/tools/validate-doc-claims.mjs docs/solutions/<category>/<file>.md
+```
+
+It flags missing cited paths, broken relative links, unknown commit SHAs, and
+leftover drafting scaffold. Adjudicate every finding yourself; the tool never
+edits the record. A claim that cannot be grounded gets rewritten or removed,
+not left as-is.
+
 ## 4. Compound patterns
 
 Add `Related` links in both directions. At 3+ similar records, create `docs/solutions/patterns/<pattern-name>.md` containing the common symptom, underlying cause, general solution pattern, and links to at least three examples.
+
+## 5. Discoverability check
+
+After writing, ask: would an agent without this skill find the store? If
+`AGENTS.md` or `CLAUDE.md` does not point to `docs/solutions/` and
+`node .agent/tools/knowledge-search.mjs`, propose the smallest one-line
+addition. Knowledge that cannot be found does not compound.
 
 Report the path created or updated and offer to continue, view it, or link related records.

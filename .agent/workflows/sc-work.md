@@ -6,6 +6,22 @@ description: "Execute an approved FSD goal or lightweight issue pointer with foc
 
 Use this only after there is an approved FSD goal or `.scratch/<feature>/issues/` issue pointer.
 
+## Loop Runtime v2 Admission
+
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
+The Budget & Stop Wizard is mandatory at every `START` and `RESUME`. Persist a
+fresh host-attested human confirmation before the run enters `RUNNING`; a model
+recommendation is never admission authority. Output/context token budget is
+separate from the Loop Run resource budget and cannot satisfy this gate.
+
+Before each implementation mutation, persist `ACTION_INTENDED`, then revalidate
+the active run with `.agent/tools/loop-run.mjs validate-gate --run <run_id>
+--operation source-write`. Use operation `work` before worker dispatch; a denied,
+stale, expired, mismatched, non-`RUNNING`, or simulation-only `work` result
+permits no dispatch. Any such `source-write` result permits no source write.
+Every project-source write stays inside that active iteration.
+
 ## Steps
 
 1. Load `skills/agentic-delivery/SKILL.md`, `skills/context-engineering/SKILL.md`, and `skills/executing-plans/SKILL.md` when following the full execution procedure.
@@ -38,12 +54,19 @@ Use this only after there is an approved FSD goal or `.scratch/<feature>/issues/
    dependency/shared files, a single writer for contract/schema/generated
    artifacts/migrations/lockfiles, an experience baseline of `VALIDATED`, and an
    isolated Git worktree per stream. `EXCEPTION_APPROVED` never opens scale-out.
+   Plan streams as dependency waves with `node .agent/tools/goal-waves.mjs
+   --issues-dir .scratch/<feature>/issues`; run wave N in parallel only after
+   wave N-1 is `verified`. Any shared-state write (`docs/STATE.md`) during a
+   wave holds the `docs/STATE.md.lock` exclusive lock.
 11. For UI tasks, follow `skills/interface-design/SKILL.md`.
 12. Use `skills/test-driven-development/SKILL.md` for behavior changes and regressions.
 13. Run task-level verification after each meaningful change. A `HARDENING` goal
     executes and records mapped integration, responsive, accessibility, E2E, and
     visual-regression checks; the Business Owner performs or approves UAT.
 14. Run final verification with `skills/verification-before-completion/SKILL.md`.
+    For multi-goal runs, completion additionally requires the machine-checked
+    predicate `node .agent/tools/verified-promise.mjs --run <run-id>` to print
+    `COMPLETE_ALLOWED`; a prose completion claim without it is void.
 15. Summarize changed files, mapped requirement IDs, deviations, and verification evidence.
 
 ## Output

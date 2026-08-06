@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:budget-proposal-v2",
+  "title": "Budget Proposal v2",
+  "type": "object",
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "positiveIntegerOrNull": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "runtimeMinutesOrNull": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 150119987579
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "max_iterations": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_runtime_minutes": { "$ref": "#/$defs/runtimeMinutesOrNull" },
+        "max_no_progress_iterations": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_tokens": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_cost_micro": { "$ref": "#/$defs/positiveIntegerOrNull" }
+      },
+      "required": [
+        "max_iterations",
+        "max_runtime_minutes",
+        "max_no_progress_iterations",
+        "max_tokens",
+        "max_cost_micro"
+      ],
+      "additionalProperties": false
+    },
+    "userLimits": {
+      "type": "object",
+      "properties": {
+        "max_iterations": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_runtime_minutes": { "$ref": "#/$defs/runtimeMinutesOrNull" },
+        "max_no_progress_iterations": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_tokens": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_cost": {
+          "type": ["string", "null"],
+          "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]{1,6})?$",
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "max_iterations",
+        "max_runtime_minutes",
+        "max_no_progress_iterations",
+        "max_tokens",
+        "max_cost"
+      ],
+      "additionalProperties": false
+    },
+    "consumed": {
+      "type": "object",
+      "properties": {
+        "iterations": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "active_runtime_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "no_progress_iterations": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "tokens": { "type": ["integer", "null"], "minimum": 0, "maximum": 9007199254740991 },
+        "cost_micro": { "type": ["integer", "null"], "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["iterations", "active_runtime_ms", "no_progress_iterations", "tokens", "cost_micro"],
+      "additionalProperties": false
+    },
+    "remaining": {
+      "type": "object",
+      "properties": {
+        "iterations": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "active_runtime_ms": { "type": ["integer", "null"], "minimum": 0, "maximum": 9007199254740991 },
+        "no_progress_iterations": { "type": ["integer", "null"], "minimum": 0, "maximum": 9007199254740991 },
+        "tokens": { "type": ["integer", "null"], "minimum": 0, "maximum": 9007199254740991 },
+        "cost_micro": { "type": ["integer", "null"], "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["iterations", "active_runtime_ms", "no_progress_iterations", "tokens", "cost_micro"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "budget_proposal_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "proposal_id": { "$ref": "#/$defs/identifier" },
+    "run_id": { "$ref": "#/$defs/identifier" },
+    "phase": { "enum": ["START", "RESUME"] },
+    "queue_item_id": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "expected_run_version": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "execution_mode": { "enum": ["OBSERVE", "ENFORCE"] },
+    "goal_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "goal_digest": { "$ref": "#/$defs/digest" },
+    "authority_digest": { "$ref": "#/$defs/digest" },
+    "project_config_digest": { "$ref": "#/$defs/digest" },
+    "verifier_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "verifier_digest": { "$ref": "#/$defs/digest" },
+    "regression_verifier_digest": {
+      "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+    },
+    "eval_definition_digest": { "$ref": "#/$defs/digest" },
+    "policy_digest": { "$ref": "#/$defs/digest" },
+    "autonomy_profile": { "enum": ["INTERACTIVE", "BACKGROUND"] },
+    "risk_profile": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "billing_currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "pricing_revision": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "pricing_digest": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "display_context": {
+      "type": "object",
+      "properties": {
+        "authority": { "const": "ADVISORY_DISPLAY_ONLY" },
+        "source": { "const": "CONTRACT_DERIVED" },
+        "source_digest": { "$ref": "#/$defs/digest" },
+        "goal_summary": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "acceptance_criteria": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "items": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "uniqueItems": true
+        }
+      },
+      "required": ["authority", "source", "source_digest", "goal_summary", "acceptance_criteria"],
+      "additionalProperties": false
+    },
+    "recommendation_source": {
+      "enum": ["MODEL_ADVISORY", "REFERENCE_ADAPTER_ADVISORY"]
+    },
+    "recommended": { "$ref": "#/$defs/budget" },
+    "recommended_limits": { "$ref": "#/$defs/userLimits" },
+    "policy_ceiling": { "$ref": "#/$defs/budget" },
+    "effective_preview": { "$ref": "#/$defs/budget" },
+    "consumed": { "$ref": "#/$defs/consumed" },
+    "remaining": { "$ref": "#/$defs/remaining" },
+    "lineage": {
+      "type": "object",
+      "properties": {
+        "parent_run_id": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+        },
+        "root_run_id": { "$ref": "#/$defs/identifier" },
+        "run_count": { "type": "integer", "minimum": 1, "maximum": 64 }
+      },
+      "required": ["parent_run_id", "root_run_id", "run_count"],
+      "additionalProperties": false
+    },
+    "lineage_totals": { "$ref": "#/$defs/consumed" },
+    "recommendation_reason": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 240,
+      "pattern": "^[^\\r\\n]+[.!?]$"
+    },
+    "null_warnings": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 500 },
+      "minItems": 0,
+      "maxItems": 4,
+      "uniqueItems": true
+    },
+    "approval_ttl_minutes": { "type": "integer", "minimum": 1, "maximum": 525600 },
+    "approval_expires_at": { "type": "string", "format": "date-time" },
+    "generated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "proposal_id",
+    "run_id",
+    "phase",
+    "queue_item_id",
+    "expected_run_version",
+    "execution_mode",
+    "goal_ref",
+    "goal_digest",
+    "authority_digest",
+    "project_config_digest",
+    "verifier_ref",
+    "verifier_digest",
+    "regression_verifier_digest",
+    "eval_definition_digest",
+    "policy_digest",
+    "autonomy_profile",
+    "risk_profile",
+    "billing_currency",
+    "pricing_revision",
+    "pricing_digest",
+    "display_context",
+    "recommendation_source",
+    "recommended",
+    "recommended_limits",
+    "policy_ceiling",
+    "effective_preview",
+    "consumed",
+    "remaining",
+    "lineage",
+    "lineage_totals",
+    "recommendation_reason",
+    "null_warnings",
+    "approval_ttl_minutes",
+    "approval_expires_at",
+    "generated_at"
+  ],
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "execution_mode": { "const": "OBSERVE" },
+        "recommendation_source": {
+          "enum": ["MODEL_ADVISORY", "REFERENCE_ADAPTER_ADVISORY"]
+        }
+      },
+      "required": ["execution_mode", "recommendation_source"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "execution_mode": { "const": "ENFORCE" },
+        "recommendation_source": { "const": "MODEL_ADVISORY" }
+      },
+      "required": ["execution_mode", "recommendation_source"]
+    }
+  ],
+  "additionalProperties": false
+}

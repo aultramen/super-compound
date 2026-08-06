@@ -134,7 +134,7 @@ test("full PRD and FSD publish additive UI contract interfaces", async () => {
 
   for (const template of [prd, fsd]) {
     assert.match(template, /template_version:\s*["']2\.1\.0["']/);
-    assert.match(template, /artifact_contract_version:\s*["']1\.1\.0["']/);
+    assert.match(template, /artifact_contract_version:\s*["']2\.0\.0["']/);
   }
 
   assert.match(prd, /UI Experience Gate/i);

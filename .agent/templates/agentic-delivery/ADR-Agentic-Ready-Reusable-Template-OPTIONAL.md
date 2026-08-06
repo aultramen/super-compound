@@ -47,7 +47,7 @@ tags:
 
 # {{ADR_ID}} — {{DECISION_TITLE}}
 
-> **Petunjuk penggunaan:** ADR adalah artefak **opsional dan kondisional**. Jangan membuat ADR hanya untuk melengkapi rangkaian BRD/PRD/FSD. Gunakan template ini ketika durable architecture rationale memang bernilai atau project policy secara eksplisit mewajibkannya. Satu file ADR hanya boleh menetapkan **satu keputusan arsitektur yang koheren**. Ganti seluruh `{{PLACEHOLDER}}`; bagian yang tidak relevan ditulis `N/A — {{ALASAN}}`. `TBD`, `later`, `best practice`, `sesuai kebutuhan`, atau kata sifat tanpa ukuran tidak diperbolehkan pada ADR berstatus `ACCEPTED`.
+> **Usage note:** The ADR is an **optional and conditional** artifact. Do not create an ADR just to complete the BRD/PRD/FSD chain. Use this template when a durable architecture rationale is genuinely valuable or project policy explicitly mandates it. One ADR file may only establish **one coherent architecture decision**. Replace every `{{PLACEHOLDER}}`; sections that are not relevant are written as `N/A — {{REASON}}`. `TBD`, `later`, `best practice`, `as needed`, or unmeasured adjectives are not allowed in an ADR with `ACCEPTED` status.
 
 ---
 
@@ -56,160 +56,160 @@ tags:
 > `skeletons/ADR-Skeleton-OPTIONAL.md` and read only the named section required
 > for the accepted architectural decision or review gap.
 
-# 0. Kontrak Operasional ADR
+# 0. ADR Operating Contract
 
-## 0.1 Tujuan Dokumen
+## 0.1 Document Purpose
 
-ADR ini adalah sidecar opsional yang merekam satu keputusan arsitektur untuk `{{PROJECT_NAME}}` secara:
+This ADR is an optional sidecar that records one architecture decision for `{{PROJECT_NAME}}` in a way that is:
 
-- dapat dipahami tanpa bergantung pada percakapan atau memori pembuatnya;
-- dapat ditelusuri ke business/product requirement dan constraint yang melandasinya;
-- dapat diuji melalui acceptance evidence atau architecture fitness functions;
-- cukup preskriptif agar FSD, developer, dan coding agent tidak menciptakan keputusan arsitektur baru secara diam-diam ketika ADR ini digunakan;
-- tetap jujur mengenai trade-off, dampak negatif, ketidakpastian, dan risiko residual;
-- dapat ditinjau ulang, dikecualikan secara terkendali, didepresiasi, atau disupersede tanpa menghapus sejarah.
+- understandable without depending on conversations or the author's memory;
+- traceable to the underlying business/product requirements and constraints;
+- testable through acceptance evidence or architecture fitness functions;
+- prescriptive enough that the FSD, developers, and coding agents do not silently invent new architecture decisions when this ADR is used;
+- honest about trade-offs, negative impacts, uncertainty, and residual risks;
+- reviewable, subject to controlled exceptions, deprecatable, or supersedable without erasing history.
 
-Ketika ADR dipilih untuk digunakan, dokumen ini dianggap lengkap apabila pembaca dapat menjawab dengan tegas:
+When the ADR is chosen for use, this document is considered complete when a reader can answer decisively:
 
-1. keputusan apa yang dibuat;
-2. masalah apa yang memerlukan keputusan tersebut;
-3. batas kewenangan dan scope keputusan;
-4. opsi layak apa yang dievaluasi;
-5. evidence dan kriteria apa yang digunakan;
-6. mengapa opsi terpilih lebih tepat dalam konteks ini;
-7. konsekuensi positif, negatif, biaya, dan risiko apa yang diterima;
-8. perubahan apa yang wajib dilakukan pada FSD, kode, data, deployment, security, operations, dan testing;
-9. bagaimana mendeteksi implementation drift;
-10. kondisi apa yang memicu review, rollback, deprecation, atau supersession.
+1. what decision was made;
+2. what problem required the decision;
+3. the authority boundaries and scope of the decision;
+4. which viable options were evaluated;
+5. what evidence and criteria were used;
+6. why the selected option is more appropriate in this context;
+7. what positive and negative consequences, costs, and risks are accepted;
+8. what changes are mandatory in the FSD, code, data, deployment, security, operations, and testing;
+9. how implementation drift is detected;
+10. what conditions trigger review, rollback, deprecation, or supersession.
 
-## 0.2 Kapan ADR Layak Digunakan — Opsional dan Kondisional
+## 0.2 When an ADR Is Worth Using — Optional and Conditional
 
-Baseline artifact lifecycle adalah:
+The baseline artifact lifecycle is:
 
 ```text
 BRD → PRD → FSD → GOAL → IMPLEMENTATION → VERIFICATION
-                 ↘ ADR (opsional)
+                 ↘ ADR (optional)
 ```
 
-ADR **tidak wajib secara default**. FSD harus tetap lengkap dan executable tanpa ADR melalui `TDEC-*` (embedded technical decisions). Buat ADR hanya ketika nilai durable decision record lebih besar daripada overhead pemeliharaannya, misalnya keputusan:
+The ADR is **not mandatory by default**. The FSD must remain complete and executable without an ADR through `TDEC-*` (embedded technical decisions). Create an ADR only when the value of a durable decision record outweighs its maintenance overhead, for example decisions that:
 
-- memengaruhi lebih dari satu module, service, repository, team, atau release;
-- mahal, berisiko, atau sulit dibalik;
-- mengubah trust boundary, data classification, data residency, authentication, authorization, auditability, atau threat model;
-- memilih atau mengganti database, queue, protocol, cloud/provider, AI provider, framework utama, runtime, deployment topology, atau integration mechanism;
-- menciptakan vendor lock-in, recurring cost, operational burden, atau availability dependency material;
-- menetapkan source of truth, consistency model, transaction boundary, event-delivery semantic, canonicalization, encryption, retention, atau migration strategy;
-- menyimpang dari architecture principle, approved standard, security baseline, atau ADR sebelumnya;
-- membutuhkan exception/waiver terhadap policy atau standard;
-- wajar diperdebatkan kembali karena rationale tidak terlihat dari kode/FSD dan perlu dipertahankan lintas release.
+- affect more than one module, service, repository, team, or release;
+- are expensive, risky, or hard to reverse;
+- change the trust boundary, data classification, data residency, authentication, authorization, auditability, or threat model;
+- select or replace a database, queue, protocol, cloud/provider, AI provider, primary framework, runtime, deployment topology, or integration mechanism;
+- create material vendor lock-in, recurring cost, operational burden, or availability dependency;
+- establish a source of truth, consistency model, transaction boundary, event-delivery semantics, canonicalization, encryption, retention, or migration strategy;
+- deviate from an architecture principle, approved standard, security baseline, or a previous ADR;
+- require an exception/waiver against a policy or standard;
+- are reasonably likely to be re-debated because the rationale is not visible from the code/FSD and must be preserved across releases.
 
-ADR biasanya tidak bernilai untuk:
+An ADR is usually not valuable for:
 
-- refactor lokal yang tidak mengubah external behavior atau architecture boundary;
-- pemilihan nama variable atau detail implementasi yang mengikuti repository convention;
-- dependency patch/minor update yang kompatibel dan tidak mengubah risk profile;
-- keputusan yang cukup dicatat sebagai `TDEC-*` di FSD;
-- keputusan yang sudah ditetapkan secara eksplisit dan lengkap oleh ADR aktif lain.
+- local refactors that do not change external behavior or architecture boundaries;
+- variable naming or implementation details that follow repository conventions;
+- compatible dependency patch/minor updates that do not change the risk profile;
+- decisions sufficiently recorded as `TDEC-*` in the FSD;
+- decisions already established explicitly and completely by another active ADR.
 
 Decision path:
 
-1. FSD melakukan ADR applicability assessment.
-2. Bila `NOT_REQUIRED`, gunakan `TDEC-*`; jangan buat file ADR kosong.
-3. Bila `LINKED`, buat/reuse ADR dan tunggu status `ACCEPTED` sebelum goal terkait `READY`.
-4. Bila project policy secara eksplisit mewajibkan ADR, set `applicability_status=REQUIRED_BY_PROJECT_POLICY` dan cite policy tersebut.
-5. Bila ragu, gunakan **Minimal Architecture Decision Brief** pada Appendix F atau `TDEC-*` terlebih dahulu; promote ke ADR penuh hanya bila blast radius/uncertainty membenarkannya.
+1. The FSD performs the ADR applicability assessment.
+2. When `NOT_REQUIRED`, use `TDEC-*`; do not create an empty ADR file.
+3. When `LINKED`, create/reuse the ADR and wait for `ACCEPTED` status before the related goal becomes `READY`.
+4. When project policy explicitly mandates an ADR, set `applicability_status=REQUIRED_BY_PROJECT_POLICY` and cite that policy.
+5. When in doubt, use the **Minimal Architecture Decision Brief** in Appendix F or `TDEC-*` first; promote to a full ADR only when the blast radius/uncertainty justifies it.
 
-## 0.3 Prinsip Satu Keputusan per ADR
+## 0.3 One Decision per ADR Principle
 
-Satu ADR harus memiliki satu decision statement utama. Beberapa aturan boleh berada dalam satu ADR hanya bila semuanya:
+One ADR must have one primary decision statement. Multiple rules may live in one ADR only when all of them:
 
-- diperlukan untuk membuat keputusan utama dapat diimplementasikan;
-- memiliki lifecycle, reviewer, dan rollback boundary yang sama;
-- tidak dapat diadopsi atau dibatalkan secara independen tanpa membuat keputusan utama tidak koheren.
+- are required to make the primary decision implementable;
+- share the same lifecycle, reviewers, and rollback boundary;
+- cannot be adopted or cancelled independently without making the primary decision incoherent.
 
-Pisahkan menjadi ADR lain ketika dua pilihan dapat disetujui, ditolak, direview, atau disupersede secara independen.
+Split into separate ADRs when two choices can be approved, rejected, reviewed, or superseded independently.
 
-## 0.4 Batas Otoritas BRD, PRD, ADR Opsional, dan FSD
+## 0.4 Authority Boundaries of BRD, PRD, Optional ADR, and FSD
 
-| Jenis Keputusan | BRD | PRD | ADR opsional | FSD |
+| Decision Type | BRD | PRD | Optional ADR | FSD |
 |---|---:|---:|---:|---:|
-| Business problem, outcome, benefit, risk appetite | **Authoritative** | Menerjemahkan | Tidak mengubah | Tidak mengubah |
-| Business scope, policy, rule, authority, compliance intent | **Authoritative** | Memperjelas product behavior | Tidak mengubah | Mengimplementasikan |
-| Product scope, user outcome, functional policy, UX intent | Constraint | **Authoritative** | Tidak mengubah | Mengimplementasikan |
-| Architecture pattern, topology, technology, cross-cutting mechanism | Constraint | Constraint | **Authoritative dalam delegated scope bila `ACCEPTED` dan linked** | **Authoritative sebagai `TDEC-*` bila ADR tidak digunakan; selalu merinci implementasi** |
-| API/schema/job/event detail dan implementation behavior | Constraint | Constraint | Menetapkan pattern/boundary bila material | **Authoritative** |
-| Test, migration, rollout, rollback, dan goal packet | Business/product gate | Acceptance intent | Menetapkan constraints/fitness functions bila linked | **Authoritative** |
-| Code-level design lokal | Tidak menetapkan | Tidak menetapkan | Biasanya tidak menetapkan | Dapat menetapkan atau menyerahkan ke repository convention |
+| Business problem, outcome, benefit, risk appetite | **Authoritative** | Translates | Does not change | Does not change |
+| Business scope, policy, rule, authority, compliance intent | **Authoritative** | Clarifies product behavior | Does not change | Implements |
+| Product scope, user outcome, functional policy, UX intent | Constraint | **Authoritative** | Does not change | Implements |
+| Architecture pattern, topology, technology, cross-cutting mechanism | Constraint | Constraint | **Authoritative within delegated scope when `ACCEPTED` and linked** | **Authoritative as `TDEC-*` when no ADR is used; always details the implementation** |
+| API/schema/job/event detail and implementation behavior | Constraint | Constraint | Defines patterns/boundaries when material | **Authoritative** |
+| Test, migration, rollout, rollback, and goal packet | Business/product gate | Acceptance intent | Defines constraints/fitness functions when linked | **Authoritative** |
+| Local code-level design | Does not define | Does not define | Usually does not define | May define or delegate to repository conventions |
 
-Aturan precedence:
+Precedence rules:
 
-1. hukum, kontrak, regulator, dan policy/security baseline yang berlaku;
-2. BRD yang disetujui untuk business intent dan business boundary;
-3. PRD yang disetujui untuk product intent dan product boundary;
-4. ADR `ACCEPTED`, **bila ada dan linked**, untuk delegated architecture scope;
-5. FSD yang disetujui untuk implementation contract; `TDEC-*` berlaku bila ADR tidak digunakan;
-6. repository convention dan existing implementation untuk pilihan lokal;
-7. task, prompt, atau invocation `/sc-work` individual.
+1. applicable law, contracts, regulators, and policy/security baselines;
+2. the approved BRD for business intent and business boundaries;
+3. the approved PRD for product intent and product boundaries;
+4. an `ACCEPTED` ADR, **when present and linked**, for the delegated architecture scope;
+5. the approved FSD for the implementation contract; `TDEC-*` applies when no ADR is used;
+6. repository conventions and the existing implementation for local choices;
+7. individual tasks, prompts, or `/sc-work` invocations.
 
-ADR tidak sah sebagai mekanisme untuk diam-diam menurunkan requirement BRD/PRD. ADR juga tidak menggantikan FSD: setiap goal tetap harus merujuk FSD, sedangkan ADR hanya menjadi additional authority untuk decision clauses yang ditautkan. Konflik dengan artifact berotoritas lebih tinggi harus memicu change request atau revisi upstream.
+The ADR is not a valid mechanism for silently weakening BRD/PRD requirements. The ADR also does not replace the FSD: every goal must still reference the FSD, while the ADR is only additional authority for the linked decision clauses. Conflicts with higher-authority artifacts must trigger a change request or an upstream revision.
 
-## 0.5 Bahasa Normatif
+## 0.5 Normative Language
 
-- **MUST / WAJIB**: harus dipenuhi oleh seluruh implementasi yang berada dalam scope ADR.
-- **MUST NOT / DILARANG**: tidak boleh dilakukan.
-- **SHOULD / SEHARUSNYA**: default yang diharapkan; penyimpangan memerlukan exception terdokumentasi.
-- **MAY / BOLEH**: opsional dan tidak boleh mengubah outcome wajib.
-- **Constraint**: batas keras yang tidak boleh dikalahkan oleh weighted score.
-- **Preference**: nilai yang diinginkan tetapi dapat dikompromikan.
-- **Decision driver**: faktor yang membedakan opsi dan memengaruhi pilihan.
-- **Fitness function**: pemeriksaan otomatis atau periodik yang membuktikan architecture property tetap terpenuhi.
-- **Residual risk**: risiko yang tetap ada setelah mitigasi dan secara eksplisit diterima oleh authority.
-- **Blast radius**: area sistem, data, pengguna, atau operasi yang dapat terdampak bila keputusan gagal.
+- **MUST**: must be satisfied by every implementation within the ADR's scope.
+- **MUST NOT**: must not be done.
+- **SHOULD**: the expected default; deviations require a documented exception.
+- **MAY**: optional and must not change mandatory outcomes.
+- **Constraint**: a hard limit that must not be defeated by a weighted score.
+- **Preference**: a desired value that can be compromised.
+- **Decision driver**: a factor that differentiates options and influences the choice.
+- **Fitness function**: an automated or periodic check that proves an architecture property still holds.
+- **Residual risk**: risk that remains after mitigation and is explicitly accepted by an authority.
+- **Blast radius**: the area of systems, data, users, or operations that can be affected if the decision fails.
 
-## 0.6 Taksonomi Pernyataan dan Evidence
+## 0.6 Statement and Evidence Taxonomy
 
-| Tipe | Definisi | Bukti Minimum | Boleh Menjadi Dasar Keputusan? |
+| Type | Definition | Minimum Evidence | May Serve as a Decision Basis? |
 |---|---|---|---|
-| `FACT` | Kondisi yang dapat diverifikasi saat ini | Source primer, repository evidence, atau telemetry | Ya |
-| `CONSTRAINT` | Batas keras dari policy, platform, budget, waktu, atau compatibility | Source + consequence bila dilanggar | Ya; dapat menjadi veto |
-| `ASSUMPTION` | Pernyataan belum terbukti yang digunakan sementara | Owner + validation method + expiry | Hanya bila risikonya diterima |
-| `HYPOTHESIS` | Prediksi hubungan sebab-akibat | Spike/experiment plan | Tidak sebagai fakta |
-| `EVIDENCE` | Hasil benchmark, test, audit, PoC, incident, atau data | Reproducible method + date + environment | Ya |
-| `PREFERENCE` | Pilihan yang diinginkan | Owner + rationale | Ya, tetapi bukan hard constraint |
-| `DECISION` | Pilihan yang telah disetujui | Authority + date + rationale | Authoritative dalam scope |
-| `OPEN` | Informasi/keputusan belum tersedia | Owner + deadline + safe fallback | Bergantung blocker class |
+| `FACT` | A condition verifiable today | Primary source, repository evidence, or telemetry | Yes |
+| `CONSTRAINT` | A hard limit from policy, platform, budget, time, or compatibility | Source + consequence if violated | Yes; may act as a veto |
+| `ASSUMPTION` | An unproven statement used temporarily | Owner + validation method + expiry | Only when its risk is accepted |
+| `HYPOTHESIS` | A prediction of a cause-effect relationship | Spike/experiment plan | Not as fact |
+| `EVIDENCE` | The result of a benchmark, test, audit, PoC, incident, or data | Reproducible method + date + environment | Yes |
+| `PREFERENCE` | A desired choice | Owner + rationale | Yes, but not a hard constraint |
+| `DECISION` | An approved choice | Authority + date + rationale | Authoritative within scope |
+| `OPEN` | Information/decision not yet available | Owner + deadline + safe fallback | Depends on blocker class |
 
 Evidence quality:
 
-| Level | Deskripsi | Contoh |
+| Level | Description | Example |
 |---|---|---|
-| E0 | Opinion tanpa verifikasi | “Library ini populer” |
-| E1 | Dokumentasi/vendor claim | Official documentation, pricing page |
-| E2 | Reproducible local spike | PoC pada sample representatif |
-| E3 | Environment-relevant test | Load/security/compatibility test pada staging-like setup |
+| E0 | Opinion without verification | “This library is popular” |
+| E1 | Documentation/vendor claim | Official documentation, pricing page |
+| E2 | Reproducible local spike | PoC on a representative sample |
+| E3 | Environment-relevant test | Load/security/compatibility test on a staging-like setup |
 | E4 | Production evidence | Telemetry, incident data, audited operating record |
 
-ADR berisiko `HIGH` atau `CRITICAL` tidak boleh bergantung hanya pada E0/E1 untuk driver terpenting kecuali decision authority menerima uncertainty tersebut secara eksplisit.
+An ADR with `HIGH` or `CRITICAL` risk must not rely only on E0/E1 for the most important drivers unless the decision authority explicitly accepts that uncertainty.
 
-## 0.7 Kebijakan Placeholder dan Open Item
+## 0.7 Placeholder and Open Item Policy
 
-Gunakan format berikut untuk setiap unresolved item:
+Use the following format for every unresolved item:
 
-| ID | Pertanyaan / Missing Evidence | Class | Dampak | Affected IDs | Owner | Safe Fallback | Resolution Gate | Due Date | Status |
+| ID | Question / Missing Evidence | Class | Impact | Affected IDs | Owner | Safe Fallback | Resolution Gate | Due Date | Status |
 |---|---|---|---|---|---|---|---|---|---|
 | OPEN-001 | {{QUESTION}} | ACCEPTANCE_BLOCKER / IMPLEMENTATION_BLOCKER / NON_BLOCKER | {{IMPACT}} | {{IDS}} | {{OWNER}} | {{FALLBACK_OR_NONE}} | {{GATE}} | {{DATE}} | OPEN |
 
-Aturan:
+Rules:
 
-- `ACCEPTANCE_BLOCKER`: ADR tidak boleh berstatus `ACCEPTED`.
-- `IMPLEMENTATION_BLOCKER`: ADR boleh diterima bila keputusan sudah jelas, tetapi goal terkait tidak boleh berstatus `READY`.
-- `NON_BLOCKER`: implementasi hanya boleh memakai safe fallback yang telah ditulis.
-- Coding agent dilarang mengisi atau menebak keputusan yang belum tersedia.
-- Item `RESOLVED` harus mencatat evidence, decider, tanggal, dan bagian ADR/FSD yang diperbarui.
+- `ACCEPTANCE_BLOCKER`: the ADR must not have `ACCEPTED` status.
+- `IMPLEMENTATION_BLOCKER`: the ADR may be accepted when the decision is already clear, but the related goal must not have `READY` status.
+- `NON_BLOCKER`: implementations may only use the safe fallback that has been written down.
+- Coding agents are forbidden from filling in or guessing decisions that are not yet available.
+- `RESOLVED` items must record the evidence, decider, date, and the ADR/FSD sections updated.
 
-## 0.8 Konvensi ID Stabil
+## 0.8 Stable ID Conventions
 
-| Prefix | Arti | Contoh |
+| Prefix | Meaning | Example |
 |---|---|---|
 | ADR | Architecture Decision Record | ADR-0042 |
 | SRC | Source artifact/evidence | SRC-001 |
@@ -239,20 +239,20 @@ Aturan:
 | ROLLBACK | Rollback action | ROLLBACK-001 |
 | GOAL | Agent-executable work package | GOAL-001 |
 
-ID yang telah dipublikasikan tidak boleh digunakan ulang untuk arti lain. Item yang dibatalkan diberi status `RETIRED` beserta rationale, bukan dihapus.
+Published IDs must not be reused for a different meaning. Cancelled items are given `RETIRED` status with a rationale, not deleted.
 
-### 0.8.1 Referensi Lintas Artifact
+### 0.8.1 Cross-Artifact References
 
-Gunakan qualified reference untuk setiap ID dari BRD, PRD, FSD, atau ADR lain:
+Use a qualified reference for every ID from the BRD, PRD, FSD, or another ADR:
 
 ```text
 {{DOCUMENT_ID}}#{{LOCAL_ID}}
-{{DOCUMENT_ID}}@{{VERSION}}#{{LOCAL_ID}}   # untuk snapshot yang dipin
+{{DOCUMENT_ID}}@{{VERSION}}#{{LOCAL_ID}}   # for pinned snapshots
 ```
 
-Contoh: `BRD-CCC#BREQ-001`, `PRD-CCC#FR-014`, `FSD-CCC#TDEC-003`, `ADR-0042#DEC-001`. Goal tetap harus menunjuk FSD secara qualified; ADR hanya ditambahkan bila goal berada dalam scope keputusan ini.
+Examples: `BRD-CCC#BREQ-001`, `PRD-CCC#FR-014`, `FSD-CCC#TDEC-003`, `ADR-0042#DEC-001`. Goals must still reference the FSD with qualified references; the ADR is only added when the goal falls within the scope of this decision.
 
-## 0.9 Lifecycle dan Immutability ADR
+## 0.9 ADR Lifecycle and Immutability
 
 Canonical status:
 
@@ -263,25 +263,25 @@ ACCEPTED → DEPRECATED → SUPERSEDED
 ACCEPTED ───────────────────────→ SUPERSEDED
 ```
 
-| Status | Arti | Boleh Menjadi Dasar Implementasi? |
+| Status | Meaning | May Serve as an Implementation Basis? |
 |---|---|---:|
-| `DRAFT` | Sedang disusun; belum siap dinilai | Tidak |
-| `PROPOSED` | Decision request lengkap untuk direview | Tidak, kecuali spike eksplisit |
-| `IN_REVIEW` | Sedang dinilai oleh required approvers | Tidak, kecuali spike eksplisit |
-| `ACCEPTED` | Keputusan aktif dan mengikat dalam scope | Ya |
-| `REJECTED` | Opsi/keputusan tidak diterima; disimpan sebagai sejarah | Tidak |
-| `DEPRECATED` | Masih mungkin ada di sistem, tetapi tidak boleh dipakai untuk implementasi baru | Hanya maintenance yang disetujui |
-| `SUPERSEDED` | Digantikan oleh ADR lain | Tidak untuk perubahan baru |
+| `DRAFT` | Being drafted; not ready for assessment | No |
+| `PROPOSED` | A complete decision request ready for review | No, except for explicit spikes |
+| `IN_REVIEW` | Being assessed by the required approvers | No, except for explicit spikes |
+| `ACCEPTED` | An active decision, binding within scope | Yes |
+| `REJECTED` | The option/decision was not accepted; kept as history | No |
+| `DEPRECATED` | May still exist in the system, but must not be used for new implementations | Approved maintenance only |
+| `SUPERSEDED` | Replaced by another ADR | Not for new changes |
 
-Setelah `ACCEPTED`:
+After `ACCEPTED`:
 
-- decision statement, rationale, option assessment, dan accepted consequences diperlakukan sebagai historical record;
-- koreksi editorial boleh dilakukan melalui revision history;
-- perubahan material harus dibuat melalui ADR baru yang mencantumkan `supersedes`;
-- ADR lama diperbarui hanya pada field lifecycle, link supersession, dan catatan post-implementation outcome;
-- jangan mengedit sejarah agar keputusan lama terlihat lebih benar dari kondisi saat diputuskan.
+- the decision statement, rationale, option assessment, and accepted consequences are treated as a historical record;
+- editorial corrections may be made through the revision history;
+- material changes must be made through a new ADR that lists `supersedes`;
+- the old ADR is updated only in the lifecycle fields, supersession links, and post-implementation outcome notes;
+- do not edit history to make the old decision look more correct than it was when decided.
 
-## 0.10 Decision Authority dan Quorum
+## 0.10 Decision Authority and Quorum
 
 | Decision Class | Minimum Decider | Required Reviewers | Optional Reviewers |
 |---|---|---|---|
@@ -293,59 +293,59 @@ Setelah `ACCEPTED`:
 | AI/ML decision boundary or data egress | Product owner + technical owner + security/privacy | Compliance, data owner, QA | Legal |
 | Critical/irreversible | Steering or delegated authority | All mandatory disciplines | Independent reviewer |
 
-Tuliskan quorum aktual pada Section 1.5. Tidak ada self-approval untuk ADR `HIGH`/`CRITICAL` kecuali governance organisasi secara eksplisit memperbolehkannya.
+Record the actual quorum in Section 1.5. No self-approval for `HIGH`/`CRITICAL` ADRs unless organizational governance explicitly allows it.
 
-## 0.11 Guardrail untuk Agentic Coding
+## 0.11 Guardrails for Agentic Coding
 
-Coding agent yang menerima ADR ini **WAJIB**:
+A coding agent that receives this ADR **MUST**:
 
-1. hanya menggunakan ADR berstatus `ACCEPTED` sebagai architectural authority;
-2. membaca decision clauses, mandatory constraints, prohibited patterns, exception register, dan fitness functions sebelum mengubah kode;
-3. membatasi perubahan pada requirement/goal yang secara eksplisit men-trace ADR ini;
-4. mempertahankan source-of-truth, trust boundary, data classification, state semantics, transaction boundary, dan failure behavior yang telah diputuskan;
-5. menjalankan validation commands dan menghasilkan evidence yang diminta;
-6. melaporkan deviasi, unmet gate, residual risk, dan repository fact yang berbeda dari asumsi ADR;
-7. berhenti pada declared stop condition, bukan mengarang workaround arsitektural.
+1. use only ADRs with `ACCEPTED` status as architectural authority;
+2. read the decision clauses, mandatory constraints, prohibited patterns, exception register, and fitness functions before changing code;
+3. limit changes to the requirements/goals that explicitly trace to this ADR;
+4. preserve the decided source of truth, trust boundaries, data classification, state semantics, transaction boundaries, and failure behavior;
+5. run the validation commands and produce the requested evidence;
+6. report deviations, unmet gates, residual risks, and repository facts that differ from the ADR's assumptions;
+7. stop at declared stop conditions rather than inventing architectural workarounds.
 
-Coding agent **DILARANG**:
+A coding agent **MUST NOT**:
 
-- mengganti technology/provider/pattern yang dipilih dengan alternatif “setara” tanpa ADR baru atau exception aktif;
-- memperluas scope, refactor lintas module, atau upgrade major dependency hanya karena lebih mudah;
-- membuat wrapper/abstraction palsu yang tidak benar-benar mempertahankan swap boundary yang diputuskan;
-- menganggap mock, unit test, atau compilation success sebagai bukti integration compatibility;
-- melemahkan security, validation, audit, consistency, idempotency, observability, atau test untuk menyelesaikan task;
-- memasukkan fallback diam-diam, silent catch, unbounded retry, default-open authorization, atau destructive migration;
-- menyatakan keputusan selesai ketika implementation obligation, fitness function, rollout, atau runbook belum tersedia.
+- replace the selected technology/provider/pattern with an “equivalent” alternative without a new ADR or an active exception;
+- expand scope, refactor across modules, or upgrade major dependencies just because it is easier;
+- create fake wrappers/abstractions that do not genuinely preserve the decided swap boundary;
+- treat mocks, unit tests, or compilation success as proof of integration compatibility;
+- weaken security, validation, audit, consistency, idempotency, observability, or tests to finish a task;
+- introduce silent fallbacks, silent catches, unbounded retries, default-open authorization, or destructive migrations;
+- declare the decision complete while implementation obligations, fitness functions, rollout, or runbooks are not yet in place.
 
-## 0.12 Gate Persetujuan ADR
+## 0.12 ADR Approval Gate
 
-ADR opsional ini dapat berstatus `ACCEPTED` hanya bila:
-- [ ] applicability assessment di FSD menyatakan `LINKED` atau project policy yang dicite menyatakan ADR diperlukan;
-- [ ] keputusan tidak lebih tepat diperlakukan sebagai local implementation detail atau `TDEC-*` sederhana;
+This optional ADR may have `ACCEPTED` status only when:
+- [ ] the applicability assessment in the FSD states `LINKED` or the cited project policy states an ADR is required;
+- [ ] the decision is not better treated as a local implementation detail or a simple `TDEC-*`;
 
-- [ ] hanya ada satu coherent decision utama;
-- [ ] problem, context, scope, non-scope, dan urgency jelas;
-- [ ] BRD, PRD, FSD, dan setiap ADR existing yang relevan telah direkonsiliasi;
-- [ ] hard constraints dibedakan dari preference;
-- [ ] status quo dan minimal dua opsi layak dipertimbangkan, atau alasan sah mengapa hanya satu opsi tersedia dicatat;
-- [ ] tidak ada strawman option yang sengaja dibuat lemah;
-- [ ] evaluation criteria memiliki definisi, weight/priority, dan measurement method;
-- [ ] decisive claims didukung evidence dengan tanggal dan environment;
-- [ ] decision statement menggunakan bahasa normatif dan tidak ambigu;
-- [ ] positive, negative, neutral, cost, lock-in, operational, dan organizational consequences dicatat;
-- [ ] security, privacy, compliance, data, reliability, observability, dan rollback impact dinilai;
-- [ ] implementation obligations dan prohibited patterns eksplisit;
-- [ ] minimum satu fitness function atau review mechanism mendeteksi architecture drift;
-- [ ] rollout, migration, rollback, dan degraded-mode implications ditentukan atau `N/A — reason`;
-- [ ] residual risk memiliki owner dan acceptance authority;
-- [ ] tidak ada `ACCEPTANCE_BLOCKER` terbuka;
-- [ ] handoff ke FSD dan goal dapat dilakukan tanpa invention;
-- [ ] FSD tetap menjadi primary implementation source of truth dan mencantumkan ADR ini sebagai linked authority;
-- [ ] review/supersession trigger memiliki owner dan tanggal/event.
+- [ ] there is only one coherent primary decision;
+- [ ] the problem, context, scope, non-scope, and urgency are clear;
+- [ ] the BRD, PRD, FSD, and every relevant existing ADR have been reconciled;
+- [ ] hard constraints are distinguished from preferences;
+- [ ] the status quo and at least two viable options are considered, or a valid reason why only one option is available is recorded;
+- [ ] no strawman options are deliberately made weak;
+- [ ] evaluation criteria have definitions, weights/priorities, and measurement methods;
+- [ ] decisive claims are supported by evidence with dates and environments;
+- [ ] the decision statement uses normative language and is unambiguous;
+- [ ] positive, negative, neutral, cost, lock-in, operational, and organizational consequences are recorded;
+- [ ] security, privacy, compliance, data, reliability, observability, and rollback impacts are assessed;
+- [ ] implementation obligations and prohibited patterns are explicit;
+- [ ] at least one fitness function or review mechanism detects architecture drift;
+- [ ] rollout, migration, rollback, and degraded-mode implications are determined or `N/A — reason`;
+- [ ] residual risks have an owner and an acceptance authority;
+- [ ] no `ACCEPTANCE_BLOCKER` remains open;
+- [ ] the handoff to the FSD and goals can proceed without invention;
+- [ ] the FSD remains the primary implementation source of truth and lists this ADR as linked authority;
+- [ ] review/supersession triggers have an owner and a date/event.
 
 ---
 
-# 1. Kontrol Dokumen, Governance, dan Traceability
+# 1. Document Control, Governance, and Traceability
 
 ## 1.1 Metadata ADR
 
@@ -369,7 +369,7 @@ ADR opsional ini dapat berstatus `ACCEPTED` hanya bila:
 | Default timezone | `{{IANA_TIMEZONE}}` |
 | Data residency | `{{REGION_OR_N/A}}` |
 
-## 1.2 Source Artifacts dan Evidence Register
+## 1.2 Source Artifacts and Evidence Register
 
 | Source ID | Artifact / Evidence | Version / Date | Authority / Quality | Relevant Claim | Location | Status |
 |---|---|---|---|---|---|---|
@@ -380,10 +380,10 @@ ADR opsional ini dapat berstatus `ACCEPTED` hanya bila:
 
 Rules:
 
-- Gunakan source primer bila tersedia.
-- Dokumentasi vendor tidak membuktikan compatibility dengan environment proyek; gunakan spike bila compatibility material.
-- Evidence yang kedaluwarsa harus diberi status `STALE` dan tidak dipakai tanpa justification.
-- Setiap angka performa/biaya harus mencantumkan workload, environment, period, dan unit.
+- Use primary sources where available.
+- Vendor documentation does not prove compatibility with the project environment; use a spike when compatibility is material.
+- Expired evidence must be given `STALE` status and not used without justification.
+- Every performance/cost figure must state the workload, environment, period, and unit.
 
 ## 1.3 Revision History
 
@@ -391,7 +391,7 @@ Rules:
 |---|---|---|---|---:|---|
 | 0.1 | {{YYYY-MM-DD}} | {{AUTHOR}} | Initial draft | Yes | Full review required |
 
-## 1.4 Related dan Supersession Map
+## 1.4 Related and Supersession Map
 
 | Relation | ADR ID | Title | Status | Relevance |
 |---|---|---|---|---|
@@ -406,7 +406,7 @@ graph LR
     B --> C[{{DOWNSTREAM_FSD_OR_ADR}}]
 ```
 
-## 1.5 Decision Authority, Review, dan Approval
+## 1.5 Decision Authority, Review, and Approval
 
 | Role | Name | Authority | Decision | Date | Conditions / Notes |
 |---|---|---|---|---|---|
@@ -420,7 +420,7 @@ graph LR
 
 Approval values: `APPROVE`, `APPROVE_WITH_RECORDED_CONDITIONS`, `REJECT`, `ABSTAIN`, `NOT_REQUIRED — reason`.
 
-## 1.6 Stakeholder Impact dan Communication
+## 1.6 Stakeholder Impact and Communication
 
 | Stakeholder / Team | Impact | Required Action | Communication Owner | Deadline | Acknowledged? |
 |---|---|---|---|---|---:|
@@ -434,7 +434,7 @@ Approval values: `APPROVE`, `APPROVE_WITH_RECORDED_CONDITIONS`, `REJECT`, `ABSTA
 
 ## 1.8 Change-Control Triggers
 
-Perubahan berikut memerlukan ADR baru atau supersession, bukan edit material pada ADR ini:
+The following changes require a new ADR or supersession, not a material edit to this ADR:
 
 | Trigger ID | Trigger | Required Action | Owner |
 |---|---|---|---|
@@ -446,32 +446,32 @@ Perubahan berikut memerlukan ADR baru atau supersession, bukan edit material pad
 
 # 2. Executive Decision Brief
 
-## 2.1 Decision Statement — Satu Kalimat
+## 2.1 Decision Statement — One Sentence
 
-> **DEC-001:** Sistem **WAJIB** menggunakan `{{CHOSEN_OPTION_OR_PATTERN}}` untuk `{{SCOPE}}`, dengan `{{KEY_BOUNDARY_OR_CONDITION}}`; sistem **DILARANG** menggunakan `{{PROHIBITED_ALTERNATIVE_OR_BEHAVIOR}}` dalam scope ini tanpa exception aktif atau ADR pengganti.
+> **DEC-001:** The system **MUST** use `{{CHOSEN_OPTION_OR_PATTERN}}` for `{{SCOPE}}`, with `{{KEY_BOUNDARY_OR_CONDITION}}`; the system **MUST NOT** use `{{PROHIBITED_ALTERNATIVE_OR_BEHAVIOR}}` within this scope without an active exception or a replacement ADR.
 
-Decision statement harus dapat dibaca terpisah tanpa menghasilkan dua interpretasi yang sama-sama masuk akal.
+The decision statement must be readable on its own without producing two equally plausible interpretations.
 
 ## 2.2 Decision Request
 
 | Item | Summary |
 |---|---|
-| Keputusan yang diminta | {{WHAT_MUST_BE_APPROVED}} |
-| Masalah yang diselesaikan | {{PROBLEM}} |
-| Opsi terpilih | {{OPT-ID_AND_NAME}} |
+| Decision requested | {{WHAT_MUST_BE_APPROVED}} |
+| Problem being solved | {{PROBLEM}} |
+| Selected option | {{OPT-ID_AND_NAME}} |
 | Scope | {{IN_SCOPE}} |
-| Di luar scope | {{OUT_OF_SCOPE}} |
+| Out of scope | {{OUT_OF_SCOPE}} |
 | Why now | {{URGENCY_OR_DEPENDENCY}} |
 | Reversibility | {{LEVEL_AND_ESTIMATED_REVERSAL_COST}} |
 | Blast radius | {{USERS_SYSTEMS_DATA_OPERATIONS}} |
-| Risk residual | {{SUMMARY}} |
+| Residual risk | {{SUMMARY}} |
 | Required go-live gate | {{GATE}} |
 
-## 2.3 Rationale Ringkas
+## 2.3 Rationale Summary
 
-`{{CHOSEN_OPTION}}` dipilih karena `{{TOP_2_TO_4_DECISIVE_REASONS}}`. Keputusan ini menerima trade-off `{{MAIN_NEGATIVE_CONSEQUENCES}}` dan hanya berlaku dalam envelope `{{LOAD_DATA_SECURITY_TIME_ORGANIZATION_BOUNDARY}}`.
+`{{CHOSEN_OPTION}}` was selected because of `{{TOP_2_TO_4_DECISIVE_REASONS}}`. This decision accepts the trade-off `{{MAIN_NEGATIVE_CONSEQUENCES}}` and applies only within the envelope `{{LOAD_DATA_SECURITY_TIME_ORGANIZATION_BOUNDARY}}`.
 
-## 2.4 Outcome yang Diharapkan
+## 2.4 Expected Outcomes
 
 | Outcome ID | Expected Effect | Metric / Evidence | Target | Evaluation Date |
 |---|---|---|---|---|
@@ -483,21 +483,21 @@ Decision statement harus dapat dibaca terpisah tanpa menghasilkan dua interpreta
 |---|---|---|---|---|
 | COND-001 | {{CONDITION_OR_N/A}} | {{OWNER}} | {{EVIDENCE}} | {{GATE}} |
 
-Kondisi yang belum terpenuhi tidak boleh disembunyikan dalam catatan. Tandai sebagai implementation blocker bila relevan.
+Unmet conditions must not be hidden in notes. Mark them as implementation blockers where relevant.
 
 ---
 
-# 3. Context, Problem, dan Architecture Forces
+# 3. Context, Problem, and Architecture Forces
 
 ## 3.1 Problem Statement
 
 Format:
 
-> Karena `{{CURRENT_CONDITION}}`, sistem/tim mengalami `{{MEASURABLE_TECHNICAL_OR_OPERATIONAL_PROBLEM}}`, yang berdampak pada `{{USER_BUSINESS_SECURITY_OR_DELIVERY_IMPACT}}`. Keputusan diperlukan untuk memilih `{{DECISION_CATEGORY}}` sebelum `{{TRIGGER_OR_DEADLINE}}`.
+> Because of `{{CURRENT_CONDITION}}`, the system/team experiences `{{MEASURABLE_TECHNICAL_OR_OPERATIONAL_PROBLEM}}`, which impacts `{{USER_BUSINESS_SECURITY_OR_DELIVERY_IMPACT}}`. A decision is needed to select `{{DECISION_CATEGORY}}` before `{{TRIGGER_OR_DEADLINE}}`.
 
 ## 3.2 Current-State Architecture
 
-Jelaskan hanya context yang diperlukan untuk keputusan ini.
+Describe only the context needed for this decision.
 
 | Component / Boundary | Current Responsibility | Current Technology / Mechanism | Pain / Limitation | Evidence |
 |---|---|---|---|---|
@@ -510,7 +510,7 @@ flowchart LR
     A --> X[{{EXTERNAL_DEPENDENCY}}]
 ```
 
-## 3.3 Target Boundary yang Sedang Diputuskan
+## 3.3 Target Boundary Being Decided
 
 | In Scope | Out of Scope | Must Remain Unchanged |
 |---|---|---|
@@ -522,15 +522,15 @@ flowchart LR
 |---|---|---|---|
 | INV-001 | {{CONDITION_THAT_MUST_ALWAYS_BE_TRUE}} | {{WHY}} | {{TEST_CONSTRAINT_MONITOR}} |
 
-Contoh kategori invariant:
+Example invariant categories:
 
-- exactly one source of truth untuk datum tertentu;
+- exactly one source of truth for a given datum;
 - no unauthorized cross-tenant access;
 - no acknowledged event lost;
-- no classified data sent outside approved boundary;
-- no duplicate side effect untuk idempotency key yang sama;
-- service tetap read-only ketika dependency tertentu degraded;
-- backward compatibility selama migration window.
+- no classified data sent outside the approved boundary;
+- no duplicate side effect for the same idempotency key;
+- the service stays read-only when a given dependency is degraded;
+- backward compatibility during the migration window.
 
 ## 3.5 Hard Constraints
 
@@ -538,7 +538,7 @@ Contoh kategori invariant:
 |---|---|---|---|---:|
 | CONSTR-001 | {{CONSTRAINT}} | {{SRC-ID}} | {{CONSEQUENCE}} | Yes |
 
-Hard constraint tidak boleh “dikalahkan” oleh total weighted score.
+Hard constraints must not be “defeated” by the total weighted score.
 
 ## 3.6 Preferences
 
@@ -546,7 +546,7 @@ Hard constraint tidak boleh “dikalahkan” oleh total weighted score.
 |---|---|---|---|---|
 | PREF-001 | {{PREFERENCE}} | {{OWNER}} | {{RATIONALE}} | {{OTHER_CRITERIA}} |
 
-## 3.7 Assumptions dan Validation
+## 3.7 Assumptions and Validation
 
 | Assumption ID | Assumption | Impact if False | Validation Method | Owner | Expiry / Gate | Status |
 |---|---|---|---|---|---|---|
@@ -558,9 +558,9 @@ Hard constraint tidak boleh “dikalahkan” oleh total weighted score.
 |---|---|---:|---|---|
 | DRV-001 | {{DRIVER}} | 1 | {{RATIONALE}} | {{HOW_MEASURED}} |
 
-Priority `1` adalah paling penting. Driver yang hanya terdengar baik tetapi tidak membedakan opsi harus dihapus.
+Priority `1` is the most important. Drivers that merely sound good but do not differentiate options must be removed.
 
-## 3.9 Workload, Data, dan Operating Envelope
+## 3.9 Workload, Data, and Operating Envelope
 
 | Dimension | Current | Target | Peak / Worst Case | Growth Horizon | Source |
 |---|---:|---:|---:|---|---|
@@ -572,19 +572,19 @@ Priority `1` adalah paling penting. Driver yang hanya terdengar baik tetapi tida
 | Recovery objective | {{RTO/RPO}} | {{RTO/RPO}} | {{RTO/RPO}} | {{PERIOD}} | {{SRC/EVD}} |
 | Data classification | {{CLASS}} | {{CLASS}} | {{CLASS}} | N/A | {{SRC}} |
 
-Architecture claim di luar envelope ini tidak boleh dianggap terbukti.
+Architecture claims outside this envelope must not be considered proven.
 
-## 3.10 Why Now dan Cost of Delay
+## 3.10 Why Now and Cost of Delay
 
 | Trigger | Deadline / Event | Consequence of Delay | Temporary Mitigation |
 |---|---|---|---|
 | {{TRIGGER}} | {{DATE_OR_EVENT}} | {{IMPACT}} | {{MITIGATION_OR_NONE}} |
 
-## 3.11 Non-Decision dan Explicit Non-Goals
+## 3.11 Non-Decisions and Explicit Non-Goals
 
-- **ND-001:** ADR ini tidak memutuskan `{{ITEM}}` karena `{{REASON}}`.
-- **ND-002:** ADR ini tidak mengubah `{{BRD_PRD_POLICY_OR_API}}`.
-- **ND-003:** ADR ini tidak memberi izin untuk `{{PROHIBITED_SCOPE_EXPANSION}}`.
+- **ND-001:** This ADR does not decide `{{ITEM}}` because `{{REASON}}`.
+- **ND-002:** This ADR does not change `{{BRD_PRD_POLICY_OR_API}}`.
+- **ND-003:** This ADR does not grant permission for `{{PROHIBITED_SCOPE_EXPANSION}}`.
 
 ---
 
@@ -598,36 +598,36 @@ Architecture claim di luar envelope ini tidak boleh dianggap terbukti.
 
 Rules:
 
-- Total weight harus `100%`.
-- Kriteria yang overlap harus digabung atau boundary-nya dijelaskan.
-- Kriteria keamanan, legal, residency, atau mandatory compatibility biasanya lebih tepat sebagai hard constraint/veto daripada weight kecil.
-- Weight ditetapkan sebelum hasil opsi diketahui untuk mengurangi outcome bias.
+- Total weight must be `100%`.
+- Overlapping criteria must be merged or their boundaries explained.
+- Security, legal, residency, or mandatory compatibility criteria are usually better treated as hard constraints/vetoes than as small weights.
+- Weights are set before the option results are known to reduce outcome bias.
 
 ## 4.2 Scoring Scale
 
-Gunakan anchor berikut atau definisikan scale lain yang sama eksplisit:
+Use the following anchors or define another equally explicit scale:
 
 | Score | Meaning |
 |---:|---|
-| 0 | Tidak memenuhi; tidak ada path realistis |
-| 1 | Sangat buruk; gap besar/risiko tinggi |
-| 2 | Di bawah kebutuhan; memerlukan mitigation material |
-| 3 | Memenuhi minimum dengan trade-off yang dapat diterima |
-| 4 | Kuat; memenuhi kebutuhan dengan trade-off kecil |
-| 5 | Sangat kuat; evidence tinggi dan margin aman |
+| 0 | Does not meet the need; no realistic path |
+| 1 | Very poor; large gaps/high risk |
+| 2 | Below the need; requires material mitigation |
+| 3 | Meets the minimum with acceptable trade-offs |
+| 4 | Strong; meets the need with small trade-offs |
+| 5 | Very strong; high evidence and a safe margin |
 
-Setiap score harus memiliki rationale dan evidence ID. Angka tanpa bukti bukan analisis.
+Every score must have a rationale and an evidence ID. Numbers without evidence are not analysis.
 
 ## 4.3 Decision Rules
 
-- Opsi yang melanggar hard constraint diberi status `DISQUALIFIED`, terlepas dari score total.
-- Opsi dengan evidence gap pada criterion kritis tidak boleh diberi score optimistis; gunakan range atau confidence rendah.
-- Selisih score kecil tidak otomatis menentukan pemenang; pertimbangkan reversibility, downside asymmetry, dan uncertainty.
-- Weighted score adalah alat bantu, bukan pengganti engineering judgment dan accountability.
-- Bila keputusan sangat reversible, prefer small experiment dapat mengalahkan analisis panjang.
-- Bila keputusan effectively irreversible, burden of proof harus lebih tinggi.
+- Options that violate a hard constraint are given `DISQUALIFIED` status, regardless of total score.
+- Options with an evidence gap on a critical criterion must not be given optimistic scores; use a range or low confidence.
+- A small score difference does not automatically determine the winner; consider reversibility, downside asymmetry, and uncertainty.
+- The weighted score is an aid, not a replacement for engineering judgment and accountability.
+- When a decision is highly reversible, preferring a small experiment can beat lengthy analysis.
+- When a decision is effectively irreversible, the burden of proof must be higher.
 
-## 4.4 Risk Appetite dan Tolerance
+## 4.4 Risk Appetite and Tolerance
 
 | Dimension | Tolerance | Maximum Acceptable Exposure | Authority for Exception |
 |---|---|---|---|
@@ -654,7 +654,7 @@ Status values: `EVALUATED`, `DISQUALIFIED`, `SELECTED`, `REJECTED`, `DEFERRED`.
 
 ## 5.2 Reusable Option Packet
 
-Salin bagian ini untuk setiap opsi yang benar-benar layak.
+Copy this section for every genuinely viable option.
 
 ### OPT-{{NNN}} — {{OPTION_NAME}}
 
@@ -670,7 +670,7 @@ flowchart LR
     B --> D[{{DATA_STORE_OR_PROVIDER}}]
 ```
 
-#### 5.2.3 Scope dan Assumptions
+#### 5.2.3 Scope and Assumptions
 
 | Item | Detail |
 |---|---|
@@ -685,7 +685,7 @@ flowchart LR
 |---|---:|---|---|
 | CONSTR-001 | Yes/No/Unknown | {{EVIDENCE}} | {{MITIGATION_OR_NONE}} |
 
-#### 5.2.5 Functional dan Domain Fit
+#### 5.2.5 Functional and Domain Fit
 
 - Source-of-truth impact: `{{IMPACT}}`
 - Consistency model: `{{MODEL}}`
@@ -693,7 +693,7 @@ flowchart LR
 - Compatibility with required workflows: `{{FIT}}`
 - Known semantic mismatch: `{{MISMATCH_OR_NONE}}`
 
-#### 5.2.6 Security, Privacy, dan Compliance
+#### 5.2.6 Security, Privacy, and Compliance
 
 | Area | Impact / Control | Evidence | Residual Concern |
 |---|---|---|---|
@@ -703,13 +703,13 @@ flowchart LR
 | Audit/retention | {{IMPACT}} | {{EVD}} | {{CONCERN}} |
 | Supply chain/vendor | {{IMPACT}} | {{EVD}} | {{CONCERN}} |
 
-#### 5.2.7 Reliability dan Failure Model
+#### 5.2.7 Reliability and Failure Model
 
 | Failure Mode | System Behavior | Detectability | Recovery | Data-Loss/Duplicate Risk |
 |---|---|---|---|---|
 | {{FAILURE}} | {{BEHAVIOR}} | {{SIGNAL}} | {{RECOVERY}} | {{RISK}} |
 
-#### 5.2.8 Performance dan Scalability
+#### 5.2.8 Performance and Scalability
 
 | Dimension | Expected Capability | Evidence Level | Tested Envelope | Limitation |
 |---|---|---|---|---|
@@ -718,7 +718,7 @@ flowchart LR
 | Storage/growth | {{VALUE}} | {{E0-E4}} | {{ENV}} | {{LIMIT}} |
 | Concurrency | {{VALUE}} | {{E0-E4}} | {{ENV}} | {{LIMIT}} |
 
-#### 5.2.9 Operability dan Observability
+#### 5.2.9 Operability and Observability
 
 - Deployment model: `{{MODEL}}`
 - Runtime ownership: `{{TEAM}}`
@@ -727,7 +727,7 @@ flowchart LR
 - On-call/runbook impact: `{{IMPACT}}`
 - Degraded-mode capability: `{{CAPABILITY}}`
 
-#### 5.2.10 Delivery, Skills, dan Organizational Fit
+#### 5.2.10 Delivery, Skills, and Organizational Fit
 
 | Dimension | Assessment |
 |---|---|
@@ -737,7 +737,7 @@ flowchart LR
 | Cross-team coordination | {{IMPACT}} |
 | Delivery dependency | {{DEPENDENCY}} |
 
-#### 5.2.11 Cost dan Commercial Impact
+#### 5.2.11 Cost and Commercial Impact
 
 | Cost Type | One-Time | Recurring | Unit / Driver | Confidence | Source |
 |---|---:|---:|---|---|---|
@@ -746,7 +746,7 @@ flowchart LR
 | Operations/support | {{AMOUNT}} | {{AMOUNT_PERIOD}} | {{DRIVER}} | {{CONFIDENCE}} | {{SRC}} |
 | Exit/reversal | {{AMOUNT_OR_RANGE}} | N/A | {{DRIVER}} | {{CONFIDENCE}} | {{SRC}} |
 
-#### 5.2.12 Lock-In, Portability, dan Reversibility
+#### 5.2.12 Lock-In, Portability, and Reversibility
 
 | Item | Assessment |
 |---|---|
@@ -756,7 +756,7 @@ flowchart LR
 | Estimated reversal effort | {{RANGE}} |
 | Irreversible effects | {{EFFECT_OR_NONE}} |
 
-#### 5.2.13 Migration, Rollout, dan Rollback
+#### 5.2.13 Migration, Rollout, and Rollback
 
 - Migration approach: `{{APPROACH}}`
 - Parallel run possible: `{{YES_NO_AND_CONDITION}}`
@@ -770,12 +770,12 @@ flowchart LR
 - `{{BENEFIT_1}}`
 - `{{BENEFIT_2}}`
 
-#### 5.2.15 Drawbacks dan Risks
+#### 5.2.15 Drawbacks and Risks
 
 - `{{DRAWBACK_1}}`
 - `{{DRAWBACK_2}}`
 
-#### 5.2.16 Unknowns dan Evidence Gaps
+#### 5.2.16 Unknowns and Evidence Gaps
 
 | Open ID | Unknown | Decision Impact | Validation | Blocker? |
 |---|---|---|---|---:|
@@ -793,11 +793,11 @@ flowchart LR
 |---|---|---|---|
 | {{CANDIDATE}} | {{REASON}} | {{RISK}} | {{NAME/ROLE}} |
 
-Mengecualikan opsi karena tidak dikenal oleh penulis bukan alasan yang valid.
+Excluding an option because the author is unfamiliar with it is not a valid reason.
 
 ---
 
-# 6. Comparative Analysis dan Evidence
+# 6. Comparative Analysis and Evidence
 
 ## 6.1 Hard-Constraint Matrix
 
@@ -818,7 +818,7 @@ Mengecualikan opsi karena tidak dikenal oleh penulis bukan alasan yang valid.
 |---|---|---|---|---|
 | OPT-001 | {{LOW-HIGH}} | LOW/MEDIUM/HIGH | {{UNCERTAINTY}} | {{IMPACT}} |
 
-## 6.4 Spike / PoC / Benchmark Plan dan Results
+## 6.4 Spike / PoC / Benchmark Plan and Results
 
 ### SPIKE-{{NNN}} — {{NAME}}
 
@@ -835,7 +835,7 @@ Mengecualikan opsi karena tidak dikenal oleh penulis bukan alasan yang valid.
 | Limitations | {{WHAT_THIS_DOES_NOT_PROVE}} |
 | Conclusion | {{SUPPORTED_NOT_SUPPORTED_INCONCLUSIVE}} |
 
-Spike code harus diberi label `throwaway` atau `production-candidate`. Jangan memasukkan spike ke production tanpa quality/security review yang berlaku.
+Spike code must be labeled `throwaway` or `production-candidate`. Do not put spikes into production without the applicable quality/security review.
 
 ## 6.5 Compatibility Matrix
 
@@ -850,7 +850,7 @@ Spike code harus diberi label `throwaway` atau `production-candidate`. Jangan me
 
 ## 6.6 Sensitivity Analysis
 
-Uji apakah pilihan berubah bila assumption atau weight utama berubah.
+Test whether the choice changes when a key assumption or weight changes.
 
 | Scenario | Changed Variable | OPT-001 Result | OPT-002 Result | Winner Changes? | Implication |
 |---|---|---:|---:|---:|---|
@@ -871,7 +871,7 @@ Uji apakah pilihan berubah bila assumption atau weight utama berubah.
 |---|---|---|---|---|
 | {{NAME_OR_ROLE}} | {{POSITION}} | {{ARGUMENT}} | {{EVD}} | {{RESOLUTION}} |
 
-Tidak ada dissenting opinion dapat ditulis `N/A — seluruh reviewer menyetujui setelah review`; jangan menghapus bagian ini.
+The absence of a dissenting opinion may be recorded as `N/A — all reviewers agreed after review`; do not delete this section.
 
 ## 6.9 Decision Confidence
 
@@ -889,19 +889,19 @@ Tidak ada dissenting opinion dapat ditulis `N/A — seluruh reviewer menyetujui 
 
 ## 7.1 Selected Option
 
-`OPT-{{NNN}} — {{OPTION_NAME}}` dipilih.
+`OPT-{{NNN}} — {{OPTION_NAME}}` is selected.
 
 ## 7.2 Normative Decision Clauses
 
-Tuliskan setiap rule yang harus diteruskan ke FSD dan implementation goals.
+Write down every rule that must be passed on to the FSD and implementation goals.
 
 | Decision ID | Normative Clause | Applies To | Verification |
 |---|---|---|---|
-| DEC-001 | Sistem **WAJIB** `{{BEHAVIOR_OR_PATTERN}}`. | {{SCOPE}} | {{FF/TEST/REVIEW}} |
-| DEC-002 | Sistem **DILARANG** `{{FORBIDDEN_BEHAVIOR}}`. | {{SCOPE}} | {{FF/TEST/REVIEW}} |
-| DEC-003 | `{{COMPONENT}}` **WAJIB** menjadi source of truth untuk `{{DATA_OR_STATE}}`. | {{SCOPE}} | {{CONSTRAINT/TEST}} |
+| DEC-001 | The system **MUST** `{{BEHAVIOR_OR_PATTERN}}`. | {{SCOPE}} | {{FF/TEST/REVIEW}} |
+| DEC-002 | The system **MUST NOT** `{{FORBIDDEN_BEHAVIOR}}`. | {{SCOPE}} | {{FF/TEST/REVIEW}} |
+| DEC-003 | `{{COMPONENT}}` **MUST** be the source of truth for `{{DATA_OR_STATE}}`. | {{SCOPE}} | {{CONSTRAINT/TEST}} |
 
-Hindari kata seperti “gunakan abstraction yang baik” atau “pastikan scalable”. Nyatakan interface, boundary, target, atau check yang konkret.
+Avoid phrases such as “use a good abstraction” or “make sure it is scalable”. State a concrete interface, boundary, target, or check.
 
 ## 7.3 Decision Scope Matrix
 
@@ -925,20 +925,20 @@ flowchart LR
     W --> X[{{EXTERNAL_SYSTEM}}]
 ```
 
-## 7.5 Component Responsibilities dan Boundaries
+## 7.5 Component Responsibilities and Boundaries
 
 | Component | Owns | Must Not Own | Inputs | Outputs | Failure Boundary |
 |---|---|---|---|---|---|
 | {{COMPONENT}} | {{RESPONSIBILITY}} | {{NON_RESPONSIBILITY}} | {{INPUT}} | {{OUTPUT}} | {{FAILURE_BEHAVIOR}} |
 
-## 7.6 Allowed dan Prohibited Patterns
+## 7.6 Allowed and Prohibited Patterns
 
 | ID | Type | Rule | Rationale | Detection |
 |---|---|---|---|---|
 | RULE-001 | REQUIRED | {{REQUIRED_PATTERN}} | {{WHY}} | {{TEST/REVIEW}} |
 | PROHIB-001 | FORBIDDEN | {{PROHIBITED_PATTERN}} | {{WHY}} | {{LINT/TEST/REVIEW}} |
 
-## 7.7 Source-of-Truth dan Consistency Rules
+## 7.7 Source-of-Truth and Consistency Rules
 
 | Datum / State | Authoritative Owner | Replicas/Caches | Consistency Model | Conflict Resolution | Reconciliation |
 |---|---|---|---|---|---|
@@ -955,21 +955,21 @@ flowchart LR
 - Transaction boundary: `{{BOUNDARY}}`
 - Locking/concurrency strategy: `{{STRATEGY}}`
 
-ADR tidak perlu memuat seluruh schema kecuali schema choice adalah inti keputusan. FSD tetap wajib merinci physical model.
+The ADR does not need to contain the entire schema unless the schema choice is the core of the decision. The FSD must still detail the physical model.
 
-## 7.9 Interface, API, Event, dan Integration Implications
+## 7.9 Interface, API, Event, and Integration Implications
 
 | Interface | Decision Boundary | Required Semantic | Compatibility | Owner |
 |---|---|---|---|---|
 | {{API/EVENT/ADAPTER}} | {{BOUNDARY}} | {{IDEMPOTENCY_ORDERING_VERSIONING}} | {{RULE}} | {{OWNER}} |
 
-## 7.10 Reliability dan Failure Semantics
+## 7.10 Reliability and Failure Semantics
 
 | Dependency / Failure | Required System Behavior | Degraded Mode | Retry/Timeout/Circuit Rule | Data Integrity Rule |
 |---|---|---|---|---|
 | {{FAILURE}} | {{BEHAVIOR}} | {{MODE}} | {{RULE}} | {{INVARIANT}} |
 
-## 7.11 Security, Privacy, dan Trust-Boundary Rules
+## 7.11 Security, Privacy, and Trust-Boundary Rules
 
 | Rule ID | Requirement | Enforcement | Evidence |
 |---|---|---|---|
@@ -991,22 +991,22 @@ ADR tidak perlu memuat seluruh schema kecuali schema choice adalah inti keputusa
 
 ## 7.13 Exception Policy
 
-Penyimpangan hanya boleh melalui exception record:
+Deviations are only allowed through an exception record:
 
 | Exception ID | Requested Deviation | Scope | Reason | Risk | Compensating Control | Approver | Expiry | Exit Plan | Status |
 |---|---|---|---|---|---|---|---|---|---|
 | EXC-001 | {{DEVIATION}} | {{SCOPE}} | {{REASON}} | {{RISK}} | {{CONTROL}} | {{APPROVER}} | {{DATE}} | {{PLAN}} | REQUESTED |
 
-Aturan:
+Rules:
 
-- Exception tidak boleh tanpa expiry.
-- Exception tidak boleh memperluas scope secara implisit.
-- Expired exception diperlakukan sebagai violation, bukan permanent precedent.
-- Repeated exception menunjukkan ADR perlu direview atau implementasi perlu diperbaiki.
+- Exceptions must not lack an expiry.
+- Exceptions must not implicitly expand the scope.
+- Expired exceptions are treated as violations, not permanent precedents.
+- Repeated exceptions indicate the ADR needs review or the implementation needs fixing.
 
 ---
 
-# 8. Consequences dan Accepted Trade-Offs
+# 8. Consequences and Accepted Trade-Offs
 
 ## 8.1 Positive Consequences
 
@@ -1020,7 +1020,7 @@ Aturan:
 |---|---|---|---|---|---|
 | CONS-NEG-001 | {{NEGATIVE_EFFECT}} | {{LOW-HIGH}} | {{RATIONALE}} | {{MITIGATION}} | {{OWNER}} |
 
-Wajib mencantumkan downside yang nyata. “Tidak ada konsekuensi negatif” memerlukan justification luar biasa.
+Real downsides must be listed. “No negative consequences” requires extraordinary justification.
 
 ## 8.3 Neutral / Structural Consequences
 
@@ -1034,7 +1034,7 @@ Wajib mencantumkan downside yang nyata. “Tidak ada konsekuensi negatif” meme
 |---|---|---|---|---|---|
 | DEBT-001 | {{DEBT}} | {{RATIONALE}} | {{IMPACT}} | {{TRIGGER}} | {{OWNER}} |
 
-## 8.5 Cost, Lock-In, dan Exit Consequences
+## 8.5 Cost, Lock-In, and Exit Consequences
 
 | Area | Accepted Consequence | Maximum Exposure | Exit Mechanism | Review Trigger |
 |---|---|---|---|---|
@@ -1043,7 +1043,7 @@ Wajib mencantumkan downside yang nyata. “Tidak ada konsekuensi negatif” meme
 | Operational burden | {{BURDEN}} | {{LIMIT}} | {{EXIT}} | {{TRIGGER}} |
 | Skills dependency | {{DEPENDENCY}} | {{LIMIT}} | {{TRAINING_OR_EXIT}} | {{TRIGGER}} |
 
-## 8.6 Organizational dan Process Consequences
+## 8.6 Organizational and Process Consequences
 
 | Team / Process | Change | Training / Staffing | New Ownership | Evidence of Readiness |
 |---|---|---|---|---|
@@ -1057,7 +1057,7 @@ Wajib mencantumkan downside yang nyata. “Tidak ada konsekuensi negatif” meme
 
 ---
 
-# 9. Implementation, Migration, dan Rollout Contract
+# 9. Implementation, Migration, and Rollout Contract
 
 ## 9.1 Implementation Obligations
 
@@ -1067,7 +1067,7 @@ Wajib mencantumkan downside yang nyata. “Tidak ada konsekuensi negatif” meme
 
 ## 9.2 FSD Handoff Requirements
 
-Bila ADR ini digunakan dan berstatus `ACCEPTED`, FSD terkait **WAJIB** memperbarui area berikut atau menulis `N/A — reason`. Tanpa linked FSD, ADR ini tidak boleh menjadi standalone implementation instruction:
+When this ADR is used and has `ACCEPTED` status, the related FSD **MUST** update the following areas or write `N/A — reason`. Without a linked FSD, this ADR must not become a standalone implementation instruction:
 
 | FSD Area | Required Detail | ADR Clauses | Blocker? |
 |---|---|---|---:|
@@ -1082,7 +1082,7 @@ Bila ADR ini digunakan dan berstatus `ACCEPTED`, FSD terkait **WAJIB** memperbar
 | Delivery | Migration, rollout, rollback | {{IMPL-IDS}} | {{YES/NO}} |
 | Goal manifest | Atomic work packages referencing FSD and this ADR when applicable | {{IMPL-IDS}} | Yes |
 
-## 9.3 Dependency dan Sequencing
+## 9.3 Dependency and Sequencing
 
 ```mermaid
 graph TD
@@ -1107,7 +1107,7 @@ graph TD
 | 3 | Full cutover | {{METHOD}} | {{RULE}} | {{CHECK}} | {{POINT}} |
 | 4 | Decommission | {{METHOD}} | {{RULE}} | {{CHECK}} | {{POINT}} |
 
-## 9.5 Backward dan Forward Compatibility
+## 9.5 Backward and Forward Compatibility
 
 - Old reader with new data: `{{SUPPORTED/NOT_SUPPORTED_AND_RULE}}`
 - New reader with old data: `{{SUPPORTED/NOT_SUPPORTED_AND_RULE}}`
@@ -1121,7 +1121,7 @@ graph TD
 |---|---|---|---|---|---|
 | {{FLAG}} | {{PURPOSE}} | OFF/ON | {{OWNER}} | {{CRITERIA}} | {{DATE}} |
 
-Permanent flags tanpa owner dan removal criteria dilarang.
+Permanent flags without an owner and removal criteria are forbidden.
 
 ## 9.7 Rollout Plan
 
@@ -1138,7 +1138,7 @@ Permanent flags tanpa owner dan removal criteria dilarang.
 |---|---|---|---|---|---|---|
 | ROLLBACK-001 | {{TRIGGER}} | {{ROLE}} | {{ACTION}} | {{DATA_RULE}} | {{CHECK}} | {{TIME}} |
 
-Rollback plan harus menjelaskan apakah rollback kode juga memerlukan rollback data/config/provider state. “Redeploy versi lama” jarang cukup.
+The rollback plan must explain whether a code rollback also requires a data/config/provider-state rollback. “Redeploy the old version” is rarely enough.
 
 ## 9.9 Decommission Plan
 
@@ -1148,20 +1148,20 @@ Rollback plan harus menjelaskan apakah rollback kode juga memerlukan rollback da
 
 ## 9.10 Operational Readiness
 
-- [ ] Owner dan on-call path tersedia.
-- [ ] Dashboards dan alerts tersedia sebelum rollout material.
-- [ ] Runbook untuk top failure modes tersedia.
-- [ ] Backup/restore atau recovery mechanism diuji.
-- [ ] Secrets/configuration tersedia di environment target.
-- [ ] Capacity limit dan cost guardrail dipasang.
-- [ ] Vendor escalation/support path terdokumentasi bila relevan.
-- [ ] Rollback rehearsal atau dry run selesai untuk risk `HIGH/CRITICAL`.
+- [ ] The owner and on-call path are in place.
+- [ ] Dashboards and alerts are in place before material rollout.
+- [ ] Runbooks for the top failure modes are available.
+- [ ] The backup/restore or recovery mechanism is tested.
+- [ ] Secrets/configuration are available in the target environment.
+- [ ] Capacity limits and cost guardrails are installed.
+- [ ] The vendor escalation/support path is documented where relevant.
+- [ ] A rollback rehearsal or dry run is complete for `HIGH/CRITICAL` risk.
 
 ---
 
-# 10. Security, Privacy, Compliance, dan AI Impact
+# 10. Security, Privacy, Compliance, and AI Impact
 
-## 10.1 Data Flow dan Trust Boundaries
+## 10.1 Data Flow and Trust Boundaries
 
 ```mermaid
 flowchart LR
@@ -1180,7 +1180,7 @@ flowchart LR
 
 ## 10.2 Threat Model Delta
 
-ADR harus menilai **perubahan** threat model, bukan menyalin daftar umum.
+The ADR must assess the **change** in the threat model, not copy a generic list.
 
 | Threat ID | New/Changed Threat | Asset | Attack Path | Likelihood | Impact | Mitigation | Residual Risk |
 |---|---|---|---|---:|---:|---|---|
@@ -1197,7 +1197,7 @@ ADR harus menilai **perubahan** threat model, bukan menyalin daftar umum.
 | Logging/audit | {{CURRENT}} | {{IMPACT}} | {{CONTROL}} | {{TEST}} |
 | Supply chain | {{CURRENT}} | {{IMPACT}} | {{CONTROL}} | {{TEST}} |
 
-## 10.4 Privacy dan Data-Lifecycle Impact
+## 10.4 Privacy and Data-Lifecycle Impact
 
 | Topic | Decision |
 |---|---|
@@ -1210,7 +1210,7 @@ ADR harus menilai **perubahan** threat model, bukan menyalin daftar umum.
 | Processor/subprocessor | {{VENDOR_OR_NONE}} |
 | DPIA/assessment required | {{YES_NO_REASON}} |
 
-## 10.5 Compliance dan Policy Mapping
+## 10.5 Compliance and Policy Mapping
 
 | Obligation / Control | Applicability | How Decision Satisfies It | Evidence | Exception |
 |---|---|---|---|---|
@@ -1218,7 +1218,7 @@ ADR harus menilai **perubahan** threat model, bukan menyalin daftar umum.
 
 ## 10.6 AI/ML-Specific Decision Boundary
 
-Isi bila ADR menyangkut AI/ML/agentic automation; selain itu `N/A — keputusan tidak menggunakan AI/ML`.
+Complete when the ADR concerns AI/ML/agentic automation; otherwise `N/A — the decision does not use AI/ML`.
 
 | Topic | Required Decision |
 |---|---|
@@ -1237,9 +1237,9 @@ Isi bila ADR menyangkut AI/ML/agentic automation; selain itu `N/A — keputusan 
 | Degraded fallback | {{BEHAVIOR}} |
 | Provider swap boundary | {{INTERFACE_AND_NON_GOALS}} |
 
-AI output dilarang menjadi authoritative state hanya karena confidence tinggi. Human atau deterministic gate harus ditulis bila outcome memiliki dampak material.
+AI output must not become authoritative state merely because of high confidence. A human or deterministic gate must be written down when the outcome has material impact.
 
-## 10.7 Third-Party dan Vendor Risk
+## 10.7 Third-Party and Vendor Risk
 
 | Vendor | Data/Access | Availability Dependency | Contract/SLA | Exit Risk | Security Evidence | Owner |
 |---|---|---|---|---|---|---|
@@ -1247,27 +1247,27 @@ AI output dilarang menjadi authoritative state hanya karena confidence tinggi. H
 
 ---
 
-# 11. Architecture Fitness Functions dan Verification
+# 11. Architecture Fitness Functions and Verification
 
 ## 11.1 Fitness Function Inventory
 
-Setiap architecture property penting harus memiliki pemeriksaan otomatis atau manual yang jelas.
+Every important architecture property must have a clear automated or manual check.
 
 | FF ID | Property Protected | Check | Type | Frequency | Threshold | Failure Action | Owner |
 |---|---|---|---|---|---|---|---|
 | FF-001 | {{ARCHITECTURE_PROPERTY}} | {{COMMAND_TEST_QUERY_REVIEW}} | CI / runtime / scheduled / manual | {{FREQUENCY}} | {{PASS_CRITERIA}} | {{ACTION}} | {{OWNER}} |
 
-Contoh:
+Examples:
 
-- dependency rule test mencegah domain layer mengimpor infrastructure adapter;
-- contract test memverifikasi provider adapter memenuhi interface yang diputuskan;
-- query memverifikasi tidak ada row tanpa tenant key;
-- policy-as-code memverifikasi storage berada pada region yang disetujui;
-- SLO alert mendeteksi p95 latency melebihi envelope;
-- reconciliation metric mendeteksi source-of-truth drift;
-- CI scan mencegah direct vendor SDK usage di luar adapter package.
+- a dependency rule test prevents the domain layer from importing infrastructure adapters;
+- a contract test verifies the provider adapter satisfies the decided interface;
+- a query verifies there are no rows without a tenant key;
+- policy-as-code verifies storage resides in the approved region;
+- an SLO alert detects p95 latency exceeding the envelope;
+- a reconciliation metric detects source-of-truth drift;
+- a CI scan prevents direct vendor SDK usage outside the adapter package.
 
-## 11.2 Acceptance dan Validation Matrix
+## 11.2 Acceptance and Validation Matrix
 
 | Validation ID | ADR Clause | Scenario | Evidence Required | Environment | Owner | Gate |
 |---|---|---|---|---|---|---|
@@ -1290,7 +1290,7 @@ Contoh:
 {{SMOKE_TEST_COMMAND}}
 ```
 
-Setiap command harus pernah dijalankan pada repository/environment yang relevan sebelum goal dinyatakan `READY`.
+Every command must have been run in the relevant repository/environment before a goal is declared `READY`.
 
 ## 11.4 Performance / Capacity Verification
 
@@ -1298,7 +1298,7 @@ Setiap command harus pernah dijalankan pada repository/environment yang relevan 
 |---|---|---|---|---|---|---|---|
 | BENCH-001 | {{WORKLOAD}} | {{ENV}} | {{TIME}} | {{TIME}} | {{TARGET}} | {{ABORT}} | {{PATH}} |
 
-## 11.5 Failure Injection dan Recovery Verification
+## 11.5 Failure Injection and Recovery Verification
 
 | Failure | Injection Method | Expected Behavior | Data Integrity Check | Recovery Check | Result |
 |---|---|---|---|---|---|
@@ -1315,21 +1315,21 @@ Setiap command harus pernah dijalankan pada repository/environment yang relevan 
 
 ## 11.7 Completion Evidence
 
-ADR implementation tidak dianggap selesai sebelum tersedia:
+The ADR implementation is not considered complete until the following are available:
 
-- [ ] FSD update yang men-trace decision clauses;
-- [ ] code/config/schema/infra changes sesuai implementation obligations;
-- [ ] tests dan fitness functions aktif;
+- [ ] an FSD update that traces the decision clauses;
+- [ ] code/config/schema/infra changes per the implementation obligations;
+- [ ] active tests and fitness functions;
 - [ ] migration/rollout/rollback evidence;
-- [ ] dashboards/alerts/runbook untuk failure material;
-- [ ] security/privacy/compliance approvals bila diperlukan;
-- [ ] post-deployment validation result;
-- [ ] debt, exception, atau residual risk record yang masih terbuka;
-- [ ] completion report dengan commit/release reference.
+- [ ] dashboards/alerts/runbooks for material failures;
+- [ ] security/privacy/compliance approvals where required;
+- [ ] post-deployment validation results;
+- [ ] records of any still-open debt, exceptions, or residual risks;
+- [ ] a completion report with commit/release references.
 
 ---
 
-# 12. Observability, Operations, dan Economics
+# 12. Observability, Operations, and Economics
 
 ## 12.1 Decision-Specific Telemetry
 
@@ -1337,9 +1337,9 @@ ADR implementation tidak dianggap selesai sebelum tersedia:
 |---|---|---|---|---|---|
 | {{METRIC_LOG_TRACE}} | metric/log/trace/audit | {{PURPOSE}} | {{DIMENSIONS}} | {{THRESHOLD}} | {{PERIOD}} |
 
-Hindari high-cardinality labels yang tidak terkendali atau logging sensitive payload.
+Avoid uncontrolled high-cardinality labels or logging sensitive payloads.
 
-## 12.2 Dashboard dan Alerts
+## 12.2 Dashboards and Alerts
 
 | Dashboard / Alert | Audience | Signal | Trigger | Severity | Response Runbook |
 |---|---|---|---|---|---|
@@ -1357,7 +1357,7 @@ Hindari high-cardinality labels yang tidak terkendali atau logging sensitive pay
 |---|---|---:|---:|---:|---|
 | {{DRIVER}} | {{UNIT}} | {{VALUE}} | {{VALUE}} | {{VALUE_OR_APPROVAL}} | {{OWNER}} |
 
-## 12.5 Capacity dan Scaling Trigger
+## 12.5 Capacity and Scaling Triggers
 
 | Resource / Limit | Current Envelope | Warning | Scale Action | Architecture Review Trigger |
 |---|---:|---:|---|---|
@@ -1447,15 +1447,15 @@ adr:
 
 ## 13.2 Goal-Slicing Rules
 
-- Satu goal harus menghasilkan satu atomic, reviewable outcome.
-- Foundation/interface goal mendahului adapter/provider implementation bila abstraction boundary adalah bagian keputusan.
-- Data migration dipisahkan dari application cutover bila keduanya memiliki rollback risk berbeda.
-- Fitness function dan observability tidak boleh ditunda ke “cleanup”; letakkan sebelum rollout.
-- Decommission goal hanya `READY` setelah rollback window dan exit criteria terpenuhi.
-- Setiap goal harus mereferensikan FSD dan requirement FSD terkait.
-- Bila goal berada dalam scope ADR ini, goal juga harus mereferensikan `ADR-ID`, `DEC-*`, `IMPL-*`, dan `FF-*`.
-- Goal di luar scope ADR tidak perlu menambahkan referensi ADR semu.
-- Goal tidak boleh membuat keputusan technology, enum, source of truth, consistency, security, atau failure semantics baru.
+- One goal must produce one atomic, reviewable outcome.
+- Foundation/interface goals precede adapter/provider implementation when the abstraction boundary is part of the decision.
+- Data migration is separated from application cutover when the two carry different rollback risks.
+- Fitness functions and observability must not be deferred to “cleanup”; place them before rollout.
+- A decommission goal is only `READY` after the rollback window and exit criteria are satisfied.
+- Every goal must reference the FSD and the related FSD requirements.
+- When a goal falls within the scope of this ADR, the goal must also reference the `ADR-ID`, `DEC-*`, `IMPL-*`, and `FF-*`.
+- Goals outside the ADR's scope do not need to add token ADR references.
+- Goals must not make new technology, enum, source-of-truth, consistency, security, or failure-semantics decisions.
 
 ## 13.3 Reusable Goal Packet
 
@@ -1537,20 +1537,20 @@ Return the required completion report with evidence, not a narrative claim of co
 
 ## 13.5 Agent Stop Conditions
 
-Untuk goal yang menautkan ADR ini, agent harus berhenti dan melaporkan blocker ketika:
-- FSD tidak `APPROVED` atau tidak menautkan ADR ini;
+For goals that link this ADR, the agent must stop and report a blocker when:
+- the FSD is not `APPROVED` or does not link this ADR;
 
-- ADR bukan `ACCEPTED`, sudah `DEPRECATED/SUPERSEDED`, atau supersession status ambigu;
-- repository state membuktikan decision assumptions salah dan tidak ada fallback;
-- upstream requirement bertentangan dengan decision clause;
-- external integration compatibility belum terbukti tetapi goal meminta production cutover;
-- migration dapat merusak data tanpa backup/restore/rollback gate;
-- security/privacy/compliance control tidak dapat dipenuhi;
-- required secret, credential, environment, or access tidak tersedia untuk verification;
-- test failure menunjukkan perubahan di luar bounded goal diperlukan;
-- hanya cara menyelesaikan task adalah melemahkan acceptance gate atau prohibited pattern.
+- the ADR is not `ACCEPTED`, is already `DEPRECATED/SUPERSEDED`, or its supersession status is ambiguous;
+- the repository state proves the decision assumptions wrong and no fallback exists;
+- an upstream requirement conflicts with a decision clause;
+- external integration compatibility is unproven but the goal requests a production cutover;
+- a migration can damage data without a backup/restore/rollback gate;
+- a security/privacy/compliance control cannot be satisfied;
+- a required secret, credential, environment, or access is unavailable for verification;
+- a test failure shows changes outside the bounded goal are required;
+- the only way to finish the task is to weaken an acceptance gate or a prohibited pattern.
 
-Agent tidak perlu berhenti untuk pilihan lokal yang sudah ditentukan oleh repository convention dan tidak mengubah decision semantics.
+The agent does not need to stop for local choices already determined by repository conventions that do not change the decision semantics.
 
 ---
 
@@ -1564,10 +1564,10 @@ Agent tidak perlu berhenti untuk pilihan lokal yang sudah ditentukan oleh reposi
 
 Rules:
 
-- Setiap decision clause harus memiliki downstream implementation atau `N/A — rationale`.
-- Setiap implementation obligation harus memiliki completion evidence.
-- Setiap high-risk consequence harus memiliki mitigation, owner, dan verification.
-- Orphan goal tanpa FSD authority harus ditolak. Referensi ADR hanya diwajibkan untuk goal yang memang berada dalam scope ADR ini.
+- Every decision clause must have a downstream implementation or `N/A — rationale`.
+- Every implementation obligation must have completion evidence.
+- Every high-risk consequence must have a mitigation, owner, and verification.
+- Orphan goals without FSD authority must be rejected. An ADR reference is only required for goals genuinely within this ADR's scope.
 
 ## 14.2 ADR-to-Code Map
 
@@ -1579,19 +1579,19 @@ Rules:
 
 ## 14.3 ADR Compliance Review Questions
 
-- Apakah kode mengakses provider langsung di luar approved adapter boundary?
-- Apakah source-of-truth dan conflict resolution tetap sesuai?
-- Apakah new data flow melewati trust boundary yang belum direview?
-- Apakah retry/idempotency/order/transaction semantics berubah?
-- Apakah schema/API/event change tetap backward compatible sesuai window?
-- Apakah architecture fitness functions masih aktif dan passing?
-- Apakah exception sudah expired atau digunakan lebih luas dari scope?
-- Apakah operational cost atau load melewati envelope?
-- Apakah implementation menambahkan hidden fallback atau silent degradation?
+- Does the code access the provider directly outside the approved adapter boundary?
+- Do the source of truth and conflict resolution remain as decided?
+- Does a new data flow cross a trust boundary that has not been reviewed?
+- Have the retry/idempotency/ordering/transaction semantics changed?
+- Do schema/API/event changes remain backward compatible within the window?
+- Are the architecture fitness functions still active and passing?
+- Has an exception expired or been used more broadly than its scope?
+- Has the operational cost or load exceeded the envelope?
+- Does the implementation add hidden fallbacks or silent degradation?
 
 ---
 
-# 15. Risks, Open Items, dan Exceptions
+# 15. Risks, Open Items, and Exceptions
 
 ## 15.1 Risk Register
 
@@ -1625,7 +1625,7 @@ Rules:
 
 ---
 
-# 16. Review, Outcome, Deprecation, dan Supersession
+# 16. Review, Outcome, Deprecation, and Supersession
 
 ## 16.1 Review Triggers
 
@@ -1657,7 +1657,7 @@ Rules:
 
 ## 16.4 Deprecation Plan
 
-ADR dapat menjadi `DEPRECATED` ketika keputusan masih ada di production tetapi tidak boleh digunakan untuk development baru.
+An ADR may become `DEPRECATED` when the decision still exists in production but must not be used for new development.
 
 | Item | Plan |
 |---|---|
@@ -1686,152 +1686,152 @@ ADR dapat menjadi `DEPRECATED` ketika keputusan masih ada di production tetapi t
 
 ## 17.1 Decision Quality
 
-- [ ] FSD applicability assessment menyatakan ADR ini digunakan, atau project policy yang mewajibkannya telah dicite.
-- [ ] Nilai durable decision record membenarkan pemisahan dari `TDEC-*`.
-- [ ] Satu decision statement utama jelas dan normatif.
-- [ ] Decision owner dan required deciders jelas.
-- [ ] Scope, non-scope, blast radius, reversibility, dan urgency jelas.
-- [ ] Tidak ada hidden product/business decision di dalam ADR.
-- [ ] Tidak ada acceptance blocker terbuka.
+- [ ] The FSD applicability assessment states this ADR is used, or the project policy mandating it has been cited.
+- [ ] The value of a durable decision record justifies separation from `TDEC-*`.
+- [ ] One primary decision statement is clear and normative.
+- [ ] The decision owner and required deciders are clear.
+- [ ] Scope, non-scope, blast radius, reversibility, and urgency are clear.
+- [ ] There are no hidden product/business decisions inside the ADR.
+- [ ] No acceptance blocker remains open.
 
-## 17.2 Context dan Evidence
+## 17.2 Context and Evidence
 
-- [ ] Current-state facts memiliki source/evidence.
-- [ ] Constraint dibedakan dari preference dan assumption.
-- [ ] Workload/data/operating envelope eksplisit.
-- [ ] Decisive claims memiliki evidence level yang memadai.
-- [ ] Benchmark/spike dapat direproduksi dan limitations dicatat.
+- [ ] Current-state facts have sources/evidence.
+- [ ] Constraints are distinguished from preferences and assumptions.
+- [ ] The workload/data/operating envelope is explicit.
+- [ ] Decisive claims have an adequate evidence level.
+- [ ] Benchmarks/spikes are reproducible and their limitations are recorded.
 
 ## 17.3 Option Analysis
 
-- [ ] Status quo dipertimbangkan.
-- [ ] Minimal dua opsi layak dibandingkan atau single-option constraint dibuktikan.
-- [ ] Tidak ada strawman option.
-- [ ] Hard constraint matrix lengkap.
-- [ ] Weighted score memiliki rationale/evidence.
-- [ ] Sensitivity dan uncertainty dinilai.
-- [ ] Dissenting opinion dicatat.
+- [ ] The status quo is considered.
+- [ ] At least two viable options are compared or the single-option constraint is proven.
+- [ ] There are no strawman options.
+- [ ] The hard-constraint matrix is complete.
+- [ ] Weighted scores have rationale/evidence.
+- [ ] Sensitivity and uncertainty are assessed.
+- [ ] Dissenting opinions are recorded.
 
-## 17.4 Decision dan Consequences
+## 17.4 Decision and Consequences
 
-- [ ] Selected option, rules, boundaries, source of truth, dan prohibited patterns eksplisit.
-- [ ] Positive, negative, neutral, cost, debt, lock-in, dan organization impacts dicatat.
-- [ ] Residual risks diterima oleh authority yang tepat.
-- [ ] Exception policy memiliki expiry dan compensating control.
+- [ ] The selected option, rules, boundaries, source of truth, and prohibited patterns are explicit.
+- [ ] Positive, negative, neutral, cost, debt, lock-in, and organizational impacts are recorded.
+- [ ] Residual risks are accepted by the appropriate authority.
+- [ ] The exception policy has an expiry and compensating controls.
 
-## 17.5 Security, Privacy, Compliance, dan AI
+## 17.5 Security, Privacy, Compliance, and AI
 
-- [ ] Trust-boundary/data-flow delta dipetakan.
-- [ ] Threat-model delta dinilai.
-- [ ] Classification, residency, retention, audit, secrets, dan vendor risk dinilai.
-- [ ] AI decision boundary, evaluation, human authority, dan data-egress rules lengkap bila relevan.
-- [ ] Required approvals tersedia.
+- [ ] The trust-boundary/data-flow delta is mapped.
+- [ ] The threat-model delta is assessed.
+- [ ] Classification, residency, retention, audit, secrets, and vendor risk are assessed.
+- [ ] The AI decision boundary, evaluation, human authority, and data-egress rules are complete where relevant.
+- [ ] The required approvals are in place.
 
-## 17.6 Implementation dan Operations
+## 17.6 Implementation and Operations
 
-- [ ] FSD handoff requirements lengkap.
-- [ ] FSD berstatus `APPROVED`, menautkan ADR ini, dan tetap menjadi primary implementation authority.
-- [ ] Implementation obligations memiliki owner dan evidence.
-- [ ] Migration, compatibility, rollout, rollback, dan decommission dinilai.
-- [ ] Observability, capacity/cost guardrails, alerts, dan runbooks tersedia.
-- [ ] Minimum satu fitness function dapat mendeteksi architecture drift.
+- [ ] The FSD handoff requirements are complete.
+- [ ] The FSD has `APPROVED` status, links this ADR, and remains the primary implementation authority.
+- [ ] Implementation obligations have owners and evidence.
+- [ ] Migration, compatibility, rollout, rollback, and decommission are assessed.
+- [ ] Observability, capacity/cost guardrails, alerts, and runbooks are in place.
+- [ ] At least one fitness function can detect architecture drift.
 
 ## 17.7 Agentic Readiness
 
-- [ ] Machine-readable manifest sesuai keputusan naratif.
-- [ ] Goal selalu merujuk FSD; referensi ADR ditambahkan hanya untuk goal dalam scope.
-- [ ] Goal boundaries dan dependency dapat ditentukan tanpa invention.
-- [ ] Allowed scope, prohibited changes, verification commands, dan stop conditions jelas.
-- [ ] Tidak ada placeholder, fake fallback, atau ambiguous adjective.
-- [ ] Mock success tidak digunakan sebagai satu-satunya integration evidence.
-- [ ] Agent tidak perlu membuat keputusan architecture/product/security baru untuk menyelesaikan goal.
+- [ ] The machine-readable manifest matches the narrative decision.
+- [ ] Goals always reference the FSD; ADR references are added only for goals in scope.
+- [ ] Goal boundaries and dependencies can be determined without invention.
+- [ ] Allowed scope, prohibited changes, verification commands, and stop conditions are clear.
+- [ ] There are no placeholders, fake fallbacks, or ambiguous adjectives.
+- [ ] Mock success is not used as the sole integration evidence.
+- [ ] The agent does not need to make new architecture/product/security decisions to complete a goal.
 
 ## 17.8 Lifecycle
 
-- [ ] Review date/event dan owner tercatat.
-- [ ] Deprecation/supersession mechanism jelas.
-- [ ] ADR index dan related ADR links diperbarui, atau `N/A — organisasi tidak memakai central ADR index`.
-- [ ] Historical decision content tidak akan ditulis ulang setelah acceptance.
+- [ ] The review date/event and owner are recorded.
+- [ ] The deprecation/supersession mechanism is clear.
+- [ ] The ADR index and related ADR links are updated, or `N/A — the organization does not use a central ADR index`.
+- [ ] Historical decision content will not be rewritten after acceptance.
 
 ---
 
-# Appendix A — Pola Penulisan ADR yang Baik dan Buruk
+# Appendix A — Good and Bad ADR Writing Patterns
 
-## A.1 Decision Statement yang Baik
+## A.1 A Good Decision Statement
 
-> **DEC-001:** Semua outbound payment requests **WAJIB** dikirim melalui `PaymentProvider` interface pada package `domain/payments`; application code **DILARANG** mengimpor SDK provider secara langsung. Adapter provider **WAJIB** memenuhi contract tests `{{PATH}}` sebelum diaktifkan.
+> **DEC-001:** All outbound payment requests **MUST** be sent through the `PaymentProvider` interface in the `domain/payments` package; application code **MUST NOT** import the provider SDK directly. Provider adapters **MUST** pass the contract tests `{{PATH}}` before being activated.
 
-Mengapa baik: scope, boundary, prohibited behavior, dan verification jelas.
+Why it is good: the scope, boundary, prohibited behavior, and verification are clear.
 
-## A.2 Decision Statement yang Buruk
+## A.2 A Bad Decision Statement
 
-> Gunakan abstraction yang fleksibel dan scalable untuk payment.
+> Use a flexible and scalable abstraction for payments.
 
-Masalah: tidak mendefinisikan abstraction, scope, target, prohibited pattern, atau cara memverifikasi.
+The problem: it does not define the abstraction, scope, target, prohibited patterns, or how to verify.
 
-## A.3 Rationale yang Baik
+## A.3 A Good Rationale
 
-> OPT-002 dipilih karena merupakan satu-satunya opsi yang memenuhi data-residency constraint CONSTR-003, lulus contract spike SPIKE-002 pada runtime target, dan mempertahankan rollback tanpa data rewrite. Opsi ini memiliki recurring cost 18% lebih tinggi, yang diterima oleh budget owner sampai volume 2 juta transaksi/bulan.
+> OPT-002 was selected because it is the only option that satisfies data-residency constraint CONSTR-003, passed contract spike SPIKE-002 on the target runtime, and preserves rollback without a data rewrite. This option has an 18% higher recurring cost, which the budget owner accepted up to a volume of 2 million transactions/month.
 
-## A.4 Rationale yang Buruk
+## A.4 A Bad Rationale
 
-> Teknologi ini modern, populer, dan best practice.
+> This technology is modern, popular, and best practice.
 
-Masalah: claim tidak kontekstual, tidak terukur, dan tidak membandingkan opsi.
+The problem: the claims are not contextual, not measurable, and do not compare options.
 
-## A.5 Consequence yang Baik
+## A.5 A Good Consequence
 
-> Tim operasi harus mengelola broker tambahan dan on-call runbook baru. Risiko ini dimitigasi dengan managed service, alert FF-004, dan game-day sebelum 50% traffic cutover.
+> The operations team must manage an additional broker and a new on-call runbook. This risk is mitigated with a managed service, alert FF-004, and a game day before the 50% traffic cutover.
 
-## A.6 Consequence yang Buruk
+## A.6 A Bad Consequence
 
-> Tidak ada downside yang berarti.
+> There is no meaningful downside.
 
-Masalah: hampir selalu tidak jujur atau belum dianalisis.
+The problem: this is almost always dishonest or unanalyzed.
 
-## A.7 Fitness Function yang Baik
+## A.7 A Good Fitness Function
 
-> CI test `pnpm test:architecture` gagal bila file di luar `src/adapters/provider-x/**` mengimpor package `provider-x-sdk`.
+> The CI test `pnpm test:architecture` fails when a file outside `src/adapters/provider-x/**` imports the `provider-x-sdk` package.
 
-## A.8 Fitness Function yang Buruk
+## A.8 A Bad Fitness Function
 
-> Code review memastikan architecture tetap bersih.
+> Code review ensures the architecture stays clean.
 
-Masalah: tidak deterministik, tidak memiliki owner/frequency, dan mudah mengalami drift.
-
----
-
-# Appendix B — Anti-Pattern dan AI-Slop Rejection Checklist
-
-Tolak ADR bila ditemukan satu atau lebih kondisi berikut tanpa koreksi:
-
-- ADR dibuat hanya karena template tersedia, tanpa applicability assessment atau durable decision value;
-
-- decision statement hanya menyebut nama teknologi tanpa boundary dan reason;
-- opsi terpilih ditentukan lebih dulu lalu score direkayasa;
-- status quo atau viable alternative tidak dipertimbangkan;
-- rejected options adalah strawman;
-- “best practice”, “industry standard”, “scalable”, “secure”, atau “simple” digunakan tanpa definisi/evidence;
-- semua konsekuensi ditulis positif;
-- benchmark tidak mencantumkan environment, workload, atau raw result;
-- vendor documentation dianggap bukti integration compatibility;
-- tidak ada hard constraint atau constraint tercampur dengan preference;
-- architecture diagram bertentangan dengan decision clauses;
-- source of truth, failure mode, data ownership, atau rollback dibiarkan implisit;
-- exception tidak memiliki expiry;
-- migration hanya menyebut “migrate data” tanpa compatibility dan rollback;
-- observability/runbook ditunda setelah go-live;
-- fitness function hanya berupa manual code review tanpa cadence/owner;
-- ADR mencoba mengubah product scope atau business rule;
-- manifest machine-readable berbeda dari isi naratif;
-- `/sc-work` dapat mengganti provider/pattern tanpa blocker;
-- agent dapat “selesai” dengan mock, TODO, disabled test, silent catch, atau weakened validation;
-- accepted ADR masih memiliki unresolved acceptance blocker;
-- ADR lama diedit material setelah acceptance tanpa supersession.
+The problem: it is not deterministic, has no owner/frequency, and drifts easily.
 
 ---
 
-# Appendix C — Option Scoring dan Decision Heuristics
+# Appendix B — Anti-Pattern and AI-Slop Rejection Checklist
+
+Reject the ADR when one or more of the following conditions is found without correction:
+
+- the ADR was created just because the template exists, without an applicability assessment or durable decision value;
+
+- the decision statement only names a technology without a boundary and reason;
+- the selected option was decided first and the scores were engineered afterwards;
+- the status quo or a viable alternative was not considered;
+- the rejected options are strawmen;
+- “best practice”, “industry standard”, “scalable”, “secure”, or “simple” is used without definition/evidence;
+- all consequences are written as positive;
+- benchmarks do not state the environment, workload, or raw results;
+- vendor documentation is treated as proof of integration compatibility;
+- there are no hard constraints, or constraints are mixed with preferences;
+- the architecture diagram contradicts the decision clauses;
+- the source of truth, failure modes, data ownership, or rollback is left implicit;
+- exceptions have no expiry;
+- the migration merely says “migrate data” without compatibility and rollback;
+- observability/runbooks are deferred until after go-live;
+- the fitness function is only a manual code review without a cadence/owner;
+- the ADR attempts to change product scope or business rules;
+- the machine-readable manifest differs from the narrative content;
+- `/sc-work` can replace the provider/pattern without a blocker;
+- the agent can be “done” with mocks, TODOs, disabled tests, silent catches, or weakened validation;
+- an accepted ADR still has an unresolved acceptance blocker;
+- an old ADR is materially edited after acceptance without supersession.
+
+---
+
+# Appendix C — Option Scoring and Decision Heuristics
 
 ## C.1 Weighted Score Formula
 
@@ -1839,40 +1839,40 @@ Tolak ADR bila ditemukan satu atau lebih kondisi berikut tanpa koreksi:
 weighted_total(option) = Σ(score_criterion × weight_criterion)
 ```
 
-Bila score menggunakan skala 0–5 dan weight berupa persentase:
+When scores use a 0–5 scale and weights are percentages:
 
 ```text
 normalized_score = Σ(score × weight) / 5
 ```
 
-Normalized score berada pada rentang 0–100%. Jangan tampilkan presisi palsu; satu angka desimal biasanya cukup.
+The normalized score falls in the 0–100% range. Do not display false precision; one decimal place is usually enough.
 
 ## C.2 Risk-Adjusted View
 
-Weighted score dapat dilengkapi, bukan diganti, oleh:
+The weighted score may be supplemented, not replaced, by:
 
 ```text
 risk_exposure = likelihood × impact × uncertainty_multiplier
 ```
 
-Gunakan hanya bila scale dan interpretation telah didefinisikan. Jangan mengurangi semua aspek menjadi satu angka bila downside bersifat non-linear atau veto.
+Use only when the scale and interpretation have been defined. Do not reduce every aspect to a single number when the downside is non-linear or a veto.
 
 ## C.3 Reversibility Heuristic
 
-- **Reversible:** perubahan dapat dibalik dalam satu release tanpa data loss atau contract break.
-- **Costly reversal:** memerlukan migration, downtime, dual-run, atau consumer coordination material.
-- **Effectively irreversible:** menghasilkan external commitment, data transformation tidak dapat balik, widespread contract adoption, atau regulatory exposure.
+- **Reversible:** the change can be undone within one release without data loss or a contract break.
+- **Costly reversal:** requires material migration, downtime, dual-run, or consumer coordination.
+- **Effectively irreversible:** produces external commitments, irreversible data transformations, widespread contract adoption, or regulatory exposure.
 
-Semakin sulit reversal, semakin tinggi evidence dan approval burden.
+The harder the reversal, the higher the evidence and approval burden.
 
 ## C.4 Buy vs Build Questions
 
-- Apakah differentiating capability atau commodity?
-- Apakah vendor memenuhi data, security, residency, audit, dan exit requirements?
-- Berapa total cost termasuk integration, operations, support, dan exit?
-- Apakah team memiliki skill dan capacity untuk ownership jangka panjang?
-- Apakah API/data export cukup untuk menghindari lock-in yang tidak diterima?
-- Apakah provider failure menghilangkan core business capability?
+- Is it a differentiating capability or a commodity?
+- Does the vendor meet the data, security, residency, audit, and exit requirements?
+- What is the total cost including integration, operations, support, and exit?
+- Does the team have the skills and capacity for long-term ownership?
+- Are the API/data exports sufficient to avoid unacceptable lock-in?
+- Would a provider failure eliminate a core business capability?
 
 ---
 
@@ -1892,13 +1892,13 @@ Semakin sulit reversal, semakin tinggi evidence dan approval burden.
 - **Evidence / response:** {{DETAIL}}
 ```
 
-Review comment harus mengidentifikasi defect atau missing decision secara spesifik, bukan preferensi gaya tanpa consequence.
+Review comments must identify a specific defect or missing decision, not a style preference without consequence.
 
 ---
 
 # Appendix E — ADR Index Template
 
-Bila organisasi menggunakan central ADR index, simpan di `{{ADR_DIRECTORY}}/README.md` atau location yang disepakati. Bila tidak, tandai `N/A` dan pastikan linked FSD tetap menjadi entry point.
+When the organization uses a central ADR index, keep it in `{{ADR_DIRECTORY}}/README.md` or an agreed location. Otherwise, mark it `N/A` and make sure the linked FSD remains the entry point.
 
 | ADR | Title | Status | Decision Date | Scope | Owner | Supersedes | Review By |
 |---|---|---|---|---|---|---|---|
@@ -1926,13 +1926,13 @@ File naming:
 docs/solutions/adr-{{4_DIGIT_ID}}-{{lowercase-kebab-case-title}}.md
 ```
 
-Jangan mengganti nomor ADR lama atau menghapus ADR rejected/superseded dari index.
+Do not renumber old ADRs or remove rejected/superseded ADRs from the index.
 
 ---
 
 # Appendix F — Minimal Architecture Decision Brief
 
-Gunakan untuk keputusan kecil/reversible ketika catatan terpisah tetap bernilai. Pertimbangkan ADR penuh bila review menemukan cross-system impact, security/data implication, lock-in, migration, atau significant uncertainty; bila tidak, `TDEC-*` di FSD tetap valid.
+Use for small/reversible decisions when a separate record still has value. Consider a full ADR when the review finds cross-system impact, security/data implications, lock-in, migration, or significant uncertainty; otherwise, a `TDEC-*` in the FSD remains valid.
 
 ```markdown
 ---
@@ -1962,7 +1962,7 @@ reversibility: "REVERSIBLE"
 
 ## Decision
 
-> Sistem **WAJIB** {{NORMATIVE_DECISION}} dan **DILARANG** {{PROHIBITED_BEHAVIOR}}.
+> The system **MUST** {{NORMATIVE_DECISION}} and **MUST NOT** {{PROHIBITED_BEHAVIOR}}.
 
 ## Rationale
 
@@ -1991,41 +1991,41 @@ reversibility: "REVERSIBLE"
 
 # Appendix G — ADR Discovery Questions
 
-## Context dan Scope
+## Context and Scope
 
-- Keputusan apa yang benar-benar perlu dibuat sekarang?
-- Apa yang terjadi bila tidak ada keputusan?
-- Batas sistem, data, organisasi, dan waktu apa yang relevan?
-- Requirement upstream mana yang tidak boleh berubah?
+- What decision genuinely needs to be made now?
+- What happens if no decision is made?
+- What system, data, organizational, and time boundaries are relevant?
+- Which upstream requirements must not change?
 
-## Constraints dan Drivers
+## Constraints and Drivers
 
-- Mana yang merupakan hukum/policy/hard constraint dan mana yang hanya preference?
-- Workload dan failure envelope apa yang harus ditanggung?
-- Apa source of truth dan invariant yang harus dipertahankan?
-- Downside mana yang tidak dapat diterima meskipun score total tinggi?
+- Which are legal/policy/hard constraints and which are merely preferences?
+- What workload and failure envelope must be borne?
+- What source of truth and invariants must be preserved?
+- Which downsides are unacceptable even with a high total score?
 
-## Options dan Evidence
+## Options and Evidence
 
-- Apa status quo?
-- Opsi viable apa yang mungkin tidak disukai penulis?
-- Evidence apa yang benar-benar membedakan pilihan?
-- Klaim mana yang hanya berasal dari vendor atau intuition?
-- Spike termurah apa yang dapat mengurangi uncertainty terbesar?
+- What is the status quo?
+- What viable options might the author dislike?
+- What evidence genuinely differentiates the choices?
+- Which claims come only from the vendor or intuition?
+- What is the cheapest spike that can reduce the biggest uncertainty?
 
-## Consequences dan Operations
+## Consequences and Operations
 
-- Siapa yang akan mengoperasikan, membayar, merespons incident, dan melakukan migration?
-- Failure baru apa yang diperkenalkan?
-- Apa exit path bila keputusan salah atau vendor berubah?
-- Architecture property apa yang dapat drift dan bagaimana CI/runtime mendeteksinya?
+- Who will operate, pay, respond to incidents, and perform migrations?
+- What new failures are introduced?
+- What is the exit path if the decision is wrong or the vendor changes?
+- Which architecture properties can drift and how do CI/runtime detect it?
 
 ## Agentic Implementation
 
-- Keputusan apa yang masih dapat ditafsirkan berbeda oleh dua coding agent?
-- Apakah agent dapat mengganti provider/pattern atas nama simplifikasi?
-- Apakah goal dapat diverifikasi tanpa manual intuition?
-- Stop condition apa yang mencegah workaround berbahaya?
+- What decisions could still be interpreted differently by two coding agents?
+- Could an agent replace the provider/pattern in the name of simplification?
+- Can the goals be verified without manual intuition?
+- What stop conditions prevent dangerous workarounds?
 
 ---
 

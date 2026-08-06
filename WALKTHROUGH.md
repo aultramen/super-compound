@@ -4,6 +4,10 @@ This walkthrough shows the current Super Compound flow after the 2026-06-20 clea
 
 Every command starts with `/sc-*` so it stays separate from native Claude Code slash commands.
 
+## Runtime checkpoint
+
+Before protected implementation begins or resumes, the Budget & Stop Wizard shows the goal, verifier, effective policy, required `max_iterations`, optional `null` guardrails, consumed budget, and approval expiry. Only a human can confirm. The same gate protects the first source write and external mutations across the 18 public workflows; `/loop` is not a public route. See `docs/loop-runtime-v2.md`.
+
 ## Scenario
 
 You want to add a usage analytics dashboard to an existing SaaS app.
@@ -567,6 +571,7 @@ Save concise knowledge under `docs/solutions/` or related project docs.
 | Review changes | `/sc-review` |
 | Audit risk/readiness | `/sc-audit` |
 | Capture learnings | `/sc-compound` |
+| Cluster verified learnings into draft framework proposals | `/sc-evolve` |
 | Save handoff | `/sc-pause` |
 | Start lifecycle | `/sc-launch` |
 | Design/review interface | `/sc-ui` |
@@ -592,7 +597,7 @@ Use these replacements:
 
 ## Quality Checklist
 
-For framework maintenance, the token benchmark emits 51 static evidence cells:
+For framework maintenance, the token benchmark emits 54 static evidence cells:
 input context reduction, process contract/authority wiring, and output
 sink/budget/next-owner coverage for every public workflow. All route reductions
 must exceed 90%. This does not measure hidden reasoning, generated response

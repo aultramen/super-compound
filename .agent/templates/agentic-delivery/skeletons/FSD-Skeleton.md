@@ -5,6 +5,7 @@ Use the full FSD template only for sections that need detailed expansion.
 ## Metadata
 
 ID: FSD-{{PROJECT}}  
+Artifact contract version: `2.0.0`
 Status: DRAFT / APPROVED  
 Upstream: PRD-{{PROJECT}}#{{IDS}}, BRD-{{PROJECT}}#{{IDS}}  
 ADR applicability: NOT_REQUIRED / LINKED

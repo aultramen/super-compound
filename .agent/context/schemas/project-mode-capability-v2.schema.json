@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:project-mode-capability-v2",
+  "title": "Loop Runtime Project Mode Capability Attestation v2",
+  "type": "object",
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "capability": {
+      "enum": [
+        "AUTHORITATIVE_READBACK",
+        "COMPENSATION",
+        "COST_METERING",
+        "CREDENTIAL_SCOPE_ENFORCEMENT",
+        "DURABLE_AUDIT",
+        "DURABLE_INTENT",
+        "DURABLE_LOCAL_STATE",
+        "FINITE_NO_PROGRESS_CAP",
+        "FINITE_RUNTIME_CAP",
+        "HARD_WRITE_INTERCEPTION",
+        "IDEMPOTENCY",
+        "ISOLATED_WORKTREE",
+        "LEASE_RECOVERY",
+        "NETWORK_EGRESS_ENFORCEMENT",
+        "PERMISSION_BYPASS_PREVENTION",
+        "PROCESS_ISOLATION",
+        "TOKEN_METERING"
+      ]
+    }
+  },
+  "properties": {
+    "schema": { "const": "project_mode_capability_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "attestation_id": { "$ref": "#/$defs/stableId" },
+    "purpose": { "const": "PROJECT_MODE_ENFORCE" },
+    "project_root_digest": { "$ref": "#/$defs/digest" },
+    "workspace_root_digest": { "$ref": "#/$defs/digest" },
+    "project_config_digest": { "$ref": "#/$defs/digest" },
+    "config_version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "mode_version": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "host_ref": { "$ref": "#/$defs/stableId" },
+    "host_identity_digest": { "$ref": "#/$defs/digest" },
+    "host_verifier_digest": { "$ref": "#/$defs/digest" },
+    "write_interceptor_digest": { "$ref": "#/$defs/digest" },
+    "filesystem_type": { "const": "ext4" },
+    "external_write_policy": { "const": "DENY" },
+    "capabilities": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/capability" },
+      "uniqueItems": true
+    },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "evidence_digest": { "$ref": "#/$defs/digest" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "attestation_id",
+    "purpose",
+    "project_root_digest",
+    "workspace_root_digest",
+    "project_config_digest",
+    "config_version",
+    "mode_version",
+    "host_ref",
+    "host_identity_digest",
+    "host_verifier_digest",
+    "write_interceptor_digest",
+    "filesystem_type",
+    "external_write_policy",
+    "capabilities",
+    "issued_at",
+    "expires_at",
+    "evidence_digest"
+  ],
+  "additionalProperties": false
+}

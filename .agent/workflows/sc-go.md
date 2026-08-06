@@ -6,6 +6,18 @@ description: "Preview and run safe Git branch, commit, push, worktree, and Pull 
 
 Use this workflow for explicit Git operations after or before Super Compound work: branch start, optional worktree setup, commit, push, and Pull Request preparation.
 
+## Loop Runtime v2 Boundary
+
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
+Status, branch, worktree, and command preview are read-only and need no wizard.
+`commit`, `push`, and PR mutation require a valid nonterminal FSD-authorized run,
+human approval, durable intent, and an allowlisted operation. GOAL-008 does not
+claim these release operations are executable: until the release gate and
+operation inventory land, return `OPEN-RELEASE-GATE`; the current allowlist does
+not authorize `commit`, `push`, or `pr`, so perform no mutation. Never substitute
+the preview approval or a terminal run for an active operation gate.
+
 ## Usage
 
 ```text

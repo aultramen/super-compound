@@ -9,6 +9,17 @@ Use this after implementation or when reviewing a diff/branch.
 This route remains strictly read-only. Approval to remediate a finding selects
 an owning workflow; it never converts review into implementation.
 
+## Loop Runtime v2 Boundary
+
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
+Read-only review needs no wizard and may consume the active run/eval evidence.
+The current policy classifies a durable `docs/reviews/` report as an
+`implementation_write`; therefore writing that report requires the caller's
+active run gate and `ACTION_INTENDED`. Without an active run gate, keep the
+review non-mutating, return `OPEN-LOOP-AUTHORITY`, and do not silently drop a
+finding. Review never uses that gate to apply a fix.
+
 ## Steps
 
 1. Load `skills/code-review/SKILL.md`.

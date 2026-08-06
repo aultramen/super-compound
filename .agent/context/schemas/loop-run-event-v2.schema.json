@@ -1,0 +1,871 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:loop-run-event-v2",
+  "title": "Loop Run Event v2",
+  "type": "object",
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "learningDelta": {
+      "type": "object",
+      "properties": {
+        "requirement_count": { "type": "integer", "minimum": -1000000, "maximum": 1000000 },
+        "coverage_basis_points": { "type": "integer", "minimum": -10000, "maximum": 10000 },
+        "test_count": { "type": "integer", "minimum": -1000000, "maximum": 1000000 },
+        "meaningful_diff_count": { "type": "integer", "minimum": -1000000, "maximum": 1000000 }
+      },
+      "required": [
+        "requirement_count",
+        "coverage_basis_points",
+        "test_count",
+        "meaningful_diff_count"
+      ],
+      "additionalProperties": false
+    },
+    "iterationLearning": {
+      "type": "object",
+      "properties": {
+        "schema": { "const": "iteration_learning_v2" },
+        "contract_version": { "const": "2.0.0" },
+        "status": { "enum": ["INTENDED", "COMPLETED"] },
+        "run_id": { "$ref": "#/$defs/identifier" },
+        "goal_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "iteration": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "pre_action_run_head_digest": { "$ref": "#/$defs/digest" },
+        "intent_digest": { "$ref": "#/$defs/digest" },
+        "hypothesis": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "hypothesis_digest": { "$ref": "#/$defs/digest" },
+        "approach_id": { "$ref": "#/$defs/identifier" },
+        "approach_signature_digest": { "$ref": "#/$defs/digest" },
+        "problem_fingerprint": { "$ref": "#/$defs/digest" },
+        "failure_fingerprint": { "$ref": "#/$defs/digest" },
+        "context_fingerprint": { "$ref": "#/$defs/digest" },
+        "predicted_delta": { "$ref": "#/$defs/learningDelta" },
+        "actual_delta": {
+          "oneOf": [
+            { "$ref": "#/$defs/learningDelta" },
+            { "type": "null" }
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/digest" }
+        },
+        "verified_pattern_refs": {
+          "type": "array",
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/digest" }
+        },
+        "verifier_status": { "enum": ["NOT_RUN", "PASS", "FAIL", "ERROR", "STALE"] },
+        "progress_verdict": { "enum": [null, "PROGRESS", "NO_PROGRESS", "WEAK_PROGRESS"] },
+        "completed_run_head_digest": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "completion_attestation_digest": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "omitted_history_digest": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "schema",
+        "contract_version",
+        "status",
+        "run_id",
+        "goal_ref",
+        "iteration",
+        "pre_action_run_head_digest",
+        "intent_digest",
+        "hypothesis",
+        "hypothesis_digest",
+        "approach_id",
+        "approach_signature_digest",
+        "problem_fingerprint",
+        "failure_fingerprint",
+        "context_fingerprint",
+        "predicted_delta",
+        "actual_delta",
+        "evidence_refs",
+        "verified_pattern_refs",
+        "verifier_status",
+        "progress_verdict",
+        "completed_run_head_digest",
+        "completion_attestation_digest",
+        "omitted_history_digest",
+        "recorded_at"
+      ],
+      "additionalProperties": false
+    },
+    "createdData": {
+      "type": "object",
+      "properties": { "contract_digest": { "$ref": "#/$defs/digest" } },
+      "required": ["contract_digest"],
+      "additionalProperties": false
+    },
+    "budgetProposedData": {
+      "type": "object",
+      "properties": { "proposal_digest": { "$ref": "#/$defs/digest" } },
+      "required": ["proposal_digest"],
+      "additionalProperties": false
+    },
+    "confirmationData": {
+      "type": "object",
+      "properties": { "confirmation_digest": { "$ref": "#/$defs/digest" } },
+      "required": ["confirmation_digest"],
+      "additionalProperties": false
+    },
+    "actionIntendedData": {
+      "type": "object",
+      "properties": {
+        "action_id": { "$ref": "#/$defs/identifier" },
+        "idempotency_key": { "$ref": "#/$defs/identifier" },
+        "learning_intent": { "$ref": "#/$defs/iterationLearning" }
+      },
+      "required": ["action_id", "idempotency_key"],
+      "additionalProperties": false
+    },
+    "actionObservedData": {
+      "type": "object",
+      "properties": {
+        "action_id": { "$ref": "#/$defs/identifier" },
+        "idempotency_key": { "$ref": "#/$defs/identifier" },
+        "external_action_record_digest": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "external_outcome": {
+          "enum": [null, "APPLIED", "NOT_APPLIED", "PARTIALLY_APPLIED", "INDETERMINATE"]
+        },
+        "target_audit_digest": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "duration_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": [
+        "action_id",
+        "idempotency_key",
+        "external_action_record_digest",
+        "external_outcome",
+        "target_audit_digest",
+        "duration_ms"
+      ],
+      "additionalProperties": false
+    },
+    "measuredValue": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["MEASURED", "UNKNOWN"] },
+        "value": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["status", "value"],
+      "additionalProperties": false
+    },
+    "normalizedUsageReceipt": {
+      "type": "object",
+      "properties": {
+        "schema": { "const": "usage_receipt_v2" },
+        "contract_version": { "const": "2.0.0" },
+        "receipt_id": { "$ref": "#/$defs/identifier" },
+        "run_id": { "$ref": "#/$defs/identifier" },
+        "bound_run_head_digest": { "$ref": "#/$defs/digest" },
+        "workflow_route": {
+          "enum": [
+            "sc-init",
+            "sc-status",
+            "sc-geniusloop",
+            "sc-explore",
+            "sc-research",
+            "sc-prd",
+            "sc-plan",
+            "sc-eval",
+            "sc-go",
+            "sc-work",
+            "sc-debug",
+            "sc-review",
+            "sc-audit",
+            "sc-compound",
+            "sc-evolve",
+            "sc-pause",
+            "sc-launch",
+            "sc-ui"
+          ]
+        },
+        "iteration": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "attempt": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "autonomy_profile": { "enum": ["INTERACTIVE", "BACKGROUND"] },
+        "risk_profile": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "contributor": {
+          "type": "object",
+          "properties": {
+            "kind": { "enum": ["MAIN_AGENT", "CHILD_AGENT"] },
+            "ref": { "$ref": "#/$defs/digest" }
+          },
+          "required": ["kind", "ref"],
+          "additionalProperties": false
+        },
+        "token_usage": {
+          "type": "object",
+          "properties": {
+            "input_tokens": { "$ref": "#/$defs/measuredValue" },
+            "output_tokens": { "$ref": "#/$defs/measuredValue" },
+            "reasoning_tokens": { "$ref": "#/$defs/measuredValue" },
+            "cached_input_tokens": { "$ref": "#/$defs/measuredValue" },
+            "conservative_total_tokens": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "input_tokens",
+            "output_tokens",
+            "reasoning_tokens",
+            "cached_input_tokens",
+            "conservative_total_tokens"
+          ],
+          "additionalProperties": false
+        },
+        "cost": {
+          "type": "object",
+          "properties": {
+            "status": { "enum": ["MEASURED", "UNKNOWN"] },
+            "micro_units": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "billing_currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+            "pricing_revision": {
+              "type": ["string", "null"],
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+            },
+            "pricing_digest": {
+              "type": ["string", "null"],
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "status",
+            "micro_units",
+            "billing_currency",
+            "pricing_revision",
+            "pricing_digest"
+          ],
+          "additionalProperties": false
+        },
+        "reservation": {
+          "type": "object",
+          "properties": {
+            "status": { "enum": ["VERIFIED", "NOT_REQUIRED"] },
+            "attestation_digest": {
+              "type": ["string", "null"],
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          },
+          "required": ["status", "attestation_digest"],
+          "additionalProperties": false
+        },
+        "coverage": {
+          "type": "object",
+          "properties": {
+            "status": { "enum": ["PARTIAL", "COMPLETE"] },
+            "receipt_count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "attestation_digest": {
+              "type": ["string", "null"],
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          },
+          "required": ["status", "receipt_count", "attestation_digest"],
+          "additionalProperties": false
+        },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "schema",
+        "contract_version",
+        "receipt_id",
+        "run_id",
+        "bound_run_head_digest",
+        "workflow_route",
+        "iteration",
+        "attempt",
+        "autonomy_profile",
+        "risk_profile",
+        "contributor",
+        "token_usage",
+        "cost",
+        "reservation",
+        "coverage",
+        "recorded_at"
+      ],
+      "additionalProperties": false
+    },
+    "usageRecordedData": {
+      "type": "object",
+      "properties": {
+        "receipt_digest": { "$ref": "#/$defs/digest" },
+        "receipt": { "$ref": "#/$defs/normalizedUsageReceipt" }
+      },
+      "required": ["receipt_digest", "receipt"],
+      "additionalProperties": false
+    },
+    "operationalMeasurement": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["MEASURED", "UNKNOWN"] },
+        "value": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["status", "value"],
+      "additionalProperties": false
+    },
+    "routeInvocationPayload": {
+      "type": "object",
+      "properties": {
+        "workflow_route": {
+          "enum": [
+            "sc-init", "sc-status", "sc-geniusloop", "sc-explore", "sc-research",
+            "sc-prd", "sc-plan", "sc-eval", "sc-go", "sc-work", "sc-debug",
+            "sc-review", "sc-audit", "sc-compound", "sc-evolve", "sc-pause", "sc-launch", "sc-ui"
+          ]
+        },
+        "surface": { "enum": ["FULL", "COMPACT"] },
+        "invocation_ref": { "$ref": "#/$defs/digest" }
+      },
+      "required": ["workflow_route", "surface", "invocation_ref"],
+      "additionalProperties": false
+    },
+    "reviewCoordinationPayload": {
+      "type": "object",
+      "properties": {
+        "review_cycle_ref": { "$ref": "#/$defs/digest" },
+        "queue_wait_ms": { "$ref": "#/$defs/operationalMeasurement" },
+        "fanout_count": { "$ref": "#/$defs/operationalMeasurement" },
+        "integration_wait_ms": { "$ref": "#/$defs/operationalMeasurement" }
+      },
+      "required": [
+        "review_cycle_ref",
+        "queue_wait_ms",
+        "fanout_count",
+        "integration_wait_ms"
+      ],
+      "additionalProperties": false
+    },
+    "hostOperationalMetric": {
+      "type": "object",
+      "properties": {
+        "schema": { "const": "operational_metric_v2" },
+        "contract_version": { "const": "2.0.0" },
+        "metric_id": { "$ref": "#/$defs/digest" },
+        "run_id": { "$ref": "#/$defs/identifier" },
+        "bound_run_head_digest": { "$ref": "#/$defs/digest" },
+        "kind": { "enum": ["ROUTE_INVOCATION", "REVIEW_COORDINATION"] },
+        "provenance": { "const": "HOST_ATTESTED" },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "recorded_at": { "type": "string", "format": "date-time" },
+        "payload": { "type": "object" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "kind": { "const": "ROUTE_INVOCATION" },
+            "payload": { "$ref": "#/$defs/routeInvocationPayload" }
+          },
+          "required": ["kind", "payload"]
+        },
+        {
+          "properties": {
+            "kind": { "const": "REVIEW_COORDINATION" },
+            "payload": { "$ref": "#/$defs/reviewCoordinationPayload" }
+          },
+          "required": ["kind", "payload"]
+        }
+      ],
+      "required": [
+        "schema", "contract_version", "metric_id", "run_id",
+        "bound_run_head_digest", "kind", "provenance", "evidence_digest",
+        "recorded_at", "payload"
+      ],
+      "additionalProperties": false
+    },
+    "operationalMetricRecordedData": {
+      "type": "object",
+      "properties": {
+        "metric_digest": { "$ref": "#/$defs/digest" },
+        "metric": { "$ref": "#/$defs/hostOperationalMetric" }
+      },
+      "required": ["metric_digest", "metric"],
+      "additionalProperties": false
+    },
+    "geniusLoopOutcome": {
+      "type": "object",
+      "properties": {
+        "schema": { "const": "geniusloop_outcome_v2" },
+        "contract_version": { "const": "2.0.0" },
+        "outcome_id": { "$ref": "#/$defs/identifier" },
+        "run_id": { "$ref": "#/$defs/identifier" },
+        "run_head_digest": { "$ref": "#/$defs/digest" },
+        "dedupe_key": { "$ref": "#/$defs/digest" },
+        "source_signal": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "prior_duplicate_result": { "enum": ["UNIQUE", "DUPLICATE"] },
+        "hypothesis": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "baseline": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "expected_metric": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "selected_route": {
+          "enum": [
+            "sc-init", "sc-status", "sc-geniusloop", "sc-explore", "sc-research",
+            "sc-prd", "sc-plan", "sc-eval", "sc-go", "sc-work", "sc-debug",
+            "sc-review", "sc-audit", "sc-compound", "sc-evolve", "sc-pause", "sc-launch", "sc-ui"
+          ]
+        },
+        "downstream_artifact_refs": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/digest" }
+        },
+        "owner": { "$ref": "#/$defs/identifier" },
+        "experiment_result": { "enum": ["PASS", "FAIL", "UNKNOWN"] },
+        "decision": { "enum": ["ACCEPTED", "REJECTED", "PENDING"] },
+        "decision_reason": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "compounding_candidate_status": {
+          "enum": ["CANDIDATE", "VERIFIED", "REJECTED"]
+        },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "schema", "contract_version", "outcome_id", "run_id",
+        "run_head_digest", "dedupe_key", "source_signal",
+        "prior_duplicate_result", "hypothesis", "baseline", "expected_metric",
+        "selected_route", "downstream_artifact_refs", "owner",
+        "experiment_result", "decision", "decision_reason",
+        "compounding_candidate_status", "evidence_digest", "recorded_at"
+      ],
+      "additionalProperties": false
+    },
+    "learningOutcomeRecordedData": {
+      "type": "object",
+      "properties": {
+        "outcome_digest": { "$ref": "#/$defs/digest" },
+        "outcome": { "$ref": "#/$defs/geniusLoopOutcome" }
+      },
+      "required": ["outcome_digest", "outcome"],
+      "additionalProperties": false
+    },
+    "verifiedPattern": {
+      "type": "object",
+      "properties": {
+        "schema": { "const": "verified_pattern_v2" },
+        "contract_version": { "const": "2.0.0" },
+        "status": { "const": "VERIFIED" },
+        "pattern_id": { "$ref": "#/$defs/identifier" },
+        "dedupe_key": { "$ref": "#/$defs/digest" },
+        "source_run_id": { "$ref": "#/$defs/identifier" },
+        "source_outcome_id": { "$ref": "#/$defs/identifier" },
+        "source_run_head_digest": { "$ref": "#/$defs/digest" },
+        "authority_digest": { "$ref": "#/$defs/digest" },
+        "verifier_digest": { "$ref": "#/$defs/digest" },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "problem_fingerprint": { "$ref": "#/$defs/digest" },
+        "context_fingerprint": { "$ref": "#/$defs/digest" },
+        "approach_id": { "$ref": "#/$defs/identifier" },
+        "hypothesis_digest": { "$ref": "#/$defs/digest" },
+        "verifier_status": { "const": "PASS" },
+        "checker_status": { "const": "PASS" },
+        "finding_status": { "const": "CLOSED" },
+        "human_approval": { "const": "HOST_ATTESTED" },
+        "attribution_status": { "const": "COMPLETE" },
+        "applicability": {
+          "type": "object",
+          "properties": {
+            "risk_profiles": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 4,
+              "uniqueItems": true,
+              "items": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] }
+            },
+            "workflow_routes": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 18,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "sc-init", "sc-status", "sc-geniusloop", "sc-explore",
+                  "sc-research", "sc-prd", "sc-plan", "sc-eval", "sc-go",
+                  "sc-work", "sc-debug", "sc-review", "sc-audit",
+                  "sc-compound", "sc-evolve", "sc-pause", "sc-launch", "sc-ui"
+                ]
+              }
+            }
+          },
+          "required": ["risk_profiles", "workflow_routes"],
+          "additionalProperties": false
+        },
+        "owner": { "$ref": "#/$defs/identifier" },
+        "verified_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "schema", "contract_version", "status", "pattern_id", "dedupe_key",
+        "source_run_id", "source_outcome_id", "source_run_head_digest",
+        "authority_digest", "verifier_digest", "evidence_digest",
+        "problem_fingerprint", "context_fingerprint", "approach_id",
+        "hypothesis_digest", "verifier_status", "checker_status",
+        "finding_status", "human_approval", "attribution_status",
+        "applicability", "owner", "verified_at", "expires_at"
+      ],
+      "additionalProperties": false
+    },
+    "patternPromotionEvidence": {
+      "type": "object",
+      "properties": {
+        "maker_actor_digest": { "$ref": "#/$defs/digest" },
+        "checker_actor_digest": { "$ref": "#/$defs/digest" },
+        "human_approver_digest": { "$ref": "#/$defs/digest" },
+        "finding_inventory_digest": { "$ref": "#/$defs/digest" },
+        "host_attestation_digest": { "$ref": "#/$defs/digest" }
+      },
+      "required": [
+        "maker_actor_digest", "checker_actor_digest",
+        "human_approver_digest", "finding_inventory_digest",
+        "host_attestation_digest"
+      ],
+      "additionalProperties": false
+    },
+    "verifiedPatternPromotedData": {
+      "type": "object",
+      "properties": {
+        "pattern_digest": { "$ref": "#/$defs/digest" },
+        "pattern": { "$ref": "#/$defs/verifiedPattern" },
+        "promotion_evidence": { "$ref": "#/$defs/patternPromotionEvidence" }
+      },
+      "required": ["pattern_digest", "pattern", "promotion_evidence"],
+      "additionalProperties": false
+    },
+    "evalAttemptMetric": {
+      "type": "object",
+      "properties": {
+        "attempt_number": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "targeted_verdict": { "enum": ["PASS", "FAIL", "ERROR"] },
+        "regression_verdict": {
+          "enum": [null, "PASS", "FAIL", "ERROR"]
+        },
+        "attempt_digest": { "$ref": "#/$defs/digest" }
+      },
+      "required": [
+        "attempt_number", "targeted_verdict", "regression_verdict", "attempt_digest"
+      ],
+      "additionalProperties": false
+    },
+    "evalPassMetric": {
+      "type": "object",
+      "properties": {
+        "k": { "const": 3 },
+        "attempts_total": { "const": 3 },
+        "attempts_passed": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "pass_at_k_basis_points": { "enum": [0, 10000] },
+        "pass_power_k_basis_points": { "enum": [0, 10000] }
+      },
+      "required": [
+        "k", "attempts_total", "attempts_passed",
+        "pass_at_k_basis_points", "pass_power_k_basis_points"
+      ],
+      "additionalProperties": false
+    },
+    "evalReleasePayload": {
+      "type": "object",
+      "properties": {
+        "accepted_outcome": { "const": "ACCEPTED" },
+        "acceptance_source": { "const": "FRESH_RELEASE_GATE" },
+        "eval_result_digest": { "$ref": "#/$defs/digest" },
+        "release_evidence_digest": { "$ref": "#/$defs/digest" },
+        "attempts": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/evalAttemptMetric" }
+        },
+        "targeted": { "$ref": "#/$defs/evalPassMetric" },
+        "regression": {
+          "oneOf": [
+            { "$ref": "#/$defs/evalPassMetric" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": [
+        "accepted_outcome", "acceptance_source", "eval_result_digest",
+        "release_evidence_digest", "attempts", "targeted", "regression"
+      ],
+      "additionalProperties": false
+    },
+    "evalOperationalMetric": {
+      "type": "object",
+      "properties": {
+        "schema": { "const": "operational_metric_v2" },
+        "contract_version": { "const": "2.0.0" },
+        "metric_id": { "$ref": "#/$defs/digest" },
+        "run_id": { "$ref": "#/$defs/identifier" },
+        "bound_run_head_digest": { "$ref": "#/$defs/digest" },
+        "kind": { "const": "EVAL_RELEASE" },
+        "provenance": { "const": "HOST_ATTESTED" },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "recorded_at": { "type": "string", "format": "date-time" },
+        "payload": { "$ref": "#/$defs/evalReleasePayload" }
+      },
+      "required": [
+        "schema", "contract_version", "metric_id", "run_id",
+        "bound_run_head_digest", "kind", "provenance", "evidence_digest",
+        "recorded_at", "payload"
+      ],
+      "additionalProperties": false
+    },
+    "activeDurationRecordedData": {
+      "type": "object",
+      "properties": {
+        "phase": { "enum": ["OBSERVATION", "VERIFICATION", "BACKOFF"] },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["phase", "duration_ms"],
+      "additionalProperties": false
+    },
+    "verificationStartedData": {
+      "type": "object",
+      "properties": { "verifier_digest": { "$ref": "#/$defs/digest" } },
+      "required": ["verifier_digest"],
+      "additionalProperties": false
+    },
+    "verificationPassedData": {
+      "type": "object",
+      "properties": {
+        "verification_status": { "const": "PASS" },
+        "fingerprint": { "$ref": "#/$defs/digest" },
+        "run_head_digest": { "$ref": "#/$defs/digest" },
+        "eval_result_digest": { "$ref": "#/$defs/digest" },
+        "work_package_digest": { "$ref": "#/$defs/digest" },
+        "work_package_goal_id": { "$ref": "#/$defs/identifier" },
+        "finding_set_digest": { "$ref": "#/$defs/digest" },
+        "checker_evidence_digest": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "workspace_head_git_sha": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "operational_metric": { "$ref": "#/$defs/evalOperationalMetric" },
+        "learning_completion": { "$ref": "#/$defs/iterationLearning" }
+      },
+      "required": [
+        "verification_status",
+        "fingerprint",
+        "run_head_digest",
+        "eval_result_digest",
+        "work_package_digest",
+        "work_package_goal_id",
+        "finding_set_digest",
+        "checker_evidence_digest",
+        "workspace_head_git_sha",
+        "operational_metric"
+      ],
+      "additionalProperties": false
+    },
+    "verificationFailedData": {
+      "type": "object",
+      "properties": {
+        "verification_status": { "enum": ["FAIL", "ERROR"] },
+        "fingerprint": { "$ref": "#/$defs/digest" },
+        "requirement_delta": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "coverage_delta": { "type": "number", "minimum": -100, "maximum": 100 },
+        "meaningful_diff_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "approach_id": { "$ref": "#/$defs/identifier" },
+        "learning_completion": { "$ref": "#/$defs/iterationLearning" }
+      },
+      "required": [
+        "verification_status",
+        "fingerprint",
+        "requirement_delta",
+        "coverage_delta",
+        "meaningful_diff_count",
+        "approach_id"
+      ],
+      "additionalProperties": false
+    },
+    "pausedData": {
+      "type": "object",
+      "properties": { "paused_from": { "enum": ["RUNNING", "OBSERVED", "VERIFYING"] } },
+      "required": ["paused_from"],
+      "additionalProperties": false
+    },
+    "resumedData": {
+      "type": "object",
+      "properties": {
+        "resumed_to": { "enum": ["RUNNING", "OBSERVED", "VERIFYING"] },
+        "confirmation_digest": { "$ref": "#/$defs/digest" },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["resumed_to", "confirmation_digest", "duration_ms"],
+      "additionalProperties": false
+    },
+    "stoppedData": {
+      "type": "object",
+      "properties": {
+        "terminal_status": {
+          "enum": [
+            "SUCCESS",
+            "BLOCKED",
+            "NO_PROGRESS",
+            "BUDGET_EXHAUSTED",
+            "TIMEOUT",
+            "POLICY_STOP",
+            "FATAL",
+            "UNKNOWN_OUTCOME",
+            "CANCELLED"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "pattern": "^[A-Z0-9][A-Z0-9_.:-]{0,127}$"
+        }
+      },
+      "required": ["terminal_status", "reason"],
+      "additionalProperties": false
+    },
+    "reconciledData": {
+      "type": "object",
+      "properties": {
+        "reconciliation_outcome": {
+          "enum": ["APPLIED", "NOT_APPLIED", "PARTIALLY_APPLIED", "INDETERMINATE"]
+        },
+        "evidence_digest": { "$ref": "#/$defs/digest" }
+      },
+      "required": ["reconciliation_outcome", "evidence_digest"],
+      "additionalProperties": false
+    },
+    "snapshotRepairedData": {
+      "type": "object",
+      "properties": { "repaired_from_event_hash": { "$ref": "#/$defs/digest" } },
+      "required": ["repaired_from_event_hash"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "loop_run_event_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "event_id": { "$ref": "#/$defs/identifier" },
+    "run_id": { "$ref": "#/$defs/identifier" },
+    "sequence": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "version": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "type": {
+      "enum": [
+        "CREATED",
+        "BUDGET_PROPOSED",
+        "BUDGET_CONFIRMED",
+        "STARTED",
+        "ACTION_INTENDED",
+        "ACTION_OBSERVED",
+        "USAGE_RECORDED",
+        "OPERATIONAL_METRIC_RECORDED",
+        "LEARNING_OUTCOME_RECORDED",
+        "VERIFIED_PATTERN_PROMOTED",
+        "ACTIVE_DURATION_RECORDED",
+        "VERIFICATION_STARTED",
+        "VERIFICATION_PASSED",
+        "VERIFICATION_FAILED",
+        "PAUSED",
+        "RESUMED",
+        "STOPPED",
+        "RECONCILED",
+        "SNAPSHOT_REPAIRED"
+      ]
+    },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "previous_hash": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "event_hash": { "$ref": "#/$defs/digest" },
+    "data": { "type": "object" }
+  },
+  "oneOf": [
+    { "properties": { "type": { "const": "CREATED" }, "data": { "$ref": "#/$defs/createdData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "BUDGET_PROPOSED" }, "data": { "$ref": "#/$defs/budgetProposedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "BUDGET_CONFIRMED" }, "data": { "$ref": "#/$defs/confirmationData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "STARTED" }, "data": { "$ref": "#/$defs/confirmationData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "ACTION_INTENDED" }, "data": { "$ref": "#/$defs/actionIntendedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "ACTION_OBSERVED" }, "data": { "$ref": "#/$defs/actionObservedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "USAGE_RECORDED" }, "data": { "$ref": "#/$defs/usageRecordedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "OPERATIONAL_METRIC_RECORDED" }, "data": { "$ref": "#/$defs/operationalMetricRecordedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "LEARNING_OUTCOME_RECORDED" }, "data": { "$ref": "#/$defs/learningOutcomeRecordedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "VERIFIED_PATTERN_PROMOTED" }, "data": { "$ref": "#/$defs/verifiedPatternPromotedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "ACTIVE_DURATION_RECORDED" }, "data": { "$ref": "#/$defs/activeDurationRecordedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "VERIFICATION_STARTED" }, "data": { "$ref": "#/$defs/verificationStartedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "VERIFICATION_PASSED" }, "data": { "$ref": "#/$defs/verificationPassedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "VERIFICATION_FAILED" }, "data": { "$ref": "#/$defs/verificationFailedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "PAUSED" }, "data": { "$ref": "#/$defs/pausedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "RESUMED" }, "data": { "$ref": "#/$defs/resumedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "STOPPED" }, "data": { "$ref": "#/$defs/stoppedData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "RECONCILED" }, "data": { "$ref": "#/$defs/reconciledData" } }, "required": ["type", "data"] },
+    { "properties": { "type": { "const": "SNAPSHOT_REPAIRED" }, "data": { "$ref": "#/$defs/snapshotRepairedData" } }, "required": ["type", "data"] }
+  ],
+  "required": [
+    "schema",
+    "contract_version",
+    "event_id",
+    "run_id",
+    "sequence",
+    "version",
+    "type",
+    "recorded_at",
+    "previous_hash",
+    "event_hash",
+    "data"
+  ],
+  "additionalProperties": false
+}
