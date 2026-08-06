@@ -10,12 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Alias pwsh as powershell.exe
+        run: |
+          command -v pwsh
+          sudo ln -sf "$(command -v pwsh)" /usr/local/bin/powershell.exe
+          powershell.exe -NoProfile -Command 'Write-Output ok'
       - name: Deterministic checks and unit suites
         run: npm test
       - name: Python suites
