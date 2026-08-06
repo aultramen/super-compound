@@ -27,6 +27,19 @@ repository-relative throwaway path plus digest. Record the decision question,
 reviewer, review date, and disposition with that locator. It is evidence only,
 not a new authority artifact.
 
+## Loop Runtime v2 Boundary
+
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
+The durable BRD is an `authority_write` and needs no wizard. A code-producing
+prototype is an `implementation_write` restricted to `.scratch/prototypes/`.
+Without an active FSD-authorized run, return `OPEN-LOOP-AUTHORITY` before creating
+or changing the prototype and perform no write. Do not invent placeholder
+PRD/FSD/verifier digests. When a prototype is explicitly owned by an approved
+goal, use its Budget & Stop Wizard, persist `ACTION_INTENDED`, and pass
+`source-write`; otherwise keep exploration read-only or advance authority through
+`/sc-prd` and `/sc-plan` first.
+
 ## Steps
 
 1. Load `skills/agentic-delivery/SKILL.md`.

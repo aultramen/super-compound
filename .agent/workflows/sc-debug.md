@@ -6,6 +6,18 @@ description: "Reproduce, diagnose root cause, fix, and verify bugs or unexpected
 
 Use this for errors, failing tests, regressions, performance surprises, or behavior that differs from expectations.
 
+## Loop Runtime v2 Boundary
+
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
+Diagnosis is read-only and needs no wizard. Writing `docs/debug/`, a regression
+test, or a fix is a classified project mutation. Without an active
+FSD-authorized run, return `OPEN-LOOP-AUTHORITY` before changing a test or fix
+and perform no write. With valid authority, run the Budget & Stop Wizard at
+`START` or `RESUME`, persist `ACTION_INTENDED`, and pass the `source-write` gate
+before the first mutation. Diagnosis never silently upgrades itself into fix
+authority.
+
 ## Steps
 
 1. Load `skills/systematic-debugging/SKILL.md`.

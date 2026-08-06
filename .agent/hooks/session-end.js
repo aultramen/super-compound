@@ -5,6 +5,10 @@
  * Prints a lightweight closeout checklist. It does not mutate project files.
  */
 
+if ((process.env.SC_DISABLED_HOOKS || '').split(',').map((s) => s.trim()).includes('session-end')) {
+    process.exit(0);
+}
+
 const fs = require('fs');
 const path = require('path');
 const { resolveHookProjectRoot, safeProjectFile } = require('./lib/hook-utils');

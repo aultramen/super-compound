@@ -10,6 +10,10 @@ Use this at the start of a session or when orientation is needed.
 
 1. Check for `.continue-here.md`.
 2. Read `docs/STATE.md` and `docs/progress.md` when present.
+   Treat any `run_id`, status, and run head digest as a non-authoritative pointer.
+   Refresh it with `node .agent/tools/loop-run.mjs show --run <run_id>`; never
+   copy events, counters, an approval envelope, or a confirmation digest into
+   the dashboard.
 3. Inventory only issue metadata (`Status`, `Goal ID`, `Blocked by`, and path)
    under `.scratch/*/issues/` without reading all issue bodies. Read the body of
    only the selected ready or blocking issue after the route is chosen.
@@ -19,7 +23,9 @@ Use this at the start of a session or when orientation is needed.
 7. Recommend one exact route from `/sc-init`, `/sc-status`, `/sc-geniusloop`,
    `/sc-explore`, `/sc-research`, `/sc-prd`, `/sc-plan`, `/sc-eval`, `/sc-go`,
    `/sc-work`, `/sc-debug`, `/sc-review`, `/sc-audit`, `/sc-compound`,
-   `/sc-pause`, `/sc-launch`, or `/sc-ui`.
+   `/sc-evolve`, `/sc-pause`, `/sc-launch`, or `/sc-ui`.
+8. If the exact next transition is `START` or `RESUME`, say that fresh human
+   confirmation is required; a saved STATE snapshot cannot authorize it.
 
 ## Output
 

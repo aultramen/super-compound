@@ -13,6 +13,8 @@ Use skeletons first. Load full templates only for the specific section being aut
 | Issue pointer | `agentic-delivery` / `issue-workflow` | `skeletons/Issue-Pointer-Skeleton.md` |
 | Pull Request | `.agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md` | n/a |
 | Research note | n/a | `.agent/templates/research/Research-Note-Skeleton.md` |
+| Project state | `.agent/templates/state/STATE-Template.md` | n/a |
+| Progress log | `.agent/templates/state/Progress-Template.md` | n/a |
 
 ## Section-On-Demand Rules
 

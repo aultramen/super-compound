@@ -69,7 +69,7 @@ realtime/offline, responsive, and keyboard/focus risks named, next owner
 | REG-UI-007 | Developer stack override has no approved `TDEC-*` or compensating verification | `BLOCKED`; next owner `/sc-plan` |
 | REG-UI-008 | Pinned contract revision changes after a historical verified first slice | Historical record stays immutable, derived scale-out gate becomes stale, one active versioned re-verification pointer is required |
 | REG-UI-009 | An in-flight UI goal predates artifact contract 1.1 | Targeted readiness supplement; no full artifact rewrite |
-| REG-UI-010 | Workflow/public-route regression | Node structural grader proves 17 routes, authority routing, mock-only rejection, and non-UI compatibility |
+| REG-UI-010 | Workflow/public-route regression | Node structural grader proves 18 routes, authority routing, mock-only rejection, and non-UI compatibility |
 
 ## Graders
 

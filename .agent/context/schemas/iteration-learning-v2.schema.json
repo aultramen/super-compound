@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:iteration-learning-v2",
+  "title": "Iteration Learning v2",
+  "type": "object",
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "nullableDigest": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "delta": {
+      "type": "object",
+      "properties": {
+        "requirement_count": { "type": "integer", "minimum": -1000000, "maximum": 1000000 },
+        "coverage_basis_points": { "type": "integer", "minimum": -10000, "maximum": 10000 },
+        "test_count": { "type": "integer", "minimum": -1000000, "maximum": 1000000 },
+        "meaningful_diff_count": { "type": "integer", "minimum": -1000000, "maximum": 1000000 }
+      },
+      "required": [
+        "requirement_count",
+        "coverage_basis_points",
+        "test_count",
+        "meaningful_diff_count"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "iteration_learning_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "status": { "enum": ["INTENDED", "COMPLETED"] },
+    "run_id": { "$ref": "#/$defs/identifier" },
+    "goal_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "iteration": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "pre_action_run_head_digest": { "$ref": "#/$defs/digest" },
+    "intent_digest": { "$ref": "#/$defs/digest" },
+    "hypothesis": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "hypothesis_digest": { "$ref": "#/$defs/digest" },
+    "approach_id": { "$ref": "#/$defs/identifier" },
+    "approach_signature_digest": { "$ref": "#/$defs/digest" },
+    "problem_fingerprint": { "$ref": "#/$defs/digest" },
+    "failure_fingerprint": { "$ref": "#/$defs/digest" },
+    "context_fingerprint": { "$ref": "#/$defs/digest" },
+    "predicted_delta": { "$ref": "#/$defs/delta" },
+    "actual_delta": {
+      "oneOf": [
+        { "$ref": "#/$defs/delta" },
+        { "type": "null" }
+      ]
+    },
+    "evidence_refs": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/digest" }
+    },
+    "verified_pattern_refs": {
+      "type": "array",
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/digest" }
+    },
+    "verifier_status": { "enum": ["NOT_RUN", "PASS", "FAIL", "ERROR", "STALE"] },
+    "progress_verdict": { "enum": [null, "PROGRESS", "NO_PROGRESS", "WEAK_PROGRESS"] },
+    "completed_run_head_digest": { "$ref": "#/$defs/nullableDigest" },
+    "completion_attestation_digest": { "$ref": "#/$defs/nullableDigest" },
+    "omitted_history_digest": { "$ref": "#/$defs/nullableDigest" },
+    "recorded_at": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "status",
+    "run_id",
+    "goal_ref",
+    "iteration",
+    "pre_action_run_head_digest",
+    "intent_digest",
+    "hypothesis",
+    "hypothesis_digest",
+    "approach_id",
+    "approach_signature_digest",
+    "problem_fingerprint",
+    "failure_fingerprint",
+    "context_fingerprint",
+    "predicted_delta",
+    "actual_delta",
+    "evidence_refs",
+    "verified_pattern_refs",
+    "verifier_status",
+    "progress_verdict",
+    "completed_run_head_digest",
+    "completion_attestation_digest",
+    "omitted_history_digest",
+    "recorded_at"
+  ],
+  "additionalProperties": false
+}

@@ -1,6 +1,8 @@
 # Project Configuration
 
-Customize this file per project. Leave fields empty when auto-detection is acceptable.
+This Markdown file is human guidance for project hints. The machine authority for Loop Runtime policy is `.agent/context/project-config.json`; values here cannot authorize execution or loosen its ceilings.
+
+Customize this guide per project. Leave discovery hints empty only when auto-detection is acceptable; an empty hint is not an unlimited runtime value. See `docs/loop-runtime-v2.md`.
 
 ```yaml
 project_name: ""

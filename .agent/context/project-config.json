@@ -1,0 +1,103 @@
+{
+  "schema": "project_config_v2",
+  "contract_version": "2.0.0",
+  "config_version": 2,
+  "mode_version": 1,
+  "mode": "OBSERVE",
+  "policy": {
+    "max_iterations": 100,
+    "max_runtime_minutes": 180,
+    "max_no_progress_iterations": 5,
+    "max_tokens": null,
+    "max_cost_micro": null,
+    "approval_ttl_minutes": 60,
+    "allowlisted_operations": [
+      "source-write",
+      "work"
+    ],
+    "credential_scopes": [],
+    "required_gates": [
+      "fresh-verifier",
+      "human-budget-confirmation"
+    ],
+    "risk": "MEDIUM",
+    "isolation": "WORKTREE",
+    "expires_at": "9999-12-31T23:59:59.999999999Z"
+  },
+  "background_aggregate_policy": {
+    "max_workers": 2,
+    "max_reserved_tokens": null,
+    "max_reserved_runtime_ms": 21600000,
+    "max_remote_calls": 0,
+    "max_reviewers": 2
+  },
+  "billing_currency": "USD",
+  "retention": {
+    "run_metadata_days": 30,
+    "audit_evidence_days": 90,
+    "legal_hold_behavior": "PRESERVE"
+  },
+  "telemetry": {
+    "enabled": false,
+    "persistence_required": false,
+    "redaction_revision": null,
+    "retention_days": null,
+    "max_file_bytes": null
+  },
+  "risk": {
+    "default_profile": "MEDIUM",
+    "maximum_autonomy": "INTERACTIVE",
+    "external_write_policy": "DENY"
+  },
+  "write_classification": {
+    "runtime_audit_prefixes": [
+      ".scratch/loop-runs/",
+      ".scratch/loop-queue/",
+      ".scratch/loop-runtime/",
+      ".scratch/work-packages/"
+    ],
+    "authority_prefixes": [
+      ".agent/evals/",
+      "docs/brd/",
+      "docs/fsd/",
+      "docs/prd/"
+    ],
+    "authority_exact_paths": [],
+    "unknown_path_class": "implementation_write"
+  },
+  "capability_requirements": {
+    "enforce": [
+      "DURABLE_LOCAL_STATE",
+      "HARD_WRITE_INTERCEPTION"
+    ],
+    "background": [
+      "CREDENTIAL_SCOPE_ENFORCEMENT",
+      "DURABLE_AUDIT",
+      "DURABLE_LOCAL_STATE",
+      "FINITE_NO_PROGRESS_CAP",
+      "FINITE_RUNTIME_CAP",
+      "HARD_WRITE_INTERCEPTION",
+      "ISOLATED_WORKTREE",
+      "LEASE_RECOVERY",
+      "NETWORK_EGRESS_ENFORCEMENT",
+      "PERMISSION_BYPASS_PREVENTION",
+      "PROCESS_ISOLATION"
+    ],
+    "external_write": [
+      "AUTHORITATIVE_READBACK",
+      "COMPENSATION",
+      "DURABLE_INTENT",
+      "IDEMPOTENCY"
+    ]
+  },
+  "artifact_authority": {
+    "required_contract_version": "2.0.0",
+    "execution_authority_types": [
+      "PRD",
+      "FSD",
+      "ISSUE",
+      "EVAL"
+    ],
+    "legacy_action": "REPLAN_REQUIRED"
+  }
+}

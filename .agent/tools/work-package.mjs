@@ -1,20 +1,23 @@
 #!/usr/bin/env node
 import { execFile } from "node:child_process";
-import { createHash, randomUUID } from "node:crypto";
-import { createReadStream } from "node:fs";
+import { createHash } from "node:crypto";
 import {
   lstat,
   mkdir,
-  readFile,
-  rename,
   rm,
   stat,
-  writeFile,
 } from "node:fs/promises";
 import path from "node:path";
-import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+
+import {
+  assertExpectedVersion,
+  readBoundedFile,
+  resolveRepositoryPath,
+  withOwnerLock,
+  writeFileAtomic,
+} from "./file-state.mjs";
 
 const execFileAsync = promisify(execFile);
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/;
@@ -33,10 +36,9 @@ const MAX_PATHS_FILE_BYTES = 64 * 1024;
 const MAX_REVIEW_PATHS = 500;
 const MAX_DIRTY_PATHS = 5000;
 const MAX_VERIFICATION_CHARS = 2000;
-const LOCK_WAIT_TIMEOUT_MS = 10_000;
-const LOCK_RETRY_MS = 10;
-const LOCK_STALE_MS = 60_000;
-const TRANSIENT_LOCK_ACQUIRE_CODES = new Set(["EPERM", "EBUSY"]);
+const MAX_LEDGER_BYTES = 2 * 1024 * 1024;
+const MAX_EVIDENCE_BYTES = 2 * 1024 * 1024;
+const MAX_CLI_INPUT_BYTES = 64 * 1024;
 const SENSITIVE_CONTENT_PATTERNS = [
   /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/i,
   /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/,
@@ -44,60 +46,103 @@ const SENSITIVE_CONTENT_PATTERNS = [
   /\bsk_(?:live|test)_[A-Za-z0-9]{16,}\b/,
   /\b(?:password|passwd|secret|token|api[_-]?key)\s*[:=]\s*["']?[^\s"']{8,}/i,
 ];
+const DIGEST_PATTERN = /^[a-f0-9]{64}$/;
+const REPOSITORY_PATH_PATTERN = /^(?!\/)(?!.*\/\/)(?!.*(?:^|\/)\.{1,2}(?:\/|$))(?!.*[\\:\u0000-\u001F\u007F])[^/]+(?:\/[^/]+)*$/;
+const WORK_PACKAGE_CONTROL_PATH_PATTERN =
+  /^\.scratch\/work-packages\/[^/]+\/ledger\.json(?:$|\.lock(?:\/|$))/;
+const TRANSITIONS = new Map([
+  ["ready", new Set(["in-progress", "blocked"])],
+  ["in-progress", new Set(["implemented", "blocked", "failed"])],
+  ["implemented", new Set(["verified", "blocked", "failed"])],
+  ["blocked", new Set(["ready"])],
+  ["failed", new Set(["ready"])],
+  ["verified", new Set()],
+]);
 
 export async function createWorkPackage(root, options) {
   const safeRoot = path.resolve(root);
   const runId = validateId("runId", options.runId);
   const goalId = validateId("goalId", options.goalId);
-  const briefSource = resolveInside(safeRoot, options.briefPath, "briefPath");
-  await assertSafeRegularFile(safeRoot, briefSource, MAX_BRIEF_BYTES);
+  const brief = await readBoundedFile(safeRoot, options.briefPath, {
+    encoding: "utf8",
+    label: "briefPath",
+    maxBytes: MAX_BRIEF_BYTES,
+  });
   if (!options.pathsFile) {
     throw new Error("Scheduler-owned pathsFile is required when creating a work package");
   }
   const scopePaths = await readReviewPaths(safeRoot, options.pathsFile);
   const scopeDigest = digestPaths(scopePaths);
   const baselineDirty = await captureDirtySnapshot(safeRoot);
+  const expectedEvidence = validateDigestBundle(
+    options.expectedEvidence,
+    "expectedEvidence",
+    false,
+  );
 
-  const packageDir = resolveInside(
+  const packageDir = await resolveRepositoryPath(
     safeRoot,
     path.join(".scratch", "work-packages", runId, goalId),
-    "packageDir",
+    { label: "packageDir" },
   );
-  await assertNoSymlinkComponents(safeRoot, packageDir);
   await mkdir(packageDir, { recursive: true });
+  await resolveRepositoryPath(safeRoot, packageDir, { label: "packageDir" });
 
   const briefPath = path.join(packageDir, "brief.md");
   const reportPath = path.join(packageDir, "report.md");
   const pathsPath = path.join(packageDir, "review-paths.json");
   const reviewPackagePath = path.join(packageDir, "review.patch");
-  const ledgerPath = resolveInside(
+  const ledgerPath = await resolveRepositoryPath(
     safeRoot,
     path.join(".scratch", "work-packages", runId, "ledger.json"),
-    "ledgerPath",
+    { label: "ledgerPath" },
   );
-  const brief = await readFile(briefSource, "utf8");
-  await writeStableFile(briefPath, brief, "brief");
-  await writeIfMissing(reportPath, reportSkeleton(goalId));
+  await writeStableFile(safeRoot, briefPath, brief, "brief", MAX_BRIEF_BYTES);
+  await writeIfMissing(
+    safeRoot,
+    reportPath,
+    reportSkeleton(goalId),
+    MAX_BRIEF_BYTES,
+  );
   await writeStableFile(
+    safeRoot,
     pathsPath,
     `${JSON.stringify(scopePaths, null, 2)}\n`,
     "review path scope",
+    MAX_PATHS_FILE_BYTES,
   );
 
-  await withLedgerLock(ledgerPath, async () => {
-    const ledger = await readLedger(ledgerPath, runId);
+  let ledgerVersion;
+  await withLedgerLock(ledgerPath, async (lock) => {
+    const ledger = await readLedger(safeRoot, ledgerPath, runId);
     const existing = ledger.goals[goalId];
+    if (existing) {
+      if (existing.scopeDigest !== scopeDigest) {
+        throw new Error(`Review scope already pinned for goalId: ${goalId}`);
+      }
+      if (
+        expectedEvidence &&
+        JSON.stringify(existing.expectedEvidence) !== JSON.stringify(expectedEvidence)
+      ) {
+        throw new Error(`expectedEvidence already pinned for goalId: ${goalId}`);
+      }
+      ledgerVersion = ledger.ledgerVersion;
+      return;
+    }
     ledger.goals[goalId] = {
-      status: existing?.status ?? "ready",
-      briefPath,
-      reportPath,
-      pathsPath,
-      reviewPackagePath,
-      scopeDigest: existing?.scopeDigest ?? scopeDigest,
-      baselineDirty: existing?.baselineDirty ?? baselineDirty,
-      verification: existing?.verification ?? "pending",
+      status: "ready",
+      briefPath: repositoryRelative(safeRoot, briefPath),
+      reportPath: repositoryRelative(safeRoot, reportPath),
+      pathsPath: repositoryRelative(safeRoot, pathsPath),
+      reviewPackagePath: repositoryRelative(safeRoot, reviewPackagePath),
+      scopeDigest,
+      baselineDirty,
+      verification: "pending",
+      ...(expectedEvidence ? { expectedEvidence } : {}),
     };
-    await writeJsonAtomic(ledgerPath, ledger);
+    incrementLedgerVersion(ledger);
+    await writeJsonAtomic(safeRoot, ledgerPath, ledger, lock);
+    ledgerVersion = ledger.ledgerVersion;
   });
 
   return {
@@ -107,6 +152,7 @@ export async function createWorkPackage(root, options) {
     pathsPath,
     reviewPackagePath,
     ledgerPath,
+    ledgerVersion,
   };
 }
 
@@ -115,24 +161,23 @@ export async function createReviewPackage(root, options) {
   const runId = validateId("runId", options.runId);
   const goalId = validateId("goalId", options.goalId);
   const baseRef = validateRef(options.baseRef ?? "HEAD");
-  const packageDir = resolveInside(
+  const packageDir = await resolveRepositoryPath(
     safeRoot,
     path.join(".scratch", "work-packages", runId, goalId),
-    "packageDir",
+    { label: "packageDir" },
   );
   const info = await stat(packageDir).catch(() => null);
   if (!info?.isDirectory()) {
     throw new Error(`Work package does not exist: ${packageDir}`);
   }
-  await assertNoSymlinkComponents(safeRoot, packageDir);
   const pathsPath = path.join(packageDir, "review-paths.json");
   const paths = await readReviewPaths(safeRoot, pathsPath);
-  const ledgerPath = resolveInside(
+  const ledgerPath = await resolveRepositoryPath(
     safeRoot,
     path.join(".scratch", "work-packages", runId, "ledger.json"),
-    "ledgerPath",
+    { label: "ledgerPath" },
   );
-  const ledger = await readLedger(ledgerPath, runId);
+  const ledger = await readLedger(safeRoot, ledgerPath, runId);
   const goal = ledger.goals[goalId];
   if (!goal?.scopeDigest || goal.scopeDigest !== digestPaths(paths)) {
     throw new Error("Scheduler-owned review scope is missing or was modified");
@@ -186,7 +231,11 @@ export async function createReviewPackage(root, options) {
   }
 
   const reviewPackagePath = path.join(packageDir, "review.patch");
-  await writeFile(reviewPackagePath, reviewContent, "utf8");
+  await writeFileAtomic(safeRoot, reviewPackagePath, reviewContent, {
+    encoding: "utf8",
+    label: "Review package",
+    maxBytes: MAX_DIFF_BYTES,
+  });
   return { reviewPackagePath, baseRef, bytes, paths };
 }
 
@@ -195,12 +244,13 @@ function digestPaths(paths) {
 }
 
 async function captureDirtySnapshot(root) {
+  const snapshot = Object.create(null);
   const inside = await execFileAsync(
     "git",
     ["rev-parse", "--is-inside-work-tree"],
     { cwd: root, encoding: "utf8", windowsHide: true },
   ).catch(() => null);
-  if (!inside || inside.stdout.trim() !== "true") return {};
+  if (!inside || inside.stdout.trim() !== "true") return snapshot;
 
   const commands = [
     ["diff", "--name-only", "--no-renames", "-z"],
@@ -230,7 +280,6 @@ async function captureDirtySnapshot(root) {
     throw new Error(`Working tree exceeds ${MAX_DIRTY_PATHS} dirty paths`);
   }
 
-  const snapshot = {};
   for (const relative of [...names].sort((left, right) => left.localeCompare(right))) {
     snapshot[relative] = await digestWorkingPath(root, relative);
   }
@@ -238,22 +287,17 @@ async function captureDirtySnapshot(root) {
 }
 
 async function digestWorkingPath(root, relative) {
-  const absolute = resolveInside(root, relative, "dirty path");
+  const absolute = await resolveRepositoryPath(root, relative, {
+    label: "dirty path",
+  });
   const info = await lstat(absolute).catch(() => null);
   if (!info) return "deleted";
-  if (info.isSymbolicLink()) {
-    throw new Error(`Refusing symlinked dirty path: ${absolute}`);
-  }
   if (!info.isFile()) return `non-file:${info.size}:${info.mtimeMs}`;
-
-  const hash = createHash("sha256");
-  await new Promise((resolve, reject) => {
-    const stream = createReadStream(absolute);
-    stream.on("data", (chunk) => hash.update(chunk));
-    stream.on("error", reject);
-    stream.on("end", resolve);
+  const content = await readBoundedFile(root, relative, {
+    label: "dirty path",
+    maxBytes: MAX_DIFF_BYTES,
   });
-  return hash.digest("hex");
+  return createHash("sha256").update(content).digest("hex");
 }
 
 async function validateNoNewOutOfScopeChanges(root, paths, baselineDirty) {
@@ -332,14 +376,14 @@ async function collectUntrackedPatches(root, paths) {
     if (/[\r\n]/.test(file)) {
       throw new Error("Untracked file name contains a line break");
     }
-    const absolute = resolveInside(root, file, "untracked file");
-    await assertNoSymlinkComponents(root, absolute);
-    const info = await stat(absolute).catch(() => null);
-    if (!info?.isFile()) continue;
-    if (info.size > MAX_DIFF_BYTES) {
-      throw new Error(`Untracked file exceeds ${MAX_DIFF_BYTES} bytes: ${file}`);
-    }
-    const content = await readFile(absolute);
+    const content = await readBoundedFile(root, file, {
+      label: "Untracked file",
+      maxBytes: MAX_DIFF_BYTES,
+    }).catch((error) => {
+      if (/File does not exist/.test(error.message)) return null;
+      throw error;
+    });
+    if (content === null) continue;
     let text;
     try {
       text = new TextDecoder("utf-8", { fatal: true }).decode(content);
@@ -394,21 +438,225 @@ export async function recordWorkPackageResult(root, options) {
     );
   }
 
-  const ledgerPath = resolveInside(
+  const ledgerPath = await resolveRepositoryPath(
     safeRoot,
     path.join(".scratch", "work-packages", runId, "ledger.json"),
-    "ledgerPath",
+    { label: "ledgerPath" },
   );
-  await withLedgerLock(ledgerPath, async () => {
-    const ledger = await readLedger(ledgerPath, runId);
+  let ledgerVersion;
+  await withLedgerLock(ledgerPath, async (lock) => {
+    const ledger = await readLedger(safeRoot, ledgerPath, runId);
+    assertExpectedVersion(
+      ledger.ledgerVersion,
+      options.expectedVersion,
+      "work-package ledger version",
+    );
     if (!ledger.goals[goalId]) {
       throw new Error(`Unknown goalId in ledger: ${goalId}`);
     }
-    ledger.goals[goalId].status = options.status;
-    ledger.goals[goalId].verification = verification || "not reported";
-    await writeJsonAtomic(ledgerPath, ledger);
+    const goal = ledger.goals[goalId];
+    const allowed = TRANSITIONS.get(goal.status);
+    if (!allowed?.has(options.status)) {
+      throw new Error(
+        `Unsupported work-package transition: ${goal.status} -> ${options.status}`,
+      );
+    }
+    if (goal.requiresFreshVerification) {
+      throw new Error(
+        "FRESH_VERIFICATION_REPLAN_REQUIRED: migrated legacy verification must be replanned as a new v2 work package",
+      );
+    }
+
+    let evidence;
+    if (["implemented", "verified"].includes(options.status)) {
+      if (!verification) {
+        throw new Error("Blank verification evidence is not allowed");
+      }
+      evidence = await materializeResultEvidence(
+        safeRoot,
+        goal.expectedEvidence,
+        options.evidence,
+      );
+    }
+    const statusReason = ["blocked", "failed"].includes(options.status)
+      ? validateStatusReason(options.reason)
+      : undefined;
+    const recovery =
+      ["blocked", "failed"].includes(goal.status) && options.status === "ready"
+        ? validateRecovery(options.recovery)
+        : undefined;
+
+    goal.status = options.status;
+    goal.verification = verification || `transitioned to ${options.status}`;
+    if (evidence) goal.evidence = evidence;
+    if (statusReason) goal.statusReason = statusReason;
+    if (recovery) goal.recovery = recovery;
+    incrementLedgerVersion(ledger);
+    await writeJsonAtomic(safeRoot, ledgerPath, ledger, lock);
+    if (evidence) {
+      await assertEvidenceArtifactsFresh(safeRoot, goalId, evidence);
+    }
+    ledgerVersion = ledger.ledgerVersion;
   });
-  return { ledgerPath, goalId, status: options.status };
+  return { ledgerPath, goalId, status: options.status, ledgerVersion };
+}
+
+function validateDigestBundle(value, label, required = true) {
+  if (value === undefined && !required) return undefined;
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`${label} must be an object`);
+  }
+  const keys = ["authorityDigest", "evalDigest", "reviewerDigest"];
+  const unknown = Object.keys(value).filter((key) => !keys.includes(key));
+  if (unknown.length > 0) {
+    throw new Error(`${label} contains unsupported field: ${unknown[0]}`);
+  }
+  const result = {};
+  for (const key of keys) {
+    if (!DIGEST_PATTERN.test(String(value[key] ?? ""))) {
+      throw new Error(`${label}.${key} must be a lowercase SHA-256 digest`);
+    }
+    result[key] = value[key];
+  }
+  return result;
+}
+
+function validateResultEvidence(expected, value, options = {}) {
+  if (!expected) {
+    throw new Error("Expected authority/eval/reviewer digests are not pinned");
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Verification evidence must be an object");
+  }
+  const allowed = new Set([
+    "authorityDigest",
+    "evalDigest",
+    "reviewerDigest",
+    "evidenceRefs",
+    ...(options.stored ? ["evidenceArtifacts"] : []),
+  ]);
+  const unknown = Object.keys(value).find((key) => !allowed.has(key));
+  if (unknown) throw new Error(`Verification evidence contains unsupported field: ${unknown}`);
+
+  const actual = validateDigestBundle(
+    {
+      authorityDigest: value.authorityDigest,
+      evalDigest: value.evalDigest,
+      reviewerDigest: value.reviewerDigest,
+    },
+    "evidence",
+  );
+  for (const [key, noun] of [
+    ["authorityDigest", "authority"],
+    ["evalDigest", "eval"],
+    ["reviewerDigest", "reviewer"],
+  ]) {
+    if (actual[key] !== expected[key]) {
+      throw new Error(`Stale ${noun} digest in verification evidence`);
+    }
+  }
+  if (
+    !Array.isArray(value.evidenceRefs) ||
+    value.evidenceRefs.length === 0 ||
+    value.evidenceRefs.length > 100
+  ) {
+    throw new Error("Verification evidence must contain 1-100 evidenceRefs");
+  }
+  const evidenceRefs = value.evidenceRefs.map((entry) => {
+    const evidenceRef = validateStoredPath(entry, "evidenceRefs entry");
+    const pathIdentity =
+      process.platform === "win32" ? evidenceRef.toLowerCase() : evidenceRef;
+    if (WORK_PACKAGE_CONTROL_PATH_PATTERN.test(pathIdentity)) {
+      throw new Error(
+        `Evidence ref aliases mutable work-package control state: ${evidenceRef}`,
+      );
+    }
+    return evidenceRef;
+  });
+  if (new Set(evidenceRefs).size !== evidenceRefs.length) {
+    throw new Error("Verification evidenceRefs must be unique");
+  }
+  if (!options.stored) return { ...actual, evidenceRefs };
+
+  if (
+    !Array.isArray(value.evidenceArtifacts) ||
+    value.evidenceArtifacts.length !== evidenceRefs.length
+  ) {
+    throw new Error("Verification evidence must bind every evidenceRef by digest");
+  }
+  const evidenceArtifacts = value.evidenceArtifacts.map((artifact, index) => {
+    if (!artifact || typeof artifact !== "object" || Array.isArray(artifact)) {
+      throw new Error("Verification evidence artifact must be an object");
+    }
+    const unknownArtifact = Object.keys(artifact).find(
+      (key) => !["path", "digest"].includes(key),
+    );
+    if (unknownArtifact) {
+      throw new Error(
+        `Verification evidence artifact contains unsupported field: ${unknownArtifact}`,
+      );
+    }
+    const artifactPath = validateStoredPath(
+      artifact.path,
+      "evidence artifact path",
+    );
+    if (artifactPath !== evidenceRefs[index]) {
+      throw new Error("Verification evidence artifact paths must match evidenceRefs");
+    }
+    if (!DIGEST_PATTERN.test(String(artifact.digest ?? ""))) {
+      throw new Error("Verification evidence artifact digest must be SHA-256");
+    }
+    return { path: artifactPath, digest: artifact.digest };
+  });
+  return { ...actual, evidenceRefs, evidenceArtifacts };
+}
+
+async function materializeResultEvidence(root, expected, value) {
+  const validated = validateResultEvidence(expected, value);
+  const evidenceArtifacts = [];
+  for (const evidenceRef of validated.evidenceRefs) {
+    const content = await readBoundedFile(root, evidenceRef, {
+      label: "Evidence file",
+      maxBytes: MAX_EVIDENCE_BYTES,
+    });
+    evidenceArtifacts.push({
+      path: evidenceRef,
+      digest: createHash("sha256").update(content).digest("hex"),
+    });
+  }
+  return { ...validated, evidenceArtifacts };
+}
+
+function validateStatusReason(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("A typed status reason is required for blocked/failed");
+  }
+  const unknown = Object.keys(value).find((key) => !["code", "detail"].includes(key));
+  if (unknown) throw new Error(`Typed status reason contains unsupported field: ${unknown}`);
+  if (!/^[A-Z][A-Z0-9_]{1,63}$/.test(String(value.code ?? ""))) {
+    throw new Error("Typed status reason code is invalid");
+  }
+  const detail = String(value.detail ?? "").trim();
+  if (!detail || detail.length > 500) {
+    throw new Error("Typed status reason detail must contain 1-500 characters");
+  }
+  return { code: value.code, detail };
+}
+
+function validateRecovery(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Typed recovery evidence is required after blocked/failed");
+  }
+  const unknown = Object.keys(value).find((key) => !["code", "evidenceRef"].includes(key));
+  if (unknown) throw new Error(`Typed recovery evidence contains unsupported field: ${unknown}`);
+  if (!/^[A-Z][A-Z0-9_]{1,63}$/.test(String(value.code ?? ""))) {
+    throw new Error("Typed recovery evidence code is invalid");
+  }
+  const evidenceRef = validateStoredPath(
+    value.evidenceRef,
+    "Typed recovery evidenceRef",
+  );
+  return { code: value.code, evidenceRef };
 }
 
 function validateId(label, value) {
@@ -428,12 +676,15 @@ function validateRef(value) {
 
 async function readReviewPaths(root, pathsFile) {
   if (!pathsFile) return null;
-  const source = resolveInside(root, pathsFile, "pathsFile");
-  await assertSafeRegularFile(root, source, MAX_PATHS_FILE_BYTES);
-
   let values;
   try {
-    values = JSON.parse(await readFile(source, "utf8"));
+    values = JSON.parse(
+      await readBoundedFile(root, pathsFile, {
+        encoding: "utf8",
+        label: "pathsFile",
+        maxBytes: MAX_PATHS_FILE_BYTES,
+      }),
+    );
   } catch (error) {
     throw new Error(`pathsFile must be valid JSON: ${error.message}`);
   }
@@ -449,19 +700,9 @@ async function readReviewPaths(root, pathsFile) {
 
   const paths = new Set();
   for (const value of values) {
+    const relative = validateStoredPath(value, "pathsFile entry");
+    await resolveRepositoryPath(root, relative, { label: "review path" });
     if (
-      typeof value !== "string" ||
-      !value ||
-      path.isAbsolute(value) ||
-      /[\0\r\n]/.test(value)
-    ) {
-      throw new Error("pathsFile entries must be safe repository-relative paths");
-    }
-    const absolute = resolveInside(root, value, "review path");
-    const relative = normalizeRelativePath(path.relative(root, absolute));
-    if (
-      !relative ||
-      relative === "." ||
       relative === ".scratch/work-packages" ||
       relative.startsWith(".scratch/work-packages/")
     ) {
@@ -475,11 +716,11 @@ async function readReviewPaths(root, pathsFile) {
 async function validateReviewPaths(root, baseRef, paths) {
   const missing = [];
   for (const relative of paths) {
-    const absolute = resolveInside(root, relative, "review path");
+    const absolute = await resolveRepositoryPath(root, relative, {
+      label: "review path",
+    });
     const info = await lstat(absolute).catch(() => null);
-    if (info) {
-      await assertNoSymlinkComponents(root, absolute);
-    } else {
+    if (!info) {
       missing.push(relative);
     }
   }
@@ -527,71 +768,250 @@ function normalizeRelativePath(value) {
   return value.replace(/\\/g, "/").replace(/^\.\//, "");
 }
 
-function resolveInside(root, value, label) {
-  const absolute = path.resolve(root, value);
-  const relative = path.relative(root, absolute);
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
-    throw new Error(`${label} resolves outside repository root`);
+function repositoryRelative(root, absolute) {
+  const relative = normalizeRelativePath(path.relative(root, absolute));
+  if (!relative || relative.startsWith("../") || path.isAbsolute(relative)) {
+    throw new Error(`Stored path must be repository-relative: ${absolute}`);
   }
-  return absolute;
+  return validateStoredPath(relative, "Stored path");
 }
 
-async function assertSafeRegularFile(root, file, maxBytes) {
-  await assertNoSymlinkComponents(root, file);
-  const info = await stat(file).catch(() => null);
-  if (!info?.isFile()) throw new Error(`File does not exist: ${file}`);
-  if (info.size > maxBytes) throw new Error(`File exceeds ${maxBytes} bytes`);
+async function readOptionalBoundedFile(root, target, label, maxBytes) {
+  return readBoundedFile(root, target, {
+    encoding: "utf8",
+    label,
+    maxBytes,
+  }).catch((error) => {
+    if (/File does not exist/.test(error.message)) return null;
+    throw error;
+  });
 }
 
-async function assertNoSymlinkComponents(root, target) {
-  const relative = path.relative(root, target);
-  let current = root;
-  for (const part of relative.split(path.sep).filter(Boolean)) {
-    current = path.join(current, part);
-    const info = await lstat(current).catch(() => null);
-    if (info?.isSymbolicLink()) {
-      throw new Error(`Refusing symlinked path: ${current}`);
+async function writeStableFile(root, target, content, label, maxBytes) {
+  const existing = await readOptionalBoundedFile(root, target, label, maxBytes);
+  if (existing !== null && existing !== content) {
+    throw new Error(`${label} already exists with different content: ${target}`);
+  }
+  if (existing === null) {
+    await writeFileAtomic(root, target, content, {
+      encoding: "utf8",
+      label,
+      maxBytes,
+    });
+  }
+}
+
+async function writeIfMissing(root, target, content, maxBytes) {
+  const existing = await readOptionalBoundedFile(
+    root,
+    target,
+    "Work-package report",
+    maxBytes,
+  );
+  if (existing === null) {
+    await writeFileAtomic(root, target, content, {
+      encoding: "utf8",
+      label: "Work-package report",
+      maxBytes,
+    });
+  }
+}
+
+async function readLedger(root, ledgerPath, runId) {
+  const content = await readBoundedFile(root, ledgerPath, {
+    encoding: "utf8",
+    label: "Work-package ledger",
+    maxBytes: MAX_LEDGER_BYTES,
+  }).catch((error) => {
+    if (/File does not exist/.test(error.message)) return null;
+    throw error;
+  });
+  if (!content) {
+    return {
+      schema: "work_package_ledger_v2",
+      runId,
+      ledgerVersion: 0,
+      goals: {},
+    };
+  }
+  let ledger;
+  try {
+    ledger = JSON.parse(content);
+  } catch (error) {
+    throw new Error(`Invalid work-package ledger JSON: ${error.message}`);
+  }
+  if (ledger.schema !== "work_package_ledger_v2") {
+    throw new Error(
+      `Invalid work-package ledger (v1/legacy ledgers are not accepted): ${ledgerPath}`,
+    );
+  }
+  validateLedger(ledger, runId);
+  await assertLedgerEvidenceFresh(root, ledger);
+  return ledger;
+}
+
+async function assertLedgerEvidenceFresh(root, ledger) {
+  for (const [goalId, goal] of Object.entries(ledger.goals)) {
+    if (!goal.evidence) continue;
+    await assertEvidenceArtifactsFresh(root, goalId, goal.evidence);
+  }
+}
+
+async function assertEvidenceArtifactsFresh(root, goalId, evidence) {
+  for (const artifact of evidence.evidenceArtifacts) {
+    const content = await readBoundedFile(root, artifact.path, {
+      label: "Evidence file",
+      maxBytes: MAX_EVIDENCE_BYTES,
+    });
+    const actualDigest = createHash("sha256").update(content).digest("hex");
+    if (actualDigest !== artifact.digest) {
+      throw new Error(
+        `Evidence digest mismatch for ${goalId}: ${artifact.path}`,
+      );
     }
   }
 }
 
-async function writeStableFile(target, content, label) {
-  const existing = await readFile(target, "utf8").catch(() => null);
-  if (existing !== null && existing !== content) {
-    throw new Error(`${label} already exists with different content: ${target}`);
-  }
-  if (existing === null) await writeFile(target, content, "utf8");
-}
-
-async function writeIfMissing(target, content) {
-  const existing = await stat(target).catch(() => null);
-  if (!existing) await writeFile(target, content, "utf8");
-}
-
-async function readLedger(ledgerPath, runId) {
-  const content = await readFile(ledgerPath, "utf8").catch(() => null);
-  if (!content) return { schema: "work_package_ledger_v1", runId, goals: {} };
-  const ledger = JSON.parse(content);
+function validateLedger(ledger, runId) {
+  const topKeys = new Set(["schema", "runId", "ledgerVersion", "goals"]);
+  const extraTop = Object.keys(ledger).find((key) => !topKeys.has(key));
+  if (extraTop) throw new Error(`Unsupported ledger field: ${extraTop}`);
   if (
-    ledger.schema !== "work_package_ledger_v1" ||
     ledger.runId !== runId ||
+    !Number.isSafeInteger(ledger.ledgerVersion) ||
+    ledger.ledgerVersion < 0 ||
+    !ledger.goals ||
     typeof ledger.goals !== "object" ||
-    ledger.goals === null
+    Array.isArray(ledger.goals)
   ) {
-    throw new Error(`Invalid work-package ledger: ${ledgerPath}`);
+    throw new Error("Invalid work-package ledger header");
   }
-  return ledger;
+  const goalEntries = Object.entries(ledger.goals);
+  if (goalEntries.length > 5000) {
+    throw new Error("Invalid work-package ledger: too many goals");
+  }
+  for (const [goalId, goal] of goalEntries) validateLedgerGoal(goalId, goal);
 }
 
-async function writeJsonAtomic(target, value) {
-  await mkdir(path.dirname(target), { recursive: true });
-  const temp = `${target}.${process.pid}.${randomUUID()}.tmp`;
-  try {
-    await writeFile(temp, `${JSON.stringify(value, null, 2)}\n`, "utf8");
-    await rename(temp, target);
-  } finally {
-    await rm(temp, { force: true }).catch(() => {});
+function incrementLedgerVersion(ledger) {
+  if (ledger.ledgerVersion >= Number.MAX_SAFE_INTEGER) {
+    throw new Error(
+      "Work-package ledger version cannot increment beyond the maximum safe integer",
+    );
   }
+  ledger.ledgerVersion += 1;
+}
+
+function validateLedgerGoal(goalId, goal) {
+  validateId("ledger goalId", goalId);
+  if (!goal || typeof goal !== "object" || Array.isArray(goal)) {
+    throw new Error(`Invalid work-package ledger goal: ${goalId}`);
+  }
+  const required = [
+    "status",
+    "briefPath",
+    "reportPath",
+    "pathsPath",
+    "reviewPackagePath",
+    "scopeDigest",
+    "baselineDirty",
+    "verification",
+  ];
+  const allowed = new Set([
+    ...required,
+    "expectedEvidence",
+    "evidence",
+    "requiresFreshVerification",
+    "statusReason",
+    "recovery",
+  ]);
+  const unknown = Object.keys(goal).find((key) => !allowed.has(key));
+  if (unknown) throw new Error(`Unsupported ledger goal field: ${unknown}`);
+  const missing = required.find((key) => !(key in goal));
+  if (missing) throw new Error(`Invalid work-package ledger goal missing ${missing}`);
+  if (!STATUSES.has(goal.status)) {
+    throw new Error(`Invalid work-package ledger status: ${goal.status}`);
+  }
+  for (const key of ["briefPath", "reportPath", "pathsPath", "reviewPackagePath"]) {
+    validateStoredPath(goal[key], `ledger.${goalId}.${key}`);
+  }
+  if (!DIGEST_PATTERN.test(String(goal.scopeDigest ?? ""))) {
+    throw new Error(`Invalid work-package ledger scopeDigest: ${goalId}`);
+  }
+  if (
+    !goal.baselineDirty ||
+    typeof goal.baselineDirty !== "object" ||
+    Array.isArray(goal.baselineDirty)
+  ) {
+    throw new Error(`Invalid work-package ledger baselineDirty: ${goalId}`);
+  }
+  for (const [dirtyPath, digest] of Object.entries(goal.baselineDirty)) {
+    validateStoredPath(dirtyPath, `ledger.${goalId}.baselineDirty`);
+    if (typeof digest !== "string" || !digest || digest.length > 256) {
+      throw new Error(`Invalid work-package ledger dirty digest: ${goalId}`);
+    }
+  }
+  if (
+    typeof goal.verification !== "string" ||
+    !goal.verification.trim() ||
+    goal.verification.length > MAX_VERIFICATION_CHARS
+  ) {
+    throw new Error(`Invalid work-package ledger verification: ${goalId}`);
+  }
+  const expected = goal.expectedEvidence
+    ? validateDigestBundle(goal.expectedEvidence, "expectedEvidence")
+    : undefined;
+  if (goal.evidence) {
+    validateResultEvidence(expected, goal.evidence, { stored: true });
+  }
+  if (goal.requiresFreshVerification !== undefined) {
+    if (goal.requiresFreshVerification !== true) {
+      throw new Error(
+        `Invalid work-package ledger requiresFreshVerification: ${goalId}`,
+      );
+    }
+    if (goal.status !== "implemented" || goal.evidence) {
+      throw new Error(
+        `Invalid work-package ledger legacy verification quarantine: ${goalId}`,
+      );
+    }
+  }
+  if (
+    ["implemented", "verified"].includes(goal.status) &&
+    !goal.evidence &&
+    !goal.requiresFreshVerification
+  ) {
+    throw new Error(`Invalid work-package ledger missing evidence: ${goalId}`);
+  }
+  if (goal.statusReason) validateStatusReason(goal.statusReason);
+  if (["blocked", "failed"].includes(goal.status) && !goal.statusReason) {
+    throw new Error(`Invalid work-package ledger missing typed status reason: ${goalId}`);
+  }
+  if (goal.recovery) validateRecovery(goal.recovery);
+}
+
+function validateStoredPath(value, label) {
+  if (
+    typeof value !== "string" ||
+    !value ||
+    value.length > 4096 ||
+    !REPOSITORY_PATH_PATTERN.test(value) ||
+    path.isAbsolute(value) ||
+    path.win32.isAbsolute(value) ||
+    value !== normalizeRelativePath(value)
+  ) {
+    throw new Error(`${label} must be a repository-relative path`);
+  }
+  return value;
+}
+
+async function writeJsonAtomic(root, target, value, lock = {}) {
+  return writeFileAtomic(root, target, `${JSON.stringify(value, null, 2)}\n`, {
+    assertOwnership: lock.assertOwnership,
+    label: "Work-package ledger",
+    maxBytes: MAX_LEDGER_BYTES,
+    mode: 0o600,
+  });
 }
 
 export async function withLedgerLock(
@@ -599,78 +1019,14 @@ export async function withLedgerLock(
   operation,
   dependencies = {},
 ) {
-  const lockPath = `${ledgerPath}.lock`;
-  const mkdirLock = dependencies.mkdirLock ?? mkdir;
-  const wait = dependencies.wait ?? delay;
-  const now = dependencies.now ?? Date.now;
   await mkdir(path.dirname(ledgerPath), { recursive: true });
-  const deadline = now() + LOCK_WAIT_TIMEOUT_MS;
-  const owner = randomUUID();
-
-  while (true) {
-    let created = false;
-    try {
-      await mkdirLock(lockPath);
-      created = true;
-      await writeFile(path.join(lockPath, "owner"), owner, {
-        encoding: "utf8",
-        flag: "wx",
-        mode: 0o600,
-      });
-      break;
-    } catch (error) {
-      if (created) {
-        await rm(lockPath, { recursive: true, force: true });
-        throw error;
-      }
-      const code = error?.code;
-      if (code === "EEXIST") {
-        if (await reclaimStaleLedgerLock(lockPath)) continue;
-      } else if (!TRANSIENT_LOCK_ACQUIRE_CODES.has(code)) {
-        throw error;
-      }
-      if (now() >= deadline) {
-        if (code !== "EEXIST") throw error;
-        throw new Error(`Timed out waiting for work-package ledger lock: ${lockPath}`);
-      }
-      await wait(LOCK_RETRY_MS);
-    }
-  }
-
-  try {
-    return await operation();
-  } finally {
-    await releaseOwnedLedgerLock(lockPath, owner);
-  }
-}
-
-async function releaseOwnedLedgerLock(lockPath, owner) {
-  const currentOwner = await readFile(path.join(lockPath, "owner"), "utf8").catch(
-    () => null,
-  );
-  if (currentOwner === owner) {
-    await rm(lockPath, { recursive: true, force: true });
-  }
-}
-
-async function reclaimStaleLedgerLock(lockPath) {
-  const info = await lstat(lockPath).catch(() => null);
-  if (!info) return true;
-  if (info.isSymbolicLink()) {
-    throw new Error(`Refusing symlinked work-package ledger lock: ${lockPath}`);
-  }
-  if (Date.now() - info.mtimeMs <= LOCK_STALE_MS) return false;
-
-  const stalePath = `${lockPath}.stale.${randomUUID()}`;
-  try {
-    await rename(lockPath, stalePath);
-  } catch (error) {
-    if (error?.code === "ENOENT") return true;
-    if (["EACCES", "EPERM"].includes(error?.code)) return false;
-    throw error;
-  }
-  await rm(stalePath, { recursive: true, force: true });
-  return true;
+  const lockRoot = path.dirname(path.resolve(ledgerPath));
+  return withOwnerLock(lockRoot, `${ledgerPath}.lock`, operation, {
+    ...dependencies,
+    staleMs: dependencies.staleMs ?? 60_000,
+    timeoutMs: dependencies.timeoutMs ?? 10_000,
+    retryMs: dependencies.retryMs ?? 10,
+  });
 }
 
 function reportSkeleton(goalId) {
@@ -685,10 +1041,54 @@ function parseArgs(argv) {
     if (!key.startsWith("--") || !rest[index + 1]) {
       throw new Error(`Invalid argument: ${key}`);
     }
-    options[key.slice(2)] = rest[index + 1];
+    const name = key.slice(2);
+    if (Object.hasOwn(options, name)) {
+      throw new Error(`Duplicate argument: ${key}`);
+    }
+    options[name] = rest[index + 1];
     index += 1;
   }
   return { command, options };
+}
+
+function assertCliOptions(command, options, allowed) {
+  const unknown = Object.keys(options).find((key) => !allowed.includes(key));
+  if (unknown) {
+    throw new Error(`${command} contains unsupported option: --${unknown}`);
+  }
+}
+
+async function readCliInput(root, candidate, options) {
+  if (!candidate) {
+    throw new Error(`${options.label} --input-file is required`);
+  }
+  const content = await readBoundedFile(root, candidate, {
+    encoding: "utf8",
+    label: `${options.label} input file`,
+    maxBytes: MAX_CLI_INPUT_BYTES,
+  });
+  let value;
+  try {
+    value = JSON.parse(content);
+  } catch (error) {
+    throw new Error(`${options.label} input file must be valid JSON: ${error.message}`);
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`${options.label} input file must contain an object`);
+  }
+  const unknown = Object.keys(value).find(
+    (key) => !options.allowedFields.includes(key),
+  );
+  if (unknown) {
+    throw new Error(`${options.label} input contains unsupported field: ${unknown}`);
+  }
+  const missing = options.requiredFields.find(
+    (key) => !Object.hasOwn(value, key),
+  );
+  if (missing) {
+    throw new Error(`${options.label} input is missing required field: ${missing}`);
+  }
+  return value;
 }
 
 async function main() {
@@ -696,13 +1096,27 @@ async function main() {
   const root = process.cwd();
   let result;
   if (command === "create") {
+    assertCliOptions(command, options, [
+      "run",
+      "goal",
+      "brief",
+      "paths-file",
+      "input-file",
+    ]);
+    const input = await readCliInput(root, options["input-file"], {
+      label: "create",
+      allowedFields: ["expectedEvidence"],
+      requiredFields: ["expectedEvidence"],
+    });
     result = await createWorkPackage(root, {
       runId: options.run,
       goalId: options.goal,
       briefPath: options.brief,
       pathsFile: options["paths-file"],
+      expectedEvidence: input.expectedEvidence,
     });
   } else if (command === "review") {
+    assertCliOptions(command, options, ["run", "goal", "base", "paths-file"]);
     result = await createReviewPackage(root, {
       runId: options.run,
       goalId: options.goal,
@@ -710,15 +1124,31 @@ async function main() {
       pathsFile: options["paths-file"],
     });
   } else if (command === "record") {
+    assertCliOptions(command, options, [
+      "run",
+      "goal",
+      "status",
+      "verification",
+      "input-file",
+    ]);
+    const input = await readCliInput(root, options["input-file"], {
+      label: "record",
+      allowedFields: ["expectedVersion", "evidence", "reason", "recovery"],
+      requiredFields: ["expectedVersion"],
+    });
     result = await recordWorkPackageResult(root, {
       runId: options.run,
       goalId: options.goal,
       status: options.status,
       verification: options.verification,
+      expectedVersion: input.expectedVersion,
+      evidence: input.evidence,
+      reason: input.reason,
+      recovery: input.recovery,
     });
   } else {
     throw new Error(
-      "Usage: work-package.mjs create --run <id> --goal <id> --brief <issue> --paths-file <scheduler-scope.json> | review|record ...",
+      "Usage: work-package.mjs create --run <id> --goal <id> --brief <issue> --paths-file <scope.json> --input-file <create.json> | review ... | record --run <id> --goal <id> --status <status> --input-file <transition.json>",
     );
   }
   process.stdout.write(`${JSON.stringify(result)}\n`);

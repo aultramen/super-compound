@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:background-dispatch-v2",
+  "title": "Loop Runtime Background Dispatch v2",
+  "type": "object",
+  "$defs": {
+    "stableId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$" },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "nonNegative": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "positive": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "nullablePositive": { "anyOf": [{ "$ref": "#/$defs/positive" }, { "type": "null" }] },
+    "nullableResult": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": { "type": "string", "minLength": 1, "maxLength": 64 },
+            "evidence_digest": { "$ref": "#/$defs/digest" }
+          },
+          "required": ["outcome", "evidence_digest"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "nullableCancellation": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "properties": {
+            "status": { "enum": ["CANCELLED_BEFORE_DISPATCH", "OBSERVATION_REQUIRED"] },
+            "evidence_digest": { "$ref": "#/$defs/digest" }
+          },
+          "required": ["status", "evidence_digest"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "nullableQuarantine": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "properties": {
+            "reason": { "enum": ["UNKNOWN_DISPATCH_OUTCOME", "UNKNOWN_WORKER_OUTCOME", "FAILURE", "POLICY_STOP", "LEASE_LOST_BEFORE_DISPATCH", "LEASE_LOST_AFTER_DISPATCH_INTENT"] },
+            "evidence_digest": { "$ref": "#/$defs/digest" }
+          },
+          "required": ["reason", "evidence_digest"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "runBinding": {
+      "type": "object",
+      "properties": {
+        "run_id": { "$ref": "#/$defs/stableId" },
+        "phase": { "enum": ["START", "RESUME"] },
+        "expected_run_version": { "$ref": "#/$defs/nonNegative" },
+        "queue_run_head_digest": { "$ref": "#/$defs/digest" },
+        "goal_digest": { "$ref": "#/$defs/digest" },
+        "authority_digest": { "$ref": "#/$defs/digest" },
+        "verifier_digest": { "$ref": "#/$defs/digest" },
+        "eval_definition_digest": { "$ref": "#/$defs/digest" },
+        "project_config_digest": { "$ref": "#/$defs/digest" },
+        "policy_digest": { "$ref": "#/$defs/digest" },
+        "operation_inventory_digest": { "$ref": "#/$defs/digest" },
+        "confirmation_digest": { "$ref": "#/$defs/digest" },
+        "approval_expires_at": { "$ref": "#/$defs/timestamp" },
+        "risk_profile": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "autonomy_profile": { "const": "BACKGROUND" },
+        "required_gates": { "type": "array", "maxItems": 256, "uniqueItems": true, "items": { "$ref": "#/$defs/stableId" } }
+      },
+      "required": ["run_id", "phase", "expected_run_version", "queue_run_head_digest", "goal_digest", "authority_digest", "verifier_digest", "eval_definition_digest", "project_config_digest", "policy_digest", "operation_inventory_digest", "confirmation_digest", "approval_expires_at", "risk_profile", "autonomy_profile", "required_gates"],
+      "additionalProperties": false
+    },
+    "actionBinding": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "properties": {
+            "operation": { "const": "work" },
+            "action_id": { "$ref": "#/$defs/stableId" },
+            "idempotency_key": { "$ref": "#/$defs/stableId" },
+            "controller_intent_digest": { "$ref": "#/$defs/digest" },
+            "action_run_head_digest": { "$ref": "#/$defs/digest" },
+        "action_run_version": { "$ref": "#/$defs/positive" },
+            "authorization_expires_at": { "$ref": "#/$defs/timestamp" }
+          },
+          "required": ["operation", "action_id", "idempotency_key", "controller_intent_digest", "action_run_head_digest", "action_run_version", "authorization_expires_at"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "queueBinding": {
+      "type": "object",
+      "properties": {
+        "queue_item_id": { "$ref": "#/$defs/stableId" },
+        "queue_version": { "$ref": "#/$defs/nonNegative" },
+        "lease_id": { "$ref": "#/$defs/stableId" },
+        "worker_ref": { "$ref": "#/$defs/stableId" },
+        "attempt": { "$ref": "#/$defs/positive" },
+        "lease_expires_at": { "$ref": "#/$defs/timestamp" }
+      },
+      "required": ["queue_item_id", "queue_version", "lease_id", "worker_ref", "attempt", "lease_expires_at"],
+      "additionalProperties": false
+    },
+    "worktree": {
+      "type": "object",
+      "properties": {
+        "attestation_id": { "$ref": "#/$defs/stableId" },
+        "worktree_ref": { "$ref": "#/$defs/stableId" },
+        "root_digest": { "$ref": "#/$defs/digest" },
+        "base_git_sha": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "verification_digest": { "$ref": "#/$defs/digest" },
+        "expires_at": { "$ref": "#/$defs/timestamp" },
+        "disposition": { "enum": ["ACTIVE", "RELEASED", "QUARANTINED"] }
+      },
+      "required": ["attestation_id", "worktree_ref", "root_digest", "base_git_sha", "evidence_digest", "verification_digest", "expires_at", "disposition"],
+      "additionalProperties": false
+    },
+    "capability": {
+      "type": "object",
+      "properties": {
+        "attestation_id": { "$ref": "#/$defs/stableId" },
+        "host_ref": { "$ref": "#/$defs/stableId" },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "effective_isolation": { "enum": ["WORKTREE", "PROCESS", "NETWORK", "CREDENTIAL", "HARDENED"] },
+        "required_capabilities": { "type": "array", "maxItems": 256, "uniqueItems": true, "items": { "$ref": "#/$defs/stableId" } },
+        "expires_at": { "$ref": "#/$defs/timestamp" }
+      },
+      "required": ["attestation_id", "host_ref", "evidence_digest", "effective_isolation", "required_capabilities", "expires_at"],
+      "additionalProperties": false
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "max_runtime_ms": { "$ref": "#/$defs/positive" },
+        "max_no_progress_iterations": { "$ref": "#/$defs/positive" },
+        "max_tokens": { "$ref": "#/$defs/nullablePositive" }
+      },
+      "required": ["max_runtime_ms", "max_no_progress_iterations", "max_tokens"],
+      "additionalProperties": false
+    },
+    "backgroundBudgetBinding": {
+      "type": "object",
+      "properties": {
+        "schema": { "const": "background_budget_binding_v2" },
+        "run_id": { "$ref": "#/$defs/stableId" },
+        "confirmation_digest": { "$ref": "#/$defs/digest" },
+        "approval_phase": { "enum": ["START", "RESUME"] },
+        "approval_expires_at": { "$ref": "#/$defs/timestamp" },
+        "run_version": { "$ref": "#/$defs/positive" },
+        "current_run_head_digest": { "$ref": "#/$defs/digest" },
+        "action_run_head_digest": { "$ref": "#/$defs/digest" },
+        "action_id": { "$ref": "#/$defs/stableId" },
+        "idempotency_key": { "$ref": "#/$defs/stableId" },
+        "controller_intent_digest": { "$ref": "#/$defs/digest" },
+        "effective_limits": { "$ref": "#/$defs/limits" },
+        "consumed": {
+          "type": "object",
+          "properties": {
+            "active_runtime_ms": { "$ref": "#/$defs/nonNegative" },
+            "no_progress_iterations": { "$ref": "#/$defs/nonNegative" },
+            "tokens": { "anyOf": [{ "$ref": "#/$defs/nonNegative" }, { "type": "null" }] }
+          },
+          "required": ["active_runtime_ms", "no_progress_iterations", "tokens"],
+          "additionalProperties": false
+        },
+        "remaining": {
+          "type": "object",
+          "properties": {
+            "runtime_ms": { "$ref": "#/$defs/positive" },
+            "no_progress_iterations": { "$ref": "#/$defs/positive" },
+            "tokens": { "$ref": "#/$defs/nullablePositive" }
+          },
+          "required": ["runtime_ms", "no_progress_iterations", "tokens"],
+          "additionalProperties": false
+        },
+        "authority_digest": { "$ref": "#/$defs/digest" }
+      },
+      "required": ["schema", "run_id", "confirmation_digest", "approval_phase", "approval_expires_at", "run_version", "current_run_head_digest", "action_run_head_digest", "action_id", "idempotency_key", "controller_intent_digest", "effective_limits", "consumed", "remaining", "authority_digest"],
+      "additionalProperties": false
+    },
+    "aggregatePolicy": {
+      "type": "object",
+      "properties": {
+        "max_workers": { "$ref": "#/$defs/positive" },
+        "max_reserved_tokens": { "$ref": "#/$defs/nullablePositive" },
+        "max_reserved_runtime_ms": { "$ref": "#/$defs/positive" },
+        "max_remote_calls": { "$ref": "#/$defs/nonNegative" },
+        "max_reviewers": { "$ref": "#/$defs/positive" }
+      },
+      "required": ["max_workers", "max_reserved_tokens", "max_reserved_runtime_ms", "max_remote_calls", "max_reviewers"],
+      "additionalProperties": false
+    },
+    "reservation": {
+      "type": "object",
+      "properties": {
+        "workers": { "const": 1 },
+        "tokens": { "anyOf": [{ "$ref": "#/$defs/nonNegative" }, { "type": "null" }] },
+        "runtime_ms": { "$ref": "#/$defs/positive" },
+        "remote_calls": { "$ref": "#/$defs/nonNegative" },
+        "reviewers": { "$ref": "#/$defs/positive" }
+      },
+      "required": ["workers", "tokens", "runtime_ms", "remote_calls", "reviewers"],
+      "additionalProperties": false
+    },
+    "lastTransition": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "properties": {
+            "command": { "enum": ["DISPATCH_INTENDED", "OBSERVE_DISPATCH", "COMPLETE", "CANCEL", "LEASE_LOST", "RECONCILE"] },
+            "outcome": { "anyOf": [{ "type": "string", "minLength": 1, "maxLength": 64 }, { "type": "null" }] },
+            "evidence_digest": { "$ref": "#/$defs/digest" },
+            "at": { "$ref": "#/$defs/timestamp" }
+          },
+          "required": ["command", "outcome", "evidence_digest", "at"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "properties": {
+    "schema": { "const": "background_dispatch_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "dispatch_id": { "$ref": "#/$defs/stableId" },
+    "version": { "$ref": "#/$defs/nonNegative" },
+    "state": { "enum": ["RESERVED", "DISPATCH_INTENDED", "DISPATCHED", "CANCEL_REQUESTED", "UNKNOWN_OUTCOME", "COMPLETED", "CANCELLED", "RECONCILED"] },
+    "run_binding": { "$ref": "#/$defs/runBinding" },
+    "action_binding": { "$ref": "#/$defs/actionBinding" },
+    "queue_binding": { "$ref": "#/$defs/queueBinding" },
+    "worktree": { "$ref": "#/$defs/worktree" },
+    "capability": { "$ref": "#/$defs/capability" },
+    "effective_limits": { "$ref": "#/$defs/limits" },
+    "effective_limits_digest": { "$ref": "#/$defs/digest" },
+    "shared_aggregate_policy": { "$ref": "#/$defs/aggregatePolicy" },
+    "aggregate_epoch_digest": { "$ref": "#/$defs/digest" },
+    "aggregate_policy": { "$ref": "#/$defs/aggregatePolicy" },
+    "aggregate_policy_digest": { "$ref": "#/$defs/digest" },
+    "budget_binding": { "$ref": "#/$defs/backgroundBudgetBinding" },
+    "reservation": { "$ref": "#/$defs/reservation" },
+    "reservation_status": { "enum": ["HELD", "RELEASED"] },
+    "dispatch_count": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "result": { "$ref": "#/$defs/nullableResult" },
+    "cancellation": { "$ref": "#/$defs/nullableCancellation" },
+    "quarantine": { "$ref": "#/$defs/nullableQuarantine" },
+    "requires_new_approval": { "type": "boolean" },
+    "created_at": { "$ref": "#/$defs/timestamp" },
+    "updated_at": { "$ref": "#/$defs/timestamp" },
+    "last_transition": { "$ref": "#/$defs/lastTransition" }
+  },
+  "required": ["schema", "contract_version", "dispatch_id", "version", "state", "run_binding", "action_binding", "queue_binding", "worktree", "capability", "effective_limits", "effective_limits_digest", "shared_aggregate_policy", "aggregate_epoch_digest", "aggregate_policy", "aggregate_policy_digest", "budget_binding", "reservation", "reservation_status", "dispatch_count", "result", "cancellation", "quarantine", "requires_new_approval", "created_at", "updated_at", "last_transition"],
+  "additionalProperties": false
+}

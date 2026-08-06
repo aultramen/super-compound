@@ -4,9 +4,15 @@ Super Compound is a compact AI-assisted development framework for Antigravity ID
 
 It keeps the public command surface small, pushes detailed procedures into skills, and treats verification as part of the work rather than a final ritual.
 
+## Loop Runtime v2
+
+Protected execution uses the human-confirmed Budget & Stop Wizard before START, RESUME, and any implementation or external write. `max_iterations` is required; runtime, no-progress, token, and cost caps may be `null` only at the human layer and never disable stricter policy ceilings. The runtime has `DISABLED`, `OBSERVE`, `ENFORCE`, and `HALTED` modes, preserves exactly 18 public workflows, and has no `/loop` route.
+
+See [Loop Engineering Runtime v2](docs/loop-runtime-v2.md) for approval, accounting, background, persistence, migration, and claim boundaries.
+
 ## What It Provides
 
-- 17 public workflows for common development operations
+- 18 public workflows for common development operations
 - Canonical product delivery path: `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`
 - Modular skills for agentic delivery, planning, execution, debugging, review, audit, UI, state, and verification
 - Full BRD/PRD/FSD/optional ADR templates under `.agent/templates/agentic-delivery/`
@@ -171,6 +177,7 @@ Only these workflow files are public:
 | `/sc-review` | Review changes for correctness, maintainability, and missing tests |
 | `/sc-audit` | Check security, compatibility, compliance, agent surface, and release readiness |
 | `/sc-compound` | Capture reusable solutions and lessons |
+| `/sc-evolve` | Cluster verified learnings into draft framework proposals for human approval |
 | `/sc-pause` | Save durable handoff state |
 | `/sc-launch` | Start a focused project or feature lifecycle |
 | `/sc-ui` | Design or review UI read-only; route approved implementation to `/sc-work` |
@@ -322,7 +329,7 @@ The CSV loader fails fast when a row does not match its header width, so malform
   skills/       modular task procedures
   templates/    BRD, PRD, FSD, optional ADR, research-note, and PR templates
   tools/        deterministic local framework utilities
-  workflows/    17 public workflows
+  workflows/    18 public workflows
 .claude/        Claude Code path-scoped rules
 .codex/         Codex skill adapter and hash-verified installer
 docs/           engineering standards, archives, and runtime project docs
@@ -330,7 +337,10 @@ SUPER-COMPOUND.md
 AGENTS.md
 CLAUDE.md
 WALKTHROUGH.md
+CHANGELOG.md
 ```
+
+Release and delivery history lives in [CHANGELOG.md](CHANGELOG.md).
 
 Runtime/cache files such as `.debug/`, `.continue-here.md`, `.agent/.compact-state/`, `__pycache__/`, and `*.pyc` are ignored. `docs/` is not ignored; durable documentation should be tracked when it is part of the framework or project history.
 
@@ -370,11 +380,12 @@ python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domai
 node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --require-reduction 90 --repeat 3 --output .agent/benchmarks/token-benchmark.after.json
 node .agent/tools/framework-audit.mjs --output .agent/benchmarks/framework-audit.after.json
 node .agent/tools/framework-audit.mjs --verify-existing .agent/benchmarks/framework-audit.after.json
+node .agent/tools/release-cutover.mjs --expected-output-digest ABSENT
 ```
 
-The benchmark separates immutable historical eager-preload evidence from current repository-owned startup budgets for Codex, Claude Code, Antigravity, the native Codex adapter, and bundled skill metadata. It also emits a 17-route x 3-cell static matrix: input context reduction, process wiring/authority, and output sink/budget/next-owner coverage. Every workflow context-entry reduction must exceed 90%; all 51 static cells must pass. Totals are scenario-weighted and may count shared files more than once. Output-authoring measures context and contracts, not generated prose. Host reasoning, generated-output, injected-context, latency, and billing tokens remain `unknown`; the static matrix is not a runtime end-to-end claim. The baseline is remeasured from recorded ancestor commit blobs on every authoritative run. A runtime claim requires paired attributable before/current traces for every route, not one after-only transcript.
+The benchmark separates immutable historical eager-preload evidence from current repository-owned startup budgets for Codex, Claude Code, Antigravity, the native Codex adapter, and bundled skill metadata. It also emits an 18-route x 3-cell static matrix: input context reduction, process wiring/authority, and output sink/budget/next-owner coverage. Every workflow context-entry reduction must exceed 90%; all 54 static cells must pass. Totals are scenario-weighted and may count shared files more than once. Output-authoring measures context and contracts, not generated prose. Host reasoning, generated-output, injected-context, latency, and billing tokens remain `unknown`; the static matrix is not a runtime end-to-end claim. The baseline is remeasured from recorded ancestor commit blobs on every authoritative run. A runtime claim requires paired attributable before/current traces for every route, not one after-only transcript.
 
-The framework audit enumerates the exact active Git manifest: tracked files plus untracked, non-ignored files. It byte-reads the physical tree outside `.git`, classifies every active path into a declared audit class, and fails on any unclassified entry. The self-generated audit report is necessarily outside its own raw content digest, so `--verify-existing` validates it separately and emits a 100%-accounted verification envelope. The recorded `repositoryHead` is digest-bound provenance; freshness is content/manifest based so committing the excluded report does not invalidate otherwise identical evidence. The envelope reports whether stored and current heads match. The report distinguishes byte/content coverage, audit-class coverage, and specialized self-evidence instead of calling them one uniform semantic audit. It also validates UTF-8, JSON, CSV shape, Markdown links, workflow/skill contracts, duplicate content, output budgets, the 17x3 matrix, and fresh benchmark evidence. Invalid payload content is never echoed into findings.
+The framework audit enumerates the exact active Git manifest: tracked files plus untracked, non-ignored files. It byte-reads the physical tree outside `.git`, classifies every active path into a declared audit class, and fails on any unclassified entry. The self-generated audit report is necessarily outside its own raw content digest, so `--verify-existing` validates it separately and emits a 100%-accounted verification envelope. The recorded `repositoryHead` is digest-bound provenance; freshness is content/manifest based so committing the excluded report does not invalidate otherwise identical evidence. The envelope reports whether stored and current heads match. The report distinguishes byte/content coverage, audit-class coverage, and specialized self-evidence instead of calling them one uniform semantic audit. It also validates UTF-8, JSON, CSV shape, Markdown links, workflow/skill contracts, duplicate content, output budgets, the 18x3 matrix, and fresh benchmark evidence. Invalid payload content is never echoed into findings.
 
 Also check:
 

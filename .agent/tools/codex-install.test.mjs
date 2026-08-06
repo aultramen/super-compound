@@ -26,6 +26,7 @@ const canonicalDirectories = [
   "templates",
   "rules",
   "agents",
+  "evals",
   "hooks",
   "tools",
 ];
@@ -66,6 +67,11 @@ function runInstaller(codexHome, ...extraArguments) {
 
 function runInstallerFrom(sourceRoot, codexHome, env, ...extraArguments) {
   const sourceInstaller = join(sourceRoot, ".codex", "install-super-compound.ps1");
+  // WSL2: Linux env vars only reach Windows processes when named in WSLENV,
+  // so always forward the fault-injection flag across the boundary.
+  const wslenv = [env.WSLENV, "SUPER_COMPOUND_INSTALL_FAIL_AFTER_STAGE"]
+    .filter(Boolean)
+    .join(":");
   return spawnSync(
     "powershell.exe",
     [
@@ -78,7 +84,7 @@ function runInstallerFrom(sourceRoot, codexHome, env, ...extraArguments) {
       codexHome,
       ...extraArguments,
     ],
-    { cwd: sourceRoot, encoding: "utf8", env },
+    { cwd: sourceRoot, encoding: "utf8", env: { ...env, WSLENV: wslenv } },
   );
 }
 
@@ -99,8 +105,9 @@ test("routes through a compact workflow contract before full workflow detail", (
   assert.doesNotMatch(adapterSkill, /routing-index\.md/i);
 });
 
-test("bundles runtime tools referenced by fallback contracts and skills", () => {
+test("bundles runtime tools and durable eval authority referenced by fallback contracts", () => {
   assert.equal(canonicalDirectories.includes("tools"), true);
+  assert.equal(canonicalDirectories.includes("evals"), true);
   for (const tool of [
     "git-workflow.mjs",
     "work-package.mjs",
@@ -108,6 +115,13 @@ test("bundles runtime tools referenced by fallback contracts and skills", () => 
   ]) {
     assert.equal(existsSync(join(repoRoot, ".agent", "tools", tool)), true);
   }
+  assert.equal(existsSync(join(repoRoot, ".agent", "evals", "loop-runtime-v2.md")), true);
+  assert.equal(
+    existsSync(
+      join(repoRoot, ".agent", "evals", "fixtures", "background-pilots-v2.json"),
+    ),
+    true,
+  );
 });
 
 test("installs an exact, hashed Codex bundle from canonical .agent sources", (t) => {
@@ -163,7 +177,7 @@ test("installs an exact, hashed Codex bundle from canonical .agent sources", (t)
   );
   assert.match(
     installedSkill,
-    /bare.*context.*workflows.*skills.*templates.*rules.*agents.*hooks.*tools.*references\//is,
+    /bare.*context.*workflows.*skills.*templates.*rules.*agents.*evals.*hooks.*tools.*references\//is,
   );
   assert.match(installedSkill, /workflow-(?:local|relative).*sc-\*\.md.*references\/workflows\//is);
 
@@ -197,6 +211,21 @@ test("installs an exact, hashed Codex bundle from canonical .agent sources", (t)
   );
   assert.equal(statSync(uiReadinessReference).isFile(), true);
   assert.match(readFileSync(uiReadinessReference, "utf8"), /READY_FOR_SLICE/);
+
+  const loopEval = join(target, "references", "evals", "loop-runtime-v2.md");
+  const loopFixtures = join(
+    target,
+    "references",
+    "evals",
+    "fixtures",
+    "background-pilots-v2.json",
+  );
+  assert.match(readFileSync(loopEval, "utf8"), /GOAL-019/);
+  assert.match(readFileSync(loopFixtures, "utf8"), /background_pilot_suite_v2/);
+  assert.doesNotMatch(
+    readFileSync(join(target, "references", "context", "workflow-invariants.json"), "utf8"),
+    /workflow_invariants_v1/,
+  );
 
   for (const [relativePath, marker] of [
     ["references/workflows/sc-prd.md", /experience_baseline_status/],

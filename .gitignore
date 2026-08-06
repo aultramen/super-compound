@@ -1,7 +1,14 @@
 .debug/
+.tmp/
 .continue-here.md
 .agent/.compact-state/
+.agent/context/project-mode-capability.json
 .scratch/work-packages/
+.scratch/loop-runs/
+.scratch/loop-queue/
+.scratch/loop-runtime/
+.scratch/loop-runtime-v2/
+.scratch/test-fixtures/
 **/__pycache__/
 *.pyc
 CLAUDE.local.md

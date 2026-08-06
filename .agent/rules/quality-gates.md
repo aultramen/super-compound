@@ -4,6 +4,7 @@ Keep gates lightweight and evidence-based. Detailed procedures belong in the ref
 
 ## Before Work
 
+- Complete the human-confirmed Budget & Stop Wizard before START, RESUME, or the first source/implementation write governed by Loop Runtime v2.
 - Read the relevant workflow and skill before editing.
 - Check `.agent/rules/project-config.md` and existing project conventions.
 - For UI work, use `interface-design` before implementation.

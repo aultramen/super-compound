@@ -16,6 +16,7 @@
     "sc-review": { "maxEstimatedTokens": 900, "maxCharacters": 3600 },
     "sc-audit": { "maxEstimatedTokens": 900, "maxCharacters": 3600 },
     "sc-compound": { "maxEstimatedTokens": 320, "maxCharacters": 1280 },
+    "sc-evolve": { "maxEstimatedTokens": 600, "maxCharacters": 2400 },
     "sc-pause": { "maxEstimatedTokens": 320, "maxCharacters": 1280 },
     "sc-launch": { "maxEstimatedTokens": 500, "maxCharacters": 2000 },
     "sc-ui": { "maxEstimatedTokens": 500, "maxCharacters": 2000 }

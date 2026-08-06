@@ -1,6 +1,15 @@
 # /sc-go Runtime Contract
 
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
 Purpose: preview-first Git branch, worktree, commit, push, and PR operations.
+
+Preview is read-only and needs no wizard. `commit`, `push`, and PR mutation need
+a nonterminal FSD-authorized run, host-attested approval, durable intent, and an
+allowlisted operation. Until the later release gate and operation inventory are
+implemented, return `OPEN-RELEASE-GATE`: the current allowlist contains no
+`commit`, `push`, or `pr`, so no mutation is permitted. A preview or terminal
+run is not an operation gate.
 
 Load first: `.agent/context/skills/git-workflow-operation.contract.md`, then `.agent/rules/project-config.md` for `gitWorkflow`.
 

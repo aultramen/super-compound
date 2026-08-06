@@ -6,6 +6,17 @@ description: "Create an FSD from an approved PRD, then slice FSD goals into ligh
 
 Use this when approved product requirements are ready to become a technical implementation contract. The FSD is the primary output and implementation authority.
 
+## Loop Runtime v2 Boundary
+
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
+Planning may write only classified `authority_write` artifacts: FSD, accepted
+ADR, eval definition, and issue pointers. No Budget & Stop Wizard is required
+for those authority writes. Classify every path before writing; block any
+`implementation_write` and route it to an approved `/sc-work` goal. Planning may
+define run authority and operation requirements but never fabricates a live run,
+human approval, counters, or execution evidence.
+
 ## Steps
 
 1. Load `skills/agentic-delivery/SKILL.md` and `skills/writing-plans/SKILL.md` when following the full planning procedure.

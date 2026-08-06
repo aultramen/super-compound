@@ -85,6 +85,47 @@ test("auditRepository reads every file and reports structural gaps", async () =>
   }
 });
 
+test("physical inventory excludes operational runtime and isolated-worktree roots", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "framework-audit-"));
+
+  try {
+    await mkdir(path.join(root, ".scratch", "recovery"), { recursive: true });
+    await mkdir(path.join(root, ".sc-worktrees", "stale"), {
+      recursive: true,
+    });
+    await mkdir(path.join(root, ".agent", ".compact-state"), {
+      recursive: true,
+    });
+    await writeFile(path.join(root, "README.md"), "# Active\n");
+    await writeFile(
+      path.join(root, ".scratch", "recovery", "event.json"),
+      "{}\n",
+    );
+    await writeFile(
+      path.join(root, ".sc-worktrees", "stale", "README.md"),
+      "# Stale\n",
+    );
+    await writeFile(
+      path.join(root, ".agent", ".compact-state", "session.json"),
+      "{}\n",
+    );
+
+    const report = await auditRepository(root);
+
+    assert.equal(report.summary.manifestFiles, 1);
+    assert.deepEqual(report.physicalInventory, {
+      scope: "physical-authority-worktree-excluding-runtime-roots",
+      files: 1,
+      filesRead: 1,
+      symlinks: 0,
+      activeManifestEntries: 1,
+      outsideActiveManifestEntries: 0,
+    });
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("auditRepository accepts the compact support-skill catch-all", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "framework-audit-"));
 
@@ -186,7 +227,7 @@ test("the current framework passes the all-file audit", async () => {
       },
     ],
   });
-  assert.ok(report.coverage.auditClassCounts.workflow >= 17);
+  assert.ok(report.coverage.auditClassCounts.workflow >= 18);
   assert.equal(report.coverage.auditClassCounts.agent, 6);
   assert.match(report.coverage.auditClassDigest, /^[a-f0-9]{64}$/);
   assert.equal(

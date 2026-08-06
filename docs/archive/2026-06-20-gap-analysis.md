@@ -1,3 +1,7 @@
+# Archived, Non-Authoritative Evidence
+
+This historical snapshot predates the clean-break Loop Runtime v2 authority. Its proposed `/loop` workflow was removed and is not a public route. Current authority is defined by `.agent/context/project-config.json`, `.agent/context/workflow-invariants.json`, and `docs/loop-runtime-v2.md`.
+
 # Super Compound Gap Analysis - 2026-06-20
 
 ## Scope

@@ -29,7 +29,7 @@ function matrixFixture(overrides = {}) {
     }),
   };
   const workflowInvariants = {
-    schema: "workflow_invariants_v1",
+    schema: "workflow_invariants_v2",
     routes: Object.fromEntries(
       WORKFLOW_SCENARIOS.map(({ name }) => [
         name,
@@ -37,6 +37,11 @@ function matrixFixture(overrides = {}) {
           authority: `authority:${name}`,
           mutation: "explicit-only",
           evidenceSink: `sink:${name}`,
+          loopRuntimeRole: "READ_ONLY",
+          writeClasses: [],
+          wizardPolicy: "NEVER",
+          requiredOperationGate: [],
+          loopStateAccess: "READ_ONLY",
           nextOwners: ["caller"],
           workflowMarkers: ["workflow marker"],
           contractMarkers: ["contract marker"],
@@ -77,7 +82,7 @@ function attributableTraces() {
     },
     current: {
       attribution: "current",
-      transcriptDigest: `${(index + 34).toString(16)}`.padStart(64, "0"),
+      transcriptDigest: `${(index + 35).toString(16)}`.padStart(64, "0"),
     },
   }));
 }
@@ -85,7 +90,7 @@ function attributableTraces() {
 test("buildWorkflowEvidenceMatrix covers every workflow with input/process/output static evidence", () => {
   const evidence = buildWorkflowEvidenceMatrix(matrixFixture());
 
-  assert.equal(WORKFLOW_SCENARIOS.length, 17);
+  assert.equal(WORKFLOW_SCENARIOS.length, 18);
   assert.equal(evidence.schema, "workflow_evidence_matrix_v1");
   assert.deepEqual(evidence.claimScope, {
     evidenceClass: "repository-owned-static",
@@ -95,14 +100,14 @@ test("buildWorkflowEvidenceMatrix covers every workflow with input/process/outpu
     generatedOutputTokens: "unknown",
   });
   assert.deepEqual(evidence.coverage, {
-    expectedRoutes: 17,
-    coveredRoutes: 17,
+    expectedRoutes: 18,
+    coveredRoutes: 18,
     stagesPerRoute: 3,
-    expectedCells: 51,
-    coveredCells: 51,
+    expectedCells: 54,
+    coveredCells: 54,
     percent: 100,
   });
-  assert.equal(Object.keys(evidence.workflowMatrix).length, 17);
+  assert.equal(Object.keys(evidence.workflowMatrix).length, 18);
   assert.equal(evidence.workflowMatrix["sc-research"].input.observedRuntimeTokens, null);
   assert.equal(
     evidence.workflowMatrix["sc-research"].process.contractPath,
@@ -121,25 +126,25 @@ test("buildWorkflowEvidenceMatrix covers every workflow with input/process/outpu
     ["caller"],
   );
   assert.deepEqual(evidence.gates.inputContextReduction, {
-    expected: 17,
-    passed: 17,
+    expected: 18,
+    passed: 18,
     thresholdExclusive: 90,
     minimumReductionPercent: 95,
     pass: true,
   });
   assert.deepEqual(evidence.gates.processWiring, {
-    expected: 17,
-    passed: 17,
+    expected: 18,
+    passed: 18,
     pass: true,
   });
   assert.deepEqual(evidence.gates.outputContracts, {
-    expected: 17,
-    passed: 17,
+    expected: 18,
+    passed: 18,
     pass: true,
   });
   assert.deepEqual(evidence.gates.runtimeEndToEnd, {
     status: "not-evaluated",
-    expectedPairedTraceCount: 17,
+    expectedPairedTraceCount: 18,
     pairedTraceCount: 0,
     pass: null,
   });
@@ -157,11 +162,11 @@ test("buildWorkflowEvidenceMatrix rejects incomplete workflow coverage", () => {
 
   assert.throws(
     () => buildWorkflowEvidenceMatrix(fixture),
-    /exactly 17 workflow routes/i,
+    /exactly 18 workflow routes/i,
   );
 });
 
-test("runtimePass cannot be true without 17 paired attributable traces", () => {
+test("runtimePass cannot be true without 18 paired attributable traces", () => {
   assert.throws(
     () =>
       buildWorkflowEvidenceMatrix(
@@ -173,7 +178,7 @@ test("runtimePass cannot be true without 17 paired attributable traces", () => {
           },
         }),
       ),
-    /runtimePass=true requires 17 paired attributable traces/i,
+    /runtimePass=true requires 18 paired attributable traces/i,
   );
 });
 
@@ -192,8 +197,8 @@ test("runtimePass may be true with one paired attributable trace per workflow", 
   assert.equal(evidence.claimScope.runtimeEndToEnd, "paired-attributable-traces");
   assert.deepEqual(evidence.gates.runtimeEndToEnd, {
     status: "evaluated",
-    expectedPairedTraceCount: 17,
-    pairedTraceCount: 17,
+    expectedPairedTraceCount: 18,
+    pairedTraceCount: 18,
     pass: true,
   });
 });

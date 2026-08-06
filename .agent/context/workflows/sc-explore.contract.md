@@ -1,11 +1,20 @@
 # /sc-explore Runtime Contract
 
+Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
+
 Purpose: resolve fuzzy intent into BRD-ready business context.
+
+The BRD is an `authority_write` and needs no wizard. Prototype code is an
+`implementation_write`; without an active FSD-authorized run, return
+`OPEN-LOOP-AUTHORITY` before changing a prototype and perform no write. Never
+forge missing PRD/FSD/verifier bindings. An approved goal may run the Budget &
+Stop Wizard, persist `ACTION_INTENDED`, and validate `source-write`; otherwise
+keep the exploration read-only and advance authority first.
 
 Load user request, nearby context, prior brainstorms, and accepted ADRs only if
 relevant. Use the BRD skeleton; record objectives, scope, non-goals, rules,
-acceptance, and `OPEN-*`. A prototype is throwaway/non-production and must be
-isolated from implementation. Route a blocking named fact through
+acceptance, and `OPEN-*`. A prototype is throwaway/non-production and must stay
+isolated under `.scratch/prototypes/`. Route a blocking named fact through
 `OPEN-RESEARCH-*` and `/sc-research`, then return; research never decides policy.
 Each prototype answers one decision, records evidence, and ends `discard`,
 `revise`, or `promote decision`; `HIGH_INTERACTION` runtime evidence may be

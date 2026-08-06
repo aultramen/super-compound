@@ -1,7 +1,5 @@
-# /sc-status Runtime Contract
-
-Read present handoff/state/progress and issue metadata without reading all issue bodies;
-then open only the selected issue. Add read-only Git state. Return
-position, blockers, checks, Git, and one exact `/sc-*` route. Send
-`OPEN-RESEARCH-*` through `/sc-research`; use `/sc-geniusloop` only if no ready
-work, handoff, blocker, or failing check.
+Issue headers/metadata only, without reading all issue bodies; open the selected
+issue. Return read-only Git state and one exact `/sc-*` route. `run_id`/status;
+run head digest: non-authoritative. Refresh: `node .agent/tools/loop-run.mjs show --run
+<run_id>`. Never copy events/counters/approval envelope/confirmation digest.
+`START`/`RESUME`: fresh human confirmation.

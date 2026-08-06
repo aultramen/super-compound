@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:budget-confirmation-v2",
+  "title": "Budget Confirmation v2",
+  "type": "object",
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "positiveIntegerOrNull": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "runtimeMinutesOrNull": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 150119987579
+    },
+    "effectiveBudget": {
+      "type": "object",
+      "properties": {
+        "max_iterations": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_runtime_minutes": { "$ref": "#/$defs/runtimeMinutesOrNull" },
+        "max_no_progress_iterations": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_tokens": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_cost_micro": { "$ref": "#/$defs/positiveIntegerOrNull" }
+      },
+      "required": [
+        "max_iterations",
+        "max_runtime_minutes",
+        "max_no_progress_iterations",
+        "max_tokens",
+        "max_cost_micro"
+      ],
+      "additionalProperties": false
+    },
+    "confirmedLimits": {
+      "type": "object",
+      "properties": {
+        "max_iterations": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_runtime_minutes": { "$ref": "#/$defs/runtimeMinutesOrNull" },
+        "max_no_progress_iterations": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_tokens": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_cost": {
+          "type": ["string", "null"],
+          "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]{1,6})?$",
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "max_iterations",
+        "max_runtime_minutes",
+        "max_no_progress_iterations",
+        "max_tokens",
+        "max_cost"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "budget_confirmation_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "confirmation_id": { "$ref": "#/$defs/identifier" },
+    "proposal_digest": { "$ref": "#/$defs/digest" },
+    "run_id": { "$ref": "#/$defs/identifier" },
+    "phase": { "enum": ["START", "RESUME"] },
+    "queue_item_id": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "expected_run_version": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "goal_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "goal_digest": { "$ref": "#/$defs/digest" },
+    "authority_digest": { "$ref": "#/$defs/digest" },
+    "project_config_digest": { "$ref": "#/$defs/digest" },
+    "verifier_ref": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "verifier_digest": { "$ref": "#/$defs/digest" },
+    "regression_verifier_digest": {
+      "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+    },
+    "eval_definition_digest": { "$ref": "#/$defs/digest" },
+    "policy_digest": { "$ref": "#/$defs/digest" },
+    "billing_currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "confirmed_limits": { "$ref": "#/$defs/confirmedLimits" },
+    "confirmed_budget": { "$ref": "#/$defs/effectiveBudget" },
+    "effective_budget": { "$ref": "#/$defs/effectiveBudget" },
+    "autonomy_profile": { "enum": ["INTERACTIVE", "BACKGROUND"] },
+    "risk_profile": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "approver": {
+      "type": "object",
+      "properties": {
+        "actor_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "actor_type": { "const": "HUMAN" },
+        "attestation": { "enum": ["HOST_ATTESTED_HUMAN", "LOCAL_OBSERVE_HUMAN"] }
+      },
+      "required": ["actor_id", "actor_type", "attestation"],
+      "additionalProperties": false
+    },
+    "confirmed_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "confirmation_id",
+    "proposal_digest",
+    "run_id",
+    "phase",
+    "queue_item_id",
+    "expected_run_version",
+    "goal_ref",
+    "goal_digest",
+    "authority_digest",
+    "project_config_digest",
+    "verifier_ref",
+    "verifier_digest",
+    "regression_verifier_digest",
+    "eval_definition_digest",
+    "policy_digest",
+    "billing_currency",
+    "confirmed_limits",
+    "confirmed_budget",
+    "effective_budget",
+    "autonomy_profile",
+    "risk_profile",
+    "approver",
+    "confirmed_at",
+    "expires_at"
+  ],
+  "additionalProperties": false
+}

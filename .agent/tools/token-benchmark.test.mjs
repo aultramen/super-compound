@@ -91,7 +91,7 @@ function sampleStaticEvidence() {
     })),
   };
   const workflowInvariants = {
-    schema: "workflow_invariants_v1",
+    schema: "workflow_invariants_v2",
     routes: Object.fromEntries(
       scenarios.map(({ name }) => [
         name,
@@ -99,6 +99,11 @@ function sampleStaticEvidence() {
           authority: `authority:${name}`,
           mutation: "explicit-only",
           evidenceSink: `sink:${name}`,
+          loopRuntimeRole: "READ_ONLY",
+          writeClasses: [],
+          wizardPolicy: "NEVER",
+          requiredOperationGate: [],
+          loopStateAccess: "READ_ONLY",
           nextOwners: ["caller"],
           workflowMarkers: ["workflow marker"],
           contractMarkers: ["contract marker"],
@@ -177,6 +182,40 @@ test("expandPatterns resolves explicit files and recursive globs", async () => {
   }
 });
 
+test("expandPatterns excludes non-authoritative runtime and worktree surfaces", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "token-benchmark-"));
+
+  try {
+    await mkdir(path.join(root, "docs"), { recursive: true });
+    await mkdir(path.join(root, ".scratch", "recovery"), { recursive: true });
+    await mkdir(path.join(root, ".sc-worktrees", "stale", "docs"), {
+      recursive: true,
+    });
+    await mkdir(path.join(root, ".agent", ".compact-state"), {
+      recursive: true,
+    });
+    await writeFile(path.join(root, "docs", "active.md"), "active");
+    await writeFile(
+      path.join(root, ".scratch", "recovery", "stale.md"),
+      "stale runtime evidence",
+    );
+    await writeFile(
+      path.join(root, ".sc-worktrees", "stale", "docs", "active.md"),
+      "stale worktree copy",
+    );
+    await writeFile(
+      path.join(root, ".agent", ".compact-state", "stale.md"),
+      "stale compact state",
+    );
+
+    const files = await expandPatterns(root, ["**/*.md"]);
+
+    assert.deepEqual(files, ["docs/active.md"]);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("expandPatterns rejects traversal and absolute input patterns", async () => {
   const container = await mkdtemp(path.join(tmpdir(), "token-benchmark-"));
   const root = path.join(container, "repository");
@@ -226,6 +265,10 @@ test("resolveRepositoryPath confines outputs and rejects symlinks", async () => 
     await assert.rejects(
       resolveRepositoryPath(root, "../outside.json"),
       /outside repository root/i,
+    );
+    await assert.rejects(
+      resolveRepositoryPath(root, ".agent/report\n.json"),
+      /control characters/i,
     );
     await assert.rejects(
       resolveBenchmarkOutputPath(root, "package.json"),
@@ -450,6 +493,7 @@ test("default benchmark covers all workflows and related hotspots", () => {
     "sc-review",
     "sc-audit",
     "sc-compound",
+    "sc-evolve",
     "sc-pause",
     "sc-launch",
     "sc-ui",
@@ -544,7 +588,7 @@ test("historical baseline is complete and reproducible from Git blobs", async ()
   );
 
   assert.equal(result.pass, true);
-  assert.equal(result.reductionScenarioCount, 31);
+  assert.equal(result.reductionScenarioCount, 32);
   assert.ok(Number.isFinite(Date.parse(baseline.assembledAt)));
   assert.equal(baseline.generatedAt, undefined);
   assert.equal(
@@ -651,7 +695,7 @@ test("buildBenchmarkReport rejects a forged runtimePass without paired attributa
         authoritative: true,
         staticEvidence,
       }),
-    /runtimePass=true requires 17 paired attributable traces/i,
+    /runtimePass=true requires 18 paired attributable traces/i,
   );
 });
 

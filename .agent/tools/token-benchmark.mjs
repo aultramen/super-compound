@@ -16,6 +16,7 @@ import {
   createUnattachedWorkflowEvidence,
   validateWorkflowEvidence,
 } from "./evidence-matrix.mjs";
+import { resolveRepositoryPath as resolveSafeRepositoryPath } from "./file-state.mjs";
 import { analyzeTranscript } from "./transcript-usage.mjs";
 
 export const METRIC = "deterministic_estimated_tokens_v1";
@@ -278,6 +279,19 @@ const WORKFLOW_SCENARIOS = [
       ".agent/skills/knowledge-compounding/SKILL.md",
     ],
     after: [".agent/context/workflows/sc-compound.contract.md"],
+  },
+  {
+    name: "sc-evolve",
+    description: "/sc-evolve draft framework proposal clustering.",
+    // sc-evolve is a new route; no recorded baseline commit contains its
+    // dedicated workflow file, so its pre-compaction surface uses the
+    // workflow glob (which covers the route file when present) plus the
+    // knowledge-compounding skill.
+    before: [
+      ".agent/workflows/*.md",
+      ".agent/skills/knowledge-compounding/SKILL.md",
+    ],
+    after: [".agent/context/workflows/sc-evolve.contract.md"],
   },
   {
     name: "sc-pause",
@@ -1336,7 +1350,18 @@ async function listFiles(root, current = "") {
 }
 
 function shouldSkip(relativePath) {
-  return relativePath
+  const normalized = normalizePath(relativePath);
+  if (
+    normalized === ".scratch" ||
+    normalized.startsWith(".scratch/") ||
+    normalized === ".sc-worktrees" ||
+    normalized.startsWith(".sc-worktrees/") ||
+    normalized === ".agent/.compact-state" ||
+    normalized.startsWith(".agent/.compact-state/")
+  ) {
+    return true;
+  }
+  return normalized
     .split("/")
     .some((part) =>
       [".git", ".debug", "node_modules", "__pycache__"].includes(part),
@@ -1396,25 +1421,7 @@ async function writeJson(root, relativePath, value) {
 }
 
 export async function resolveRepositoryPath(root, candidate) {
-  if (typeof candidate !== "string" || !candidate.trim()) {
-    throw new Error("Output path is required");
-  }
-  const safeRoot = path.resolve(root);
-  const absolute = path.resolve(safeRoot, candidate);
-  const relative = path.relative(safeRoot, absolute);
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
-    throw new Error("Output path resolves outside repository root");
-  }
-
-  let current = safeRoot;
-  for (const part of relative.split(path.sep).filter(Boolean)) {
-    current = path.join(current, part);
-    const info = await lstat(current).catch(() => null);
-    if (info?.isSymbolicLink()) {
-      throw new Error(`Output path contains a symlink: ${current}`);
-    }
-  }
-  return absolute;
+  return resolveSafeRepositoryPath(root, candidate, { label: "Output path" });
 }
 
 export async function resolveBenchmarkOutputPath(root, candidate) {
@@ -1562,7 +1569,7 @@ function usage() {
 
 Default suite:
   legacy eager-preload reduction, real repository-owned startup budgets for
-  Codex/Claude/Antigravity, all 17 public workflows, artifact surfaces, skills,
+  Codex/Claude/Antigravity, all 18 public workflows, artifact surfaces, skills,
   templates, interface-design data/scripts, hooks, agents, workflows, and rules.
 
 Options:

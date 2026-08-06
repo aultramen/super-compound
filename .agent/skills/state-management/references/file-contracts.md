@@ -16,28 +16,18 @@ Create only the artifacts required by the active workflow.
 
 ## `STATE.md`
 
-```markdown
-# Project State
-Last updated: YYYY-MM-DD HH:mm
+The canonical skeleton lives at `.agent/templates/state/STATE-Template.md`
+(sections: Current Position, Active Loop Run, Decisions, Blockers, Completed
+Work, Deferred Ideas). Copy it verbatim when seeding; do not restate it here.
+The Active Loop Run section holds only a refreshable non-authoritative pointer:
+run_id, run head digest, status snapshot, last evidence, reason, next transition.
+The progress-log skeleton lives at `.agent/templates/state/Progress-Template.md`.
 
-## Current Position
-- Workflow: <route>
-- Active task: <task or none>
-- Next action: <specific executable step>
-- Branch/workspace: <branch or n/a>
-
-## Decisions
-- YYYY-MM-DD: <decision, scope, and why>
-
-## Blockers
-- <blocker, owner, and needed input>
-
-## Completed Work
-- YYYY-MM-DD: <outcome and important artifact links>
-
-## Deferred Ideas
-- <idea and reason out of scope>
-```
+Refresh the pointer with `node .agent/tools/loop-run.mjs show --run <run_id>`.
+Never copy lifecycle events, counters, an approval envelope, or a confirmation
+digest into STATE. Writing `docs/STATE.md` requires the active source-write gate;
+reading it does not. `START` or `RESUME` after a pause requires fresh human
+confirmation.
 
 ## Error and learning records
 

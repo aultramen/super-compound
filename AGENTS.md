@@ -21,6 +21,8 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - `SUPER-COMPOUND.md`: concise root rules for Claude-style usage.
 - `README.md`: installation, features, compatibility, and user-facing setup.
 - `WALKTHROUGH.md`: extended walkthrough and examples.
+- `CHANGELOG.md`: dated delivery history for the framework; update it when a change alters public behavior, contracts, or evidence.
+- `docs/loop-runtime-v2.md`: canonical human operating guide for the machine-authoritative Loop Runtime v2 contracts.
 - `docs/engineering-standards.md`: long software engineering standards reference; read on demand, do not import into startup files.
 - `.claude/rules/`: Claude Code path-scoped rules for this repo.
 
@@ -40,6 +42,8 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - `docs/engineering-standards.md` preserves the long engineering reference from the old monolithic `CLAUDE.md`; read it only when broad standards guidance is needed.
 - Use skills, workflows, and normal docs for long procedures instead of expanding startup memory.
 - Use `.agent/context/` contracts as the first runtime layer; load full workflows, skills, templates, or CSV data only when the active task needs their detail.
+- Search durable knowledge before solving a repeat problem: `node .agent/tools/knowledge-search.mjs "<query>"` over `docs/solutions/` and `docs/learnings/`.
+- Read `docs/loop-runtime-v2.md` before protected START, RESUME, implementation writes, background dispatch, or external mutation.
 
 ## Working Agreement
 

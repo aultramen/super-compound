@@ -14,26 +14,22 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
 
 - Goal has approved FSD authority, exact acceptance/test refs, and no unresolved
   `OPEN-*` blocker.
-- For UI scope, the pointer includes `ui_delivery_role`, `required_gate`, and
-  qualified pinned contract refs. `CONTRACT_ENABLER` is the only bounded
-  DRAFT/BLOCKED exception; `FIRST_VERTICAL_SLICE` requires `READY_FOR_SLICE`;
-  `SCALE_OUT_SLICE` requires a `VALIDATED` baseline and the pinned first-slice
-  issue at `FIRST_VERTICAL_SLICE_VERIFIED`.
-- `HARDENING` requires every applicable UI delivery slice dependency to be
-  `verified`, final verification refs, and a named Business Owner for UAT.
+- UI pointers carry `ui_delivery_role`, `required_gate`, pinned contract refs;
+  gates `READY_FOR_SLICE`, `FIRST_VERTICAL_SLICE_VERIFIED`, `HARDENING` (every
+  UI slice `verified`, Business Owner UAT): [ui gates](references/ui-gates.md).
 - Parallel goals do not share unmerged files or mutable validation resources.
 - Search existing code/tests before assuming anything is absent.
 
 ## File-Backed Process
 
 1. The scheduler writes a JSON array of allowed repository-relative target
-   paths, then creates one package from the lightweight issue pointer and that
+   paths, then creates one package from the issue pointer and that
    scheduler-owned scope:
 
    ```bash
    node .agent/tools/work-package.mjs create \
      --run <run-id> --goal <goal-id> --brief <issue-path> \
-     --paths-file <scheduler-scope.json>
+     --paths-file <scheduler-scope.json> --input-file <create-input.json>
    ```
 
 2. Send the implementer only the returned `briefPath`, `reportPath`,
@@ -57,7 +53,9 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
    separate verdicts: `SPEC` and `QUALITY`. Use
    `references/review-contract.md` for the detailed checklist.
 6. Batch critical/important fixes into one correction wave. Rebuild the patch
-   and re-review once. After two failed revision cycles, escalate.
+   and re-review once. Fix rounds cap at 5 with model escalation and a
+   round-5 adjudication circuit breaker:
+   [orchestration loop](references/orchestration-loop.md).
 7. Record the result:
 
    A `FIRST_VERTICAL_SLICE` must use a real provider or backend to prove
@@ -70,8 +68,15 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
    ```bash
    node .agent/tools/work-package.mjs record \
      --run <run-id> --goal <goal-id> --status verified \
-     --verification "<short command result>"
+     --verification "<short command result>" \
+     --input-file <transition-input.json>
    ```
+
+## Ledger, Recovery, Model Tiers
+
+Ledger grammar, post-compaction recovery (trust ledger and `git log` over
+recollection), anti-history dispatch, and the extraction/generation/ceiling
+tier ladder: [orchestration loop](references/orchestration-loop.md).
 
 ## Invariants
 
@@ -84,6 +89,5 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
 
 ## Related Skills
 
-Use `context-engineering`, `executing-plans`, `test-driven-development`,
-`code-review`, and `verification-before-completion` as their active branches
-require.
+`context-engineering`, `executing-plans`, `test-driven-development`,
+`code-review`, `verification-before-completion`.

@@ -23,10 +23,10 @@ Static measurements cover repository-owned files only. Parent/system/user instru
 tool schemas, conversation history, and model-specific billing tokens require runtime
 telemetry and must not be inferred from the legacy eager-preload reduction.
 
-The benchmark's 17 x 3 matrix proves static route coverage: modeled context
+The benchmark's 18 x 3 matrix proves static route coverage: modeled context
 entry, process wiring/authority, and output sink/budget/next owner. It does not
 measure hidden reasoning or generated output. Runtime pass stays `null` until
-all 17 routes have paired attributable baseline/current traces.
+all 18 routes have paired attributable baseline/current traces.
 
 ## Orchestrator Return Envelopes
 
@@ -45,7 +45,7 @@ usage remains `unknown` until the host supplies attributable transcript telemetr
 | `sc-explore`, `sc-prd`, `sc-plan`, `sc-go`, `sc-work`, `sc-debug`, `sc-launch`, `sc-ui` | 12 lines |
 | `sc-review`, `sc-audit` | 20 lines plus all P0/P1 findings |
 | `sc-geniusloop` | 12 ranked ideas/lines |
-| `sc-compound`, `sc-pause` | 8 lines |
+| `sc-compound`, `sc-evolve`, `sc-pause` | 8 lines |
 
 Full reports belong in the route's named artifact. When no normal artifact exists,
 use `docs/geniusloop/YYYY-MM-DD-<scope>.md`, `.agent/evals/<feature>.md`,

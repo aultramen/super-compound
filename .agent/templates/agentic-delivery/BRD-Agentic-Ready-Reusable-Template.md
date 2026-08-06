@@ -40,17 +40,17 @@ downstream_artifacts:
 
 # {{PROJECT_NAME}} — Business Requirements Document
 
-> **Cara menggunakan template**
+> **How to use this template**
 >
-> 1. Ganti seluruh `{{PLACEHOLDER}}` dengan fakta, keputusan, atau referensi yang dapat diverifikasi.
-> 2. Bagian yang tidak relevan harus ditulis `N/A — {{ALASAN}}`; jangan dihapus diam-diam.
-> 3. Jangan menggunakan `TBD`, “nanti”, “sesuai kebutuhan”, “optimal”, “efisien”, “mudah”, “real-time”, atau istilah ambigu tanpa `OPEN-ID`, owner, deadline, serta fallback yang disetujui.
-> 4. Bedakan dengan tegas antara **fakta**, **evidence**, **asumsi**, **hipotesis**, **keputusan**, dan **preferensi solusi**.
-> 5. BRD menetapkan **mengapa perubahan dibutuhkan, outcome bisnis, ruang lingkup, capability, proses, kebijakan, decision rights, nilai ekonomi, risiko, serta business acceptance**. PRD menetapkan perilaku produk; FSD menetapkan implementasi teknis.
-> 6. Hindari mengunci UI, endpoint, database, framework, vendor, atau arsitektur kecuali hal tersebut merupakan constraint bisnis, hukum, kontraktual, keamanan, biaya, interoperabilitas, atau operasional yang nyata dan disetujui.
-> 7. Setiap requirement dan keputusan yang disetujui wajib memiliki ID stabil dan traceability.
-> 8. Coding agent tidak boleh menggunakan BRD sebagai instruksi implementasi langsung. Jalur wajib untuk autonomous coding adalah **BRD → PRD → FSD → GOAL → implementation → verification**.
-> 9. ADR adalah artefak **opsional dan kondisional**, bukan tahap wajib. Bila tidak ada ADR, keputusan teknis material harus tetap dicatat di FSD sebagai `TDEC-*`; bila ADR digunakan, hanya ADR berstatus `ACCEPTED` yang boleh dirujuk.
+> 1. Replace every `{{PLACEHOLDER}}` with verifiable facts, decisions, or references.
+> 2. Sections that are not relevant must be written as `N/A — {{REASON}}`; do not delete them silently.
+> 3. Do not use `TBD`, “later”, “as needed”, “optimal”, “efficient”, “easy”, “real-time”, or ambiguous terms without an `OPEN-ID`, owner, deadline, and approved fallback.
+> 4. Distinguish strictly between **facts**, **evidence**, **assumptions**, **hypotheses**, **decisions**, and **solution preferences**.
+> 5. The BRD establishes **why the change is needed, the business outcomes, scope, capabilities, processes, policies, decision rights, economic value, risks, and business acceptance**. The PRD establishes product behavior; the FSD establishes the technical implementation.
+> 6. Avoid locking in UI, endpoints, databases, frameworks, vendors, or architecture unless they are real, approved business, legal, contractual, security, cost, interoperability, or operational constraints.
+> 7. Every approved requirement and decision must have a stable ID and traceability.
+> 8. Coding agents must not use the BRD as direct implementation instructions. The mandatory path for autonomous coding is **BRD → PRD → FSD → GOAL → implementation → verification**.
+> 9. The ADR is an **optional and conditional** artifact, not a mandatory stage. When there is no ADR, material technical decisions must still be recorded in the FSD as `TDEC-*`; when an ADR is used, only ADRs with `ACCEPTED` status may be referenced.
 
 ---
 
@@ -59,137 +59,137 @@ downstream_artifacts:
 > `skeletons/BRD-Skeleton.md`, select MINIMAL/STANDARD/HIGH_RISK, and read only
 > the named section needed for a concrete risk, decision, or review gap.
 
-# 0. Kontrak Operasional BRD
+# 0. BRD Operating Contract
 
-## 0.1 Tujuan Dokumen
+## 0.1 Document Purpose
 
-BRD ini adalah sumber kebenaran untuk kebutuhan dan keputusan bisnis `{{PROJECT_NAME}}`. Dokumen ini mendefinisikan:
+This BRD is the source of truth for the business needs and decisions of `{{PROJECT_NAME}}`. This document defines:
 
-- masalah dan peluang yang dibuktikan;
-- strategic driver serta alasan perubahan dilakukan sekarang;
-- outcome, manfaat, KPI, dan guardrail;
-- capability bisnis yang dibutuhkan tanpa menebak desain produk;
-- scope, non-goal, prioritas, dan horizon perubahan;
-- stakeholder, owner, decision rights, serta segregation of duties;
-- current state, target process, control point, exception, dan target operating model;
-- business rule, policy, information need, compliance obligation, dan evidence;
-- business case, biaya, manfaat, risiko, change impact, dan acceptance gate;
-- keputusan yang harus diteruskan secara deterministik ke PRD dan FSD.
+- the evidenced problems and opportunities;
+- the strategic drivers and the reasons the change is happening now;
+- outcomes, benefits, KPIs, and guardrails;
+- the required business capabilities without guessing at product design;
+- scope, non-goals, priorities, and the change horizon;
+- stakeholders, owners, decision rights, and segregation of duties;
+- current state, target process, control points, exceptions, and the target operating model;
+- business rules, policies, information needs, compliance obligations, and evidence;
+- the business case, costs, benefits, risks, change impact, and acceptance gates;
+- the decisions that must be passed deterministically to the PRD and FSD.
 
-BRD dianggap cukup lengkap ketika sponsor, business owner, product, finance, risk/compliance, operations, dan agent penyusun PRD dapat melanjutkan tanpa menciptakan sendiri:
+The BRD is considered sufficiently complete when the sponsor, business owner, product, finance, risk/compliance, operations, and the PRD-authoring agent can proceed without inventing on their own:
 
-- tujuan, manfaat, stakeholder, atau proses bisnis baru;
-- policy, authority boundary, approval chain, atau risk appetite baru;
-- scope, non-goal, service expectation, atau success metric baru;
-- asumsi nilai ekonomi, volume, ownership, klasifikasi, retensi, atau compliance baru;
-- definisi business acceptance dan consequence of failure yang tidak tertulis.
+- new objectives, benefits, stakeholders, or business processes;
+- new policies, authority boundaries, approval chains, or risk appetite;
+- new scope, non-goals, service expectations, or success metrics;
+- new assumptions about economic value, volume, ownership, classification, retention, or compliance;
+- unwritten definitions of business acceptance and consequence of failure.
 
-## 0.2 Batas Otoritas dan Relasi BRD, PRD, FSD, serta ADR Opsional
+## 0.2 Authority Boundaries and the Relationship Between BRD, PRD, FSD, and the Optional ADR
 
-### 0.2.1 Jalur Artifact Canonical
+### 0.2.1 Canonical Artifact Path
 
 ```text
 BRD → PRD → FSD → GOAL → IMPLEMENTATION → VERIFICATION
-                 ↘ ADR (opsional, sidecar keputusan arsitektur)
+                 ↘ ADR (optional, architecture-decision sidecar)
 ```
 
-- BRD, PRD, dan FSD membentuk jalur utama yang harus lengkap sebelum autonomous coding.
-- ADR **bukan** gate default dan tidak perlu dibuat hanya untuk melengkapi checklist.
-- Bila ADR tidak digunakan, FSD harus mencatat keputusan teknis material dalam **Technical Decision Register** dengan ID `TDEC-*`.
-- Bila ADR digunakan, FSD harus menautkan ADR berstatus `ACCEPTED`, merinci implementasinya, dan tidak boleh menduplikasi keputusan secara kontradiktif.
-- ADR berstatus `DRAFT`, `PROPOSED`, atau `IN_REVIEW` tidak menjadi authority implementasi.
+- The BRD, PRD, and FSD form the primary path that must be complete before autonomous coding.
+- The ADR is **not** a default gate and does not need to be created just to complete a checklist.
+- When no ADR is used, the FSD must record material technical decisions in the **Technical Decision Register** with `TDEC-*` IDs.
+- When an ADR is used, the FSD must link the ADR with `ACCEPTED` status, detail its implementation, and must not duplicate the decision in a contradictory way.
+- ADRs with `DRAFT`, `PROPOSED`, or `IN_REVIEW` status do not become implementation authority.
 
 ### 0.2.2 Authority Matrix
 
-| Jenis Keputusan | BRD | PRD | FSD | ADR opsional |
+| Decision Type | BRD | PRD | FSD | Optional ADR |
 |---|---:|---:|---:|---:|
-| Strategic driver, problem, dan opportunity | **Authoritative** | Referensi | Referensi | Tidak mengubah |
-| Business objective, outcome, benefit, dan KPI | **Authoritative** | Menerjemahkan | Mendukung | Tidak mengubah |
-| Business scope, non-goal, dan capability | **Authoritative** | Memetakan ke product scope | Memetakan ke implementation scope | Tidak memperluas |
-| Business process, policy, rule, dan decision rights | **Authoritative** | Menetapkan observable product behavior | Merinci enforcement | Tidak mengubah |
-| Business acceptance dan go/no-go criteria | **Authoritative** | Merinci product acceptance | Merinci technical evidence | Tidak menurunkan |
-| Product feature, journey, UX, dan functional behavior | Constraint/outcome saja | **Authoritative** | Mengimplementasikan | Tidak mengubah intent |
-| Logical product state dan product permission | Business boundary | **Authoritative** | Merinci persistence/enforcement | Tidak mengubah |
-| Schema, API, event, job, concurrency, dan integration mechanics | Tidak menetapkan | Constraint saja | **Authoritative** | Menetapkan pattern/boundary hanya bila ADR dipakai |
-| Architecture, framework, library, dan deployment topology | Constraint bisnis saja | Constraint produk saja | **Authoritative melalui `TDEC-*` bila tanpa ADR** | **Authoritative dalam delegated scope bila `ACCEPTED` dan linked** |
-| Test implementation, build command, migration, rollback teknis | Business acceptance intent | Product acceptance intent | **Authoritative** | Dapat menetapkan constraint/pattern bila linked |
+| Strategic driver, problem, and opportunity | **Authoritative** | Reference | Reference | Does not change |
+| Business objective, outcome, benefit, and KPI | **Authoritative** | Translates | Supports | Does not change |
+| Business scope, non-goal, and capability | **Authoritative** | Maps to product scope | Maps to implementation scope | Does not expand |
+| Business process, policy, rule, and decision rights | **Authoritative** | Defines observable product behavior | Details enforcement | Does not change |
+| Business acceptance and go/no-go criteria | **Authoritative** | Details product acceptance | Details technical evidence | Does not weaken |
+| Product feature, journey, UX, and functional behavior | Constraint/outcome only | **Authoritative** | Implements | Does not change intent |
+| Logical product state and product permission | Business boundary | **Authoritative** | Details persistence/enforcement | Does not change |
+| Schema, API, event, job, concurrency, and integration mechanics | Does not define | Constraint only | **Authoritative** | Defines patterns/boundaries only when an ADR is used |
+| Architecture, framework, library, and deployment topology | Business constraints only | Product constraints only | **Authoritative through `TDEC-*` when no ADR is used** | **Authoritative within delegated scope when `ACCEPTED` and linked** |
+| Test implementation, build command, migration, technical rollback | Business acceptance intent | Product acceptance intent | **Authoritative** | May define constraints/patterns when linked |
 
-### 0.2.3 Aturan Precedence dan Perubahan
+### 0.2.3 Precedence and Change Rules
 
-1. Hukum, kontrak, regulator, dan approved policy/security baseline berlaku paling tinggi.
-2. BRD yang disetujui authoritative untuk business intent dan business boundary.
-3. PRD yang disetujui authoritative untuk product intent dan product boundary.
-4. ADR `ACCEPTED`, **bila ada dan linked**, authoritative hanya untuk delegated architecture decision yang tidak mengubah BRD/PRD.
-5. FSD yang disetujui authoritative untuk implementation contract; `TDEC-*` menjadi authority teknis ketika ADR tidak digunakan.
-6. Repository convention berlaku untuk pilihan lokal yang tidak ditentukan artifact di atas.
-7. Task, prompt, atau invocation `/sc-work` tidak boleh mengubah artifact authority.
+1. Law, contracts, regulators, and approved policy/security baselines take the highest precedence.
+2. The approved BRD is authoritative for business intent and business boundaries.
+3. The approved PRD is authoritative for product intent and product boundaries.
+4. An `ACCEPTED` ADR, **when present and linked**, is authoritative only for delegated architecture decisions that do not change the BRD/PRD.
+5. The approved FSD is authoritative for the implementation contract; `TDEC-*` becomes the technical authority when no ADR is used.
+6. Repository conventions apply to local choices not determined by the artifacts above.
+7. Tasks, prompts, or `/sc-work` invocations must not change artifact authority.
 
-PRD, FSD, dan ADR **MUST NOT** mengubah outcome bisnis, capability, scope, business rule, decision rights, compliance obligation, atau acceptance gate BRD tanpa change request yang disetujui. Konflik tidak boleh diselesaikan diam-diam; gunakan **Conflict and Resolution Ledger**.
+The PRD, FSD, and ADR **MUST NOT** change the BRD's business outcomes, capabilities, scope, business rules, decision rights, compliance obligations, or acceptance gates without an approved change request. Conflicts must not be resolved silently; use the **Conflict and Resolution Ledger**.
 
-## 0.3 Audiens
+## 0.3 Audience
 
-| Audiens | Penggunaan Utama |
+| Audience | Primary Use |
 |---|---|
-| Sponsor / Steering Committee | Menyetujui investasi, outcome, risk appetite, dan keputusan go/no-go |
-| Business Owner | Memiliki problem, scope, policy, dan business acceptance |
-| Process Owner | Menetapkan proses target, control point, SLA, dan operating ownership |
-| Benefits Owner | Bertanggung jawab atas realisasi manfaat setelah delivery |
-| Product Owner | Menurunkan capability dan policy menjadi PRD tanpa mengarang kebutuhan bisnis |
-| Finance | Memvalidasi biaya, benefit model, funding, dan financial assumptions |
-| Risk / Legal / Compliance / Privacy | Memvalidasi obligation, control objective, data boundary, dan residual risk |
-| Operations / Support / Change Team | Menyiapkan target operating model, adopsi, support, dan transisi |
-| Architect / Technical Lead | Memahami business constraints sebelum menyusun FSD dan, bila diperlukan, ADR opsional |
-| QA / Business Tester | Menurunkan business acceptance dan UAT scenario |
-| Agent Penyusun PRD/FSD | Mengubah keputusan yang disetujui menjadi spesifikasi downstream tanpa invention |
+| Sponsor / Steering Committee | Approves investment, outcomes, risk appetite, and go/no-go decisions |
+| Business Owner | Owns the problem, scope, policy, and business acceptance |
+| Process Owner | Defines the target process, control points, SLAs, and operating ownership |
+| Benefits Owner | Accountable for benefit realization after delivery |
+| Product Owner | Derives capabilities and policies into the PRD without fabricating business needs |
+| Finance | Validates costs, the benefit model, funding, and financial assumptions |
+| Risk / Legal / Compliance / Privacy | Validates obligations, control objectives, data boundaries, and residual risk |
+| Operations / Support / Change Team | Prepares the target operating model, adoption, support, and transition |
+| Architect / Technical Lead | Understands business constraints before drafting the FSD and, when needed, an optional ADR |
+| QA / Business Tester | Derives business acceptance and UAT scenarios |
+| PRD/FSD Authoring Agent | Turns approved decisions into downstream specifications without invention |
 
-## 0.4 Bahasa Normatif
+## 0.4 Normative Language
 
-- **MUST / WAJIB**: mandatory untuk business increment yang disetujui.
-- **MUST NOT / DILARANG**: outcome atau tindakan yang tidak boleh terjadi.
-- **SHOULD / SEHARUSNYA**: ekspektasi kuat; pengecualian memerlukan keputusan tertulis.
-- **MAY / BOLEH**: opsional dan tidak boleh mengubah outcome wajib.
-- **Business outcome**: perubahan terukur pada performa, risiko, biaya, pendapatan, kepatuhan, atau pengalaman stakeholder.
-- **Business capability**: kemampuan organisasi yang dibutuhkan, independen dari bentuk solusi.
-- **Business requirement**: kondisi atau kemampuan bisnis yang wajib dipenuhi untuk mencapai outcome.
-- **Business rule**: aturan keputusan yang berlaku konsisten dan memiliki owner/authority.
-- **Business invariant**: kondisi bisnis yang harus selalu benar.
-- **Guardrail**: batas yang mencegah pencapaian satu KPI dengan merusak KPI atau obligation lain.
-- **Business acceptance**: bukti bahwa perubahan mampu digunakan dan menghasilkan kondisi bisnis yang disetujui, bukan hanya bahwa software berjalan.
+- **MUST**: mandatory for the approved business increment.
+- **MUST NOT**: outcomes or actions that must not occur.
+- **SHOULD**: a strong expectation; exceptions require a written decision.
+- **MAY**: optional and must not change mandatory outcomes.
+- **Business outcome**: a measurable change in performance, risk, cost, revenue, compliance, or stakeholder experience.
+- **Business capability**: a required organizational ability, independent of the solution's form.
+- **Business requirement**: a business condition or capability that must be met to achieve an outcome.
+- **Business rule**: a decision rule that applies consistently and has an owner/authority.
+- **Business invariant**: a business condition that must always be true.
+- **Guardrail**: a limit that prevents achieving one KPI by damaging another KPI or obligation.
+- **Business acceptance**: evidence that the change can be used and produces the approved business condition, not merely that the software runs.
 
-## 0.5 Taksonomi Pernyataan
+## 0.5 Statement Taxonomy
 
-Setiap pernyataan material harus dikategorikan agar agent tidak mengubah asumsi menjadi fakta.
+Every material statement must be categorized so that agents do not turn assumptions into facts.
 
-| Tipe | Definisi | Bukti Minimum | Boleh Menjadi Requirement? |
+| Type | Definition | Minimum Evidence | May Become a Requirement? |
 |---|---|---|---|
-| `FACT` | Kondisi yang dapat diverifikasi saat ini | Source primer atau data terukur | Ya, bila relevan |
-| `EVIDENCE` | Data/observasi yang mendukung problem atau outcome | Source, periode, metode, kualitas | Menjadi dasar requirement |
-| `ASSUMPTION` | Pernyataan belum terbukti yang dipakai untuk perencanaan | Owner + validation method + impact | Hanya bila risikonya diterima |
-| `HYPOTHESIS` | Hubungan sebab-akibat yang perlu diuji | Experiment/validation plan | Tidak boleh diperlakukan sebagai hasil pasti |
-| `DECISION` | Pilihan yang telah disetujui oleh authority | Approver + date + rationale | Ya, authoritative |
-| `CONSTRAINT` | Batas yang benar-benar membatasi pilihan | Source dan consequence | Ya, bila valid |
-| `PREFERENCE` | Pilihan yang diinginkan tetapi tidak wajib | Owner dan alasan | Tidak boleh dipromosikan menjadi MUST |
-| `OPEN` | Keputusan yang belum tersedia | Owner + deadline + fallback | Blocker/non-blocker sesuai dampak |
+| `FACT` | A condition verifiable today | Primary source or measured data | Yes, when relevant |
+| `EVIDENCE` | Data/observation supporting a problem or outcome | Source, period, method, quality | Forms the basis of requirements |
+| `ASSUMPTION` | An unproven statement used for planning | Owner + validation method + impact | Only when its risk is accepted |
+| `HYPOTHESIS` | A cause-effect relationship that needs testing | Experiment/validation plan | Must not be treated as a certain result |
+| `DECISION` | A choice approved by an authority | Approver + date + rationale | Yes, authoritative |
+| `CONSTRAINT` | A limit that genuinely restricts choices | Source and consequence | Yes, when valid |
+| `PREFERENCE` | A desired but non-mandatory choice | Owner and reason | Must not be promoted to MUST |
+| `OPEN` | A decision not yet available | Owner + deadline + fallback | Blocker/non-blocker depending on impact |
 
-## 0.6 Kebijakan Placeholder dan Open Item
+## 0.6 Placeholder and Open Item Policy
 
-`TBD` tanpa struktur dilarang. Gunakan format berikut:
+Unstructured `TBD` is forbidden. Use the following format:
 
-| ID | Pertanyaan / Keputusan | Kelas | Dampak | IDs Terdampak | Owner | Opsi | Rekomendasi | Fallback Aman | Deadline | Status |
+| ID | Question / Decision | Class | Impact | Affected IDs | Owner | Options | Recommendation | Safe Fallback | Deadline | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
 | OPEN-001 | {{QUESTION}} | BUSINESS_BLOCKER / PRD_BLOCKER / NON_BLOCKER | {{IMPACT}} | {{IDS}} | {{OWNER}} | {{OPTIONS}} | {{RECOMMENDATION}} | {{FALLBACK_OR_NONE}} | {{DATE_OR_GATE}} | OPEN |
 
-Aturan:
+Rules:
 
-- `BUSINESS_BLOCKER`: BRD tidak boleh disetujui sebelum selesai.
-- `PRD_BLOCKER`: BRD dapat disetujui bersyarat, tetapi PRD tidak boleh memfinalkan area terkait.
-- `NON_BLOCKER`: hanya boleh memakai fallback yang ditulis dan disetujui.
-- Agent atau tim downstream dilarang menciptakan opsi/fallback baru secara diam-diam.
-- Item `RESOLVED` harus menghasilkan `DEC-ID`, approver, tanggal, rationale, serta daftar ID yang diperbarui.
+- `BUSINESS_BLOCKER`: the BRD must not be approved until it is resolved.
+- `PRD_BLOCKER`: the BRD may be approved conditionally, but the PRD must not finalize the related area.
+- `NON_BLOCKER`: only the written and approved fallback may be used.
+- Downstream agents or teams are forbidden from silently inventing new options/fallbacks.
+- `RESOLVED` items must produce a `DEC-ID`, approver, date, rationale, and the list of updated IDs.
 
-## 0.7 Konvensi ID Stabil
+## 0.7 Stable ID Conventions
 
-| Prefix | Arti | Contoh |
+| Prefix | Meaning | Example |
 |---|---|---|
 | SRC | Source artifact | SRC-001 |
 | DRV | Strategic/business driver | DRV-001 |
@@ -245,71 +245,71 @@ Aturan:
 | GATE | Approval / release gate | GATE-001 |
 | REV | Review comment | REV-001 |
 
-ID yang telah disetujui tidak boleh digunakan ulang untuk arti lain. Item yang dibatalkan diberi status `RETIRED` dengan rationale, bukan dihapus.
+Approved IDs must not be reused for a different meaning. Cancelled items are given `RETIRED` status with a rationale, not deleted.
 
-### 0.7.1 Referensi Lintas Artifact
+### 0.7.1 Cross-Artifact References
 
-ID lokal boleh digunakan di dalam dokumennya sendiri. Referensi lintas dokumen **WAJIB** qualified agar `FR-001`, `BR-001`, atau `INV-001` dari artifact berbeda tidak tertukar.
+Local IDs may be used within their own document. Cross-document references **MUST** be qualified so that `FR-001`, `BR-001`, or `INV-001` from different artifacts are not confused.
 
 ```text
 {{DOCUMENT_ID}}#{{LOCAL_ID}}
-{{DOCUMENT_ID}}@{{VERSION}}#{{LOCAL_ID}}   # gunakan saat snapshot harus dipin
+{{DOCUMENT_ID}}@{{VERSION}}#{{LOCAL_ID}}   # use when a snapshot must be pinned
 ```
 
-Contoh:
+Examples:
 
 - `BRD-CCC#BREQ-001`
 - `PRD-CCC@1.2#FR-014`
 - `FSD-CCC#TDEC-003`
 - `ADR-0042#DEC-001`
 
-Manifest machine-readable harus menyimpan `artifact_id`, `artifact_version`, dan `local_id` secara terpisah atau memakai qualified reference di atas.
+Machine-readable manifests must store `artifact_id`, `artifact_version`, and `local_id` separately or use the qualified reference above.
 
-## 0.8 Aturan Kualitas untuk Mencegah AI Slop
+## 0.8 Quality Rules to Prevent AI Slop
 
-BRD yang disetujui wajib memenuhi aturan berikut:
+An approved BRD must satisfy the following rules:
 
-1. Setiap `BREQ` memetakan ke minimal satu `PROB`, `OBJ`, `OUT`, dan `CAP`.
-2. Problem harus ditulis sebagai kondisi bisnis, bukan solusi yang sudah dipilih.
-3. Capability harus tetap bermakna bila teknologi atau vendor diganti.
-4. Outcome harus memiliki baseline, target, measurement source, owner, dan timeframe.
-5. Benefit tidak boleh dihitung dua kali pada kategori berbeda.
-6. KPI adoption/usage tidak boleh menggantikan business outcome kecuali adoption memang outcome utama.
-7. Setiap angka memiliki unit, periode, segment/population, dan sumber.
-8. Setiap business rule ditulis satu kali sebagai canonical rule dan direferensikan.
-9. Scope harus menyatakan batas organisasi, proses, pengguna, data, geografi, kanal, waktu, dan release bila relevan.
-10. Non-goal harus eksplisit agar agent tidak “melengkapi” solusi di luar mandat.
-11. Current-state symptom dan root cause harus dibedakan; solusi tidak boleh hanya mengotomasi proses yang salah tanpa keputusan sadar.
-12. Business acceptance harus mengukur kondisi penggunaan nyata dan evidence, bukan hanya “fitur tersedia”.
-13. Risiko memiliki trigger, mitigation, contingency, owner, residual risk, dan acceptance authority.
-14. Asumsi material memiliki validation method dan consequence bila salah.
-15. Compliance/security/privacy harus berupa obligation atau control objective yang dapat dibuktikan, bukan klaim generik.
-16. AI/automation tidak boleh mendapat authority implisit; advisory, deterministic, human-approved, dan autonomous harus dibedakan.
-17. Opsi “do nothing” dan process-only harus dinilai agar keputusan build/buy tidak menjadi bias awal.
-18. Constraint teknologi hanya boleh masuk bila sumber dan konsekuensi bisnisnya jelas.
-19. Tidak boleh menggunakan daftar terbuka seperti “dan lain-lain” untuk obligation mandatory.
-20. Konflik source, angka, policy, owner, atau scope harus terlihat di ledger; dilarang memilih salah satu secara diam-diam.
+1. Every `BREQ` maps to at least one `PROB`, `OBJ`, `OUT`, and `CAP`.
+2. Problems must be written as business conditions, not pre-selected solutions.
+3. Capabilities must remain meaningful when the technology or vendor changes.
+4. Outcomes must have a baseline, target, measurement source, owner, and timeframe.
+5. Benefits must not be counted twice under different categories.
+6. Adoption/usage KPIs must not replace business outcomes unless adoption is genuinely the primary outcome.
+7. Every number has a unit, period, segment/population, and source.
+8. Every business rule is written once as a canonical rule and referenced.
+9. Scope must state organizational, process, user, data, geography, channel, time, and release boundaries where relevant.
+10. Non-goals must be explicit so that agents do not “complete” the solution beyond the mandate.
+11. Current-state symptoms and root causes must be distinguished; the solution must not merely automate a broken process without a conscious decision.
+12. Business acceptance must measure real usage conditions and evidence, not merely “the feature is available”.
+13. Risks have a trigger, mitigation, contingency, owner, residual risk, and acceptance authority.
+14. Material assumptions have a validation method and a consequence if wrong.
+15. Compliance/security/privacy must be provable obligations or control objectives, not generic claims.
+16. AI/automation must not receive implicit authority; advisory, deterministic, human-approved, and autonomous modes must be distinguished.
+17. The “do nothing” and process-only options must be assessed so that the build/buy decision does not become an initial bias.
+18. Technology constraints may only be included when their source and business consequences are clear.
+19. Open-ended lists such as “and so on” must not be used for mandatory obligations.
+20. Conflicts in sources, numbers, policies, owners, or scope must be visible in the ledger; silently picking one is forbidden.
 
-## 0.9 Gate Persetujuan BRD
+## 0.9 BRD Approval Gate
 
-BRD hanya dapat memiliki `status: APPROVED` dan `decision_stage: APPROVED_FOR_PRD` bila:
+The BRD may only have `status: APPROVED` and `decision_stage: APPROVED_FOR_PRD` when:
 
-- [ ] Decision request dan accountable approver jelas.
-- [ ] Problem, root cause, evidence, dan baseline cukup untuk mendukung investasi.
-- [ ] Objective, outcome, KPI, guardrail, dan benefit owner ditetapkan.
-- [ ] Scope, non-goal, capability, target process, dan target operating model konsisten.
-- [ ] Business rule, policy, decision rights, control objective, dan obligation tidak ambigu.
-- [ ] Opsi utama, termasuk do-nothing, dinilai dengan kriteria yang disetujui.
-- [ ] Business case mencatat cost range, benefit range, uncertainty, dan sensitivity.
-- [ ] Change impact, adoption dependency, support ownership, dan transition intent ditetapkan.
-- [ ] Business acceptance scenario dan go/no-go criteria dapat diverifikasi.
-- [ ] Risiko residual telah diterima oleh authority yang tepat.
-- [ ] Tidak ada `BUSINESS_BLOCKER` terbuka.
-- [ ] PRD handoff manifest konsisten dan tidak memiliki mandatory field kosong.
+- [ ] The decision request and accountable approver are clear.
+- [ ] The problem, root cause, evidence, and baseline are sufficient to support the investment.
+- [ ] Objectives, outcomes, KPIs, guardrails, and benefit owners are defined.
+- [ ] Scope, non-goals, capabilities, the target process, and the target operating model are consistent.
+- [ ] Business rules, policies, decision rights, control objectives, and obligations are unambiguous.
+- [ ] The main options, including do-nothing, are assessed against approved criteria.
+- [ ] The business case records the cost range, benefit range, uncertainty, and sensitivity.
+- [ ] Change impact, adoption dependencies, support ownership, and transition intent are defined.
+- [ ] Business acceptance scenarios and go/no-go criteria are verifiable.
+- [ ] Residual risks have been accepted by the appropriate authority.
+- [ ] No `BUSINESS_BLOCKER` remains open.
+- [ ] The PRD handoff manifest is consistent and has no empty mandatory fields.
 
 ---
 
-# 1. Kontrol Dokumen, Governance, dan Traceability
+# 1. Document Control, Governance, and Traceability
 
 ## 1.1 Metadata Dokumen
 
@@ -334,7 +334,7 @@ BRD hanya dapat memiliki `status: APPROVED` dan `decision_stage: APPROVED_FOR_PR
 | Default Timezone | `{{IANA_TIMEZONE}}` |
 | Classification | `{{CLASSIFICATION}}` |
 
-## 1.2 Source Artifacts dan Evidence Register
+## 1.2 Source Artifacts and Evidence Register
 
 | Source ID | Source / Artifact | Owner / Publisher | Version / Period | Type | Authority | Evidence Quality | Sections / Data Used | Access / Classification | Status |
 |---|---|---|---|---|---|---|---|---|---|
@@ -342,18 +342,18 @@ BRD hanya dapat memiliki `status: APPROVED` dan `decision_stage: APPROVED_FOR_PR
 
 Evidence quality:
 
-- `A`: source primer, lengkap, terkini, dan dapat direproduksi.
-- `B`: source resmi/terpercaya dengan keterbatasan minor.
-- `C`: observasi/interview terstruktur atau sample terbatas.
-- `D`: anecdotal, tidak lengkap, atau belum diverifikasi; tidak boleh menjadi satu-satunya dasar keputusan material.
+- `A`: primary source, complete, current, and reproducible.
+- `B`: official/trusted source with minor limitations.
+- `C`: structured observation/interview or a limited sample.
+- `D`: anecdotal, incomplete, or unverified; must not be the sole basis of a material decision.
 
-## 1.3 Riwayat Revisi
+## 1.3 Revision History
 
 | Version | Date | Author | Change Summary | IDs Affected | Review / Approval |
 |---|---|---|---|---|---|
 | 0.1 | {{YYYY-MM-DD}} | {{AUTHOR}} | Initial draft | All | Pending |
 
-## 1.4 Approval dan Decision Authority
+## 1.4 Approval and Decision Authority
 
 | Role | Name | Authority | Decision | Date | Conditions / Notes |
 |---|---|---|---|---|---|
@@ -379,15 +379,15 @@ Evidence quality:
 
 ## 1.7 Change-Control Triggers
 
-Perubahan berikut memerlukan review dan reapproval BRD:
+The following changes require BRD review and reapproval:
 
 | Trigger ID | Change Type | Reapproval Required From | Downstream Impact |
 |---|---|---|---|
-| CHG-001 | Perubahan problem, objective, outcome, atau KPI target material | Sponsor + Business Owner | PRD/FSD traceability review |
-| CHG-002 | Perluasan scope organisasi, proses, data, geografi, atau user | Business Owner + Finance/Risk as applicable | Re-estimation and new requirements |
-| CHG-003 | Perubahan business rule, authority, approval, atau compliance obligation | Business Owner + Control Owner | PRD/FSD and test update |
-| CHG-004 | Cost/benefit melewati tolerance `{{THRESHOLD}}` | Sponsor + Finance | Business-case reapproval |
-| CHG-005 | Residual risk melebihi appetite | Risk Owner + Sponsor | Pause/re-scope/mitigation decision |
+| CHG-001 | Material change to the problem, objective, outcome, or KPI target | Sponsor + Business Owner | PRD/FSD traceability review |
+| CHG-002 | Expansion of organizational, process, data, geography, or user scope | Business Owner + Finance/Risk as applicable | Re-estimation and new requirements |
+| CHG-003 | Change to a business rule, authority, approval, or compliance obligation | Business Owner + Control Owner | PRD/FSD and test update |
+| CHG-004 | Cost/benefit exceeds tolerance `{{THRESHOLD}}` | Sponsor + Finance | Business-case reapproval |
+| CHG-005 | Residual risk exceeds appetite | Risk Owner + Sponsor | Pause/re-scope/mitigation decision |
 
 ## 1.8 Business Requirement Inventory
 
@@ -399,9 +399,9 @@ Perubahan berikut memerlukan review dan reapproval BRD:
 
 # 2. Executive Decision Brief
 
-## 2.1 Ringkasan Satu Paragraf
+## 2.1 One-Paragraph Summary
 
-`{{Dalam satu paragraf: kondisi sekarang, dampak terukur, perubahan capability/proses yang dibutuhkan, outcome target, kelompok terdampak, nilai/biaya utama, risiko utama, dan keputusan yang diminta. Jangan memuat detail implementasi.}}`
+`{{In one paragraph: the current condition, measured impact, required capability/process change, target outcome, affected groups, key value/cost, key risks, and the decision being requested. Do not include implementation detail.}}`
 
 ## 2.2 Decision Request
 
@@ -409,9 +409,9 @@ Perubahan berikut memerlukan review dan reapproval BRD:
 |---|---|---|---|---|
 | {{EXACT_DECISION_REQUEST}} | {{AUTHORITY}} | {{DATE/GATE}} | {{CONSEQUENCE}} | {{RECOMMENDATION}} |
 
-## 2.3 Snapshot Bisnis
+## 2.3 Business Snapshot
 
-| Area | Ringkasan |
+| Area | Summary |
 |---|---|
 | Strategic driver | {{DRV_IDS_AND_SUMMARY}} |
 | Core problem | {{PROB_IDS_AND_SUMMARY}} |
@@ -428,11 +428,11 @@ Perubahan berikut memerlukan review dan reapproval BRD:
 
 ## 2.4 Value Thesis
 
-> Bila `{{TARGET_STAKEHOLDER_OR_BUSINESS_UNIT}}` memperoleh capability `{{CAPABILITY}}`, maka `{{CURRENT_PROBLEM}}` akan berubah menjadi `{{TARGET_OUTCOME}}`, yang diukur melalui `{{KPI_IDS}}`, karena `{{EVIDENCE_BASED_CAUSAL_LOGIC}}`.
+> When `{{TARGET_STAKEHOLDER_OR_BUSINESS_UNIT}}` gains the capability `{{CAPABILITY}}`, then `{{CURRENT_PROBLEM}}` will change into `{{TARGET_OUTCOME}}`, measured through `{{KPI_IDS}}`, because `{{EVIDENCE_BASED_CAUSAL_LOGIC}}`.
 
 ## 2.5 Recommendation
 
-`{{Nyatakan opsi yang direkomendasikan, alasan berbasis kriteria, trade-off yang diterima, dan kondisi yang harus benar. Jangan menyatakan kepastian bila masih berupa hipotesis.}}`
+`{{State the recommended option, the criteria-based rationale, the accepted trade-offs, and the conditions that must hold true. Do not state certainty while it is still a hypothesis.}}`
 
 ## 2.6 Cost of Inaction
 
@@ -442,7 +442,7 @@ Perubahan berikut memerlukan review dan reapproval BRD:
 
 ---
 
-# 3. Strategic Context, Problem, dan Evidence
+# 3. Strategic Context, Problem, and Evidence
 
 ## 3.1 Strategic Drivers
 
@@ -452,17 +452,17 @@ Perubahan berikut memerlukan review dan reapproval BRD:
 
 ## 3.2 Business Context
 
-`{{Jelaskan konteks organisasi, proses, pasar, regulasi, customer, vendor, workforce, dan operating environment yang relevan. Hindari sejarah yang tidak memengaruhi keputusan.}}`
+`{{Describe the relevant organizational, process, market, regulatory, customer, vendor, workforce, and operating-environment context. Avoid history that does not influence the decision.}}`
 
 ## 3.3 Problem Statements
 
-Gunakan struktur: **actor/process terdampak + kondisi saat ini + dampak + evidence + batas konteks**.
+Use the structure: **affected actor/process + current condition + impact + evidence + context boundary**.
 
 | Problem ID | Problem Statement | Affected Stakeholders / Process | Business Impact | Evidence IDs | Frequency / Scale | Owner |
 |---|---|---|---|---|---|---|
 | PROB-001 | {{PROBLEM_WITHOUT_SOLUTION}} | {{STK/PROC_IDS}} | {{IMPACT}} | {{EVD_IDS}} | {{FREQUENCY_SCALE}} | {{OWNER}} |
 
-## 3.4 Evidence dan Baseline
+## 3.4 Evidence and Baseline
 
 | Evidence ID | Metric / Observation | Baseline Value | Unit | Population / Segment | Period | Source | Collection Method | Data Quality | Limitation |
 |---|---|---:|---|---|---|---|---|---|---|
@@ -474,7 +474,7 @@ Gunakan struktur: **actor/process terdampak + kondisi saat ini + dampak + eviden
 |---|---|---|---|---:|---:|---|
 | ROOT-001 | {{SYMPTOM}} | {{ROOT_CAUSE}} | {{EVD_IDS}} | YES / PARTIAL / NO | YES / NO | {{METHOD_OR_NONE}} |
 
-## 3.6 Current-State Process dan Workaround
+## 3.6 Current-State Process and Workarounds
 
 ```mermaid
 flowchart TD
@@ -488,7 +488,7 @@ flowchart TD
 |---|---|---|---|---|---|---:|---:|---|---|
 | PROC-001 | {{STEP}} | {{ACT_ID}} | {{INPUT}} | {{OUTPUT}} | {{CURRENT_TOOL}} | {{TIME}} | {{RATE}} | {{PAIN}} | {{EVD_ID}} |
 
-## 3.7 Existing Controls dan Their Limitations
+## 3.7 Existing Controls and Their Limitations
 
 | Control ID | Existing Control | Objective | Owner | Evidence Produced | Effectiveness | Limitation / Failure Mode |
 |---|---|---|---|---|---|---|
@@ -496,15 +496,15 @@ flowchart TD
 
 ## 3.8 Why Now
 
-`{{Nyatakan deadline eksternal/internal, compounding cost, strategic window, audit finding, contract event, capacity limit, or dependency. “Karena teknologi tersedia” saja bukan why-now yang cukup.}}`
+`{{State the external/internal deadline, compounding cost, strategic window, audit finding, contract event, capacity limit, or dependency. “Because the technology is available” alone is not a sufficient why-now.}}`
 
 ## 3.9 Opportunity Statement
 
-`{{Nyatakan peluang sebagai peningkatan capability atau perubahan outcome, bukan nama fitur/teknologi.}}`
+`{{State the opportunity as a capability improvement or an outcome change, not a feature/technology name.}}`
 
 ---
 
-# 4. Business Objectives, Outcomes, KPI, dan Benefits
+# 4. Business Objectives, Outcomes, KPI, and Benefits
 
 ## 4.1 Business Objectives
 
@@ -526,10 +526,10 @@ flowchart TD
 
 KPI rules:
 
-- Definisikan perilaku ketika denominator nol, data terlambat, data hilang, atau source berubah.
-- Pisahkan **leading indicator**, **lagging outcome**, **adoption metric**, dan **guardrail**.
-- Hindari target persentase tanpa numerator/denominator dan population.
-- Tulis tindakan yang diambil bila KPI melewati threshold; metric tanpa decision use adalah vanity metric.
+- Define the behavior when the denominator is zero, data is late, data is missing, or the source changes.
+- Separate **leading indicators**, **lagging outcomes**, **adoption metrics**, and **guardrails**.
+- Avoid percentage targets without a numerator/denominator and population.
+- Write down the action taken when a KPI crosses its threshold; a metric without a decision use is a vanity metric.
 
 ## 4.4 Benefits Register
 
@@ -537,7 +537,7 @@ KPI rules:
 |---|---|---|---|---|---:|---:|---|---|---|---|---|
 | BEN-001 | {{BENEFIT}} | Revenue / Cost Avoidance / Productivity / Risk Reduction / Compliance / Experience / Strategic | OUT-001 / KPI-001 | {{METHOD}} | {{BASELINE}} | {{LOW_BASE_HIGH}} | {{DATE}} | {{DEPENDENCY}} | {{OWNER}} | H/M/L | {{METHOD}} |
 
-## 4.5 Disbenefits dan Guardrails
+## 4.5 Disbenefits and Guardrails
 
 | ID | Potential Adverse Effect | Trigger / Leading Signal | Guardrail Metric | Tolerance | Mitigation | Owner |
 |---|---|---|---|---|---|---|
@@ -567,11 +567,11 @@ flowchart LR
 
 ---
 
-# 5. Options Analysis dan Business Case
+# 5. Options Analysis and Business Case
 
 ## 5.1 Option Inventory
 
-Minimal pertimbangkan `do nothing`, `process/policy only`, `buy`, `build`, dan `hybrid` bila relevan.
+At minimum, consider `do nothing`, `process/policy only`, `buy`, `build`, and `hybrid` where relevant.
 
 | Option ID | Option | Description | Scope / Capability Covered | Time to Value | Indicative Cost | Key Benefits | Key Risks | Reversibility | Status |
 |---|---|---|---|---|---:|---|---|---|---|
@@ -600,7 +600,7 @@ Weights must total 100%.
 |---|---:|---:|---:|---:|---:|---:|---:|---|---|
 | OPT-001 | {{1-5}} | {{1-5}} | {{1-5}} | {{1-5}} | {{1-5}} | {{1-5}} | {{SCORE}} | H/M/L | {{NOTES}} |
 
-## 5.4 Selected Direction dan Trade-Off
+## 5.4 Selected Direction and Trade-Off
 
 | Selected Option | Decision ID | Rationale | Trade-Off Accepted | Conditions / Exit Triggers | Approver |
 |---|---|---|---|---|---|
@@ -632,7 +632,7 @@ Do not mix one-time and recurring costs. Use ranges when estimates are immature.
 | ROI | {{VALUE}} | {{VALUE}} | {{VALUE}} | `(total benefits − total costs) / total costs` |
 | NPV, if required | {{VALUE}} | {{VALUE}} | {{VALUE}} | Use approved discount rate `{{RATE}}` |
 
-## 5.8 Sensitivity dan Break-Even
+## 5.8 Sensitivity and Break-Even
 
 | Variable | Base Assumption | Downside | Upside | Effect on Outcome / ROI | Break-Even Value | Monitoring Source |
 |---|---:|---:|---:|---|---:|---|
@@ -640,7 +640,7 @@ Do not mix one-time and recurring costs. Use ranges when estimates are immature.
 | Delivery cost | {{VALUE}} | {{VALUE}} | {{VALUE}} | {{EFFECT}} | {{VALUE}} | {{SOURCE}} |
 | Volume | {{VALUE}} | {{VALUE}} | {{VALUE}} | {{EFFECT}} | {{VALUE}} | {{SOURCE}} |
 
-## 5.9 Funding dan Stage Gates
+## 5.9 Funding and Stage Gates
 
 | Gate ID | Funding / Decision Gate | Evidence Required | Decision Options | Authority | Date |
 |---|---|---|---|---|---|
@@ -648,7 +648,7 @@ Do not mix one-time and recurring costs. Use ranges when estimates are immature.
 
 ---
 
-# 6. Scope, Capability, Prioritization, dan Constraints
+# 6. Scope, Capability, Prioritization, and Constraints
 
 ## 6.1 Scope Boundary Matrix
 
@@ -672,9 +672,9 @@ Do not mix one-time and recurring costs. Use ranges when estimates are immature.
 
 Capability quality check:
 
-- Nama capability harus berupa kemampuan organisasi, bukan layar, service, tabel, atau vendor.
-- Capability harus memiliki owner, consumer, input/output, dan measurable outcome.
-- Capability tidak boleh tumpang tindih tanpa boundary yang jelas.
+- Capability names must be organizational abilities, not screens, services, tables, or vendors.
+- Capabilities must have an owner, consumers, inputs/outputs, and a measurable outcome.
+- Capabilities must not overlap without a clear boundary.
 
 ## 6.3 In-Scope Business Requirements
 
@@ -700,7 +700,7 @@ Capability quality check:
 |---|---|---|---|---|---|---|
 | BREQ-001 | MUST / SHOULD / COULD / WON'T | {{RATIONALE}} | {{LEVEL}} | {{VALUE}} | {{VALUE}} | {{REASON}} |
 
-`MUST` berarti business increment gagal tanpa item tersebut; bukan sekadar “penting”.
+`MUST` means the business increment fails without the item; not merely “important”.
 
 ## 6.7 Constraints
 
@@ -722,7 +722,7 @@ Capability quality check:
 
 ---
 
-# 7. Stakeholders, Actors, Decision Rights, dan Governance
+# 7. Stakeholders, Actors, Decision Rights, and Governance
 
 ## 7.1 Stakeholder Map
 
@@ -730,7 +730,7 @@ Capability quality check:
 |---|---|---:|---:|---|---|---|---|---|
 | STK-001 | {{GROUP}} | High / Medium / Low | High / Medium / Low | {{PAIN}} | {{SUCCESS}} | {{RESISTANCE}} | {{STRATEGY}} | {{OWNER}} |
 
-## 7.2 Business Actor dan Operating Role Catalog
+## 7.2 Business Actor and Operating Role Catalog
 
 | Actor ID | Role | Responsibilities | Business Authority | Data / Process Scope | Obligations | Prohibited Actions | Backup / Delegate |
 |---|---|---|---|---|---|---|---|
@@ -738,11 +738,11 @@ Capability quality check:
 
 Distinguish:
 
-- stakeholder yang terdampak;
-- actor yang menjalankan proses;
-- approver yang memiliki authority;
-- owner yang accountable atas outcome;
-- product/system role yang baru akan didefinisikan di PRD.
+- stakeholders who are affected;
+- actors who execute the process;
+- approvers who hold authority;
+- owners accountable for outcomes;
+- product/system roles that will only be defined in the PRD.
 
 ## 7.3 Decision Rights Matrix
 
@@ -753,15 +753,15 @@ Distinguish:
 | High-risk action | {{ROLE}} | {{ROLE}} | {{ROLE}} | {{ROLE}} | {{ROLE}} | {{EVIDENCE}} |
 | Benefit acceptance | {{ROLE}} | {{ROLE}} | {{ROLE}} | {{ROLE}} | {{ROLE}} | {{EVIDENCE}} |
 
-## 7.4 RACI untuk Business Processes
+## 7.4 RACI for Business Processes
 
 | Process / Deliverable | Sponsor | Business Owner | Process Owner | Product | Operations | Risk/Compliance | Finance | Change |
 |---|---|---|---|---|---|---|---|---|
 | {{PROC_OR_DELIVERABLE}} | A / R / C / I | A / R / C / I | A / R / C / I | A / R / C / I | A / R / C / I | A / R / C / I | A / R / C / I | A / R / C / I |
 
-Setiap row harus memiliki tepat satu `A`.
+Every row must have exactly one `A`.
 
-## 7.5 Segregation of Duties dan Conflict of Interest
+## 7.5 Segregation of Duties and Conflict of Interest
 
 | SoD ID | Action / Decision | Initiator | Approver / Verifier | Prohibited Combination | Exception Authority | Evidence |
 |---|---|---|---|---|---|---|
@@ -781,7 +781,7 @@ Setiap row harus memiliki tepat satu `A`.
 
 ---
 
-# 8. Target Business Process dan Operating Model
+# 8. Target Business Process and Operating Model
 
 ## 8.1 Target-State Principles
 
@@ -875,7 +875,7 @@ flowchart TD
 |---|---|---|---|---|---|---|---|---|---|
 | SLA-001 | {{SERVICE}} | {{SCOPE}} | {{TARGET}} | {{START}} | {{STOP}} | {{CALENDAR}} | {{EXCLUSIONS}} | {{ACTION}} | {{OWNER}} |
 
-## 8.7 Control Points dan Evidence
+## 8.7 Control Points and Evidence
 
 | Control ID | Process Step | Control Objective | Preventive / Detective / Corrective | Performer | Verifier | Frequency | Evidence | Failure Response |
 |---|---|---|---|---|---|---|---|---|
@@ -892,7 +892,7 @@ flowchart TD
 | Data stewardship | {{TARGET}} | {{OWNER}} | {{CAPACITY}} | {{FORUM}} | {{DEP}} | {{EVIDENCE}} |
 | Control assurance | {{TARGET}} | {{OWNER}} | {{CADENCE}} | {{FORUM}} | {{DEP}} | {{EVIDENCE}} |
 
-## 8.9 Manual Fallback dan Degraded Business Operation
+## 8.9 Manual Fallback and Degraded Business Operation
 
 | Failure / Unavailability | Minimum Business Capability Preserved | Manual / Alternate Process | Maximum Safe Duration | Data Reconciliation Needed | Owner | Communication |
 |---|---|---|---|---|---|---|
@@ -900,7 +900,7 @@ flowchart TD
 
 ---
 
-# 9. Business Domain Semantics, Policy, dan Rules
+# 9. Business Domain Semantics, Policy, and Rules
 
 ## 9.1 Canonical Glossary
 
@@ -930,11 +930,11 @@ Do not define physical schema here.
 
 Rule quality:
 
-- satu row = satu rule;
-- condition dan outcome harus deterministik bila rule bukan kebijakan discretionary;
-- exception harus memiliki authority dan evidence;
-- contoh tidak menggantikan rule;
-- apabila dua rule berlaku bersamaan, precedence harus ditulis.
+- one row = one rule;
+- conditions and outcomes must be deterministic when the rule is not a discretionary policy;
+- exceptions must have an authority and evidence;
+- examples do not replace rules;
+- when two rules apply at the same time, precedence must be written down.
 
 ## 9.5 Business Policies
 
@@ -942,7 +942,7 @@ Rule quality:
 |---|---|---|---|---|---|---|---|
 | POL-001 | {{POLICY}} | {{OBJECTIVE}} | {{SCOPE}} | {{TYPE}} | {{AUTHORITY}} | {{CADENCE}} | {{SRC_ID}} |
 
-## 9.6 Business Invariants dan Forbidden Outcomes
+## 9.6 Business Invariants and Forbidden Outcomes
 
 | Invariant ID | Condition That Must Always Be True | Applies To | Violation Impact | Prevention / Detection Intent | Exception Allowed? | Owner |
 |---|---|---|---|---|---|---|
@@ -978,7 +978,7 @@ stateDiagram-v2
 |---|---|---|---|---|---|
 | DT-001 | {{VALUE}} | {{VALUE}} | {{VALUE}} | {{OUTCOME}} | {{AUTHORITY/EVIDENCE}} |
 
-## 9.9 Precedence dan Fail-Safe Rules
+## 9.9 Precedence and Fail-Safe Rules
 
 | Area | Higher-Precedence Source / Rule | Lower-Precedence Source | Conflict Resolution | Safe Default | Owner |
 |---|---|---|---|---|---|
@@ -986,7 +986,7 @@ stateDiagram-v2
 
 Unknown/default behavior must not become more permissive unless explicitly approved.
 
-## 9.10 Time, Date, Currency, Unit, dan Rounding Semantics
+## 9.10 Time, Date, Currency, Unit, and Rounding Semantics
 
 | Semantic Area | Canonical Rule | Example | Edge Case | Owner |
 |---|---|---|---|---|
@@ -999,7 +999,7 @@ Unknown/default behavior must not become more permissive unless explicitly appro
 
 ---
 
-# 10. Business Information, Reporting, Records, dan Notifications
+# 10. Business Information, Reporting, Records, and Notifications
 
 ## 10.1 Business Information Requirements
 
@@ -1007,7 +1007,7 @@ Unknown/default behavior must not become more permissive unless explicitly appro
 |---|---|---|---|---|---|---|---|---|---|
 | INFO-001 | {{INFORMATION}} | {{DECISION/PROC}} | {{ROLE}} | {{SOURCE}} | {{FIELDS/DIMENSIONS}} | {{FRESHNESS}} | {{QUALITY_TARGET}} | {{CLASS}} | {{OWNER}} |
 
-## 10.2 Data Ownership dan Stewardship
+## 10.2 Data Ownership and Stewardship
 
 | Information Domain | Business Owner | Data Steward | Permitted Consumers | Quality Accountability | Correction Authority | Escalation |
 |---|---|---|---|---|---|---|
@@ -1019,13 +1019,13 @@ Unknown/default behavior must not become more permissive unless explicitly appro
 |---|---|---|---|---|---|---|---|
 | DQ-001 | {{DATA}} | Accuracy / Completeness / Timeliness / Uniqueness / Consistency | {{RULE}} | {{POINT}} | {{RESPONSE}} | {{OWNER}} | {{REPORT}} |
 
-## 10.4 Classification, Access, Retention, dan Disposal Intent
+## 10.4 Classification, Access, Retention, and Disposal Intent
 
 | Information / Record | Classification | Need-to-Know / Clearance | Permitted Purpose | Retention | Disposal / Legal Hold | Cross-Border / Third-Party Restriction | Owner |
 |---|---|---|---|---|---|---|---|
 | {{RECORD}} | {{CLASS}} | {{ACCESS}} | {{PURPOSE}} | {{PERIOD/RULE}} | {{RULE}} | {{RESTRICTION}} | {{OWNER}} |
 
-## 10.5 Reporting dan Decision-Support Requirements
+## 10.5 Reporting and Decision-Support Requirements
 
 | Report ID | Information Product / Report | Audience | Decision Supported | Metrics / Dimensions | Frequency | Freshness | Drill / Filter Needs | Export / Evidence | Owner |
 |---|---|---|---|---|---|---|---|---|---|
@@ -1033,13 +1033,13 @@ Unknown/default behavior must not become more permissive unless explicitly appro
 
 Do not require a “dashboard” unless the business need genuinely requires continuous visual monitoring; define the decision and information first.
 
-## 10.6 Business Notifications dan Escalations
+## 10.6 Business Notifications and Escalations
 
 | Notification ID | Trigger | Recipient | Purpose / Required Action | Delivery Deadline | Escalation | Deduplication / Repeat Rule | Suppression / Completion Rule | Evidence |
 |---|---|---|---|---|---|---|---|---|
 | NOTIF-001 | {{BUSINESS_EVENT}} | {{ROLE}} | {{ACTION}} | {{TIME}} | {{PATH}} | {{RULE}} | {{RULE}} | {{RECORD}} |
 
-## 10.7 Records dan Audit Evidence
+## 10.7 Records and Audit Evidence
 
 | Record / Evidence | Event / Process | Required Contents | Creator | Verifier | Immutability / Correction Rule | Retention | Retrieval SLA | Consumer |
 |---|---|---|---|---|---|---|---|---|
@@ -1051,7 +1051,7 @@ Do not require a “dashboard” unless the business need genuinely requires con
 |---|---|---|---|---|---|---|---|---|
 | {{PARTY/SYSTEM}} | {{PURPOSE}} | {{INFO}} | In / Out / Both | {{TRIGGER}} | {{SRC/OBL}} | {{IMPACT}} | {{FALLBACK}} | {{OWNER}} |
 
-## 10.9 Historical Data dan Transition Intent
+## 10.9 Historical Data and Transition Intent
 
 | Data / Record Set | Required History | Reason | Quality Known? | Cleansing / Reconciliation Owner | Cutover Acceptance | Legacy Retention / Decommission |
 |---|---|---|---|---|---|---|
@@ -1233,9 +1233,9 @@ PRD must not decide:
 
 ---
 
-# 12. Cross-Cutting Obligations dan Control Objectives
+# 12. Cross-Cutting Obligations and Control Objectives
 
-## 12.1 Legal, Regulatory, Contractual, dan Policy Obligations
+## 12.1 Legal, Regulatory, Contractual, and Policy Obligations
 
 | Obligation ID | Obligation | Jurisdiction / Contract / Policy | Applies To | Effective Date | Required Business Behavior | Evidence | Owner | Non-Compliance Impact |
 |---|---|---|---|---|---|---|---|---|
@@ -1249,13 +1249,13 @@ Verify legal interpretations with qualified counsel or the designated compliance
 |---|---|---|---|---|---|---|
 | CTRL-SEC-001 | {{ASSET}} | {{THREAT}} | {{OBJECTIVE}} | {{EVIDENCE}} | {{OWNER}} | PRD/FSD may choose implementation that meets objective |
 
-## 12.3 Privacy dan Personal Data Requirements
+## 12.3 Privacy and Personal Data Requirements
 
 | Privacy ID | Data Subject / Data | Purpose | Lawful / Approved Basis | Minimization | Access / Sharing | Retention / Deletion | Data Subject Request | Owner |
 |---|---|---|---|---|---|---|---|---|
 | PRIV-BIZ-001 | {{SUBJECT/DATA}} | {{PURPOSE}} | {{BASIS}} | {{MINIMUM_DATA}} | {{BOUNDARY}} | {{RULE}} | {{PROCESS}} | {{OWNER}} |
 
-## 12.4 Auditability dan Recordkeeping
+## 12.4 Auditability and Recordkeeping
 
 | Requirement | Event / Decision | Actor Attribution | Before/After / Rationale | Immutability Need | Retention | Retrieval / Export | Owner |
 |---|---|---|---|---|---|---|---|
@@ -1285,19 +1285,19 @@ Required governance questions:
 - How are model/provider changes re-approved?
 - What capability remains when AI is unavailable?
 
-## 12.6 Third-Party, Vendor, dan Outsourcing Requirements
+## 12.6 Third-Party, Vendor, and Outsourcing Requirements
 
 | Vendor / Service | Business Dependency | Data / IP Ownership | SLA / Support | Regulatory / Residency | Lock-In Risk | Portability / Exit Requirement | Failure / Insolvency Contingency | Owner |
 |---|---|---|---|---|---|---|---|---|
 | {{VENDOR}} | {{DEPENDENCY}} | {{OWNERSHIP}} | {{SLA}} | {{REQUIREMENT}} | {{RISK}} | {{EXIT}} | {{CONTINGENCY}} | {{OWNER}} |
 
-## 12.7 Business Continuity dan Resilience
+## 12.7 Business Continuity and Resilience
 
 | Scenario | Critical Capability | Maximum Tolerable Disruption | Target Recovery | Minimum Data / Record Integrity | Manual Workaround | Reconciliation | Communication | Owner |
 |---|---|---|---|---|---|---|---|---|
 | {{SCENARIO}} | CAP-001 | {{MTD}} | {{RTO/RPO_BUSINESS_INTENT}} | {{INTEGRITY}} | {{WORKAROUND}} | {{RULE}} | {{PLAN}} | {{OWNER}} |
 
-## 12.8 Accessibility, Inclusion, dan Ethical Guardrails
+## 12.8 Accessibility, Inclusion, and Ethical Guardrails
 
 | Requirement | Affected Group | Barrier / Harm | Required Business Outcome | Measure / Evidence | Owner |
 |---|---|---|---|---|---|
@@ -1305,7 +1305,7 @@ Required governance questions:
 
 ---
 
-# 13. Organizational Change, Adoption, dan Operational Readiness
+# 13. Organizational Change, Adoption, and Operational Readiness
 
 ## 13.1 Change Impact Assessment
 
@@ -1319,7 +1319,7 @@ Required governance questions:
 |---|---|---|---|---|---|---|---|
 | OCM-001 | {{CHANGE_ACTION}} | {{AUDIENCE}} | {{OUTCOME}} | Training / Communication / Policy / Role / Incentive / Coaching | {{TIMING}} | {{EVIDENCE}} | {{OWNER}} |
 
-## 13.3 Training dan Competency
+## 13.3 Training and Competency
 
 | Role | Required Competency | Current Level | Target Level | Training / Practice | Assessment | Refresher Cadence | Owner |
 |---|---|---|---|---|---|---|---|
@@ -1337,7 +1337,7 @@ Required governance questions:
 |---|---|---|---:|---:|---|---|---|---|
 | {{METRIC}} | {{POPULATION}} | {{FORMULA}} | {{VALUE}} | {{VALUE}} | {{DATE}} | {{GUARDRAIL}} | {{ACTION}} | {{OWNER}} |
 
-## 13.6 Transition, Parallel Run, dan Cutover Intent
+## 13.6 Transition, Parallel Run, and Cutover Intent
 
 | Phase | Current Process Status | Target Process Status | Entry Criteria | Exit Criteria | Reconciliation | Decision Authority |
 |---|---|---|---|---|---|---|
@@ -1370,11 +1370,11 @@ Required governance questions:
 
 ---
 
-# 14. Business Acceptance, Pilot, dan Go-Live Gates
+# 14. Business Acceptance, Pilot, and Go-Live Gates
 
 ## 14.1 Business Acceptance Strategy
 
-`{{Jelaskan siapa yang menerima, environment/process context, sample/population, evidence, tolerances, prerequisite, and decision authority. Business acceptance is not a substitute for technical testing.}}`
+`{{Describe who accepts, the environment/process context, sample/population, evidence, tolerances, prerequisites, and decision authority. Business acceptance is not a substitute for technical testing.}}`
 
 ## 14.2 Business Acceptance Scenario Matrix
 
@@ -1397,7 +1397,7 @@ Required scenario classes to assess where material:
 - reporting, audit evidence, retention, and confidentiality;
 - AI false positive/negative, unavailable provider, and human override.
 
-## 14.3 Pilot Design dan Exit Criteria
+## 14.3 Pilot Design and Exit Criteria
 
 | Area | Pilot Scope | Baseline | Target / Tolerance | Duration | Sample / Population | Exit Rule | Stop Rule | Owner |
 |---|---|---:|---:|---|---|---|---|---|
@@ -1449,7 +1449,7 @@ Required scenario classes to assess where material:
 
 ---
 
-# 15. Risks, Assumptions, Dependencies, dan Open Decisions
+# 15. Risks, Assumptions, Dependencies, and Open Decisions
 
 ## 15.1 Risk Register
 
@@ -1495,75 +1495,75 @@ Required scenario classes to assess where material:
 
 ---
 
-# 16. Traceability dan Handoff ke PRD/FSD
+# 16. Traceability and Handoff to PRD/FSD
 
 ## 16.1 End-to-End Traceability Matrix
 
-Isi kolom downstream ketika artifact dibuat. Autonomous coding tidak boleh dimulai apabila requirement `MUST` belum memiliki PRD, FSD, test, dan goal traceability. Kolom keputusan teknis boleh berisi `TDEC-*`, `ADR-*`, atau `N/A — tidak ada keputusan arsitektur material`.
+Fill in the downstream columns as artifacts are created. Autonomous coding must not start while a `MUST` requirement lacks PRD, FSD, test, and goal traceability. The technical-decision column may contain `TDEC-*`, `ADR-*`, or `N/A — no material architecture decision`.
 
-| Source / Driver | Problem / Evidence | Objective / Outcome / KPI | Capability / Process | Business Requirement | Rule / Obligation | Business Acceptance | PRD Feature / FR | FSD IDs | Decision Ref (`TDEC` / ADR opsional) | Test IDs | Goal IDs | Status |
+| Source / Driver | Problem / Evidence | Objective / Outcome / KPI | Capability / Process | Business Requirement | Rule / Obligation | Business Acceptance | PRD Feature / FR | FSD IDs | Decision Ref (`TDEC` / optional ADR) | Test IDs | Goal IDs | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | SRC-001 / DRV-001 | PROB-001 / EVD-001 | OBJ-001 / OUT-001 / KPI-001 | CAP-001 / PROC-001 | BREQ-001 | BR-001 / OBL-001 | BAC-001 / BAT-001 |  |  | N/A |  |  | DRAFT |
 
 Orphan checks:
 
-- Driver tanpa problem/opportunity yang nyata.
-- Problem tanpa evidence atau validation plan.
-- Objective tanpa outcome/KPI.
-- Outcome tanpa owner, baseline, target, atau timeframe.
-- Benefit tanpa capability/adoption dependency.
-- Capability tanpa requirement/process/owner.
-- `BREQ` tanpa business acceptance.
-- Business rule atau obligation tidak digunakan oleh requirement mana pun.
-- `MUST` requirement tanpa business increment.
-- PRD feature yang tidak memetakan ke capability/BREQ.
-- FSD/goal yang tidak memetakan ke PRD dan BRD.
-- Keputusan teknis material tanpa `TDEC-*` atau ADR `ACCEPTED`.
-- Goal yang menjadikan ADR sebagai satu-satunya authority tanpa FSD.
+- A driver without a real problem/opportunity.
+- A problem without evidence or a validation plan.
+- An objective without an outcome/KPI.
+- An outcome without an owner, baseline, target, or timeframe.
+- A benefit without a capability/adoption dependency.
+- A capability without a requirement/process/owner.
+- A `BREQ` without business acceptance.
+- A business rule or obligation not used by any requirement.
+- A `MUST` requirement without a business increment.
+- A PRD feature that does not map to a capability/BREQ.
+- An FSD/goal that does not map to the PRD and BRD.
+- A material technical decision without a `TDEC-*` or an `ACCEPTED` ADR.
+- A goal that treats an ADR as the sole authority without the FSD.
 
-## 16.2 Business Decisions yang Tidak Boleh Diciptakan PRD/FSD
+## 16.2 Business Decisions That PRD/FSD Must Not Invent
 
-| Decision Area | Canonical BRD IDs | Final Business Decision | PRD Boleh Menentukan | PRD/FSD Dilarang Menentukan |
+| Decision Area | Canonical BRD IDs | Final Business Decision | PRD May Decide | PRD/FSD Must Not Decide |
 |---|---|---|---|---|
-| Business outcome and KPI | OUT-001 / KPI-001 | {{DECISION}} | Product instrumentation and experience | Target/formula baru tanpa approval |
-| Scope and capability | SCOPE-001 / CAP-001 | {{DECISION}} | Feature decomposition | Scope/capability baru |
-| Decision rights / SoD | ACT-001 / SOD-001 | {{DECISION}} | Product roles and enforcement UX | Approval authority baru atau lebih permisif |
-| Business rule / policy | BR-001 / POL-001 | {{DECISION}} | Observable behavior and validation | Mengubah rule/exception |
-| Compliance / retention | OBL-001 / CTRL-001 | {{DECISION}} | Technical controls | Default lebih lemah atau data use baru |
-| AI authority | AI-BIZ-001 | {{DECISION}} | Provider, prompt, eval implementation | Autonomous authority lebih luas |
-| Business continuity | SLA-001 / BCP row | {{DECISION}} | Recovery design | Menurunkan minimum capability/fallback |
+| Business outcome and KPI | OUT-001 / KPI-001 | {{DECISION}} | Product instrumentation and experience | New targets/formulas without approval |
+| Scope and capability | SCOPE-001 / CAP-001 | {{DECISION}} | Feature decomposition | New scope/capabilities |
+| Decision rights / SoD | ACT-001 / SOD-001 | {{DECISION}} | Product roles and enforcement UX | New or more permissive approval authority |
+| Business rule / policy | BR-001 / POL-001 | {{DECISION}} | Observable behavior and validation | Changing rules/exceptions |
+| Compliance / retention | OBL-001 / CTRL-001 | {{DECISION}} | Technical controls | Weaker defaults or new data uses |
+| AI authority | AI-BIZ-001 | {{DECISION}} | Provider, prompt, eval implementation | Broader autonomous authority |
+| Business continuity | SLA-001 / BCP row | {{DECISION}} | Recovery design | Lowering the minimum capability/fallback |
 
 ## 16.3 Required PRD Outputs
 
-PRD downstream minimal harus menghasilkan:
+The downstream PRD must at minimum produce:
 
-- [ ] Product problem framing yang tidak mengubah BRD.
-- [ ] User/actor mapping dari business role ke product role.
-- [ ] Product scope, non-goal, release slice, dan feature decomposition.
-- [ ] User journeys serta observable functional behavior untuk tiap `BREQ`.
-- [ ] Canonical product rules, enums, states, permission intent, dan source of truth.
-- [ ] Happy, negative, exception, stale, duplicate, authorization, degraded, dan recovery behavior.
-- [ ] Product acceptance criteria yang memetakan ke `BAC` dan `BAT`.
-- [ ] Security, privacy, compliance, AI, notification, reporting, accessibility, dan NFR product intent.
-- [ ] Metrics/instrumentation intent untuk KPI/benefit measurement.
-- [ ] UAT/release gates yang tidak lebih lemah daripada business acceptance.
-- [ ] Traceability BRD → PRD → FSD.
-- [ ] Machine-readable handoff ke FSD.
-- [ ] Daftar candidate architecture decisions yang perlu dinilai FSD; daftar ini tidak otomatis mewajibkan ADR.
-- [ ] `adr_policy` yang mempertahankan ADR sebagai sidecar opsional, bukan dependency serial.
+- [ ] Product problem framing that does not change the BRD.
+- [ ] User/actor mapping from business roles to product roles.
+- [ ] Product scope, non-goals, release slices, and feature decomposition.
+- [ ] User journeys and observable functional behavior for every `BREQ`.
+- [ ] Canonical product rules, enums, states, permission intent, and source of truth.
+- [ ] Happy, negative, exception, stale, duplicate, authorization, degraded, and recovery behavior.
+- [ ] Product acceptance criteria that map to `BAC` and `BAT`.
+- [ ] Security, privacy, compliance, AI, notification, reporting, accessibility, and NFR product intent.
+- [ ] Metrics/instrumentation intent for KPI/benefit measurement.
+- [ ] UAT/release gates that are no weaker than business acceptance.
+- [ ] BRD → PRD → FSD traceability.
+- [ ] A machine-readable handoff to the FSD.
+- [ ] A list of candidate architecture decisions for the FSD to assess; this list does not automatically mandate an ADR.
+- [ ] An `adr_policy` that keeps the ADR as an optional sidecar, not a serial dependency.
 
 ## 16.4 Required FSD/Delivery Outputs
 
-FSD/delivery downstream minimal harus menghasilkan:
+The downstream FSD/delivery must at minimum produce:
 
-- [ ] Deterministic implementation contracts untuk seluruh approved PRD requirements.
+- [ ] Deterministic implementation contracts for all approved PRD requirements.
 - [ ] Data/API/UI/event/job/integration/security/AI specifications.
 - [ ] Idempotency, concurrency, failure, reconciliation, observability, recovery, and rollback.
-- [ ] Deterministic tests dan business-evidence support untuk `BAC/BAT`.
-- [ ] Goal graph dan bounded goal packets yang memetakan kembali ke BRD/PRD.
-- [ ] Completion report yang tidak menyatakan business outcome tercapai hanya karena code/test pass; benefit realization tetap diverifikasi melalui KPI BRD.
-- [ ] ADR applicability assessment dengan status `NOT_REQUIRED` atau `LINKED`.
-- [ ] Setiap keputusan teknis material dicatat tepat satu kali: sebagai `TDEC-*` di FSD atau sebagai ADR `ACCEPTED` yang ditautkan.
+- [ ] Deterministic tests and business-evidence support for `BAC/BAT`.
+- [ ] A goal graph and bounded goal packets that map back to the BRD/PRD.
+- [ ] A completion report that does not claim business outcomes are achieved merely because code/tests pass; benefit realization is still verified through the BRD KPIs.
+- [ ] An ADR applicability assessment with `NOT_REQUIRED` or `LINKED` status.
+- [ ] Every material technical decision recorded exactly once: as a `TDEC-*` in the FSD or as a linked `ACCEPTED` ADR.
 
 ## 16.5 Handoff Blockers
 
@@ -1573,7 +1573,7 @@ FSD/delivery downstream minimal harus menghasilkan:
 
 ## 16.6 Machine-Readable BRD Handoff Manifest
 
-Perbarui sebelum PRD dibuat. Mandatory values yang kosong adalah blocker. Keep IDs aligned with the human-readable sections.
+Update before the PRD is created. Empty mandatory values are blockers. Keep IDs aligned with the human-readable sections.
 
 ```yaml
 brd_handoff:
@@ -1707,29 +1707,29 @@ brd_handoff:
 
 ## 16.7 PRD Review Questions
 
-PRD reviewer wajib memeriksa:
+The PRD reviewer must check:
 
-1. Apakah PRD menambah problem, outcome, capability, actor authority, business rule, atau scope yang tidak ada di BRD?
-2. Apakah requirement bisnis diterjemahkan menjadi observable behavior tanpa mengubah policy?
-3. Apakah product metrics benar-benar mendukung KPI dan benefit realization BRD?
-4. Apakah feature tertentu hanya mengotomasi workaround tanpa mengatasi root cause yang disetujui?
-5. Apakah error/degraded behavior mempertahankan business invariant dan control objective?
-6. Apakah AI/automation mendapat authority yang lebih luas daripada `AI-BIZ`?
-7. Apakah product acceptance lebih lemah daripada `BAC/BAT`?
-8. Apakah constraint teknis telah dipromosikan menjadi keputusan bisnis tanpa approval?
-9. Apakah ada `MUST` requirement yang hilang, menjadi opsional, atau tidak memiliki release slice?
-10. Apakah konflik diselesaikan diam-diam?
+1. Does the PRD add problems, outcomes, capabilities, actor authority, business rules, or scope that are not in the BRD?
+2. Are business requirements translated into observable behavior without changing policy?
+3. Do the product metrics genuinely support the BRD KPIs and benefit realization?
+4. Does any feature merely automate a workaround without addressing the approved root cause?
+5. Does error/degraded behavior preserve business invariants and control objectives?
+6. Does AI/automation receive broader authority than `AI-BIZ`?
+7. Is product acceptance weaker than `BAC/BAT`?
+8. Has a technical constraint been promoted into a business decision without approval?
+9. Is any `MUST` requirement missing, made optional, or lacking a release slice?
+10. Were conflicts resolved silently?
 
-## 16.8 FSD dan Goal Review Questions
+## 16.8 FSD and Goal Review Questions
 
-1. Apakah implementasi mengubah semantics, rule, authority, scope, atau obligation BRD/PRD?
-2. Apakah technical success dilaporkan sebagai business success tanpa KPI evidence?
-3. Apakah goal packet memetakan ke PRD dan `BREQ/BAC` yang jelas?
-4. Apakah fallback, audit, security, data handling, dan recovery memenuhi control objective bisnis?
-5. Apakah test hanya membuktikan happy path sementara BAT mencakup negative/exception path?
-6. Apakah agent menambah refactor/feature “best practice” yang tidak mendukung requirement?
-7. Apakah FSD menganggap ADR wajib tanpa policy yang eksplisit, atau gagal mencatat `TDEC-*` ketika ADR tidak digunakan?
-8. Bila ADR ditautkan, apakah statusnya `ACCEPTED` dan seluruh goal tetap menjadikan FSD sebagai source of truth utama?
+1. Does the implementation change BRD/PRD semantics, rules, authority, scope, or obligations?
+2. Is technical success reported as business success without KPI evidence?
+3. Does each goal packet map to a clear PRD and `BREQ/BAC`?
+4. Do fallback, audit, security, data handling, and recovery satisfy the business control objectives?
+5. Do the tests only prove the happy path while the BAT covers negative/exception paths?
+6. Did the agent add “best practice” refactors/features that do not support the requirements?
+7. Does the FSD treat the ADR as mandatory without an explicit policy, or fail to record `TDEC-*` when no ADR is used?
+8. When an ADR is linked, is its status `ACCEPTED` and do all goals still treat the FSD as the primary source of truth?
 
 ---
 
@@ -1737,143 +1737,143 @@ PRD reviewer wajib memeriksa:
 
 ## 17.1 Decision and Evidence
 
-- [ ] Decision request, decision maker, deadline, dan consequence of delay jelas.
-- [ ] Facts, evidence, assumptions, hypotheses, decisions, constraints, dan preferences dibedakan.
-- [ ] Source register mencatat authority, recency, quality, limitation, dan classification.
-- [ ] Problem tidak menyamar sebagai solusi.
-- [ ] Root cause, symptom, current workaround, dan control gap dipisahkan.
-- [ ] Why-now dan cost of inaction dapat dibuktikan.
+- [ ] The decision request, decision maker, deadline, and consequence of delay are clear.
+- [ ] Facts, evidence, assumptions, hypotheses, decisions, constraints, and preferences are distinguished.
+- [ ] The source register records authority, recency, quality, limitations, and classification.
+- [ ] The problem is not a solution in disguise.
+- [ ] Root causes, symptoms, current workarounds, and control gaps are separated.
+- [ ] The why-now and cost of inaction are provable.
 
 ## 17.2 Outcomes and Business Case
 
-- [ ] Objective, outcome, KPI, baseline, target, population, timeframe, source, dan owner lengkap.
-- [ ] Guardrail/disbenefit mencegah local optimization.
-- [ ] Benefit memiliki owner, dependency, ramp, valuation method, dan realization date.
-- [ ] Cost model memisahkan one-time, recurring, contingency, dan uncertainty.
-- [ ] Opsi do-nothing/process-only/build/buy/hybrid dinilai bila relevan.
-- [ ] Selected option, trade-off, sensitivity, break-even, dan exit trigger jelas.
-- [ ] Tidak ada double counting atau false precision pada benefit.
+- [ ] Objectives, outcomes, KPIs, baselines, targets, populations, timeframes, sources, and owners are complete.
+- [ ] Guardrails/disbenefits prevent local optimization.
+- [ ] Benefits have an owner, dependencies, ramp, valuation method, and realization date.
+- [ ] The cost model separates one-time, recurring, contingency, and uncertainty.
+- [ ] Do-nothing/process-only/build/buy/hybrid options are assessed where relevant.
+- [ ] The selected option, trade-offs, sensitivity, break-even, and exit triggers are clear.
+- [ ] There is no double counting or false precision in the benefits.
 
 ## 17.3 Scope, Capability, and Process
 
-- [ ] Scope memiliki batas organisasi, proses, actor, data, geografi, channel, history, dan horizon.
-- [ ] Non-goals eksplisit dan tidak tumpang tindih.
-- [ ] Capability technology-independent, memiliki owner, dan memetakan ke outcome.
-- [ ] Current dan target process memuat trigger, handoff, decision, exception, SLA, control, dan evidence.
-- [ ] Target operating model, support, fallback, capacity, dan reconciliation ditetapkan.
-- [ ] Prioritas `MUST` benar-benar diperlukan untuk business increment.
+- [ ] Scope has organizational, process, actor, data, geography, channel, history, and horizon boundaries.
+- [ ] Non-goals are explicit and do not overlap.
+- [ ] Capabilities are technology-independent, have owners, and map to outcomes.
+- [ ] Current and target processes include triggers, handoffs, decisions, exceptions, SLAs, controls, and evidence.
+- [ ] The target operating model, support, fallback, capacity, and reconciliation are defined.
+- [ ] `MUST` priorities are genuinely required for the business increment.
 
 ## 17.4 Governance and Semantics
 
-- [ ] Stakeholder, actor, owner, approver, verifier, dan product role dibedakan.
-- [ ] Decision rights dan RACI memiliki satu accountable owner per keputusan/process.
-- [ ] Segregation of duties dan exception authority jelas.
-- [ ] Glossary, business rule, policy, invariant, state, and source of truth canonical.
-- [ ] Precedence, unknown/default, date/time, currency, unit, and rounding rules jelas.
-- [ ] Tidak ada rule atau angka yang bertentangan tanpa resolution ledger.
+- [ ] Stakeholders, actors, owners, approvers, verifiers, and product roles are distinguished.
+- [ ] Decision rights and RACI have one accountable owner per decision/process.
+- [ ] Segregation of duties and exception authority are clear.
+- [ ] The glossary, business rules, policies, invariants, states, and source of truth are canonical.
+- [ ] Precedence, unknown/default, date/time, currency, unit, and rounding rules are clear.
+- [ ] No rules or numbers conflict without a resolution ledger entry.
 
 ## 17.5 Information, Compliance, Security, and AI
 
-- [ ] Information need dimulai dari decision/process, bukan dari keinginan membuat dashboard.
-- [ ] Data owner, steward, quality, classification, purpose, retention, access, and disposal jelas.
-- [ ] Report, notification, record, evidence, and external exchange memiliki owner dan timing.
-- [ ] Legal/regulatory/contractual interpretation telah divalidasi oleh authority yang tepat.
-- [ ] Security/privacy requirements berupa control objective dan evidence.
-- [ ] AI authority, human gate, error tolerance, data egress, evaluation, override, and fallback jelas.
-- [ ] Third-party exit, portability, data/IP ownership, and continuity dinilai.
+- [ ] Information needs start from decisions/processes, not from a desire to build a dashboard.
+- [ ] Data owners, stewards, quality, classification, purpose, retention, access, and disposal are clear.
+- [ ] Reports, notifications, records, evidence, and external exchanges have owners and timing.
+- [ ] Legal/regulatory/contractual interpretations have been validated by the appropriate authority.
+- [ ] Security/privacy requirements take the form of control objectives and evidence.
+- [ ] AI authority, human gates, error tolerance, data egress, evaluation, override, and fallback are clear.
+- [ ] Third-party exit, portability, data/IP ownership, and continuity are assessed.
 
 ## 17.6 Change and Acceptance
 
-- [ ] Change impact, skills, capacity, resistance, training, communication, dan adoption action tersedia.
-- [ ] Transition/parallel run/cutover/legacy decommission memiliki entry-exit criteria.
-- [ ] Business acceptance mencakup happy, negative, exception, degraded, reconciliation, and control evidence.
-- [ ] Pilot scope, sample, duration, exit, stop, and scale criteria jelas.
-- [ ] Go/no-go, rollback/pause, support, and post-implementation review ditetapkan.
-- [ ] Benefits measurement dapat berjalan setelah launch.
+- [ ] Change impact, skills, capacity, resistance, training, communication, and adoption actions are in place.
+- [ ] Transition/parallel run/cutover/legacy decommission have entry-exit criteria.
+- [ ] Business acceptance covers happy, negative, exception, degraded, reconciliation, and control evidence.
+- [ ] Pilot scope, sample, duration, exit, stop, and scale criteria are clear.
+- [ ] Go/no-go, rollback/pause, support, and post-implementation review are defined.
+- [ ] Benefits measurement can run after launch.
 
 ## 17.7 Traceability and Handoff
 
-- [ ] Setiap `BREQ` memetakan ke problem, outcome, capability, process, owner, dan `BAC/BAT`.
-- [ ] Tidak ada orphan pada traceability matrix.
-- [ ] Business decisions yang dilarang diciptakan PRD/FSD telah dicatat.
-- [ ] Tidak ada `BUSINESS_BLOCKER` terbuka.
-- [ ] PRD blocker memiliki owner, deadline, dan fallback bila diizinkan.
-- [ ] Machine-readable manifest konsisten dengan isi manusia.
-- [ ] Downstream artifacts diwajibkan mempertahankan business controls dan scope.
+- [ ] Every `BREQ` maps to a problem, outcome, capability, process, owner, and `BAC/BAT`.
+- [ ] There are no orphans in the traceability matrix.
+- [ ] The business decisions PRD/FSD are forbidden from inventing have been recorded.
+- [ ] No `BUSINESS_BLOCKER` remains open.
+- [ ] PRD blockers have an owner, deadline, and fallback where permitted.
+- [ ] The machine-readable manifest is consistent with the human-readable content.
+- [ ] Downstream artifacts are required to preserve business controls and scope.
 
 ## 17.8 AI-Slop Rejection
 
-Tolak BRD atau artifact turunannya apabila ditemukan:
+Reject the BRD or its derived artifacts when any of the following is found:
 
-- [ ] Problem generik tanpa evidence, scale, population, atau impact.
-- [ ] Solution-first wording seperti “butuh dashboard/app/AI” tanpa capability dan outcome.
-- [ ] Capability yang sebenarnya nama layar, service, database, atau vendor.
-- [ ] Outcome yang hanya berupa “fitur selesai”, “system live”, atau “user menggunakan”.
-- [ ] KPI tanpa formula, baseline, target, owner, timeframe, atau action threshold.
-- [ ] Benefit tanpa causal chain, valuation method, adoption dependency, atau double-count check.
-- [ ] Cost/ROI yang menggunakan satu angka pasti padahal source belum matang.
-- [ ] Scope dengan “semua user/data/proses” tanpa boundary.
-- [ ] Business rule baru tanpa source atau approver.
-- [ ] Happy path saja tanpa exception, denial, stale, duplicate, dependency failure, atau recovery.
-- [ ] “Sistem otomatis” tanpa authority, trigger, exception, evidence, dan fallback.
-- [ ] “AI akan menentukan” tanpa decision boundary, human gate, eval, override, dan accountability.
-- [ ] Security/compliance berupa klaim “aman/compliant” tanpa obligation/control evidence.
-- [ ] Adoption dianggap otomatis setelah launch tanpa change requirement.
-- [ ] Business acceptance hanya mengulang requirement atau technical test.
-- [ ] Technology/vendor dipilih karena tren atau preferensi, bukan option analysis/constraint.
-- [ ] Placeholder, contradiction, fake certainty, atau hidden assumption.
-- [ ] Coding agent diarahkan bekerja langsung dari BRD tanpa PRD/FSD approved.
+- [ ] A generic problem without evidence, scale, population, or impact.
+- [ ] Solution-first wording such as “needs a dashboard/app/AI” without a capability and outcome.
+- [ ] A capability that is actually the name of a screen, service, database, or vendor.
+- [ ] An outcome that is merely “feature done”, “system live”, or “users are using it”.
+- [ ] A KPI without a formula, baseline, target, owner, timeframe, or action threshold.
+- [ ] A benefit without a causal chain, valuation method, adoption dependency, or double-count check.
+- [ ] A cost/ROI that uses a single exact number while the source is still immature.
+- [ ] A scope of “all users/data/processes” without a boundary.
+- [ ] A new business rule without a source or approver.
+- [ ] Happy path only, without exception, denial, stale, duplicate, dependency-failure, or recovery paths.
+- [ ] An “automated system” without authority, triggers, exceptions, evidence, and fallback.
+- [ ] “AI will decide” without a decision boundary, human gate, evals, override, and accountability.
+- [ ] Security/compliance stated as a “secure/compliant” claim without obligation/control evidence.
+- [ ] Adoption assumed to be automatic after launch without change requirements.
+- [ ] Business acceptance that merely repeats the requirements or technical tests.
+- [ ] A technology/vendor chosen due to trends or preference, not option analysis/constraints.
+- [ ] Placeholders, contradictions, fake certainty, or hidden assumptions.
+- [ ] Coding agents directed to work straight from the BRD without an approved PRD/FSD.
 
 ---
 
-# Appendix A — Pola Penulisan Business Requirement
+# Appendix A — Business Requirement Writing Patterns
 
-## A.1 Requirement yang Baik
+## A.1 A Good Requirement
 
 > **BREQ-014:** Process Owner MUST be able to identify every overdue review obligation for the in-scope business unit by the start of each business day, so that `OUT-003` can be achieved, while preserving `INV-007` that no obligation may disappear because a notification or external dependency failed.
 
-Mengapa baik: actor, capability, scope, timing, outcome, dan invariant jelas; implementation tidak dipaksakan.
+Why it is good: the actor, capability, scope, timing, outcome, and invariant are clear; no implementation is forced.
 
-## A.2 Negative Requirement yang Baik
+## A.2 A Good Negative Requirement
 
 > **BREQ-015:** A review obligation MUST NOT be marked complete unless the designated verifier has accepted the required evidence; a failed notification MUST NOT change the obligation state.
 
-## A.3 Business Acceptance yang Baik
+## A.3 Good Business Acceptance
 
 > **BAC-021:** Given an owner has not submitted evidence by the approved due date, when the next business day begins, then the obligation appears in the authoritative overdue population, the escalation owner can act on it, and the record identifies the due date, owner, and evidence status; a notification delivery failure does not remove the obligation.
 
-## A.4 Requirement yang Terlalu Teknis
+## A.4 An Overly Technical Requirement
 
 > “Create a React dashboard backed by PostgreSQL with a cron job every five minutes.”
 
-Perbaikan di BRD:
+The BRD correction:
 
 > “Authorized oversight roles MUST have current decision-support information for the in-scope obligations within `SLA-001`; overdue obligations must remain visible even when an external notification service is unavailable.”
 
-UI, database, dan scheduler ditentukan di PRD/FSD.
+The UI, database, and scheduler are determined in the PRD/FSD.
 
-## A.5 Requirement yang Buruk
+## A.5 Bad Requirements
 
-- “Sistem harus user-friendly.”
-- “Gunakan AI untuk meningkatkan efisiensi.”
-- “Dashboard menampilkan semua informasi penting.”
-- “Proses harus cepat dan aman.”
-- “Support semua edge case.”
-- “Integrasikan dengan sistem terkait.”
+- “The system must be user-friendly.”
+- “Use AI to improve efficiency.”
+- “The dashboard displays all important information.”
+- “The process must be fast and secure.”
+- “Support all edge cases.”
+- “Integrate with related systems.”
 
-Setiap kalimat di atas tidak memiliki scope, ukuran, owner, evidence, decision boundary, atau acceptance oracle.
+Every sentence above lacks a scope, measure, owner, evidence, decision boundary, or acceptance oracle.
 
 ---
 
-# Appendix B — Evidence Quality dan Discovery Checklist
+# Appendix B — Evidence Quality and Discovery Checklist
 
 ## B.1 Evidence Triangulation
 
-Untuk problem atau investasi material, usahakan minimal dua kategori source:
+For material problems or investments, aim for at least two source categories:
 
-- data operasional atau finansial;
+- operational or financial data;
 - process observation / sample record;
-- policy, audit, contract, atau regulatory source;
+- policy, audit, contract, or regulatory source;
 - structured stakeholder interview;
 - customer/user research;
 - incident, complaint, or control failure data.
@@ -1882,43 +1882,43 @@ Untuk problem atau investasi material, usahakan minimal dua kategori source:
 
 ### Problem and Impact
 
-1. Apa yang gagal hari ini, untuk siapa, seberapa sering, dan apa bukti terbarunya?
-2. Apa konsekuensi finansial, risiko, compliance, customer, atau kapasitas?
-3. Workaround apa yang dipakai dan biaya tersembunyinya?
-4. Mana symptom dan mana root cause?
-5. Apa yang terjadi bila tidak melakukan perubahan selama 6–12 bulan?
+1. What fails today, for whom, how often, and what is the most recent evidence?
+2. What are the financial, risk, compliance, customer, or capacity consequences?
+3. What workarounds are in use and what are their hidden costs?
+4. Which are symptoms and which are root causes?
+5. What happens if no change is made for 6–12 months?
 
 ### Outcomes and Decisions
 
-1. Keputusan bisnis apa yang harus menjadi lebih baik atau lebih cepat?
-2. Outcome apa yang dapat diamati dan siapa pemiliknya?
-3. Baseline dan source of truth mana yang dipercaya?
-4. Guardrail apa yang tidak boleh dikorbankan?
-5. Threshold apa yang memicu tindakan atau penghentian?
+1. Which business decisions must become better or faster?
+2. What outcomes are observable and who owns them?
+3. Which baseline and source of truth are trusted?
+4. Which guardrails must not be sacrificed?
+5. Which thresholds trigger action or a stop?
 
 ### Process and Governance
 
-1. Siapa yang initiate, approve, execute, verify, dan menerima exception?
-2. Handoff mana yang paling sering gagal?
-3. Evidence apa yang wajib tersedia untuk audit atau dispute?
-4. Apa manual fallback dan berapa lama aman digunakan?
-5. Role mana yang tidak boleh digabung?
+1. Who initiates, approves, executes, verifies, and accepts exceptions?
+2. Which handoffs fail most often?
+3. What evidence must be available for audits or disputes?
+4. What is the manual fallback and how long is it safe to use?
+5. Which roles must not be combined?
 
 ### Scope and Change
 
-1. Unit, user, process, data, geography, and history mana yang benar-benar termasuk?
-2. Apa yang secara eksplisit tidak diselesaikan?
-3. Perilaku siapa yang harus berubah agar benefit terealisasi?
-4. Capacity, training, policy, incentive, atau support apa yang dibutuhkan?
-5. Legacy process/tool apa yang harus dihentikan?
+1. Which units, users, processes, data, geographies, and history are genuinely included?
+2. What is explicitly not being solved?
+3. Whose behavior must change for the benefits to be realized?
+4. What capacity, training, policy, incentives, or support are needed?
+5. Which legacy processes/tools must be retired?
 
 ### AI / Automation
 
-1. Keputusan mana yang boleh direkomendasikan atau dijalankan otomatis?
-2. Apa biaya false positive dan false negative?
-3. Siapa yang bertanggung jawab dan bisa override?
-4. Data apa yang boleh diproses pihak ketiga?
-5. Apa fallback bila AI unavailable atau evidence stale?
+1. Which decisions may be recommended or executed automatically?
+2. What is the cost of a false positive and a false negative?
+3. Who is accountable and who can override?
+4. What data may be processed by third parties?
+5. What is the fallback when AI is unavailable or evidence is stale?
 
 ---
 
@@ -1988,13 +1988,13 @@ Resolution / Decision ID: {{DEC_ID_OR_NA}}
 
 # Appendix E — Minimal BRD Variant
 
-Gunakan hanya untuk perubahan berisiko rendah dengan scope kecil. Minimal variant tidak boleh dipakai bila terdapat regulatory impact, sensitive data, external vendor/data egress, material financial investment, high-risk automation/AI, cross-department process change, atau irreversible migration.
+Use only for low-risk changes with a small scope. The minimal variant must not be used when there is regulatory impact, sensitive data, external vendor/data egress, material financial investment, high-risk automation/AI, cross-department process change, or irreversible migration.
 
 Minimal sections:
 
-1. Metadata dan decision request.
-2. Problem, evidence, baseline, dan root cause.
-3. Objective, outcome, KPI, guardrail, dan owner.
+1. Metadata and decision request.
+2. Problem, evidence, baseline, and root cause.
+3. Objective, outcome, KPI, guardrail, and owner.
 4. Scope, non-goal, capability, and selected option.
 5. Actors, decision rights, process change, and rules.
 6. `BREQ` + `BAC/BAT` inventory.

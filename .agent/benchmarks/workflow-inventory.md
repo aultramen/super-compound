@@ -8,7 +8,7 @@
 
 The v3 result stores one canonical scenario set, the full suite-definition
 digest, input/process/output stage summaries, the verified baseline digest, and
-recomputed run digests. It also stores a 17-route x 3-cell static workflow
+recomputed run digests. It also stores an 18-route x 3-cell static workflow
 matrix with source and matrix digests. It does
 not copy the same full result for every repeat. `.agent/tools/framework-audit.mjs`
 fails when the report is stale, non-deterministic, incomplete, or has fewer than
@@ -17,13 +17,13 @@ three consecutive passing runs.
 ## Coverage
 
 The suite covers real repository-owned startup budgets for Codex, Claude, and
-Antigravity; the native Codex adapter metadata; all 17 public `/sc-*` workflows
+Antigravity; the native Codex adapter metadata; all 18 public `/sc-*` workflows
 including the selected adapter body; and these cross-cutting surfaces:
 legacy eager preload, artifact output, all skills, delivery/planning,
 execution/verification, risk/audit, templates, Git, interface data and scripts,
 hooks, agents, workflows, and rules.
 
-The matrix covers all 51 cells: route input context reduction, process
+The matrix covers all 54 cells: route input context reduction, process
 adapter/contract/authority/mutation wiring, and output sink/budget/next-owner
 contracts. Runtime reasoning and generated output remain explicitly unevaluated.
 

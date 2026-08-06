@@ -4,6 +4,10 @@
  * tool-count fallback. Silent unless a structured PreToolUse reminder fires.
  */
 
+if ((process.env.SC_DISABLED_HOOKS || '').split(',').map((s) => s.trim()).includes('suggest-compact')) {
+    process.exit(0);
+}
+
 const fs = require('fs');
 const path = require('path');
 const { createHash } = require('crypto');

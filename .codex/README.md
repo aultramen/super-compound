@@ -16,7 +16,7 @@ The destination is `$CODEX_HOME\skills\super-compound`. If `CODEX_HOME` is unset
 powershell -NoProfile -ExecutionPolicy Bypass -File .\.codex\install-super-compound.ps1 -CodexHome C:\temp\codex-home
 ```
 
-The installer copies `.agent/context`, workflows, skills, templates, rules, agents, hooks, and runtime tools into `references/`, excluding generated Python bytecode caches. It builds the replacement in a path-confined staging directory, verifies its exact file set and deterministic SHA-256 manifest, then swaps it into place. A copy/hash failure rolls back to the previous verified installation. Stale files are removed only through that managed replacement, and a clean second run is a no-op.
+The installer copies `.agent/context`, workflows, skills, templates, rules, agents, durable eval definitions and fixtures, hooks, and runtime tools into `references/`, excluding generated Python bytecode caches. It builds the replacement in a path-confined staging directory, verifies its exact file set and deterministic SHA-256 manifest, then swaps it into place. A copy/hash failure rolls back to the previous verified installation. Stale files are removed only through that managed replacement, and a clean second run is a no-op.
 
 ## Verify
 

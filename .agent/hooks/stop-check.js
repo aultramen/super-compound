@@ -3,6 +3,10 @@
  * Warn about suspicious response output without echoing sensitive diagnostics.
  */
 
+if ((process.env.SC_DISABLED_HOOKS || '').split(',').map((s) => s.trim()).includes('stop-check')) {
+    process.exit(0);
+}
+
 const {
     readStdinJson,
     redactSensitiveText,

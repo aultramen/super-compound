@@ -1,7 +1,7 @@
 ---
 template_name: "Functional Specification Document — Standalone Agentic AI Implementation Contract"
 template_version: "2.1.0"
-artifact_contract_version: "1.1.0"
+artifact_contract_version: "2.0.0"
 document_type: "FSD"
 project_name: "{{PROJECT_NAME}}"
 project_code: "{{PROJECT_CODE}}"

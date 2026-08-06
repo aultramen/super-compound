@@ -15,6 +15,20 @@
         "description": "Suggest compaction from transcript pressure with session-scoped tool-count fallback"
       }
     ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.agent/hooks/context-monitor.js"],
+            "timeout": 5
+          }
+        ],
+        "description": "Warn the agent at low remaining context: wrap up at <=35%, stop and save state at <=25%"
+      }
+    ],
     "PreCompact": [
       {
         "matcher": "*",

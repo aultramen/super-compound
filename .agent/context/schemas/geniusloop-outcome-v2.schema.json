@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:geniusloop-outcome-v2",
+  "title": "GeniusLoop Outcome v2",
+  "type": "object",
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    }
+  },
+  "properties": {
+    "schema": { "const": "geniusloop_outcome_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "outcome_id": { "$ref": "#/$defs/identifier" },
+    "run_id": { "$ref": "#/$defs/identifier" },
+    "run_head_digest": { "$ref": "#/$defs/digest" },
+    "dedupe_key": { "$ref": "#/$defs/digest" },
+    "source_signal": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "prior_duplicate_result": { "enum": ["UNIQUE", "DUPLICATE"] },
+    "hypothesis": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "baseline": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "expected_metric": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "selected_route": {
+      "enum": [
+        "sc-init", "sc-status", "sc-geniusloop", "sc-explore", "sc-research",
+        "sc-prd", "sc-plan", "sc-eval", "sc-go", "sc-work", "sc-debug",
+        "sc-review", "sc-audit", "sc-compound", "sc-evolve", "sc-pause", "sc-launch", "sc-ui"
+      ]
+    },
+    "downstream_artifact_refs": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/digest" }
+    },
+    "owner": { "$ref": "#/$defs/identifier" },
+    "experiment_result": { "enum": ["PASS", "FAIL", "UNKNOWN"] },
+    "decision": { "enum": ["ACCEPTED", "REJECTED", "PENDING"] },
+    "decision_reason": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "compounding_candidate_status": { "enum": ["CANDIDATE", "VERIFIED", "REJECTED"] },
+    "evidence_digest": { "$ref": "#/$defs/digest" },
+    "recorded_at": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "outcome_id",
+    "run_id",
+    "run_head_digest",
+    "dedupe_key",
+    "source_signal",
+    "prior_duplicate_result",
+    "hypothesis",
+    "baseline",
+    "expected_metric",
+    "selected_route",
+    "downstream_artifact_refs",
+    "owner",
+    "experiment_result",
+    "decision",
+    "decision_reason",
+    "compounding_candidate_status",
+    "evidence_digest",
+    "recorded_at"
+  ],
+  "additionalProperties": false
+}
