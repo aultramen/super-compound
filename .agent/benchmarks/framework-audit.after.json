@@ -1,8 +1,8 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-08-20T04:34:50.983Z",
-  "repositoryHead": "6b870042f655c2bdbdc02e04b9aac9a5a139b40b",
-  "pass": false,
+  "generatedAt": "2026-08-20T04:38:17.386Z",
+  "repositoryHead": "404a3c5d1f167929e6751e9e38915c6a8bcd42d8",
+  "pass": true,
   "summary": {
     "manifestSource": "git-active-manifest",
     "manifestFiles": 473,
@@ -13,20 +13,20 @@
         "reason": "requested output path"
       }
     ],
-    "filesRead": 471,
-    "textFiles": 471,
+    "filesRead": 472,
+    "textFiles": 472,
     "binaryFiles": 0,
-    "bytesRead": 5595277,
-    "linesRead": 111469,
-    "contentDigest": "121954b2eabd3a58d3afe3f8826db234cbdfec01b7d56102f3ad829220de745d",
+    "bytesRead": 5600574,
+    "linesRead": 111518,
+    "contentDigest": "610263b525265bdb9d900fe55af5acb129cba89e880802fe25d0a10b2c0db22f",
     "skillEntrypoints": 36,
     "skillEntrypointWords": 14650,
     "maxSkillEntrypointWords": 498,
     "skillEntrypointWordLimit": 500,
-    "findings": 1,
+    "findings": 0,
     "severityCounts": {
       "P0": 0,
-      "P1": 1,
+      "P1": 0,
       "P2": 0,
       "P3": 0
     }
@@ -66,7 +66,7 @@
       "workflow": 18,
       "workflow-contract": 18
     },
-    "auditClassDigest": "ab4de19fa7d4253b76cba84c14a4c9291176269ed92a67ba35500d9b79f96935",
+    "auditClassDigest": "95655604759caf7487b12658928ff10e9667fa32e6207d771ae9554861be3add",
     "contentDigestScope": "byte-content-audited",
     "specialVerificationRequired": true,
     "specialEntries": [
@@ -78,19 +78,12 @@
   },
   "physicalInventory": {
     "scope": "physical-authority-worktree-excluding-runtime-roots",
-    "files": 473,
-    "filesRead": 473,
+    "files": 474,
+    "filesRead": 474,
     "symlinks": 0,
     "activeManifestEntries": 473,
     "outsideActiveManifestEntries": 1
   },
-  "findings": [
-    {
-      "severity": "P1",
-      "code": "UNSAFE_MANIFEST_ENTRY",
-      "file": "docs/brainstorms/context7-readme.md",
-      "message": "Manifest entry must be a regular, non-symlink file."
-    }
-  ],
-  "evidenceDigest": "a46d3b1966746ab0a063057035feb185321f6903f496254b0de314c3e8d288f2"
+  "findings": [],
+  "evidenceDigest": "f235b742e5df6530e64d59e31dcfeab7c0a23dcba8da67911553df64fc0a93c8"
 }
