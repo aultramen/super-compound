@@ -1,45 +1,45 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-08-20T03:17:27.895Z",
-  "repositoryHead": "73ac871c65bcbaab3a9dd7e3d1cb8344aca43414",
-  "pass": true,
+  "generatedAt": "2026-08-20T04:34:50.983Z",
+  "repositoryHead": "6b870042f655c2bdbdc02e04b9aac9a5a139b40b",
+  "pass": false,
   "summary": {
     "manifestSource": "git-active-manifest",
-    "manifestFiles": 469,
-    "auditedFiles": 468,
+    "manifestFiles": 473,
+    "auditedFiles": 472,
     "excludedFiles": [
       {
         "path": ".agent/benchmarks/framework-audit.after.json",
         "reason": "requested output path"
       }
     ],
-    "filesRead": 468,
-    "textFiles": 468,
+    "filesRead": 471,
+    "textFiles": 471,
     "binaryFiles": 0,
-    "bytesRead": 5580474,
-    "linesRead": 111129,
-    "contentDigest": "bec76ef626021e0bbc7e5f9be9308593a89ab8c91881ed989fce9e7045e641d2",
+    "bytesRead": 5595277,
+    "linesRead": 111469,
+    "contentDigest": "121954b2eabd3a58d3afe3f8826db234cbdfec01b7d56102f3ad829220de745d",
     "skillEntrypoints": 36,
     "skillEntrypointWords": 14650,
     "maxSkillEntrypointWords": 498,
     "skillEntrypointWordLimit": 500,
-    "findings": 0,
+    "findings": 1,
     "severityCounts": {
       "P0": 0,
-      "P1": 0,
+      "P1": 1,
       "P2": 0,
       "P3": 0
     }
   },
   "coverage": {
-    "activeManifestEntries": 469,
-    "byteContentAuditedEntries": 468,
+    "activeManifestEntries": 473,
+    "byteContentAuditedEntries": 472,
     "specialVerificationEntries": 1,
-    "accountedEntries": 469,
+    "accountedEntries": 473,
     "unaccountedEntries": 0,
     "accountedPercent": 100,
-    "byteContentAuditPercent": 99.7868,
-    "classifiedEntries": 469,
+    "byteContentAuditPercent": 99.7886,
+    "classifiedEntries": 473,
     "unclassifiedEntries": 0,
     "classCoveragePercent": 100,
     "auditClassCounts": {
@@ -54,19 +54,19 @@
       "host-rule": 21,
       "repository-config": 5,
       "rule": 3,
-      "runtime-context": 31,
+      "runtime-context": 33,
       "skill-contract": 7,
       "skill-entrypoint": 36,
       "skill-reference": 114,
       "skill-support": 2,
       "startup-contract": 3,
       "template": 15,
-      "test": 55,
-      "tool": 39,
+      "test": 56,
+      "tool": 40,
       "workflow": 18,
       "workflow-contract": 18
     },
-    "auditClassDigest": "037ef305e6bdbd21d945493baf3bf89fab0e7a5ead5c31e1e6da80581ecfa579",
+    "auditClassDigest": "ab4de19fa7d4253b76cba84c14a4c9291176269ed92a67ba35500d9b79f96935",
     "contentDigestScope": "byte-content-audited",
     "specialVerificationRequired": true,
     "specialEntries": [
@@ -78,12 +78,19 @@
   },
   "physicalInventory": {
     "scope": "physical-authority-worktree-excluding-runtime-roots",
-    "files": 470,
-    "filesRead": 470,
+    "files": 473,
+    "filesRead": 473,
     "symlinks": 0,
-    "activeManifestEntries": 469,
+    "activeManifestEntries": 473,
     "outsideActiveManifestEntries": 1
   },
-  "findings": [],
-  "evidenceDigest": "20cd978643673bd7f32e43169c46fbe6ea8e9a86396843950f779923bbed3b30"
+  "findings": [
+    {
+      "severity": "P1",
+      "code": "UNSAFE_MANIFEST_ENTRY",
+      "file": "docs/brainstorms/context7-readme.md",
+      "message": "Manifest entry must be a regular, non-symlink file."
+    }
+  ],
+  "evidenceDigest": "a46d3b1966746ab0a063057035feb185321f6903f496254b0de314c3e8d288f2"
 }

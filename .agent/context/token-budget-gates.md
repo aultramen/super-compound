@@ -33,6 +33,8 @@ route markers.
 ## Orchestrator Return Envelopes
 
 These caps apply to the short chat return, not the durable artifact or evidence file.
+File sinks follow `.agent/context/output-style.md` plus the advisory caps in
+`.agent/context/doc-budgets.json`.
 Expand inline only when the user explicitly requests detail. Never truncate blockers,
 failed gates, P0/P1 findings, or required user decisions.
 

@@ -6,13 +6,17 @@
    - Critical: missing requirements, broken dependencies, cycles, missing must-haves
    - Important: incomplete tasks, missing tests, scope concerns
    - Suggestion: minor sizing or ordering improvements
-3. Produce a report:
+3. Produce a single-projection report. When all 10 dimensions pass, the one
+   line `**Dimensions:** 10/10 PASS` is the whole dimension section; enumerate
+   only dimensions with findings or `NOT_APPLICABLE` (reason plus evidence),
+   and omit the Findings table when it would be empty:
 
 ```markdown
 ## FSD Verification Report
 
 **FSD:** <fsd or issue board>
 **Verdict:** PASS | PASS WITH NOTES | NEEDS REVISION
+**Dimensions:** 10/10 PASS
 
 ### Findings
 

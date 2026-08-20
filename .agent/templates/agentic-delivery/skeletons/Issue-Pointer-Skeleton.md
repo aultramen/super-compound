@@ -13,10 +13,8 @@ UI delivery role: NOT_APPLICABLE / CONTRACT_ENABLER / FIRST_VERTICAL_SLICE / SCA
 Contract refs: None / FSD-{{PROJECT}}@{{VERSION}}#CONTRACT-{{NNN}}, FSD-{{PROJECT}}@{{VERSION}}#UIMAP-{{NNN}}
 Contract gate: NOT_APPLICABLE / READY_FOR_SLICE / FIRST_VERTICAL_SLICE_VERIFIED
 
-## Scope
+## Deviations
 
-Implement referenced FSD goal only; do not copy authority prose.
-
-## Stop
-
-Report `OPEN-*` for missing authority, blockers, or invention.
+Omit this section when the default contract applies: implement the referenced
+FSD goal only and report `OPEN-*` per
+`.agent/skills/agentic-delivery/references/open-stop-conditions.md`.

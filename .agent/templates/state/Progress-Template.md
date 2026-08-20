@@ -12,10 +12,7 @@
 - Implemented: <what changed>
 - Files: <paths>
 - Verification: <command or inspection + result>
-- Learnings for future sessions:
-  - Patterns discovered: <or none>
-  - Gotchas encountered: <or none>
-  - Useful context: <or none>
+- Learnings: <one line each; omit when none>
 
 <!--
 Contract: .agent/skills/state-management/references/file-contracts.md

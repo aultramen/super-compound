@@ -1,6 +1,7 @@
 # {{PROJECT_NAME}} - Business Requirements Document
 
 Use the full BRD template only for sections that need detailed expansion.
+State each fact once; omit sections with no content; expand only risk-relevant full-template sections.
 
 ## Profile Gate
 

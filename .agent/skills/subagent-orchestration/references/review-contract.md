@@ -51,6 +51,9 @@ QUALITY: PASS | FAIL
 - <command/result or missing evidence>
 ```
 
+Emit the Findings, Suggestions, and Verification Checked sections only when
+non-empty.
+
 If either verdict fails, return the review path plus a bounded finding summary.
 Batch fixes once, regenerate the patch, and re-review. Escalate after two failed
 revision cycles.

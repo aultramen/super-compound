@@ -43,7 +43,7 @@ goal, use its Budget & Stop Wizard, persist `ACTION_INTENDED`, and pass
 ## Steps
 
 1. Load `skills/agentic-delivery/SKILL.md`.
-2. Load `skills/brainstorming/SKILL.md` in advisory mode while the BRD is the canonical capture; create a separate brainstorm sidecar only when the user explicitly requests it.
+2. Load `skills/brainstorming/SKILL.md` in advisory mode while the BRD is the canonical capture; create a separate brainstorm sidecar only when the user explicitly requests it. A sidecar has at most 4 sections: decision (what + why), alternatives (one line each), open questions (only when any exist), and next workflow.
 3. Inspect existing code, docs, issues, accepted ADRs in `docs/solutions/`, and related solutions before asking questions.
 4. Load `skills/domain-modeling/SKILL.md` in advisory read-only mode when terms, roles, or domain boundaries are fuzzy; persist glossary changes only through an explicitly authorized owner.
 5. Load `skills/codebase-design/SKILL.md` when a business decision depends on a major seam, module shape, or testability tradeoff.
@@ -56,7 +56,7 @@ goal, use its Budget & Stop Wizard, persist `ACTION_INTENDED`, and pass
 8. Resolve the smallest business decision that unlocks the next step.
 9. Capture objectives, scope, non-goals, business rules, policies, constraints, acceptance gates, and `OPEN-*` blockers.
 10. Capture Git workflow constraints only when they affect delivery scope; do not mutate Git state.
-11. A chat draft is allowed during exploration. Before approval and `/sc-prd`, save the BRD to `docs/brd/brd-<feature>.md` using the skeleton first and the full template only as a reference.
+11. A chat draft is allowed during exploration. Before approval and `/sc-prd`, save the BRD to `docs/brd/brd-<feature>.md` using `.agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md` first and the full template only as a reference.
 12. Route to `sc-prd.md` only after the durable BRD is approved or the user explicitly accepts its recorded assumptions.
 
 ## Output

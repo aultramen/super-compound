@@ -66,3 +66,4 @@ human approval, counters, or execution evidence.
 - Verification plan.
 - Suggested Git branch names and optional worktree candidates when useful.
 - Risks, assumptions, and out-of-scope notes.
+- Every durable artifact follows `.agent/context/output-style.md`.

@@ -30,3 +30,5 @@ Use skeletons first. Load full templates only for the specific section being aut
 - Goal issue files must point to IDs and paths; do not copy BRD/PRD/FSD/ADR paragraphs.
 - UI issue pointers add only versioned contract refs and required gate.
 - Pull Request text uses the Git workflow template after local verification and push.
+- Filled artifacts follow `.agent/context/output-style.md`: single projection,
+  non-empty sections only, uniform tables collapsed.

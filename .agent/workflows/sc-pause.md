@@ -18,7 +18,7 @@ Use this before stopping a session or compacting context.
 4. Before writing the handoff, capture any unlogged agent mistake (`ERR-*` in
    `docs/ERROR_LOG.md`) or confirmed convention (`LRN-*` in
    `docs/LEARNED_KNOWLEDGE.md`) from this session.
-   Then create or update `docs/STATE.md` as the canonical durable state: current position, exact next action, active blockers and owners, decisions, completed outcomes, verification, branch/workspace, and links to authoritative artifacts.
+   Then create or update `docs/STATE.md` as the canonical durable state: current position, exact next action, active blockers and owners, decisions, completed outcomes, verification, branch/workspace, and links to authoritative artifacts. Update only the STATE fields that changed; never re-serialize unchanged sections.
    Store only a non-authoritative Loop Run pointer: `run_id`, run head digest,
    status, last evidence, pause/terminal reason, and next transition. Never copy
    events, counters, an approval envelope, or a confirmation digest. The STATE

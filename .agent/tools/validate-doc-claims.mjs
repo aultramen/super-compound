@@ -7,6 +7,8 @@
  *   - referenced commit SHAs exist in this git repository
  *   - relative markdown links resolve
  *   - leftover drafting scaffold (TODO/FIXME/TBD/<placeholder>)
+ *   - skeleton-boilerplate residue in produced docs under docs/ or .scratch/
+ *     (skeleton scope prose, unfilled tokens such as '<task or none>')
  *
  * Reports findings only; it never edits the document. Findings are
  * adjudicated by the author, not auto-fixed.
@@ -24,6 +26,9 @@ const PATH_RE = /`((?:\.?\.?\/)?[A-Za-z0-9_.@-]+(?:\/[A-Za-z0-9_.@*-]+)+\/?)`/g;
 const SHA_RE = /\b([0-9a-f]{7,40})\b/g;
 const LINK_RE = /\[[^\]]*\]\(([^)#\s]+)(?:#[^)\s]*)?\)/g;
 const SCAFFOLD_RE = /\b(TODO|FIXME|TBD)\b|<placeholder>|\bXXX\b/g;
+// Skeleton residue is only a defect in produced docs (docs/, .scratch/);
+// the skeletons and skills that teach these tokens must not self-flag.
+const BOILERPLATE_RE = /Implement referenced FSD goal only|<[a-z][a-z /-]{0,40} or none>/g;
 
 function isExternal(target) {
     return /^(?:[a-z]+:)?\/\//i.test(target) || target.startsWith('mailto:');
@@ -73,6 +78,13 @@ export function validateDoc({ docPath, root, gitCheck }) {
 
     for (const match of raw.matchAll(SCAFFOLD_RE)) {
         findings.push({ kind: 'drafting-scaffold', value: match[0] });
+    }
+
+    const rel = path.relative(root, docPath).split(path.sep).join('/');
+    if (rel.startsWith('docs/') || rel.startsWith('.scratch/')) {
+        for (const match of raw.matchAll(BOILERPLATE_RE)) {
+            findings.push({ kind: 'skeleton-boilerplate', value: match[0] });
+        }
     }
 
     return findings;

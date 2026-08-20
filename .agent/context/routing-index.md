@@ -21,3 +21,5 @@ not cover. A full workflow never reloads its compact contract.
 - Verification commands remain mapped before completion.
 - Git operations remain preview-first and route through `/sc-go`.
 - Chat returns follow `token-budget-gates.md`; full evidence stays in artifacts.
+- Durable file outputs follow `.agent/context/output-style.md`: single
+  projection, non-empty sections only, uniform tables collapsed.

@@ -32,7 +32,8 @@ experience_baseline_status: NOT_APPLICABLE / DRAFT / VALIDATED / EXCEPTION_APPRO
 - Critical journey and feature/AC refs.
 - State applicability: loading, empty, success, validation, error, forbidden,
   stale/conflict, partial/degraded, offline, and async; each is `COVERED` or
-  `N/A - reason + approver`.
+  `N/A - reason + approver`; states sharing a disposition may be grouped on
+  one line.
 - Responsive/accessibility intent and validation evidence refs.
 - Business approver and blocking OPEN (`OPEN-*`) refs.
 

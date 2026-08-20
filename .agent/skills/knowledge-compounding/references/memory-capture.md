@@ -45,6 +45,8 @@ format. Append the entry to its file, newest last:
 - Source: <user statement | repeated observation | verified experiment>
 ```
 
+Keep each field to one line; no narrative paragraphs.
+
 ## 3. Update the Quick Reference table
 
 Every entry also gets exactly one row in its file's Quick Reference table,

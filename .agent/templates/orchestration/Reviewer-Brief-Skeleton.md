@@ -19,6 +19,7 @@ refs before style; write separate `SPEC` and `QUALITY` verdicts using
   no speculation.
 - Flag extra scope, unapproved deviation, or invented contract as SPEC
   failures; do not request improvements outside the goal's scope.
+- Emit findings, suggestions, and verification sections only when non-empty.
 
 ## Output
 

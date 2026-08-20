@@ -31,7 +31,9 @@ finding. Review never uses that gate to apply a fix.
 7. Verify claims when practical.
 8. If complete evidence exceeds the chat envelope, save it to
    `docs/reviews/YYYY-MM-DD-<scope>.md` and return the path; never omit a
-   finding to satisfy an output cap.
+   finding to satisfy an output cap. Then run
+   `node .agent/tools/doc-lint.mjs <artifact>` and adjudicate its findings
+   (advisory).
 9. Assign each remediation owner:
    - business scope or policy -> `/sc-explore`;
    - product requirement gap -> `/sc-prd`;
@@ -46,3 +48,4 @@ finding. Review never uses that gate to apply a fix.
 - File/line references where available.
 - Open questions and residual test gaps.
 - Exact next owner for every actionable finding.
+- The durable review report follows `.agent/context/output-style.md`.

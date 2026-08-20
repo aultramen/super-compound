@@ -1030,7 +1030,7 @@ export async function withLedgerLock(
 }
 
 function reportSkeleton(goalId) {
-  return `# ${goalId} Report\n\nStatus: in-progress\n\n## Outcome\n\n## Changed Files\n\n## Verification\n\n## Blockers\n`;
+  return `# ${goalId} Report\n\nStatus: in-progress\n\n<!-- Append Outcome, Changed Files, Verification, and Blockers sections; omit empty sections. -->\n`;
 }
 
 function parseArgs(argv) {

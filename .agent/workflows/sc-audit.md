@@ -38,7 +38,9 @@ workflow; it never authorizes changes inside `/sc-audit`.
    - branch, commit, push, or PR action -> `/sc-go`.
 10. If complete evidence exceeds the chat envelope, save it to
     `docs/audits/YYYY-MM-DD-<scope>.md` and return the path; never omit a
-    finding to satisfy an output cap.
+    finding to satisfy an output cap. Then run
+    `node .agent/tools/doc-lint.mjs <artifact>` and adjudicate its findings
+    (advisory).
 
 ## Output
 
@@ -46,3 +48,4 @@ workflow; it never authorizes changes inside `/sc-audit`.
 - Evidence for each finding.
 - Clear distinction between confirmed issues, risks, and unverified assumptions.
 - Exact next owner for every remediation.
+- Each finding stated exactly once in its reporting block, with evidence, fix, and next owner as fields of that block; summaries carry counts only, and remediation ordering references finding IDs.
