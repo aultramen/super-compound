@@ -29,7 +29,7 @@ Load command previews only for the requested operation. Load workflow touchpoint
 - **Sensitive-file gate:** Before staging, inspect `git status` and `git diff`; warn about `.env`, secrets, credentials, logs, caches, and build output before `git add .`.
 - **Verification gate:** Require relevant local verification before commit claims or PR creation. Review the actual diff and PR checklist; `/sc-review` and `/sc-audit` remain read-only.
 - **Force gate:** First push uses `git push -u origin <branch>`. After an approved rebase, use only `--force-with-lease`, never `--force`.
-- **Approval gate:** Never run publishing commands, `git reset --hard`, `git clean -fd`, destructive branch deletion, merge, or destructive worktree removal without explicit approval. Validate worktree target paths before cleanup.
+- **Approval gate:** Never run publishing commands, `git reset --hard`, `git clean -fd`, destructive branch deletion, merge, or destructive worktree removal without explicit approval. Validate worktree target paths before cleanup. Prune stale worktree entries preview-first: run `git worktree list`, confirm the stale entries, then `git worktree prune`.
 
 ## Integration
 

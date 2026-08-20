@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import {
     acquireStateLock,
@@ -88,6 +90,51 @@ test('resolveMaxWorkers prefers override, then config, then 2', (t) => {
         JSON.stringify({ background_aggregate_policy: { max_workers: 3 } })
     );
     assert.equal(resolveMaxWorkers(root, null), 3);
+});
+
+const cliPath = fileURLToPath(new URL('./goal-waves.mjs', import.meta.url));
+
+function writeGoalsFile(dir) {
+    const input = path.join(dir, 'goals.json');
+    fs.writeFileSync(
+        input,
+        JSON.stringify([
+            { id: 'schema', dependsOn: [] },
+            { id: 'api', dependsOn: ['schema'] },
+            { id: 'ui', dependsOn: ['schema'] },
+        ])
+    );
+    return input;
+}
+
+test('--json emits the stable goal_waves_plan_v1 machine shape', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'waves-json-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    const stdout = execFileSync(
+        process.execPath,
+        [cliPath, '--input', writeGoalsFile(dir), '--max-workers', '2', '--json'],
+        { encoding: 'utf8' }
+    );
+    assert.deepEqual(JSON.parse(stdout), {
+        schema: 'goal_waves_plan_v1',
+        maxWorkers: 2,
+        goalCount: 3,
+        waveCount: 2,
+        waves: [['schema'], ['api', 'ui']],
+    });
+});
+
+test('default CLI output keeps the goal_waves_v1 shape', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'waves-text-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    const stdout = execFileSync(
+        process.execPath,
+        [cliPath, '--input', writeGoalsFile(dir), '--max-workers', '2'],
+        { encoding: 'utf8' }
+    );
+    const plan = JSON.parse(stdout);
+    assert.equal(plan.schema, 'goal_waves_v1');
+    assert.deepEqual(plan.waves[1], { wave: 2, parallel: 2, goals: ['api', 'ui'] });
 });
 
 test('state lock is exclusive and stale locks clear', (t) => {

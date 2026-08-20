@@ -14,9 +14,10 @@ Announce: "I'm applying context engineering to keep the working context focused.
 ## Core Rules
 
 - Load by relevance to the current task, not by directory size.
-- Prefer summaries and targeted file reads before loading large files.
+- Prefer summaries and targeted reads before loading large files; scale depth
+  per [read depth](references/read-depth.md).
 - Follow imports, references, and tests only as far as needed.
-- Use durable files for cross-session state; conversation memory is not durable.
+- Keep cross-session state in durable files; conversation memory is not.
 - Stop gathering context once you can safely act.
 
 ## What To Load
@@ -36,7 +37,7 @@ When returning to work:
 1. Read `docs/STATE.md` if present.
 2. Read `.continue-here.md` if present.
 3. Read the active BRD, PRD, FSD, goal issue pointer, or brainstorm.
-4. Load only files needed for the current next step.
+4. Load only files needed for the next step.
 5. Run `/sc-status` to route the session if the next action is unclear.
 
 ## Fresh Context Signals
@@ -60,7 +61,7 @@ At natural breaks, ask internally:
 
 - Am I using the files I loaded?
 - Is the next file necessary for the next action?
-- Do I need a summary instead of a full file?
+- Would a summary beat the full file?
 - Should this state be written to `docs/STATE.md`, `docs/progress.md`, or `.continue-here.md`?
 
 ## Red Flags

@@ -254,4 +254,98 @@ for (const script of ['pre-compact.js', 'session-end.js']) {
     });
 }
 
+withTempProject((root) => {
+    const stateDir = path.join(root, '.agent', '.compact-state');
+    fs.mkdirSync(stateDir, { recursive: true });
+    fs.mkdirSync(path.join(root, 'docs', 'solutions'), { recursive: true });
+    fs.writeFileSync(path.join(root, 'docs', 'ERROR_LOG.md'), '# Errors\n', 'utf8');
+    fs.writeFileSync(path.join(root, 'docs', 'LEARNED_KNOWLEDGE.md'), '# Learned\n', 'utf8');
+    const past = (Date.now() - 86400000) / 1000;
+    for (const name of ['solutions', 'ERROR_LOG.md', 'LEARNED_KNOWLEDGE.md']) {
+        fs.utimesSync(path.join(root, 'docs', name), past, past);
+    }
+    fs.writeFileSync(path.join(stateDir, 'nudge-session.json'), JSON.stringify({ count: 3 }), 'utf8');
+    const env = { ...process.env, SUPER_COMPOUND_PROJECT_ROOT: root };
+
+    const nudged = spawnSync(process.execPath, [path.join(__dirname, 'stop-check.js')], {
+        input: JSON.stringify({ session_id: 'nudge-session', last_assistant_message: 'done' }),
+        encoding: 'utf8',
+        env,
+    });
+    assert.strictEqual(nudged.status, 0);
+    assert.match(JSON.parse(nudged.stdout).systemMessage, /\/sc-compound/);
+
+    const future = (Date.now() + 10000) / 1000;
+    fs.utimesSync(path.join(root, 'docs', 'LEARNED_KNOWLEDGE.md'), future, future);
+    const captured = spawnSync(process.execPath, [path.join(__dirname, 'stop-check.js')], {
+        input: JSON.stringify({ session_id: 'nudge-session', last_assistant_message: 'done' }),
+        encoding: 'utf8',
+        env,
+    });
+    assert.strictEqual(captured.status, 0);
+    assert.strictEqual(captured.stdout.trim(), '{}');
+
+    const untouched = spawnSync(process.execPath, [path.join(__dirname, 'stop-check.js')], {
+        input: JSON.stringify({ session_id: 'other-session', last_assistant_message: 'done' }),
+        encoding: 'utf8',
+        env,
+    });
+    assert.strictEqual(untouched.status, 0);
+    assert.strictEqual(untouched.stdout.trim(), '{}');
+});
+
+withTempProject((root) => {
+    const transcriptPath = path.join(root, 'usage-transcript.jsonl');
+    fs.writeFileSync(transcriptPath, `${JSON.stringify({
+        type: 'assistant',
+        message: {
+            usage: {
+                input_tokens: 80,
+                output_tokens: 20,
+                reasoning_tokens: 5,
+                cache_creation_input_tokens: 30,
+                cache_read_input_tokens: 40,
+            },
+        },
+    })}\n`, 'utf8');
+
+    const result = spawnSync(process.execPath, [path.join(__dirname, 'session-end.js')], {
+        input: JSON.stringify({ session_id: 'usage-session', transcript_path: transcriptPath }),
+        encoding: 'utf8',
+        env: {
+            ...process.env,
+            SUPER_COMPOUND_PROJECT_ROOT: root,
+        },
+    });
+    assert.strictEqual(result.status, 0);
+    assert.strictEqual(result.stdout, '');
+
+    const logFile = path.join(root, '.agent', '.compact-state', 'usage-log.jsonl');
+    const entries = fs.readFileSync(logFile, 'utf8').trim().split('\n').map((line) => JSON.parse(line));
+    assert.strictEqual(entries.length, 1);
+    assert.strictEqual(entries[0].session, 'usage-session');
+    assert.strictEqual(entries[0].measurement, 'MEASURED');
+    assert.strictEqual(entries[0].inputTokens, 80);
+    assert.strictEqual(entries[0].outputTokens, 20);
+    assert.strictEqual(entries[0].cacheCreationTokens, 30);
+    assert.strictEqual(entries[0].cacheReadTokens, 40);
+    assert.strictEqual(entries[0].conservativeTokens, 175);
+});
+
+withTempProject((root) => {
+    const result = spawnSync(process.execPath, [path.join(__dirname, 'session-end.js')], {
+        input: JSON.stringify({
+            session_id: 'missing-transcript',
+            transcript_path: path.join(root, 'absent.jsonl'),
+        }),
+        encoding: 'utf8',
+        env: {
+            ...process.env,
+            SUPER_COMPOUND_PROJECT_ROOT: root,
+        },
+    });
+    assert.strictEqual(result.status, 0);
+    assert(!fs.existsSync(path.join(root, '.agent', '.compact-state', 'usage-log.jsonl')));
+});
+
 console.log('hook security tests passed');

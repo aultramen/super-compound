@@ -60,6 +60,21 @@ Work delivered on `feature/ui-aware-delivery` after the 2026-07-16 evidence refr
 - External write policy ships as `DENY`; ambiguous external outcomes become `UNKNOWN_OUTCOME` and are never automatically retried.
 - No raw prompts, chain-of-thought, secrets, PII, or untrusted payloads persisted in run state or telemetry.
 
+## [2026-08-20] - Cross-Framework Activation Wave
+
+Driven by `docs/audits/2026-08-20-cross-framework-gap-analysis.md`. The wave wires existing mechanisms together instead of adding new mechanism categories, following the activation-first diagnosis adapted from everything-claude-code's continuous-learning-v2. Enhancements sourced from ghuntley/ralph landed in the sibling `ralph` repository, not this one.
+
+### Added
+
+- Closed knowledge loop (capture -> read-back -> maintenance -> evolve). `/sc-compound` routes outcomes to four sinks: `docs/solutions/` (solved problems), `ERR-*` entries in `docs/ERROR_LOG.md` (agent mistakes plus prevention rule), `LRN-*` entries in `docs/LEARNED_KNOWLEDGE.md` (user corrections and confirmed conventions), and `docs/progress.md` (chronology); capture guide `.agent/skills/knowledge-compounding/references/memory-capture.md` (producers adapted from gao-agent's error-memory).
+- Early knowledge read-back in `/sc-plan`, `/sc-work`, and `/sc-debug` via `.agent/tools/knowledge-search.mjs`; matching `ERR-*`/`LRN-*` prevention rules are binding until superseded (adapted from compound-engineering's learnings-researcher).
+- Entry-granular knowledge search: the corpus adds `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, and the Codebase Patterns head of `docs/progress.md`, splits on `##` headings with stable `ERR-*`/`LRN-*` IDs, still top-3 bounded; `docs/learnings/` now exists per the README contract.
+- `.agent/tools/memory-maintenance.mjs`: `check` (format and cap validation), `report` (promotion candidates counted by `/sc-status`, which recommends `/sc-evolve` at 3+ recurrences or a `PATTERN` flag, and consumed by `/sc-evolve` step 1), and `archive --dry-run` only; applying archives stays human-approved and `/sc-evolve` remains drafts-only.
+- Advisory `/sc-compound` suggestion from the `stop-check` hook when a session edited source but captured no knowledge.
+- Runtime token telemetry: `.agent/hooks/session-end.js` measures the host transcript (when `transcript_path` is provided) through `.agent/tools/transcript-usage.mjs` into a runtime usage log under `.agent/.compact-state/`; new aggregate mode `npm run usage`. Static bench gates unchanged.
+- Claude Code command surface: `.claude/commands/sc-<name>.md` for all 18 routes as thin contract-first pointers loaded on demand; route/command pairing enforced by a test in `.agent/tools/`.
+- Wave-boundary protocol in `parallel-execution` and `subagent-orchestration`: compact wave summary to `docs/STATE.md` under lock, fresh subagents per wave, re-dispatch only unverified goals (adapted from gsd-core-next's between-wave reset); `.agent/tools/goal-waves.mjs` gains `--json`; dispatch brief skeletons `.agent/templates/orchestration/Implementer-Brief-Skeleton.md` and `Reviewer-Brief-Skeleton.md` (adapted from superpowers' prompt pairs); read-depth scaling reference in `context-engineering`.
+
 ## [2026-07-16]
 
 ### Added

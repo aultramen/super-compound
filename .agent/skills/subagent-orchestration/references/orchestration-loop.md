@@ -1,4 +1,4 @@
-# Orchestration Loop: Fix Rounds, Ledger, Model Tiers
+# Orchestration Loop: Fix Rounds, Ledger, Waves, Model Tiers
 
 ## Fix rounds (cap 5, model escalation)
 
@@ -30,6 +30,18 @@ dispatching anything; re-dispatching completed goals is the single most
 expensive failure. A dispatch prompt describes one goal, never the session's
 history. Between tool calls, narrate at most one short line; the ledger and
 tool results carry the record.
+
+## Wave boundaries (between-wave reset)
+
+- After wave N's goals verify, write a compact wave summary (wave number,
+  verified goal ids, commit range, open rulings) to `docs/STATE.md` while
+  holding the `docs/STATE.md` lock - use the `goal-waves.mjs` / `file-state.mjs`
+  lock primitives, never reimplement locking.
+- Dispatch wave N+1 with fresh subagents; no accumulated transcript crosses a
+  wave boundary. The ledger and `docs/STATE.md` carry everything forward.
+- On mid-wave failure, re-dispatch only goals the work-package ledger leaves
+  unverified (`verified-promise.mjs` is the predicate); never re-run a
+  verified goal.
 
 ## Model tiers
 

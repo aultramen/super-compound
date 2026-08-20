@@ -8,8 +8,8 @@ Use this when `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, or `docs/solutio
 
 ## Steps
 
-1. Read the Quick Reference tables in `docs/ERROR_LOG.md` and `docs/LEARNED_KNOWLEDGE.md`; run `node .agent/tools/knowledge-search.mjs "<area>"` for the target area.
-2. Cluster entries: the same category or prevention rule appearing 3+ times with confidence Observed or Confirmed.
+1. Run `node .agent/tools/memory-maintenance.mjs report` for promotion candidates across `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, and `docs/solutions/`; run `node .agent/tools/knowledge-search.mjs "<area>"` for the target area.
+2. Cluster entries from the report's candidates: the same category or prevention rule appearing 3+ times with confidence Observed or Confirmed.
 3. For each cluster, write one DRAFT proposal at `docs/proposals/<YYYY-MM-DD>-<slug>.md`: current behavior, evidence references (entry IDs and paths), the proposed diff to the target rule, skill, or workflow, expected effect, and a rollback note.
 4. Validate every proposal with `node .agent/tools/validate-doc-claims.mjs <proposal>`.
 5. Present the proposal list and stop. Human approval and application happen outside this route.

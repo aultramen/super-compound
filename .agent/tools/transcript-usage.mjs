@@ -292,15 +292,109 @@ function isUsageObject(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+const USAGE_LOG_TOKEN_FIELDS = [
+  "inputTokens",
+  "outputTokens",
+  "cacheCreationTokens",
+  "cacheReadTokens",
+  "conservativeTokens",
+];
+
+export async function aggregateUsageLog(filePath, options = {}) {
+  const absolute = path.resolve(filePath);
+  const maxBytes = options.maxBytes ?? DEFAULT_MAX_BYTES;
+  let info;
+  try {
+    info = await stat(absolute);
+  } catch (error) {
+    if (error?.code === "ENOENT") return emptyUsageLogReport();
+    throw error;
+  }
+  if (!info.isFile()) throw new Error(`Usage log is not a file: ${absolute}`);
+  if (info.size > maxBytes) {
+    throw new Error(`Usage log exceeds ${maxBytes} bytes`);
+  }
+
+  const report = emptyUsageLogReport();
+  const lines = readline.createInterface({
+    input: createReadStream(absolute, { encoding: "utf8" }),
+    crlfDelay: Infinity,
+  });
+  for await (const line of lines) {
+    if (!line.trim()) continue;
+    let entry;
+    try {
+      entry = JSON.parse(line);
+    } catch {
+      report.invalidLines += 1;
+      continue;
+    }
+    if (!isUsageObject(entry)) {
+      report.invalidLines += 1;
+      continue;
+    }
+    report.sessions += 1;
+    if (entry.measurement === "MEASURED") report.measured += 1;
+    else report.unmeasured += 1;
+    for (const field of USAGE_LOG_TOKEN_FIELDS) {
+      const value = entry[field];
+      if (!Number.isSafeInteger(value) || value < 0) continue;
+      const next = report.totals[field] + value;
+      if (!Number.isSafeInteger(next)) {
+        throw new Error("Usage log token totals exceed the safe integer bound");
+      }
+      report.totals[field] = next;
+    }
+  }
+
+  const cacheDenominator =
+    report.totals.inputTokens +
+    report.totals.cacheCreationTokens +
+    report.totals.cacheReadTokens;
+  report.cacheHitRatio =
+    cacheDenominator > 0
+      ? Math.round((report.totals.cacheReadTokens / cacheDenominator) * 10000) /
+        10000
+      : null;
+  return report;
+}
+
+function emptyUsageLogReport() {
+  return {
+    schema: "usage_log_report_v1",
+    sessions: 0,
+    measured: 0,
+    unmeasured: 0,
+    invalidLines: 0,
+    totals: {
+      inputTokens: 0,
+      outputTokens: 0,
+      cacheCreationTokens: 0,
+      cacheReadTokens: 0,
+      conservativeTokens: 0,
+    },
+    cacheHitRatio: null,
+  };
+}
+
 async function main() {
-  const transcript = process.argv[2];
-  if (!transcript || transcript === "--help" || transcript === "-h") {
+  const args = process.argv.slice(2);
+  if (!args[0] || args[0] === "--help" || args[0] === "-h") {
     console.log(
-      "Usage: node .agent/tools/transcript-usage.mjs <session.jsonl>",
+      [
+        "Usage: node .agent/tools/transcript-usage.mjs <session.jsonl>",
+        "       node .agent/tools/transcript-usage.mjs --report <usage-log.jsonl>",
+      ].join("\n"),
     );
     return;
   }
-  const report = await analyzeTranscript(transcript);
+  if (args[0] === "--report") {
+    if (!args[1]) throw new Error("--report requires a usage-log.jsonl path");
+    const report = await aggregateUsageLog(args[1]);
+    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+    return;
+  }
+  const report = await analyzeTranscript(args[0]);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }
 

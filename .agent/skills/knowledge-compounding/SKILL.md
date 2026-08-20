@@ -15,7 +15,8 @@ Use after a difficult debugging fix, non-obvious root cause, recurring workaroun
 
 - For a solved problem, search before creating anything, then follow [solution capture](references/solution-capture.md).
 - For end-of-session or reusable project learning, follow [progress memory](references/progress-memory.md).
-- Use only the relevant branch; do not load both references by default.
+- For a costly mistake (`ERR-*`) or confirmed convention (`LRN-*`) too small for a solution record, follow [memory capture](references/memory-capture.md): one lightweight IF-THEN entry.
+- Use only the relevant branch; do not load the other references by default.
 
 ## Invariants
 

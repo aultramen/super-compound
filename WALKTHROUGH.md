@@ -551,7 +551,18 @@ Use this after solving something reusable:
 - Security/privacy lesson
 - Verification recipe
 
-Save concise knowledge under `docs/solutions/` or related project docs.
+Outcomes route to four sinks:
+
+- `docs/solutions/` for the reusable solved problem
+- an `ERR-*` entry in `docs/ERROR_LOG.md` when an agent mistake yields an IF-THEN prevention rule
+- an `LRN-*` entry in `docs/LEARNED_KNOWLEDGE.md` for user corrections and confirmed conventions
+- `docs/progress.md` for the chronology
+
+Later, `/sc-status` counts memory entries through
+`node .agent/tools/memory-maintenance.mjs report`. When a category recurs 3+
+times or carries a `PATTERN` flag, it recommends `/sc-evolve`, which consumes
+the report's promotion candidates and drafts framework proposals for human
+approval.
 
 ## Current Workflow Map
 

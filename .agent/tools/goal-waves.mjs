@@ -12,6 +12,10 @@
  * Usage:
  *   node .agent/tools/goal-waves.mjs --issues-dir .scratch/<feature>/issues
  *   node .agent/tools/goal-waves.mjs --input goals.json [--max-workers N]
+ *   node .agent/tools/goal-waves.mjs --input goals.json --json
+ *
+ * --json emits the stable machine shape goal_waves_plan_v1: waves as an
+ * array of goal-id arrays plus maxWorkers/goalCount/waveCount metadata.
  */
 
 import fs from 'node:fs';
@@ -135,12 +139,14 @@ function main(argv) {
     let inputFile = null;
     let maxWorkers = null;
     let root = process.cwd();
+    let json = false;
     for (let i = 0; i < args.length; i += 1) {
         const a = args[i];
         if (a === '--issues-dir') issuesDir = args[++i];
         else if (a === '--input') inputFile = args[++i];
         else if (a === '--max-workers') maxWorkers = Number(args[++i]);
         else if (a === '--root') root = args[++i];
+        else if (a === '--json') json = true;
     }
     let goals;
     if (inputFile) {
@@ -149,12 +155,24 @@ function main(argv) {
         goals = parseIssueDependencies(issuesDir);
     } else {
         process.stderr.write(
-            'usage: goal-waves.mjs (--issues-dir <dir> | --input <goals.json>) [--max-workers N] [--root <path>]\n'
+            'usage: goal-waves.mjs (--issues-dir <dir> | --input <goals.json>) [--max-workers N] [--root <path>] [--json]\n'
         );
         return 2;
     }
     const waves = computeWaves(goals);
     const workers = resolveMaxWorkers(root, maxWorkers);
+    if (json) {
+        process.stdout.write(
+            `${JSON.stringify({
+                schema: 'goal_waves_plan_v1',
+                maxWorkers: workers,
+                goalCount: goals.length,
+                waveCount: waves.length,
+                waves,
+            })}\n`
+        );
+        return 0;
+    }
     process.stdout.write(
         `${JSON.stringify(
             {

@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { analyzeTranscript } from "./transcript-usage.mjs";
+import { aggregateUsageLog, analyzeTranscript } from "./transcript-usage.mjs";
 
 test("analyzeTranscript separates main and subagent token usage", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "transcript-usage-"));
@@ -330,6 +330,96 @@ test("analyzeTranscript rejects transcripts without supported usage", async () =
     await assert.rejects(
       analyzeTranscript(transcript),
       /no supported token usage records/i,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("aggregateUsageLog aggregates runtime usage-log entries", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "transcript-usage-"));
+  const logFile = path.join(root, "usage-log.jsonl");
+
+  try {
+    await writeFile(
+      logFile,
+      [
+        JSON.stringify({
+          ts: "2026-08-20T00:00:00.000Z",
+          session: "a",
+          measurement: "MEASURED",
+          inputTokens: 100,
+          outputTokens: 20,
+          cacheCreationTokens: 30,
+          cacheReadTokens: 70,
+          conservativeTokens: 220,
+        }),
+        JSON.stringify({
+          ts: "2026-08-20T01:00:00.000Z",
+          session: "b",
+          measurement: "MEASURED",
+          inputTokens: 50,
+          outputTokens: 10,
+          cacheCreationTokens: 0,
+          cacheReadTokens: 150,
+          conservativeTokens: 210,
+        }),
+        JSON.stringify({
+          ts: "2026-08-20T02:00:00.000Z",
+          session: "c",
+          measurement: "UNMEASURED",
+          inputTokens: null,
+          outputTokens: null,
+          cacheCreationTokens: null,
+          cacheReadTokens: null,
+          conservativeTokens: null,
+        }),
+        "not-json",
+        "",
+      ].join("\n"),
+    );
+
+    const report = await aggregateUsageLog(logFile);
+
+    assert.equal(report.schema, "usage_log_report_v1");
+    assert.equal(report.sessions, 3);
+    assert.equal(report.measured, 2);
+    assert.equal(report.unmeasured, 1);
+    assert.equal(report.invalidLines, 1);
+    assert.deepEqual(report.totals, {
+      inputTokens: 150,
+      outputTokens: 30,
+      cacheCreationTokens: 30,
+      cacheReadTokens: 220,
+      conservativeTokens: 430,
+    });
+    assert.equal(report.cacheHitRatio, 0.55);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("aggregateUsageLog returns an empty report for a missing log", async () => {
+  const report = await aggregateUsageLog(
+    path.join(tmpdir(), `transcript-usage-absent-${Date.now()}.jsonl`),
+  );
+
+  assert.equal(report.sessions, 0);
+  assert.equal(report.measured, 0);
+  assert.equal(report.unmeasured, 0);
+  assert.equal(report.invalidLines, 0);
+  assert.equal(report.cacheHitRatio, null);
+});
+
+test("aggregateUsageLog enforces a file-size cap", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "transcript-usage-"));
+  const logFile = path.join(root, "large-log.jsonl");
+
+  try {
+    await writeFile(logFile, "x".repeat(101));
+    await assert.rejects(
+      aggregateUsageLog(logFile, { maxBytes: 100 }),
+      /exceeds 100 bytes/,
     );
   } finally {
     await rm(root, { recursive: true, force: true });
