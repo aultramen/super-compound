@@ -25,10 +25,12 @@
 
 - **Facts:** <directly supported conclusions>
 - **Inferences:** <reasoning derived from the facts>
-- **Contradictions:** <conflicting evidence and resolution>
-- **Unknowns:** <remaining gaps>
+- **Contradictions:** <conflicting evidence and resolution; omit when none>
+- **Unknowns:** <remaining gaps; omit when none>
 
 ## Options And Recommendation
+
+Include the options table only when more than one option was considered.
 
 | Option | Supporting evidence | Trade-offs | Verdict |
 |---|---|---|---|

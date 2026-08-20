@@ -47,6 +47,10 @@ cp AGENTS.md <target-project>/
 cp -R .claude <target-project>/
 ```
 
+Copying `.claude/` also installs `.claude/commands/` pointers for all 18 routes,
+so `/sc-*` works as native Claude Code slash commands. Each pointer is a thin
+contract-first stub that loads the compact route contract on demand.
+
 Optional Codex skill installation (PowerShell):
 
 ```powershell
@@ -60,7 +64,7 @@ For Antigravity IDE, keep `.agent/rules/super-compound.md` lowercase. The root `
 
 ## Quick Start
 
-All public commands use the `/sc-*` prefix to avoid collisions with native Claude Code planning and review slash commands.
+All public commands use the `/sc-*` prefix to avoid collisions with native Claude Code planning and review slash commands. In Claude Code, the copied `.claude/commands/` surface exposes them directly as slash commands.
 
 ```text
 /sc-init
@@ -266,6 +270,15 @@ Supporting skills:
 - `threat-modeling`
 - `todo-management`
 
+## Knowledge Loop
+
+Captured knowledge runs a closed loop: capture -> read-back -> maintenance -> evolve.
+
+- `/sc-compound` routes outcomes to four sinks: `docs/solutions/` (solved problems), `ERR-*` entries in `docs/ERROR_LOG.md` (agent mistakes plus an IF-THEN prevention rule), `LRN-*` entries in `docs/LEARNED_KNOWLEDGE.md` (user corrections and confirmed conventions), and `docs/progress.md` (chronology). Formats live in `.agent/skills/state-management/references/file-contracts.md`; the capture guide is `.agent/skills/knowledge-compounding/references/memory-capture.md`.
+- `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; matching `ERR-*`/`LRN-*` prevention rules are binding until superseded. The corpus is entry-granular over `docs/solutions/`, `docs/learnings/`, `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, and the Codebase Patterns head of `docs/progress.md`, still top-3 bounded.
+- `/sc-status` counts memory entries via `node .agent/tools/memory-maintenance.mjs report` and recommends `/sc-evolve` at 3+ recurrences or a `PATTERN` flag; `/sc-evolve` consumes the report's promotion candidates but still writes drafts only for human approval. `memory-maintenance.mjs` supports `check` (format and cap validation), `report`, and `archive --dry-run`; applying archives stays human-approved.
+- The `stop-check` hook emits one advisory `/sc-compound` suggestion when a session edited source but captured no knowledge.
+
 ## Git Workflow Operation
 
 Use `/sc-go` when starting a branch, using an optional worktree, committing, pushing, or preparing a Pull Request. The default mode is preview-first: Super Compound shows safety checks and exact commands before mutating Git state.
@@ -384,6 +397,8 @@ node .agent/tools/release-cutover.mjs --expected-output-digest ABSENT
 ```
 
 The benchmark separates immutable historical eager-preload evidence from current repository-owned startup budgets for Codex, Claude Code, Antigravity, the native Codex adapter, and bundled skill metadata. It also emits an 18-route x 3-cell static matrix: input context reduction, process wiring/authority, and output sink/budget/next-owner coverage. Every workflow context-entry reduction must exceed 90%; all 54 static cells must pass. Totals are scenario-weighted and may count shared files more than once. Output-authoring measures context and contracts, not generated prose. Host reasoning, generated-output, injected-context, latency, and billing tokens remain `unknown`; the static matrix is not a runtime end-to-end claim. The baseline is remeasured from recorded ancestor commit blobs on every authoritative run. A runtime claim requires paired attributable before/current traces for every route, not one after-only transcript.
+
+Runtime token telemetry complements the static gates: `.agent/hooks/session-end.js` measures the host transcript (when the host provides `transcript_path`) through `.agent/tools/transcript-usage.mjs` into a runtime usage log under `.agent/.compact-state/`, and `npm run usage` aggregates it. Static benchmark gates are unchanged.
 
 The framework audit enumerates the exact active Git manifest: tracked files plus untracked, non-ignored files. It byte-reads the physical tree outside `.git`, classifies every active path into a declared audit class, and fails on any unclassified entry. The self-generated audit report is necessarily outside its own raw content digest, so `--verify-existing` validates it separately and emits a 100%-accounted verification envelope. The recorded `repositoryHead` is digest-bound provenance; freshness is content/manifest based so committing the excluded report does not invalidate otherwise identical evidence. The envelope reports whether stored and current heads match. The report distinguishes byte/content coverage, audit-class coverage, and specialized self-evidence instead of calling them one uniform semantic audit. It also validates UTF-8, JSON, CSV shape, Markdown links, workflow/skill contracts, duplicate content, output budgets, the 18x3 matrix, and fresh benchmark evidence. Invalid payload content is never echoed into findings.
 

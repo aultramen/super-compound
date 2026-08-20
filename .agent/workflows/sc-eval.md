@@ -35,3 +35,4 @@ a finding by self-report, or mutate the implementation it grades.
 7. A non-gating exploratory check may remain in chat. If another workflow or a
    commit/push/PR gate consumes the criteria or result, it must be saved to
    `.agent/evals/<feature>.md`; never make an approval depend on a chat-only eval.
+   The durable eval artifact follows `.agent/context/output-style.md`.

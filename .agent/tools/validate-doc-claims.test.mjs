@@ -56,6 +56,24 @@ test('drafting scaffold is flagged', (t) => {
     );
 });
 
+test('skeleton boilerplate is flagged in produced docs but not in templates', (t) => {
+    const root = makeRepo(t);
+    const residue =
+        '# S\nImplement referenced FSD goal only; do not copy authority prose.\nActive task: <task or none>';
+    const doc = path.join(root, 'docs/solutions/subject.md');
+    fs.writeFileSync(doc, residue);
+    const findings = validateDoc({ docPath: doc, root, gitCheck: false });
+    assert.deepEqual(
+        findings.map((f) => f.kind),
+        ['skeleton-boilerplate', 'skeleton-boilerplate']
+    );
+    fs.mkdirSync(path.join(root, '.agent/templates'), { recursive: true });
+    const template = path.join(root, '.agent/templates/skeleton.md');
+    fs.writeFileSync(template, residue);
+    const exempt = validateDoc({ docPath: template, root, gitCheck: false });
+    assert.deepEqual(exempt, []);
+});
+
 test('unknown commit sha flagged only when gitCheck enabled', (t) => {
     const root = makeRepo(t);
     const doc = path.join(root, 'docs/solutions/subject.md');

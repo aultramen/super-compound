@@ -64,32 +64,34 @@ tags: [tag1, tag2]
 <Technical explanation of why>
 
 ## Solution
-<Verified code or configuration changes; before/after examples when useful>
+<Verified code or configuration changes, stated once; before/after examples when useful>
 
 ## What Didn't Work
-<Failed attempts and why>
+<Failed attempts, one line each; omit this section when no attempt failed>
 
 ## Prevention
-<Checks or reusable guidance>
+<IF-THEN rule that adds something beyond the Solution; omit when it would restate the Solution>
 
 ## Related
-<Bidirectional links to related records>
+<Bidirectional links to related records; omit when empty>
 ```
 
 Good records are specific, searchable, reproducible, and explanatory. Never include credentials or real customer data.
 
 ## 3b. Ground the record
 
-Run the mechanical validator before finishing:
+Run the mechanical validator and the single-projection doc lint before finishing:
 
 ```bash
 node .agent/tools/validate-doc-claims.mjs docs/solutions/<category>/<file>.md
+node .agent/tools/doc-lint.mjs docs/solutions/<category>/<file>.md
 ```
 
 It flags missing cited paths, broken relative links, unknown commit SHAs, and
 leftover drafting scaffold. Adjudicate every finding yourself; the tool never
 edits the record. A claim that cannot be grounded gets rewritten or removed,
-not left as-is.
+not left as-is. The doc lint flags empty shells, duplicated paragraphs, and
+boilerplate; keep the record single-projection - state each fact once.
 
 ## 4. Compound patterns
 
@@ -102,4 +104,4 @@ After writing, ask: would an agent without this skill find the store? If
 `node .agent/tools/knowledge-search.mjs`, propose the smallest one-line
 addition. Knowledge that cannot be found does not compound.
 
-Report the path created or updated and offer to continue, view it, or link related records.
+Report the path created or updated.

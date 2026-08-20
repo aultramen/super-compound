@@ -11,6 +11,7 @@
     "test:hooks": "node .agent/hooks/test-hooks-security.js",
     "test:python": "python3 -m unittest discover -s .agent/skills/interface-design/scripts -p \"test_*.py\" && python3 .agent/skills/verification-before-completion/tests/test_skill_router_contract.py",
     "test": "npm run check && npm run test:tools && npm run test:skills && npm run test:hooks",
+    "usage": "node .agent/tools/transcript-usage.mjs --report .agent/.compact-state/usage-log.jsonl",
     "bench": "node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --require-reduction 90 --repeat 3 --output .agent/benchmarks/token-benchmark.after.json",
     "audit": "node .agent/tools/framework-audit.mjs --output .agent/benchmarks/framework-audit.after.json && node .agent/tools/framework-audit.mjs --verify-existing .agent/benchmarks/framework-audit.after.json"
   }

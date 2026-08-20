@@ -36,7 +36,8 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
    read-only `pathsPath`, exact target paths, and this constraint: implement one
    goal, use TDD when behavior changes, never edit the scheduler-owned scope,
    keep full evidence in `reportPath`, and return at most 15 lines containing
-   outcome, paths, verification status, and blockers.
+   outcome, paths, verification status, and blockers. Seed from
+   `.agent/templates/orchestration/Implementer-Brief-Skeleton.md`.
 3. Run parallel goals only in isolated worktrees/workspaces. Review rejects a
    changed scope digest and any new working-tree edit outside the allowlist.
 4. After implementation, freeze one working-tree review package:
@@ -51,7 +52,8 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
 
 5. One fresh reviewer reads the brief, report, and patch once, then writes two
    separate verdicts: `SPEC` and `QUALITY`. Use
-   `references/review-contract.md` for the detailed checklist.
+   `references/review-contract.md` for the detailed checklist. Seed from
+   `.agent/templates/orchestration/Reviewer-Brief-Skeleton.md`.
 6. Batch critical/important fixes into one correction wave. Rebuild the patch
    and re-review once. Fix rounds cap at 5 with model escalation and a
    round-5 adjudication circuit breaker:

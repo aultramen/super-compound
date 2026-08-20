@@ -1801,6 +1801,8 @@ A backup requirement is incomplete without a tested restore procedure.
 
 ## 14.2 Requirement-to-Test Matrix
 
+Derived view - generate from goal packets / issue pointers; do not hand-maintain a second copy.
+
 | Requirement | UI/action/state/mapping refs | Contract/schema refs | Test ID | Layer | Fixture | Expected Evidence | Automated? | Goal |
 |---|---|---|---|---|---|---|---:|---|
 | FR-001 | UI-001 / UI-ACT-001 / UI-STATE-001 / UIMAP-001 | CONTRACT-001 / SCHEMA-001 | TEST-001 | Integration | FIX-001 | {{ASSERTION}} | Yes | GOAL-001 |
@@ -1992,6 +1994,8 @@ Avoid goals such as “implement backend,” “build dashboard,” “add secur
 
 ## 16.5 Goal Dependency Graph
 
+Derived view - generate from goal packets / issue pointers; do not hand-maintain a second copy.
+
 ```mermaid
 flowchart LR
     G001[GOAL-001 CONTRACT_ENABLER] --> G002[GOAL-002 FIRST_VERTICAL_SLICE]
@@ -2007,6 +2011,8 @@ For UI-bearing scope, create exactly one `FIRST_VERTICAL_SLICE`. Every
 `FIRST_VERTICAL_SLICE_VERIFIED`; `EXCEPTION_APPROVED` cannot open scale-out.
 
 ## 16.6 Machine-Readable Goal Manifest
+
+Derived view - generate from goal packets / issue pointers; do not hand-maintain a second copy.
 
 Keep this manifest synchronized with the human-readable goal packets.
 
@@ -2236,6 +2242,8 @@ Technical Manager approval before `FIRST_VERTICAL_SLICE` becomes ready.
 # 17. Traceability, Risks, and Final Readiness
 
 ## 17.1 End-to-End Traceability Matrix
+
+Derived view - generate from goal packets / issue pointers; do not hand-maintain a second copy.
 
 | BRD Source | PRD Source | FSD Requirement | Decision Authority (`TDEC` / ADR optional) | Design / Invariant | Data | API/Event/Job | UI/action/state/mapping | Wire Contract | Security/NFR | Test | Goal | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|

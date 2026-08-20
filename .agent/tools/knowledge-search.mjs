@@ -2,14 +2,19 @@
 /**
  * knowledge-search - BM25 retrieval over the durable knowledge store.
  *
- * Ranks docs/solutions/** (and optionally docs/learnings/**) against a query
- * and emits at most MAX_RESULTS compact hits: path, title, score, snippet.
- * Ranking sees full text (frontmatter + headings + body); output stays
- * bounded so the knowledge base itself never enters agent context.
+ * Ranks docs/solutions/** (and optionally docs/learnings/**) plus the
+ * memory files docs/ERROR_LOG.md, docs/LEARNED_KNOWLEDGE.md, and the
+ * "## Codebase Patterns" head section of docs/progress.md against a query
+ * and emits at most MAX_RESULTS compact hits: id, path, title, score,
+ * snippet. Multi-entry memory files are split on /^## /m so BM25 ranks at
+ * entry granularity; each entry hit carries a stable id (the ERR-* or
+ * LRN-* id from its heading when present, else file+heading). Ranking sees full
+ * text (frontmatter + headings + body); output stays bounded so the
+ * knowledge base itself never enters agent context.
  *
  * Usage:
  *   node .agent/tools/knowledge-search.mjs "<query>" [--dir docs/solutions]
- *        [--limit 3] [--json] [--root <repo-root>]
+ *        [--file docs/ERROR_LOG.md] [--limit 3] [--json] [--root <repo-root>]
  */
 
 import fs from 'node:fs';
@@ -21,6 +26,14 @@ const MAX_RESULTS = 3;
 const SNIPPET_CHARS = 240;
 const BM25_K1 = 1.5;
 const BM25_B = 0.75;
+const ENTRY_ID_RE = /^((?:ERR|LRN)-\d{4}-\d{2}-\d{2}-\d+)\b/;
+
+const DEFAULT_DIRS = ['docs/solutions', 'docs/learnings'];
+const DEFAULT_FILES = [
+    { file: 'docs/ERROR_LOG.md' },
+    { file: 'docs/LEARNED_KNOWLEDGE.md' },
+    { file: 'docs/progress.md', section: 'Codebase Patterns' },
+];
 
 export function tokenize(text) {
     return String(text)
@@ -62,9 +75,34 @@ function listMarkdownFiles(dir) {
     return out.sort();
 }
 
+export function splitEntries(body) {
+    const clean = String(body).replace(/<!--[\s\S]*?-->/g, '');
+    const marks = [];
+    const re = /^## +(.+)$/gm;
+    let m;
+    while ((m = re.exec(clean)) !== null) {
+        marks.push({ heading: m[1].trim(), at: m.index });
+    }
+    return marks.map((mark, i) => ({
+        heading: mark.heading,
+        text: clean
+            .slice(mark.at, i + 1 < marks.length ? marks[i + 1].at : clean.length)
+            .trim(),
+    }));
+}
+
 export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8')) {
     const docs = [];
-    for (const file of files) {
+    const addDoc = (file, title, meta, body, extra = {}) => {
+        const searchable = [
+            title,
+            Object.values(meta).join(' '),
+            body,
+        ].join('\n');
+        docs.push({ file, title, meta, body, tokens: tokenize(searchable), ...extra });
+    };
+    for (const spec of files) {
+        const file = typeof spec === 'string' ? spec : spec.file;
         let raw;
         try {
             raw = readFile(file);
@@ -72,14 +110,23 @@ export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8')) 
             continue;
         }
         const { meta, body } = parseFrontmatter(raw);
+        if (typeof spec === 'object' && spec.split) {
+            let entries = splitEntries(body);
+            if (spec.section) entries = entries.filter((e) => e.heading === spec.section);
+            if (entries.length > 0 || spec.section) {
+                for (const entry of entries) {
+                    const idMatch = entry.heading.match(ENTRY_ID_RE);
+                    addDoc(file, entry.heading, meta, entry.text, {
+                        entryHeading: entry.heading,
+                        entryId: idMatch ? idMatch[1] : null,
+                    });
+                }
+                continue;
+            }
+        }
         const title =
             (body.match(/^#\s+(.+)$/m) || [])[1] || path.basename(file, '.md');
-        const searchable = [
-            title,
-            Object.values(meta).join(' '),
-            body,
-        ].join('\n');
-        docs.push({ file, title, meta, body, tokens: tokenize(searchable) });
+        addDoc(file, title, meta, body);
     }
     const df = new Map();
     for (const doc of docs) {
@@ -130,23 +177,32 @@ export function snippetFor(doc, query) {
         .trim();
 }
 
-export function search({ root, dirs, query, limit = MAX_RESULTS }) {
-    const files = dirs.flatMap((d) => listMarkdownFiles(path.resolve(root, d)));
-    const index = buildIndex(files);
+export function search({ root, dirs = [], files = [], query, limit = MAX_RESULTS }) {
+    const fromDirs = dirs.flatMap((d) => listMarkdownFiles(path.resolve(root, d)));
+    const fromFiles = files.map((spec) => {
+        const f = typeof spec === 'string' ? { file: spec } : spec;
+        return { ...f, file: path.resolve(root, f.file), split: true };
+    });
+    const index = buildIndex([...fromDirs, ...fromFiles]);
     return scoreQuery(index, query)
         .slice(0, limit)
-        .map(({ doc, score }) => ({
-            path: path.relative(root, doc.file),
-            title: doc.title,
-            category: doc.meta.category || path.basename(path.dirname(doc.file)),
-            score: Number(score.toFixed(4)),
-            snippet: snippetFor(doc, query),
-        }));
+        .map(({ doc, score }) => {
+            const rel = path.relative(root, doc.file);
+            return {
+                id: doc.entryId || (doc.entryHeading ? `${rel}#${doc.entryHeading}` : rel),
+                path: rel,
+                title: doc.title,
+                category: doc.meta.category || path.basename(path.dirname(doc.file)),
+                score: Number(score.toFixed(4)),
+                snippet: snippetFor(doc, query),
+            };
+        });
 }
 
 function main(argv) {
     const args = argv.slice(2);
     const dirs = [];
+    const files = [];
     let query = null;
     let limit = MAX_RESULTS;
     let json = false;
@@ -154,6 +210,7 @@ function main(argv) {
     for (let i = 0; i < args.length; i += 1) {
         const a = args[i];
         if (a === '--dir') dirs.push(args[++i]);
+        else if (a === '--file') files.push(args[++i]);
         else if (a === '--limit') limit = Math.max(1, Number(args[++i]) || MAX_RESULTS);
         else if (a === '--json') json = true;
         else if (a === '--root') root = args[++i];
@@ -161,20 +218,24 @@ function main(argv) {
     }
     if (!query) {
         process.stderr.write(
-            'usage: knowledge-search.mjs "<query>" [--dir <dir>]... [--limit N] [--json] [--root <path>]\n'
+            'usage: knowledge-search.mjs "<query>" [--dir <dir>]... [--file <file>]... [--limit N] [--json] [--root <path>]\n'
         );
         return 2;
     }
-    if (dirs.length === 0) dirs.push('docs/solutions', 'docs/learnings');
-    const hits = search({ root, dirs, query, limit });
+    if (dirs.length === 0 && files.length === 0) {
+        dirs.push(...DEFAULT_DIRS);
+        files.push(...DEFAULT_FILES);
+    }
+    const hits = search({ root, dirs, files, query, limit });
     if (json) {
         process.stdout.write(`${JSON.stringify({ query, results: hits }, null, 2)}\n`);
     } else if (hits.length === 0) {
         process.stdout.write('No knowledge-store match. Safe to write a new record.\n');
     } else {
         for (const hit of hits) {
+            const where = hit.id.startsWith(hit.path) ? hit.id : `${hit.path}#${hit.id}`;
             process.stdout.write(
-                `${hit.score.toFixed(2)}  ${hit.path}\n    ${hit.title} [${hit.category}]\n    ${hit.snippet}\n`
+                `${hit.score.toFixed(2)}  ${where}\n    ${hit.title} [${hit.category}]\n    ${hit.snippet}\n`
             );
         }
     }

@@ -10,7 +10,7 @@
     },
     "limitation": "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens."
   },
-  "generatedAt": "2026-08-06T07:52:21.161Z",
+  "generatedAt": "2026-08-20T04:34:49.914Z",
   "observedRuntimeTokens": "unknown",
   "hostInjectedSurfaceTokens": "unknown",
   "claimScope": {
@@ -225,10 +225,10 @@
           ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md"
         ],
         "beforeTokens": 32334,
-        "afterTokens": 724,
-        "reductionPercent": 97.7609,
+        "afterTokens": 745,
+        "reductionPercent": 97.6959,
         "reductionThresholdExclusive": 90,
-        "afterDigest": "b1960313f31a207ec3fc050e8ba8523bb057f3bd9761cc48a0809c3e73da530a",
+        "afterDigest": "e30a671c3e36e586a89e75294a94cbfa9cc212ad78b0c37c6f8fa108be044ceb",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -356,10 +356,10 @@
           ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md"
         ],
         "beforeTokens": 23435,
-        "afterTokens": 765,
-        "reductionPercent": 96.7357,
+        "afterTokens": 776,
+        "reductionPercent": 96.6887,
         "reductionThresholdExclusive": 90,
-        "afterDigest": "347c5797c2c70b8e5134b7f8ada043f378cbd41f297ddf3019e491b008ca8256",
+        "afterDigest": "4b5103238131ecf23b3b6532d3a6f55b30c5949cfc085fb18b1bd4271803f857",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -427,10 +427,10 @@
           ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
         ],
         "beforeTokens": 59150,
-        "afterTokens": 2625,
-        "reductionPercent": 95.5621,
+        "afterTokens": 2746,
+        "reductionPercent": 95.3576,
         "reductionThresholdExclusive": 90,
-        "afterDigest": "64f4c3e8566a853b518d8d9f1205e3121a33e277b4f21e614a69418d40152a99",
+        "afterDigest": "75c31674251f5e5c9b93684eccf772ea8b457937ab9f70fa7297c20526bb8269",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -620,10 +620,10 @@
           ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
         ],
         "beforeTokens": 11412,
-        "afterTokens": 1085,
-        "reductionPercent": 90.4925,
+        "afterTokens": 1099,
+        "reductionPercent": 90.3698,
         "reductionThresholdExclusive": 90,
-        "afterDigest": "7f137b62522e49ed1a4b4325c859517e4564408455f65cb6af69f9838b7e2989",
+        "afterDigest": "0c931bbb0ca44195d95e452d377bf597b9bca50dfecb9c70744c30c11052794a",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1068,10 +1068,10 @@
           ".agent/context/template-index.md"
         ],
         "beforeTokens": 112816,
-        "afterTokens": 1028,
-        "reductionPercent": 99.0888,
+        "afterTokens": 1116,
+        "reductionPercent": 99.0108,
         "reductionThresholdExclusive": 90,
-        "afterDigest": "1bec156e3f61b0c4e79fa229038cd937f397609a2544f06bbfc866302d2d0d5f",
+        "afterDigest": "20558f2eb85ac0d35d8324eee49e8ed21513fdae5e4c4532335bf2116c5932b1",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1218,14 +1218,14 @@
   "evidenceDigests": {
     "workflowInvariants": "392497eeb4fb3375d041bbd0eb8fdc61cab0da72fea4dee63599516bc381785d",
     "outputBudgets": "ca63a13ba8c0198c55d8fc43130b0e3776f22741fae7767c571d13e7f643e94f",
-    "workflowMatrix": "7b37158106098073857fe03b51618a266b791ace6ce766e6bfbf0d5a40ff22be"
+    "workflowMatrix": "d55609209e5d91dbe227996928285986c39630c8e07e7bbc8369f198dc3fd6d5"
   },
   "digests": {
     "baseline": "6105f25f49cba281efc529f37912a9e1ff5952220534fea9d88156808d266e4a",
     "suiteDefinition": "1fb4153bbeeb0cd8221d54426f5f3f4650c5fc478d1191a478d606001969ad52",
     "workflowInvariants": "392497eeb4fb3375d041bbd0eb8fdc61cab0da72fea4dee63599516bc381785d",
     "outputBudgets": "ca63a13ba8c0198c55d8fc43130b0e3776f22741fae7767c571d13e7f643e94f",
-    "workflowMatrix": "7b37158106098073857fe03b51618a266b791ace6ce766e6bfbf0d5a40ff22be"
+    "workflowMatrix": "d55609209e5d91dbe227996928285986c39630c8e07e7bbc8369f198dc3fd6d5"
   },
   "runtimeEvidence": {
     "status": "unknown",
@@ -1242,7 +1242,7 @@
   "deterministic": true,
   "runDigests": [
     {
-      "digest": "e228f6b507a881c609c168302dc11d6fe5c8060d2731827a5941474cd40db638",
+      "digest": "532b2be5e60fc47a122271b761e74fe3bab6d6a7d5c3c2326808d994d4612c4f",
       "count": 3
     }
   ],
@@ -1253,10 +1253,10 @@
         "name": "legacy-eager-preload",
         "stage": "input",
         "beforeTokens": 516436,
-        "afterTokens": 2534,
+        "afterTokens": 2720,
         "pass": true,
-        "afterDigest": "6691f822384fa088fb615725ccd0f98a5e0bc839bf1470df228bbda4faa832bf",
-        "reductionPercent": 99.5093
+        "afterDigest": "7a1214f2d9612b91b558aa30e692e34a7977fc7ee6b0e31702da7251addb9692",
+        "reductionPercent": 99.4733
       },
       {
         "name": "startup-codex-repository",
@@ -1339,10 +1339,10 @@
         "name": "sc-explore",
         "stage": "process",
         "beforeTokens": 32334,
-        "afterTokens": 724,
+        "afterTokens": 745,
         "pass": true,
-        "afterDigest": "b1960313f31a207ec3fc050e8ba8523bb057f3bd9761cc48a0809c3e73da530a",
-        "reductionPercent": 97.7609
+        "afterDigest": "e30a671c3e36e586a89e75294a94cbfa9cc212ad78b0c37c6f8fa108be044ceb",
+        "reductionPercent": 97.6959
       },
       {
         "name": "sc-research",
@@ -1357,19 +1357,19 @@
         "name": "sc-prd",
         "stage": "process",
         "beforeTokens": 23435,
-        "afterTokens": 765,
+        "afterTokens": 776,
         "pass": true,
-        "afterDigest": "347c5797c2c70b8e5134b7f8ada043f378cbd41f297ddf3019e491b008ca8256",
-        "reductionPercent": 96.7357
+        "afterDigest": "4b5103238131ecf23b3b6532d3a6f55b30c5949cfc085fb18b1bd4271803f857",
+        "reductionPercent": 96.6887
       },
       {
         "name": "sc-plan",
         "stage": "process",
         "beforeTokens": 59150,
-        "afterTokens": 2625,
+        "afterTokens": 2746,
         "pass": true,
-        "afterDigest": "64f4c3e8566a853b518d8d9f1205e3121a33e277b4f21e614a69418d40152a99",
-        "reductionPercent": 95.5621
+        "afterDigest": "75c31674251f5e5c9b93684eccf772ea8b457937ab9f70fa7297c20526bb8269",
+        "reductionPercent": 95.3576
       },
       {
         "name": "sc-eval",
@@ -1393,10 +1393,10 @@
         "name": "sc-work",
         "stage": "process",
         "beforeTokens": 11412,
-        "afterTokens": 1085,
+        "afterTokens": 1099,
         "pass": true,
-        "afterDigest": "7f137b62522e49ed1a4b4325c859517e4564408455f65cb6af69f9838b7e2989",
-        "reductionPercent": 90.4925
+        "afterDigest": "0c931bbb0ca44195d95e452d377bf597b9bca50dfecb9c70744c30c11052794a",
+        "reductionPercent": 90.3698
       },
       {
         "name": "sc-debug",
@@ -1456,10 +1456,10 @@
         "name": "sc-launch",
         "stage": "process",
         "beforeTokens": 112816,
-        "afterTokens": 1028,
+        "afterTokens": 1116,
         "pass": true,
-        "afterDigest": "1bec156e3f61b0c4e79fa229038cd937f397609a2544f06bbfc866302d2d0d5f",
-        "reductionPercent": 99.0888
+        "afterDigest": "20558f2eb85ac0d35d8324eee49e8ed21513fdae5e4c4532335bf2116c5932b1",
+        "reductionPercent": 99.0108
       },
       {
         "name": "sc-ui",
@@ -1474,10 +1474,10 @@
         "name": "artifact-output-brd-prd-fsd-issue",
         "stage": "output",
         "beforeTokens": 98427,
-        "afterTokens": 1835,
+        "afterTokens": 2003,
         "pass": true,
-        "afterDigest": "993448c73f0261c7cd5cba38ce52422cf57b01c635fe83f05907dcb82e60dcbc",
-        "reductionPercent": 98.1357
+        "afterDigest": "42514d8e71d31e624fd1ec9a922c5e8351f77bf0eb5d7bed4e891c394b6e6f68",
+        "reductionPercent": 97.965
       },
       {
         "name": "related-all-skills",
@@ -1519,10 +1519,10 @@
         "name": "related-agentic-templates",
         "stage": "output",
         "beforeTokens": 95066,
-        "afterTokens": 1835,
+        "afterTokens": 2003,
         "pass": true,
-        "afterDigest": "993448c73f0261c7cd5cba38ce52422cf57b01c635fe83f05907dcb82e60dcbc",
-        "reductionPercent": 98.0698
+        "afterDigest": "42514d8e71d31e624fd1ec9a922c5e8351f77bf0eb5d7bed4e891c394b6e6f68",
+        "reductionPercent": 97.893
       },
       {
         "name": "related-git-workflow",
@@ -1555,10 +1555,10 @@
         "name": "related-hooks",
         "stage": "process",
         "beforeTokens": 4559,
-        "afterTokens": 134,
+        "afterTokens": 156,
         "pass": true,
-        "afterDigest": "660f2ecf02d14ff0703c816198405485afff55eb7de2dba9ac81992f86942582",
-        "reductionPercent": 97.0608
+        "afterDigest": "c2f3653c08dfa2b91410c3489bfd3a62e9c47f24eae2fa15f26d0c3d4b8117db",
+        "reductionPercent": 96.5782
       },
       {
         "name": "related-agents",
@@ -1593,8 +1593,8 @@
       "reductionScenarioCount": 32,
       "budgetScenarioCount": 5,
       "totalBeforeTokens": 1842998,
-      "totalAfterTokens": 19672,
-      "totalReductionPercent": 98.9326,
+      "totalAfterTokens": 20471,
+      "totalReductionPercent": 98.8893,
       "minimumReductionPercent": 90.0618,
       "aggregation": "scenario-weighted",
       "stages": {
@@ -1603,8 +1603,8 @@
           "reductionScenarioCount": 4,
           "budgetScenarioCount": 5,
           "totalBeforeTokens": 923783,
-          "totalAfterTokens": 3424,
-          "totalReductionPercent": 99.6294,
+          "totalAfterTokens": 3610,
+          "totalReductionPercent": 99.6092,
           "minimumReductionPercent": 95.1169,
           "aggregation": "scenario-weighted"
         },
@@ -1613,8 +1613,8 @@
           "reductionScenarioCount": 26,
           "budgetScenarioCount": 0,
           "totalBeforeTokens": 725722,
-          "totalAfterTokens": 12578,
-          "totalReductionPercent": 98.2668,
+          "totalAfterTokens": 12855,
+          "totalReductionPercent": 98.2287,
           "minimumReductionPercent": 90.0618,
           "aggregation": "scenario-weighted"
         },
@@ -1623,9 +1623,9 @@
           "reductionScenarioCount": 2,
           "budgetScenarioCount": 0,
           "totalBeforeTokens": 193493,
-          "totalAfterTokens": 3670,
-          "totalReductionPercent": 98.1033,
-          "minimumReductionPercent": 98.0698,
+          "totalAfterTokens": 4006,
+          "totalReductionPercent": 97.9296,
+          "minimumReductionPercent": 97.893,
           "aggregation": "scenario-weighted"
         }
       }

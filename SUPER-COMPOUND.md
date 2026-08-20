@@ -192,6 +192,8 @@ Use:
 - `.scratch/<feature>/issues/*.md` for local FSD goal issue pointers
 - `docs/solutions/` for reusable solved problems and optional linked accepted ADRs
 
+`/sc-compound` also routes agent mistakes to `ERR-*` entries in `docs/ERROR_LOG.md` and user corrections or confirmed conventions to `LRN-*` entries in `docs/LEARNED_KNOWLEDGE.md`, per `.agent/skills/state-management/references/file-contracts.md`. `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; a matching `ERR-*`/`LRN-*` prevention rule is binding until superseded.
+
 The next session should be able to run `/sc-status` and continue from disk.
 
 ## UI Work

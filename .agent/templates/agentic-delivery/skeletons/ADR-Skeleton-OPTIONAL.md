@@ -1,6 +1,7 @@
 # ADR-{{NNNN}} - {{TITLE}}
 
 Use ADR only for cross-system, high-risk, costly-to-reverse, security/privacy-sensitive, vendor-locking, platform-level, or policy-required decisions.
+One decision per ADR; consequences one line each; omit empty subsections.
 
 ## Metadata
 

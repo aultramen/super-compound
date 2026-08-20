@@ -15,7 +15,10 @@ Use this before stopping a session or compacting context.
    If it contains a `run_id`, refresh it with `node .agent/tools/loop-run.mjs
    show --run <run_id>` before trusting the snapshot.
 3. Check `git status --short`, active branch, and worktree path when inside a Git repo; do not mutate Git state.
-4. Create or update `docs/STATE.md` as the canonical durable state: current position, exact next action, active blockers and owners, decisions, completed outcomes, verification, branch/workspace, and links to authoritative artifacts.
+4. Before writing the handoff, capture any unlogged agent mistake (`ERR-*` in
+   `docs/ERROR_LOG.md`) or confirmed convention (`LRN-*` in
+   `docs/LEARNED_KNOWLEDGE.md`) from this session.
+   Then create or update `docs/STATE.md` as the canonical durable state: current position, exact next action, active blockers and owners, decisions, completed outcomes, verification, branch/workspace, and links to authoritative artifacts. Update only the STATE fields that changed; never re-serialize unchanged sections.
    Store only a non-authoritative Loop Run pointer: `run_id`, run head digest,
    status, last evidence, pause/terminal reason, and next transition. Never copy
    events, counters, an approval envelope, or a confirmation digest. The STATE

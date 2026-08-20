@@ -56,6 +56,16 @@ Every FSD includes or marks not applicable:
 
 An optional `docs/plans/` note may summarize context, resolved decisions, risks, design-system evidence, goal/issue links, verification, rollback, and docs. It never replaces or overrides the FSD.
 
+## Single Projection
+
+Author every goal/ID fact exactly once:
+
+- `GOAL-*` packets are the only hand-authored serialization of the goal/ID graph.
+- Generate the dependency graph with `node .agent/tools/goal-waves.mjs --issues-dir <dir>`; never hand-draw it a second time.
+- End-to-End Traceability and Requirement-to-Test matrices are derived views; omit them from authored FSDs unless a reviewer requests them. Per-goal Verification refs are the source.
+- Specify each `TDEC-*` once in the decision register; goals cite decision IDs only, and feature sections reference goal IDs without restating packet content.
+- Use sequential IDs in range notation (for example `GOAL-001..GOAL-005`).
+
 ## Acceptance And Handoff
 
 Confirm user-visible behavior, edge/failure cases, and tests at the highest practical public seam. UI includes accessibility/responsiveness; security/privacy includes negative cases; data changes include compatibility, migration, and rollback.

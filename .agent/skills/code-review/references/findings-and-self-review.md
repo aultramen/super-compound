@@ -12,35 +12,21 @@ Load when turning review evidence into feedback or reviewing your own change.
 
 ## Finding Format
 
-Each finding includes:
+Each finding is one line: tight `file:line` location, then the violated requirement or invariant, concrete impact and trigger conditions, the evidence establishing it, and a focused fix.
 
-- tight `file:line` location,
-- violated requirement or invariant,
-- concrete failure/impact and conditions that trigger it,
-- evidence or trace establishing it,
-- focused corrective direction.
-
-Group findings by severity and related root cause. Do not inflate counts by splitting one issue across symptoms. Lead with a brief, specific strengths section before issues, then present findings by severity without obscuring defects.
+Group findings by severity and related root cause; omit empty severity tiers. Do not inflate counts by splitting one issue across symptoms. The header is exactly three lines (Scope, Authority, Verdict). Add a Strengths line — at most one — only when it informs the merge decision; omit it otherwise. The verdict states the decision only and never restates findings. Include Residual Risk only when it is non-empty.
 
 ```markdown
 ## Review Summary
 **Scope:** [diff/artifacts]
+**Authority:** [spec, plan, or FSD governing the change]
 **Verdict:** APPROVE / CHANGES REQUESTED / NEEDS DISCUSSION
 
-### Strengths
-- [specific strength]
-
 ### P1 Critical
-1. `path/file.ts:42` — [issue, impact, evidence, correction]
-
-### P2 Important
-...
-
-### P3 Suggestions
-...
+1. `path/file.ts:42` — [issue, impact, evidence, fix]
 
 ### Residual Risk
-- [untested/uninspected area]
+- [untested/uninspected area, only when non-empty]
 ```
 
 ## Common Red Flags

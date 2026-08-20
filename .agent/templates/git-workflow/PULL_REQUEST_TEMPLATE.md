@@ -11,15 +11,12 @@ Jelaskan perubahan yang dibuat.
 
 ## Perubahan Utama
 -
--
--
 
 ## Cara Test
 1.
-2.
-3.
 
 ## Checklist
+Laporkan hanya item yang belum terpenuhi.
 - [ ] Branch dibuat dari base branch terbaru
 - [ ] Tidak ada secret/API key yang ter-commit
 - [ ] Test lokal sudah dijalankan

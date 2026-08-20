@@ -32,7 +32,8 @@ Use this when the user wants the whole lifecycle from idea to verified delivery.
 Run one active stage at a time. At every non-trivial boundary update
 `docs/STATE.md` with artifact paths, accepted decisions, blockers, qualified
 gate refs/version plus a non-authoritative status snapshot, verification refs,
-and next route; use `.continue-here.md` only as a short pointer
+and next route; update only the STATE fields that changed and never
+re-serialize unchanged sections; use `.continue-here.md` only as a short pointer
 when stopping. Release prior-stage detail before loading the next contract. UI implementation
 is a capability of an approved goal under `sc-work.md`, not a parallel authority.
 

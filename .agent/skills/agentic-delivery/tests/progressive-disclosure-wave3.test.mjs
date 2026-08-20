@@ -54,7 +54,7 @@ const specs = {
       "links-scope-and-must-haves.md": "d73c1b53afe2bab7a3b5bd8221b3ef62f1705490eb18abba300d6f1218157b7d",
       "sizing.md": "449d2058678489910fbd8d56e839bcd132db1025927ad267f94c2b52d559edb0",
       "tests-and-decisions.md": "63985afa660fd9d2b6412f66a40175f72029e1018bf833c42763e7111f7f1ce0",
-      "verification-process.md": "0183c6bcf5d3ac4da6b82cd18e6e8056e63d69aeb264205673a763046d3a4034",
+      "verification-process.md": "309c48c27b610f8870ae3957dc58f8b24a72bc94703d386cdccffcb9dc779713",
       "revision-rules.md": "541a5a8061f13aeeb69156486bd4f63d7b48766c30a69c1f99824f7ece66c97a",
     },
     invariants: [

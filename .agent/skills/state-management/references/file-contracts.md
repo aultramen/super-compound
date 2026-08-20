@@ -21,6 +21,9 @@ The canonical skeleton lives at `.agent/templates/state/STATE-Template.md`
 Work, Deferred Ideas). Copy it verbatim when seeding; do not restate it here.
 The Active Loop Run section holds only a refreshable non-authoritative pointer:
 run_id, run head digest, status snapshot, last evidence, reason, next transition.
+When no loop run is active, that section collapses to the single line
+`- Run: none`; Decisions, Blockers, Completed Work, and Deferred Ideas appear
+only when non-empty.
 The progress-log skeleton lives at `.agent/templates/state/Progress-Template.md`.
 
 Refresh the pointer with `node .agent/tools/loop-run.mjs show --run <run_id>`.

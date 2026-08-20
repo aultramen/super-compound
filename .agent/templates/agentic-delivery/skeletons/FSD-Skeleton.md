@@ -37,3 +37,4 @@ Use approved `TDEC-*` records or linked `ACCEPTED` ADR refs. Stop on missing aut
 
 Define `GOAL-*` packets with UI delivery role, required gate, contract refs,
 scope, dependencies, stop conditions, and verification refs.
+Each goal fact appears once; graph/traceability views are tool-derived, not re-authored.

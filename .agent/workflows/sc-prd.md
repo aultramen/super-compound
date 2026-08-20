@@ -30,7 +30,7 @@ Use this when approved business requirements need to become product behavior bef
 11. Do not specify database schema, internal architecture, implementation modules, or technical mechanisms unless they are existing constraints inherited from the BRD or repository.
 12. Use qualified BRD references such as `BRD-CCC#BREQ-001`; mark unresolved product decisions as `OPEN-*`.
 13. Mention Git workflow constraints only when they affect release or collaboration expectations; do not mutate Git state.
-14. A chat draft is allowed while requirements are being shaped. Before approval and `/sc-plan`, save the PRD to `docs/prd/prd-<feature>.md` using the skeleton first and the full template only as a reference.
+14. A chat draft is allowed while requirements are being shaped. Before approval and `/sc-plan`, save the PRD to `docs/prd/prd-<feature>.md` using `.agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md` first and the full template only as a reference.
 15. Route to `sc-plan.md` only after the durable PRD is approved with baseline
     `VALIDATED`, `EXCEPTION_APPROVED`, or `NOT_APPLICABLE`.
 
