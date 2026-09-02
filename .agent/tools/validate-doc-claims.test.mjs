@@ -81,3 +81,27 @@ test('unknown commit sha flagged only when gitCheck enabled', (t) => {
     const off = validateDoc({ docPath: doc, root, gitCheck: false });
     assert.deepEqual(off, []);
 });
+
+test('hex without a commit cue is a NOTE, cued or backticked hex is a FLAG', (t) => {
+    // The temp root is not a git repository, so every sha is unresolvable.
+    const root = makeRepo(t);
+    const doc = path.join(root, 'docs/solutions/subject.md');
+    fs.writeFileSync(
+        doc,
+        [
+            '# S',
+            'Fixed in commit deadbeefcafe1234 and rev `abc1234`.',
+            'Session a781a1fff73e43c20 measured digest 610263b525265bdb9d900fe55af5acb129cba89e.',
+        ].join('\n')
+    );
+    const findings = validateDoc({ docPath: doc, root, gitCheck: true });
+    assert.deepEqual(
+        findings.map((f) => [f.kind, f.value, f.severity ?? 'FLAG']),
+        [
+            ['unknown-commit', 'deadbeefcafe1234', 'FLAG'],
+            ['unknown-commit', 'abc1234', 'FLAG'],
+            ['unresolved-hex', 'a781a1fff73e43c20', 'NOTE'],
+            ['unresolved-hex', '610263b525265bdb9d900fe55af5acb129cba89e', 'NOTE'],
+        ]
+    );
+});

@@ -13,7 +13,12 @@
  *                      plus docs/solutions/** frontmatter; emit bounded
  *                      /sc-evolve promotion candidates (3+ recurrences at
  *                      observed/confirmed confidence, or a PATTERN flag) with
- *                      entry-ID evidence.
+ *                      entry-ID evidence. Also emit a freshness block: the
+ *                      docs/STATE.md "Last updated" date and the newest
+ *                      docs/progress.md entry date compared with the newest
+ *                      commit date; STALE_STATE / STALE_PROGRESS flag durable
+ *                      state that a later commit left behind (/sc-status then
+ *                      routes to /sc-pause first). Deterministic; no model call.
  *   archive --dry-run  Print proposed overflow moves to docs/archive/ per the
  *                      consolidate-then-archive rule. There is no write mode:
  *                      applying archives stays a human-approved workflow
@@ -24,12 +29,15 @@
  *        [--json] [--root <repo-root>]
  */
 
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 import { parseFrontmatter } from './knowledge-search.mjs';
+
+const ISO_DATE_RE = /(\d{4}-\d{2}-\d{2})/;
 
 const PROMOTION_THRESHOLD = 3;
 const MAX_CANDIDATES = 10;
@@ -277,8 +285,52 @@ export function buildReport({ observations, totals }) {
     return { totals, candidates: candidates.slice(0, MAX_CANDIDATES), truncated };
 }
 
+export function latestCommitDate(root) {
+    try {
+        const out = execFileSync('git', ['-C', root, 'log', '-1', '--format=%cI'], {
+            encoding: 'utf8',
+            stdio: ['ignore', 'pipe', 'ignore'],
+        });
+        const match = String(out).match(ISO_DATE_RE);
+        return match ? match[1] : null;
+    } catch {
+        return null;
+    }
+}
+
+export function stateLastUpdated(raw) {
+    const match = String(raw).match(/^Last updated:\s*(\d{4}-\d{2}-\d{2})/m);
+    return match ? match[1] : null;
+}
+
+export function progressLatestEntry(raw) {
+    let latest = null;
+    for (const match of stripComments(raw).matchAll(/^##\s+(\d{4}-\d{2}-\d{2})/gm)) {
+        if (latest === null || match[1] > latest) latest = match[1];
+    }
+    return latest;
+}
+
+/**
+ * Date-only comparison (YYYY-MM-DD lexical order) so time zones cannot flip a
+ * verdict. A missing file, missing date, or unavailable Git history yields no
+ * flag: absence of evidence is reported, never treated as staleness.
+ */
+export function computeFreshness({ root, commitDate = latestCommitDate(root) }) {
+    const state = readIfPresent(root, 'docs/STATE.md');
+    const progress = readIfPresent(root, 'docs/progress.md');
+    const stateDate = state === null ? null : stateLastUpdated(state);
+    const progressDate = progress === null ? null : progressLatestEntry(progress);
+    const flags = [];
+    if (commitDate) {
+        if (stateDate && stateDate < commitDate) flags.push('STALE_STATE');
+        if (progressDate && progressDate < commitDate) flags.push('STALE_PROGRESS');
+    }
+    return { commitDate, stateDate, progressDate, flags };
+}
+
 export function runReport({ root }) {
-    return buildReport(collectObservations({ root }));
+    return { ...buildReport(collectObservations({ root })), freshness: computeFreshness({ root }) };
 }
 
 function entryBytes(entry) {
@@ -382,6 +434,15 @@ function printReport(report, json, io) {
     io.out.write(
         `totals: errors=${totals.errors} learnings=${totals.learnings} solutions=${totals.solutions} candidates=${report.candidates.length}\n`
     );
+    if (report.freshness) {
+        const f = report.freshness;
+        io.out.write(
+            `freshness: commit=${f.commitDate ?? 'unknown'} state=${f.stateDate ?? 'none'} progress=${f.progressDate ?? 'none'} flags=${f.flags.length ? f.flags.join(',') : 'none'}\n`
+        );
+        if (f.flags.length > 0) {
+            io.out.write('STALE durable state: run /sc-pause before any other route\n');
+        }
+    }
     if (report.candidates.length === 0) {
         io.out.write(
             'no promotion candidates (need 3+ recurrences at observed/confirmed, or a PATTERN flag)\n'

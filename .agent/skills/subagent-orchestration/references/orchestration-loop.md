@@ -42,6 +42,10 @@ tool results carry the record.
 - On mid-wave failure, re-dispatch only goals the work-package ledger leaves
   unverified (`verified-promise.mjs` is the predicate); never re-run a
   verified goal.
+- Before dispatching wave N+1, re-check the base: every worker's `HEAD` must
+  equal the wave's recorded base SHA (the brief's `Base SHA`). On divergence,
+  stop dispatching worktree workers and finish the remaining goals
+  sequentially in the main workspace; never edit a diverged copy.
 
 ## Model tiers
 

@@ -23,7 +23,9 @@ Use this at the start of a session or when orientation is needed.
    missing, count Quick Reference rows in `docs/ERROR_LOG.md` and
    `docs/LEARNED_KNOWLEDGE.md` manually. If any category or prevention rule
    recurs 3+ times or a `PATTERN` flag exists, recommend `/sc-evolve` as the
-   next route.
+   next route. If the report's `freshness` block flags `STALE_STATE` or
+   `STALE_PROGRESS` (durable state older than the newest commit), recommend
+   `/sc-pause` before any other route.
 7. If no ready goal issues exist and there is no active handoff, blocker, or failing verification, recommend `/sc-geniusloop`.
 8. Recommend one exact route from `/sc-init`, `/sc-status`, `/sc-geniusloop`,
    `/sc-explore`, `/sc-research`, `/sc-prd`, `/sc-plan`, `/sc-eval`, `/sc-go`,

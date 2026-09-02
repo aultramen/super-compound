@@ -2,6 +2,8 @@
 
 Load after spec compliance passes. Apply only axes relevant to the changed code, but never skip an applicable risk area.
 
+Standards source: the applicable sections of `docs/engineering-standards.md`, or a project `CODING_STANDARDS.md` when one exists. Review carries this load so implementation does not.
+
 ## Correctness
 
 - Check normal, empty, null, boundary, error, concurrency, retry, and cancellation paths.

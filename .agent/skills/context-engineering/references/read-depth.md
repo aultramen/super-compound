@@ -19,3 +19,14 @@ Pick the column for the current window and stay at that depth.
   re-reading resident text buys nothing and spends budget.
 - At small windows, treat every full-body read as a spend decision: name the
   single fact the read supplies before opening the file.
+
+## Output Tier At Intake
+
+Choose the tier before any research, file fan-out, or subagent dispatch; the
+tier bounds the spend, not the other way round.
+
+| Tier | Choose when | Spend allowed |
+| --- | --- | --- |
+| Direct | The answer is known or one targeted read settles it | No subagents; a few reads |
+| Chat brief | The result fits the route's return cap in `.agent/context/token-budget-gates.md` | Bounded reads; no subagents |
+| Durable artifact | Evidence exceeds the chat envelope or another route consumes it | Subagents and full fan-out; evidence on disk |

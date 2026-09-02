@@ -4,7 +4,11 @@
  *
  * Checks a markdown document for claims a repository can verify cheaply:
  *   - backtick-cited repository paths exist
- *   - referenced commit SHAs exist in this git repository
+ *   - referenced commit SHAs exist in this git repository. A hex run is only
+ *     treated as a commit claim (FLAG, affects the exit code) when a cue such
+ *     as "commit", "sha", "rev", or "hash" precedes it or it sits alone in
+ *     backticks at commit length; other hex runs (session ids, digests) are
+ *     reported one tier down as NOTE `unresolved-hex` and never gate.
  *   - relative markdown links resolve
  *   - leftover drafting scaffold (TODO/FIXME/TBD/<placeholder>)
  *   - skeleton-boilerplate residue in produced docs under docs/ or .scratch/
@@ -24,6 +28,19 @@ import { fileURLToPath } from 'node:url';
 
 const PATH_RE = /`((?:\.?\.?\/)?[A-Za-z0-9_.@-]+(?:\/[A-Za-z0-9_.@*-]+)+\/?)`/g;
 const SHA_RE = /\b([0-9a-f]{7,40})\b/g;
+// Cue vocabulary ranks confidence; it never decides whether a hit is surfaced.
+const COMMIT_CUE_RE = /(?:commit|sha|rev|revision|hash)\S{0,3}\s*[`'"(]?\s*$/i;
+const CUE_WINDOW_CHARS = 24;
+const MAX_BACKTICK_COMMIT_LENGTH = 12;
+
+function commitCued(raw, match) {
+    const sha = match[1];
+    const before = raw.slice(Math.max(0, match.index - CUE_WINDOW_CHARS), match.index);
+    if (COMMIT_CUE_RE.test(before)) return true;
+    const inBackticks =
+        raw[match.index - 1] === '`' && raw[match.index + sha.length] === '`';
+    return inBackticks && sha.length <= MAX_BACKTICK_COMMIT_LENGTH;
+}
 const LINK_RE = /\[[^\]]*\]\(([^)#\s]+)(?:#[^)\s]*)?\)/g;
 const SCAFFOLD_RE = /\b(TODO|FIXME|TBD)\b|<placeholder>|\bXXX\b/g;
 // Skeleton residue is only a defect in produced docs (docs/, .scratch/);
@@ -71,7 +88,11 @@ export function validateDoc({ docPath, root, gitCheck }) {
                     stdio: 'ignore',
                 });
             } catch {
-                findings.push({ kind: 'unknown-commit', value: sha });
+                findings.push(
+                    commitCued(raw, match)
+                        ? { kind: 'unknown-commit', value: sha }
+                        : { kind: 'unresolved-hex', value: sha, severity: 'NOTE' }
+                );
             }
         }
     }
@@ -107,17 +128,20 @@ function main(argv) {
     }
     const gitCheck = fs.existsSync(path.join(root, '.git'));
     const findings = validateDoc({ docPath: path.resolve(docPath), root, gitCheck });
+    const flagged = findings.filter((f) => f.severity !== 'NOTE');
     if (json) {
         process.stdout.write(`${JSON.stringify({ doc: docPath, findings }, null, 2)}\n`);
     } else if (findings.length === 0) {
         process.stdout.write('All mechanical claims verified.\n');
     } else {
         for (const f of findings) {
-            process.stdout.write(`${f.kind}: ${f.value}\n`);
+            process.stdout.write(`${f.severity === 'NOTE' ? 'NOTE ' : ''}${f.kind}: ${f.value}\n`);
         }
-        process.stdout.write(`${findings.length} finding(s). Adjudicate each; do not auto-fix.\n`);
+        process.stdout.write(
+            `${flagged.length} finding(s)${findings.length > flagged.length ? ` and ${findings.length - flagged.length} note(s)` : ''}. Adjudicate each; do not auto-fix.\n`
+        );
     }
-    return findings.length === 0 ? 0 : 1;
+    return flagged.length === 0 ? 0 : 1;
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {

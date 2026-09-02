@@ -348,4 +348,38 @@ withTempProject((root) => {
     assert(!fs.existsSync(path.join(root, '.agent', '.compact-state', 'usage-log.jsonl')));
 });
 
+// Context window detection: a known 1M family must not trip the 200k thresholds,
+// and an unknown model reports the assumed window instead of a false percentage.
+withTempProject((root) => {
+    const run = (name, model, tokens) => {
+        const transcriptPath = path.join(root, `${name}.jsonl`);
+        fs.writeFileSync(transcriptPath, `${JSON.stringify({
+            message: { role: 'assistant', model, usage: { input_tokens: tokens } },
+        })}\n`, 'utf8');
+        return spawnSync(process.execPath, [path.join(__dirname, 'context-monitor.js')], {
+            input: JSON.stringify({ session_id: `ctx-${name}`, transcript_path: transcriptPath }),
+            encoding: 'utf8',
+            env: {
+                ...process.env,
+                SUPER_COMPOUND_PROJECT_ROOT: root,
+                CLAUDE_CODE_AUTO_COMPACT_WINDOW: '',
+            },
+        });
+    };
+    const fable = run('fable', 'claude-fable-5-1', 130000);
+    assert.strictEqual(fable.status, 0);
+    assert.strictEqual(fable.stdout, '');
+
+    const unknown = run('unknown', 'claude-test', 130000);
+    assert.strictEqual(unknown.status, 0);
+    const warning = JSON.parse(unknown.stdout).hookSpecificOutput.additionalContext;
+    assert.match(warning, /WARNING/);
+    assert.match(warning, /assumed 200k window/);
+    assert.match(warning, /CLAUDE_CODE_AUTO_COMPACT_WINDOW/);
+    assert(!/%/.test(warning));
+
+    const marked = run('marked', 'claude-test[1m]', 130000);
+    assert.strictEqual(marked.stdout, '');
+});
+
 console.log('hook security tests passed');

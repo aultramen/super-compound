@@ -22,10 +22,12 @@ const {
     resolveHookProjectRoot,
     safeProjectFile,
 } = require('./lib/hook-utils');
-const { readLatestContextTokens } = require('./lib/context-pressure');
+const {
+    formatWindow,
+    readLatestContextTokens,
+    resolveContextWindow,
+} = require('./lib/context-pressure');
 
-const STANDARD_WINDOW = 200000;
-const LARGE_WINDOW = 1000000;
 const WARN_REMAINING_PCT = readPositiveInteger('SC_CONTEXT_WARN_PCT', 35);
 const CRITICAL_REMAINING_PCT = readPositiveInteger('SC_CONTEXT_CRITICAL_PCT', 25);
 
@@ -59,11 +61,16 @@ try {
 const usage = readLatestContextTokens(input.transcript_path);
 if (!usage) process.exit(0);
 
-const windowTokens = resolveWindowTokens(usage.tokens, usage.model, process.env);
+const { windowTokens, detected } = resolveContextWindow(usage.tokens, usage.model, process.env);
 const remainingPct = Math.max(
     0,
     Math.round(100 - (usage.tokens / windowTokens) * 100)
 );
+// An assumed window reports raw usage, never a percentage it cannot stand behind.
+const scale = detected
+    ? `~${remainingPct}% context remaining`
+    : `~${usage.tokens} tokens used of an assumed ${formatWindow(windowTokens)} window ` +
+      '(set CLAUDE_CODE_AUTO_COMPACT_WINDOW if larger)';
 
 const state = readState(stateFile);
 let message = null;
@@ -71,13 +78,13 @@ if (remainingPct <= CRITICAL_REMAINING_PCT && !state.criticalFired) {
     state.criticalFired = true;
     state.warnFired = true;
     message =
-        `[Super Compound] CRITICAL: ~${remainingPct}% context remaining. ` +
+        `[Super Compound] CRITICAL: ${scale}. ` +
         'Stop new work now: update docs/STATE.md with exact Next Action, ' +
         'write .continue-here.md, then finish or hand off via /sc-pause.';
 } else if (remainingPct <= WARN_REMAINING_PCT && !state.warnFired) {
     state.warnFired = true;
     message =
-        `[Super Compound] WARNING: ~${remainingPct}% context remaining. ` +
+        `[Super Compound] WARNING: ${scale}. ` +
         'Wrap up the current step; avoid opening large files or new scope. ' +
         'Prefer finishing at the next logical boundary.';
 }
@@ -95,13 +102,6 @@ if (message) {
             additionalContext: message,
         },
     }));
-}
-
-function resolveWindowTokens(tokens, model, env) {
-    const override = Number.parseInt(env.CLAUDE_CODE_AUTO_COMPACT_WINDOW || '', 10);
-    if (Number.isInteger(override) && override > 0) return override;
-    if (String(model).includes('[1m]') || tokens > STANDARD_WINDOW) return LARGE_WINDOW;
-    return STANDARD_WINDOW;
 }
 
 function sanitizeSessionId(value) {

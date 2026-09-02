@@ -33,6 +33,29 @@ const PUBLIC_ROUTES = [
   "sc-ui",
 ];
 
+test("route contracts carry the knowledge-loop spine (read-back, capture, evolve)", async () => {
+  // Contract-first routing never loads the full workflow body, so the loop must
+  // hold with zero references loaded (Wave 3 fix for contract shadowing).
+  const contract = (name) =>
+    readRepositoryFile(`.agent/context/workflows/${name}.contract.md`);
+  const [work, debug, plan, status, pause, compound] = await Promise.all(
+    ["sc-work", "sc-debug", "sc-plan", "sc-status", "sc-pause", "sc-compound"].map(contract),
+  );
+  for (const text of [work, debug, plan]) {
+    assert.match(text, /knowledge-search/);
+    assert.match(text, /ERR-\*\/LRN-\*/);
+  }
+  for (const text of [work, debug]) assert.match(text, /\/sc-compound/);
+  assert.match(debug, /ERR-\*[^\n]*mandatory/);
+  assert.match(status, /memory-maintenance\.mjs report/);
+  assert.match(status, /\/sc-evolve/);
+  assert.match(pause, /ERR-\*\/LRN-\*/);
+  assert.match(compound, /docs\/solutions\//);
+  assert.match(compound, /docs\/ERROR_LOG\.md ERR-\*/);
+  assert.match(compound, /docs\/LEARNED_KNOWLEDGE\.md LRN-\*/);
+  assert.match(compound, /docs\/progress\.md/);
+});
+
 test("sc-research remains a conditional advisory evidence workflow", async () => {
   const [
     workflow,

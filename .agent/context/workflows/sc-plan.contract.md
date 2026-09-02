@@ -13,6 +13,7 @@ Load first:
 
 - Approved PRD and qualified upstream BRD refs.
 - `.agent/context/skills/sc-plan.contract.md`.
+- `node .agent/tools/knowledge-search.mjs "<feature area>"` hits; cite matching ERR-*/LRN-*/solution IDs verbatim as plan constraints.
 - `.agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md`,
   `.agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md` only if
   justified, and

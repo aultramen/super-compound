@@ -27,8 +27,9 @@ The benchmark's 18 x 3 matrix proves static route coverage: modeled context
 entry, process wiring/authority, and output sink/budget/next owner. It does not
 measure hidden reasoning or generated output. Runtime session totals are
 collected locally at SessionEnd into a runtime usage log under `.agent/.compact-state/`
-(`npm run usage`); per-route attribution stays pending until hosts supply
-route markers.
+(`npm run usage`), counted once per `message.id`; per-route attribution comes
+from the same log's `assetReads` histogram (Read calls on `.agent/` contracts,
+workflows, and skills), the activation evidence the static matrix cannot supply.
 
 ## Orchestrator Return Envelopes
 
@@ -40,9 +41,9 @@ failed gates, P0/P1 findings, or required user decisions.
 
 `.agent/context/output-budgets.json` is the machine-readable authority for estimated
 token and character caps per route. The line counts below are presentation hints.
-Static validation proves coverage and configuration only; session usage is
-collected locally at SessionEnd into the runtime usage log, and per-route
-attribution stays pending until hosts supply route markers.
+Static validation proves coverage and configuration only; session usage and the
+`assetReads` histogram are collected locally at SessionEnd into the runtime usage
+log (`npm run usage` aggregates both).
 
 | Routes | Default return cap |
 |---|---:|

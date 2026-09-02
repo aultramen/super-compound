@@ -34,19 +34,10 @@ confirmation.
 
 ## Error and learning records
 
-```markdown
-## YYYY-MM-DD - <error category>
-- Symptom: <observed failure>
-- Root cause: <why>
-- Correct approach: <verified correction>
-- Prevention: <bounded rule>
-```
-
-```markdown
-## YYYY-MM-DD - <learning topic>
-- Learning: <confirmed pattern>
-- Confidence: confirmed | observed | inferred
-- Applies to: <scope>
-```
+The entry grammar (`## ERR-YYYY-MM-DD-NNN` / `## LRN-YYYY-MM-DD-NNN` headings,
+their field lines, and the Quick Reference row) lives once in
+`.agent/skills/knowledge-compounding/references/memory-capture.md` section 2 and
+is enforced by `node .agent/tools/memory-maintenance.mjs check`. Do not restate
+or fork it here; an entry without an ID is invisible to the tool.
 
 At session end, update exact Next Action, completed outcomes, decisions, blockers, and owner. Suggest knowledge compounding for a reusable solution and pause workflow for later continuation.

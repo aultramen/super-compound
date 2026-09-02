@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import {
     buildReport,
     collectObservations,
+    computeFreshness,
     planArchive,
     runCheck,
     runReport,
@@ -207,6 +208,48 @@ test('report promotes 3+ recurrences across files and solutions frontmatter', (t
     assert.ok(candidate.evidence.includes('ERR-2026-01-01-001'));
     assert.ok(candidate.evidence.some((id) => id.endsWith('rules-drift.md')));
     assert.ok(!report.candidates.some((c) => c.key === 'one off'));
+});
+
+test('freshness flags durable state older than the newest commit, date-only', (t) => {
+    const root = makeRoot(t);
+    fs.writeFileSync(
+        path.join(root, 'docs', 'STATE.md'),
+        '# Project State\nLast updated: 2026-08-06 00:00\n\n## Current Position\n- Workflow: none\n'
+    );
+    fs.writeFileSync(
+        path.join(root, 'docs', 'progress.md'),
+        [
+            '# Progress Log',
+            '',
+            '## Codebase Patterns',
+            '- pattern',
+            '',
+            '---',
+            '',
+            '## 2026-08-06 00:00 - seed',
+            '- Implemented: x',
+            '',
+            '## 2026-08-06 14:30 - wave',
+            '- Implemented: y',
+            '',
+        ].join('\n')
+    );
+    const stale = computeFreshness({ root, commitDate: '2026-08-20' });
+    assert.deepEqual(stale, {
+        commitDate: '2026-08-20',
+        stateDate: '2026-08-06',
+        progressDate: '2026-08-06',
+        flags: ['STALE_STATE', 'STALE_PROGRESS'],
+    });
+    assert.deepEqual(computeFreshness({ root, commitDate: '2026-08-06' }).flags, []);
+    // No Git history (temp dir) or no date: report absence, never staleness.
+    assert.equal(computeFreshness({ root }).commitDate, null);
+    assert.deepEqual(computeFreshness({ root }).flags, []);
+    fs.rmSync(path.join(root, 'docs', 'STATE.md'));
+    assert.deepEqual(computeFreshness({ root, commitDate: '2026-08-20' }).flags, [
+        'STALE_PROGRESS',
+    ]);
+    assert.ok('freshness' in runReport({ root }));
 });
 
 test('report ignores inferred learnings but honors the PATTERN flag', (t) => {

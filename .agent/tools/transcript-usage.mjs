@@ -22,6 +22,10 @@ export async function analyzeTranscript(filePath, options = {}) {
   const main = emptyUsage();
   const subagentMap = new Map();
   const unattributed = emptyUsage();
+  const assistantUsageById = new Map();
+  const readCountsByAsset = new Map();
+  const seenToolUseIds = new Set();
+  let duplicateUsageLines = 0;
   let linesRead = 0;
   let invalidJsonLines = 0;
   let unsupportedLines = 0;
@@ -50,10 +54,21 @@ export async function analyzeTranscript(filePath, options = {}) {
       entry?.type === "assistant" &&
       isUsageObject(entry.message?.usage)
     ) {
-      addUsage(main, entry.message.usage);
-      usageRecords += 1;
+      // Streaming hosts emit several lines per message that share one
+      // message.id; the last line carries the final counts. Summing every
+      // line inflates totals ~2.5-3x, so usage is counted once per id.
+      const messageId =
+        typeof entry.message.id === "string" && entry.message.id
+          ? `id:${entry.message.id}`
+          : `line:${linesRead}`;
+      if (assistantUsageById.has(messageId)) duplicateUsageLines += 1;
+      else usageRecords += 1;
+      assistantUsageById.set(messageId, entry.message.usage);
       accountedUsageRecords += 1;
       supported = true;
+    }
+    if (entry?.type === "assistant") {
+      recordAssetReads(entry.message?.content, readCountsByAsset, seenToolUseIds);
     }
 
     const result = entry?.type === "user" ? entry.toolUseResult : null;
@@ -81,6 +96,8 @@ export async function analyzeTranscript(filePath, options = {}) {
       unsupportedLines += 1;
     }
   }
+
+  for (const usage of assistantUsageById.values()) addUsage(main, usage);
 
   if (usageRecords === 0) {
     throw new Error("Transcript contains no supported token usage records");
@@ -125,13 +142,71 @@ export async function analyzeTranscript(filePath, options = {}) {
       unaccountedUsageRecords,
       invalidJsonLines,
       unsupportedLines,
+      duplicateUsageLines,
       completeness: complete ? "COMPLETE" : "PARTIAL",
     },
     main: finalizedMain,
     subagents: finalizedSubagents,
     unattributed: finalizedUnattributed,
     totals: finalizedTotals,
+    assetReads: finalizeAssetReads(readCountsByAsset),
   };
+}
+
+const ASSET_ROOT = ".agent/";
+const MAX_ASSET_KEYS = 200;
+
+/**
+ * Count Read tool calls on repository-owned framework assets. This is the
+ * activation evidence the static benchmark cannot supply: which contracts,
+ * workflows, and skills a session actually loaded. Streamed lines repeat the
+ * same tool_use block, so each tool_use id is counted once.
+ */
+function recordAssetReads(content, counts, seenToolUseIds) {
+  if (!Array.isArray(content)) return;
+  for (const block of content) {
+    if (!block || block.type !== "tool_use" || block.name !== "Read") continue;
+    if (typeof block.id === "string" && block.id) {
+      if (seenToolUseIds.has(block.id)) continue;
+      seenToolUseIds.add(block.id);
+    }
+    const key = assetKey(block.input?.file_path);
+    if (!key) continue;
+    if (!counts.has(key) && counts.size >= MAX_ASSET_KEYS) continue;
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+}
+
+/**
+ * Everything before `.agent/` is dropped so no host path leaves the machine.
+ * Route files keep their name (per-route attribution); skills collapse to the
+ * skill directory, with `references` as its own bucket.
+ */
+export function assetKey(filePath) {
+  if (typeof filePath !== "string") return null;
+  const normalized = filePath.replace(/\\/g, "/");
+  let rel = null;
+  if (normalized.startsWith(ASSET_ROOT)) rel = normalized;
+  else {
+    const at = normalized.lastIndexOf(`/${ASSET_ROOT}`);
+    if (at !== -1) rel = normalized.slice(at + 1);
+  }
+  if (!rel) return null;
+  const parts = rel.split("/").filter(Boolean);
+  if (parts[1] === "skills" && parts.length >= 3) {
+    return parts[3] === "references"
+      ? parts.slice(0, 4).join("/")
+      : parts.slice(0, 3).join("/");
+  }
+  return parts.length > 4 ? parts.slice(0, 4).join("/") : rel;
+}
+
+function finalizeAssetReads(counts) {
+  const byAsset = Object.fromEntries(
+    [...counts.entries()].sort(([a, x], [b, y]) => y - x || a.localeCompare(b)),
+  );
+  const total = [...counts.values()].reduce((sum, value) => sum + value, 0);
+  return { total, byAsset };
 }
 
 function countUsagePayloads(value) {
@@ -336,6 +411,7 @@ export async function aggregateUsageLog(filePath, options = {}) {
     report.sessions += 1;
     if (entry.measurement === "MEASURED") report.measured += 1;
     else report.unmeasured += 1;
+    accumulateAssetReads(report.assetReads, entry.assetReads);
     for (const field of USAGE_LOG_TOKEN_FIELDS) {
       const value = entry[field];
       if (!Number.isSafeInteger(value) || value < 0) continue;
@@ -356,7 +432,25 @@ export async function aggregateUsageLog(filePath, options = {}) {
       ? Math.round((report.totals.cacheReadTokens / cacheDenominator) * 10000) /
         10000
       : null;
+  report.assetReads.top = Object.fromEntries(
+    Object.entries(report.assetReads.top)
+      .sort(([a, x], [b, y]) => y - x || a.localeCompare(b))
+      .slice(0, MAX_REPORT_ASSETS),
+  );
   return report;
+}
+
+const MAX_REPORT_ASSETS = 15;
+
+function accumulateAssetReads(target, assetReads) {
+  if (!assetReads || typeof assetReads !== "object") return;
+  if (Number.isSafeInteger(assetReads.total) && assetReads.total >= 0) {
+    target.total += assetReads.total;
+  }
+  for (const [key, value] of Object.entries(assetReads.top ?? {})) {
+    if (!key.startsWith(ASSET_ROOT) || !Number.isSafeInteger(value) || value < 0) continue;
+    target.top[key] = (target.top[key] ?? 0) + value;
+  }
 }
 
 function emptyUsageLogReport() {
@@ -374,6 +468,7 @@ function emptyUsageLogReport() {
       conservativeTokens: 0,
     },
     cacheHitRatio: null,
+    assetReads: { total: 0, top: {} },
   };
 }
 

@@ -60,6 +60,31 @@ Work delivered on `feature/ui-aware-delivery` after the 2026-07-16 evidence refr
 - External write policy ships as `DENY`; ambiguous external outcomes become `UNKNOWN_OUTCOME` and are never automatically retried.
 - No raw prompts, chain-of-thought, secrets, PII, or untrusted payloads persisted in run state or telemetry.
 
+## [2026-09-02] - Wave 3 Contract Spine and Truthful Telemetry
+
+Driven by `docs/audits/2026-09-02-cross-framework-gap-analysis-wave3.md`. Thirteen days after Wave 2 the knowledge loop still had zero entries; the dominant cause was contract shadowing: the loop was wired into full workflow bodies that the contract-first runtime path never loads. This wave puts the loop's spine into the contracts, makes the telemetry truthful, and captures its own lessons as the first real `ERR-*`/`LRN-*` entries.
+
+### Added
+
+- Knowledge-loop spine in the compact contracts (`sc-work`, `sc-debug`, `sc-plan`, `sc-status`, `sc-pause`, `sc-compound`): read-back via `knowledge-search.mjs`, binding `ERR-*`/`LRN-*` rules, `/sc-compound` on the way out, `memory-maintenance.mjs report` and `/sc-evolve` in status, and the four sinks named once in the compound contract. Token-neutral: headroom came from trimming `.codex/SKILL.md` (104 to 92 tokens, shared by all 18 routes). Guarded by a spine test in `workflow-contracts.test.mjs` (adapted from compound-engineering's outcome-spine contract test).
+- `memory-maintenance.mjs report` freshness block: `docs/STATE.md` and `docs/progress.md` dates compared with the newest commit date; `STALE_STATE`/`STALE_PROGRESS` make `/sc-status` recommend `/sc-pause` first (adapted from gsd-core-next's context-drift gate).
+- `transcript-usage.mjs`: usage counted once per `message.id` (streamed transcripts inflate line sums 2.5-3x; adapted from everything-claude-code's cost-tracker) and an `assetReads` histogram of Read calls on `.agent/` contracts, workflows, and skills, carried into the runtime usage log and `npm run usage` (activation evidence; adapted from everything-claude-code's skill-stocktake).
+- Context window detection shared by `context-monitor` and `suggest-compact` (`.agent/hooks/lib/context-pressure.js`): explicit override, `[1m]` marker, known 1M families, or observed usage above 200k count as detected; otherwise the hooks report raw usage of an assumed 200k window instead of a false percentage.
+- `.agent/tools/hook-env-surface.test.mjs` plus an environment-variable table in `.agent/hooks/README.md`: a hook that reads an undocumented variable fails the suite.
+- `knowledge-search.mjs` opt-in global store: when `SC_GLOBAL_KNOWLEDGE_DIR` is set, `<dir>/LEARNED_KNOWLEDGE.md` joins the default corpus as `global:` hits; `memory-capture.md` routes `Applies to: global` entries there (adapted from gsd-core-next's global learnings store).
+- `validate-doc-claims.mjs` severity tiers: unresolvable hex is `unknown-commit` (FLAG, exit code) only when cued or backticked at commit length, otherwise `unresolved-hex` (NOTE).
+- Standards at review, not implementation: `/sc-review` and `code-review` load the applicable sections of `docs/engineering-standards.md` (or a project `CODING_STANDARDS.md`); `/sc-work` explicitly does not. Output tier (direct, chat brief, durable artifact) chosen at intake in `context-engineering`. Implementer briefs carry `Base SHA` and an optional exploration-notes pointer; wave boundaries re-check the base and degrade to sequential on divergence. Retro axes (no-op steering, tool economy, information access) as `LRN-*` triggers and `/sc-evolve` clusters. Deferred findings must land in `docs/todos/YYYY-MM-DD-<slug>.md` or `docs/STATE.md` before a completion claim.
+- First real memory entries: `ERR-2026-09-02-001`, `LRN-2026-09-02-001`, `LRN-2026-09-02-002`.
+
+### Changed
+
+- `.agent/skills/state-management/references/file-contracts.md` no longer restates the entry grammar; `.agent/skills/knowledge-compounding/references/memory-capture.md` is the single authority and `sc-compound.md` step 6 points there (the old copy lacked the `ERR-`/`LRN-` IDs the maintenance tool parses).
+- Benchmark evidence regenerated: every route still above 90%, tightest margins now `sc-debug` and `sc-pause` at 3 tokens.
+
+### Deferred
+
+- Shared-workspace wave contract (compound-engineering), interface-design upstream refresh (11 commits behind pin), skill-eval cells and compliance runners that need live host runs.
+
 ## [2026-08-20] - Cross-Framework Activation Wave
 
 Driven by `docs/audits/2026-08-20-cross-framework-gap-analysis.md`. The wave wires existing mechanisms together instead of adding new mechanism categories, following the activation-first diagnosis adapted from everything-claude-code's continuous-learning-v2. Enhancements sourced from ghuntley/ralph landed in the sibling `ralph` repository, not this one.

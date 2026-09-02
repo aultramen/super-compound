@@ -5,7 +5,60 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { aggregateUsageLog, analyzeTranscript } from "./transcript-usage.mjs";
+import { aggregateUsageLog, analyzeTranscript, assetKey } from "./transcript-usage.mjs";
+
+test("assistant usage counts once per message.id (last line wins) and Read calls attribute to framework assets", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "transcript-usage-"));
+  const transcript = path.join(root, "streamed.jsonl");
+  const usage = (input_tokens) => ({
+    input_tokens,
+    output_tokens: 1,
+    reasoning_tokens: 0,
+    cache_creation_input_tokens: 0,
+    cache_read_input_tokens: 0,
+  });
+  const read = (id, file_path) => ({ type: "tool_use", id, name: "Read", input: { file_path } });
+  try {
+    await writeFile(
+      transcript,
+      [
+        JSON.stringify({ type: "assistant", message: { id: "msg_1", usage: usage(100), content: [read("toolu_a", "/home/x/repo/.agent/context/workflows/sc-work.contract.md")] } }),
+        JSON.stringify({ type: "assistant", message: { id: "msg_1", usage: usage(120), content: [read("toolu_a", "/home/x/repo/.agent/context/workflows/sc-work.contract.md")] } }),
+        JSON.stringify({ type: "assistant", message: { id: "msg_2", usage: usage(5), content: [read("toolu_b", "C:\\repo\\.agent\\skills\\context-engineering\\references\\read-depth.md"), read("toolu_c", "/home/x/repo/src/app.js")] } }),
+        JSON.stringify({ type: "assistant", message: { usage: usage(7) } }),
+        "",
+      ].join("\n"),
+    );
+    const report = await analyzeTranscript(transcript);
+    assert.equal(report.diagnostics.usageRecords, 3);
+    assert.equal(report.diagnostics.duplicateUsageLines, 1);
+    assert.equal(report.diagnostics.completeness, "COMPLETE");
+    assert.equal(report.main.messages, 3);
+    assert.equal(report.main.inputTokens, 132);
+    assert.deepEqual(report.assetReads, {
+      total: 2,
+      byAsset: {
+        ".agent/context/workflows/sc-work.contract.md": 1,
+        ".agent/skills/context-engineering/references": 1,
+      },
+    });
+    assert.equal(JSON.stringify(report).includes("/home/x"), false);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("assetKey keeps route files, collapses skills, and drops host paths", () => {
+  assert.equal(assetKey("/a/b/.agent/workflows/sc-plan.md"), ".agent/workflows/sc-plan.md");
+  assert.equal(assetKey(".agent/skills/code-review/SKILL.md"), ".agent/skills/code-review");
+  assert.equal(
+    assetKey("/r/.agent/skills/code-review/references/quality-axes.md"),
+    ".agent/skills/code-review/references",
+  );
+  assert.equal(assetKey("/r/.agent/tools/deep/nested/more/file.mjs"), ".agent/tools/deep/nested");
+  assert.equal(assetKey("/r/src/index.js"), null);
+  assert.equal(assetKey(42), null);
+});
 
 test("analyzeTranscript separates main and subagent token usage", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "transcript-usage-"));

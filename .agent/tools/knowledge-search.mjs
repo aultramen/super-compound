@@ -12,6 +12,11 @@
  * text (frontmatter + headings + body); output stays bounded so the
  * knowledge base itself never enters agent context.
  *
+ * Global store (opt-in): when SC_GLOBAL_KNOWLEDGE_DIR is set and
+ * <dir>/LEARNED_KNOWLEDGE.md exists, its LRN-* entries join the default corpus
+ * and are reported with path `global:LEARNED_KNOWLEDGE.md`. Unset means the
+ * corpus is repository-local and the tool stays deterministic in CI.
+ *
  * Usage:
  *   node .agent/tools/knowledge-search.mjs "<query>" [--dir docs/solutions]
  *        [--file docs/ERROR_LOG.md] [--limit 3] [--json] [--root <repo-root>]
@@ -34,6 +39,13 @@ const DEFAULT_FILES = [
     { file: 'docs/LEARNED_KNOWLEDGE.md' },
     { file: 'docs/progress.md', section: 'Codebase Patterns' },
 ];
+
+export function globalKnowledgeFiles(env = process.env) {
+    const dir = env.SC_GLOBAL_KNOWLEDGE_DIR;
+    if (typeof dir !== 'string' || !dir.trim()) return [];
+    const file = path.resolve(dir, 'LEARNED_KNOWLEDGE.md');
+    return fs.existsSync(file) ? [{ file, global: true }] : [];
+}
 
 export function tokenize(text) {
     return String(text)
@@ -110,6 +122,7 @@ export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8')) 
             continue;
         }
         const { meta, body } = parseFrontmatter(raw);
+        const global = typeof spec === 'object' && spec.global === true;
         if (typeof spec === 'object' && spec.split) {
             let entries = splitEntries(body);
             if (spec.section) entries = entries.filter((e) => e.heading === spec.section);
@@ -119,6 +132,7 @@ export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8')) 
                     addDoc(file, entry.heading, meta, entry.text, {
                         entryHeading: entry.heading,
                         entryId: idMatch ? idMatch[1] : null,
+                        global,
                     });
                 }
                 continue;
@@ -126,7 +140,7 @@ export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8')) 
         }
         const title =
             (body.match(/^#\s+(.+)$/m) || [])[1] || path.basename(file, '.md');
-        addDoc(file, title, meta, body);
+        addDoc(file, title, meta, body, { global });
     }
     const df = new Map();
     for (const doc of docs) {
@@ -187,12 +201,16 @@ export function search({ root, dirs = [], files = [], query, limit = MAX_RESULTS
     return scoreQuery(index, query)
         .slice(0, limit)
         .map(({ doc, score }) => {
-            const rel = path.relative(root, doc.file);
+            const rel = doc.global
+                ? `global:${path.basename(doc.file)}`
+                : path.relative(root, doc.file);
             return {
                 id: doc.entryId || (doc.entryHeading ? `${rel}#${doc.entryHeading}` : rel),
                 path: rel,
                 title: doc.title,
-                category: doc.meta.category || path.basename(path.dirname(doc.file)),
+                category: doc.global
+                    ? 'global'
+                    : doc.meta.category || path.basename(path.dirname(doc.file)),
                 score: Number(score.toFixed(4)),
                 snippet: snippetFor(doc, query),
             };
@@ -224,7 +242,7 @@ function main(argv) {
     }
     if (dirs.length === 0 && files.length === 0) {
         dirs.push(...DEFAULT_DIRS);
-        files.push(...DEFAULT_FILES);
+        files.push(...DEFAULT_FILES, ...globalKnowledgeFiles());
     }
     const hits = search({ root, dirs, files, query, limit });
     if (json) {
