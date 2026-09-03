@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 
 import { loadCanonicalProjectConfig } from "./project-config.mjs";
 import {
+  CORE_ROUTE_RULES,
   buildHardWriteInterceptedCommand,
   validateWorkflowAdmission,
   writeInterceptedSourceFile,
@@ -519,6 +520,72 @@ test("authority writes stay inside the owning workflow boundary", async () => {
     );
     assert.equal(result.allowed, false, route);
     assert.equal(result.reason, "WRITE_PATH_NOT_ALLOWED", route);
+  }
+});
+
+test("OPEN-RUNTIME-PRD-001: sc-prd owns docs/prd/ authority writes without a wizard or run gate", async () => {
+  const calls = [];
+  const { dependencies } = await fixture(async (input) => {
+    calls.push(input);
+    return allowedGateResult(input);
+  });
+
+  const allowed = await validateWorkflowAdmission(
+    ROOT,
+    { route: "sc-prd", intent: { path: "docs/prd/prd-example.md" } },
+    dependencies,
+  );
+  assert.equal(allowed.allowed, true);
+  assert.equal(allowed.approval_required, false);
+  assert.equal(allowed.write_class, "authority_write");
+  assert.equal(allowed.gate_evidence.intent_path, "docs/prd/prd-example.md");
+
+  for (const path of ["docs/fsd/foreign.md", "docs/brd/foreign.md"]) {
+    const foreign = await validateWorkflowAdmission(
+      ROOT,
+      { route: "sc-prd", intent: { path } },
+      dependencies,
+    );
+    assert.equal(foreign.allowed, false, path);
+    assert.equal(foreign.reason, "WRITE_PATH_NOT_ALLOWED", path);
+  }
+
+  const implementation = await validateWorkflowAdmission(
+    ROOT,
+    {
+      route: "sc-prd",
+      intent: { path: "src/feature.mjs" },
+      runId: "RUN-PRD",
+      operation: "source-write",
+    },
+    dependencies,
+  );
+  assert.equal(implementation.allowed, false);
+  assert.equal(implementation.reason, "WRITE_CLASS_NOT_ALLOWED");
+  assert.equal(calls.length, 0, "sc-prd never consults the controller gate");
+});
+
+test("admission route table matches the authority routes in workflow-invariants.json", async () => {
+  const { routes } = JSON.parse(
+    await readFile(
+      path.join(ROOT, ".agent", "context", "workflow-invariants.json"),
+      "utf8",
+    ),
+  );
+  const invariantAuthority = Object.keys(routes)
+    .filter((route) => routes[route].writeClasses.includes("authority_write"))
+    .sort();
+  const ruleAuthority = Object.keys(CORE_ROUTE_RULES)
+    .filter((route) => CORE_ROUTE_RULES[route].authority === true)
+    .sort();
+  assert.deepEqual(ruleAuthority, invariantAuthority);
+
+  for (const route of invariantAuthority) {
+    const spec = routes[route];
+    if (spec.writeClasses.length === 1 && spec.wizardPolicy === "NEVER") {
+      assert.deepEqual(CORE_ROUTE_RULES[route].gated, [], route);
+      assert.deepEqual(CORE_ROUTE_RULES[route].operations, [], route);
+    }
   }
 });
 

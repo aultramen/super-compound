@@ -43,7 +43,7 @@ const SOURCE_WRITE_LOCK_ROOT = path.join(
   "source-write-locks",
 );
 
-const CORE_ROUTE_RULES = Object.freeze({
+export const CORE_ROUTE_RULES = Object.freeze({
   "sc-plan": Object.freeze({
     authority: true,
     authorityPathPrefixes: [".agent/evals/", "docs/fsd/", "docs/solutions/"],
@@ -54,6 +54,12 @@ const CORE_ROUTE_RULES = Object.freeze({
   "sc-eval": Object.freeze({
     authority: true,
     authorityPathPrefixes: [".agent/evals/"],
+    gated: [],
+    operations: [],
+  }),
+  "sc-prd": Object.freeze({
+    authority: true,
+    authorityPathPrefixes: ["docs/prd/"],
     gated: [],
     operations: [],
   }),

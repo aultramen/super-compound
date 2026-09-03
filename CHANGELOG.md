@@ -23,6 +23,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Per-host subagent models: `.agent/context/agent-models.json` (edit it, then `npm run agents:project`) is the single source of truth; `node .agent/tools/agent-projection.mjs` projects `.agent/agents/*.md` plus the Claude Code mapping into native `.claude/agents/*.md`, so `code-reviewer`, `architect`, and `brain` inherit the session model while `build-fixer`, `doc-updater`, and `e2e-runner` run on the configured tier. The `model:` frontmatter leaves `.agent/agents/*.md`; Codex has no machine surface for subagent models here, so its orchestrator reads the same mapping from the installed `references/context/agent-models.json`.
 - Route budgets re-adopted after Waves B and C (`token-budget-gates.md` table); `docs/eval-results/2026-09-03-wave4-baseline.md` records the scripted sessions per label.
 
+### Fixed
+
+- OPEN-RUNTIME-PRD-001: `/sc-prd` is registered as an authority route in `.agent/tools/workflow-admission.mjs` (`authority_write` to `docs/prd/` only, no Budget & Stop Wizard or run gate, other paths and write classes denied). Previously every `/sc-prd` write failed with `Unsupported workflow route: sc-prd`. Regression tests cover the allowed path, foreign paths, and the write class; a parity test keeps the admission table equal to the `authority_write` routes in `.agent/context/workflow-invariants.json`.
+
 ## [Unreleased] - Gap-Analysis Enhancements
 
 ### Added
