@@ -250,7 +250,7 @@ Run:
   `UIMAP-*` traceability
 - Pin delegated `SCHEMA-*`/`CONTRACT-*`, deterministic fixtures, mock, typed
   consumer, provider/consumer tests, responsive/accessibility refs, and owners
-- Reach `ui_contract_readiness: READY_FOR_SLICE` with score >=90 and every hard gate
+- Reach `ui_contract_readiness: READY_FOR_SLICE` with every hard gate green (`node .agent/tools/readiness-gate.mjs`)
 - Decide ADR applicability
 - Capture local technical decisions as FSD `TDEC-*`
 - Link only accepted ADRs under `docs/solutions/adr-####-<slug>.md` when ADR criteria are met
@@ -610,8 +610,9 @@ Use these replacements:
 
 For framework maintenance, the token benchmark emits 54 static evidence cells:
 input context reduction, process contract/authority wiring, and output
-sink/budget/next-owner coverage for every public workflow. All route reductions
-must exceed 90%. This does not measure hidden reasoning, generated response
+sink/budget/next-owner coverage for every public workflow. Every route must stay
+within its absolute context-entry budget; hotspot reductions must exceed 90%.
+This does not measure hidden reasoning, generated response
 tokens, latency, or billing; those remain unknown without paired host traces.
 
 Before finishing any meaningful work:

@@ -33,6 +33,82 @@ const PUBLIC_ROUTES = [
   "sc-ui",
 ];
 
+test("route contracts carry the knowledge-loop spine (read-back, capture, evolve)", async () => {
+  // Contract-first routing never loads the full workflow body, so the loop must
+  // hold with zero references loaded (Wave 3 fix for contract shadowing).
+  const contract = (name) =>
+    readRepositoryFile(`.agent/context/workflows/${name}.contract.md`);
+  const [work, debug, plan, status, pause, compound] = await Promise.all(
+    ["sc-work", "sc-debug", "sc-plan", "sc-status", "sc-pause", "sc-compound"].map(contract),
+  );
+  for (const text of [work, debug, plan]) {
+    assert.match(text, /knowledge-search/);
+    assert.match(text, /ERR-\*\/LRN-\*/);
+  }
+  for (const text of [work, debug]) assert.match(text, /\/sc-compound/);
+  assert.match(debug, /ERR-\*[^\n]*mandatory/);
+  assert.match(status, /memory-maintenance\.mjs report/);
+  assert.match(status, /\/sc-evolve/);
+  assert.match(pause, /ERR-\*\/LRN-\*/);
+  assert.match(compound, /docs\/solutions\//);
+  assert.match(compound, /docs\/ERROR_LOG\.md ERR-\*/);
+  assert.match(compound, /docs\/LEARNED_KNOWLEDGE\.md LRN-\*/);
+  assert.match(compound, /docs\/progress\.md/);
+});
+
+test("route contracts carry the persistence spine (STATE entry, close, or pause handoff)", async () => {
+  // Wave 4 B: every route leaves durable state or hands off to the route that does,
+  // on every host, without depending on a hook.
+  const contract = (name) =>
+    readRepositoryFile(`.agent/context/workflows/${name}.contract.md`);
+  const contracts = Object.fromEntries(
+    await Promise.all(PUBLIC_ROUTES.map(async (route) => [route, await contract(route)])),
+  );
+  // Read-only routes that already return their next owner carry no STATE line.
+  const returnsToOwner = new Set(["sc-geniusloop", "sc-review", "sc-research", "sc-compound", "sc-evolve"]);
+  for (const [route, text] of Object.entries(contracts)) {
+    if (returnsToOwner.has(route)) continue;
+    assert.match(
+      text,
+      /\/sc-pause|docs\/STATE\.md|\/sc-status|\/sc-compound/,
+      `${route} contract has no persistence spine`,
+    );
+  }
+  for (const route of ["sc-work", "sc-debug"]) {
+    assert.match(
+      contracts[route],
+      /docs\/STATE\.md Next action via source-write gate[^\n]*\/sc-pause/,
+    );
+  }
+  for (const route of ["sc-status", "sc-work", "sc-launch"]) {
+    assert.match(contracts[route], /(?:Start|Resume) from docs\/STATE\.md Next action/);
+  }
+  assert.match(contracts["sc-pause"], /State, Next action, Artifacts lines only/);
+  assert.match(contracts["sc-init"], /\/sc-status/);
+  for (const route of ["sc-explore", "sc-prd", "sc-plan", "sc-eval", "sc-go", "sc-audit", "sc-ui"]) {
+    assert.match(contracts[route], /If work remains, end with \/sc-pause\./, route);
+  }
+});
+
+test("route contracts carry the knowledge read-back and capture spine on every unit of work", async () => {
+  // Wave 4 C: read-back before work, capture after it, refresh on contradiction.
+  const contract = (name) =>
+    readRepositoryFile(`.agent/context/workflows/${name}.contract.md`);
+  const readBack = ["sc-plan", "sc-work", "sc-debug", "sc-review", "sc-explore", "sc-prd", "sc-audit", "sc-ui", "sc-geniusloop", "sc-evolve", "sc-compound"];
+  for (const route of readBack) {
+    assert.match(await contract(route), /knowledge-search/, `${route} lacks read-back`);
+  }
+  assert.match(await contract("sc-research"), /knowledge-search[^\n]*docs\/research/);
+  assert.match(await contract("sc-review"), /\/sc-compound ERR-\*/);
+  assert.match(await contract("sc-plan"), /\/sc-compound/);
+  assert.match(await contract("sc-compound"), /Quick Reference/);
+  const [evolveContract, evolveWorkflow] = await Promise.all([
+    contract("sc-evolve"),
+    readRepositoryFile(".agent/workflows/sc-evolve.md"),
+  ]);
+  for (const text of [evolveContract, evolveWorkflow]) assert.match(text, /knowledge-refresh/);
+});
+
 test("sc-research remains a conditional advisory evidence workflow", async () => {
   const [
     workflow,
@@ -740,7 +816,8 @@ test("UI contract readiness capability eval covers the three delivery archetypes
   for (const archetype of ["simple CRUD", "multi-role approval", "realtime/offline"]) {
     assert.match(evaluation, new RegExp(archetype, "i"));
   }
-  assert.match(evaluation, /score 100[\s\S]*hard gate[\s\S]*(?:BLOCKED|fail)/i);
+  assert.match(evaluation, /prose[\s\S]*hard-gate[\s\S]*(?:BLOCKED|fail)/i);
+  assert.doesNotMatch(evaluation, /\bscore\b/i);
   assert.match(evaluation, /mock-only[\s\S]*scale-out[\s\S]*(?:BLOCKED|reject)/i);
   assert.match(evaluation, /NOT_APPLICABLE[\s\S]*(?:backend-only|CLI)/i);
   assert.match(evaluation, /Reset condition[\s\S]*fresh agent context/i);

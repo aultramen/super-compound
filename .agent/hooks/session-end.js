@@ -83,7 +83,8 @@ function recordSessionUsage(root, payload) {
             maxBuffer: 4 * 1024 * 1024,
         });
         if (result.error || result.status !== 0 || !result.stdout) return;
-        const totals = JSON.parse(result.stdout).totals;
+        const parsed = JSON.parse(result.stdout);
+        const totals = parsed.totals;
         if (!totals || typeof totals !== 'object') return;
 
         const entry = {
@@ -99,6 +100,7 @@ function recordSessionUsage(root, payload) {
             cacheCreationTokens: safeToken(totals.cacheCreationTokens),
             cacheReadTokens: safeToken(totals.cacheReadTokens),
             conservativeTokens: safeToken(totals.totalTokens ?? totals.conservativeTokens),
+            assetReads: compactAssetReads(parsed.assetReads),
         };
         const logDir = safeProjectFile(root, ['.agent', '.compact-state']);
         const logFile = safeProjectFile(root, ['.agent', '.compact-state', 'usage-log.jsonl']);
@@ -111,6 +113,20 @@ function recordSessionUsage(root, payload) {
 
 function safeToken(value) {
     return Number.isSafeInteger(value) && value >= 0 ? value : null;
+}
+
+/**
+ * Which framework assets (contracts, workflows, skills) the session actually
+ * read: the activation evidence the static benchmark cannot supply. Keys are
+ * repository-relative `.agent/...` paths only; the top 10 keep the log compact.
+ */
+function compactAssetReads(assetReads) {
+    if (!assetReads || typeof assetReads !== 'object') return null;
+    const top = Object.entries(assetReads.byAsset || {}).slice(0, 10);
+    return {
+        total: Number.isSafeInteger(assetReads.total) ? assetReads.total : 0,
+        top: Object.fromEntries(top),
+    };
 }
 
 function sanitizeSessionId(value) {

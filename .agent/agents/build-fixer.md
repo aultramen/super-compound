@@ -2,7 +2,6 @@
 name: build-fixer
 description: Compact adapter for evidence-led build and dependency failure repair.
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
-model: sonnet
 ---
 
 # Build Fixer Adapter

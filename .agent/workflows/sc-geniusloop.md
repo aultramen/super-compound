@@ -34,7 +34,7 @@ The goal is continuous improvement and creativity for an existing system. This w
     - Alpha: creative value, uniqueness, strategic coherence;
     - Theta: hidden pain points and edge cases such as empty states, permission boundaries, data anomalies, concurrency, scale, accessibility, degraded networks, abuse/security, and operational failure;
     - Delta: fundamental, durable, high-leverage product value.
-10. Select only the 1-2 surviving Delta ideas. Record each eliminated idea as one line (`GL-003 - eliminated at Beta: reason`); give full reasoning only for the surviving Delta ideas, at most 3 lines each.
+10. Select only the 1-2 surviving Delta ideas. Record each eliminated idea as one line (`GL-003 - eliminated at Beta: reason`); give full reasoning only for the surviving Delta ideas.
 11. Route each selected idea:
     - new business direction or unclear user value -> `/sc-explore`;
     - approved BRD but missing product requirements -> `/sc-prd`;
@@ -49,7 +49,7 @@ The goal is continuous improvement and creativity for an existing system. This w
 - Current-state benchmark summary.
 - Minimum 10 numbered `GL-*` ideas.
 - Brain elimination matrix covering Beta, Alpha, Theta, and Delta: one line per eliminated idea.
-- Selected 1-2 Delta ideas with rationale, at most 3 lines each.
+- Selected 1-2 Delta ideas with rationale.
 - Recommended next workflow for each selected idea.
 - Advisory prior-outcome/pattern references used for dedupe, plus the resulting `geniusloop_outcome_v2` event reference when the active run supports it.
 - `OPEN-*` blockers when authority, evidence, or user intent is missing.

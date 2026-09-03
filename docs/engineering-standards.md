@@ -1,6 +1,6 @@
 # Engineering Standards Reference
 
-> **Purpose:** This reference preserves the long-form engineering standards that used to live in a monolithic `CLAUDE.md`. It is for on-demand consultation, not automatic startup memory. The concise operational rules now live in `AGENTS.md`, `CLAUDE.md`, and `.claude/rules/`.
+> **Purpose:** Long-form engineering standards for on-demand consultation, not startup memory. Operational rules live in `AGENTS.md`, `CLAUDE.md`, and `.claude/rules/`.
 
 > **How to read this file:** Rules are written as imperatives. `MUST` = non-negotiable. `PREFER` = default choice unless context demands otherwise. `AVOID` = anti-pattern. Code blocks show `✅ DO` vs `❌ DON'T` side by side.
 
@@ -42,7 +42,7 @@ Apply these in every session, every codebase, no exceptions.
 **Code Quality**
 - NEVER swallow exceptions silently. Always log or re-raise with context.
 - NEVER use magic numbers or strings in logic. Always use named constants.
-- NEVER write functions longer than ~20 lines without a clear justification.
+- Treat functions longer than ~20 lines as a review signal, not a verdict; require demonstrated cohesion or a split.
 - ALWAYS write code for the reader, not the machine. Readability beats cleverness.
 
 **Design**
@@ -915,7 +915,7 @@ def place_order(order_data):
 
 ### Delivery Rules
 - MUST deliver working software in iterations of 2 weeks or less.
-- MUST use feature flags to decouple deploy from release.
+- Use feature flags when a release must be decoupled from a deploy; do not add flags or compatibility shims where the code can simply change.
 - MUST not skip retrospectives. Document action items and follow up.
 - MUST define and track Definition of Done per team — done means deployable.
 - AVOID technical debt accumulation without a paydown plan. Track debt explicitly.

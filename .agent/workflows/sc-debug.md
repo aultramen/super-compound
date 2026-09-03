@@ -29,7 +29,9 @@ authority.
 7. Fix the root cause, preferably with a regression test.
 8. Run verification and report evidence.
 9. If a non-trivial investigation would exceed the chat envelope, save the complete investigation to `docs/debug/YYYY-MM-DD-<slug>.md` and return its path. Shape it as: reproduction as exact commands; every hypothesis, including failed ones, as one line each (`H1: cause -> test -> disproving evidence`); root cause as one paragraph; fix as the changed-path list; verification as command plus result. Never drop failed hypotheses or evidence. Then run `node .agent/tools/doc-lint.mjs <artifact>` and adjudicate its findings (advisory).
-10. After a verified non-trivial root cause, route to `/sc-compound`. When the bug originated from an agent mistake, appending the `ERR-*` entry is mandatory, not optional: never repeat the same mistake twice.
+10. After a verified non-trivial root cause, route to `/sc-compound`. When the bug originated from an agent mistake, appending the `ERR-*` entry is mandatory.
+11. Close by writing the `docs/STATE.md` Next action through the active
+    source-write gate; without an active run, hand off with `/sc-pause`.
 
 ## Output
 

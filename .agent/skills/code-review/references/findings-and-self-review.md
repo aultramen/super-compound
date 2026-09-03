@@ -14,7 +14,7 @@ Load when turning review evidence into feedback or reviewing your own change.
 
 Each finding is one line: tight `file:line` location, then the violated requirement or invariant, concrete impact and trigger conditions, the evidence establishing it, and a focused fix.
 
-Group findings by severity and related root cause; omit empty severity tiers. Do not inflate counts by splitting one issue across symptoms. The header is exactly three lines (Scope, Authority, Verdict). Add a Strengths line — at most one — only when it informs the merge decision; omit it otherwise. The verdict states the decision only and never restates findings. Include Residual Risk only when it is non-empty.
+Group findings by severity and related root cause; omit empty severity tiers. Do not inflate counts by splitting one issue across symptoms. Add a Strengths line only when it informs the merge decision. The verdict states the decision only and never restates findings. Include Residual Risk only when it is non-empty.
 
 ```markdown
 ## Review Summary
@@ -35,4 +35,4 @@ Investigate empty catches, magic values, copy-paste, deep nesting, god functions
 
 ## Self-Review
 
-Wait two minutes or switch context, read every changed line as another author, inspect the full unstaged and staged diff as applicable, run relevant tests, and ask whether the evidence would justify approval in someone else's PR. Never assume self-authorship lowers review rigor.
+Inspect the full unstaged and staged diff, run the relevant tests, and ask whether the evidence would justify approval in someone else's PR. Never assume self-authorship lowers review rigor.

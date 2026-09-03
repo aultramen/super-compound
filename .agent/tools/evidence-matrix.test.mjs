@@ -20,7 +20,8 @@ function matrixFixture(overrides = {}) {
       return {
         name,
         stage,
-        gateType: "reduction",
+        gateType: "budget",
+        maxAfterTokens: 100,
         before: { tokens: beforeTokens },
         after: { tokens: afterTokens, contentDigest: `${index.toString(16)}`.padStart(64, "0") },
         reductionPercent: ((beforeTokens - afterTokens) / beforeTokens) * 100,
@@ -128,7 +129,6 @@ test("buildWorkflowEvidenceMatrix covers every workflow with input/process/outpu
   assert.deepEqual(evidence.gates.inputContextReduction, {
     expected: 18,
     passed: 18,
-    thresholdExclusive: 90,
     minimumReductionPercent: 95,
     pass: true,
   });

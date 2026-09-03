@@ -22,7 +22,7 @@
 | **Rust** | `ring`, `rust-crypto`, `argon2` |
 | **C#** | `System.Security.Cryptography`, BCrypt.Net |
 
-### Approved Algorithms (2024+)
+### Algorithm Choices
 
 | Purpose | ✅ Use | ❌ Never Use |
 |---------|--------|-------------|
@@ -99,7 +99,7 @@
 
 1. **Generate** keys using cryptographically secure random
 2. **Store** keys in vault or environment variables (never in code)
-3. **Rotate** keys on schedule (every 90 days) and after incidents
+3. **Rotate** keys on compromise, on personnel change, and on the interval the key's own policy sets
 4. **Separate** encryption keys from encrypted data
 5. **Version** keys to support rotation without downtime
 6. **Destroy** old keys after rotation grace period

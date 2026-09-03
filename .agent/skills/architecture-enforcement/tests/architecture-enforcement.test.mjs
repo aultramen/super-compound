@@ -151,12 +151,12 @@ const expectedPresetValues = [
 const preservedPresetValues = [
   { "frontend.bundler": "turbopack", "backend.api_docs": "none", "auth.method": "jwt", "auth.provider": "better-auth", "commands.seed": "pnpm prisma db seed", "commands.container_up": "docker compose up -d" },
   { "frontend.bundler": "vite", "backend.api_docs": "swagger", "auth.method": "jwt", "auth.provider": "passport", "commands.seed": "pnpm prisma db seed", "commands.container_up": "docker compose up -d" },
-  { "frontend.bundler": "vite", "backend.api_docs": "none", "auth.method": "session", "auth.provider": "lucia", "commands.seed": "pnpm prisma db seed", "commands.container_up": "docker compose up -d" },
+  { "frontend.bundler": "vite", "backend.api_docs": "none", "auth.method": "session", "auth.provider": "custom", "commands.seed": "pnpm prisma db seed", "commands.container_up": "docker compose up -d" },
   { "backend.api_docs": "swagger", "auth.method": "jwt", "auth.provider": "custom", "commands.seed": "python -m app.seeds", "commands.container_up": "docker compose up -d" },
   { "backend.api_docs": "swagger", "auth.method": "session", "auth.provider": "custom", "commands.seed": "python manage.py loaddata fixtures/*.json", "commands.container_up": "docker compose up -d" },
   { "backend.api_docs": "swagger", "auth.method": "jwt", "auth.provider": "custom", "commands.seed": "go run ./cmd/seed", "commands.container_up": "docker compose up -d" },
   { "frontend.bundler": "vite", "backend.api_docs": "swagger", "auth.method": "session", "auth.provider": "custom", "commands.seed": "php artisan db:seed", "commands.container_up": "docker compose up -d" },
-  { "frontend.bundler": "vite", "backend.api_docs": "none", "auth.method": "session", "auth.provider": "lucia", "commands.seed": "pnpm tsx scripts/seed.ts" },
+  { "frontend.bundler": "vite", "backend.api_docs": "none", "auth.method": "session", "auth.provider": "custom", "commands.seed": "pnpm tsx scripts/seed.ts" },
   { "frontend.bundler": "metro", "auth.method": "jwt", "auth.provider": "custom" },
 ];
 

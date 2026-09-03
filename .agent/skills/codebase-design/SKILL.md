@@ -15,11 +15,7 @@ Announce: "I'm using the codebase-design skill to design the module seam."
 
 Use these terms consistently:
 
-- `Module`: anything with an interface and implementation.
-- `Interface`: everything callers must know to use a module correctly.
-- `Implementation`: code behind the interface.
 - `Seam`: where behavior can vary without editing callers.
-- `Adapter`: a concrete implementation at a seam.
 - `Depth`: how much useful behavior sits behind a small interface.
 - `Leverage`: what callers gain from a deep module.
 - `Locality`: how much change and debugging concentrate in one place.
@@ -32,7 +28,6 @@ Avoid vague substitutes such as boundary, helper, service, or component when the
 - Prefer one high seam over many shallow seams.
 - A module earns its place when deleting it would spread complexity across callers.
 - One adapter is a hypothetical seam; two adapters make the seam real.
-- Accept dependencies instead of constructing hard-coded concrete dependencies.
 - Mock only system boundaries; use local substitutes when practical.
 
 ## Process

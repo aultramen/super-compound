@@ -1,6 +1,6 @@
 ---
 name: knowledge-refresh
-description: "Use when the knowledge store may have drifted from the codebase, after a learning contradicts an older record, or on periodic maintenance."
+description: "Use when the knowledge store may have drifted from the codebase, after a learning contradicts an older record, or on periodic maintenance. Not for capturing a new learning or solution; that is knowledge-compounding."
 ---
 
 # Knowledge Refresh
@@ -46,5 +46,5 @@ audited for a long period. Not for writing new learnings - that is
 ## Integration
 
 Fed by `knowledge-compounding` (contradiction discovered while writing a new
-record) and `/sc-audit`. Report actions taken per record, then return to the
+record), `/sc-evolve` (a promotion candidate contradicts a record), and `/sc-audit`. Report actions taken per record, then return to the
 active workflow.

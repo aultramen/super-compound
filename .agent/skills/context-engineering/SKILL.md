@@ -15,7 +15,7 @@ Announce: "I'm applying context engineering to keep the working context focused.
 
 - Load by relevance to the current task, not by directory size.
 - Prefer summaries and targeted reads before loading large files; scale depth
-  per [read depth](references/read-depth.md).
+  and pick the output tier at intake per [read depth](references/read-depth.md).
 - Follow imports, references, and tests only as far as needed.
 - Keep cross-session state in durable files; conversation memory is not.
 - Stop gathering context once you can safely act.
@@ -38,7 +38,7 @@ When returning to work:
 2. Read `.continue-here.md` if present.
 3. Read the active BRD, PRD, FSD, goal issue pointer, or brainstorm.
 4. Load only files needed for the next step.
-5. Run `/sc-status` to route the session if the next action is unclear.
+5. Run `/sc-status` if the next action is unclear.
 
 ## Fresh Context Signals
 
@@ -57,12 +57,7 @@ After a fresh session, use `/sc-status` to recover from disk.
 
 ## Checkpoints
 
-At natural breaks, ask internally:
-
-- Am I using the files I loaded?
-- Is the next file necessary for the next action?
-- Would a summary beat the full file?
-- Should this state be written to `docs/STATE.md`, `docs/progress.md`, or `.continue-here.md`?
+At phase ends, persist durable state to `docs/STATE.md`, `docs/progress.md`, or `.continue-here.md` before dropping loaded files.
 
 ## Red Flags
 
@@ -71,12 +66,12 @@ At natural breaks, ask internally:
 | "Read the whole repo first" | Search, sample, and follow references |
 | "Keep everything in memory" | Summarize and persist durable state |
 | "Reload the whole conversation" | Use `STATE.md`, `.continue-here.md`, and current files |
-| "More context will fix uncertainty" | Identify the specific missing fact |
+| "More context will fix uncertainty" | Name the missing fact |
 
 ## Related Skills
 
 - `state-management` for durable state files
-- `agentic-delivery` for qualified artifact references and zero context bloat rules
+- `agentic-delivery` for qualified references and zero-bloat rules
 - `executing-plans` for goal-by-goal loading
 - `systematic-debugging` for investigation scope
 - `brainstorming` for lightweight product context

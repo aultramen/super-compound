@@ -4,7 +4,7 @@
 
 | Aspek | GDPR (EU) | UU PDP Indonesia (UU 27/2022) |
 |-------|-----------|-------------------------------|
-| **Berlaku** | 25 Mei 2018 | 17 Oktober 2022 (transisi 2 tahun → Oktober 2024) |
+| **Berlaku** | 25 Mei 2018 | 17 Oktober 2022; masa transisi berakhir Oktober 2024, berlaku penuh |
 | **Cakupan** | Semua pemroses data EU residents | Semua pemroses data WNI/di Indonesia |
 | **Dasar Hukum Pemrosesan** | 6 dasar (Art. 6) | Persetujuan eksplisit + kepentingan hukum |
 | **Hak Subjek Data** | 8 hak (Art. 15-22) | 9 hak (Pasal 5-13) |

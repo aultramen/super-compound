@@ -31,8 +31,6 @@ Do not use when requirements or architecture are genuinely undecided; return to 
 5. Re-run the ORIGINAL verification, then relevant regression checks.
 6. If new gaps appear, stop after max 2 additional closure iterations and report what remains.
 
-An enhancement is not gap closure. Finish the bounded closure before routing improvements separately.
-
 ## Red Flags
 
 | Thought | Required response |

@@ -29,24 +29,28 @@ The progress-log skeleton lives at `.agent/templates/state/Progress-Template.md`
 Refresh the pointer with `node .agent/tools/loop-run.mjs show --run <run_id>`.
 Never copy lifecycle events, counters, an approval envelope, or a confirmation
 digest into STATE. Writing `docs/STATE.md` requires the active source-write gate;
-reading it does not. `START` or `RESUME` after a pause requires fresh human
-confirmation.
+reading it does not. Inside an active run, `/sc-work`, `/sc-debug`, and
+`/sc-launch` write the Next action through that gate; every other route, and any
+route outside a run, hands off through `/sc-pause`. `START` or `RESUME` after a
+pause requires fresh human confirmation.
+
+## `.continue-here.md`
+
+Exactly these lines, nothing else:
+
+```markdown
+# Continue Here
+- State: docs/STATE.md
+- Next action: <one executable step or /sc-status>
+- Authoritative artifacts: <paths>
+```
 
 ## Error and learning records
 
-```markdown
-## YYYY-MM-DD - <error category>
-- Symptom: <observed failure>
-- Root cause: <why>
-- Correct approach: <verified correction>
-- Prevention: <bounded rule>
-```
-
-```markdown
-## YYYY-MM-DD - <learning topic>
-- Learning: <confirmed pattern>
-- Confidence: confirmed | observed | inferred
-- Applies to: <scope>
-```
+The entry grammar (`## ERR-YYYY-MM-DD-NNN` / `## LRN-YYYY-MM-DD-NNN` headings,
+their field lines, and the Quick Reference row) lives once in
+`.agent/skills/knowledge-compounding/references/memory-capture.md` section 2 and
+is enforced by `node .agent/tools/memory-maintenance.mjs check`. Do not restate
+or fork it here; an entry without an ID is invisible to the tool.
 
 At session end, update exact Next Action, completed outcomes, decisions, blockers, and owner. Suggest knowledge compounding for a reusable solution and pause workflow for later continuation.

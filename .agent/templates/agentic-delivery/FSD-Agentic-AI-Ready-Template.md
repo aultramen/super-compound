@@ -171,8 +171,8 @@ Before this FSD becomes `APPROVED`, all items below must be true:
       first-slice and scale-out goals remain blocked. The enabler has complete
       authority, bounded paths, deterministic verification, and no unrelated
       blocker.
-- [ ] When readiness is `READY_FOR_SLICE`, score is at least 90, every hard gate
-      passes, and UI states/data/actions map to pinned operation/schema/result/error
+- [ ] When readiness is `READY_FOR_SLICE`, `readiness-gate.mjs` passes every hard
+      gate, and UI states/data/actions map to pinned operation/schema/result/error
       refs, deterministic fixtures, matching mock/typed-consumer revisions, and
       provider/consumer/responsive/accessibility/QA verification.
 - [ ] After `CONTRACT_ENABLER` verification, return to `/sc-plan`, update the FSD
@@ -1154,7 +1154,6 @@ ui_api_contract:
     owners: { technical: "{{ROLE}}", provider: "{{ROLE}}", consumer: "{{ROLE}}", qa: "{{ROLE}}" }
     approvers: { business: "{{ROLE}}", technical: "{{ROLE}}" }
   readiness:
-    score: 90
     hard_gates_passed: ["{{GATE IDS}}"]
     blocking_open_refs: []
 ```

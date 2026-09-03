@@ -24,8 +24,8 @@ Every project-source write stays inside that active iteration.
 
 ## Steps
 
-1. Load `skills/agentic-delivery/SKILL.md`, `skills/context-engineering/SKILL.md`, and `skills/executing-plans/SKILL.md` when following the full execution procedure.
-2. Read the `.scratch/<feature>/issues/<NN>-<slug>.md` issue or direct FSD goal, then dynamically load only the referenced FSD sections, upstream BRD/PRD IDs, linked accepted ADRs, blockers, verification refs, and relevant code/tests. An issue pointer must be `ready-for-agent` before any edit or execution.
+1. Load `skills/agentic-delivery/SKILL.md`, `skills/context-engineering/SKILL.md`, and `skills/executing-plans/SKILL.md` when following the full execution procedure. Do not load `docs/engineering-standards.md` or a project `CODING_STANDARDS.md` here; `/sc-review` enforces standards so implementation context stays small.
+2. Start from the `docs/STATE.md` Next action. Read the `.scratch/<feature>/issues/<NN>-<slug>.md` issue or direct FSD goal, then dynamically load only the referenced FSD sections, upstream BRD/PRD IDs, linked accepted ADRs, blockers, verification refs, and relevant code/tests. An issue pointer must be `ready-for-agent` before any edit or execution.
    Search durable knowledge first with `node .agent/tools/knowledge-search.mjs "<goal area>"`; a matching `ERR-*`/`LRN-*` prevention rule is binding until superseded.
 3. Before any edit or execution, confirm every `Blocked by` dependency is
    satisfied at `verified`, not merely `done`; `HARDENING` requires every
@@ -71,6 +71,8 @@ Every project-source write stays inside that active iteration.
 15. Summarize changed files, mapped requirement IDs, deviations, and verification evidence.
     If the goal surfaced a non-obvious fix, a costly mistake, or a new convention,
     route to `/sc-compound` before closing.
+16. Close by writing the `docs/STATE.md` Next action through the active
+    source-write gate; without an active run, hand off with `/sc-pause`.
 
 ## Output
 

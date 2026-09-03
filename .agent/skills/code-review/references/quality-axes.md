@@ -2,6 +2,8 @@
 
 Load after spec compliance passes. Apply only axes relevant to the changed code, but never skip an applicable risk area.
 
+Standards source: the applicable sections of `docs/engineering-standards.md`, or a project `CODING_STANDARDS.md` when one exists. Review carries this load so implementation does not.
+
 ## Correctness
 
 - Check normal, empty, null, boundary, error, concurrency, retry, and cancellation paths.
@@ -18,21 +20,7 @@ Load after spec compliance passes. Apply only axes relevant to the changed code,
 
 ## Security and Privacy
 
-Check applicable items:
-
-- typed, length-bounded server-side validation;
-- no embedded secrets, credentials, tokens, or sensitive logs;
-- parameterized queries and safe shell/process invocation;
-- output encoding and safe HTML handling;
-- authentication on protected routes and authorization against IDOR;
-- CSRF, CORS, security headers, session/JWT flags, expiry, and token refresh;
-- rate limits for auth/public APIs;
-- file type/size/path/storage validation;
-- non-leaking production errors;
-- modern password hashing and environment-based secrets;
-- dependency vulnerability posture.
-
-Use `security-audit` for deep vulnerability/auth/secrets analysis, `secure-code-patterns` for validation/crypto, and `data-privacy` for PII or consent.
+For each applicable risk area use `security-audit` (vulnerabilities, auth, secrets, dependency posture), `secure-code-patterns` (validation, encoding, crypto), and `data-privacy` (PII, consent).
 
 ## Performance
 

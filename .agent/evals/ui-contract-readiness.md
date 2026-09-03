@@ -33,14 +33,14 @@ must not be required.
 
 ### CAP-UI-002 — Multi-role approval
 
-**Task input:** UI-bearing multi-role approval with a claimed readiness score 100.
+**Task input:** UI-bearing multi-role approval whose author asserts readiness in prose.
 Success/loading/error are mapped, but forbidden and stale/conflict behavior
 have neither coverage nor approved `N/A`. All executable contract assets match.
 
 **Binary pass criteria:** `STANDARD`, baseline `DRAFT`, readiness `BLOCKED`,
 verdict `NEEDS_REVISION`, both missing states named as blockers, next owner
 `/sc-prd`, scale-out `BLOCKED`.
-The score must not hide the hard-gate failure.
+A prose readiness claim must not hide the hard-gate failure; `readiness-gate.mjs` fails.
 
 ### CAP-UI-003 — Realtime/offline flow
 
@@ -62,7 +62,7 @@ realtime/offline, responsive, and keyboard/focus risks named, next owner
 |---|---|---|
 | REG-UI-001 | Backend-only/CLI scope and an unchanged artifact-contract 1.0 document with no UI fields | Remains readable; new backend planning records approved `NOT_APPLICABLE`; no UI bundle or retroactive rewrite |
 | REG-UI-002 | UI network action lacks operation/schema mapping | `BLOCKED`, blocking `OPEN-*`, next owner `/sc-plan` |
-| REG-UI-003 | Fixture revision differs from schema revision | Contract hard gate fails even if score is 100 |
+| REG-UI-003 | Fixture revision differs from schema revision | Contract hard gate fails regardless of any prose readiness claim |
 | REG-UI-004 | First slice has mock-only success | Not `FIRST_VERTICAL_SLICE_VERIFIED`; scale-out `BLOCKED` |
 | REG-UI-005 | Real provider proves auth/permission, success, representative failure, and integration checking under a `VALIDATED` baseline | First slice may become `verified`; dependent promotion is owned by `/sc-plan` |
 | REG-UI-006 | Brownfield UI has no current UI/API/design-system/compatibility characterization | `BLOCKED`; characterization evidence required before approval |

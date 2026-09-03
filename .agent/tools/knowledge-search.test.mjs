@@ -6,6 +6,7 @@ import test from 'node:test';
 
 import {
     buildIndex,
+    globalKnowledgeFiles,
     parseFrontmatter,
     scoreQuery,
     search,
@@ -38,6 +39,41 @@ function makeStore(t) {
     );
     return root;
 }
+
+test('global store joins the corpus only when SC_GLOBAL_KNOWLEDGE_DIR points at a file', (t) => {
+    const root = makeStore(t);
+    const globalDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ks-global-'));
+    t.after(() => fs.rmSync(globalDir, { recursive: true, force: true }));
+    assert.deepEqual(globalKnowledgeFiles({}), []);
+    assert.deepEqual(globalKnowledgeFiles({ SC_GLOBAL_KNOWLEDGE_DIR: globalDir }), []);
+    fs.writeFileSync(
+        path.join(globalDir, 'LEARNED_KNOWLEDGE.md'),
+        [
+            '# Learned Knowledge',
+            '',
+            '## Quick Reference',
+            '',
+            '| ID | Scope | Confidence | Action rule (IF-THEN) |',
+            '| --- | --- | --- | --- |',
+            '| LRN-2026-09-02-001 | global | confirmed | IF replying THEN use the user language |',
+            '',
+            '---',
+            '',
+            '## LRN-2026-09-02-001 - reply language',
+            '- Learning: the user writes Indonesian; reply in Indonesian, technical terms verbatim.',
+            '- Confidence: confirmed',
+            '- Applies to: global',
+        ].join('\n')
+    );
+    const files = globalKnowledgeFiles({ SC_GLOBAL_KNOWLEDGE_DIR: globalDir });
+    assert.equal(files.length, 1);
+    assert.equal(files[0].global, true);
+    const hits = search({ root, files, query: 'reply language indonesian' });
+    assert.equal(hits[0].id, 'LRN-2026-09-02-001');
+    assert.equal(hits[0].path, 'global:LEARNED_KNOWLEDGE.md');
+    assert.equal(hits[0].category, 'global');
+    assert.equal(JSON.stringify(hits).includes(globalDir), false);
+});
 
 function makeMemoryStore(t) {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ks-mem-'));

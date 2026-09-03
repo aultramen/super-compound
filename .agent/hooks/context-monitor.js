@@ -2,9 +2,11 @@
 /**
  * Super Compound - Context Monitor Hook (PostToolUse)
  *
- * Injects an agent-facing warning when remaining context drops below
- * thresholds: WARNING at <=35% remaining ("wrap up"), CRITICAL at <=25%
- * remaining ("stop and save state"). Each level fires once per session.
+ * Injects an agent-facing note when remaining context drops below
+ * thresholds: WARNING ("persist state, continue"), CRITICAL ("hand off").
+ * Defaults: 35%/25% remaining on a 200k window, 15%/8% on a detected 1M
+ * window. The note never states a remaining-token count: a countdown in
+ * context makes the model wrap up early. Each level fires once per session.
  * Deterministic, local-first; reads only the transcript tail.
  */
 
@@ -22,12 +24,12 @@ const {
     resolveHookProjectRoot,
     safeProjectFile,
 } = require('./lib/hook-utils');
-const { readLatestContextTokens } = require('./lib/context-pressure');
-
-const STANDARD_WINDOW = 200000;
-const LARGE_WINDOW = 1000000;
-const WARN_REMAINING_PCT = readPositiveInteger('SC_CONTEXT_WARN_PCT', 35);
-const CRITICAL_REMAINING_PCT = readPositiveInteger('SC_CONTEXT_CRITICAL_PCT', 25);
+const {
+    LARGE_WINDOW,
+    formatWindow,
+    readLatestContextTokens,
+    resolveContextWindow,
+} = require('./lib/context-pressure');
 
 let input = {};
 try {
@@ -59,11 +61,19 @@ try {
 const usage = readLatestContextTokens(input.transcript_path);
 if (!usage) process.exit(0);
 
-const windowTokens = resolveWindowTokens(usage.tokens, usage.model, process.env);
+const { windowTokens, detected } = resolveContextWindow(usage.tokens, usage.model, process.env);
+const largeWindow = windowTokens >= LARGE_WINDOW;
+const WARN_REMAINING_PCT = readPositiveInteger('SC_CONTEXT_WARN_PCT', largeWindow ? 15 : 35);
+const CRITICAL_REMAINING_PCT = readPositiveInteger('SC_CONTEXT_CRITICAL_PCT', largeWindow ? 8 : 25);
 const remainingPct = Math.max(
     0,
     Math.round(100 - (usage.tokens / windowTokens) * 100)
 );
+// The note carries no token count or percentage; an assumed window says so.
+const note = detected
+    ? ''
+    : ` (window not detected; assumed ${formatWindow(windowTokens)} window, ` +
+      'set CLAUDE_CODE_AUTO_COMPACT_WINDOW if larger)';
 
 const state = readState(stateFile);
 let message = null;
@@ -71,15 +81,14 @@ if (remainingPct <= CRITICAL_REMAINING_PCT && !state.criticalFired) {
     state.criticalFired = true;
     state.warnFired = true;
     message =
-        `[Super Compound] CRITICAL: ~${remainingPct}% context remaining. ` +
-        'Stop new work now: update docs/STATE.md with exact Next Action, ' +
-        'write .continue-here.md, then finish or hand off via /sc-pause.';
+        `[Super Compound] CRITICAL: context is nearly exhausted${note}. ` +
+        'Update docs/STATE.md with the exact Next Action, write .continue-here.md, ' +
+        'then hand off via /sc-pause.';
 } else if (remainingPct <= WARN_REMAINING_PCT && !state.warnFired) {
     state.warnFired = true;
     message =
-        `[Super Compound] WARNING: ~${remainingPct}% context remaining. ` +
-        'Wrap up the current step; avoid opening large files or new scope. ' +
-        'Prefer finishing at the next logical boundary.';
+        `[Super Compound] WARNING: context is running low${note}. ` +
+        'Persist the docs/STATE.md Next Action at the next natural boundary, then continue.';
 }
 
 if (message) {
@@ -95,13 +104,6 @@ if (message) {
             additionalContext: message,
         },
     }));
-}
-
-function resolveWindowTokens(tokens, model, env) {
-    const override = Number.parseInt(env.CLAUDE_CODE_AUTO_COMPACT_WINDOW || '', 10);
-    if (Number.isInteger(override) && override > 0) return override;
-    if (String(model).includes('[1m]') || tokens > STANDARD_WINDOW) return LARGE_WINDOW;
-    return STANDARD_WINDOW;
 }
 
 function sanitizeSessionId(value) {

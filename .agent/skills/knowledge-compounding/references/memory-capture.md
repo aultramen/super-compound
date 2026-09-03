@@ -17,6 +17,9 @@ choose this branch over nothing.
 | Explicit user correction | `LRN-*` | `docs/LEARNED_KNOWLEDGE.md` |
 | Stated user preference | `LRN-*` | `docs/LEARNED_KNOWLEDGE.md` |
 | Confirmed reusable convention | `LRN-*` | `docs/LEARNED_KNOWLEDGE.md` |
+| Steering instruction that never changed behavior (no-op; deletion saves tokens) | `LRN-*` | `docs/LEARNED_KNOWLEDGE.md` |
+| Tool call or CLI that was expensive or repeated for no gain (tool economy) | `LRN-*` | `docs/LEARNED_KNOWLEDGE.md` |
+| Information the agent needed but could not reach (information access) | `LRN-*` | `docs/LEARNED_KNOWLEDGE.md` |
 
 Skip typos, transient noise, and anything an existing entry already covers;
 update the matching entry instead of duplicating it.
@@ -46,6 +49,13 @@ format. Append the entry to its file, newest last:
 ```
 
 Keep each field to one line; no narrative paragraphs.
+
+Global scope: when `SC_GLOBAL_KNOWLEDGE_DIR` is set, an `Applies to: global`
+`LRN-*` entry (with its Quick Reference row) is also appended to
+`$SC_GLOBAL_KNOWLEDGE_DIR/LEARNED_KNOWLEDGE.md`; seed that file once by copying
+the header of `docs/LEARNED_KNOWLEDGE.md`. `knowledge-search.mjs` reads it back
+in every repository that sets the variable. A failed global write never blocks
+the local capture.
 
 ## 3. Update the Quick Reference table
 

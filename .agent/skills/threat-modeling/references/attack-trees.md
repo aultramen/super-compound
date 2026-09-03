@@ -1,6 +1,6 @@
 ## Attack Tree Analysis
 
-Use attack trees to model complex multi-step attacks:
+Use attack trees for high-risk components where the attacker goal takes several steps.
 
 ### Template
 
@@ -19,20 +19,5 @@ ROOT: [Attacker Goal]
 - **OR:** Any child node success achieves parent goal
 - **[Mitigated]:** Control in place, residual risk accepted
 - **[OPEN]:** No control — needs mitigation
-
-### Example
-
-```
-ROOT: Steal User Credentials
-├─ OR: Obtain Password
-│  ├─ Brute force login [Mitigated: rate limiting + lockout]
-│  ├─ Credential stuffing [Mitigated: MFA + breach detection]
-│  ├─ Phishing [OPEN: needs user training]
-│  └─ SQL injection on login [Mitigated: parameterized queries]
-└─ OR: Steal Session
-   ├─ XSS to steal cookies [Mitigated: httpOnly + CSP]
-   ├─ Session fixation [Mitigated: regeneration on login]
-   └─ Network sniffing [Mitigated: TLS 1.2+]
-```
 
 ---

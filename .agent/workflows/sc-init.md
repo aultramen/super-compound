@@ -23,6 +23,7 @@ description: "Initialize or refresh project context by scanning the codebase, co
    from an inference.
 7. Report enabled MCP/tool schemas and installed skill metadata when the host exposes them. Mark unavailable measurements `unknown`; do not disable capabilities automatically.
 8. For `/sc-init reload`, re-read rules/workflows/skills that changed and summarize what matters.
+9. Then run `/sc-status` to pick the next route from durable state.
 
 ## Output
 

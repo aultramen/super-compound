@@ -36,10 +36,6 @@ Test claims such as "config loaded", "path executed", "function returns X", or "
 
 ## Phase 3: Hypotheses
 
-Create 3-5 ranked hypotheses from the evidence. Each uses this form:
-
-> If **X** is the cause, observing or changing **Y** will produce **Z**.
-
-Test the highest-confidence hypothesis with the smallest reversible observation or change. Change one variable, record the result, and revise the ranking. If the top three fail, return to Phase 1 instead of trying low-confidence patches.
+Rank the candidate causes the evidence supports, each with the observation that would confirm or refute it. Test the highest-confidence hypothesis with the smallest reversible observation or change. Change one variable, record the result, and revise the ranking. If the top three fail, return to Phase 1 instead of trying low-confidence patches.
 
 Exit investigation only when evidence identifies a cause and the chosen hypothesis predicted the observed result.

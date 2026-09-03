@@ -10,7 +10,7 @@ Use this when the user wants the whole lifecycle from idea to verified delivery.
 
 ## Pipeline
 
-1. `sc-status.md` - check current state and existing handoff.
+1. `sc-status.md` - check current state and existing handoff; resume from the `docs/STATE.md` Next action.
 2. `sc-explore.md` - resolve business intent, constraints, non-goals, and open decisions into a BRD.
 3. `sc-research.md` - conditional evidence gate only when a named factual or technical gap could change the BRD, PRD, FSD, or risk decision; otherwise skip it.
 4. `sc-prd.md` - create the PRD draft and classify UI delivery risk.
@@ -26,7 +26,7 @@ Use this when the user wants the whole lifecycle from idea to verified delivery.
 14. `sc-work.md` - execute the bounded hardening/verification goal for integration, responsive, accessibility, E2E, and visual-regression evidence; obtain Business Owner UAT approval.
 15. `sc-review.md` - audit implementation and recorded verification/UAT evidence against authority; it does not manufacture missing evidence.
 16. `sc-audit.md` - run risk checks when the change affects users, data, dependencies, auth, release, or agent surfaces.
-17. `sc-go.md` - preview finish flow, push, and PR template after verification.
+17. `sc-go.md` - preview the finish flow and PR template after verification; push and PR return `OPEN-RELEASE-GATE` until the operation allowlist carries them.
 18. `sc-compound.md` - document reusable lessons.
 
 Run one active stage at a time. At every non-trivial boundary update

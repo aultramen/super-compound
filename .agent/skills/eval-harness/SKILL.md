@@ -23,7 +23,7 @@ Use for a non-trivial feature, an AI-produced result that is hard to trust, a pa
 - Include capability evals for intended behavior and regression evals for protected behavior.
 - Prefer a deterministic grader based on executable tests, builds, or explicit output checks. Use LLM-as-judge only for open-ended quality and a human gate for security, legal, or subjective UX decisions.
 - Record independent attempts rather than retrying until a pass is convenient.
-- Report `pass@k` with `pass@1` and `pass@3`, plus `pass^3`, accurately. Target `pass@3 ≥ 90%` for ordinary capability evals and `pass^3 = 100%` for critical auth, payment, migration, and regression paths.
+- Compute `pass@k` (`pass@1`, `pass@3`) and `pass^3` with `node .agent/tools/eval-gate-model.mjs` from the attempt records; hand-computed metrics are rejected as `PASS_METRICS_MISMATCH`. Target `pass@3 ≥ 90%` for ordinary capability evals and `pass^3 = 100%` for critical auth, payment, migration, and regression paths.
 - Never claim approval when a required grader or human gate is unresolved.
 
 ## Red Flags

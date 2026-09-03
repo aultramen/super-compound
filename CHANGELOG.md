@@ -4,6 +4,25 @@ All notable changes to the Super Compound framework are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and version entries follow the repository's delivery history. Dates use `YYYY-MM-DD`.
 
+## [Unreleased] - Wave 4: Readiness Gate, Persistence, Knowledge Loop
+
+### Added
+
+- `.agent/tools/readiness-gate.mjs`: deterministic, binary UI/API readiness. `READY_FOR_SLICE` means `node .agent/tools/readiness-gate.mjs --fsd <fsd> --prd <prd> --issues-dir <dir>` exits 0 (enum, baseline, state coverage, UIMAP, revisions, derived assets, verification refs, HIGH_INTERACTION evidence, open blockers, first-slice/scale-out/HARDENING/enabler structure). The 0-100 readiness score and its weighted table are removed from `ui-contract-readiness.md`, `plan-verification`, `sc-plan`, the FSD template, evals, and the public docs.
+- `.agent/tools/session-baseline.mjs` (`npm run baseline -- seed|run --label <l>|report`): seeds a throwaway project under a gitignored `.scratch/baseline-<date>` directory, runs three headless Claude Code sessions (`/sc-status`, `/sc-debug`, `/sc-work`), and records tokens, contract reads, knowledge-search and memory-maintenance calls, durable-state changes, and stop markers per label into `docs/eval-results/2026-09-03-wave4-baseline.md`.
+- `transcript-usage.mjs` attributes framework-tool Bash calls (`node .agent/tools/<name>.mjs`, `cat .agent/context/...`) to `assetReads` alongside Read calls.
+
+### Changed
+
+- Token benchmark route gates are absolute per-route after-token budgets (`maxAfterTokens`, measured after + 40 headroom, re-adopted whenever a deliberate contract change lands; table in `.agent/context/token-budget-gates.md`). The reduction against the frozen baseline is still measured and reported per route but no longer gates; `--require-reduction` now scopes only hotspot and legacy reduction scenarios and is dropped from `npm run bench` and `release-cutover.mjs`. `evidence-matrix` input cells carry `maxAfterTokens` instead of `reductionThresholdExclusive`.
+- Contract fixes the old ratio gate had blocked: `sc-status.contract.md` routes `STALE_STATE`/`STALE_PROGRESS` to `/sc-pause` first and an empty goal queue to `/sc-geniusloop`; `sc-compound.contract.md` gains a search-first line and readable `ADAPTIVE_LEARNING_V2` conditions; `sc-pause.contract.md` states the write-admission gate as an instruction.
+- `docs/LEARNED_KNOWLEDGE.md`: `LRN-2026-09-03-001` (absolute route budgets) supersedes `LRN-2026-09-02-002`.
+- `.agent/rules/super-compound.md` Completion Bar points at `quality-gates.md`; `SUPER-COMPOUND.md` drops the benchmark-methodology paragraph (owner: `token-budget-gates.md`); `docs/engineering-standards.md` function-length and feature-flag rules are signals, not absolutes. `token-budget-gates.md` return envelopes are described qualitatively (outcome, artifact path, verification, blockers, next owner) instead of per-route line counts.
+- Persistence spine on every host (file-based, no hook required): `sc-status`, `sc-work`, and `sc-launch` start from the `docs/STATE.md` Next action; `sc-work` and `sc-debug` close by writing it through the source-write gate or handing off to `/sc-pause`; `sc-init` ends in `/sc-status`; explore/prd/plan/eval/go/audit/ui end with `/sc-pause` when work remains; `sc-pause` fixes the `.continue-here.md` shape (State, Next action, Authoritative artifacts). `state-management` names who writes STATE (`/sc-work`, `/sc-debug`, `/sc-launch` inside a run; `/sc-pause` otherwise). Guarded by a persistence spine test in `workflow-contracts.test.mjs`.
+- Knowledge loop on every unit of work: `knowledge-search.mjs` read-back before `sc-review`, `sc-explore`, `sc-prd`, `sc-audit`, `sc-ui`, `sc-geniusloop`, and `sc-research` (which searches `docs/research` first) in addition to plan/work/debug/evolve/compound; `sc-review` routes agent-caused findings to `/sc-compound ERR-*`; `sc-plan` routes lessons to `/sc-compound`; `sc-compound` requires the Quick Reference row per entry; `/sc-evolve` runs `knowledge-refresh` when a promotion candidate contradicts a record. Applying proposals stays human. `SC_GLOBAL_KNOWLEDGE_DIR` is documented in the README Install section and `.agent/rules/project-config.md`.
+- Per-host subagent models: `.agent/context/agent-models.json` (edit it, then `npm run agents:project`) is the single source of truth; `node .agent/tools/agent-projection.mjs` projects `.agent/agents/*.md` plus the Claude Code mapping into native `.claude/agents/*.md`, so `code-reviewer`, `architect`, and `brain` inherit the session model while `build-fixer`, `doc-updater`, and `e2e-runner` run on the configured tier. The `model:` frontmatter leaves `.agent/agents/*.md`; Codex has no machine surface for subagent models here, so its orchestrator reads the same mapping from the installed `references/context/agent-models.json`.
+- Route budgets re-adopted after Waves B and C (`token-budget-gates.md` table); `docs/eval-results/2026-09-03-wave4-baseline.md` records the scripted sessions per label.
+
 ## [Unreleased] - Gap-Analysis Enhancements
 
 ### Added
@@ -23,6 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - BRD, PRD, and ADR reusable templates translated from Indonesian to English (structure byte-identical).
 - `.claude/rules/agent-framework.md` no longer claims workflow aliases are preserved; removed workflows are intentionally not aliases.
 - `.gitignore` now ignores `.tmp/`.
+- Prompt audit (2026-09-02) against Claude Fable 5.1: hook notes no longer surface a remaining-token count or percentage (`context-monitor`, `suggest-compact`); `context-monitor` defaults scale with the detected window (35%/25% on 200k, 15%/8% on 1M), `suggest-compact` drops the tool-count reminder cadence and its fixed suffix, and its 1M pressure threshold moves from 250k to 700k tokens. Numeric return ceilings ("at most 15 lines", "at most 3 lines", "250 words", "30 seconds", "300 lines") replaced by the field lists they wrapped; `token-budget-gates.md` semantics unchanged. `/sc-go` usage marks `commit`/`push`/`pr` as preview-only under `OPEN-RELEASE-GATE` and drops the roadmap-relative wording; `EVAL-REG-001` now protects 18 routes. Alias-cleanup narrative removed from `SUPER-COMPOUND.md`, `AGENTS.md`, and `.claude/rules/agent-framework.md` (README keeps the migration table). Risk-skill references (`.agent/skills/threat-modeling/references/`, `.agent/skills/security-audit/references/owasp.md`, `.agent/skills/data-privacy/references/privacy-by-design.md`, `.agent/skills/secure-code-patterns/references/`) trimmed to project-specific residue; two wrong claims corrected (Latin-1 name regex, "SHA-256 for all hashing"); pinned hashes in the progressive-disclosure tests refreshed.
 
 ## [Unreleased] - Loop Runtime v2
 
@@ -59,6 +79,31 @@ Work delivered on `feature/ui-aware-delivery` after the 2026-07-16 evidence refr
 - Fail-closed stop evaluation: safety/policy/corruption gates run before success or exhaustion checks; unknown token or cost attribution recorded as unknown, never zero.
 - External write policy ships as `DENY`; ambiguous external outcomes become `UNKNOWN_OUTCOME` and are never automatically retried.
 - No raw prompts, chain-of-thought, secrets, PII, or untrusted payloads persisted in run state or telemetry.
+
+## [2026-09-02] - Wave 3 Contract Spine and Truthful Telemetry
+
+Driven by `docs/audits/2026-09-02-cross-framework-gap-analysis-wave3.md`. Thirteen days after Wave 2 the knowledge loop still had zero entries; the dominant cause was contract shadowing: the loop was wired into full workflow bodies that the contract-first runtime path never loads. This wave puts the loop's spine into the contracts, makes the telemetry truthful, and captures its own lessons as the first real `ERR-*`/`LRN-*` entries.
+
+### Added
+
+- Knowledge-loop spine in the compact contracts (`sc-work`, `sc-debug`, `sc-plan`, `sc-status`, `sc-pause`, `sc-compound`): read-back via `knowledge-search.mjs`, binding `ERR-*`/`LRN-*` rules, `/sc-compound` on the way out, `memory-maintenance.mjs report` and `/sc-evolve` in status, and the four sinks named once in the compound contract. Token-neutral: headroom came from trimming `.codex/SKILL.md` (104 to 92 tokens, shared by all 18 routes). Guarded by a spine test in `workflow-contracts.test.mjs` (adapted from compound-engineering's outcome-spine contract test).
+- `memory-maintenance.mjs report` freshness block: `docs/STATE.md` and `docs/progress.md` dates compared with the newest commit date; `STALE_STATE`/`STALE_PROGRESS` make `/sc-status` recommend `/sc-pause` first (adapted from gsd-core-next's context-drift gate).
+- `transcript-usage.mjs`: usage counted once per `message.id` (streamed transcripts inflate line sums 2.5-3x; adapted from everything-claude-code's cost-tracker) and an `assetReads` histogram of Read calls on `.agent/` contracts, workflows, and skills, carried into the runtime usage log and `npm run usage` (activation evidence; adapted from everything-claude-code's skill-stocktake).
+- Context window detection shared by `context-monitor` and `suggest-compact` (`.agent/hooks/lib/context-pressure.js`): explicit override, `[1m]` marker, known 1M families, or observed usage above 200k count as detected; otherwise the hooks report raw usage of an assumed 200k window instead of a false percentage.
+- `.agent/tools/hook-env-surface.test.mjs` plus an environment-variable table in `.agent/hooks/README.md`: a hook that reads an undocumented variable fails the suite.
+- `knowledge-search.mjs` opt-in global store: when `SC_GLOBAL_KNOWLEDGE_DIR` is set, `<dir>/LEARNED_KNOWLEDGE.md` joins the default corpus as `global:` hits; `memory-capture.md` routes `Applies to: global` entries there (adapted from gsd-core-next's global learnings store).
+- `validate-doc-claims.mjs` severity tiers: unresolvable hex is `unknown-commit` (FLAG, exit code) only when cued or backticked at commit length, otherwise `unresolved-hex` (NOTE).
+- Standards at review, not implementation: `/sc-review` and `code-review` load the applicable sections of `docs/engineering-standards.md` (or a project `CODING_STANDARDS.md`); `/sc-work` explicitly does not. Output tier (direct, chat brief, durable artifact) chosen at intake in `context-engineering`. Implementer briefs carry `Base SHA` and an optional exploration-notes pointer; wave boundaries re-check the base and degrade to sequential on divergence. Retro axes (no-op steering, tool economy, information access) as `LRN-*` triggers and `/sc-evolve` clusters. Deferred findings must land in `docs/todos/YYYY-MM-DD-<slug>.md` or `docs/STATE.md` before a completion claim.
+- First real memory entries: `ERR-2026-09-02-001`, `LRN-2026-09-02-001`, `LRN-2026-09-02-002`.
+
+### Changed
+
+- `.agent/skills/state-management/references/file-contracts.md` no longer restates the entry grammar; `.agent/skills/knowledge-compounding/references/memory-capture.md` is the single authority and `sc-compound.md` step 6 points there (the old copy lacked the `ERR-`/`LRN-` IDs the maintenance tool parses).
+- Benchmark evidence regenerated: every route still above 90%, tightest margins now `sc-debug` and `sc-pause` at 3 tokens.
+
+### Deferred
+
+- Shared-workspace wave contract (compound-engineering), interface-design upstream refresh (11 commits behind pin), skill-eval cells and compliance runners that need live host runs.
 
 ## [2026-08-20] - Cross-Framework Activation Wave
 

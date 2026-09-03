@@ -9,6 +9,7 @@
 .scratch/loop-runtime/
 .scratch/loop-runtime-v2/
 .scratch/test-fixtures/
+.scratch/baseline-*/
 **/__pycache__/
 *.pyc
 CLAUDE.local.md

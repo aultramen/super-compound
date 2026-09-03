@@ -11,8 +11,8 @@ Invoke this skill whenever you need:
 | Package compatibility info | "Drizzle ORM version requirements" |
 
 **Triggers in other skills:**
-- `sc-research.md` — Step 3 External Research: library/framework involved
-- `writing-plans` — Phase 1.2 Research Decision: high-risk API/library topic
+- `sc-research.md` — a named library or framework fact gap
+- `writing-plans` — risk routing: uncertain framework or API behavior
 - `compatibility-check` — Pre-flight: checking version docs for new dependencies
 - `architecture-enforcement` — Looking up framework-specific conventions
 

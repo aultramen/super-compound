@@ -10,6 +10,7 @@ used inside active `/sc-work`, mutation authority and verification remain there.
 
 Load first:
 
+- knowledge-search.mjs "<scope>" first; ERR-*/LRN-* hits bind.
 - `.agent/skills/agentic-delivery/references/ui-contract-readiness.md` for a
   UI-bearing PRD/FSD validation gate.
 - `.agent/context/skills/interface-design.contract.md`.
@@ -29,3 +30,4 @@ routes to `/sc-explore`, otherwise `/sc-prd`); `FSD_CHANGE_REQUIRED` when data,
 API, or technical interaction routes to `/sc-plan`; or `VERIFICATION_FINDING`
 when implementation diverges and routes to owning `/sc-work`. A new preference
 after acceptance becomes backlog/change request, not an authority mutation.
+If work remains, end with /sc-pause.

@@ -15,7 +15,7 @@ SKILLS = {
         "exit code",
     ],
     "systematic-debugging": [
-        "DO NOT attempt fixes until",
+        "Do not attempt a fix until",
         "root cause",
         "falsifiable",
         "failing test",

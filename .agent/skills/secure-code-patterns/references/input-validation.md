@@ -36,7 +36,7 @@ Database Layer             → Constraints, unique checks, foreign keys
 
 | Data Type | Validation | Max Length |
 |-----------|------------|-----------|
-| **Name** | `^[A-Za-zÀ-ÿ\s'-]+$` | 50-100 |
+| **Name** | Length bound plus Unicode letter classes (`\p{L}`); never an ASCII or Latin-1 allowlist | 100 |
 | **Email** | Use library validator (not regex) | 254 |
 | **Phone** | `^\+?[0-9\s-()]+$` | 20 |
 | **URL** | Parse and validate protocol + domain | 2048 |

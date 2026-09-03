@@ -78,6 +78,8 @@ design_system:
   page_overrides_path: "design-system/<project-slug>/pages/"
 ```
 
+Cross-project knowledge: export `SC_GLOBAL_KNOWLEDGE_DIR=<dir>` and `knowledge-search.mjs` also reads `<dir>/LEARNED_KNOWLEDGE.md`; unset, knowledge stays repository-local.
+
 ## Presets
 
 Use presets as starting points, then adapt to the actual project.

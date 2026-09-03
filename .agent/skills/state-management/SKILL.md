@@ -12,8 +12,9 @@ Keep continuation state concise enough to load quickly and precise enough that `
 1. Search before load: read `docs/STATE.md` and `.continue-here.md`, then load only artifacts explicitly needed by Next Action.
 2. Update Current Position, Next Action, active Blockers, Decisions, and Completed Work.
 3. Dedupe before appending. Mark replaced guidance `SUPERSEDED by <reference>` instead of preserving competing truths.
-4. Apply the archive gate: compact when Completed Work exceeds 20 entries, Decisions exceeds 30 entries, or `STATE.md` exceeds 300 lines; never archive active blockers or the next action.
+4. Apply the archive gate: compact when Completed Work exceeds 20 entries or Decisions exceeds 30 entries; never archive active blockers or the next action.
 5. For an active Loop Run, refresh `run_id` with `node .agent/tools/loop-run.mjs show --run <run_id>` and store only a non-authoritative pointer plus run head digest, status snapshot, last evidence, stop reason, and next transition.
+6. Who writes STATE: inside an active run, `/sc-work`, `/sc-debug`, and `/sc-launch` update the Next action through the source-write gate; every other route, and any route outside a run, hands off through `/sc-pause`, the designated STATE writer.
 
 ## When to Use
 

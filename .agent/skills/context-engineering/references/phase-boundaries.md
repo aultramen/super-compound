@@ -27,7 +27,7 @@ the moves where the surviving set is explicit (STATE, handoff, brief).
 
 ## Signals
 
-- `context-monitor` WARNING (<=35% remaining): stop opening new scope; drive to
-  the nearest boundary and choose from the table.
-- `context-monitor` CRITICAL (<=25% remaining): option 3 immediately - update
-  `docs/STATE.md` with exact Next Action, write `.continue-here.md`, stop.
+- `context-monitor` WARNING (context running low): drive to the nearest
+  boundary and choose from the table.
+- `context-monitor` CRITICAL (context nearly exhausted): option 3 - update
+  `docs/STATE.md` with the exact Next Action, write `.continue-here.md`, stop.

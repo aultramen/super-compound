@@ -1,6 +1,7 @@
 ### Next.js (App Router) — Modular
 
 ```
+prisma/                      ← Schema and migrations (repo root, Prisma default)
 src/
 ├── app/                     ← Routes & layouts (framework convention)
 │   ├── (auth)/              ← Route groups
@@ -17,8 +18,7 @@ src/
 │   ├── db/                  ← Prisma client, queries
 │   └── validators/          ← Zod schemas
 ├── hooks/
-├── types/
-└── prisma/
+└── types/
 ```
 
 **Rules:** `app/` → `components/`, `lib/`, `hooks/` · `lib/services/` NEVER imports `app/` or `components/` · `lib/db/` → `prisma/`, `types/` only

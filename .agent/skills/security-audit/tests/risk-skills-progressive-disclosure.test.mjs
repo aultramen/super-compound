@@ -15,9 +15,9 @@ const specs = {
     frontmatter:
       '---\nname: data-privacy\ndescription: "Use when processing personal data (PII), implementing consent mechanisms, or handling data subject requests. Covers GDPR, UU PDP Indonesia, and privacy-by-design principles."\n---',
     references: {
-      "privacy-by-design.md": "a68ec5518d83baea42280c20ada6537950f7616a99912812f754ceb72d4784a7",
-      "regulatory-reference.md": "6d212f93d4ada6db260089211b10f6649a5c125b6c2966334c2cef52d9304d78",
-      "implementation-patterns.md": "f024fdb7c9e8916be14b6bedb86733adbf41a041953846049726eea25ee2056a",
+      "privacy-by-design.md": "9d4f0f7852056be3b7a1decdc1578ff272fc23d7f5569e75ff4c29d06355fd8f",
+      "regulatory-reference.md": "b4ca468b5df1b0093827f3098815b0957e1a462d41496a5f0e8def166ac74c2f",
+      "implementation-patterns.md": "ffb11e436148f04e6f5df20037dd9ff247139b46f05a0d8d6327185852722657",
       "dpia-template.md": "de1cbd13a824bf1b125e8cc9402ad0dc6af29533b3263e51107d2aa50f863c67",
       "review-checklists.md": "8d7ae22cae84dc613fe386eac92f445c45a7eb6b7c74ae4136ad73937f524974",
       "red-flags.md": "28b4d6574d0c57d7e5d1661a51043138b5dac6957d70f1ffc3e39937fe9a22c8",
@@ -44,10 +44,10 @@ const specs = {
     frontmatter:
       '---\nname: secure-code-patterns\ndescription: "Use when implementing input validation, cryptography, data encryption, or secure data handling. Covers allowlist validation, context encoding, password hashing, encryption at rest\/transit, and JWT security."\n---',
     references: {
-      "input-validation.md": "c35873781f2dd84244ccdf96d9cd17e8fa46f3cb78c7974a74bb84f0251a153c",
-      "cryptography.md": "c670f72789248235a34779966dca9d74837fdd7e023d4e581762d4bf735602b6",
-      "decision-tree.md": "8c3a24572c903523de544ea6ffbf9b9a5739a3aee62fccd5048cff92b64212cf",
-      "red-flags.md": "6697e86523f3968b76f176d706af028ff352e6aa0c77e0f84b8e3542ce13322c",
+      "input-validation.md": "8ce9db41057b24acc0e9656a139c4ab8955182130d14db189b0ac8e5703fff5e",
+      "cryptography.md": "b828876eae60a2c548c7730af149fdd2dae5977a8556ca41a8fa2de7a96af240",
+      "decision-tree.md": "92a78a3781317a4efc4809313456c8421185e15b213068d0a7d9618d71ea649f",
+      "red-flags.md": "5503e5c4bd902a94ca74059f815e08d5fc615d65992c9cb3d9cda37413c18428",
     },
     headings: [
       "## Overview",
@@ -70,12 +70,12 @@ const specs = {
     frontmatter:
       '---\nname: threat-modeling\ndescription: "Use when designing features that handle sensitive data, authentication, or external integrations and need STRIDE, attack-tree, or trust-boundary analysis."\n---',
     references: {
-      "stride.md": "858f89dc292fd51dee2b3f6beeb7363071143baa7d5bff8f44db0f7f6e854311",
-      "attack-trees.md": "dccc47198c1949ca1ba5a66aad843f392c975f2aaea7b24115eab380e9054a26",
-      "trust-boundaries.md": "97ea4f18ea9951a1a4204fb986cfe92558a3f5239f70d179ed7182478b0cd3d6",
+      "stride.md": "b2a38f4eb5b8428a7722256df60c513710c48c25feafdc7dfc484465130030a4",
+      "attack-trees.md": "5a4a87a383ecbe8015b7fd3744e4a7f800cbd438b15409f66771ed977b60ed2a",
+      "trust-boundaries.md": "24f2dd2fc77fb2a7945ca240838f4418704d17cdde9fa1020a7f5a788a2414bc",
       "document-template.md": "0806ea7f979e80e0347e9351463d705290fa292d6cf445d9ec76ece283a6ef8e",
-      "process.md": "8ce636a3ca362ca80397aead9a9875e7ab5a18627c218bbeb4d094ee68ee350a",
-      "red-flags.md": "0851b8f87ecbedf5ae9886a8c3ce8b348edabcf20c0686c40b8b6791b4698b83",
+      "process.md": "7b18d63bc86626e0b90e77d680b33ae531ae245becca0bcff67eb9298690c0a2",
+      "red-flags.md": "df55923b8b78ffec29c5f17567d27faba6a0df05b2ee0bd25b2176dcde315ba0",
     },
     headings: [
       "## Overview",
@@ -100,7 +100,7 @@ const specs = {
     frontmatter:
       '---\nname: security-audit\ndescription: "Use when auditing code for security vulnerabilities, reviewing auth flows, checking OWASP Top 10 risks, validating secrets handling, or assessing dependency and agent-surface security."\n---',
     references: {
-      "owasp.md": "8475ced508efbc56eda0a9b26f3fbd99a83a72ce903e09f976121d873fe244f0",
+      "owasp.md": "179da9dc1d6adffa09ce4882e876b00821d66d8e3bf43d603f0ae7581d620647",
       "secrets.md": "3d60df1bf26c6c69976e1958f76e31e42aac3e8b6f6123c7181d6b057a42a829",
       "supply-chain.md": "d15ac415a557856a0e4c5da305bdd77edffb7440461c96852edca0c1e83b30c8",
       "agent-surface.md": "ce7c233651c026dd36e4ba488eec19c95a117b1c8828de563fa7f8cdbddd9877",

@@ -1,7 +1,6 @@
-# /sc-work Runtime Contract
-
 Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
 
+Start from docs/STATE.md Next action.
 Execute one approved FSD goal or `.scratch/<feature>/issues/` pointer. The Budget
 & Stop Wizard requires fresh human confirmation at every `START`/`RESUME`.
 Output/context token budget is separate from the Loop Run resource budget.
@@ -14,6 +13,7 @@ Load only:
 
 - The issue or exact FSD `GOAL-*`, referenced authority, target files, and tests.
 - `.agent/context/skills/sc-work.contract.md`.
+- `node .agent/tools/knowledge-search.mjs "<goal>"` hits; a matching ERR-*/LRN-* rule is binding.
 - `.agent/context/skills/git-workflow-operation.contract.md` only when needed.
 
 Before edit/execution, require `ready-for-agent` and every `Blocked by` dependency
@@ -31,3 +31,5 @@ writer, and isolated worktrees.
 
 Block protected-base edits. Run mapped verification before completion; bounded
 `HARDENING` covers required integration/UI evidence and UAT approval.
+Route non-obvious fixes, agent mistakes, or new conventions to `/sc-compound` before closing.
+Close: docs/STATE.md Next action via source-write gate, else /sc-pause.

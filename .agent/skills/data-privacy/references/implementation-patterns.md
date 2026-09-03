@@ -63,14 +63,8 @@ For each data category, define:
 ├─ Legal hold exception (litigation, regulatory)
 └─ Automated enforcement (cron job / scheduled task)
 
-Common retention periods:
-├─ Active user accounts: While active + 30 days
-├─ Inactive accounts: 2 years after last login
-├─ Transaction records: 7 years (tax/legal)
-├─ Audit logs: 1-3 years
-├─ Marketing consent: Until withdrawn
-├─ Support tickets: 3 years after resolution
-└─ Cookies: Max 13 months (ePrivacy)
+Retention periods: set each category from the applicable regulator's current
+guidance and record the source and date next to the value.
 ```
 
 ### Anonymization & Pseudonymization

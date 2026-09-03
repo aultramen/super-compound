@@ -26,9 +26,9 @@ finding. Review never uses that gate to apply a fix.
 2. Identify review scope: current diff, branch, files, or user-specified target.
 3. Identify the spec source: user request, BRD, PRD, FSD, goal issue pointer, linked accepted ADR, or acceptance criteria.
 4. Review the spec axis first: missing behavior, incorrect behavior, or scope creep.
-5. Review the standards axis: security, architecture, tests, maintainability, performance, and docs.
+5. Review the standards axis: security, architecture, tests, maintainability, performance, and docs. Load only the applicable sections of `docs/engineering-standards.md`, or the project's `CODING_STANDARDS.md` when one exists; standards are enforced here, not during implementation, so implementation context stays small.
 6. For PR readiness, load `skills/git-workflow-operation/SKILL.md` and review the PR checklist/template, but do not commit or push unless routed through `/sc-go`.
-7. Verify claims when practical.
+7. Verify each claim against the diff or a command result; name the claims that could not be verified and why.
 8. If complete evidence exceeds the chat envelope, save it to
    `docs/reviews/YYYY-MM-DD-<scope>.md` and return the path; never omit a
    finding to satisfy an output cap. Then run
@@ -48,4 +48,5 @@ finding. Review never uses that gate to apply a fix.
 - File/line references where available.
 - Open questions and residual test gaps.
 - Exact next owner for every actionable finding.
+- Deferred findings with their owner and durable sink (`docs/todos/YYYY-MM-DD-<slug>.md` or `docs/STATE.md` Deferred Ideas); nothing is parked silently.
 - The durable review report follows `.agent/context/output-style.md`.

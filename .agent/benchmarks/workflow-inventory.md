@@ -41,10 +41,12 @@ contracts. Runtime reasoning and generated output remain explicitly unevaluated.
 - The aggregate total is a scenario workload and may count a file more than
   once. It is labeled scenario-weighted; use per-scenario and stage-minimum
   reductions for decisions.
-- A pass requires every reduction scenario to improve by more than 90%, every
-  startup profile to stay within its absolute budget, three repeated runs to
-  match exactly, each modeled stage to pass, and all smart-zone checks to remain
-  intact.
+- A pass requires every startup profile and every `/sc-*` route to stay within
+  its absolute after-token budget (`.agent/context/token-budget-gates.md`),
+  every hotspot reduction scenario to improve by more than 90% against the
+  frozen baseline, three repeated runs to match exactly, each modeled stage to
+  pass, and all smart-zone checks to remain intact. Route reduction percentages
+  stay recorded for information.
 - Smaller context is not allowed to remove artifact authority, `OPEN-*` stop
   conditions, verification mapping, preview-first Git, or search-backed UI
   guidance.
@@ -54,7 +56,6 @@ contracts. Runtime reasoning and generated output remain explicitly unevaluated.
 ```bash
 node .agent/tools/token-benchmark.mjs \
   --baseline .agent/benchmarks/token-baseline.before.json \
-  --require-reduction 90 \
   --repeat 3 \
   --output .agent/benchmarks/token-benchmark.after.json
 

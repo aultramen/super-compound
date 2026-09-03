@@ -80,7 +80,8 @@ function sampleStaticEvidence() {
     scenarios: scenarios.map(({ name, stage }, index) => ({
       name,
       stage,
-      gateType: "reduction",
+      gateType: "budget",
+      maxAfterTokens: 100,
       before: { tokens: 1_000 + index },
       after: {
         tokens: 50,
@@ -456,6 +457,7 @@ test("evaluateScenarios enforces absolute startup token budgets", async () => {
       before: ["startup/AGENTS.md"],
       after: ["startup/AGENTS.md"],
       maxAfterTokens: 25,
+      liveBefore: true,
     };
 
     const passing = await evaluateScenarios(root, [scenario], {}, 90);
@@ -468,9 +470,69 @@ test("evaluateScenarios enforces absolute startup token budgets", async () => {
 
     assert.equal(passing.scenarios[0].gateType, "budget");
     assert.equal(passing.scenarios[0].pass, true);
+    assert.equal(passing.scenarios[0].reductionPercent, null);
     assert.equal(failing.scenarios[0].pass, false);
     assert.equal(passing.summary.budgetScenarioCount, 1);
     assert.equal(passing.summary.reductionScenarioCount, 0);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("a route budget gate keeps its baseline reduction as information", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "token-benchmark-"));
+
+  try {
+    await mkdir(path.join(root, "route"), { recursive: true });
+    await writeFile(path.join(root, "route", "contract.md"), "word ".repeat(50));
+    const scenario = {
+      name: "route-test",
+      stage: "process",
+      before: ["route/contract.md"],
+      after: ["route/contract.md"],
+      maxAfterTokens: 60,
+    };
+    const baseline = {
+      scenarios: {
+        "route-test": {
+          tokens: 100,
+          chars: 500,
+          bytes: 500,
+          fileCount: 1,
+          files: ["route/contract.md"],
+          contentDigest: "0".repeat(64),
+        },
+      },
+    };
+
+    const result = await evaluateScenarios(root, [scenario], baseline, 90);
+    const [row] = result.scenarios;
+    assert.equal(row.gateType, "budget");
+    assert.equal(row.maxAfterTokens, 60);
+    assert.equal(row.before.tokens, 100);
+    assert.equal(row.reductionPercent, 50);
+    assert.equal(row.pass, true, "50% reduction passes because the budget, not the ratio, gates");
+    assert.equal(result.summary.budgetScenarioCount, 1);
+    assert.equal(result.summary.reductionScenarioCount, 0);
+    assert.equal(result.summary.minimumReductionPercent, 50);
+    assert.equal(result.summary.stages.process.minimumReductionPercent, 50);
+
+    const report = buildBenchmarkReport([result], {
+      baselineDigest: "1".repeat(64),
+      suiteDefinitionDigest: "2".repeat(64),
+    });
+    assert.deepEqual(report.result.scenarios[0], {
+      name: "route-test",
+      stage: "process",
+      beforeTokens: 100,
+      afterTokens: 50,
+      pass: true,
+      afterDigest: row.after.contentDigest,
+      gateType: "budget",
+      maxAfterTokens: 60,
+      reductionPercent: 50,
+    });
+    assert.match(formatTable(result), /route-test.*50\.00%.*<=60.*PASS/);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -588,7 +650,7 @@ test("historical baseline is complete and reproducible from Git blobs", async ()
   );
 
   assert.equal(result.pass, true);
-  assert.equal(result.reductionScenarioCount, 32);
+  assert.equal(result.baselineScenarioCount, 32);
   assert.ok(Number.isFinite(Date.parse(baseline.assembledAt)));
   assert.equal(baseline.generatedAt, undefined);
   assert.equal(

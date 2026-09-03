@@ -8,7 +8,7 @@ existing PRD, FSD, goal-pointer, implementation, and verification authorities.
 
 Set `ui_delivery_profile` for every scope:
 
-- `NOT_APPLICABLE`: no interactive end-user surface. The UI score and gates are
+- `NOT_APPLICABLE`: no interactive end-user surface. The UI hard gates are
   skipped with a reason and approver.
 - `STANDARD`: canonical page, form, or CRUD interaction. Wireframe, static, or
   clickable evidence may be sufficient when it resolves the material risk.
@@ -78,24 +78,12 @@ issue-board dependency graph.
 If FSD semantics and the machine contract conflict, create a blocking `OPEN-*`;
 do not silently select one.
 
-## Readiness Score
-
-Minimum score is 90/100. `N/A` earns points only with a reason and approver.
-`NOT_APPLICABLE` skips the score. A score never compensates for a hard-gate
-failure.
-
-| Area | Allocation |
-|---|---|
-| Product flow/state (25) | journey + AC 5; state applicability 10; permission/recovery 5; baseline approval 5 |
-| Interaction/responsive/a11y (20) | actions/transitions 5; responsive 5; accessibility 5; risk-appropriate evidence 5 |
-| UI-data-API mapping (20) | visible/editable data 5; actions to operations 5; outcomes to states 5; null/empty/redaction/concurrency semantics 5 |
-| Executable contract (15) | pinned schema 3; deterministic fixtures 3; matching mock 3; typed consumer/equivalent 3; provider + consumer tests 3 |
-| Traceability (10) | AC to tests 5; journey/state to tests 5 |
-| Governance (10) | ownership/approval 3; version/change policy 3; no blocking `OPEN-*` 4 |
-
 ## Hard Gates
 
-All must pass for `READY_FOR_SLICE`:
+`READY_FOR_SLICE` is binary: `node .agent/tools/readiness-gate.mjs --fsd <fsd>
+--prd <prd> --issues-dir <dir>` must exit 0. `N/A` counts only with a reason
+and approver; `NOT_APPLICABLE` skips the gates with a reason and approver. All
+must pass:
 
 1. Experience baseline is `VALIDATED` or `EXCEPTION_APPROVED`.
 2. Every critical state is covered or approved `N/A`.
@@ -136,7 +124,7 @@ UI delivery roles and gates are:
 it creates a `CONTRACT_ENABLER` goal. An FSD with readiness `DRAFT` or `BLOCKED`
 may be approved only to make that bounded enabler ready; first-slice and
 scale-out issues remain blocked. After the enabler is verified, return to
-`/sc-plan`, update the FSD index, rerun score/hard gates, and obtain Technical
+`/sc-plan`, update the FSD index, rerun the readiness gate, and obtain Technical
 Manager approval for the updated contract. Only
 `READY_FOR_SLICE` releases exactly one active `FIRST_VERTICAL_SLICE` for the
 critical/highest-risk flow. Every `SCALE_OUT_SLICE` depends on the verified
@@ -212,5 +200,4 @@ New artifacts, not-started UI goals, and changed contracts use these gates.
 Completed/verified goals are not rewritten or revalidated retroactively as
 historical work; the contract-revision rule above controls whether their proof
 can release new dependents. In-flight UI goals receive a targeted readiness
-supplement, not a full rewrite. Artifact contract 1.0 remains readable; no
-automatic project migration is performed.
+supplement, not a full rewrite.

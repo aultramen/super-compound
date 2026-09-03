@@ -28,6 +28,7 @@ NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 3. Read all relevant output, the exit code, and failure counts.
 4. Compare the evidence with the claim and requirements.
 5. If it fails or is incomplete, report actual status and gaps. Otherwise cite the evidence with the claim.
+6. Park nothing silently: an accepted-but-deferred finding lands in `docs/todos/YYYY-MM-DD-<slug>.md` (`todo-management`) or `docs/STATE.md` Deferred Ideas before the completion claim.
 
 No executable proof available? Use an explicit requirement checklist and direct artifact inspection; disclose residual uncertainty. Never convert missing evidence into success wording.
 

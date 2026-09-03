@@ -54,6 +54,7 @@ const STARTUP_BUDGET_SCENARIOS = [
     before: ["AGENTS.md"],
     after: ["AGENTS.md"],
     maxAfterTokens: 2000,
+    liveBefore: true,
   },
   {
     name: "startup-claude-repository",
@@ -62,6 +63,7 @@ const STARTUP_BUDGET_SCENARIOS = [
     before: ["CLAUDE.md", "AGENTS.md", ".claude/rules/*.md"],
     after: ["CLAUDE.md", "AGENTS.md", ".claude/rules/*.md"],
     maxAfterTokens: 3000,
+    liveBefore: true,
   },
   {
     name: "startup-antigravity-rules",
@@ -69,6 +71,7 @@ const STARTUP_BUDGET_SCENARIOS = [
     before: [".agent/rules/*.md"],
     after: [".agent/rules/*.md"],
     maxAfterTokens: 2750,
+    liveBefore: true,
   },
   {
     name: "startup-codex-adapter-metadata",
@@ -77,6 +80,7 @@ const STARTUP_BUDGET_SCENARIOS = [
     after: [".codex/SKILL.md"],
     measure: "skill-metadata",
     maxAfterTokens: 200,
+    liveBefore: true,
   },
   {
     name: "startup-installed-skill-metadata",
@@ -86,12 +90,14 @@ const STARTUP_BUDGET_SCENARIOS = [
     after: [".agent/skills/**/SKILL.md"],
     measure: "skill-metadata",
     maxAfterTokens: 2500,
+    liveBefore: true,
   },
 ];
 
 const WORKFLOW_SCENARIOS = [
   {
     name: "sc-init",
+    maxAfterTokens: 217,
     description: "/sc-init project scan and config orientation.",
     before: [
       ".agent/rules/project-config.md",
@@ -103,6 +109,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-status",
+    maxAfterTokens: 274,
     description: "/sc-status handoff, state, issue dashboard, and route selection.",
     before: [
       ".agent/workflows/sc-status.md",
@@ -113,6 +120,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-geniusloop",
+    maxAfterTokens: 512,
     description: "/sc-geniusloop proactive improvement ideation and Brain filtering.",
     before: [
       ".agent/workflows/sc-geniusloop.md",
@@ -129,6 +137,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-explore",
+    maxAfterTokens: 806,
     description: "/sc-explore BRD exploration and open-decision capture.",
     before: [
       ".agent/workflows/sc-explore.md",
@@ -146,6 +155,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-research",
+    maxAfterTokens: 269,
     description: "/sc-research local and official-doc evidence gathering.",
     before: [
       ".agent/workflows/sc-research.md",
@@ -156,6 +166,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-prd",
+    maxAfterTokens: 837,
     description: "/sc-prd PRD generation from approved BRD.",
     before: [
       ".agent/workflows/sc-prd.md",
@@ -172,6 +183,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-plan",
+    maxAfterTokens: 2893,
     description: "/sc-plan FSD planning and issue pointer routing.",
     before: [
       ".agent/rules/super-compound.md",
@@ -198,6 +210,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-eval",
+    maxAfterTokens: 225,
     description: "/sc-eval measurable pass/fail criteria and eval runs.",
     before: [
       ".agent/workflows/sc-eval.md",
@@ -207,6 +220,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-go",
+    maxAfterTokens: 599,
     description: "/sc-go preview-first Git branch, worktree, commit, push, and PR operations.",
     before: [
       ".agent/workflows/sc-go.md",
@@ -221,6 +235,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-work",
+    maxAfterTokens: 1207,
     description: "/sc-work goal execution with focused context.",
     before: [
       ".agent/rules/super-compound.md",
@@ -242,6 +257,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-debug",
+    maxAfterTokens: 288,
     description: "/sc-debug reproduce, root cause, fix, and verify.",
     before: [
       ".agent/workflows/sc-debug.md",
@@ -251,6 +267,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-review",
+    maxAfterTokens: 261,
     description: "/sc-review findings-first review.",
     before: [
       ".agent/workflows/sc-review.md",
@@ -260,6 +277,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-audit",
+    maxAfterTokens: 335,
     description: "/sc-audit security, compatibility, compliance, and readiness audit.",
     before: [
       ".agent/workflows/sc-audit.md",
@@ -273,6 +291,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-compound",
+    maxAfterTokens: 266,
     description: "/sc-compound reusable knowledge capture.",
     before: [
       ".agent/workflows/sc-compound.md",
@@ -282,6 +301,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-evolve",
+    maxAfterTokens: 234,
     description: "/sc-evolve draft framework proposal clustering.",
     // sc-evolve is a new route; no recorded baseline commit contains its
     // dedicated workflow file, so its pre-compaction surface uses the
@@ -295,6 +315,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-pause",
+    maxAfterTokens: 249,
     description: "/sc-pause durable handoff before stopping.",
     before: [
       ".agent/workflows/sc-pause.md",
@@ -305,6 +326,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-launch",
+    maxAfterTokens: 1154,
     description: "/sc-launch complete lifecycle routing.",
     before: [
       ".agent/workflows/*.md",
@@ -327,6 +349,7 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-ui",
+    maxAfterTokens: 2149,
     description: "/sc-ui interface-design search-only guidance.",
     before: [
       ".agent/rules/super-compound.md",
@@ -663,12 +686,17 @@ async function countScenarioSurface(root, scenario, side) {
   });
 }
 
+// A scenario has a frozen baseline `before` unless it measures its own surface
+// live (`liveBefore`). Route scenarios keep their baseline even though their
+// gate is an absolute after-token budget, so the reduction stays reported.
+export function hasBaseline(scenario) {
+  return scenario.liveBefore !== true;
+}
+
 export async function createBaseline(root, scenarios = DEFAULT_SCENARIOS) {
   const baseline = {};
 
-  for (const scenario of scenarios.filter(
-    (candidate) => !Number.isFinite(candidate.maxAfterTokens),
-  )) {
+  for (const scenario of scenarios.filter(hasBaseline)) {
     baseline[scenario.name] = await countScenarioSurface(
       root,
       scenario,
@@ -688,7 +716,7 @@ export async function createBaseline(root, scenarios = DEFAULT_SCENARIOS) {
 
 export function digestScenarioDefinitions(scenarios) {
   const definitions = scenarios
-    .filter((scenario) => !Number.isFinite(scenario.maxAfterTokens))
+    .filter(hasBaseline)
     .map(({ name, before }) => ({ name, before }));
   return createHash("sha256").update(JSON.stringify(definitions)).digest("hex");
 }
@@ -714,9 +742,7 @@ function baselineScenariosOf(baseline) {
 }
 
 function validateBaselineEntries(scenarios, baseline) {
-  const expected = scenarios.filter(
-    (scenario) => !Number.isFinite(scenario.maxAfterTokens),
-  );
+  const expected = scenarios.filter(hasBaseline);
   const entries = baselineScenariosOf(baseline);
   if (!entries || typeof entries !== "object" || Array.isArray(entries)) {
     throw new Error("Invalid baseline: scenarios object is required");
@@ -934,9 +960,7 @@ export async function validateBaselineProvenance(
     throw new Error("Invalid baseline provenance: assembledAt is required");
   }
   const entries = validateBaselineEntries(scenarios, baseline);
-  const reductionScenarios = scenarios.filter(
-    (scenario) => !Number.isFinite(scenario.maxAfterTokens),
-  );
+  const reductionScenarios = scenarios.filter(hasBaseline);
   const defaultCommit = baseline.provenance.defaultSourceCommit;
   const overrides = baseline.provenance.scenarioSourceCommits ?? {};
   const overrideRationales = baseline.provenance.scenarioSourceRationales ?? {};
@@ -1009,7 +1033,7 @@ export async function validateBaselineProvenance(
   const rawText = options.rawText ?? `${JSON.stringify(baseline, null, 2)}\n`;
   return {
     pass: true,
-    reductionScenarioCount: reductionScenarios.length,
+    baselineScenarioCount: reductionScenarios.length,
     baselineDigest: createHash("sha256").update(rawText).digest("hex"),
     sourceContentDigest,
   };
@@ -1025,9 +1049,7 @@ export async function createGitBaseline(
   }
   await assertGitCommitProvenance(root, sourceCommit);
   const allFiles = await listGitFiles(root, sourceCommit);
-  const reductionScenarios = scenarios.filter(
-    (scenario) => !Number.isFinite(scenario.maxAfterTokens),
-  );
+  const reductionScenarios = scenarios.filter(hasBaseline);
   const filesByScenario = new Map();
   const specs = new Set();
   for (const scenario of reductionScenarios) {
@@ -1080,12 +1102,16 @@ export async function evaluateScenarios(
   const results = [];
 
   for (const scenario of scenarios) {
+    // Gate type and baseline membership are independent: a route is a budget
+    // gate (absolute after-token cap) that still reports its reduction against
+    // the frozen baseline; startup surfaces are budget gates measured live.
     const isBudget = Number.isFinite(scenario.maxAfterTokens);
-    const before = isBudget
-      ? await countScenarioSurface(root, scenario, "before")
-      : baselineScenarios[scenario.name];
+    const measured = hasBaseline(scenario);
+    const before = measured
+      ? baselineScenarios[scenario.name]
+      : await countScenarioSurface(root, scenario, "before");
     const after = await countScenarioSurface(root, scenario, "after");
-    const reductionPercent = isBudget
+    const reductionPercent = !measured
       ? null
       : before.tokens === 0
         ? 0
@@ -1106,16 +1132,21 @@ export async function evaluateScenarios(
     });
   }
 
+  // Reduction totals are informational and cover every baseline-backed row;
+  // the counts follow the gate type.
   const reductionResults = results.filter(
     (result) => result.gateType === "reduction",
   );
   const budgetResults = results.filter((result) => result.gateType === "budget");
+  const measuredResults = results.filter(
+    (result) => result.reductionPercent !== null,
+  );
   const totalBeforeTokens = sum(
-    reductionResults,
+    measuredResults,
     (result) => result.before.tokens,
   );
   const totalAfterTokens = sum(
-    reductionResults,
+    measuredResults,
     (result) => result.after.tokens,
   );
 
@@ -1124,7 +1155,7 @@ export async function evaluateScenarios(
     stageNames.map((stage) => {
       const stageResults = results.filter((result) => result.stage === stage);
       const stageReductions = stageResults.filter(
-        (result) => result.gateType === "reduction",
+        (result) => result.reductionPercent !== null,
       );
       const stageBudgets = stageResults.filter(
         (result) => result.gateType === "budget",
@@ -1139,7 +1170,9 @@ export async function evaluateScenarios(
         stage,
         {
           pass: stageResults.length > 0 && stageResults.every((result) => result.pass),
-          reductionScenarioCount: stageReductions.length,
+          reductionScenarioCount: stageResults.filter(
+            (result) => result.gateType === "reduction",
+          ).length,
           budgetScenarioCount: stageBudgets.length,
           totalBeforeTokens: beforeTokens,
           totalAfterTokens: afterTokens,
@@ -1164,9 +1197,9 @@ export async function evaluateScenarios(
       totalAfterTokens,
       totalReductionPercent: reduction(totalBeforeTokens, totalAfterTokens),
       minimumReductionPercent:
-        reductionResults.length === 0
+        measuredResults.length === 0
           ? null
-          : Math.min(...reductionResults.map((result) => result.reductionPercent)),
+          : Math.min(...measuredResults.map((result) => result.reductionPercent)),
       aggregation: "scenario-weighted",
       stages,
     },
@@ -1276,7 +1309,8 @@ function compactBenchmarkResult(result) {
       if (scenario.gateType === "budget") {
         compact.gateType = "budget";
         compact.maxAfterTokens = scenario.maxAfterTokens;
-      } else {
+      }
+      if (scenario.reductionPercent !== null && scenario.reductionPercent !== undefined) {
         compact.reductionPercent = Number(
           scenario.reductionPercent.toFixed(4),
         );
@@ -1516,22 +1550,28 @@ export function formatTable(result, runLabel = "") {
       "Stage".padEnd(7),
       "Before".padStart(8),
       "After".padStart(8),
+      "Reduct.".padStart(8),
       "Gate".padStart(9),
       "Result".padStart(7),
     ].join("  "),
   );
 
   for (const scenario of result.scenarios) {
+    const reduct =
+      scenario.reductionPercent === null || scenario.reductionPercent === undefined
+        ? "n/a"
+        : `${scenario.reductionPercent.toFixed(2)}%`;
     const gate =
       scenario.gateType === "budget"
         ? `<=${scenario.maxAfterTokens}`
-        : `${scenario.reductionPercent.toFixed(2)}%`;
+        : `>${result.threshold}%`;
     lines.push(
       [
         scenario.name.padEnd(34),
         String(scenario.stage ?? "process").padEnd(7),
         String(scenario.before.tokens).padStart(8),
         String(scenario.after.tokens).padStart(8),
+        reduct.padStart(8),
         gate.padStart(9),
         (scenario.pass ? "PASS" : "FAIL").padStart(7),
       ].join("  "),
@@ -1565,19 +1605,23 @@ export function formatTable(result, runLabel = "") {
 function usage() {
   return `Usage:
   node .agent/tools/token-benchmark.mjs --write-baseline .agent/benchmarks/token-baseline.json --source-commit <full-sha>
-  node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.json --require-reduction 90 --repeat 3
+  node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.json --repeat 3
 
 Default suite:
   legacy eager-preload reduction, real repository-owned startup budgets for
-  Codex/Claude/Antigravity, all 18 public workflows, artifact surfaces, skills,
-  templates, interface-design data/scripts, hooks, agents, workflows, and rules.
+  Codex/Claude/Antigravity, all 18 public workflows (absolute after-token
+  budgets; reduction against the frozen baseline is reported, not gated),
+  artifact surfaces, skills, templates, interface-design data/scripts, hooks,
+  agents, workflows, and rules.
 
 Options:
   --write-baseline <path>     Capture reduction surfaces from an immutable commit.
   --source-commit <full-sha>  Anchor a written baseline to immutable Git blobs.
   --baseline <path>           Compare optimized after surfaces against a baseline.
   --output <path>             Write compare result JSON.
-  --require-reduction <n>     Required strict reduction percentage. Default: 90.
+  --require-reduction <n>     Strict reduction percentage for hotspot and legacy
+                              reduction gates; routes and startup surfaces use
+                              absolute budgets. Default: 90.
   --repeat <n>                Run compare mode repeatedly. Default: 1.
   --transcript <jsonl>        Attach observed main/subagent runtime token totals.
   --json                      Print JSON instead of a table.
@@ -1604,7 +1648,7 @@ async function main() {
     );
     await writeJson(root, options.writeBaseline, baseline);
     console.log(
-      `Wrote Git-anchored baseline (${Object.keys(baseline.scenarios).length} reduction scenarios): ${options.writeBaseline}`,
+      `Wrote Git-anchored baseline (${Object.keys(baseline.scenarios).length} baseline scenarios): ${options.writeBaseline}`,
     );
     return;
   }

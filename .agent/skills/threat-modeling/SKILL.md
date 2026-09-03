@@ -7,7 +7,7 @@ description: "Use when designing features that handle sensitive data, authentica
 
 ## Overview
 
-Identify threats before they become vulnerabilities. Threats found during design cost 10x less to fix than threats found in production. Model assets, actors, data flows, and trust boundaries before writing sensitive, authentication, or integration code.
+Identify threats before they become vulnerabilities. Model assets, actors, data flows, and trust boundaries before writing sensitive, authentication, or integration code.
 
 **Announce:** "I'm using the threat-modeling skill to identify security threats in this design."
 

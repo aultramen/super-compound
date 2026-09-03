@@ -25,7 +25,7 @@ For UI-bearing scope, load the canonical
 `agentic-delivery/references/ui-contract-readiness.md` policy and verify:
 
 - The PRD experience baseline and FSD Screen & Interaction Contract are current.
-- Readiness is at least 90 and every hard gate passes; `N/A` has reason/approver.
+- `node .agent/tools/readiness-gate.mjs` exits 0: every hard gate passes; `N/A` has reason/approver.
 - Every visible/editable datum and network action maps through `UIMAP-*` to an
   operation, schema, outcome/error, named state, deterministic fixture, and test.
 - Schema, fixture, mock, and typed-consumer revisions are pinned and consistent.

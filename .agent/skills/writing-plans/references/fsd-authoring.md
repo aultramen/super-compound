@@ -25,7 +25,7 @@ Run only branches supported by a signal:
 | PII, consent, retention, deletion, export, sharing | `data-privacy` and negative acceptance cases |
 | Compliance or AI governance | Evidence path, owner, retention, review gate |
 | Frontend/UI | Existing design system or targeted `interface-design` retrieval |
-| UI-bearing delivery | `agentic-delivery/references/ui-contract-readiness.md`; PRD baseline, Section 8 contract, readiness score/hard gates |
+| UI-bearing delivery | `agentic-delivery/references/ui-contract-readiness.md`; PRD baseline, Section 8 contract, readiness hard gates (`readiness-gate.mjs`) |
 | Domain or module-seam ambiguity | `domain-modeling` or `codebase-design` |
 | Missing product/architecture authority | Return to `/sc-explore` or `/sc-prd`, or record a blocking `OPEN-*` |
 

@@ -15,8 +15,8 @@ Use this when approved business requirements need to become product behavior bef
 5. Use `skills/domain-modeling/SKILL.md` in advisory read-only mode when user stories need vocabulary alignment; persist glossary updates only through an explicitly authorized owner.
 6. Use `skills/codebase-design/SKILL.md` only when product requirements need a known test seam or interface constraint to be reliable.
 7. Define users, observable behavior, feature scope, non-goals, user stories, functional requirements, acceptance criteria, edge cases, negative behavior, and product-level security/privacy/compliance requirements.
-8. Set `ui_delivery_profile` in this order: `NOT_APPLICABLE`, `STANDARD`, or
-   `HIGH_INTERACTION`. Set `experience_baseline_status` in this order:
+8. Set `ui_delivery_profile` to `NOT_APPLICABLE`, `STANDARD`, or
+   `HIGH_INTERACTION`. Set `experience_baseline_status` to
    `DRAFT`, `VALIDATED`, or `EXCEPTION_APPROVED` (or `NOT_APPLICABLE` for a
    non-interactive surface). If UI is detected but unclassified, use `STANDARD`.
 9. For `STANDARD` or `HIGH_INTERACTION`, route the PRD draft through `/sc-ui`
@@ -33,6 +33,7 @@ Use this when approved business requirements need to become product behavior bef
 14. A chat draft is allowed while requirements are being shaped. Before approval and `/sc-plan`, save the PRD to `docs/prd/prd-<feature>.md` using `.agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md` first and the full template only as a reference.
 15. Route to `sc-plan.md` only after the durable PRD is approved with baseline
     `VALIDATED`, `EXCEPTION_APPROVED`, or `NOT_APPLICABLE`.
+16. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
 
 ## Output
 

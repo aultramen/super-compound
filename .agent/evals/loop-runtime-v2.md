@@ -21,7 +21,7 @@
 
 | ID | Protected behavior | Grader | Baseline |
 |---|---|---|---|
-| EVAL-REG-001 | Exact 17 public routes and no `/loop` | Workflow contract tests | Git SHA above |
+| EVAL-REG-001 | Exact 18 public routes and no `/loop` | Workflow contract tests | Git SHA above |
 | EVAL-REG-002 | Compact/full authority and evidence contracts | Evidence/framework audit tests | Git SHA above |
 | EVAL-REG-003 | Work-package integrity | Work-package tests | Git SHA above plus v2 transition requirements |
 | EVAL-REG-004 | Hook security and bounded advisory behavior | Hook security tests | Git SHA above |
