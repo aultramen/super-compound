@@ -14,6 +14,7 @@ entries to `docs/archive/ERROR_ARCHIVE.md`. Archive, never delete.
 | ID | Category | Prevention rule (IF-THEN) |
 | --- | --- | --- |
 <!-- newest first; one row per entry below -->
+| ERR-2026-09-03-001 | verification output filtered | IF verifying a compound npm script THEN assert its exit code, never a grepped subset of its output |
 | ERR-2026-09-02-001 | skill router word cap | IF editing a SKILL.md router THEN run `wc -w` first and stay under 500 words |
 
 ---
@@ -24,6 +25,13 @@ entries to `docs/archive/ERROR_ARCHIVE.md`. Archive, never delete.
 - Correct approach: merged the rule into an existing bullet and trimmed three lines.
 - Prevention: IF editing a SKILL.md router THEN run `wc -w` first and stay under 500 words.
 - Files: .agent/skills/context-engineering/SKILL.md
+
+## ERR-2026-09-03-001 - verification output filtered
+- Symptom: CI failed `npm run test:python` on PR #14 (`skill router contract: FAIL - systematic-debugging: missing critical marker 'DO NOT attempt fixes until'`) after the local run had been reported green.
+- Root cause: the local check piped the script through `grep -E '^(OK|FAILED)'`, which kept the unittest `OK` line and dropped the second script's FAIL line; the exit code was never checked.
+- Correct approach: ran the script unfiltered, moved the pinned marker to the router's current wording (`Do not attempt a fix until`), and asserted the exit code.
+- Prevention: IF verifying a compound npm script THEN assert its exit code, never a grepped subset of its output.
+- Files: .agent/skills/verification-before-completion/tests/test_skill_router_contract.py, .agent/skills/systematic-debugging/SKILL.md
 
 <!-- Entry format (append below, newest last):
 
