@@ -156,21 +156,30 @@ export async function analyzeTranscript(filePath, options = {}) {
 const ASSET_ROOT = ".agent/";
 const MAX_ASSET_KEYS = 200;
 
+const FRAMEWORK_PATH_IN_COMMAND = /(?:^|[\s"'=(])((?:[^\s"'()]*\/)?\.agent\/[^\s"'()]+)/u;
+
 /**
- * Count Read tool calls on repository-owned framework assets. This is the
- * activation evidence the static benchmark cannot supply: which contracts,
- * workflows, and skills a session actually loaded. Streamed lines repeat the
- * same tool_use block, so each tool_use id is counted once.
+ * Count Read calls on repository-owned framework assets and Bash calls that
+ * touch one (`node .agent/tools/<name>.mjs`, `cat .agent/context/...`). This
+ * is the activation evidence the static benchmark cannot supply: which
+ * contracts, workflows, skills, and tools a session actually used. Streamed
+ * lines repeat the same tool_use block, so each tool_use id is counted once.
+ * Only the first `.agent/` path is kept from a Bash command, reduced through
+ * `assetKey`; the command text never leaves the machine.
  */
 function recordAssetReads(content, counts, seenToolUseIds) {
   if (!Array.isArray(content)) return;
   for (const block of content) {
-    if (!block || block.type !== "tool_use" || block.name !== "Read") continue;
+    if (!block || block.type !== "tool_use") continue;
+    if (block.name !== "Read" && block.name !== "Bash") continue;
     if (typeof block.id === "string" && block.id) {
       if (seenToolUseIds.has(block.id)) continue;
       seenToolUseIds.add(block.id);
     }
-    const key = assetKey(block.input?.file_path);
+    const key =
+      block.name === "Read"
+        ? assetKey(block.input?.file_path)
+        : frameworkToolKey(block.input?.command);
     if (!key) continue;
     if (!counts.has(key) && counts.size >= MAX_ASSET_KEYS) continue;
     counts.set(key, (counts.get(key) ?? 0) + 1);
@@ -199,6 +208,12 @@ export function assetKey(filePath) {
       : parts.slice(0, 3).join("/");
   }
   return parts.length > 4 ? parts.slice(0, 4).join("/") : rel;
+}
+
+function frameworkToolKey(command) {
+  if (typeof command !== "string") return null;
+  const match = FRAMEWORK_PATH_IN_COMMAND.exec(command);
+  return match ? assetKey(match[1].replace(/[;,:]+$/u, "")) : null;
 }
 
 function finalizeAssetReads(counts) {

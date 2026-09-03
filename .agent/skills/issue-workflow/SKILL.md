@@ -36,7 +36,7 @@ Load the process while creating or revising a board. Load status details only wh
 - **Skeleton gate:** Create each pointer from `.agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md`. Do not restate the template. Populate qualified references, dependency paths, and concise goal-specific boundaries only.
 - **Fail-closed creation gate:** New pointers start `needs-info`; promote them
   only after authority, dependency, verification, and applicable contract gates
-  pass. Existing issue files are not migrated automatically.
+  pass. Recheck any pre-existing pointer against these gates before promoting it.
 - **Ready gate:** `ready-for-agent` requires no unresolved blocker and its
   required contract gate. Missing decisions or evidence use `Status: blocked`
   plus an `OPEN-*` record under stop conditions.

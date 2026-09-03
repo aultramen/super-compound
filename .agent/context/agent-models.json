@@ -1,0 +1,22 @@
+{
+  "schema": "agent_models_v1",
+  "note": "Per-host model per subagent. Edit this file, then run: npm run agents:project. inherit = the session's main model.",
+  "hosts": {
+    "claude-code": {
+      "code-reviewer": "inherit",
+      "architect": "inherit",
+      "brain": "inherit",
+      "build-fixer": "sonnet",
+      "doc-updater": "sonnet",
+      "e2e-runner": "sonnet"
+    },
+    "codex": {
+      "code-reviewer": "inherit",
+      "architect": "inherit",
+      "brain": "inherit",
+      "build-fixer": "gpt-5.6-terra",
+      "doc-updater": "gpt-5.6-terra",
+      "e2e-runner": "gpt-5.6-terra"
+    }
+  }
+}

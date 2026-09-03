@@ -42,3 +42,4 @@ Gates:
   and owns final merged-system verification and Business Owner UAT evidence.
 
 Escalate to full `sc-plan.md` or full skills when writing/reviewing the detailed FSD procedure.
+If work remains, end with /sc-pause. Lessons: /sc-compound.

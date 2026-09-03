@@ -11,6 +11,7 @@ forge missing PRD/FSD/verifier bindings. An approved goal may run the Budget &
 Stop Wizard, persist `ACTION_INTENDED`, and validate `source-write`; otherwise
 keep the exploration read-only and advance authority first.
 
+knowledge-search.mjs "<scope>" first; ERR-*/LRN-* hits bind.
 Load user request, nearby context, prior brainstorms, and accepted ADRs only if
 relevant. Use the BRD skeleton; record objectives, scope, non-goals, rules,
 acceptance, and `OPEN-*`. A prototype is throwaway/non-production and must stay
@@ -26,3 +27,4 @@ disposition. UI evidence returns to `/sc-ui`; it is never authority.
 Exploration may remain a chat draft, but before approval and `/sc-prd` it must
 be saved at `docs/brd/brd-<feature>.md`. Use brainstorming and domain modeling
 advisory read-only modes unless a separate sidecar mutation is explicitly owned.
+If work remains, end with /sc-pause.

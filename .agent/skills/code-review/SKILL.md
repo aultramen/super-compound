@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Use when reviewing code changes for specification compliance, correctness, quality, security, and maintainability."
+description: "Use when reviewing code changes for specification compliance, correctness, quality, security, and maintainability. Not for standalone security or privacy audits; route those to security-audit or data-privacy."
 ---
 
 # Code Review

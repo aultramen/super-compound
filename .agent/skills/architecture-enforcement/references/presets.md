@@ -54,7 +54,7 @@ api_style: "rest"
 frontend: { framework: "nuxtjs", language: "typescript", styling: "tailwind", bundler: "vite", component_library: "none" }
 backend: { framework: "nuxtjs", language: "typescript", orm: "prisma", api_docs: "none" }
 database: { primary: "postgresql", cache: "none", migration_tool: "prisma-migrate" }
-auth: { method: "session", provider: "lucia" }
+auth: { method: "session", provider: "custom" }
 runtime: { package_manager: "pnpm", container: "docker", deployment: "docker-compose" }
 commands:
   dev: "pnpm dev"
@@ -164,7 +164,7 @@ api_style: "rest"
 frontend: { framework: "svelte", language: "typescript", styling: "tailwind", bundler: "vite", component_library: "none" }
 backend: { framework: "svelte", language: "typescript", orm: "drizzle", api_docs: "none" }
 database: { primary: "sqlite", cache: "none", migration_tool: "drizzle-kit" }
-auth: { method: "session", provider: "lucia" }
+auth: { method: "session", provider: "custom" }
 runtime: { package_manager: "pnpm", container: "none", deployment: "none" }
 commands:
   dev: "pnpm dev"

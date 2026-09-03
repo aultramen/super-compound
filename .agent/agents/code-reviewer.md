@@ -2,7 +2,6 @@
 name: code-reviewer
 description: Compact adapter for spec-first, findings-first code review.
 tools: ["Read", "Grep", "Glob", "Bash"]
-model: sonnet
 ---
 
 # Code Reviewer Adapter

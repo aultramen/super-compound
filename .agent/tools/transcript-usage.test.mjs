@@ -25,7 +25,11 @@ test("assistant usage counts once per message.id (last line wins) and Read calls
         JSON.stringify({ type: "assistant", message: { id: "msg_1", usage: usage(100), content: [read("toolu_a", "/home/x/repo/.agent/context/workflows/sc-work.contract.md")] } }),
         JSON.stringify({ type: "assistant", message: { id: "msg_1", usage: usage(120), content: [read("toolu_a", "/home/x/repo/.agent/context/workflows/sc-work.contract.md")] } }),
         JSON.stringify({ type: "assistant", message: { id: "msg_2", usage: usage(5), content: [read("toolu_b", "C:\\repo\\.agent\\skills\\context-engineering\\references\\read-depth.md"), read("toolu_c", "/home/x/repo/src/app.js")] } }),
-        JSON.stringify({ type: "assistant", message: { usage: usage(7) } }),
+        JSON.stringify({ type: "assistant", message: { usage: usage(7), content: [
+          { type: "tool_use", id: "toolu_d", name: "Bash", input: { command: "cd /home/x/repo && node .agent/tools/knowledge-search.mjs \"secret topic\"" } },
+          { type: "tool_use", id: "toolu_e", name: "Bash", input: { command: "npm test" } },
+          { type: "tool_use", id: "toolu_f", name: "Bash", input: { command: "cat /home/x/repo/.agent/context/workflows/sc-work.contract.md" } },
+        ] } }),
         "",
       ].join("\n"),
     );
@@ -36,13 +40,15 @@ test("assistant usage counts once per message.id (last line wins) and Read calls
     assert.equal(report.main.messages, 3);
     assert.equal(report.main.inputTokens, 132);
     assert.deepEqual(report.assetReads, {
-      total: 2,
+      total: 4,
       byAsset: {
-        ".agent/context/workflows/sc-work.contract.md": 1,
+        ".agent/context/workflows/sc-work.contract.md": 2,
         ".agent/skills/context-engineering/references": 1,
+        ".agent/tools/knowledge-search.mjs": 1,
       },
     });
     assert.equal(JSON.stringify(report).includes("/home/x"), false);
+    assert.equal(JSON.stringify(report).includes("secret topic"), false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

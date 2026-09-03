@@ -23,7 +23,7 @@ Use this before stopping a session or compacting context.
    status, last evidence, pause/terminal reason, and next transition. Never copy
    events, counters, an approval envelope, or a confirmation digest. The STATE
    file write needs the active source-write gate.
-5. Write `.continue-here.md` as a short pointer to `docs/STATE.md`, the active goal/artifact, and the suggested next workflow (usually `sc-status.md`). Do not duplicate state or specification prose.
+5. Write `.continue-here.md` as a short pointer with exactly the lines `# Continue Here`, `- State: docs/STATE.md`, `- Next action: <one executable step or /sc-status>`, and `- Authoritative artifacts: <paths>`. Do not duplicate state or specification prose.
 6. Update `docs/progress.md` only for chronological session history or durable project patterns.
 7. A later `START` or `RESUME` requires fresh human confirmation; the saved
    pointer is never approval.

@@ -35,8 +35,8 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
 2. Send the implementer only the returned `briefPath`, `reportPath`,
    read-only `pathsPath`, exact target paths, and this constraint: implement one
    goal, use TDD when behavior changes, never edit the scheduler-owned scope,
-   keep full evidence in `reportPath`, and return at most 15 lines containing
-   outcome, paths, verification status, and blockers. Seed from
+   keep full evidence in `reportPath`, and return only outcome, paths,
+   verification status, and blockers. Seed from
    `.agent/templates/orchestration/Implementer-Brief-Skeleton.md`.
 3. Run parallel goals only in isolated worktrees/workspaces. Review rejects a
    changed scope digest and any new working-tree edit outside the allowlist.

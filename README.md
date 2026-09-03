@@ -51,6 +51,14 @@ Copying `.claude/` also installs `.claude/commands/` pointers for all 18 routes,
 so `/sc-*` works as native Claude Code slash commands. Each pointer is a thin
 contract-first stub that loads the compact route contract on demand.
 
+It also ships `.claude/agents/` (regenerated from `.agent/agents/` plus
+`.agent/context/agent-models.json` by `npm run agents:project`), so the six
+framework subagents are native Claude Code subagents with the per-host model
+you configured.
+
+Optional cross-project knowledge store: `export SC_GLOBAL_KNOWLEDGE_DIR=~/.super-compound`
+makes every route's read-back also search `<dir>/LEARNED_KNOWLEDGE.md` (see Knowledge Loop).
+
 Optional Codex skill installation (PowerShell):
 
 ```powershell
@@ -129,9 +137,10 @@ For continuation:
 - FSD Section 8 owns the Screen & Interaction Contract and stable
   `UI-STATE-*`/`UIMAP-*` mappings. OpenAPI/JSON Schema/AsyncAPI owns the exact
   delegated wire shape; `ui_api_contract` only indexes those authorities.
-- Readiness needs at least 90/100 and every hard gate. Missing state coverage,
-  data/action mapping, revision consistency, verification refs, risk-appropriate
-  evidence, or any blocking `OPEN-*` still blocks a score of 100.
+- Readiness is binary: `node .agent/tools/readiness-gate.mjs` must pass every
+  hard gate. Missing state coverage, data/action mapping, revision consistency,
+  verification refs, risk-appropriate evidence, or any blocking `OPEN-*` blocks
+  the slice.
 - `/sc-plan` writes only FSD and issue pointers. `/sc-work` materializes missing
   schemas, fixtures, mock, typed consumer, and contract tests through a
   `CONTRACT_ENABLER` goal.
@@ -393,13 +402,13 @@ node .agent/hooks/test-hooks-security.js
 python -m unittest discover -s .agent/skills/interface-design/scripts -p "test_*.py"
 python .agent/skills/verification-before-completion/tests/test_skill_router_contract.py
 python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domain web
-node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --require-reduction 90 --repeat 3 --output .agent/benchmarks/token-benchmark.after.json
+node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --repeat 3 --output .agent/benchmarks/token-benchmark.after.json
 node .agent/tools/framework-audit.mjs --output .agent/benchmarks/framework-audit.after.json
 node .agent/tools/framework-audit.mjs --verify-existing .agent/benchmarks/framework-audit.after.json
 node .agent/tools/release-cutover.mjs --expected-output-digest ABSENT
 ```
 
-The benchmark separates immutable historical eager-preload evidence from current repository-owned startup budgets for Codex, Claude Code, Antigravity, the native Codex adapter, and bundled skill metadata. It also emits an 18-route x 3-cell static matrix: input context reduction, process wiring/authority, and output sink/budget/next-owner coverage. Every workflow context-entry reduction must exceed 90%; all 54 static cells must pass. Totals are scenario-weighted and may count shared files more than once. Output-authoring measures context and contracts, not generated prose. Host reasoning, generated-output, injected-context, latency, and billing tokens remain `unknown`; the static matrix is not a runtime end-to-end claim. The baseline is remeasured from recorded ancestor commit blobs on every authoritative run. A runtime claim requires paired attributable before/current traces for every route, not one after-only transcript.
+The benchmark separates immutable historical eager-preload evidence from current repository-owned startup budgets for Codex, Claude Code, Antigravity, the native Codex adapter, and bundled skill metadata. It also emits an 18-route x 3-cell static matrix: input context reduction, process wiring/authority, and output sink/budget/next-owner coverage. Every workflow context entry must stay within its absolute after-token budget (`.agent/context/token-budget-gates.md`; the reduction against the frozen baseline is reported, not gated), every hotspot reduction must exceed 90%, and all 54 static cells must pass. Totals are scenario-weighted and may count shared files more than once. Output-authoring measures context and contracts, not generated prose. Host reasoning, generated-output, injected-context, latency, and billing tokens remain `unknown`; the static matrix is not a runtime end-to-end claim. The baseline is remeasured from recorded ancestor commit blobs on every authoritative run. A runtime claim requires paired attributable before/current traces for every route, not one after-only transcript.
 
 Runtime token telemetry complements the static gates: `.agent/hooks/session-end.js` measures the host transcript (when the host provides `transcript_path`) through `.agent/tools/transcript-usage.mjs` into a runtime usage log under `.agent/.compact-state/`, and `npm run usage` aggregates it. Usage is counted once per `message.id` (streamed transcripts repeat lines), and each log entry carries an `assetReads` histogram of Read calls on `.agent/` contracts, workflows, and skills, which is the activation evidence the static matrix cannot supply. Static benchmark gates are unchanged.
 
@@ -417,6 +426,6 @@ Also check:
 - Design-system persistence rejects path traversal and requires `--overwrite` for existing files
 - Claude hook settings use exec-form `node` plus `${CLAUDE_PROJECT_DIR}` script args, so cwd changes and spaces do not break paths
 - Old workflow and skill names are not referenced in active docs
-- The benchmark is deterministic across 3 runs, every reduction gate exceeds 90%, and every absolute startup budget passes
+- The benchmark is deterministic across 3 runs, every route and startup surface stays within its absolute budget, and every hotspot reduction gate exceeds 90%
 - The exact active-manifest framework audit passes with fresh benchmark evidence
 - `docs/engineering-standards.md` and archive docs are not ignored

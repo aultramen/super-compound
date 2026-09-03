@@ -172,7 +172,6 @@ export function createUnattachedWorkflowEvidence() {
     gates: {
       inputContextReduction: {
         ...unavailableGate(EXPECTED_WORKFLOW_ROUTES),
-        thresholdExclusive: null,
         minimumReductionPercent: null,
       },
       processWiring: unavailableGate(EXPECTED_WORKFLOW_ROUTES),
@@ -256,12 +255,16 @@ export function buildWorkflowEvidenceMatrix({
     const expectedSemanticContract = `workflow-invariants-v1/${route}`;
     const reductionPercent = Number(row.reductionPercent);
     const afterDigest = String(row.after?.contentDigest ?? "");
+    // Route input gate: an absolute after-token budget. The reduction against
+    // the frozen baseline must still be measurable (reported), but it does not
+    // gate; a route without a budget fails closed.
     const inputPass =
-      row.gateType === "reduction" &&
+      row.gateType === "budget" &&
+      Number.isSafeInteger(row.maxAfterTokens) &&
       Number.isFinite(row.before?.tokens) &&
       Number.isFinite(row.after?.tokens) &&
+      row.after.tokens <= row.maxAfterTokens &&
       Number.isFinite(reductionPercent) &&
-      reductionPercent > benchmarkResult.threshold &&
       row.pass === true &&
       HEX_DIGEST.test(afterDigest);
 
@@ -314,7 +317,7 @@ export function buildWorkflowEvidenceMatrix({
         beforeTokens: row.before.tokens,
         afterTokens: row.after.tokens,
         reductionPercent: roundPercent(reductionPercent),
-        reductionThresholdExclusive: benchmarkResult.threshold,
+        maxAfterTokens: row.maxAfterTokens ?? null,
         afterDigest,
         observedRuntimeTokens: null,
         pass: inputPass,
@@ -391,7 +394,6 @@ export function buildWorkflowEvidenceMatrix({
       inputContextReduction: {
         expected: EXPECTED_WORKFLOW_ROUTES,
         passed: inputPassed,
-        thresholdExclusive: benchmarkResult.threshold,
         minimumReductionPercent,
         pass: inputPassed === EXPECTED_WORKFLOW_ROUTES,
       },

@@ -1354,16 +1354,16 @@ async function validateBenchmarkEvidence(root, contents, findings) {
   }
   for (const stage of ["input", "process", "output"]) {
     const summary = stages?.[stage];
+    // Route gates are absolute budgets; the reduction percentages are reported
+    // for every baseline-backed row but no longer gate a stage.
     if (
       !summary?.pass ||
       !Number.isFinite(summary.totalReductionPercent) ||
       !Number.isFinite(summary.minimumReductionPercent) ||
-      summary.reductionScenarioCount < 1 ||
-      summary.totalReductionPercent <= recordedThreshold ||
-      summary.minimumReductionPercent <= recordedThreshold ||
+      summary.reductionScenarioCount + summary.budgetScenarioCount < 1 ||
       summary.aggregation !== "scenario-weighted"
     ) {
-      invalidReasons.push(`${stage} stage evidence is missing or below threshold`);
+      invalidReasons.push(`${stage} stage evidence is missing or failed`);
     }
   }
 
@@ -1448,7 +1448,7 @@ async function validateBenchmarkEvidence(root, contents, findings) {
   for (const scenario of current.scenarios) {
     const row = recorded.get(scenario.name);
     const reductionPercent =
-      scenario.gateType === "budget"
+      scenario.reductionPercent === null || scenario.reductionPercent === undefined
         ? undefined
         : Number(scenario.reductionPercent.toFixed(4));
     if (

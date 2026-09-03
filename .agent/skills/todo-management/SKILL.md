@@ -24,7 +24,7 @@ During active execution, load quick capture only. Load the full structure for a 
 ## Mandatory Gates
 
 - **Scope gate:** Capture a newly surfaced item only when it is outside the current approved plan or requested outcome. In-scope defects remain part of current work unless authority or planning is missing.
-- **Focus gate:** Capture, not act. Spend at most 30 seconds during active work: create the minimal record, add its path to `STATE.md` Deferred Ideas, and continue the current task immediately.
+- **Focus gate:** Capture, not act. Create the minimal record, add its path to `STATE.md` Deferred Ideas, and return to the current task in the same turn.
 - **Artifact gate:** Durable todos live at `docs/todos/YYYY-MM-DD-<slug>.md` with area, priority, source, created date, status, title, description, context, and related paths. Infer ordinary metadata from current context; do not invent product requirements.
 - **Cross-reference gate:** Keep `STATE.md` and the todo path aligned. During planning, inspect relevant pending todos and ask which, if any, belong in the new plan.
 - **Action gate:** Listing or capturing a todo does not authorize implementation, deletion, or a plan change. Route approved work to `/sc-work`, exploration to `/sc-explore`, planning to `/sc-plan`, deferral to status update, and deletion only when explicitly chosen.

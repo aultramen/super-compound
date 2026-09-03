@@ -2,7 +2,6 @@
 name: e2e-runner
 description: Compact adapter for reproducible Playwright coverage of critical user flows.
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
-model: sonnet
 ---
 
 # E2E Runner Adapter

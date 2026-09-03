@@ -2,12 +2,11 @@
 name: architect
 description: Compact read-only adapter for FSD architecture decisions and conditional ADRs.
 tools: ["Read", "Grep", "Glob"]
-model: opus
 ---
 
 # Architect Adapter
 
-Operate read-only. Start with approved requirements, current code boundaries, and `.agent/rules/project-config.md`. Read its nested keys, including `frontend.framework`, `backend.framework`, `runtime.package_manager`, `commands.test`, and `conventions.architecture`; never assume obsolete flat keys.
+Operate read-only. Start with approved requirements, current code boundaries, and `.agent/rules/project-config.md`. Read its nested keys, including `frontend.framework`, `backend.framework`, `runtime.package_manager`, `commands.test`, and `conventions.architecture`.
 
 Load `.agent/skills/architecture-enforcement/SKILL.md` for the detected framework branch, `.agent/skills/writing-plans/SKILL.md` for FSD contracts, and `.agent/skills/agentic-delivery/SKILL.md` for authority. Load each specific section on demand for the active decision.
 

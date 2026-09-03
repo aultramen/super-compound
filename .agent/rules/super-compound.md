@@ -68,7 +68,4 @@ Super Compound is a compact agent framework for disciplined software work: under
 
 ## Completion Bar
 
-- Identify the command or inspection that proves the claim.
-- Run it fresh when available.
-- Read the output and report failures honestly.
-- If verification finds gaps, fix the specific gap before expanding scope.
+Apply the "Before Completion" gates in `quality-gates.md`: prove the claim with a fresh command or inspection and fix the specific gap before expanding scope.

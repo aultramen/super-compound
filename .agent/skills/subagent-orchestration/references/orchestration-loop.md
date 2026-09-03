@@ -28,8 +28,7 @@ Conversation memory does not survive compaction. After any compaction or
 resume, trust the ledger and `git log` over your own recollection before
 dispatching anything; re-dispatching completed goals is the single most
 expensive failure. A dispatch prompt describes one goal, never the session's
-history. Between tool calls, narrate at most one short line; the ledger and
-tool results carry the record.
+history.
 
 ## Wave boundaries (between-wave reset)
 
@@ -55,3 +54,5 @@ implementation and review - turn count beats token price), `ceiling`
 (inherited session model; final whole-branch review and adjudication only).
 Always name the model tier explicitly; omission inherits the most expensive
 session model. Escalate one tier on soft failure; `ceiling` is the cap.
+Per-host model per agent lives in `.agent/context/agent-models.json`;
+`inherit` means the session model.

@@ -10,7 +10,7 @@
     },
     "limitation": "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens."
   },
-  "generatedAt": "2026-09-02T09:12:18.104Z",
+  "generatedAt": "2026-09-03T03:44:28.164Z",
   "observedRuntimeTokens": "unknown",
   "hostInjectedSurfaceTokens": "unknown",
   "claimScope": {
@@ -39,10 +39,10 @@
           ".agent/context/workflows/sc-init.contract.md"
         ],
         "beforeTokens": 4535,
-        "afterTokens": 171,
-        "reductionPercent": 96.2293,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "a9932725fe1f0bfef3b77aa82ed9bcb2cd65d3dc58e2d011f80b72b1a999d12d",
+        "afterTokens": 177,
+        "reductionPercent": 96.097,
+        "maxAfterTokens": 217,
+        "afterDigest": "4951f771935853ff2cab2e52f751f8b5a18ae7cebbe628b6b979c42cf3d46416",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -97,10 +97,10 @@
           ".agent/context/workflows/sc-status.contract.md"
         ],
         "beforeTokens": 2015,
-        "afterTokens": 195,
-        "reductionPercent": 90.3226,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "59ac760f3c2d47a63266afc5420f65a329be8d8b5e92be70191764154df5b502",
+        "afterTokens": 234,
+        "reductionPercent": 88.3871,
+        "maxAfterTokens": 274,
+        "afterDigest": "fa2ccde3a2609f06e5a41bc6278da1aad1addd7d7e58b1b359694c48188d598c",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -156,10 +156,10 @@
           ".agent/context/agent-index.md"
         ],
         "beforeTokens": 4080,
-        "afterTokens": 379,
-        "reductionPercent": 90.7108,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "b9af73a96a855841aac28952bbb9dd80114f9786b4bf9a864a7c432eefba7eb2",
+        "afterTokens": 472,
+        "reductionPercent": 88.4314,
+        "maxAfterTokens": 512,
+        "afterDigest": "9511954030d56f9e61d110d8a5b4c6f572b10df0df1f53ec4cebf7032dae7c14",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -225,10 +225,10 @@
           ".agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md"
         ],
         "beforeTokens": 32334,
-        "afterTokens": 733,
-        "reductionPercent": 97.733,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "2f7f877305f46e2e954d9fefbac0094b4c18192e6e6cbe75aae6768cb98b13de",
+        "afterTokens": 766,
+        "reductionPercent": 97.631,
+        "maxAfterTokens": 806,
+        "afterDigest": "fd44d9273639cbece4bfd4199e2a83c854a33157caa795d8d862523d877eaf1a",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -289,10 +289,10 @@
           ".agent/context/workflows/sc-research.contract.md"
         ],
         "beforeTokens": 2263,
-        "afterTokens": 211,
-        "reductionPercent": 90.6761,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "2ddbd175881db81f86bd55fe9769d5aafe419d9bb014fcef32b66d77af5592cf",
+        "afterTokens": 229,
+        "reductionPercent": 89.8807,
+        "maxAfterTokens": 269,
+        "afterDigest": "c3d285336470f158a91383eec4edda73b805ddd7682b78a7cd5cc20c787bef34",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -356,10 +356,10 @@
           ".agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md"
         ],
         "beforeTokens": 23435,
-        "afterTokens": 764,
-        "reductionPercent": 96.7399,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "a13ba75f9a6330add171f132ee91d71f6db10c890154e2fcb414a562bcff9f5a",
+        "afterTokens": 797,
+        "reductionPercent": 96.5991,
+        "maxAfterTokens": 837,
+        "afterDigest": "5c9d88bf846a85cb09348bba3f758fb16c8a3349b1d2a8513309058b7178586a",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -427,10 +427,10 @@
           ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
         ],
         "beforeTokens": 59150,
-        "afterTokens": 2773,
-        "reductionPercent": 95.3119,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "e9b6f1109ac0e63b1bf6c3317f677205707a70165cb5772f411a20886a0a6553",
+        "afterTokens": 2853,
+        "reductionPercent": 95.1767,
+        "maxAfterTokens": 2893,
+        "afterDigest": "359f554f760212366ee58a2c1e2e32c3bd756cf697d9e37bfc29bcf829cc64b7",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -495,10 +495,10 @@
           ".agent/context/workflows/sc-eval.contract.md"
         ],
         "beforeTokens": 1886,
-        "afterTokens": 171,
-        "reductionPercent": 90.9332,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "13d847456530bc7a6fae5f05a23cedff9126ba0f1c38cabafea675cf8a702619",
+        "afterTokens": 185,
+        "reductionPercent": 90.1909,
+        "maxAfterTokens": 225,
+        "afterDigest": "8d1808bd1af09aa9f6f715520b3f7d7530e33b490ed20d76d6a9989fe56065b1",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -560,10 +560,10 @@
           ".agent/context/skills/git-workflow-operation.contract.md"
         ],
         "beforeTokens": 6322,
-        "afterTokens": 560,
-        "reductionPercent": 91.142,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "b430ab0e2f014c11833e400ef4f3b858b13051c4c4b4be3aa13e4db4a5287528",
+        "afterTokens": 559,
+        "reductionPercent": 91.1579,
+        "maxAfterTokens": 599,
+        "afterDigest": "68fa9e9e15f83242bc2b180fc3ed6d3d46d139ab845abcb243d25fe2ab351dd1",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -620,10 +620,10 @@
           ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md"
         ],
         "beforeTokens": 11412,
-        "afterTokens": 1136,
-        "reductionPercent": 90.0456,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "e926eaffa2643db7df8d22e3432a476959141b16aeebb6aebaa5105e2ac2e3cf",
+        "afterTokens": 1167,
+        "reductionPercent": 89.7739,
+        "maxAfterTokens": 1207,
+        "afterDigest": "c735f1a8d90d3c99970de84cc3bfaf91cf59b6ccd60d51f9bdb0f47c319a2e4a",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -696,10 +696,10 @@
           ".agent/context/workflows/sc-debug.contract.md"
         ],
         "beforeTokens": 2271,
-        "afterTokens": 224,
-        "reductionPercent": 90.1365,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "98b49e729770ad5a7e1e17deaafd3e1304c69d65631ac8b6682a3d2582987adc",
+        "afterTokens": 248,
+        "reductionPercent": 89.0797,
+        "maxAfterTokens": 288,
+        "afterDigest": "867060d1b7f76830b15acb86cc1c079a98009a237fe79c1d12b3b65b49e29fcc",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -756,10 +756,10 @@
           ".agent/context/workflows/sc-review.contract.md"
         ],
         "beforeTokens": 1942,
-        "afterTokens": 181,
-        "reductionPercent": 90.6797,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "673458b2d1e19353841713577cc5023525661d097f40e694a565bd5dd0b8166a",
+        "afterTokens": 221,
+        "reductionPercent": 88.62,
+        "maxAfterTokens": 261,
+        "afterDigest": "9b3869dcb55f7cd165225855ac7dc6f9c38b7615c30c2cdf2b2d3b4d21848bb7",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -824,10 +824,10 @@
           ".agent/context/workflows/sc-audit.contract.md"
         ],
         "beforeTokens": 11903,
-        "afterTokens": 262,
-        "reductionPercent": 97.7989,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "6acdaadab9aff88ef34756def0ec312ff66c5ab3345af08ab9d6ea0c21568ff8",
+        "afterTokens": 295,
+        "reductionPercent": 97.5216,
+        "maxAfterTokens": 335,
+        "afterDigest": "68b3746594a2317a5de398074761a1fe9f8ef4a87a497537a9b2f1659dbe186d",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -892,10 +892,10 @@
           ".agent/context/workflows/sc-compound.contract.md"
         ],
         "beforeTokens": 1879,
-        "afterTokens": 182,
-        "reductionPercent": 90.314,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "b78b5aab37118dde502f86619d5d8ef3042b5db2782f199ae1251cc289e1ebf1",
+        "afterTokens": 226,
+        "reductionPercent": 87.9723,
+        "maxAfterTokens": 266,
+        "afterDigest": "f731cbb9b3d1897c863f184950a9cca31d0cb9463d98226b2b0bd01c9d44dbb4",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -950,10 +950,10 @@
           ".agent/context/workflows/sc-evolve.contract.md"
         ],
         "beforeTokens": 5748,
-        "afterTokens": 183,
-        "reductionPercent": 96.8163,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "5be1406eeb2363735bd33686fd3280f24a768882cf4841e87be91fb2c0635ab5",
+        "afterTokens": 194,
+        "reductionPercent": 96.6249,
+        "maxAfterTokens": 234,
+        "afterDigest": "5228f5c889065f5764b8bb745ec3f381d36a63ad768d9a5533576da357aa4e6e",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1008,10 +1008,10 @@
           ".agent/context/workflows/sc-pause.contract.md"
         ],
         "beforeTokens": 1980,
-        "afterTokens": 194,
-        "reductionPercent": 90.202,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "f114952ad09aee2ec0c97042363d8fe64f55abe6853aed74a891670f717d9ece",
+        "afterTokens": 209,
+        "reductionPercent": 89.4444,
+        "maxAfterTokens": 249,
+        "afterDigest": "63ebaf01999494edbcc84d717ace4f7f057fbe69dc8d6bf1317824c27b972e01",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1068,10 +1068,10 @@
           ".agent/context/template-index.md"
         ],
         "beforeTokens": 112816,
-        "afterTokens": 1104,
-        "reductionPercent": 99.0214,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "a4a5efc473aa1b78027346969860e0584866dbed8f659376d957c9feba628063",
+        "afterTokens": 1114,
+        "reductionPercent": 99.0126,
+        "maxAfterTokens": 1154,
+        "afterDigest": "73c132055ddcd12675e6a60b6f44d3259ee806aa720ae91c93b2dcf71926143d",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1131,10 +1131,10 @@
           ".agent/skills/interface-design/SKILL.md"
         ],
         "beforeTokens": 374638,
-        "afterTokens": 2047,
-        "reductionPercent": 99.4536,
-        "reductionThresholdExclusive": 90,
-        "afterDigest": "ded7718a4f89ba92a034239d962e4ee791f2fea0878b6e2e253b326b5a4833f9",
+        "afterTokens": 2109,
+        "reductionPercent": 99.4371,
+        "maxAfterTokens": 2149,
+        "afterDigest": "364d17ec69e372b3f21c8f6b83bdab22c3236ced50fcf94401df5c83fa1217b0",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1194,8 +1194,7 @@
     "inputContextReduction": {
       "expected": 18,
       "passed": 18,
-      "thresholdExclusive": 90,
-      "minimumReductionPercent": 90.0456,
+      "minimumReductionPercent": 87.9723,
       "pass": true
     },
     "processWiring": {
@@ -1218,14 +1217,14 @@
   "evidenceDigests": {
     "workflowInvariants": "392497eeb4fb3375d041bbd0eb8fdc61cab0da72fea4dee63599516bc381785d",
     "outputBudgets": "ca63a13ba8c0198c55d8fc43130b0e3776f22741fae7767c571d13e7f643e94f",
-    "workflowMatrix": "32e730bc44eecb7ad29f6c9298071144c6f3ad8ed0568cff01f2796c6a3d53cb"
+    "workflowMatrix": "07be75954df28fff1462977ef7b56feb1aefaf767fe108fb40a04c4f001e7ef9"
   },
   "digests": {
     "baseline": "6105f25f49cba281efc529f37912a9e1ff5952220534fea9d88156808d266e4a",
-    "suiteDefinition": "1fb4153bbeeb0cd8221d54426f5f3f4650c5fc478d1191a478d606001969ad52",
+    "suiteDefinition": "ddd79bdbdb86f2f0a50aa9f260f7aa10c46930a0f319cc6102e95ac367e2399c",
     "workflowInvariants": "392497eeb4fb3375d041bbd0eb8fdc61cab0da72fea4dee63599516bc381785d",
     "outputBudgets": "ca63a13ba8c0198c55d8fc43130b0e3776f22741fae7767c571d13e7f643e94f",
-    "workflowMatrix": "32e730bc44eecb7ad29f6c9298071144c6f3ad8ed0568cff01f2796c6a3d53cb"
+    "workflowMatrix": "07be75954df28fff1462977ef7b56feb1aefaf767fe108fb40a04c4f001e7ef9"
   },
   "runtimeEvidence": {
     "status": "unknown",
@@ -1236,13 +1235,13 @@
   "runtimePass": null,
   "staticPass": true,
   "baselineDigest": "6105f25f49cba281efc529f37912a9e1ff5952220534fea9d88156808d266e4a",
-  "suiteDefinitionDigest": "1fb4153bbeeb0cd8221d54426f5f3f4650c5fc478d1191a478d606001969ad52",
+  "suiteDefinitionDigest": "ddd79bdbdb86f2f0a50aa9f260f7aa10c46930a0f319cc6102e95ac367e2399c",
   "authoritative": true,
   "repeat": 3,
   "deterministic": true,
   "runDigests": [
     {
-      "digest": "bf7dabcbd02e1cf713411fcb316423c5ed21d28e06b6e79835360413b9d30d6e",
+      "digest": "0c5c44e7741fabefab0373d0f7866d39db5ea0ab6940470cbba84c5cad4eadff",
       "count": 3
     }
   ],
@@ -1253,38 +1252,38 @@
         "name": "legacy-eager-preload",
         "stage": "input",
         "beforeTokens": 516436,
-        "afterTokens": 2760,
+        "afterTokens": 2854,
         "pass": true,
-        "afterDigest": "e0fbf9e76fcac114150b21605611abcd3616f230f529b97e9fe5910e769710c2",
-        "reductionPercent": 99.4656
+        "afterDigest": "f7d589f1450f80c8c21bb0d29f7ef6902a492a332dc4d86e351c16cdc16dbe11",
+        "reductionPercent": 99.4474
       },
       {
         "name": "startup-codex-repository",
         "stage": "input",
-        "beforeTokens": 1662,
-        "afterTokens": 1662,
+        "beforeTokens": 1585,
+        "afterTokens": 1585,
         "pass": true,
-        "afterDigest": "63fda069c7652b8072bb7ceba2170b30c496e96dba70f0a734e3405d2fc1857f",
+        "afterDigest": "12ba18d7374c34d0d3bc94be194b8fd370075184461103aaffde6709a1c1c2d5",
         "gateType": "budget",
         "maxAfterTokens": 2000
       },
       {
         "name": "startup-claude-repository",
         "stage": "input",
-        "beforeTokens": 2542,
-        "afterTokens": 2542,
+        "beforeTokens": 2457,
+        "afterTokens": 2457,
         "pass": true,
-        "afterDigest": "46427d5ca23ad737686d07d3b5d3b32100c58bb413947c877a0bca86f5db5a5a",
+        "afterDigest": "267514d81d14fae9add235791745630f8293769d18b2afe566e888d0ff934a53",
         "gateType": "budget",
         "maxAfterTokens": 3000
       },
       {
         "name": "startup-antigravity-rules",
         "stage": "input",
-        "beforeTokens": 2611,
-        "afterTokens": 2611,
+        "beforeTokens": 2645,
+        "afterTokens": 2645,
         "pass": true,
-        "afterDigest": "27a9764d9f6f5ac46d6826266c60d2e901f49819a517dd00acf9b6bf7b4c4dde",
+        "afterDigest": "12e1753ce6d3274057eaf551a9dda394f5c7dd0b86a274c67cbb793a5cab6a2f",
         "gateType": "budget",
         "maxAfterTokens": 2750
       },
@@ -1301,10 +1300,10 @@
       {
         "name": "startup-installed-skill-metadata",
         "stage": "input",
-        "beforeTokens": 1047,
-        "afterTokens": 1047,
+        "beforeTokens": 1081,
+        "afterTokens": 1081,
         "pass": true,
-        "afterDigest": "daf0363aafca6ca9c928b74cb59c179b18df5c60b5a8e0fa3828a1ee3e8223b8",
+        "afterDigest": "56b3cf755a5ee4f0cb180aedcdc8f44a2c09232fe224736be6387aaa707082bb",
         "gateType": "budget",
         "maxAfterTokens": 2500
       },
@@ -1312,163 +1311,199 @@
         "name": "sc-init",
         "stage": "process",
         "beforeTokens": 4535,
-        "afterTokens": 171,
+        "afterTokens": 177,
         "pass": true,
-        "afterDigest": "a9932725fe1f0bfef3b77aa82ed9bcb2cd65d3dc58e2d011f80b72b1a999d12d",
-        "reductionPercent": 96.2293
+        "afterDigest": "4951f771935853ff2cab2e52f751f8b5a18ae7cebbe628b6b979c42cf3d46416",
+        "gateType": "budget",
+        "maxAfterTokens": 217,
+        "reductionPercent": 96.097
       },
       {
         "name": "sc-status",
         "stage": "process",
         "beforeTokens": 2015,
-        "afterTokens": 195,
+        "afterTokens": 234,
         "pass": true,
-        "afterDigest": "59ac760f3c2d47a63266afc5420f65a329be8d8b5e92be70191764154df5b502",
-        "reductionPercent": 90.3226
+        "afterDigest": "fa2ccde3a2609f06e5a41bc6278da1aad1addd7d7e58b1b359694c48188d598c",
+        "gateType": "budget",
+        "maxAfterTokens": 274,
+        "reductionPercent": 88.3871
       },
       {
         "name": "sc-geniusloop",
         "stage": "process",
         "beforeTokens": 4080,
-        "afterTokens": 379,
+        "afterTokens": 472,
         "pass": true,
-        "afterDigest": "b9af73a96a855841aac28952bbb9dd80114f9786b4bf9a864a7c432eefba7eb2",
-        "reductionPercent": 90.7108
+        "afterDigest": "9511954030d56f9e61d110d8a5b4c6f572b10df0df1f53ec4cebf7032dae7c14",
+        "gateType": "budget",
+        "maxAfterTokens": 512,
+        "reductionPercent": 88.4314
       },
       {
         "name": "sc-explore",
         "stage": "process",
         "beforeTokens": 32334,
-        "afterTokens": 733,
+        "afterTokens": 766,
         "pass": true,
-        "afterDigest": "2f7f877305f46e2e954d9fefbac0094b4c18192e6e6cbe75aae6768cb98b13de",
-        "reductionPercent": 97.733
+        "afterDigest": "fd44d9273639cbece4bfd4199e2a83c854a33157caa795d8d862523d877eaf1a",
+        "gateType": "budget",
+        "maxAfterTokens": 806,
+        "reductionPercent": 97.631
       },
       {
         "name": "sc-research",
         "stage": "process",
         "beforeTokens": 2263,
-        "afterTokens": 211,
+        "afterTokens": 229,
         "pass": true,
-        "afterDigest": "2ddbd175881db81f86bd55fe9769d5aafe419d9bb014fcef32b66d77af5592cf",
-        "reductionPercent": 90.6761
+        "afterDigest": "c3d285336470f158a91383eec4edda73b805ddd7682b78a7cd5cc20c787bef34",
+        "gateType": "budget",
+        "maxAfterTokens": 269,
+        "reductionPercent": 89.8807
       },
       {
         "name": "sc-prd",
         "stage": "process",
         "beforeTokens": 23435,
-        "afterTokens": 764,
+        "afterTokens": 797,
         "pass": true,
-        "afterDigest": "a13ba75f9a6330add171f132ee91d71f6db10c890154e2fcb414a562bcff9f5a",
-        "reductionPercent": 96.7399
+        "afterDigest": "5c9d88bf846a85cb09348bba3f758fb16c8a3349b1d2a8513309058b7178586a",
+        "gateType": "budget",
+        "maxAfterTokens": 837,
+        "reductionPercent": 96.5991
       },
       {
         "name": "sc-plan",
         "stage": "process",
         "beforeTokens": 59150,
-        "afterTokens": 2773,
+        "afterTokens": 2853,
         "pass": true,
-        "afterDigest": "e9b6f1109ac0e63b1bf6c3317f677205707a70165cb5772f411a20886a0a6553",
-        "reductionPercent": 95.3119
+        "afterDigest": "359f554f760212366ee58a2c1e2e32c3bd756cf697d9e37bfc29bcf829cc64b7",
+        "gateType": "budget",
+        "maxAfterTokens": 2893,
+        "reductionPercent": 95.1767
       },
       {
         "name": "sc-eval",
         "stage": "process",
         "beforeTokens": 1886,
-        "afterTokens": 171,
+        "afterTokens": 185,
         "pass": true,
-        "afterDigest": "13d847456530bc7a6fae5f05a23cedff9126ba0f1c38cabafea675cf8a702619",
-        "reductionPercent": 90.9332
+        "afterDigest": "8d1808bd1af09aa9f6f715520b3f7d7530e33b490ed20d76d6a9989fe56065b1",
+        "gateType": "budget",
+        "maxAfterTokens": 225,
+        "reductionPercent": 90.1909
       },
       {
         "name": "sc-go",
         "stage": "process",
         "beforeTokens": 6322,
-        "afterTokens": 560,
+        "afterTokens": 559,
         "pass": true,
-        "afterDigest": "b430ab0e2f014c11833e400ef4f3b858b13051c4c4b4be3aa13e4db4a5287528",
-        "reductionPercent": 91.142
+        "afterDigest": "68fa9e9e15f83242bc2b180fc3ed6d3d46d139ab845abcb243d25fe2ab351dd1",
+        "gateType": "budget",
+        "maxAfterTokens": 599,
+        "reductionPercent": 91.1579
       },
       {
         "name": "sc-work",
         "stage": "process",
         "beforeTokens": 11412,
-        "afterTokens": 1136,
+        "afterTokens": 1167,
         "pass": true,
-        "afterDigest": "e926eaffa2643db7df8d22e3432a476959141b16aeebb6aebaa5105e2ac2e3cf",
-        "reductionPercent": 90.0456
+        "afterDigest": "c735f1a8d90d3c99970de84cc3bfaf91cf59b6ccd60d51f9bdb0f47c319a2e4a",
+        "gateType": "budget",
+        "maxAfterTokens": 1207,
+        "reductionPercent": 89.7739
       },
       {
         "name": "sc-debug",
         "stage": "process",
         "beforeTokens": 2271,
-        "afterTokens": 224,
+        "afterTokens": 248,
         "pass": true,
-        "afterDigest": "98b49e729770ad5a7e1e17deaafd3e1304c69d65631ac8b6682a3d2582987adc",
-        "reductionPercent": 90.1365
+        "afterDigest": "867060d1b7f76830b15acb86cc1c079a98009a237fe79c1d12b3b65b49e29fcc",
+        "gateType": "budget",
+        "maxAfterTokens": 288,
+        "reductionPercent": 89.0797
       },
       {
         "name": "sc-review",
         "stage": "process",
         "beforeTokens": 1942,
-        "afterTokens": 181,
+        "afterTokens": 221,
         "pass": true,
-        "afterDigest": "673458b2d1e19353841713577cc5023525661d097f40e694a565bd5dd0b8166a",
-        "reductionPercent": 90.6797
+        "afterDigest": "9b3869dcb55f7cd165225855ac7dc6f9c38b7615c30c2cdf2b2d3b4d21848bb7",
+        "gateType": "budget",
+        "maxAfterTokens": 261,
+        "reductionPercent": 88.62
       },
       {
         "name": "sc-audit",
         "stage": "process",
         "beforeTokens": 11903,
-        "afterTokens": 262,
+        "afterTokens": 295,
         "pass": true,
-        "afterDigest": "6acdaadab9aff88ef34756def0ec312ff66c5ab3345af08ab9d6ea0c21568ff8",
-        "reductionPercent": 97.7989
+        "afterDigest": "68b3746594a2317a5de398074761a1fe9f8ef4a87a497537a9b2f1659dbe186d",
+        "gateType": "budget",
+        "maxAfterTokens": 335,
+        "reductionPercent": 97.5216
       },
       {
         "name": "sc-compound",
         "stage": "process",
         "beforeTokens": 1879,
-        "afterTokens": 182,
+        "afterTokens": 226,
         "pass": true,
-        "afterDigest": "b78b5aab37118dde502f86619d5d8ef3042b5db2782f199ae1251cc289e1ebf1",
-        "reductionPercent": 90.314
+        "afterDigest": "f731cbb9b3d1897c863f184950a9cca31d0cb9463d98226b2b0bd01c9d44dbb4",
+        "gateType": "budget",
+        "maxAfterTokens": 266,
+        "reductionPercent": 87.9723
       },
       {
         "name": "sc-evolve",
         "stage": "process",
         "beforeTokens": 5748,
-        "afterTokens": 183,
+        "afterTokens": 194,
         "pass": true,
-        "afterDigest": "5be1406eeb2363735bd33686fd3280f24a768882cf4841e87be91fb2c0635ab5",
-        "reductionPercent": 96.8163
+        "afterDigest": "5228f5c889065f5764b8bb745ec3f381d36a63ad768d9a5533576da357aa4e6e",
+        "gateType": "budget",
+        "maxAfterTokens": 234,
+        "reductionPercent": 96.6249
       },
       {
         "name": "sc-pause",
         "stage": "process",
         "beforeTokens": 1980,
-        "afterTokens": 194,
+        "afterTokens": 209,
         "pass": true,
-        "afterDigest": "f114952ad09aee2ec0c97042363d8fe64f55abe6853aed74a891670f717d9ece",
-        "reductionPercent": 90.202
+        "afterDigest": "63ebaf01999494edbcc84d717ace4f7f057fbe69dc8d6bf1317824c27b972e01",
+        "gateType": "budget",
+        "maxAfterTokens": 249,
+        "reductionPercent": 89.4444
       },
       {
         "name": "sc-launch",
         "stage": "process",
         "beforeTokens": 112816,
-        "afterTokens": 1104,
+        "afterTokens": 1114,
         "pass": true,
-        "afterDigest": "a4a5efc473aa1b78027346969860e0584866dbed8f659376d957c9feba628063",
-        "reductionPercent": 99.0214
+        "afterDigest": "73c132055ddcd12675e6a60b6f44d3259ee806aa720ae91c93b2dcf71926143d",
+        "gateType": "budget",
+        "maxAfterTokens": 1154,
+        "reductionPercent": 99.0126
       },
       {
         "name": "sc-ui",
         "stage": "process",
         "beforeTokens": 374638,
-        "afterTokens": 2047,
+        "afterTokens": 2109,
         "pass": true,
-        "afterDigest": "ded7718a4f89ba92a034239d962e4ee791f2fea0878b6e2e253b326b5a4833f9",
-        "reductionPercent": 99.4536
+        "afterDigest": "364d17ec69e372b3f21c8f6b83bdab22c3236ced50fcf94401df5c83fa1217b0",
+        "gateType": "budget",
+        "maxAfterTokens": 2149,
+        "reductionPercent": 99.4371
       },
       {
         "name": "artifact-output-brd-prd-fsd-issue",
@@ -1528,10 +1563,10 @@
         "name": "related-git-workflow",
         "stage": "process",
         "beforeTokens": 5910,
-        "afterTokens": 468,
+        "afterTokens": 467,
         "pass": true,
-        "afterDigest": "9c85ebc36db3809186d2335e8d065b75463d0d63a69d874bdcf9fb6171a792f4",
-        "reductionPercent": 92.0812
+        "afterDigest": "1dac871e5175427b7f229dc96296258c33e4e01ef13dadbf8fe6bad615d2fc70",
+        "reductionPercent": 92.0981
       },
       {
         "name": "related-interface-data",
@@ -1555,19 +1590,19 @@
         "name": "related-hooks",
         "stage": "process",
         "beforeTokens": 4559,
-        "afterTokens": 192,
+        "afterTokens": 197,
         "pass": true,
-        "afterDigest": "27140a2880685cdf522f1f32cad16d7a4c671c4c708a3d5e3f15c11543326d46",
-        "reductionPercent": 95.7886
+        "afterDigest": "32e21ed85dff1de4d28ff1350984b2996bd6472e6cc1d9f3ccf4d7ffcf76e76b",
+        "reductionPercent": 95.6789
       },
       {
         "name": "related-agents",
         "stage": "process",
         "beforeTokens": 5442,
-        "afterTokens": 99,
+        "afterTokens": 170,
         "pass": true,
-        "afterDigest": "f7c50cb2ecf8f7070cb42ec49223bd3713c081b515f5b7c5ec75b06bb9eaa912",
-        "reductionPercent": 98.1808
+        "afterDigest": "9119d2df1d8e97983da43b74860dc2c2e1886a106851a465074aae4107ae39ea",
+        "reductionPercent": 96.8761
       },
       {
         "name": "related-all-workflows",
@@ -1590,12 +1625,12 @@
     ],
     "summary": {
       "pass": true,
-      "reductionScenarioCount": 32,
-      "budgetScenarioCount": 5,
+      "reductionScenarioCount": 14,
+      "budgetScenarioCount": 23,
       "totalBeforeTokens": 1842998,
-      "totalAfterTokens": 20467,
-      "totalReductionPercent": 98.8895,
-      "minimumReductionPercent": 90.0456,
+      "totalAfterTokens": 21221,
+      "totalReductionPercent": 98.8486,
+      "minimumReductionPercent": 87.9723,
       "aggregation": "scenario-weighted",
       "stages": {
         "input": {
@@ -1603,19 +1638,19 @@
           "reductionScenarioCount": 4,
           "budgetScenarioCount": 5,
           "totalBeforeTokens": 923783,
-          "totalAfterTokens": 3650,
-          "totalReductionPercent": 99.6049,
+          "totalAfterTokens": 3744,
+          "totalReductionPercent": 99.5947,
           "minimumReductionPercent": 95.1169,
           "aggregation": "scenario-weighted"
         },
         "process": {
           "pass": true,
-          "reductionScenarioCount": 26,
-          "budgetScenarioCount": 0,
+          "reductionScenarioCount": 8,
+          "budgetScenarioCount": 18,
           "totalBeforeTokens": 725722,
-          "totalAfterTokens": 12811,
-          "totalReductionPercent": 98.2347,
-          "minimumReductionPercent": 90.0456,
+          "totalAfterTokens": 13471,
+          "totalReductionPercent": 98.1438,
+          "minimumReductionPercent": 87.9723,
           "aggregation": "scenario-weighted"
         },
         "output": {

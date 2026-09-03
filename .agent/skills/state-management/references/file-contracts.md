@@ -29,8 +29,21 @@ The progress-log skeleton lives at `.agent/templates/state/Progress-Template.md`
 Refresh the pointer with `node .agent/tools/loop-run.mjs show --run <run_id>`.
 Never copy lifecycle events, counters, an approval envelope, or a confirmation
 digest into STATE. Writing `docs/STATE.md` requires the active source-write gate;
-reading it does not. `START` or `RESUME` after a pause requires fresh human
-confirmation.
+reading it does not. Inside an active run, `/sc-work`, `/sc-debug`, and
+`/sc-launch` write the Next action through that gate; every other route, and any
+route outside a run, hands off through `/sc-pause`. `START` or `RESUME` after a
+pause requires fresh human confirmation.
+
+## `.continue-here.md`
+
+Exactly these lines, nothing else:
+
+```markdown
+# Continue Here
+- State: docs/STATE.md
+- Next action: <one executable step or /sc-status>
+- Authoritative artifacts: <paths>
+```
 
 ## Error and learning records
 

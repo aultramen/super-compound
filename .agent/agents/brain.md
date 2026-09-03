@@ -2,7 +2,6 @@
 name: brain
 description: Read-only evaluator for /sc-geniusloop ideas using Beta, Alpha, Theta, and Delta filters.
 tools: ["Read", "Grep", "Glob"]
-model: opus
 ---
 
 You are Brain, a read-only evaluator for Super Compound `/sc-geniusloop`.

@@ -39,7 +39,6 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - `CLAUDE.md` imports `AGENTS.md` and adds Claude Code memory rules.
 - `CLAUDE.local.md` is for private local preferences and must not be committed.
 - `.claude/rules/*.md` is for Claude Code instructions that should load only for matching paths.
-- `docs/engineering-standards.md` preserves the long engineering reference from the old monolithic `CLAUDE.md`; read it only when broad standards guidance is needed.
 - Use skills, workflows, and normal docs for long procedures instead of expanding startup memory.
 - Use `.agent/context/` contracts as the first runtime layer; load full workflows, skills, templates, or CSV data only when the active task needs their detail.
 - Search durable knowledge before solving a repeat problem: `node .agent/tools/knowledge-search.mjs "<query>"` over `docs/solutions/` and `docs/learnings/`.
@@ -51,7 +50,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - Preserve the framework's core promise: BRD -> PRD -> FSD -> GOAL before product code, evidence before claims, test-first by default, knowledge compounds, and verification gates.
 - Route branch, worktree, commit, push, and Pull Request operations through `/sc-go` and `git-workflow-operation`.
 - Keep edits scoped. Avoid broad rewrites, formatting churn, or renaming established workflows unless the user asks.
-- Preserve the documented public workflow names. Compatibility aliases may be removed when a breaking cleanup explicitly approves it.
+- Preserve the documented public workflow names.
 - Do not overwrite user changes or generated local state such as `.debug/`, `docs/progress.md`, `docs/STATE.md`, or `.continue-here.md`.
 - Ask only when a missing product or compatibility decision blocks safe progress.
 
@@ -60,17 +59,14 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - Rules in `.agent/rules/` are high-level and always-on for Antigravity; keep them focused.
 - Context contracts in `.agent/context/` are compact runtime indexes; keep them shorter than the full workflows/skills/templates they route to.
 - Skills in `.agent/skills/*/SKILL.md` hold detailed, task-specific procedures and may be longer.
-- Workflows in `.agent/workflows/` should route work clearly and avoid thin aliases unless they are explicitly part of the public interface.
-- Agent prompts in `.agent/agents/` should remain role-specific and compatible with the model notes already present.
+- Workflows in `.agent/workflows/` route work clearly; the 18 public workflows are the whole surface.
+- Agent prompts in `.agent/agents/` stay role-specific; per-host models live in `.agent/context/agent-models.json` and project into `.claude/agents/` via `npm run agents:project`.
 - Hooks in `.agent/hooks/` must stay deterministic, local-first, and safe to run repeatedly.
 - Documentation changes should keep `README.md`, `SUPER-COMPOUND.md`, `WALKTHROUGH.md`, and `.agent/` references consistent.
 
 ## Engineering Standards
 
-- Favor simple, readable designs. Apply DRY, KISS, YAGNI, SOLID, separation of concerns, high cohesion, and low coupling pragmatically.
-- Keep dependencies explicit and local to the feature that needs them.
-- Validate inputs at boundaries and encode domain invariants close to their owner.
-- Avoid silent failures. Add context, log safely, or rethrow.
+- Favor simple, readable, local designs; validate at boundaries and never fail silently.
 - Preserve backward compatibility for public commands, workflow names, and installation paths unless the user explicitly approves a breaking change.
 
 ## Security And Privacy

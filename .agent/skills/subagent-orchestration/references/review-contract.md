@@ -11,8 +11,8 @@ Load this reference only when dispatching or reviewing a file-backed goal.
 - Implement only the named goal and run its mapped verification.
 - Write the full report to `reportPath` with outcome, changed files,
   verification, deviations, and blockers.
-- Return no more than 15 lines: outcome, report path, verification status, and
-  blockers. Do not return the diff or report body.
+- Return only: outcome, report path, verification status, and blockers. Do not
+  return the diff or report body.
 
 ## Single-Read Reviewer Contract
 

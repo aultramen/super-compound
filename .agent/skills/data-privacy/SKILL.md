@@ -11,8 +11,6 @@ Ensure applications comply with data privacy regulations when processing persona
 
 **Announce:** "I'm using the data-privacy skill to verify privacy compliance for personal data handling."
 
-**Core principle:** Privacy is a fundamental right, not a feature. Design for privacy from the start: collect only what you need, protect what you collect, and delete what you no longer need.
-
 ## Modes
 
 | Mode | Trigger | Scope | Output |

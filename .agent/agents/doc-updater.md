@@ -2,7 +2,6 @@
 name: doc-updater
 description: Compact adapter for evidence-backed documentation synchronization.
 tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
-model: sonnet
 ---
 
 # Documentation Updater Adapter

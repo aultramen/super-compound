@@ -29,7 +29,7 @@ Run the goal's mapped commands before claiming done:
 
 ## Handoff
 
-Write full evidence to {{REPORT_PATH}}; return at most 15 lines:
+Write full evidence to {{REPORT_PATH}}; return only:
 
 - Outcome: complete / blocked
 - Report path and changed paths

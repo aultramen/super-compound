@@ -130,7 +130,6 @@ withTempProject((root) => {
         env: {
             ...process.env,
             SUPER_COMPOUND_PROJECT_ROOT: root,
-            COMPACT_THRESHOLD: '999999',
         },
     });
 
@@ -156,7 +155,6 @@ withTempProject((root) => {
                 env: {
                     ...process.env,
                     SUPER_COMPOUND_PROJECT_ROOT: root,
-                    COMPACT_THRESHOLD: '999999',
                 },
             }
         );
@@ -182,7 +180,6 @@ withTempProject((root) => {
     const env = {
         ...process.env,
         SUPER_COMPOUND_PROJECT_ROOT: root,
-        COMPACT_THRESHOLD: '999999',
         COMPACT_CONTEXT_THRESHOLD: '100',
         COMPACT_CONTEXT_INTERVAL: '50',
     };
@@ -199,7 +196,11 @@ withTempProject((root) => {
     });
     const output = JSON.parse(first.stdout);
 
-    assert.match(output.hookSpecificOutput.additionalContext, /150 context tokens/i);
+    const note = output.hookSpecificOutput.additionalContext;
+    assert.match(note, /context pressure is high/i);
+    // The note never surfaces a token count or percentage (a countdown makes the model wrap up early).
+    assert(!/\d|%/.test(note.replace(/200k|CLAUDE_CODE_AUTO_COMPACT_WINDOW/g, '')));
+    assert(!/skip compaction/i.test(note));
     assert.strictEqual(second.stdout, '');
 });
 
@@ -218,23 +219,6 @@ withTempProject((root) => {
         tokens: 170000,
         model: 'claude-test',
     });
-});
-
-withTempProject((root) => {
-    const suggestResult = spawnSync(process.execPath, [path.join(__dirname, 'suggest-compact.js')], {
-        input: JSON.stringify({ tool_input: { content: `${passwordName}=bravo` } }),
-        encoding: 'utf8',
-        env: {
-            ...process.env,
-            SUPER_COMPOUND_PROJECT_ROOT: root,
-            COMPACT_THRESHOLD: '1',
-        },
-    });
-    const output = JSON.parse(suggestResult.stdout);
-
-    assert.strictEqual(output.hookSpecificOutput.hookEventName, 'PreToolUse');
-    assert.match(output.hookSpecificOutput.additionalContext, /context checkpoint/i);
-    assert(!suggestResult.stdout.includes('bravo'));
 });
 
 for (const script of ['pre-compact.js', 'session-end.js']) {
@@ -369,6 +353,14 @@ withTempProject((root) => {
     const fable = run('fable', 'claude-fable-5-1', 130000);
     assert.strictEqual(fable.status, 0);
     assert.strictEqual(fable.stdout, '');
+
+    // A detected 1M window warns at its own threshold (15% remaining), and the
+    // note carries no percentage or token count.
+    const fableLow = run('fable-low', 'claude-fable-5-1', 880000);
+    assert.strictEqual(fableLow.status, 0);
+    const fableWarning = JSON.parse(fableLow.stdout).hookSpecificOutput.additionalContext;
+    assert.match(fableWarning, /WARNING/);
+    assert(!/\d|%/.test(fableWarning));
 
     const unknown = run('unknown', 'claude-test', 130000);
     assert.strictEqual(unknown.status, 0);

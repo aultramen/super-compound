@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Suggest compaction from real transcript pressure, with session-scoped
- * tool-count fallback. Silent unless a structured PreToolUse reminder fires.
+ * Suggest compaction from real transcript pressure. Silent unless a
+ * structured PreToolUse reminder fires; the note never states a token count.
  */
 
 if ((process.env.SC_DISABLED_HOOKS || '').split(',').map((s) => s.trim()).includes('suggest-compact')) {
@@ -23,8 +23,6 @@ const {
     readLatestContextTokens,
 } = require('./lib/context-pressure');
 
-const TOOL_THRESHOLD = readPositiveInteger('COMPACT_THRESHOLD', 50);
-const TOOL_INTERVAL = readPositiveInteger('COMPACT_REMINDER_INTERVAL', 25);
 const STATE_TTL_MS = readPositiveInteger('COMPACT_STATE_TTL_DAYS', 14) * 86400000;
 
 let input = {};
@@ -54,9 +52,8 @@ try {
 
 cleanupOldState(stateDir, stateFile);
 const state = readState(stateFile);
-state.count += 1;
 
-const messages = [];
+let message = null;
 const usage = readLatestContextTokens(input.transcript_path);
 const contextSuggestion = buildContextSuggestion(
     usage,
@@ -65,18 +62,7 @@ const contextSuggestion = buildContextSuggestion(
 );
 if (contextSuggestion) {
     state.lastContextBucket = contextSuggestion.bucket;
-    messages.push(contextSuggestion.message);
-}
-
-if (
-    state.count === TOOL_THRESHOLD ||
-    (state.count > TOOL_THRESHOLD &&
-        (state.count - TOOL_THRESHOLD) % TOOL_INTERVAL === 0)
-) {
-    messages.push(
-        `[Super Compound] Context checkpoint after ${state.count} tool calls. ` +
-        'Use /sc-pause or /compact at the next logical boundary.'
-    );
+    message = contextSuggestion.message;
 }
 
 state.updatedAt = new Date().toISOString();
@@ -86,12 +72,11 @@ try {
     console.error(`[Super Compound] Suggest compact: state write failed: ${error.message}`);
 }
 
-if (messages.length > 0) {
+if (message) {
     process.stdout.write(JSON.stringify({
         hookSpecificOutput: {
             hookEventName: 'PreToolUse',
-            additionalContext:
-                `${messages.join('\n')} Skip compaction while implementation or tests are active.`,
+            additionalContext: message,
         },
     }));
 }
@@ -111,9 +96,6 @@ function readState(file) {
     try {
         const parsed = JSON.parse(fs.readFileSync(file, 'utf8'));
         return {
-            count: Number.isInteger(parsed.count) && parsed.count >= 0 && parsed.count <= 1000000
-                ? parsed.count
-                : 0,
             lastContextBucket:
                 Number.isInteger(parsed.lastContextBucket) && parsed.lastContextBucket >= -1
                     ? parsed.lastContextBucket
@@ -121,7 +103,7 @@ function readState(file) {
             updatedAt: parsed.updatedAt,
         };
     } catch {
-        return { count: 0, lastContextBucket: -1, updatedAt: null };
+        return { lastContextBucket: -1, updatedAt: null };
     }
 }
 

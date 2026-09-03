@@ -4,14 +4,12 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. It 
 
 ## Core Principles
 
-- Plan before code when the work is non-trivial.
 - Evidence before claims: run or name the verification that proves the result.
 - Test-first by default for behavior changes.
 - Prefer simple, local, reversible changes.
 - Keep durable context on disk, not only in conversation memory.
 - Use the canonical delivery path for product work: `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`.
 - Turn reusable solutions into documentation through `/sc-compound`.
-- Do not preserve stale workflow aliases unless they are part of the current public interface.
 
 ## Loop Runtime Boundary
 
@@ -34,8 +32,9 @@ PRD owns observable experience behavior; FSD Section 8 owns semantic UI/API
 mappings; OpenAPI/JSON Schema/approved equivalent owns exact wire shape. Goal
 issues remain pointers to these authorities.
 
-`READY_FOR_SLICE` requires score >=90 and every canonical hard gate. A score,
-business preference, or `EXCEPTION_APPROVED` cannot waive security,
+`READY_FOR_SLICE` requires every canonical hard gate (`node
+.agent/tools/readiness-gate.mjs` exit 0). A business preference or
+`EXCEPTION_APPROVED` cannot waive security,
 accessibility baseline, contract conformance, data integrity, or a blocking
 `OPEN-*`. Exceptions permit only the first slice. Parallel scale-out waits for a
 `VALIDATED` baseline and a first-slice issue verified against the real provider;
@@ -56,7 +55,7 @@ stakeholder preferences from preventable rework.
 
 ## Public Workflows
 
-Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound commands do not collide with native Claude Code planning and review commands.
+Use these workflow names only; these 18 are the whole surface, and wrapper or alias workflows are not added. The `/sc-*` prefix is mandatory so Super Compound commands do not collide with native Claude Code planning and review commands.
 
 | Workflow | Purpose |
 |---|---|
@@ -93,7 +92,7 @@ Use these workflow names only. The `/sc-*` prefix is mandatory so Super Compound
 - Failure or unexpected behavior: `/sc-debug`
 - Changed files need critique: `/sc-review`
 - Security, current-stack compatibility/dependency posture, MCP, agent config, compliance, or release readiness: `/sc-audit`
-- Frontend UI design/review: `/sc-ui`; implementation: `/sc-work <approved-goal>` with UI guidance
+- Frontend UI design/review: `/sc-ui`; approved UI implementation: `/sc-work <approved-goal>` with UI guidance
 - Need to stop and continue later: `/sc-pause`, then `/sc-status` in the next session
 
 ## Explore vs Research
@@ -110,11 +109,6 @@ Research is a conditional sidecar, not a mandatory lifecycle stage. Use it only 
 ## Skill Loading
 
 Use `.agent/context/` as the compact runtime layer before full workflow/skill/template reads. Load a full `SKILL.md` only when its procedure is active or being edited/reviewed. When that entrypoint routes to `references/`, load only the branch needed for the current decision; never preload the whole reference directory.
-
-Framework verification records a static 18-route x 3-cell matrix: context-entry
-reduction, process authority/wiring, and output sink/budget/next owner. This is
-repository evidence, not hidden reasoning or generated-output telemetry; runtime
-claims remain unavailable until paired attributable traces exist for all routes.
 
 Load skills only when their detailed procedure is relevant. Announce the skill and follow its `SKILL.md`.
 
@@ -214,24 +208,7 @@ python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domai
 python .agent/skills/interface-design/scripts/search.py "performance trackBy" --stack angular
 ```
 
-Use the current `interface-design` skill name in active docs and workflows.
-
 Interface-design data must be retrieved through `scripts/search.py`; do not preload CSV files into model context.
-
-## Breaking Compatibility Notes
-
-This framework intentionally removed alias and thin workflows from the 2026-06-20 import.
-
-Current replacements:
-
-- Brainstorm/discuss/domain/strategy/prototype intent -> `/sc-explore`
-- Issue/task shaping, triage, Kanban, Journey -> `/sc-plan`
-- Loop/handoff/parallel execution -> `/sc-work`
-- Branch, worktree, commit, push, or PR -> `/sc-go`
-- Security/compatibility/MCP/compliance/release readiness -> `/sc-audit`
-- Progress or continuation state -> `/sc-status`
-- Reload -> `/sc-init reload`
-- UI design/review -> `/sc-ui`; approved UI implementation -> `/sc-work <approved-goal>` with interface guidance
 
 ## Quality Bar
 
@@ -240,5 +217,5 @@ The work is done when:
 - The requested change is implemented or the blocker is explicit.
 - The smallest meaningful verification has been run.
 - User-facing docs and rules agree with the current public interface.
-- No secrets, cache files, stale aliases, or malformed data were introduced.
+- No secrets, cache files, or malformed data were introduced.
 - The final response names the changed areas and verification evidence.

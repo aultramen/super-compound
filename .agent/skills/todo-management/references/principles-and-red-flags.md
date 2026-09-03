@@ -2,7 +2,7 @@
 
 | Principle | Description |
 |-----------|-------------|
-| **Capture fast** | 30 seconds max, then back to work |
+| **Capture fast** | Minimal record, then back to work |
 | **Infer context** | Area and priority from what you're doing |
 | **Don't context-switch** | Capture ≠ act on it now |
 | **Review periodically** | Check todos before planning |

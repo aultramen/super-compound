@@ -1,19 +1,10 @@
 ## Universal Security Architecture
 
-Every framework MUST implement these security patterns. Placement follows each framework's architecture guide above.
+Placement follows each framework's architecture guide above.
 
 ### Security Headers (All Frameworks)
 
-Every HTTP response should include these headers:
-
-| Header | Value | Purpose |
-|--------|-------|---------|
-| `Content-Security-Policy` | Framework-specific | Prevent XSS, data injection |
-| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` | Force HTTPS |
-| `X-Content-Type-Options` | `nosniff` | Prevent MIME sniffing |
-| `X-Frame-Options` | `DENY` or `SAMEORIGIN` | Prevent clickjacking |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` | Control referrer leaks |
-| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | Disable unused APIs |
+Every HTTP response sets CSP, HSTS, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, and `Permissions-Policy`.
 
 **Where to implement:**
 
@@ -43,13 +34,7 @@ FORBIDDEN: Access-Control-Allow-Origin: * (with credentials)
 
 ### Rate Limiting
 
-| Endpoint Type | Recommended Limit | Purpose |
-|---------------|-------------------|---------|
-| Login / Auth | 5-10 req/min per IP | Prevent brute force |
-| Password Reset | 3 req/hour per email | Prevent abuse |
-| API (general) | 100-1000 req/min per user | Prevent abuse |
-| File Upload | 10 req/min per user | Prevent storage abuse |
-| Public endpoints | 30 req/min per IP | Prevent scraping |
+Set limits per endpoint class (auth, password reset, general API, upload, public) from the product's own abuse model and record them in `project-config`.
 
 **Where to implement:**
 
@@ -65,9 +50,6 @@ FORBIDDEN: Access-Control-Allow-Origin: * (with credentials)
 ### Auth Middleware Placement
 
 ```
-RULE: Authentication middleware MUST run BEFORE any controller/handler.
-RULE: Authorization checks MUST run AFTER authentication.
-
 Flow: Request → Auth Middleware → Authz Check → Controller → Service → Response
 ```
 

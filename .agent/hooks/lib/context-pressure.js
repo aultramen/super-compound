@@ -74,7 +74,7 @@ function buildContextSuggestion(usage, lastBucket, env = process.env) {
     const { windowTokens, detected } = resolveContextWindow(usage.tokens, usage.model, env);
     const threshold = resolveSetting(
         env.COMPACT_CONTEXT_THRESHOLD,
-        windowTokens >= LARGE_WINDOW ? 250000 : 160000,
+        windowTokens >= LARGE_WINDOW ? 700000 : 160000,
         true
     );
     if (threshold === 0 || usage.tokens < threshold) return null;
@@ -87,15 +87,14 @@ function buildContextSuggestion(usage, lastBucket, env = process.env) {
     const bucket = Math.floor((usage.tokens - threshold) / interval);
     if (bucket <= lastBucket) return null;
 
-    const percent = Math.round((usage.tokens / windowTokens) * 100);
-    const windowLabel = formatWindow(windowTokens);
-    const scale = detected
-        ? `${percent}% of ${windowLabel}`
-        : `window assumed ${windowLabel}; set CLAUDE_CODE_AUTO_COMPACT_WINDOW if larger`;
+    // No token count or percentage: a countdown in context makes the model wrap up early.
+    const note = detected
+        ? ''
+        : ` (window assumed ${formatWindow(windowTokens)}; set CLAUDE_CODE_AUTO_COMPACT_WINDOW if larger)`;
     return {
         bucket,
         message:
-            `[Super Compound] ~${usage.tokens} context tokens (${scale}). ` +
+            `[Super Compound] Context pressure is high${note}. ` +
             'Compact at the next logical boundary.',
     };
 }
@@ -134,6 +133,7 @@ function finiteToken(value) {
 }
 
 module.exports = {
+    LARGE_WINDOW,
     buildContextSuggestion,
     formatWindow,
     readLatestContextTokens,

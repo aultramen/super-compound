@@ -40,7 +40,7 @@ human approval, counters, or execution evidence.
 13. Shape FSD `GOAL-*` packets into vertical, independently verifiable issue pointers without copying BRD/PRD/FSD/ADR prose.
 14. Include suggested branch names per GOAL and identify optional worktree candidates for independent parallel goals; do not checkout or mutate Git state during planning.
 15. Include blocker relationships, qualified refs, verification refs, and stop conditions.
-16. For UI-bearing scope, calculate readiness and enforce every hard gate.
+16. For UI-bearing scope, run `node .agent/tools/readiness-gate.mjs --fsd <fsd> --prd <prd> --issues-dir <dir>` and enforce every hard gate.
     `ui_contract_readiness = READY_FOR_SLICE` is required before a UI-integrated
     goal can be ready, except for the bounded `CONTRACT_ENABLER` described next.
     `/sc-plan` writes only the FSD and issue pointers; it does not create
@@ -49,7 +49,7 @@ human approval, counters, or execution evidence.
     exactly one blocked `FIRST_VERTICAL_SLICE` pointer for the critical/highest-risk
     flow. The FSD may be approved with `DRAFT/BLOCKED` readiness only to release
     the bounded enabler. After it is verified, return to `/sc-plan`, update the
-    FSD index, rerun readiness, and obtain Technical Manager re-approval;
+    FSD index, rerun the readiness gate, and obtain Technical Manager re-approval;
     `READY_FOR_SLICE` then releases the first slice.
     Every `SCALE_OUT_SLICE` records `required_gate =
     FIRST_VERTICAL_SLICE_VERIFIED` and depends on the first-slice issue. These
@@ -58,6 +58,7 @@ human approval, counters, or execution evidence.
     applicable UI delivery slices and owns merged integration, responsive,
     accessibility, E2E, visual-regression, and Business Owner UAT evidence.
 19. Use `skills/plan-verification/SKILL.md` and its ten dimensions before execution.
+20. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
 
 ## Output
 

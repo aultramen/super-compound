@@ -20,7 +20,7 @@ Capability: query-docs
 
 > **Tip — Skip Step 1**: If you already know the library ID (e.g., `/vercel/next.js`, `/prisma/prisma`), call `query-docs` directly.
 
-> **Tip — Version-specific**: Include version in your query: `"Next.js 14 app router middleware"` — Context7 will match the correct version.
+> **Tip — Version-specific**: Include the installed major in your query: `"<library> <major> <topic>"` — Context7 will match the correct version.
 
 Use the namespaced tool name actually exposed by the current host; the logical
 capability names above are portable across MCP clients.

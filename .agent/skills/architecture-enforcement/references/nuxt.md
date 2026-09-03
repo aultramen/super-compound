@@ -1,5 +1,7 @@
 ### Vue / Nuxt 3 — Modular
 
+Nuxt 3 srcDir layout; Nuxt 4 nests `pages/`, `components/`, `composables/`, and `layouts/` under `app/`. Verify against the installed major.
+
 ```
 ├── server/
 │   ├── api/

@@ -28,7 +28,7 @@ Generating tokens/IDs?
 │   ├─ Session token? → 128+ bits of entropy
 │   ├─ CSRF token? → 128+ bits, per-session
 │   └─ API key? → 256 bits, store hash only
-└─ NO → No security pattern needed for this code
+└─ NO → Done; the branches above still apply to any data this code touches
 ```
 
 ---

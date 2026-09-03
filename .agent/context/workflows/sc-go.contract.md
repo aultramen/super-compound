@@ -6,10 +6,9 @@ Purpose: preview-first Git branch, worktree, commit, push, and PR operations.
 
 Preview is read-only and needs no wizard. `commit`, `push`, and PR mutation need
 a nonterminal FSD-authorized run, host-attested approval, durable intent, and an
-allowlisted operation. Until the later release gate and operation inventory are
-implemented, return `OPEN-RELEASE-GATE`: the current allowlist contains no
-`commit`, `push`, or `pr`, so no mutation is permitted. A preview or terminal
-run is not an operation gate.
+allowlisted operation. `commit`, `push`, and `pr` are not in the operation
+allowlist: return `OPEN-RELEASE-GATE` and perform no mutation. A preview or
+terminal run is not an operation gate.
 
 Load first: `.agent/context/skills/git-workflow-operation.contract.md`, then `.agent/rules/project-config.md` for `gitWorkflow`.
 
@@ -18,4 +17,4 @@ Use `.agent/tools/git-workflow.mjs` to preview commands. Stop on protected base 
 Mutation requires explicit current user intent and a fresh preview. Never commit,
 push, create a PR, force-push, delete a branch, remove a worktree, reset, or clean
 without that operation being explicitly requested; stop for approval when the
-preview exposes risk.
+preview exposes risk. If work remains, end with /sc-pause.

@@ -24,7 +24,7 @@ Use for every new skill, behavioral change to an existing skill, invocation rede
 - REFACTOR: add counters only for loopholes actually exposed and rerun all pressure scenarios.
 - Combine at least three pressure sources when testing discipline: time, sunk cost, authority, exhaustion, or “pragmatic” exception claims.
 - The frontmatter description starts with `Use when` and states triggering conditions, not a workflow summary. Choose model- versus user-invocation deliberately.
-- Keep most `SKILL.md` routers below 500 whitespace words. Move branch-specific detail behind explicit reference links and load only the selected branch.
+- Keep every `SKILL.md` router below 500 whitespace words; `node .agent/tools/framework-audit.mjs` fails `SKILL_ENTRYPOINT_TOO_LARGE` otherwise. Move branch-specific detail behind explicit reference links and load only the selected branch.
 - Preserve evidence of RED and GREEN; prose review alone is not verification.
 
 ## Red Flags

@@ -58,6 +58,7 @@ goal, use its Budget & Stop Wizard, persist `ACTION_INTENDED`, and pass
 10. Capture Git workflow constraints only when they affect delivery scope; do not mutate Git state.
 11. A chat draft is allowed during exploration. Before approval and `/sc-prd`, save the BRD to `docs/brd/brd-<feature>.md` using `.agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md` first and the full template only as a reference.
 12. Route to `sc-prd.md` only after the durable BRD is approved or the user explicitly accepts its recorded assumptions.
+13. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
 
 ## Output
 

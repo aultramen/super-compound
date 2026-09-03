@@ -2,7 +2,7 @@
 
 Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
 
-Purpose: run the lifecycle from idea to verified delivery.
+Purpose: run the lifecycle from idea to verified delivery. Resume from docs/STATE.md Next action.
 
 Run one active stage at a time: status, explore, conditional research, PRD draft,
 `/sc-ui` validation, approved PRD, plan with optional contract enabler, eval,

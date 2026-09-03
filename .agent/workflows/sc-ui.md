@@ -30,6 +30,7 @@ Use this workflow as a UI capability sidecar with two explicit modes:
    and approver gates. Runnable evidence is required for timing, runtime
    responsive behavior, keyboard/focus, realtime, or offline risk. Also check
    accessibility, text overflow, and every applicable named state.
+9. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
 
 ## Result Classification And Routing
 

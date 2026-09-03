@@ -28,7 +28,7 @@ finding. Review never uses that gate to apply a fix.
 4. Review the spec axis first: missing behavior, incorrect behavior, or scope creep.
 5. Review the standards axis: security, architecture, tests, maintainability, performance, and docs. Load only the applicable sections of `docs/engineering-standards.md`, or the project's `CODING_STANDARDS.md` when one exists; standards are enforced here, not during implementation, so implementation context stays small.
 6. For PR readiness, load `skills/git-workflow-operation/SKILL.md` and review the PR checklist/template, but do not commit or push unless routed through `/sc-go`.
-7. Verify claims when practical.
+7. Verify each claim against the diff or a command result; name the claims that could not be verified and why.
 8. If complete evidence exceeds the chat envelope, save it to
    `docs/reviews/YYYY-MM-DD-<scope>.md` and return the path; never omit a
    finding to satisfy an output cap. Then run

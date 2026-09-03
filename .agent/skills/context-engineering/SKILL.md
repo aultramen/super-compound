@@ -57,12 +57,7 @@ After a fresh session, use `/sc-status` to recover from disk.
 
 ## Checkpoints
 
-At natural breaks, ask internally:
-
-- Am I using the files I loaded?
-- Is the next file necessary for the next action?
-- Would a summary beat the full file?
-- Should this state be written to `docs/STATE.md`, `docs/progress.md`, or `.continue-here.md`?
+At phase ends, persist durable state to `docs/STATE.md`, `docs/progress.md`, or `.continue-here.md` before dropping loaded files.
 
 ## Red Flags
 

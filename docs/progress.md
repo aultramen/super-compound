@@ -35,3 +35,9 @@
   - Patterns discovered: LRN-2026-09-02-001 (contract shadowing), LRN-2026-09-02-002 (`.codex/SKILL.md` is shared headroom).
   - Gotchas encountered: ERR-2026-09-02-001 (router word cap 500; `context-engineering` sat at 498). Real Claude Code transcripts lack `reasoning_tokens`, so `transcript-usage` reports UNMEASURED; 211 of 241 usage lines in this session were streamed duplicates.
   - Useful context: hooks resolve their project root from their own location, so a parent-workspace `.claude/settings.json` can register the scripts under `.agent/hooks/` and state still lands here.
+
+## 2026-09-03 12:00 - wave4-readiness-persistence-knowledge
+- Implemented: route benchmark gates became absolute per-route budgets (reduction reported, not gated); `readiness-gate.mjs` replaced the model-computed readiness score; persistence spine (STATE entry/close or `/sc-pause` handoff) and knowledge read-back/capture lines in the route contracts; `knowledge-refresh` wired into `/sc-evolve`; per-host subagent models in `.agent/context/agent-models.json` projected to `.claude/agents/`; scripted session baseline harness.
+- Files: .agent/tools/{token-benchmark,evidence-matrix,framework-audit,release-cutover,readiness-gate,session-baseline,agent-projection,transcript-usage}.mjs, .agent/context/workflows/, .agent/context/token-budget-gates.md, .agent/skills/state-management/, docs/eval-results/2026-09-03-wave4-baseline.md, CHANGELOG.md
+- Verification: `npm test`, `npm run test:python`, `npm run bench` (18 route budgets), `npm run audit` PASS after each wave; `npm run baseline -- run --label <baseline|after-A|after-B|after-C>`.
+- Learnings: LRN-2026-09-03-001 (absolute route budgets) supersedes LRN-2026-09-02-002; headless `-p` sessions must bypass permissions or every Bash-based read-back is silently denied.

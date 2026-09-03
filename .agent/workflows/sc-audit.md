@@ -41,6 +41,7 @@ workflow; it never authorizes changes inside `/sc-audit`.
     finding to satisfy an output cap. Then run
     `node .agent/tools/doc-lint.mjs <artifact>` and adjudicate its findings
     (advisory).
+11. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
 
 ## Output
 

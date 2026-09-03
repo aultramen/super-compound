@@ -12,11 +12,10 @@ Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
 
 Status, branch, worktree, and command preview are read-only and need no wizard.
 `commit`, `push`, and PR mutation require a valid nonterminal FSD-authorized run,
-human approval, durable intent, and an allowlisted operation. GOAL-008 does not
-claim these release operations are executable: until the release gate and
-operation inventory land, return `OPEN-RELEASE-GATE`; the current allowlist does
-not authorize `commit`, `push`, or `pr`, so perform no mutation. Never substitute
-the preview approval or a terminal run for an active operation gate.
+human approval, durable intent, and an allowlisted operation. `commit`, `push`,
+and `pr` are not in the operation allowlist (`.agent/context/operation-inventory.json`):
+return `OPEN-RELEASE-GATE` and perform no mutation. A preview approval or a
+terminal run is not an operation gate.
 
 ## Usage
 
@@ -24,9 +23,9 @@ the preview approval or a terminal run for an active operation gate.
 /sc-go status
 /sc-go start feature/name
 /sc-go worktree feature/name --path ../project-feature
-/sc-go commit "Describe the change"
-/sc-go push
-/sc-go pr
+/sc-go commit "Describe the change"   # preview only; returns OPEN-RELEASE-GATE
+/sc-go push                           # preview only; returns OPEN-RELEASE-GATE
+/sc-go pr                             # preview only; returns OPEN-RELEASE-GATE
 ```
 
 ## Steps
@@ -38,6 +37,7 @@ the preview approval or a terminal run for an active operation gate.
 5. If the user mentions a branch different from the active branch, stop or preview checkout/worktree commands before commit, push, or PR.
 6. Never commit, push, force-push, create a PR, delete a branch, remove a worktree, reset, or clean without explicit user intent and a fresh preview.
 7. For PRs, use `.agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md`; use `gh` or `glab` only when available and explicitly requested.
+8. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
 
 ## Output
 

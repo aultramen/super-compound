@@ -19,23 +19,19 @@ Use for every defect or unexplained failure, including flaky, environment-specif
 - After evidence confirms a cause, load [Fix and Regression](references/fix-and-regression.md) before implementing the failing test and root-cause fix.
 - Load [Advanced Techniques](references/advanced-techniques.md) only for regression localization, deep upstream tracing, recurring defect classes, async waits, or 3+ unsuccessful fix attempts.
 
-## Non-Negotiable Rule
+## Core Loop
 
-```text
-DO NOT attempt fixes until Phase 1 establishes a reproducible symptom and evidence about where it originates.
-```
-
-Core loop:
+Do not attempt a fix until Phase 1 has a reproducible symptom and evidence of where it originates; a fix without that is a guess.
 
 1. Reproduce the exact symptom with one agent-runnable command or structured HITL check.
 2. Read the complete error and inspect recent changes.
 3. Trace inputs and outputs until correct data becomes incorrect.
-4. Rank 3-5 hypotheses; each must make a falsifiable prediction.
+4. Rank the candidate causes; each must make a falsifiable prediction.
 5. Test one variable at a time. If the top three fail, revisit assumptions.
 6. Write a failing test, implement the smallest root-cause fix, and prove RED-GREEN regression behavior.
 7. Remove probes, rerun the original reproduction and relevant suite, then use `verification-before-completion`.
 
-If reproduction is impossible, gather more data and report uncertainty. Never guess-fix.
+If reproduction is impossible, gather more data and report uncertainty.
 
 ## Red Flags
 

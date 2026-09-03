@@ -16,7 +16,7 @@ Regression evals ask whether protected behavior still works. Name an immutable b
 ## Grader routing
 
 1. Prefer deterministic code-based graders: targeted tests, a build, schema validation, static checks, or an explicit endpoint/output assertion. Commands must be safe, reproducible, and fail nonzero.
-2. Use an LLM-as-judge for genuinely open-ended properties. Provide a rubric, 1–5 scale, written reasoning, and a pass threshold of at least 4.
+2. Use an LLM-as-judge for genuinely open-ended properties. Provide a rubric with an explicit pass bar and require the judge to cite the evidence for its verdict.
 3. Require human review when the decision depends on security acceptance, legal interpretation, or subjective UX judgment. State the change, reason, risk, and decision needed.
 
 ## Reliability metrics

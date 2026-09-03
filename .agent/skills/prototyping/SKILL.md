@@ -32,11 +32,9 @@ If the question is ambiguous, choose the type closest to the code area and state
 ## Process
 
 1. State the question the prototype answers.
-2. Pick the smallest runnable artifact.
-3. Build only enough to compare the decision.
-4. Let the user or verification evidence pick the answer.
-5. Capture the answer in a PRD, ADR, issue, plan, or notes.
-6. Delete the prototype or explicitly absorb the validated behavior into planned work.
+2. Let the user or verification evidence pick the answer.
+3. Capture the answer in a PRD, ADR, issue, plan, or notes.
+4. Delete the prototype or explicitly absorb the validated behavior into planned work.
 
 ## UI Variant Guidance
 

@@ -1,10 +1,10 @@
 # Project State
-Last updated: 2026-09-02 12:00
+Last updated: 2026-09-03 12:00
 
 ## Current Position
 - Workflow: none
 - Active task: none
-- Next action: run `/sc-status`; Wave 3 changes are uncommitted on the current branch and need an owner decision to commit
+- Next action: run `/sc-status`; Wave 3, the 2026-09-02 prompt audit, and Wave 4 are uncommitted on the current branch and need an owner decision to commit
 - Branch/workspace: feature/gap-enhancements-wave2
 
 ## Active Loop Run
@@ -21,6 +21,7 @@ Last updated: 2026-09-02 12:00
 - 2026-09-02: Parallel streams keep strict worktree isolation; the shared-workspace wave contract is deferred.
 - 2026-09-02: Global knowledge store is opt-in through `SC_GLOBAL_KNOWLEDGE_DIR`; no implicit default.
 - 2026-09-02: A workspace-root `.claude/settings.json` (outside this repository) wires these hooks for sessions started from the parent workspace.
+- 2026-09-03: Route benchmark gates are absolute after-token budgets (measured after + 40, re-adopted per deliberate contract change); the 90% ratio is reported only. UI readiness is binary via `readiness-gate.mjs`. Learning stays capture-automatic, apply-human. Per-host subagent models live in `.agent/context/agent-models.json`.
 
 ## Blockers
 - none
@@ -29,6 +30,7 @@ Last updated: 2026-09-02 12:00
 - 2026-08-06: Memory layer seeded; gap-analysis enhancement wave (CHANGELOG Unreleased).
 - 2026-08-20: Cross-framework activation wave (CHANGELOG 2026-08-20).
 - 2026-09-02: Wave 3 contract spine and truthful telemetry (CHANGELOG 2026-09-02; `docs/audits/2026-09-02-cross-framework-gap-analysis-wave3.md`). Evidence: `npm test`, `npm run test:python`, `npm run bench` 18/18, `npm run audit` PASS.
+- 2026-09-03: Wave 4 (CHANGELOG Unreleased - Wave 4): absolute route budgets, `readiness-gate.mjs`, persistence and knowledge spine in all route contracts, per-host agent models, measured baseline in `docs/eval-results/2026-09-03-wave4-baseline.md`.
 
 ## Deferred Ideas
 - Shared-workspace wave contract (compound-engineering CONCEPTS `Wave contract`).

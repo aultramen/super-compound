@@ -8,4 +8,4 @@ When you notice something mid-work, don't context-switch. Use the minimal format
 3. Continue current work immediately
 ```
 
-**Time budget:** Max 30 seconds on capture. Details can be added later.
+Details can be added later.
