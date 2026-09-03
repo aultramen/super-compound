@@ -10,7 +10,7 @@
     },
     "limitation": "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens."
   },
-  "generatedAt": "2026-09-03T06:07:37.224Z",
+  "generatedAt": "2026-09-03T06:55:25.380Z",
   "observedRuntimeTokens": "unknown",
   "hostInjectedSurfaceTokens": "unknown",
   "claimScope": {
@@ -1215,14 +1215,14 @@
     }
   },
   "evidenceDigests": {
-    "workflowInvariants": "392497eeb4fb3375d041bbd0eb8fdc61cab0da72fea4dee63599516bc381785d",
+    "workflowInvariants": "919b9352bbcdb111b6db5b420a6a3754d22237020896c4ff686d38482c664cc2",
     "outputBudgets": "ca63a13ba8c0198c55d8fc43130b0e3776f22741fae7767c571d13e7f643e94f",
     "workflowMatrix": "07be75954df28fff1462977ef7b56feb1aefaf767fe108fb40a04c4f001e7ef9"
   },
   "digests": {
     "baseline": "6105f25f49cba281efc529f37912a9e1ff5952220534fea9d88156808d266e4a",
     "suiteDefinition": "ddd79bdbdb86f2f0a50aa9f260f7aa10c46930a0f319cc6102e95ac367e2399c",
-    "workflowInvariants": "392497eeb4fb3375d041bbd0eb8fdc61cab0da72fea4dee63599516bc381785d",
+    "workflowInvariants": "919b9352bbcdb111b6db5b420a6a3754d22237020896c4ff686d38482c664cc2",
     "outputBudgets": "ca63a13ba8c0198c55d8fc43130b0e3776f22741fae7767c571d13e7f643e94f",
     "workflowMatrix": "07be75954df28fff1462977ef7b56feb1aefaf767fe108fb40a04c4f001e7ef9"
   },

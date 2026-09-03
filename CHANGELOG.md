@@ -4,6 +4,17 @@ All notable changes to the Super Compound framework are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and version entries follow the repository's delivery history. Dates use `YYYY-MM-DD`.
 
+## [Unreleased] - Workflow Admission Registry
+
+### Changed
+
+- `docs/research/` is an authority prefix in `.agent/context/project-config.json` (`config_version` 3, `mode_version` unchanged) and in the `migrate-loop-v2.mjs` default, so `/sc-research` saves its note as an `authority_write` without a Budget & Stop Wizard or run gate. `workflow-invariants.json` `sc-research` now declares `writeClasses: ["authority_write"]`, `wizardPolicy: NEVER`, and no operation gate; the note remains advisory evidence with no decision or execution authority.
+- `sc-plan` authority allowlist tightened from the `docs/solutions/` prefix to the accepted-ADR pattern `docs/solutions/adr-NNNN-*.md`, matching the classifier; solution notes stay with `/sc-compound`.
+
+### Fixed
+
+- `.agent/tools/workflow-admission.mjs` registers all 18 public routes instead of 10, so no public route throws `Unsupported workflow route`. `sc-init`, `sc-status`, and `sc-ui` are read-only under their own id (only runtime-audit writes admitted). `sc-geniusloop` (`docs/geniusloop/`), `sc-audit` (`docs/audits/`), `sc-compound` (`docs/solutions/`, `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, `docs/progress.md`), and `sc-evolve` (`docs/proposals/`) admit run-gated implementation writes confined to those sinks, mirroring `sc-review`. Regression tests cover allowed paths, foreign paths, unsupported routes, and write-class mismatches; a registry parity test requires every invariants route to have a rule and every authority or implementation allowlist (except `sc-work` and `sc-debug`) to be path-confined.
+
 ## [Unreleased] - Wave 4: Readiness Gate, Persistence, Knowledge Loop
 
 ### Added
