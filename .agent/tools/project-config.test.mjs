@@ -1229,6 +1229,10 @@ test("write classification is path-confined and defaults every unknown path to i
     "authority_write",
   );
   assert.equal(
+    classifyWriteIntent(loaded, { path: "docs/research/2026-09-03-example.md" }),
+    "authority_write",
+  );
+  assert.equal(
     classifyWriteIntent(loaded, {
       path: "docs/solutions/adr-0001-loop-run-controller-v2.md",
     }),

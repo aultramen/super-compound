@@ -85,6 +85,7 @@ function sourceCapabilityProjectConfig({
         "docs/brd/",
         "docs/fsd/",
         "docs/prd/",
+        "docs/research/",
       ],
       authority_exact_paths: [],
       unknown_path_class: "implementation_write",
@@ -565,6 +566,224 @@ test("OPEN-RUNTIME-PRD-001: sc-prd owns docs/prd/ authority writes without a wiz
   assert.equal(calls.length, 0, "sc-prd never consults the controller gate");
 });
 
+test("sc-research owns docs/research/ authority writes without a wizard or run gate", async () => {
+  const calls = [];
+  const { dependencies } = await fixture(async (input) => {
+    calls.push(input);
+    return allowedGateResult(input);
+  });
+
+  const allowed = await validateWorkflowAdmission(
+    ROOT,
+    { route: "sc-research", intent: { path: "docs/research/2026-09-03-example.md" } },
+    dependencies,
+  );
+  assert.equal(allowed.allowed, true);
+  assert.equal(allowed.approval_required, false);
+  assert.equal(allowed.write_class, "authority_write");
+  assert.equal(allowed.gate_evidence.intent_path, "docs/research/2026-09-03-example.md");
+
+  for (const path of ["docs/prd/foreign.md", "docs/brd/foreign.md"]) {
+    const foreign = await validateWorkflowAdmission(
+      ROOT,
+      { route: "sc-research", intent: { path } },
+      dependencies,
+    );
+    assert.equal(foreign.allowed, false, path);
+    assert.equal(foreign.reason, "WRITE_PATH_NOT_ALLOWED", path);
+  }
+
+  const implementation = await validateWorkflowAdmission(
+    ROOT,
+    {
+      route: "sc-research",
+      intent: { path: "src/feature.mjs" },
+      runId: "RUN-RESEARCH",
+      operation: "source-write",
+    },
+    dependencies,
+  );
+  assert.equal(implementation.allowed, false);
+  assert.equal(implementation.reason, "WRITE_CLASS_NOT_ALLOWED");
+  assert.equal(calls.length, 0, "sc-research never consults the controller gate");
+});
+
+const READ_ONLY_ROUTES = ["sc-init", "sc-status", "sc-ui"];
+
+test("read-only routes admit only runtime audit writes under their own id", async () => {
+  const calls = [];
+  const { dependencies } = await fixture(async (input) => {
+    calls.push(input);
+    return allowedGateResult(input);
+  });
+
+  for (const route of READ_ONLY_ROUTES) {
+    const authority = await validateWorkflowAdmission(
+      ROOT,
+      { route, intent: { path: "docs/prd/prd-example.md" } },
+      dependencies,
+    );
+    assert.equal(authority.allowed, false, route);
+    assert.equal(authority.reason, "WRITE_CLASS_NOT_ALLOWED", route);
+
+    const implementation = await validateWorkflowAdmission(
+      ROOT,
+      {
+        route,
+        intent: { path: "src/feature.mjs" },
+        runId: "RUN-READ-ONLY",
+        operation: "source-write",
+      },
+      dependencies,
+    );
+    assert.equal(implementation.allowed, false, route);
+    assert.equal(implementation.reason, "WRITE_CLASS_NOT_ALLOWED", route);
+
+    const audit = await validateWorkflowAdmission(
+      ROOT,
+      { route, intent: { path: ".scratch/loop-runtime/GOAL-001/observation.json" } },
+      dependencies,
+    );
+    assert.equal(audit.allowed, true, route);
+    assert.equal(audit.approval_required, false, route);
+    assert.equal(audit.write_class, "runtime_audit_write", route);
+  }
+  assert.equal(calls.length, 0, "read-only routes never consult the controller gate");
+});
+
+const ADVISORY_SINKS = [
+  ["sc-geniusloop", ["docs/geniusloop/2026-09-03-scope.md"]],
+  ["sc-audit", ["docs/audits/2026-09-03-scope.md"]],
+  [
+    "sc-compound",
+    [
+      "docs/solutions/performance-issues/incident.md",
+      "docs/ERROR_LOG.md",
+      "docs/LEARNED_KNOWLEDGE.md",
+      "docs/progress.md",
+    ],
+  ],
+  ["sc-evolve", ["docs/proposals/2026-09-03-slug.md"]],
+];
+
+test("advisory evidence sinks are run-gated and path-confined", async () => {
+  const calls = [];
+  const { dependencies } = await fixture(async (input) => {
+    calls.push(input);
+    return allowedGateResult(input);
+  });
+
+  for (const [route, sinks] of ADVISORY_SINKS) {
+    for (const path of sinks) {
+      const label = `${route} ${path}`;
+      const missingRun = await validateWorkflowAdmission(
+        ROOT,
+        { route, intent: { path }, operation: "source-write" },
+        dependencies,
+      );
+      assert.equal(missingRun.allowed, false, label);
+      assert.equal(missingRun.reason, "OPEN-LOOP-AUTHORITY", label);
+
+      const admitted = await validateWorkflowAdmission(
+        ROOT,
+        { route, intent: { path }, runId: "RUN-ADVISORY", operation: "source-write" },
+        dependencies,
+      );
+      assert.equal(admitted.allowed, true, label);
+      assert.equal(admitted.approval_required, true, label);
+      assert.equal(admitted.write_class, "implementation_write", label);
+    }
+
+    for (const path of ["src/feature.mjs", "docs/reviews/2026-09-03-foreign.md"]) {
+      const foreign = await validateWorkflowAdmission(
+        ROOT,
+        { route, intent: { path }, runId: "RUN-ADVISORY", operation: "source-write" },
+        dependencies,
+      );
+      assert.equal(foreign.allowed, false, `${route} ${path}`);
+      assert.equal(foreign.reason, "WRITE_PATH_NOT_ALLOWED", `${route} ${path}`);
+    }
+
+    const authority = await validateWorkflowAdmission(
+      ROOT,
+      { route, intent: { path: "docs/prd/prd-example.md" } },
+      dependencies,
+    );
+    assert.equal(authority.allowed, false, route);
+    assert.equal(authority.reason, "WRITE_CLASS_NOT_ALLOWED", route);
+  }
+
+  const adr = await validateWorkflowAdmission(
+    ROOT,
+    {
+      route: "sc-compound",
+      intent: { path: "docs/solutions/adr-0001-example.md" },
+      runId: "RUN-ADVISORY",
+      operation: "source-write",
+    },
+    dependencies,
+  );
+  assert.equal(adr.allowed, false);
+  assert.equal(adr.reason, "WRITE_CLASS_NOT_ALLOWED", "ADRs belong to sc-plan");
+
+  const admittedSinkCount = ADVISORY_SINKS.reduce((total, [, sinks]) => total + sinks.length, 0);
+  assert.equal(calls.length, admittedSinkCount, "exactly one gate call per admitted sink write");
+});
+
+test("sc-plan owns accepted ADRs but not solution notes", async () => {
+  const { dependencies } = await fixture();
+  const adr = await validateWorkflowAdmission(
+    ROOT,
+    { route: "sc-plan", intent: { path: "docs/solutions/adr-0001-example.md" } },
+    dependencies,
+  );
+  assert.equal(adr.allowed, true);
+  assert.equal(adr.approval_required, false);
+  assert.equal(adr.write_class, "authority_write");
+
+  const note = await validateWorkflowAdmission(
+    ROOT,
+    { route: "sc-plan", intent: { path: "docs/solutions/performance-issues/incident.md" } },
+    dependencies,
+  );
+  assert.equal(note.allowed, false);
+  assert.equal(note.reason, "WRITE_CLASS_NOT_ALLOWED");
+});
+
+const UNBOUNDED_IMPLEMENTATION_ROUTES = ["sc-work", "sc-debug"];
+
+test("admission registry covers every public route with a confined allowlist", async () => {
+  const { routes } = JSON.parse(
+    await readFile(
+      path.join(ROOT, ".agent", "context", "workflow-invariants.json"),
+      "utf8",
+    ),
+  );
+  assert.deepEqual(Object.keys(CORE_ROUTE_RULES).sort(), Object.keys(routes).sort());
+
+  for (const [route, rule] of Object.entries(CORE_ROUTE_RULES)) {
+    if (routes[route].writeClasses.length === 0) {
+      assert.equal(rule.authority, false, `${route}: read-only route cannot own authority writes`);
+    }
+    if (rule.authority === true) {
+      assert.ok(
+        (rule.authorityPathPrefixes?.length ?? 0) + (rule.authorityPathPatterns?.length ?? 0) > 0,
+        `${route}: authority writes must be path-confined`,
+      );
+    }
+    if (
+      rule.gated.includes("implementation_write") &&
+      rule.operations.includes("source-write") &&
+      !UNBOUNDED_IMPLEMENTATION_ROUTES.includes(route)
+    ) {
+      assert.ok(
+        (rule.pathPrefixes?.length ?? 0) + (rule.exactPaths?.length ?? 0) > 0,
+        `${route}: implementation writes must be path-confined`,
+      );
+    }
+  }
+});
+
 test("admission route table matches the authority routes in workflow-invariants.json", async () => {
   const { routes } = JSON.parse(
     await readFile(
@@ -903,14 +1122,17 @@ test("delivery mutations consume the controller gate and unsupported operations 
 
 test("unknown routes and malformed requests fail closed before classification", async () => {
   const { dependencies } = await fixture();
-  await assert.rejects(
-    validateWorkflowAdmission(
-      ROOT,
-      { route: "loop", intent: { path: "src/example.mjs" } },
-      dependencies,
-    ),
-    /unsupported workflow route/i,
-  );
+  for (const route of ["loop", "sc-nope", "SC-PRD", ""]) {
+    await assert.rejects(
+      validateWorkflowAdmission(
+        ROOT,
+        { route, intent: { path: "src/example.mjs" } },
+        dependencies,
+      ),
+      /unsupported workflow route/i,
+      JSON.stringify(route),
+    );
+  }
   await assert.rejects(
     validateWorkflowAdmission(ROOT, { route: "sc-work" }, dependencies),
     /write intent/i,

@@ -43,11 +43,23 @@ const SOURCE_WRITE_LOCK_ROOT = path.join(
   "source-write-locks",
 );
 
+const READ_ONLY_ROUTE_RULE = Object.freeze({
+  authority: false,
+  gated: [],
+  operations: [],
+});
+
 export const CORE_ROUTE_RULES = Object.freeze({
+  "sc-init": READ_ONLY_ROUTE_RULE,
+  "sc-status": READ_ONLY_ROUTE_RULE,
+  "sc-ui": READ_ONLY_ROUTE_RULE,
   "sc-plan": Object.freeze({
     authority: true,
-    authorityPathPrefixes: [".agent/evals/", "docs/fsd/", "docs/solutions/"],
-    authorityPathPatterns: [/^\.scratch\/[^/]+\/issues\/[^/]+\.md$/u],
+    authorityPathPrefixes: [".agent/evals/", "docs/fsd/"],
+    authorityPathPatterns: [
+      /^\.scratch\/[^/]+\/issues\/[^/]+\.md$/u,
+      /^docs\/solutions\/adr-[0-9]{4}-[^/]+\.md$/u,
+    ],
     gated: [],
     operations: [],
   }),
@@ -62,6 +74,37 @@ export const CORE_ROUTE_RULES = Object.freeze({
     authorityPathPrefixes: ["docs/prd/"],
     gated: [],
     operations: [],
+  }),
+  "sc-research": Object.freeze({
+    authority: true,
+    authorityPathPrefixes: ["docs/research/"],
+    gated: [],
+    operations: [],
+  }),
+  "sc-geniusloop": Object.freeze({
+    authority: false,
+    gated: ["implementation_write"],
+    operations: ["source-write"],
+    pathPrefixes: ["docs/geniusloop/"],
+  }),
+  "sc-audit": Object.freeze({
+    authority: false,
+    gated: ["implementation_write"],
+    operations: ["source-write"],
+    pathPrefixes: ["docs/audits/"],
+  }),
+  "sc-compound": Object.freeze({
+    authority: false,
+    gated: ["implementation_write"],
+    operations: ["source-write"],
+    pathPrefixes: ["docs/solutions/"],
+    exactPaths: ["docs/ERROR_LOG.md", "docs/LEARNED_KNOWLEDGE.md", "docs/progress.md"],
+  }),
+  "sc-evolve": Object.freeze({
+    authority: false,
+    gated: ["implementation_write"],
+    operations: ["source-write"],
+    pathPrefixes: ["docs/proposals/"],
   }),
   "sc-work": Object.freeze({
     authority: true,

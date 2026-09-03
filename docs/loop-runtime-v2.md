@@ -69,6 +69,7 @@ Unknown token or cost attribution is recorded as unknown, never as zero. A finit
 
 - Read-only review, audit, UI inspection, status, and pre-fix diagnosis do not need the wizard.
 - Planning routes may write authority artifacts only.
+- `/sc-research` writes its note under `docs/research/` as an authority-class write with no wizard; the note stays advisory evidence and grants no decision or execution authority. Advisory sinks (`docs/geniusloop/`, `docs/audits/`, `docs/reviews/`, `docs/proposals/`, `docs/solutions/` notes, `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, `docs/progress.md`) remain implementation writes behind the active run gate, confined to the owning route by `.agent/tools/workflow-admission.mjs`.
 - `/sc-work`, the fix phase of `/sc-debug`, launch implementation handoff, background execution, and every implementation write consume the same budget and write gate.
 - `/sc-go` commit, push, Pull Request, or other external mutation consumes the same run-bound approval and operation gate.
 - Unknown paths default to implementation writes and are denied before approval.
