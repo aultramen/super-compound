@@ -131,6 +131,25 @@ export function validateBranchName(branch, config = {}) {
   return { valid: errors.length === 0, errors };
 }
 
+// Paths whose change usually means a contract surface moved (delivery tier T2):
+// the preview warns so the change cites its PRD/FSD or escalates before commit.
+const SCOPE_TRIGGER_PATTERNS = [
+  /(^|[/\\])migrations?([/\\]|$)/i,
+  /(^|[/\\])prisma([/\\]|$)/i,
+  /schema/i,
+  /\.sql$/i,
+  /openapi|swagger/i,
+  /(^|[/\\])routes?[/\\]api([/\\]|$)|(^|[/\\])api([/\\]|$)/i,
+  /(^|[/\\])auth([/\\]|$)/i,
+  /permission|billing|payment/i,
+];
+
+export function detectScopeTriggers(files = []) {
+  return files.filter((file) =>
+    SCOPE_TRIGGER_PATTERNS.some((pattern) => pattern.test(file)),
+  );
+}
+
 export function detectSensitiveFiles(files = []) {
   return files.filter((file) =>
     SENSITIVE_PATH_PATTERNS.some((pattern) => pattern.test(file)),
@@ -262,6 +281,12 @@ export function planFinish({
   if (sensitiveFiles.length > 0) {
     warnings.push(`Sensitive-looking paths detected: ${sensitiveFiles.join(", ")}`);
   }
+  const scopeTriggers = detectScopeTriggers(repoState.changedFiles ?? []);
+  if (scopeTriggers.length > 0) {
+    warnings.push(
+      `Full-tier paths touched (delivery trigger T2): ${scopeTriggers.join(", ")}; cite the owning PRD/FSD or escalate before this mutation.`,
+    );
+  }
 
   return {
     mode: "finish",
@@ -323,6 +348,12 @@ export function planCommit({
 
   if (sensitiveFiles.length > 0) {
     warnings.push(`Sensitive-looking paths detected: ${sensitiveFiles.join(", ")}`);
+  }
+  const scopeTriggers = detectScopeTriggers(repoState.changedFiles ?? []);
+  if (scopeTriggers.length > 0) {
+    warnings.push(
+      `Full-tier paths touched (delivery trigger T2): ${scopeTriggers.join(", ")}; cite the owning PRD/FSD or escalate before this mutation.`,
+    );
   }
 
   return {

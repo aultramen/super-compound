@@ -97,7 +97,6 @@ const STARTUP_BUDGET_SCENARIOS = [
 const WORKFLOW_SCENARIOS = [
   {
     name: "sc-init",
-    maxAfterTokens: 217,
     description: "/sc-init project scan and config orientation.",
     before: [
       ".agent/rules/project-config.md",
@@ -109,7 +108,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-status",
-    maxAfterTokens: 274,
     description: "/sc-status handoff, state, issue dashboard, and route selection.",
     before: [
       ".agent/workflows/sc-status.md",
@@ -120,7 +118,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-geniusloop",
-    maxAfterTokens: 512,
     description: "/sc-geniusloop proactive improvement ideation and Brain filtering.",
     before: [
       ".agent/workflows/sc-geniusloop.md",
@@ -137,7 +134,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-explore",
-    maxAfterTokens: 806,
     description: "/sc-explore BRD exploration and open-decision capture.",
     before: [
       ".agent/workflows/sc-explore.md",
@@ -155,7 +151,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-research",
-    maxAfterTokens: 269,
     description: "/sc-research local and official-doc evidence gathering.",
     before: [
       ".agent/workflows/sc-research.md",
@@ -166,7 +161,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-prd",
-    maxAfterTokens: 837,
     description: "/sc-prd PRD generation from approved BRD.",
     before: [
       ".agent/workflows/sc-prd.md",
@@ -183,7 +177,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-plan",
-    maxAfterTokens: 2893,
     description: "/sc-plan FSD planning and issue pointer routing.",
     before: [
       ".agent/rules/super-compound.md",
@@ -210,7 +203,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-eval",
-    maxAfterTokens: 225,
     description: "/sc-eval measurable pass/fail criteria and eval runs.",
     before: [
       ".agent/workflows/sc-eval.md",
@@ -220,7 +212,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-go",
-    maxAfterTokens: 599,
     description: "/sc-go preview-first Git branch, worktree, commit, push, and PR operations.",
     before: [
       ".agent/workflows/sc-go.md",
@@ -235,7 +226,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-work",
-    maxAfterTokens: 1207,
     description: "/sc-work goal execution with focused context.",
     before: [
       ".agent/rules/super-compound.md",
@@ -257,7 +247,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-debug",
-    maxAfterTokens: 288,
     description: "/sc-debug reproduce, root cause, fix, and verify.",
     before: [
       ".agent/workflows/sc-debug.md",
@@ -267,7 +256,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-review",
-    maxAfterTokens: 261,
     description: "/sc-review findings-first review.",
     before: [
       ".agent/workflows/sc-review.md",
@@ -277,7 +265,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-audit",
-    maxAfterTokens: 335,
     description: "/sc-audit security, compatibility, compliance, and readiness audit.",
     before: [
       ".agent/workflows/sc-audit.md",
@@ -291,7 +278,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-compound",
-    maxAfterTokens: 266,
     description: "/sc-compound reusable knowledge capture.",
     before: [
       ".agent/workflows/sc-compound.md",
@@ -301,7 +287,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-evolve",
-    maxAfterTokens: 234,
     description: "/sc-evolve draft framework proposal clustering.",
     // sc-evolve is a new route; no recorded baseline commit contains its
     // dedicated workflow file, so its pre-compaction surface uses the
@@ -315,7 +300,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-pause",
-    maxAfterTokens: 249,
     description: "/sc-pause durable handoff before stopping.",
     before: [
       ".agent/workflows/sc-pause.md",
@@ -326,7 +310,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-launch",
-    maxAfterTokens: 1154,
     description: "/sc-launch complete lifecycle routing.",
     before: [
       ".agent/workflows/*.md",
@@ -349,7 +332,6 @@ const WORKFLOW_SCENARIOS = [
   },
   {
     name: "sc-ui",
-    maxAfterTokens: 2149,
     description: "/sc-ui interface-design search-only guidance.",
     before: [
       ".agent/rules/super-compound.md",
@@ -519,9 +501,12 @@ function scenarioStage(name) {
 export const DEFAULT_SCENARIOS = [
   ...LEGACY_PRELOAD_SCENARIOS,
   ...STARTUP_BUDGET_SCENARIOS,
+  // The Codex adapter stub is loaded once per session and measured under
+  // startup-codex-adapter-metadata; counting it again on every route would
+  // double-charge the routes whose whole contract is smaller than the stub.
   ...WORKFLOW_SCENARIOS.map((scenario) => ({
     ...scenario,
-    after: [".codex/SKILL.md", ...scenario.after],
+    after: [...scenario.after],
     semanticContract: `workflow-invariants-v1/${scenario.name}`,
   })),
   ...RELATED_HOTSPOT_SCENARIOS,

@@ -1,8 +1,8 @@
 # Project Configuration
 
-This Markdown file is human guidance for project hints. The machine authority for Loop Runtime policy is `.agent/context/project-config.json`; values here cannot authorize execution or loosen its ceilings.
-
-Customize this guide per project. Leave discovery hints empty only when auto-detection is acceptable; an empty hint is not an unlimited runtime value. See `docs/loop-runtime-v2.md`.
+This Markdown file holds the project's hints and adaptive knobs. Routes read it
+directly; there is no machine-side policy file. Customize it per project and
+leave discovery hints empty only when auto-detection is acceptable.
 
 ```yaml
 project_name: ""
@@ -53,6 +53,7 @@ conventions:
   default_branch: "main"
   commit_convention: "conventional"
   tdd_mode: "balanced"        # strict | balanced | relaxed
+  delivery_mode: "auto"       # auto | light | full; auto applies the tier triggers in agentic-delivery/references/workflow-integration.md
   default_execution: "sequential"
 
 gitWorkflow:

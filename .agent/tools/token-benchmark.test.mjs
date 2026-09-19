@@ -588,9 +588,9 @@ test("default benchmark covers all workflows and related hotspots", () => {
   for (const name of workflows) {
     const scenario = DEFAULT_SCENARIOS.find((candidate) => candidate.name === name);
     assert.equal(
-      scenario.after[0],
-      ".codex/SKILL.md",
-      `${name}: native Codex adapter overhead must be included`,
+      scenario.after.includes(".codex/SKILL.md"),
+      false,
+      `${name}: the Codex adapter stub is startup cost, measured once, not per route`,
     );
     assert.ok(
       scenario.after.includes(`.agent/context/workflows/${name}.contract.md`),

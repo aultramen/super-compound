@@ -24,7 +24,7 @@ Load only the branch required by the active stage:
 - Cross-artifact ID syntax: [qualified references](references/qualified-references.md)
 - Context loading, issue-pointer fields, statuses, and canonical skeleton: [context and issue pointers](references/context-and-issue-pointers.md)
 - Missing authority, conflicts, or unavailable prerequisites: [OPEN stop conditions](references/open-stop-conditions.md)
-- Stage-to-workflow handoff: [workflow integration](references/workflow-integration.md)
+- Stage-to-workflow handoff and the `light|full` delivery tier triggers T1-T5: [workflow integration](references/workflow-integration.md)
 - UI-bearing profiles, readiness, contract boundaries, first-slice proof, scale-out, and compatibility: [UI contract readiness](references/ui-contract-readiness.md)
 
 Do not preload templates or downstream procedures before their artifact or stage is active.

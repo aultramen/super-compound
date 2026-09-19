@@ -76,7 +76,8 @@ test("auditRepository reads every file and reports structural gaps", async () =>
     assert.equal(codes.has("DUPLICATE_PARAGRAPH"), true);
     assert.equal(codes.has("OUTPUT_BUDGET_GAP"), true);
     assert.equal(codes.has("OUTPUT_BUDGET_MANIFEST_MISSING"), true);
-    assert.equal(codes.has("AUDIT_CLASS_MISSING"), true);
+    assert.equal(codes.has("AUDIT_CLASS_MISSING"), false);
+    assert.equal(report.coverage.auditClassCounts.project >= 1, true);
     const serializedFindings = JSON.stringify(report.findings);
     assert.equal(serializedFindings.includes(repeated), false);
     assert.equal(serializedFindings.includes("{not-json}"), false);

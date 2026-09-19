@@ -4,9 +4,10 @@ description: "Run the complete Super Compound lifecycle through BRD, PRD, FSD, g
 
 # Launch Workflow
 
-Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
-
 Use this when the user wants the whole lifecycle from idea to verified delivery.
+Launch is the `full` delivery tier: use it when intake classified the request
+`full` (triggers T1-T5 in `skills/agentic-delivery/references/workflow-integration.md`);
+a `light` request goes straight to `/sc-work` or `/sc-debug`.
 
 ## Pipeline
 
@@ -26,7 +27,7 @@ Use this when the user wants the whole lifecycle from idea to verified delivery.
 14. `sc-work.md` - execute the bounded hardening/verification goal for integration, responsive, accessibility, E2E, and visual-regression evidence; obtain Business Owner UAT approval.
 15. `sc-review.md` - audit implementation and recorded verification/UAT evidence against authority; it does not manufacture missing evidence.
 16. `sc-audit.md` - run risk checks when the change affects users, data, dependencies, auth, release, or agent surfaces.
-17. `sc-go.md` - preview the finish flow and PR template after verification; push and PR return `OPEN-RELEASE-GATE` until the operation allowlist carries them.
+17. `sc-go.md` - preview the finish flow and PR template after verification; commit, push, and PR run through `/sc-go` on explicit confirmation.
 18. `sc-compound.md` - document reusable lessons.
 
 Run one active stage at a time. At every non-trivial boundary update
@@ -37,12 +38,8 @@ re-serialize unchanged sections; use `.continue-here.md` only as a short pointer
 when stopping. Release prior-stage detail before loading the next contract. UI implementation
 is a capability of an approved goal under `sc-work.md`, not a parallel authority.
 
-Carry the exact `run_id` and current run head at every implementation handoff,
-then route the handoff through `/sc-work`; launch never manufactures approval or
-mutates implementation directly. A `docs/STATE.md` update is itself a classified
-write and needs the active run's source-write gate. Store only a
-non-authoritative run pointer and refresh it with `loop-run.mjs show`; never copy
-the event log, counters, approval envelope, or confirmation digest into STATE.
+Route every implementation handoff through `/sc-work`; launch itself writes
+only `docs/STATE.md` and never mutates implementation directly.
 
 ## Rules
 

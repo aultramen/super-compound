@@ -6,16 +6,10 @@ description: "Preview and run safe Git branch, commit, push, worktree, and Pull 
 
 Use this workflow for explicit Git operations after or before Super Compound work: branch start, optional worktree setup, commit, push, and Pull Request preparation.
 
-## Loop Runtime v2 Boundary
-
-Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
-
-Status, branch, worktree, and command preview are read-only and need no wizard.
-`commit`, `push`, and PR mutation require a valid nonterminal FSD-authorized run,
-human approval, durable intent, and an allowlisted operation. `commit`, `push`,
-and `pr` are not in the operation allowlist (`.agent/context/operation-inventory.json`):
-return `OPEN-RELEASE-GATE` and perform no mutation. A preview approval or a
-terminal run is not an operation gate.
+Preview first. On explicit confirmation for that operation, run the previewed
+commands. A preview that warns about full-tier paths (schema, migrations, API,
+auth, billing) must cite the owning PRD/FSD or escalate (`ESCALATE: T2`) before
+the mutation runs.
 
 ## Usage
 
@@ -23,9 +17,9 @@ terminal run is not an operation gate.
 /sc-go status
 /sc-go start feature/name
 /sc-go worktree feature/name --path ../project-feature
-/sc-go commit "Describe the change"   # preview only; returns OPEN-RELEASE-GATE
-/sc-go push                           # preview only; returns OPEN-RELEASE-GATE
-/sc-go pr                             # preview only; returns OPEN-RELEASE-GATE
+/sc-go commit "Describe the change"   # preview, then run on confirmation
+/sc-go push                           # preview, then run on confirmation
+/sc-go pr                             # preview, then run on confirmation
 ```
 
 ## Steps

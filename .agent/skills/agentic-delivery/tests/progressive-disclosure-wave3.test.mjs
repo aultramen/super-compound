@@ -20,7 +20,7 @@ const specs = {
       "qualified-references.md": "bc5f8b87bb0333347f291087ae7a28858b5326ebfd12c09094e5532f21c110eb",
       "context-and-issue-pointers.md": "68c0d02211cd46b95845c2555e0d680075e61e72d3793eae3678a07d69cf8b1d",
       "open-stop-conditions.md": "d063fff88d47101ae5c331abe7d51dce53cc36d41d80195f4f0132a797bbf7b0",
-      "workflow-integration.md": "c1442ade732078dbda78f121d1dab271227f885a2158bce8a4c42e18862e841a",
+      "workflow-integration.md": "fa4bb97d5c735e39d22538d6eee2e78cf2bfc71104114022a209254b5a457f71",
       "ui-contract-readiness.md": "89c536da9119951d7872fb99e2b924a6873f7f0fc6f58486bc2d311cdbf7d96f",
     },
     invariants: [

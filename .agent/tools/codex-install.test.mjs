@@ -115,13 +115,7 @@ test("bundles runtime tools and durable eval authority referenced by fallback co
   ]) {
     assert.equal(existsSync(join(repoRoot, ".agent", "tools", tool)), true);
   }
-  assert.equal(existsSync(join(repoRoot, ".agent", "evals", "loop-runtime-v2.md")), true);
-  assert.equal(
-    existsSync(
-      join(repoRoot, ".agent", "evals", "fixtures", "background-pilots-v2.json"),
-    ),
-    true,
-  );
+  assert.equal(existsSync(join(repoRoot, ".agent", "evals", "ui-contract-readiness.md")), true);
 });
 
 test("installs an exact, hashed Codex bundle from canonical .agent sources", (t) => {
@@ -212,16 +206,10 @@ test("installs an exact, hashed Codex bundle from canonical .agent sources", (t)
   assert.equal(statSync(uiReadinessReference).isFile(), true);
   assert.match(readFileSync(uiReadinessReference, "utf8"), /READY_FOR_SLICE/);
 
-  const loopEval = join(target, "references", "evals", "loop-runtime-v2.md");
-  const loopFixtures = join(
-    target,
-    "references",
-    "evals",
-    "fixtures",
-    "background-pilots-v2.json",
+  assert.match(
+    readFileSync(join(target, "references", "evals", "ui-contract-readiness.md"), "utf8"),
+    /READY_FOR_SLICE/,
   );
-  assert.match(readFileSync(loopEval, "utf8"), /GOAL-019/);
-  assert.match(readFileSync(loopFixtures, "utf8"), /background_pilot_suite_v2/);
   assert.doesNotMatch(
     readFileSync(join(target, "references", "context", "workflow-invariants.json"), "utf8"),
     /workflow_invariants_v1/,

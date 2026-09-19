@@ -21,7 +21,8 @@ framework proposal (human-approved).
 | ID | Scope | Confidence | Action rule (IF-THEN) |
 | --- | --- | --- | --- |
 <!-- newest first; one row per entry below -->
-| LRN-2026-09-03-001 | framework | confirmed | IF a route contract needs tokens THEN add them and re-adopt that route's absolute budget in `token-benchmark.mjs` (measured after + 40); the 90% ratio is reported, not a gate |
+| LRN-2026-09-20-001 | framework | confirmed | IF a rule is enforced only by prose the model reads THEN back it with a test, CI check, or tool, or delete it; prose-only gates cost tokens and block compliant models without protecting anything |
+| LRN-2026-09-03-001 | framework | confirmed (SUPERSEDED by LRN-2026-09-20-001) | IF a route contract needs tokens THEN add them and re-adopt that route's absolute budget in `token-benchmark.mjs` (measured after + 40); the 90% ratio is reported, not a gate |
 | LRN-2026-09-02-002 | framework | confirmed (SUPERSEDED by LRN-2026-09-03-001) | IF a route contract needs tokens THEN trim `.codex/SKILL.md` or rewrite token-neutral |
 | LRN-2026-09-02-001 | framework | confirmed | IF wiring a behavior into an sc-* workflow THEN add its spine to the paired contract in the same change and extend the spine test |
 
@@ -48,6 +49,14 @@ framework proposal (human-approved).
 - Applies to: framework
 - Action rule: IF a route contract needs tokens THEN add them and re-adopt that route's absolute budget in `token-benchmark.mjs` (measured after + 40); the 90% ratio is reported, not a gate.
 - Source: verified experiment (Wave 4 A: sc-status 224/264, sc-compound 215/255, sc-pause 200/240 after the contract fixes the ratio gate had blocked)
+- Status: SUPERSEDED by LRN-2026-09-20-001 (2026-09-20); routes use the ratio gate again with the Codex stub measured once at startup.
+
+## LRN-2026-09-20-001 - prose-only gates
+- Learning: Loop Runtime v2 wrote 28k lines of gate tooling, yet no hook could deny an Edit, the admission library had no CLI, and the Git tool had no gate; the only enforcement was contract prose, which blocked compliant models (OBSERVE forbade writes) and cost tokens for the rest.
+- Confidence: confirmed
+- Applies to: framework
+- Action rule: IF a rule is enforced only by prose the model reads THEN back it with a test, CI check, or tool, or delete it.
+- Source: verified experiment (2026-09-20 audit: 27 gates on /sc-work, 9 tool-backed, none reachable in the shipped mode; removal left every suite green)
 
 <!-- Entry format (append below, newest last):
 

@@ -4,9 +4,9 @@ This walkthrough shows the current Super Compound flow after the 2026-06-20 clea
 
 Every command starts with `/sc-*` so it stays separate from native Claude Code slash commands.
 
-## Runtime checkpoint
+## Delivery tier checkpoint
 
-Before protected implementation begins or resumes, the Budget & Stop Wizard shows the goal, verifier, effective policy, required `max_iterations`, optional `null` guardrails, consumed budget, and approval expiry. Only a human can confirm. The same gate protects the first source write and external mutations across the 18 public workflows; `/loop` is not a public route. See `docs/loop-runtime-v2.md`.
+Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or a one-module change is `light`: `/sc-debug` or `/sc-work` starts immediately, tests and verification still apply, and a single trivial change is simply done. A new capability, a schema/API/auth/billing surface, a new screen, or multi-stream work is `full` and takes the lifecycle below. The scenario that follows is `full`.
 
 ## Scenario
 

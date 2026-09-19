@@ -1,13 +1,10 @@
 # /sc-plan Runtime Contract
 
-Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
-
 Purpose: convert an approved PRD into an FSD plus lightweight goal issue pointers.
 
-Loop Runtime v2: write only classified `authority_write` FSD/ADR/eval/issue
-artifacts; these need no Budget & Stop Wizard. Classify the target first and
-block every `implementation_write`, routing it to an approved `/sc-work` goal.
-Planning defines authority but never creates approval or execution evidence.
+Entry of the `full` tier (agentic-delivery/references/workflow-integration.md).
+Write authority artifacts only: FSD, accepted ADR, eval, issue pointers; never
+product code, which belongs to an approved `/sc-work` goal.
 
 Load first:
 

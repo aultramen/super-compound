@@ -1,23 +1,24 @@
 # Super Compound Operating Contract
 
-Super Compound is a disciplined operating layer for AI-assisted engineering. It keeps work small, evidence-driven, and durable.
+Super Compound is a disciplined operating layer for AI-assisted engineering. Discipline compounds: each unit of work makes the next one easier. It keeps work small, evidence-driven, and durable.
 
 ## Core Principles
 
+- Discipline compounds: rigorous process today saves time tomorrow.
 - Evidence before claims: run or name the verification that proves the result.
-- Test-first by default for behavior changes.
-- Prefer simple, local, reversible changes.
+- Test-first by default for behavior changes, at the strictness `tdd_mode` sets.
+- YAGNI and DRY: build only what is needed, never duplicate.
 - Keep durable context on disk, not only in conversation memory.
-- Use the canonical delivery path for product work: `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`.
+- Plan before code: `full`-tier product work follows `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`; `light` work goes straight to `/sc-work` or `/sc-debug`.
 - Turn reusable solutions into documentation through `/sc-compound`.
 
-## Loop Runtime Boundary
+## Delivery Tiers
 
-Protected execution follows `docs/loop-runtime-v2.md`: a human-confirmed Budget & Stop Wizard gates START, RESUME, and implementation or external writes; hooks are advisory; and the machine-authoritative surface remains 18 workflows without `/loop`.
+The framework decides the tier per request (`delivery_mode: auto` in `.agent/rules/project-config.md`; `light` or `full` pin it). Intake states one line, `Tier: light|full; trigger: T<n>|none`, and never asks. `full` is triggered by a new product capability without approved PRD/FSD (T1), a contract surface such as schema, API, auth, billing, or PII (T2), a new interactive screen or flow (T3), multi-session or multi-stream work (T4), or an explicit request for BRD/PRD/FSD (T5). Everything else is `light`; a single trivial change is done directly. A trigger found mid-work escalates (`ESCALATE: T<n>`) to its owner; the tier never steps down. The rubric lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`; `/sc-go` previews and `/sc-review` warn when touched paths match T2.
 
-## Default UI-Aware Lifecycle
+## UI-Aware Lifecycle (trigger T3 or `full`)
 
-When the scope has an interactive user surface, use:
+When `full` scope adds an interactive user surface, use:
 
 ```text
 BRD -> PRD draft -> /sc-ui validation -> approved PRD

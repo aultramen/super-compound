@@ -13,8 +13,7 @@ Keep continuation state concise enough to load quickly and precise enough that `
 2. Update Current Position, Next Action, active Blockers, Decisions, and Completed Work.
 3. Dedupe before appending. Mark replaced guidance `SUPERSEDED by <reference>` instead of preserving competing truths.
 4. Apply the archive gate: compact when Completed Work exceeds 20 entries or Decisions exceeds 30 entries; never archive active blockers or the next action.
-5. For an active Loop Run, refresh `run_id` with `node .agent/tools/loop-run.mjs show --run <run_id>` and store only a non-authoritative pointer plus run head digest, status snapshot, last evidence, stop reason, and next transition.
-6. Who writes STATE: inside an active run, `/sc-work`, `/sc-debug`, and `/sc-launch` update the Next action through the source-write gate; every other route, and any route outside a run, hands off through `/sc-pause`, the designated STATE writer.
+5. Who writes STATE: `/sc-work`, `/sc-debug`, and `/sc-launch` update the Next action when they close; every other route hands off through `/sc-pause`, the designated STATE writer.
 
 ## When to Use
 
@@ -32,11 +31,8 @@ Use when starting, pausing, or completing non-trivial workflow work; recording a
 - Create only files the work needs. Do not copy BRD, PRD, FSD, issue, or solution contents into state.
 - Decisions remain constraints until explicitly reopened. Blockers name owner and required input.
 - `.continue-here.md` is a short pointer, not a second state database.
-- Loop lifecycle authority remains in `events.jsonl`. Never copy events,
-  counters, an approval envelope, or a confirmation digest into `STATE.md`.
-- A `docs/STATE.md` write is classified project mutation and needs the active
-  source-write gate. Reading or refreshing the pointer stays read-only. A
-  `START` or `RESUME` recommendation always requires fresh human confirmation.
+- STATE records position, decisions, blockers, and evidence refs; it never
+  copies artifact prose or tool output into memory.
 - Never store secrets, credentials, private data, or full sensitive payloads.
 - Preserve useful history through archive links, not unbounded hot memory.
 

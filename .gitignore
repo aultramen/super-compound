@@ -2,7 +2,6 @@
 .tmp/
 .continue-here.md
 .agent/.compact-state/
-.agent/context/project-mode-capability.json
 .scratch/work-packages/
 .scratch/loop-runs/
 .scratch/loop-queue/

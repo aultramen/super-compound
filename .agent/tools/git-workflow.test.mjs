@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   DEFAULT_CONFIG,
+  detectScopeTriggers,
   detectSensitiveFiles,
   planCommit,
   planFinish,
@@ -234,4 +235,22 @@ test("exports safe default configuration", () => {
   assert.equal(DEFAULT_CONFIG.remote, "origin");
   assert.equal(DEFAULT_CONFIG.previewFirst, true);
   assert.equal(DEFAULT_CONFIG.protectMainBranch, true);
+});
+
+test("flags full-tier paths so a light change cannot silently cross a contract surface", () => {
+  assert.deepEqual(
+    detectScopeTriggers(["src/app.ts", "migrations/001_add_column.sql", "src/auth/session.ts", "README.md"]),
+    ["migrations/001_add_column.sql", "src/auth/session.ts"],
+  );
+  const preview = planCommit({
+    message: "feat: add column",
+    config: DEFAULT_CONFIG,
+    repoState: {
+      isGitRepo: true,
+      currentBranch: "feature/x",
+      hasOrigin: true,
+      changedFiles: ["migrations/001_add_column.sql"],
+    },
+  });
+  assert.ok(preview.warnings.some((line) => /Full-tier paths touched/.test(line)));
 });

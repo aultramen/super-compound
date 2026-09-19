@@ -51,7 +51,7 @@ The goal is continuous improvement and creativity for an existing system. This w
 - Brain elimination matrix covering Beta, Alpha, Theta, and Delta: one line per eliminated idea.
 - Selected 1-2 Delta ideas with rationale.
 - Recommended next workflow for each selected idea.
-- Advisory prior-outcome/pattern references used for dedupe, plus the resulting `geniusloop_outcome_v2` event reference when the active run supports it.
+- Advisory prior-outcome references used for dedupe (`docs/geniusloop/` and `knowledge-search` hits).
 - `OPEN-*` blockers when authority, evidence, or user intent is missing.
 - When the evidence exceeds the chat envelope, save the complete benchmark,
   ideas, matrix, and rationale to `docs/geniusloop/YYYY-MM-DD-<scope>.md` and
