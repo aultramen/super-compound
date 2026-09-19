@@ -9,34 +9,33 @@ Budgets use `.agent/tools/token-benchmark.mjs` with `deterministic_estimated_tok
 | Claude repository startup | <= 3,000 tokens | `CLAUDE.md`, its `AGENTS.md` import, and worst-case path rules |
 | Antigravity always-on rules | <= 2,750 tokens | all `.agent/rules/*.md`; these cannot be routed away |
 | Native skill discovery | <= 2,500 tokens | count repository skill `name` + `description`; bodies stay on demand |
-| sc-init | <= 217 tokens | route contract first |
-| sc-status | <= 274 tokens | route contract first |
-| sc-geniusloop | <= 512 tokens | load route contract and scoped evidence before Brain |
-| sc-explore | <= 806 tokens | route contract first |
-| sc-research | <= 269 tokens | route contract first |
-| sc-prd | <= 837 tokens | route contract first |
-| sc-plan | <= 2,893 tokens | use route contract and skeletons before full skills/templates |
-| sc-eval | <= 225 tokens | route contract first |
-| sc-go | <= 599 tokens | use route contract and Git helper previews before full skill |
-| sc-work | <= 1,207 tokens | load issue pointer, referenced FSD sections, target files, tests |
-| sc-debug | <= 288 tokens | route contract first |
-| sc-review | <= 261 tokens | route contract first |
-| sc-audit | <= 335 tokens | route contract first |
-| sc-compound | <= 266 tokens | route contract first |
-| sc-evolve | <= 234 tokens | route contract first |
-| sc-pause | <= 249 tokens | route contract first |
-| sc-launch | <= 1,154 tokens | route contract first |
-| sc-ui | <= 2,149 tokens | run interface search; never preload CSV data |
+| sc-init | <= 10% of baseline | route contract first |
+| sc-status | <= 10% of baseline | route contract first |
+| sc-geniusloop | <= 10% of baseline | load route contract and scoped evidence before Brain |
+| sc-explore | <= 10% of baseline | route contract first |
+| sc-research | <= 10% of baseline | route contract first |
+| sc-prd | <= 10% of baseline | route contract first |
+| sc-plan | <= 10% of baseline | route contract and skeletons before full skills/templates |
+| sc-eval | <= 10% of baseline | route contract first |
+| sc-go | <= 10% of baseline | route contract and Git helper previews before full skill |
+| sc-work | <= 10% of baseline | load issue pointer, referenced FSD sections, target files, tests |
+| sc-debug | <= 10% of baseline | route contract first |
+| sc-review | <= 10% of baseline | route contract first |
+| sc-audit | <= 10% of baseline | route contract first |
+| sc-compound | <= 10% of baseline | route contract first |
+| sc-evolve | <= 10% of baseline | route contract first |
+| sc-pause | <= 10% of baseline | route contract first |
+| sc-launch | <= 10% of baseline | route contract first |
+| sc-ui | <= 10% of baseline | run interface search; never preload CSV data |
 | artifacts | <= 10% of baseline | skeleton first, full section on demand |
 | related hotspots | <= 10% of baseline | use compact skill/template/hook/agent/rule/workflow indexes |
 
-A route gate is an absolute after-token budget over the route contract plus
-`.codex/SKILL.md`: measured after-tokens plus 40 headroom, re-adopted whenever a
-deliberate contract change lands (one number in `token-benchmark.mjs`). The
-route's reduction against the frozen baseline is reported per run but does not
-gate. If a route exceeds its budget, stop expanding context and switch to a
-narrower artifact section, search result, or issue pointer. Do not remove
-authority checks, OPEN detection, or verification mapping to reduce tokens.
+A route gate is the ratio of the route contract to the full workflow and
+skills it replaces (the Codex adapter stub is startup cost, measured once): the contract must stay under 10% of
+that baseline, so the gate scales with the workflow instead of pinning a number.
+If a route exceeds its budget, stop expanding context and switch to a narrower
+artifact section, search result, or issue pointer. Do not remove authority
+checks, OPEN detection, or verification mapping to reduce tokens.
 
 Static measurements cover repository-owned files only. Parent/system/user instructions,
 tool schemas, conversation history, and model-specific billing tokens require runtime

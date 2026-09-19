@@ -9,17 +9,6 @@ Use this after implementation or when reviewing a diff/branch.
 This route remains strictly read-only. Approval to remediate a finding selects
 an owning workflow; it never converts review into implementation.
 
-## Loop Runtime v2 Boundary
-
-Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
-
-Read-only review needs no wizard and may consume the active run/eval evidence.
-The current policy classifies a durable `docs/reviews/` report as an
-`implementation_write`; therefore writing that report requires the caller's
-active run gate and `ACTION_INTENDED`. Without an active run gate, keep the
-review non-mutating, return `OPEN-LOOP-AUTHORITY`, and do not silently drop a
-finding. Review never uses that gate to apply a fix.
-
 ## Steps
 
 1. Load `skills/code-review/SKILL.md`.
@@ -29,6 +18,7 @@ finding. Review never uses that gate to apply a fix.
 5. Review the standards axis: security, architecture, tests, maintainability, performance, and docs. Load only the applicable sections of `docs/engineering-standards.md`, or the project's `CODING_STANDARDS.md` when one exists; standards are enforced here, not during implementation, so implementation context stays small.
 6. For PR readiness, load `skills/git-workflow-operation/SKILL.md` and review the PR checklist/template, but do not commit or push unless routed through `/sc-go`.
 7. Verify each claim against the diff or a command result; name the claims that could not be verified and why.
+   Check tier consistency: when the diff touches full-tier paths (schema, migrations, API, auth, billing; the same patterns `git-workflow.mjs` previews warn on) without a cited PRD/FSD, report a finding `ESCALATE: T2` with `/sc-plan` as owner.
 8. If complete evidence exceeds the chat envelope, save it to
    `docs/reviews/YYYY-MM-DD-<scope>.md` and return the path; never omit a
    finding to satisfy an output cap. Then run

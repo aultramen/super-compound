@@ -6,7 +6,6 @@ import path from "node:path";
 import readline from "node:readline";
 import { fileURLToPath } from "node:url";
 
-import { assertPrivacySafeRuntimeValue } from "./loop-telemetry-model.mjs";
 
 const DEFAULT_MAX_BYTES = 256 * 1024 * 1024;
 
@@ -263,7 +262,10 @@ function opaqueContributorRef(agentId) {
   if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/u.test(agentId)) {
     throw new TypeError("PRIVACY_STOP: transcript contributor ID is invalid.");
   }
-  assertPrivacySafeRuntimeValue(agentId, "transcript contributor ID");
+  // Emails, API keys, and credential-like ids must never reach the usage log.
+  if (/@|^(?:sk|ghp|gho|xox[a-z]?|AKIA|ya29)[-_.A-Za-z0-9]|password|secret|token|apikey|credential/iu.test(agentId)) {
+    throw new TypeError("PRIVACY_STOP: transcript contributor ID looks sensitive.");
+  }
   return `sha256:${createHash("sha256")
     .update(`super-compound:transcript-contributor:v2\0${agentId}`)
     .digest("hex")}`;

@@ -26,7 +26,7 @@
             "timeout": 5
           }
         ],
-        "description": "Warn the agent at low remaining context: wrap up at <=35%, stop and save state at <=25%"
+        "description": "Warn the agent at low remaining context: 35%/25% remaining on a 200k window, 15%/8% on 1M; override with SC_CONTEXT_WARN_PCT and SC_CONTEXT_CRITICAL_PCT"
       }
     ],
     "PreCompact": [

@@ -32,7 +32,7 @@ Check two things before recommending work:
 
 ### 2. Recommend A State
 
-Report the category, state, and short reasoning.
+Report the category, state, delivery tier (`light|full; trigger: T<n>|none`), and short reasoning.
 
 Before `ready-for-agent`, bugs need a reproduction/verification signal;
 enhancements need concrete behavior, non-goals, acceptance, and verification.

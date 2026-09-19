@@ -171,7 +171,7 @@ export function checkFile(spec, raw) {
 
 function readIfPresent(root, relPath) {
     try {
-        return fs.readFileSync(path.resolve(root, relPath), 'utf8');
+        return fs.readFileSync(path.resolve(root, relPath), 'utf8').replace(/\r\n?/g, '\n');
     } catch {
         return null;
     }
@@ -230,7 +230,7 @@ export function collectObservations({ root }) {
     for (const file of listMarkdownFiles(solutionsDir)) {
         let raw;
         try {
-            raw = fs.readFileSync(file, 'utf8');
+            raw = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
         } catch {
             continue;
         }

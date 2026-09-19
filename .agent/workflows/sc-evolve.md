@@ -21,4 +21,4 @@ Use this when `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, or `docs/solutio
 ## Guardrails
 
 - `/sc-evolve` writes DRAFT proposals only; it must not modify prompts, model weights, goals, policy, budgets, verifier definitions, framework source, operating rules, or the public workflow inventory.
-- A proposal grants no implementation, source-write, Git, external-write, or release authority. Approval and apply are explicit human actions in a later session.
+- A proposal grants no implementation, Git, or release authority. Approval and apply are explicit human actions in a later session.

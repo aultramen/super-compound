@@ -4,6 +4,36 @@ All notable changes to the Super Compound framework are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and version entries follow the repository's delivery history. Dates use `YYYY-MM-DD`.
 
+## [2026-09-20] - Simplify Wave: Loop Runtime v2 Removed, Adaptive Delivery Restored
+
+Audit: `docs/audits/2026-09-20-simplify-wave.md`. Archive tag before removal: archive/loop-runtime-v2 (git tag).
+
+### Removed
+
+- Loop Runtime v2 in full: the controller, run model, queue, telemetry, learning store, cancellation coordinator, background execution and policy, action adapter and capability model, external action store, schema validator, project-config authority, safety state, Budget & Stop Wizard, workflow admission, migration, and release cutover tools with their test suites (84 files); `.agent/context/project-config.json`, `.agent/context/operation-inventory.json`, and the 19 runtime JSON Schemas under `.agent/context/schemas/`; the runtime operating guide, its BRD/PRD/FSD/ADR authority package, the cutover-status solution, six runtime goal reviews, and the runtime eval with its fixture. The shipped mode forbade every source write, the only permissive mode required a WSL2 kernel, a native ext4 mount, and a root-owned bwrap binary, and no route ever reached it. `.agent/tools` shrinks from 73,098 to 15,970 lines.
+- The five runtime fields (`loopRuntimeRole`, `writeClasses`, `wizardPolicy`, `requiredOperationGate`, `loopStateAccess`) from `.agent/context/workflow-invariants.json` and their validation in `framework-audit.mjs` and `workflow-contracts.test.mjs`.
+- Filesystem locks: `withOwnerLock`, `appendFileDurable`, the hard-write interceptor and bwrap sandbox command from `.agent/tools/file-state.mjs`; the `docs/STATE.md.lock` primitives from `goal-waves.mjs`; the work-package ledger lock is now an in-process queue. Directory fsync is best-effort on every platform and a busy `rename` falls back to a direct write, so the tools run on WSL `/mnt/c` and native Windows.
+- Per-route absolute token budgets in `token-benchmark.mjs`; routes use the 10% ratio gate again, and the Codex adapter stub is measured once at startup instead of on every route.
+
+### Added
+
+- Delivery tiers decided per request: `delivery_mode: auto | light | full` in `.agent/rules/project-config.md`; the rubric with triggers T1-T5 in `.agent/skills/agentic-delivery/references/workflow-integration.md`; every route states `Tier: light|full; trigger: T<n>|none` at intake and escalates with `ESCALATE: T<n>` mid-work. The 2026-02-11 fast path "single trivial change: just do it directly" is back in `/sc-work` and `/sc-debug`.
+- `detectScopeTriggers` in `.agent/tools/git-workflow.mjs`: `/sc-go` previews warn when touched paths match contract surfaces (migrations, schema, SQL, OpenAPI, API routes, auth, permission, billing, payment); `/sc-review` reports the same as `ESCALATE: T2`.
+- A negative guard in `workflow-contracts.test.mjs`: no route surface may reintroduce runtime ceremony.
+- CRLF-safe reads for `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, and `docs/solutions/` in `knowledge-search.mjs` and `memory-maintenance.mjs`; `.gitattributes` gains `* text=auto eol=lf`.
+
+### Changed
+
+- `/sc-go` runs `commit`, `push`, and `pr` after a fresh preview and explicit confirmation; the previous contract returned `OPEN-RELEASE-GATE` for every mutation. `/sc-pause` writes `docs/STATE.md` without a run gate.
+- `SUPER-COMPOUND.md` Core Principles restore "Discipline compounds" and "YAGNI and DRY"; the UI-aware lifecycle applies to trigger T3 or `delivery_mode: full`.
+- `npm run audit` runs the benchmark first, so evidence is never stale; `framework-audit` fails only on P0/P1 and classifies unknown paths as `project` instead of failing, so it runs in downstream repositories.
+- `transcript-usage.mjs` keeps a minimal fail-closed privacy check for contributor ids instead of the runtime telemetry model.
+
+### Deferred
+
+- Local `.scratch/loop-*` runtime state stays gitignored and on disk; delete it by hand when convenient.
+- `.agent/skills/threat-modeling/references/stride.md` still names "loop-runtime state files" in one asset row; the reference is hash-pinned and the row is harmless.
+
 ## [Unreleased] - Workflow Admission Registry
 
 ### Changed

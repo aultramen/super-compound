@@ -7,12 +7,9 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import {
-    acquireStateLock,
     computeWaves,
     parseIssueDependencies,
-    releaseStateLock,
     resolveMaxWorkers,
-    stateLockPath,
 } from './goal-waves.mjs';
 
 test('linear chain produces one goal per wave', () => {
@@ -79,17 +76,9 @@ test('parseIssueDependencies reads Blocked by lines', (t) => {
     assert.deepEqual(computeWaves(goals), [['01-first.md'], ['02-second.md']]);
 });
 
-test('resolveMaxWorkers prefers override, then config, then 2', (t) => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'waves-root-'));
-    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-    assert.equal(resolveMaxWorkers(root, 4), 4);
-    assert.equal(resolveMaxWorkers(root, null), 2);
-    fs.mkdirSync(path.join(root, '.agent/context'), { recursive: true });
-    fs.writeFileSync(
-        path.join(root, '.agent/context/project-config.json'),
-        JSON.stringify({ background_aggregate_policy: { max_workers: 3 } })
-    );
-    assert.equal(resolveMaxWorkers(root, null), 3);
+test('resolveMaxWorkers prefers override, then 2', () => {
+    assert.equal(resolveMaxWorkers('.', 4), 4);
+    assert.equal(resolveMaxWorkers('.', null), 2);
 });
 
 const cliPath = fileURLToPath(new URL('./goal-waves.mjs', import.meta.url));
@@ -137,16 +126,3 @@ test('default CLI output keeps the goal_waves_v1 shape', (t) => {
     assert.deepEqual(plan.waves[1], { wave: 2, parallel: 2, goals: ['api', 'ui'] });
 });
 
-test('state lock is exclusive and stale locks clear', (t) => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'waves-lock-'));
-    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-    fs.mkdirSync(path.join(root, 'docs'), { recursive: true });
-    assert.equal(acquireStateLock(root), true);
-    assert.equal(acquireStateLock(root), false);
-    releaseStateLock(root);
-    assert.equal(acquireStateLock(root), true);
-    const past = Date.now() - 60_000;
-    fs.utimesSync(stateLockPath(root), past / 1000, past / 1000);
-    assert.equal(acquireStateLock(root), true);
-    releaseStateLock(root);
-});

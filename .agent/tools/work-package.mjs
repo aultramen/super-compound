@@ -15,7 +15,6 @@ import {
   assertExpectedVersion,
   readBoundedFile,
   resolveRepositoryPath,
-  withOwnerLock,
   writeFileAtomic,
 } from "./file-state.mjs";
 
@@ -1014,19 +1013,24 @@ async function writeJsonAtomic(root, target, value, lock = {}) {
   });
 }
 
-export async function withLedgerLock(
-  ledgerPath,
-  operation,
-  dependencies = {},
-) {
+const ledgerQueues = new Map();
+
+// ponytail: in-process serialization per ledger path; work packages are
+// written by one orchestrator session, so a cross-process lock buys nothing
+// and a filesystem lock is what broke Windows and WSL mounts.
+export async function withLedgerLock(ledgerPath, operation) {
   await mkdir(path.dirname(ledgerPath), { recursive: true });
-  const lockRoot = path.dirname(path.resolve(ledgerPath));
-  return withOwnerLock(lockRoot, `${ledgerPath}.lock`, operation, {
-    ...dependencies,
-    staleMs: dependencies.staleMs ?? 60_000,
-    timeoutMs: dependencies.timeoutMs ?? 10_000,
-    retryMs: dependencies.retryMs ?? 10,
-  });
+  const key = path.resolve(ledgerPath);
+  const previous = ledgerQueues.get(key) ?? Promise.resolve();
+  const run = previous.catch(() => {}).then(() =>
+    operation({ assertOwnership: async () => {} }),
+  );
+  ledgerQueues.set(key, run);
+  try {
+    return await run;
+  } finally {
+    if (ledgerQueues.get(key) === run) ledgerQueues.delete(key);
+  }
 }
 
 function reportSkeleton(goalId) {

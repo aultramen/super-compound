@@ -1,13 +1,10 @@
-Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
-
 Start from docs/STATE.md Next action.
-Execute one approved FSD goal or `.scratch/<feature>/issues/` pointer. The Budget
-& Stop Wizard requires fresh human confirmation at every `START`/`RESUME`.
-Output/context token budget is separate from the Loop Run resource budget.
-Before mutation persist `ACTION_INTENDED`, then require `.agent/tools/loop-run.mjs
-validate-gate --run <run_id> --operation source-write`; validate-gate `work`
-before worker dispatch. A denied or stale `work` result permits no dispatch;
-failure or OBSERVE permits no source write.
+Tier first (agentic-delivery/references/workflow-integration.md): `Tier:
+light|full; trigger: T<n>|none`. `light`: a plain request or
+`.scratch/<feature>/issues/` pointer; a single trivial change is done directly.
+`full`: one approved FSD goal or its pointer. Stop with `OPEN-*` on missing
+authority; never invent it. A trigger found mid-work: `ESCALATE: T<n>`, route to
+its owner, continue in `full`.
 
 Load only:
 
@@ -16,11 +13,11 @@ Load only:
 - `node .agent/tools/knowledge-search.mjs "<goal>"` hits; a matching ERR-*/LRN-* rule is binding.
 - `.agent/context/skills/git-workflow-operation.contract.md` only when needed.
 
-Before edit/execution, require `ready-for-agent` and every `Blocked by` dependency
-`verified`. Check the pinned contract version and `ui_delivery_role` against its
-`required_gate`; `HARDENING` requires every delivery slice verified. Missing,
-unsatisfied, stale, or mismatched evidence returns `needs-info`/`blocked` and
-stops with `OPEN-*`. Stop with `OPEN-*` on missing authority; never invent it.
+In `full`, before edit/execution require `ready-for-agent` and every `Blocked by`
+dependency `verified`. Check the pinned contract version and `ui_delivery_role`
+against its `required_gate`; `HARDENING` requires every delivery slice verified.
+Missing, unsatisfied, stale, or mismatched evidence returns `needs-info`/`blocked`
+and stops with `OPEN-*`.
 
 A `FIRST_VERTICAL_SLICE` uses a real provider/backend and proves auth/permission,
 success, and representative failure through `integration-checking`; mock-only
@@ -29,7 +26,8 @@ eligible `SCALE_OUT_SLICE` pointers. Parallel scale-out also requires 2+
 independent streams, baseline `VALIDATED`, unchanged contract, one shared-file
 writer, and isolated worktrees.
 
-Block protected-base edits. Run mapped verification before completion; bounded
-`HARDENING` covers required integration/UI evidence and UAT approval.
+Block protected-base edits. Test-first per `tdd_mode`; run mapped verification
+before completion; bounded `HARDENING` covers required integration/UI evidence
+and UAT approval.
 Route non-obvious fixes, agent mistakes, or new conventions to `/sc-compound` before closing.
-Close: docs/STATE.md Next action via source-write gate, else /sc-pause.
+Close: docs/STATE.md Next action, else /sc-pause.

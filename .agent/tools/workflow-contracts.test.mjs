@@ -77,7 +77,7 @@ test("route contracts carry the persistence spine (STATE entry, close, or pause 
   for (const route of ["sc-work", "sc-debug"]) {
     assert.match(
       contracts[route],
-      /docs\/STATE\.md Next action via source-write gate[^\n]*\/sc-pause/,
+      /docs\/STATE\.md Next action[^\n]*\/sc-pause/,
     );
   }
   for (const route of ["sc-status", "sc-work", "sc-launch"]) {
@@ -177,10 +177,7 @@ test("sc-research remains a conditional advisory evidence workflow", async () =>
   assert.ok(scenario, "missing sc-research benchmark scenario");
   assert.deepEqual(
     scenario.after,
-    [
-      ".codex/SKILL.md",
-      ".agent/context/workflows/sc-research.contract.md",
-    ],
+    [".agent/context/workflows/sc-research.contract.md"],
     "sc-research must defer its optional output skeleton until a durable note is needed",
   );
 });
@@ -360,112 +357,6 @@ test("pause and launch persist one canonical durable state with a pointer-only h
   assert.match(routes["sc-launch"].evidenceSink, /docs\/STATE\.md/);
 });
 
-test("core route semantics cannot bypass budget, write-classification, or operation gates", async () => {
-  const coreRoutes = [
-    "sc-plan",
-    "sc-work",
-    "sc-debug",
-    "sc-eval",
-    "sc-review",
-    "sc-go",
-    "sc-launch",
-    "sc-explore",
-    "sc-pause",
-  ];
-  const surfaces = Object.fromEntries(
-    await Promise.all(
-      coreRoutes.map(async (route) => [
-        route,
-        await Promise.all([
-          readRepositoryFile(`.agent/workflows/${route}.md`),
-          readRepositoryFile(`.agent/context/workflows/${route}.contract.md`),
-        ]),
-      ]),
-    ),
-  );
-  const pairs = Object.fromEntries(
-    Object.entries(surfaces).map(([route, texts]) => [route, texts.join("\n")]),
-  );
-
-  for (const route of coreRoutes) {
-    for (const text of surfaces[route]) {
-      assert.match(text, /workflow-admission\.mjs/);
-    }
-  }
-
-  assert.match(pairs["sc-work"], /Budget & Stop Wizard[\s\S]*START[\s\S]*RESUME/i);
-  assert.match(pairs["sc-work"], /ACTION_INTENDED[\s\S]*validate-gate[\s\S]*source-write/i);
-  assert.match(pairs["sc-debug"], /diagnosis[\s\S]*read-only[\s\S]*no wizard/i);
-  assert.match(pairs["sc-debug"], /active\s+FSD-authorized run[\s\S]*OPEN-LOOP-AUTHORITY[\s\S]*(?:test|fix)[\s\S]*no write/i);
-  assert.match(pairs["sc-explore"], /BRD[\s\S]*authority_write[\s\S]*no wizard/i);
-  assert.match(pairs["sc-explore"], /active FSD-authorized run[\s\S]*OPEN-LOOP-AUTHORITY[\s\S]*prototype[\s\S]*no write/i);
-  assert.match(pairs["sc-launch"], /carry[\s\S]*run_id[\s\S]*implementation handoff[\s\S]*\/sc-work/i);
-  assert.match(pairs["sc-go"], /preview[\s\S]*no wizard/i);
-  assert.match(pairs["sc-go"], /commit[\s\S]*push[\s\S]*PR[\s\S]*OPEN-RELEASE-GATE[\s\S]*(?:allowlist|inventory)/i);
-  assert.match(pairs["sc-plan"], /authority_write[\s\S]*implementation_write[\s\S]*(?:deny|block)/i);
-  assert.match(pairs["sc-eval"], /authority_write[\s\S]*implementation_write[\s\S]*(?:deny|block)/i);
-  assert.match(pairs["sc-review"], /read-only[\s\S]*no wizard[\s\S]*docs\/reviews[\s\S]*implementation_write[\s\S]*active run gate/i);
-  assert.match(pairs["sc-work"], /output\/context token budget[\s\S]*Loop Run resource budget/i);
-});
-
-test("full and compact work surfaces fail closed at the worker-dispatch gate", async () => {
-  const surfaces = await Promise.all([
-    readRepositoryFile(".agent/workflows/sc-work.md"),
-    readRepositoryFile(".agent/context/workflows/sc-work.contract.md"),
-  ]);
-
-  for (const text of surfaces) {
-    assert.match(
-      text,
-      /(?:validate-gate|operation)\s+`?work`?[\s\S]*before worker dispatch/i,
-    );
-    assert.match(
-      text,
-      /(?:denied|stale)[\s\S]*(?:no worker dispatch|permits no dispatch|blocks? dispatch)/i,
-    );
-  }
-});
-
-test("STATE stores a refreshable non-authoritative Loop Run pointer instead of lifecycle authority", async () => {
-  const [stateSkill, fileContracts, pause, pauseContract, status, statusContract, launch, launchContract] =
-    await Promise.all([
-      readRepositoryFile(".agent/skills/state-management/SKILL.md"),
-      readRepositoryFile(".agent/skills/state-management/references/file-contracts.md"),
-      readRepositoryFile(".agent/workflows/sc-pause.md"),
-      readRepositoryFile(".agent/context/workflows/sc-pause.contract.md"),
-      readRepositoryFile(".agent/workflows/sc-status.md"),
-      readRepositoryFile(".agent/context/workflows/sc-status.contract.md"),
-      readRepositoryFile(".agent/workflows/sc-launch.md"),
-      readRepositoryFile(".agent/context/workflows/sc-launch.contract.md"),
-    ]);
-
-  for (const text of [stateSkill, fileContracts, pause, pauseContract, status, statusContract, launch, launchContract]) {
-    assert.match(text, /run_id/);
-    assert.match(text, /non-authoritative/i);
-  }
-  for (const text of [stateSkill, fileContracts, pause, pauseContract, status, statusContract]) {
-    assert.match(text, /run head digest/i);
-    assert.match(text, /loop-run\.mjs\s+show --run/i);
-    assert.match(text, /never\s+copy|do not\s+copy/i);
-    assert.match(text, /confirmation\s+digest/i);
-  }
-  for (const text of [pause, pauseContract, status, statusContract]) {
-    assert.match(text, /START|RESUME/);
-    assert.match(text, /fresh\s+(?:human\s+)?confirmation/i);
-  }
-});
-
-test("configured runtime-audit paths are ignored while durable STATE and reports remain classified writes", async () => {
-  const [config, gitignore] = await Promise.all([
-    readRepositoryFile(".agent/context/project-config.json"),
-    readRepositoryFile(".gitignore"),
-  ]);
-  const runtimePrefixes = JSON.parse(config).write_classification.runtime_audit_prefixes;
-  for (const prefix of runtimePrefixes) {
-    assert.match(gitignore, new RegExp(`^${prefix.replaceAll("/", "\\/")}$`, "m"));
-  }
-});
-
 test("genius loop dispatches Brain without implementation orchestration or sidecar mutations", async () => {
   const [
     workflow,
@@ -509,36 +400,6 @@ test("genius loop dispatches Brain without implementation orchestration or sidec
   const genius = JSON.parse(invariants).routes["sc-geniusloop"];
   assert.equal(genius.mutation, "geniusloop-report-only");
   assert.match(genius.evidenceSink, /docs\/geniusloop/);
-});
-
-test("TEST-015 workflow closure consumes only event-derived outcomes and host-verified advisory patterns", async () => {
-  const [genius, geniusContract, compound, compoundContract] = await Promise.all([
-    readRepositoryFile(".agent/workflows/sc-geniusloop.md"),
-    readRepositoryFile(".agent/context/workflows/sc-geniusloop.contract.md"),
-    readRepositoryFile(".agent/workflows/sc-compound.md"),
-    readRepositoryFile(".agent/context/workflows/sc-compound.contract.md"),
-  ]);
-
-  for (const artifact of [genius, geniusContract]) {
-    assert.match(artifact, /queryAdaptiveLearningMemory/);
-    assert.match(artifact, /event-(?:derived|authoritative)/i);
-    assert.match(artifact, /sanitized/i);
-    assert.match(artifact, /RECORD_LEARNING_OUTCOME/);
-    assert.match(artifact, /advisory/i);
-  }
-  for (const artifact of [compound, compoundContract]) {
-    assert.match(artifact, /verified_pattern_v2/);
-    assert.match(artifact, /host-attested|host-verified/i);
-    assert.match(artifact, /human-owned documentation/i);
-    assert.match(artifact, /advisory/i);
-  }
-  for (const artifact of [genius, geniusContract, compound, compoundContract]) {
-    assert.match(
-      artifact,
-      /(?:must not|never|no).*(?:self-modif|prompt|policy|verifier|framework)/is,
-    );
-    assert.doesNotMatch(artifact, /(?:create|add).*(?:\/loop|new public workflow)/is);
-  }
 });
 
 test("ui work has explicit read-only and sc-work implementation modes", async () => {
@@ -954,6 +815,24 @@ test("every compact skill contract is reachable from runtime routing", async () 
   }
 });
 
+test("no route surface reintroduces Loop Runtime ceremony", async () => {
+  const banned =
+    /Budget & Stop Wizard|ACTION_INTENDED|workflow-admission|OPEN-LOOP-AUTHORITY|OPEN-RELEASE-GATE|\bOBSERVE\b|\bENFORCE\b|loop-run\.mjs|run head digest|approval envelope|confirmation digest|FSD-authorized run|source-write gate/;
+  const files = [
+    ...PUBLIC_ROUTES.map((route) => `.agent/workflows/${route}.md`),
+    ...PUBLIC_ROUTES.map((route) => `.agent/context/workflows/${route}.contract.md`),
+    "SUPER-COMPOUND.md",
+    "AGENTS.md",
+    "README.md",
+    ".agent/rules/super-compound.md",
+    ".agent/rules/quality-gates.md",
+    ".agent/rules/project-config.md",
+  ];
+  for (const file of files) {
+    assert.doesNotMatch(await readRepositoryFile(file), banned, file);
+  }
+});
+
 test("all public routes satisfy the machine-readable quality invariant manifest", async () => {
   const manifest = JSON.parse(
     await readRepositoryFile(".agent/context/workflow-invariants.json"),
@@ -970,77 +849,6 @@ test("all public routes satisfy the machine-readable quality invariant manifest"
     ]);
     for (const field of ["authority", "mutation", "evidenceSink"]) {
       assert.ok(spec[field], `${route}: missing ${field}`);
-    }
-    assert.ok(
-      [
-        "READ_ONLY",
-        "ADVISORY",
-        "AUTHORITY",
-        "IMPLEMENTATION",
-        "ORCHESTRATION",
-        "EXTERNAL_DELIVERY",
-        "GUIDANCE",
-      ].includes(spec.loopRuntimeRole),
-      `${route}: invalid loopRuntimeRole`,
-    );
-    assert.equal(Array.isArray(spec.writeClasses), true, `${route}: writeClasses`);
-    assert.equal(
-      new Set(spec.writeClasses).size,
-      spec.writeClasses.length,
-      `${route}: duplicate writeClasses`,
-    );
-    assert.equal(
-      spec.writeClasses.every((value) =>
-        [
-          "runtime_audit_write",
-          "authority_write",
-          "implementation_write",
-          "external_write",
-        ].includes(value),
-      ),
-      true,
-      `${route}: invalid writeClasses`,
-    );
-    assert.ok(
-      [
-        "NEVER",
-        "WHEN_IMPLEMENTATION_WRITE",
-        "START_AND_RESUME",
-        "BEFORE_FIX",
-        "PER_IMPLEMENTATION_HANDOFF",
-        "BEFORE_EXTERNAL_WRITE",
-        "CONSUME_ACTIVE_WORK_GATE",
-      ].includes(spec.wizardPolicy),
-      `${route}: invalid wizardPolicy`,
-    );
-    assert.equal(
-      Array.isArray(spec.requiredOperationGate),
-      true,
-      `${route}: requiredOperationGate`,
-    );
-    assert.equal(
-      spec.requiredOperationGate.every((value) =>
-        ["source-write", "work", "commit", "push", "pr", "queue-claim"].includes(
-          value,
-        ),
-      ),
-      true,
-      `${route}: invalid requiredOperationGate`,
-    );
-    assert.ok(
-      ["READ_ONLY", "CONTROLLER_MEDIATED"].includes(spec.loopStateAccess),
-      `${route}: invalid loopStateAccess`,
-    );
-    if (
-      spec.writeClasses.some((value) =>
-        ["implementation_write", "external_write"].includes(value),
-      )
-    ) {
-      assert.notEqual(spec.wizardPolicy, "NEVER", `${route}: wizard bypass`);
-      assert.ok(
-        spec.requiredOperationGate.length > 0,
-        `${route}: operation gate bypass`,
-      );
     }
     assert.ok(
       Array.isArray(spec.nextOwners) && spec.nextOwners.length > 0,

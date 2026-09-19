@@ -6,9 +6,6 @@
  * array) and emits execution waves: wave N runs in parallel after wave N-1
  * completes. Fails closed on cycles and unknown dependencies.
  *
- * Also provides the STATE.md.lock primitives (O_EXCL create, stale-lock
- * clear) that parallel wave writers must hold around shared-state writes.
- *
  * Usage:
  *   node .agent/tools/goal-waves.mjs --issues-dir .scratch/<feature>/issues
  *   node .agent/tools/goal-waves.mjs --input goals.json [--max-workers N]
@@ -23,7 +20,6 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-const STALE_LOCK_MS = 10_000;
 
 export function computeWaves(goals) {
     const byId = new Map();
@@ -87,50 +83,7 @@ export function parseIssueDependencies(issuesDir) {
 
 export function resolveMaxWorkers(root, override) {
     if (Number.isInteger(override) && override >= 1) return override;
-    try {
-        const config = JSON.parse(
-            fs.readFileSync(
-                path.join(root, '.agent', 'context', 'project-config.json'),
-                'utf8'
-            )
-        );
-        const workers = config?.background_aggregate_policy?.max_workers;
-        if (Number.isInteger(workers) && workers >= 1) return workers;
-    } catch {
-        // fall through to conservative default
-    }
     return 2;
-}
-
-export function stateLockPath(root) {
-    return path.join(root, 'docs', 'STATE.md.lock');
-}
-
-export function acquireStateLock(root, now = Date.now()) {
-    const lockFile = stateLockPath(root);
-    try {
-        const descriptor = fs.openSync(lockFile, 'wx');
-        fs.writeSync(descriptor, JSON.stringify({ pid: process.pid, at: now }));
-        fs.closeSync(descriptor);
-        return true;
-    } catch (error) {
-        if (error.code !== 'EEXIST') throw error;
-        let stale = false;
-        try {
-            stale = now - fs.statSync(lockFile).mtimeMs > STALE_LOCK_MS;
-        } catch {
-            stale = false;
-        }
-        if (stale) {
-            fs.rmSync(lockFile, { force: true });
-            return acquireStateLock(root, now);
-        }
-        return false;
-    }
-}
-
-export function releaseStateLock(root) {
-    fs.rmSync(stateLockPath(root), { force: true });
 }
 
 function main(argv) {

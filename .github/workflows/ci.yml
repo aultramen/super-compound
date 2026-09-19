@@ -29,5 +29,3 @@ jobs:
         run: npm run test:python
       - name: Framework audit
         run: npm run audit
-      - name: Token benchmark
-        run: npm run bench

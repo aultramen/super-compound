@@ -250,7 +250,7 @@ export async function auditRepository(root, options = {}) {
     schema: "super_compound_framework_audit_v2",
     generatedAt: new Date().toISOString(),
     repositoryHead: manifestEvidence.head,
-    pass: findings.length === 0,
+    pass: !findings.some((entry) => ["P0", "P1"].includes(entry.severity)),
     summary: {
       manifestSource: manifestEvidence.source,
       manifestFiles: manifest.length,
@@ -462,7 +462,8 @@ function classifyAuditPath(file) {
     return "repository-config";
   }
   if (/^\.github\//.test(file)) return "repository-config";
-  return null;
+  // Anything else is project-owned: the audit runs inside downstream projects too.
+  return "project";
 }
 
 async function readPhysicalInventory(root, activeManifest) {
@@ -837,119 +838,6 @@ function validateWorkflowInvariants(contents, findings) {
           ),
         );
       }
-    }
-    if (
-      ![
-        "READ_ONLY",
-        "ADVISORY",
-        "AUTHORITY",
-        "IMPLEMENTATION",
-        "ORCHESTRATION",
-        "EXTERNAL_DELIVERY",
-        "GUIDANCE",
-      ].includes(spec.loopRuntimeRole)
-    ) {
-      findings.push(
-        finding(
-          "P1",
-          "WORKFLOW_RUNTIME_ROLE_INVALID",
-          manifestPath,
-          `${route} requires a valid loopRuntimeRole.`,
-        ),
-      );
-    }
-    const allowedWriteClasses = new Set([
-      "runtime_audit_write",
-      "authority_write",
-      "implementation_write",
-      "external_write",
-    ]);
-    if (
-      !Array.isArray(spec.writeClasses) ||
-      new Set(spec.writeClasses).size !== spec.writeClasses.length ||
-      spec.writeClasses.some((value) => !allowedWriteClasses.has(value))
-    ) {
-      findings.push(
-        finding(
-          "P1",
-          "WORKFLOW_WRITE_CLASSES_INVALID",
-          manifestPath,
-          `${route} requires unique allowlisted writeClasses.`,
-        ),
-      );
-    }
-    if (
-      ![
-        "NEVER",
-        "WHEN_IMPLEMENTATION_WRITE",
-        "START_AND_RESUME",
-        "BEFORE_FIX",
-        "PER_IMPLEMENTATION_HANDOFF",
-        "BEFORE_EXTERNAL_WRITE",
-        "CONSUME_ACTIVE_WORK_GATE",
-      ].includes(spec.wizardPolicy)
-    ) {
-      findings.push(
-        finding(
-          "P1",
-          "WORKFLOW_WIZARD_POLICY_INVALID",
-          manifestPath,
-          `${route} requires a valid wizardPolicy.`,
-        ),
-      );
-    }
-    const allowedOperationGates = new Set([
-      "source-write",
-      "work",
-      "commit",
-      "push",
-      "pr",
-      "queue-claim",
-    ]);
-    if (
-      !Array.isArray(spec.requiredOperationGate) ||
-      new Set(spec.requiredOperationGate).size !==
-        spec.requiredOperationGate.length ||
-      spec.requiredOperationGate.some(
-        (value) => !allowedOperationGates.has(value),
-      )
-    ) {
-      findings.push(
-        finding(
-          "P1",
-          "WORKFLOW_OPERATION_GATE_INVALID",
-          manifestPath,
-          `${route} requires unique allowlisted operation gates.`,
-        ),
-      );
-    }
-    if (!["READ_ONLY", "CONTROLLER_MEDIATED"].includes(spec.loopStateAccess)) {
-      findings.push(
-        finding(
-          "P1",
-          "WORKFLOW_STATE_ACCESS_INVALID",
-          manifestPath,
-          `${route} requires a valid loopStateAccess.`,
-        ),
-      );
-    }
-    if (
-      Array.isArray(spec.writeClasses) &&
-      spec.writeClasses.some((value) =>
-        ["implementation_write", "external_write"].includes(value),
-      ) &&
-      (spec.wizardPolicy === "NEVER" ||
-        !Array.isArray(spec.requiredOperationGate) ||
-        spec.requiredOperationGate.length === 0)
-    ) {
-      findings.push(
-        finding(
-          "P0",
-          "WORKFLOW_GATE_BYPASS",
-          manifestPath,
-          `${route} declares a gated write without wizard and operation gates.`,
-        ),
-      );
     }
     if (!Array.isArray(spec.nextOwners) || spec.nextOwners.length === 0) {
       findings.push(

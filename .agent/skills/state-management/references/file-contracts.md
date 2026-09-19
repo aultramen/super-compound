@@ -17,22 +17,14 @@ Create only the artifacts required by the active workflow.
 ## `STATE.md`
 
 The canonical skeleton lives at `.agent/templates/state/STATE-Template.md`
-(sections: Current Position, Active Loop Run, Decisions, Blockers, Completed
-Work, Deferred Ideas). Copy it verbatim when seeding; do not restate it here.
-The Active Loop Run section holds only a refreshable non-authoritative pointer:
-run_id, run head digest, status snapshot, last evidence, reason, next transition.
-When no loop run is active, that section collapses to the single line
-`- Run: none`; Decisions, Blockers, Completed Work, and Deferred Ideas appear
-only when non-empty.
+(sections: Current Position, Decisions, Blockers, Completed Work, Deferred
+Ideas). Copy it verbatim when seeding; do not restate it here. Decisions,
+Blockers, Completed Work, and Deferred Ideas appear only when non-empty.
 The progress-log skeleton lives at `.agent/templates/state/Progress-Template.md`.
 
-Refresh the pointer with `node .agent/tools/loop-run.mjs show --run <run_id>`.
-Never copy lifecycle events, counters, an approval envelope, or a confirmation
-digest into STATE. Writing `docs/STATE.md` requires the active source-write gate;
-reading it does not. Inside an active run, `/sc-work`, `/sc-debug`, and
-`/sc-launch` write the Next action through that gate; every other route, and any
-route outside a run, hands off through `/sc-pause`. `START` or `RESUME` after a
-pause requires fresh human confirmation.
+`/sc-work`, `/sc-debug`, and `/sc-launch` write the Next action when they
+close; every other route hands off through `/sc-pause`. The next session
+verifies STATE against the tree with `/sc-status` before acting on it.
 
 ## `.continue-here.md`
 

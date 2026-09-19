@@ -5,7 +5,8 @@
 - Every new repository file must be classified in `framework-audit` audit classes or the audit fails.
 - New contracts must respect `.agent/context/token-budget-gates.md` startup budgets.
 - Compact contracts are the runtime path; a behavior wired only into a full workflow never fires. Wire the paired contract in the same change; the spine test in `workflow-contracts.test.mjs` guards it.
-- `npm run bench` must rerun after any hook, contract, or `.codex/SKILL.md` edit, or `npm run audit` fails with `BENCHMARK_EVIDENCE_STALE`.
+- `npm run audit` runs the benchmark itself; route gates are the 10% ratio against the frozen baseline, so a contract must stay under a tenth of the workflow and skills it replaces.
+- A gate that exists only as prose for the model is token cost, not enforcement: either back it with a test, CI check, or tool, or delete it.
 
 ---
 
@@ -41,3 +42,12 @@
 - Files: .agent/tools/{token-benchmark,evidence-matrix,framework-audit,release-cutover,readiness-gate,session-baseline,agent-projection,transcript-usage}.mjs, .agent/context/workflows/, .agent/context/token-budget-gates.md, .agent/skills/state-management/, docs/eval-results/2026-09-03-wave4-baseline.md, CHANGELOG.md
 - Verification: `npm test`, `npm run test:python`, `npm run bench` (18 route budgets), `npm run audit` PASS after each wave; `npm run baseline -- run --label <baseline|after-A|after-B|after-C>`.
 - Learnings: LRN-2026-09-03-001 (absolute route budgets) supersedes LRN-2026-09-02-002; headless `-p` sessions must bypass permissions or every Bash-based read-back is silently denied.
+
+## 2026-09-20 18:00 - simplify-wave
+- Implemented: Loop Runtime v2 removed (84 files, tools 73,098 -> 15,970 lines; tag archive/loop-runtime-v2); `file-state` slim and cross-platform (no locks, best-effort directory fsync, busy-rename fallback); 18 contracts and workflows rewritten without runtime ceremony plus a negative guard test; delivery tiers `light|full` decided per request (T1-T5, `delivery_mode: auto`); `detectScopeTriggers` warning in Git previews; ratio route gates with the Codex stub measured once; audit runs bench first, fails on P0/P1 only, classifies unknown paths as `project`; CRLF-safe knowledge reads; `.gitattributes` text=auto.
+- Files: .agent/tools/, .agent/context/workflows/, .agent/workflows/, .agent/context/workflow-invariants.json, .agent/skills/agentic-delivery/references/workflow-integration.md, .agent/rules/, SUPER-COMPOUND.md, README.md, AGENTS.md, WALKTHROUGH.md, CHANGELOG.md, docs/audits/2026-09-20-simplify-wave.md
+- Verification: `npm test` (227 tool tests, 20 skill tests, hook suite), `npm run test:python` 29+1, `npm run bench` 18/18 (weakest 90.83%), `npm run audit` PASS.
+- Learnings for future sessions:
+  - Patterns discovered: LRN-2026-09-20-001 (prose-only gates are token cost; enforce or delete).
+  - Gotchas encountered: the evidence matrix and benchmark tests pinned the Codex stub in every route after-set and absolute budgets; both had to move together with the gate model. `progressive-disclosure-wave3.test.mjs` hash-pins `workflow-integration.md`; recompute the SHA-256 after editing it.
+  - Useful context: `git ls-files --eol` lists CRLF blobs; `git add --renormalize <file>` fixes them once `* text=auto` is in `.gitattributes`.

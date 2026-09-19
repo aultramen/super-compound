@@ -15,6 +15,6 @@
     "baseline": "node .agent/tools/session-baseline.mjs",
     "agents:project": "node .agent/tools/agent-projection.mjs",
     "bench": "node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --repeat 3 --output .agent/benchmarks/token-benchmark.after.json",
-    "audit": "node .agent/tools/framework-audit.mjs --output .agent/benchmarks/framework-audit.after.json && node .agent/tools/framework-audit.mjs --verify-existing .agent/benchmarks/framework-audit.after.json"
+    "audit": "npm run bench && node .agent/tools/framework-audit.mjs --output .agent/benchmarks/framework-audit.after.json && node .agent/tools/framework-audit.mjs --verify-existing .agent/benchmarks/framework-audit.after.json"
   }
 }

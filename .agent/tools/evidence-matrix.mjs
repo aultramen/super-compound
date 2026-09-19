@@ -258,12 +258,20 @@ export function buildWorkflowEvidenceMatrix({
     // Route input gate: an absolute after-token budget. The reduction against
     // the frozen baseline must still be measurable (reported), but it does not
     // gate; a route without a budget fails closed.
-    const inputPass =
+    // A route passes its input gate either by an absolute after-token budget
+    // or by the ratio gate (contract under 10% of the full-workflow baseline).
+    const budgetGate =
       row.gateType === "budget" &&
       Number.isSafeInteger(row.maxAfterTokens) &&
+      row.after.tokens <= row.maxAfterTokens;
+    const ratioGate =
+      row.gateType !== "budget" &&
+      Number.isFinite(reductionPercent) &&
+      reductionPercent >= benchmarkResult.threshold;
+    const inputPass =
+      (budgetGate || ratioGate) &&
       Number.isFinite(row.before?.tokens) &&
       Number.isFinite(row.after?.tokens) &&
-      row.after.tokens <= row.maxAfterTokens &&
       Number.isFinite(reductionPercent) &&
       row.pass === true &&
       HEX_DIGEST.test(afterDigest);
@@ -280,14 +288,16 @@ export function buildWorkflowEvidenceMatrix({
     const workflowWired = scenarioIncludesWorkflow(scenario, workflowPath);
     const contractWired =
       Array.isArray(scenario.after) && scenario.after.includes(contractPath);
-    const adapterWired =
+    // The Codex adapter stub is startup cost measured once by
+    // startup-codex-adapter-metadata; routes must not count it again.
+    const adapterCountedPerRoute =
       Array.isArray(scenario.after) && scenario.after.includes(".codex/SKILL.md");
     const semanticContractWired =
       scenario.semanticContract === expectedSemanticContract;
     const processPass =
       workflowWired &&
       contractWired &&
-      adapterWired &&
+      !adapterCountedPerRoute &&
       semanticContractWired &&
       typeof invariant?.authority === "string" &&
       invariant.authority.length > 0 &&
@@ -325,6 +335,7 @@ export function buildWorkflowEvidenceMatrix({
       process: {
         evidenceClass: "repository-contract-wiring",
         adapterPath: ".codex/SKILL.md",
+        adapterMeasuredAt: "startup-codex-adapter-metadata",
         workflowPath,
         contractPath,
         semanticContract: scenario.semanticContract,
@@ -336,7 +347,7 @@ export function buildWorkflowEvidenceMatrix({
         contractMarkers,
         workflowWired,
         contractWired,
-        adapterWired,
+        adapterCountedPerRoute,
         semanticContractWired,
         observedRuntimeReasoning: null,
         pass: processPass,

@@ -103,7 +103,7 @@ export function splitEntries(body) {
     }));
 }
 
-export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8')) {
+export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8').replace(/\r\n?/g, '\n')) {
     const docs = [];
     const addDoc = (file, title, meta, body, extra = {}) => {
         const searchable = [

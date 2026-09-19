@@ -6,17 +6,10 @@ description: "Reproduce, diagnose root cause, fix, and verify bugs or unexpected
 
 Use this for errors, failing tests, regressions, performance surprises, or behavior that differs from expectations.
 
-## Loop Runtime v2 Boundary
-
-Pass each prospective write through `.agent/tools/workflow-admission.mjs`.
-
-Diagnosis is read-only and needs no wizard. Writing `docs/debug/`, a regression
-test, or a fix is a classified project mutation. Without an active
-FSD-authorized run, return `OPEN-LOOP-AUTHORITY` before changing a test or fix
-and perform no write. With valid authority, run the Budget & Stop Wizard at
-`START` or `RESUME`, persist `ACTION_INTENDED`, and pass the `source-write` gate
-before the first mutation. Diagnosis never silently upgrades itself into fix
-authority.
+Diagnosis is read-only. The fix phase is `light` by default: once the root cause
+is proven, fix it with a regression test. If the fix needs a contract surface
+(schema, API, auth, billing: trigger T2) or a new capability (T1), write
+`ESCALATE: T<n>` and route to `/sc-plan` or `/sc-prd` instead of widening the fix.
 
 ## Steps
 
@@ -30,13 +23,13 @@ authority.
 8. Run verification and report evidence.
 9. If a non-trivial investigation would exceed the chat envelope, save the complete investigation to `docs/debug/YYYY-MM-DD-<slug>.md` and return its path. Shape it as: reproduction as exact commands; every hypothesis, including failed ones, as one line each (`H1: cause -> test -> disproving evidence`); root cause as one paragraph; fix as the changed-path list; verification as command plus result. Never drop failed hypotheses or evidence. Then run `node .agent/tools/doc-lint.mjs <artifact>` and adjudicate its findings (advisory).
 10. After a verified non-trivial root cause, route to `/sc-compound`. When the bug originated from an agent mistake, appending the `ERR-*` entry is mandatory.
-11. Close by writing the `docs/STATE.md` Next action through the active
-    source-write gate; without an active run, hand off with `/sc-pause`.
+11. Close by writing the `docs/STATE.md` Next action; if work remains, hand off
+    with `/sc-pause`.
 
 ## Output
 
 - Reproduction evidence.
 - Root cause.
-- Fix summary.
+- Fix summary, or `ESCALATE: T<n>` with its owner.
 - Verification evidence.
 - `docs/debug/YYYY-MM-DD-<slug>.md` when the complete investigation needs a durable sink.

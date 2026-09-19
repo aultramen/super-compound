@@ -4,11 +4,11 @@ Super Compound is a compact AI-assisted development framework for Antigravity ID
 
 It keeps the public command surface small, pushes detailed procedures into skills, and treats verification as part of the work rather than a final ritual.
 
-## Loop Runtime v2
+## Delivery Tiers
 
-Protected execution uses the human-confirmed Budget & Stop Wizard before START, RESUME, and any implementation or external write. `max_iterations` is required; runtime, no-progress, token, and cost caps may be `null` only at the human layer and never disable stricter policy ceilings. The runtime has `DISABLED`, `OBSERVE`, `ENFORCE`, and `HALTED` modes, preserves exactly 18 public workflows, and has no `/loop` route.
+The framework decides how much process a request needs. Intake states one line, `Tier: light|full; trigger: T<n>|none`. `light` (bug fixes, refactors, config, one-module features) goes straight to `/sc-work` or `/sc-debug` with tests and verification; a single trivial change is done directly. `full` (new capability without approved PRD/FSD, schema/API/auth/billing surface, new screen or flow, multi-stream work, or an explicit BRD/PRD/FSD request) takes `BRD -> PRD -> FSD -> GOAL`. A trigger found mid-work escalates; it never blocks at intake. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
 
-See [Loop Engineering Runtime v2](docs/loop-runtime-v2.md) for approval, accounting, background, persistence, migration, and claim boundaries.
+The tools have no platform requirements beyond Node 22 and Python 3: no filesystem locks, no sandbox binary, no kernel or mount checks. Writes are temp-file plus rename, so the framework runs on Linux, macOS, WSL (including repositories under `/mnt/c`), and native Windows.
 
 ## What It Provides
 
