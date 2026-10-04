@@ -1,14 +1,38 @@
 # Super Compound
 
+## Summary
+
+Use [prompt-driven setup](SETUP.md) to install project/global scope and native adapters, then follow separate BRD, PRD, FSD approvals and execution authorization. Documentation follows the shared output standard; existing configuration is preserved.
+
 Super Compound is a compact AI-assisted development framework for Antigravity IDE, Claude Code, and compatible coding agents.
 
 It keeps the public command surface small, pushes detailed procedures into skills, and treats verification as part of the work rather than a final ritual.
 
 ## Delivery Tiers
 
-The framework decides how much process a request needs. Intake states one line, `Tier: light|full; trigger: T<n>|none`. `light` (bug fixes, refactors, config, one-module features) goes straight to `/sc-work` or `/sc-debug` with tests and verification; a single trivial change is done directly. `full` (new capability without approved PRD/FSD, schema/API/auth/billing surface, new screen or flow, multi-stream work, or an explicit BRD/PRD/FSD request) takes `BRD -> PRD -> FSD -> GOAL`. A trigger found mid-work escalates; it never blocks at intake. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
+The framework decides how much process a request needs. Intake states one line, `Tier: light|full; trigger: T<n>|none`. `light` (bug fixes, refactors, config, one-module features) goes straight to `/sc-work` or `/sc-debug` with tests and verification; a single trivial change is done directly. `full` (new capability without approved PRD/FSD, material contract/access/data/side-effect change, new screen or flow, coordination that changes outcomes or risk, or an explicit BRD/PRD/FSD request) takes `BRD -> PRD -> FSD -> GOAL`. A trigger found mid-work escalates; it never blocks at intake. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
 
-The tools have no platform requirements beyond Node 22 and Python 3: no filesystem locks, no sandbox binary, no kernel or mount checks. Writes are temp-file plus rename, so the framework runs on Linux, macOS, WSL (including repositories under `/mnt/c`), and native Windows.
+Session handoff, a derived issue board, and parallelism alone do not raise a
+clear bugfix above `light`. Sensitive paths trigger semantic inspection.
+Reversible internal choices proceed within authority; explicit operation
+authorization persists unless target, scope, or material risk changes. Derived
+boards and unchanged contract revisions pass machine gates without redundant
+approval. LOCAL_ONLY UI uses local behavior checks without fabricated provider
+assets. Networked scale-out retains real-provider first-slice proof.
+
+Setup requires Node 22+ on Windows, macOS, and Linux. Python is needed only for Python-based features. See SETUP.md for ownership, staging, rollback, and verification limits.
+
+## High-Level Design
+
+```mermaid
+flowchart LR
+ Setup[Prompt setup] --> Core[Canonical .agent core]
+ Core --> Hosts[Six native adapters]
+ Hosts --> Stages[BRD approval → PRD approval → FSD approval]
+ Stages --> Execute[Separate execution authorization]
+ Execute --> Verify[Implementation and verification]
+ Verify --> Knowledge[Evidence and reusable lessons]
+```
 
 ## What It Provides
 
@@ -32,22 +56,24 @@ must likewise be stored under `.agent/evals/` whenever another gate consumes it.
 
 ## Install
 
-Copy the framework files into a project root:
+Use the onboarding prompt in [SETUP.md](SETUP.md), or select scope and hosts explicitly:
 
 ```bash
-cp -R .agent <target-project>/
-cp SUPER-COMPOUND.md <target-project>/
+node .agent/tools/setup.mjs install --scope project --host codex,claude --target "PATH TO PROJECT" --dry-run
+node .agent/tools/setup.mjs install --scope project --host codex,claude --target "PATH TO PROJECT"
+node .agent/tools/setup.mjs doctor --scope project --host codex,claude --target "PATH TO PROJECT"
 ```
 
-Optional Claude Code support:
+Choose `global` for a local framework cache and personal entrypoints, or `both`.
+Existing configuration and user-owned instructions are preserved; conflicts are
+reported together. Node 22+ is the setup baseline. To export an active-only
+distribution for offline transfer:
 
 ```bash
-cp CLAUDE.md <target-project>/
-cp AGENTS.md <target-project>/
-cp -R .claude <target-project>/
+node .agent/tools/active-assets.mjs copy <new-bundle-directory>
 ```
 
-Copying `.claude/` also installs `.claude/commands/` pointers for all 18 routes,
+Selecting Claude installs `.claude/commands/` pointers for all 18 routes,
 so `/sc-*` works as native Claude Code slash commands. Each pointer is a thin
 contract-first stub that loads the compact route contract on demand.
 
@@ -97,10 +123,10 @@ For product work with an interactive surface, the default hybrid lifecycle is:
 ```text
 BRD -> PRD draft -> UI validation -> approved PRD
     -> FSD/UI-API contract -> contract enabler (when needed)
-    -> /sc-plan re-index + Technical Manager re-approval
+    -> /sc-plan re-index + automatic promotion of approved semantics
     -> first real vertical slice -> /sc-plan dependent promotion
     -> controlled parallel scale-out -> hardening
-    -> integration/responsive/accessibility/E2E/visual + Business Owner UAT
+    -> applicable integration/responsive/accessibility/E2E/visual + conditional UAT
 ```
 
 Use `NOT_APPLICABLE` for backend-only/CLI work, `STANDARD` for canonical
@@ -234,6 +260,8 @@ Removed workflows are intentionally not aliases. Route them this way:
 | progress, resume | `/sc-status` |
 | reload | `/sc-init reload` |
 
+Exploration uses numbered decision rounds: ask small batches of consequential decisions with settled prerequisites, with a recommendation, reason, and trade-off for each question. Partial answers remain open; corrections reopen affected descendants. Concrete scope skips grilling, and existing BRD/PRD/FSD approvals remain authoritative. Both execution tiers inspect current flow, reusable patterns, affected callers, and proving checks. Product AI context and live verification expand only when relevant through their skill references.
+
 ## Skills
 
 Skills live in `.agent/skills/<name>/SKILL.md`. They are loaded only when relevant.
@@ -285,7 +313,7 @@ Captured knowledge runs a closed loop: capture -> read-back -> maintenance -> ev
 
 - `/sc-compound` routes outcomes to four sinks: `docs/solutions/` (solved problems), `ERR-*` entries in `docs/ERROR_LOG.md` (agent mistakes plus an IF-THEN prevention rule), `LRN-*` entries in `docs/LEARNED_KNOWLEDGE.md` (user corrections and confirmed conventions), and `docs/progress.md` (chronology). Entry formats and the capture guide live in `.agent/skills/knowledge-compounding/references/memory-capture.md`; `.agent/skills/state-management/references/file-contracts.md` only selects the file.
 - `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; matching `ERR-*`/`LRN-*` prevention rules are binding until superseded. The corpus is entry-granular over `docs/solutions/`, `docs/learnings/`, `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, and the Codebase Patterns head of `docs/progress.md`, still top-3 bounded.
-- `/sc-status` counts memory entries via `node .agent/tools/memory-maintenance.mjs report` and recommends `/sc-evolve` at 3+ recurrences or a `PATTERN` flag; `/sc-evolve` consumes the report's promotion candidates but still writes drafts only for human approval. `memory-maintenance.mjs` supports `check` (format and cap validation), `report`, and `archive --dry-run`; applying archives stays human-approved.
+- `/sc-status` counts memory entries via `node .agent/tools/memory-maintenance.mjs report` and recommends `/sc-evolve` at 3+ independent observed/confirmed origins with evidence; `/sc-evolve` consumes the report's promotion candidates but still writes drafts only for human approval. `memory-maintenance.mjs` supports `check` (format and cap validation), `report`, JSON `capture`/`refresh`/`feedback`/`checkpoint`, read-only `resume`, and `archive --dry-run`; applying archives stays human-approved.
 - The `stop-check` hook emits one advisory `/sc-compound` suggestion when a session edited source but captured no knowledge.
 - The compact contracts carry the loop's spine, not just the full workflows: `sc-work`, `sc-debug`, and `sc-plan` read back first, `sc-work` and `sc-debug` close through `/sc-compound`, `sc-status` runs the maintenance report, `sc-pause` captures unlogged entries, and `sc-compound` names the four sinks. A spine test in `.agent/tools/workflow-contracts.test.mjs` keeps it that way, because the contract-first path never loads the full workflow body.
 - `memory-maintenance.mjs report` also prints a `freshness` block comparing `docs/STATE.md` and `docs/progress.md` dates with the newest commit; `STALE_STATE` or `STALE_PROGRESS` makes `/sc-status` recommend `/sc-pause` before any other route.
@@ -322,6 +350,36 @@ git push -u origin feature/login
 ```
 
 Branch names should use `feature/`, `fix/`, `hotfix/`, `refactor/`, `docs/`, or `chore/`. Do not work directly on `main` or the configured base branch. Review sensitive paths such as `.env`, credentials, logs, cache, and build output before `git add .`. Pull Requests use `.agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md`.
+
+## Automatic Knowledge and Resume
+
+After verification, owning work/debug/compound routes automatically capture
+reusable knowledge before closeout. Structured JSON capture validates evidence
+locators, upserts stable origins, and keeps Quick Reference rows consistent.
+Three independent observed/confirmed origins with evidence are required for
+promotion; PATTERN alone cannot promote. Human proposal dispositions suppress
+repeat candidates until new evidence appears. `/sc-status` remains read-only.
+
+```bash
+node .agent/tools/memory-maintenance.mjs capture --input-file .scratch/capture.json --json
+node .agent/tools/memory-maintenance.mjs checkpoint --input-file .scratch/checkpoint.json
+node .agent/tools/memory-maintenance.mjs resume --json
+node .agent/tools/knowledge-search.mjs "retry timeout" --project my-project --json
+```
+
+Schemas, worth gate, reviewed refresh, feedback, and writer ownership are in
+[the deterministic loop](.agent/skills/knowledge-compounding/references/deterministic-loop.md)
+and [checkpoint protocol](.agent/skills/state-management/references/checkpoint-protocol.md).
+Capture is local; global knowledge remains opt-in. A failed atomic replacement
+keeps the old record and retries capture using saved verification. Resume checks
+contract digests and fresh ledger evidence before offering ready goals.
+Stale/superseded knowledge is hidden by default; `--diagnostic` includes it.
+Unknown legacy origins/versions remain unknown.
+
+Optimization comparisons use task/host/model/grader/measurement parity and
+KEEP/REJECT/INCONCLUSIVE. Tool fixtures and static context estimates do not
+prove actual host behavior or runtime token savings. See the
+[dated gap analysis](docs/audits/2026-10-03-knowledge-loop-gap-analysis.md).
 
 ## Interface Design
 
@@ -405,10 +463,9 @@ python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domai
 node .agent/tools/token-benchmark.mjs --baseline .agent/benchmarks/token-baseline.before.json --repeat 3 --output .agent/benchmarks/token-benchmark.after.json
 node .agent/tools/framework-audit.mjs --output .agent/benchmarks/framework-audit.after.json
 node .agent/tools/framework-audit.mjs --verify-existing .agent/benchmarks/framework-audit.after.json
-node .agent/tools/release-cutover.mjs --expected-output-digest ABSENT
 ```
 
-The benchmark separates immutable historical eager-preload evidence from current repository-owned startup budgets for Codex, Claude Code, Antigravity, the native Codex adapter, and bundled skill metadata. It also emits an 18-route x 3-cell static matrix: input context reduction, process wiring/authority, and output sink/budget/next-owner coverage. Every workflow context entry must stay within its absolute after-token budget (`.agent/context/token-budget-gates.md`; the reduction against the frozen baseline is reported, not gated), every hotspot reduction must exceed 90%, and all 54 static cells must pass. Totals are scenario-weighted and may count shared files more than once. Output-authoring measures context and contracts, not generated prose. Host reasoning, generated-output, injected-context, latency, and billing tokens remain `unknown`; the static matrix is not a runtime end-to-end claim. The baseline is remeasured from recorded ancestor commit blobs on every authoritative run. A runtime claim requires paired attributable before/current traces for every route, not one after-only transcript.
+The benchmark separates immutable historical eager-preload evidence from current repository-owned startup budgets for Codex, Claude Code, Antigravity, the native Codex adapter, and bundled skill metadata. It also emits an 18-route x 3-cell static matrix: input context reduction, process wiring/authority, and output sink/budget/next-owner coverage. Every route contract must stay at or below 10% of its full workflow/skill context (`.agent/context/token-budget-gates.md`); startup surfaces retain absolute caps, every hotspot reduction must exceed 90%, and all 54 static cells must pass. Totals are scenario-weighted and may count shared files more than once. Output-authoring measures context and contracts, not generated prose. Host reasoning, generated-output, injected-context, latency, and billing tokens remain `unknown`; the static matrix is not a runtime end-to-end claim. The baseline is remeasured from recorded ancestor commit blobs on every authoritative run. A runtime claim requires paired attributable before/current traces for every route, not one after-only transcript.
 
 Runtime token telemetry complements the static gates: `.agent/hooks/session-end.js` measures the host transcript (when the host provides `transcript_path`) through `.agent/tools/transcript-usage.mjs` into a runtime usage log under `.agent/.compact-state/`, and `npm run usage` aggregates it. Usage is counted once per `message.id` (streamed transcripts repeat lines), and each log entry carries an `assetReads` histogram of Read calls on `.agent/` contracts, workflows, and skills, which is the activation evidence the static matrix cannot supply. Static benchmark gates are unchanged.
 
@@ -426,6 +483,35 @@ Also check:
 - Design-system persistence rejects path traversal and requires `--overwrite` for existing files
 - Claude hook settings use exec-form `node` plus `${CLAUDE_PROJECT_DIR}` script args, so cwd changes and spaces do not break paths
 - Old workflow and skill names are not referenced in active docs
-- The benchmark is deterministic across 3 runs, every route and startup surface stays within its absolute budget, and every hotspot reduction gate exceeds 90%
+- The benchmark is deterministic across 3 runs, every route meets the 10% ratio gate and startup surfaces stay within their absolute caps, and every hotspot reduction gate exceeds 90%
 - The exact active-manifest framework audit passes with fresh benchmark evidence
 - `docs/engineering-standards.md` and archive docs are not ignored
+
+For framework maintenance, `npm run test:local` runs syntax, tool, skill, hook,
+and Python checks while excluding the cross-platform installer integration
+suite. `npm test` retains full installer verification; run it in CI and after
+installer/adapter changes. `npm run audit` refreshes benchmark freshness and
+checks structural invariants. Local Git previews can use `start`/`worktree` with
+`--local --base <known-local-branch>` without requiring a remote.
+
+## Evidence-Based Learning and Recovery
+
+Existing work/debug workflows turn verified lessons into reusable or additive
+regression checks; compound stores outcomes and evolve proposes changes to
+skills/workflows/policy. Active instructions survive checkpoint/dispatch and
+completion receipts survive interruption. See [learning/check guide](.agent/skills/knowledge-compounding/references/prevention-checks.md),
+[recovery protocol](.agent/skills/context-engineering/references/active-context.md),
+and [verification recipes](.agent/skills/verification-before-completion/references/verification-recipes.md).
+
+The [exact retirement registry](.agent/context/retired-assets.json) keeps local
+retired files intact while excluding them from the active runner, Codex bundle,
+operational knowledge, active benchmark and pilot fixtures. New paths are active
+by default. Use `npm run test:tools`; direct wildcard runners include retired
+tests. Distribution should use the selector rather than an unfiltered copy.
+Audit records physical retired bytes and digests separately. Historical token
+baselines remain immutable.
+
+The [pstack delivery analysis](docs/audits/2026-10-04-pstack-gap-analysis.md)
+links acceptance and implementation evidence. Runtime savings require measured
+paired sessions; static context reduction is not runtime token/latency proof.
+See [paired experiments](.agent/skills/eval-harness/references/paired-experiments.md).

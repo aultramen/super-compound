@@ -1,12 +1,33 @@
 # Super Compound Walkthrough
 
+## Summary
+
+Use [prompt-driven setup](SETUP.md) to install project/global scope and native adapters, then follow separate BRD, PRD, FSD approvals and execution authorization. Documentation follows the shared output standard; existing configuration is preserved.
+
 This walkthrough shows the current Super Compound flow after the 2026-06-20 cleanup. It uses the small public workflow surface and avoids legacy aliases.
 
 Every command starts with `/sc-*` so it stays separate from native Claude Code slash commands.
 
 ## Delivery tier checkpoint
 
-Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or a one-module change is `light`: `/sc-debug` or `/sc-work` starts immediately, tests and verification still apply, and a single trivial change is simply done. A new capability, a schema/API/auth/billing surface, a new screen, or multi-stream work is `full` and takes the lifecycle below. The scenario that follows is `full`.
+Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or a one-module change is `light`: `/sc-debug` or `/sc-work` starts immediately, tests and verification still apply, and a single trivial change is simply done. A new capability, a material contract/access/data change, a new screen, or coordinated work that changes outcomes or risk is `full` and takes the lifecycle below. The scenario that follows is `full`.
+
+## High-Level Design
+
+```mermaid
+flowchart LR
+ Setup[Choose scope and install] --> Doctor[Doctor]
+ Doctor --> BRD[BRD approval]
+ BRD --> PRD[PRD approval]
+ PRD --> FSD[FSD and goals approval]
+ FSD --> Auth[Execution authorization]
+ Auth --> Work[Implement → Verify → Review]
+```
+
+Use `/sc-init setup` for installation. Ordinary init/reload only inspect context.
+Internal document corrections and derived pointers run within the approved
+stage; they do not create new human checkpoints. Existing-screen light UI fixes
+go directly to work/debug; LOCAL_ONLY uses local behavior and accessibility tests.
 
 ## Scenario
 
@@ -23,7 +44,7 @@ The ideal path:
 /sc-plan --issues
 /sc-go start feature/analytics-dashboard
 /sc-work .scratch/analytics-dashboard/issues/01-materialize-analytics-contract.md
-/sc-plan --issues  # re-index exact revisions and obtain technical re-approval
+/sc-plan --issues  # re-index revisions and auto-promote unchanged approved semantics
 /sc-work .scratch/analytics-dashboard/issues/02-account-usage-vertical-slice.md
 /sc-plan --issues  # promote only eligible dependents after real-slice verification
 /sc-work .scratch/analytics-dashboard/issues/03-comparison-export-slices.md
@@ -92,7 +113,7 @@ Use `/sc-explore` when the idea is still fuzzy, strategic, domain-heavy, or need
 The agent should:
 
 - Read nearby project context
-- Ask one concise question at a time
+- Ask small batches of consequential ready decisions in numbered rounds; give each a recommendation, reason, and trade-off. Dependent decisions wait for their prerequisites. Partial answers remain open; corrections reopen affected descendants. Recommendations are not approval.
 - Offer 2-3 practical approaches
 - Name objectives, constraints, policies, non-goals, and business acceptance
 - Capture decisions in `docs/brainstorms/` when useful
@@ -120,6 +141,14 @@ Save the BRD to:
 ```text
 docs/brd/brd-analytics-dashboard.md
 ```
+
+### Decision rounds and proportional verification
+
+For example, actor and retention decisions can share a frontier when independent; a storage decision dependent on retention waits for the next round. Answering only actor leaves retention open. Changing retention reopens affected storage decisions while preserving unrelated answers. Repository facts are investigated before questioning, and recommendations never count as approval. Material decisions are captured by their BRD/PRD/FSD owner; read-only exploration returns proposals without sidecars.
+
+On `/sc-work`, light-tier preflight is a brief note of current flow, reusable pattern, affected callers/consumers, and acceptance/regression checks; full-tier preflight cites the FSD. Material alternatives state current approach, alternative, benefit/trade-off, impact, and recommendation. Changed requirements return to their owner; authorized reversible details proceed. UI/integration failures retain safe draft/selection and verify retry without duplicate side effects. Product AI runtime expands selected-context actor/source attribution, chronology, selection/truncation, and the approved language policy through PRD/FSD references.
+
+When browser or live-service proof is needed, load `.agent/skills/verification-before-completion/references/live-verification.md`. Reuse the harness and authenticated session, reference environment variable names without values, and capture success/failure evidence after changes. Record revision/change digest, environment, command, time, result, and artifact path. Screenshots support visual checks; mutations and permissions still need assertions. Missing credentials or stale evidence remain explicit verification gaps.
 
 ## 3A. Research (Conditional)
 
@@ -298,7 +327,7 @@ Blocked by: GOAL-002 and all applicable scale-out issues verified
 If the pinned executable assets already exist and pass the contract gate,
 `GOAL-001` may be omitted. Otherwise, after `GOAL-001` is verified, `/sc-plan`
 must update the FSD contract index, rerun readiness, and obtain Technical Manager
-re-approval before `GOAL-002` can become ready.
+readiness promotion before `GOAL-002` can become ready; material changes still need owner approval.
 
 For a local Journey board, run:
 
@@ -321,7 +350,7 @@ This should review the proposed FSD goals with you, then create:
 Each issue includes `Status`, `Parent FSD`, `Goal ID`, `Blocked by`, qualified
 upstream/technical/optional ADR/verification refs, `UI delivery role`, versioned
 `Contract refs`, and `Contract gate`. It must not copy BRD, PRD, FSD, ADR, schema,
-or mapping prose. The DAG is contract enabler -> `/sc-plan` re-approval -> exactly
+or mapping prose. The DAG is contract enabler -> `/sc-plan` mechanical readiness promotion -> exactly
 one first vertical slice -> `/sc-plan` dependent promotion -> scale-out ->
 hardening; only verified dependencies can release ready work.
 
@@ -375,7 +404,7 @@ The agent should execute sequentially by default:
 - Update durable state for long work
 
 After `GOAL-001` verifies the executable assets, return to `/sc-plan` to pin
-their revisions and re-approve `READY_FOR_SLICE`. Then `GOAL-002` verifies the pinned contract against the real backend,
+their revisions and automatically promote unchanged approved semantics at `READY_FOR_SLICE`. Then `GOAL-002` verifies the pinned contract against the real backend,
 including auth/permission, success, and a representative failure. It runs
 `integration-checking`; a mock-only result cannot produce
 `FIRST_VERTICAL_SLICE_VERIFIED`. Return to `/sc-plan` again so issue planning,
@@ -559,8 +588,8 @@ Outcomes route to four sinks:
 - `docs/progress.md` for the chronology
 
 Later, `/sc-status` counts memory entries through
-`node .agent/tools/memory-maintenance.mjs report`. When a category recurs 3+
-times or carries a `PATTERN` flag, it recommends `/sc-evolve`, which consumes
+`node .agent/tools/memory-maintenance.mjs report`. When a category has 3+ independent
+observed/confirmed origins with evidence, it recommends `/sc-evolve`, which consumes
 the report's promotion candidates and drafts framework proposals for human
 approval.
 
@@ -611,7 +640,7 @@ Use these replacements:
 For framework maintenance, the token benchmark emits 54 static evidence cells:
 input context reduction, process contract/authority wiring, and output
 sink/budget/next-owner coverage for every public workflow. Every route must stay
-within its absolute context-entry budget; hotspot reductions must exceed 90%.
+within the 10% contract-to-full-context ratio gate; startup caps remain absolute and hotspot reductions must exceed 90%.
 This does not measure hidden reasoning, generated response
 tokens, latency, or billing; those remain unknown without paired host traces.
 
@@ -624,3 +653,59 @@ Before finishing any meaningful work:
 - Stale workflow/skill names were not reintroduced.
 - No secrets, cache files, or malformed data were introduced.
 - The final response reports changed areas and verification.
+
+## Verified outcome to next session
+
+1. Save the verification artifact and exact outcome.
+2. Apply the solution worth gate; capture reusable solutions or lightweight ERR/LRN
+   through memory-maintenance.mjs capture (JSON example in deterministic-loop.md).
+3. If capture fails, checkpoint nextAction as retry capture with existing evidence.
+4. Record bounded feedback when retrieved knowledge was used, rejected, or irrelevant.
+5. `/sc-pause` updates canonical STATE and the managed checkpoint. Pre-compact checks
+   checkpoint availability; a timestamp alone does not prove a saved next action.
+6. `/sc-status` reads resume/report and routes drift or missing state to its writer.
+   `/sc-work` reconciles contracts and ledger; verified goals are never dispatched again.
+7. `/sc-evolve` uses three independent evidenced origins and stores DRAFT disposition.
+   Prefer an existing automated check; human APPLIED/DISMISSED/DEFERRED decisions
+   suppress repeats without new evidence.
+
+Schemas: [.agent/skills/knowledge-compounding/references/deterministic-loop.md](.agent/skills/knowledge-compounding/references/deterministic-loop.md).
+Static estimates, local UI cache timings, and actual host tokens are separate measurements.
+
+## Autonomous recovery
+
+A resumed bugfix remains light unless its semantics/risk changed. Status selects
+active intent and dependency-ready work ahead of optional memory maintenance.
+Checkpoint `goalScopes` binds blockers and contract paths to ledger goals and
+the approved DAG; resume quarantines affected descendants and skips verified
+work. Unknown scope fails closed.
+
+Use `goal-waves.mjs --ready --state <state.json>` for dispatch: state contains
+`verified`, `inProgress`, `blocked`, and optional total `hostSlots`/`resourceSlots`.
+Waves report progress; a ready goal need not wait for unrelated peers. Payload
+composition preserves mandatory requirements and drops optional background
+first; explicit caps remain hard and genuine overflow exits 2 without writes.
+
+Review inspects evidence identity/provenance before reuse; changed source,
+contract, environment, merge, nondeterminism, or material risk prompts reruns.
+Repeated failure prompts reassessment/escalation. Context pressure checkpoints,
+reduces optional context, and compacts/continues at a safe boundary. Local memory
+capture archives losslessly with original locators and persists pending input
+on maintenance failure; verified implementation is never replayed for hygiene.
+
+## Recover a Verified Lesson
+
+After a verified fix, capture its stable origin and evidence. The owning
+work/debug route assesses whether an existing check exercises its reproducer;
+only a demonstrated gap warrants a new additive regression. Record candidate,
+validation and disposition with `prevention-checks.mjs`; review later evidence
+as prevented/missed/unknown instead of assuming receipt existence is effectiveness.
+
+On a cold resume, restore checkpoint constraints and ledger completion receipts.
+Classify received evidence before acknowledgement; acknowledge already classified
+work and skip verified goals. Flush at most three pending captures/check receipts,
+leaving the remainder durable. See [active context](.agent/skills/context-engineering/references/active-context.md)
+and [learning lifecycle](.agent/skills/knowledge-compounding/references/prevention-checks.md).
+Use the [project verification recipe](.agent/skills/verification-before-completion/references/verification-recipes.md)
+to preserve proof through cleanup. Runtime benefit is decided by the paired pilot,
+not by the static text benchmark.

@@ -14,7 +14,7 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. Dis
 
 ## Delivery Tiers
 
-The framework decides the tier per request (`delivery_mode: auto` in `.agent/rules/project-config.md`; `light` or `full` pin it). Intake states one line, `Tier: light|full; trigger: T<n>|none`, and never asks. `full` is triggered by a new product capability without approved PRD/FSD (T1), a contract surface such as schema, API, auth, billing, or PII (T2), a new interactive screen or flow (T3), multi-session or multi-stream work (T4), or an explicit request for BRD/PRD/FSD (T5). Everything else is `light`; a single trivial change is done directly. A trigger found mid-work escalates (`ESCALATE: T<n>`) to its owner; the tier never steps down. The rubric lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`; `/sc-go` previews and `/sc-review` warn when touched paths match T2.
+The framework decides the tier per request (`delivery_mode: auto` in `.agent/rules/project-config.md`; `light` or `full` pin it). Intake states one line, `Tier: light|full; trigger: T<n>|none`, and never asks. `full` is triggered by a new product capability without approved PRD/FSD (T1), a material change to contract compatibility, access, billing effects, or PII handling (T2), a new interactive screen or flow (T3), coordination that changes outcomes, contracts, or material risk (T4), or an explicit request for BRD/PRD/FSD (T5). Everything else is `light`; a single trivial change is done directly. A trigger found mid-work escalates (`ESCALATE: T<n>`) to its owner; administrative handoff alone never raises the tier. The rubric lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`; `/sc-go` previews and `/sc-review` inspect semantic changes when touched paths match T2 signals.
 
 ## UI-Aware Lifecycle (trigger T3 or `full`)
 
@@ -43,10 +43,10 @@ mock-only evidence is not integration proof.
 
 When contract assets are absent, the only executable goal is the bounded
 `CONTRACT_ENABLER`. After it is verified, return to `/sc-plan` to pin exact
-revisions, rerun the gate, and obtain Technical Manager re-approval before the
+revisions, rerun the gate, and auto-promote approved semantics after readiness checks before the
 first slice. A verified first slice returns to `/sc-plan` for dependent pointer
 promotion. One final `HARDENING` goal owns merged integration, responsive,
-accessibility, E2E, visual-regression, and Business Owner UAT evidence;
+accessibility, E2E, visual-regression, and Business Owner UAT evidence when required by acceptance or unresolved material judgment;
 `/sc-review` audits that evidence rather than creating it.
 
 Do not claim the outcome target from framework structure alone. Measure greater
@@ -106,6 +106,8 @@ Use these workflow names only; these 18 are the whole surface, and wrapper or al
 | What security, compatibility, compliance, or readiness risks exist? | `/sc-audit` | Severity findings and risk gates |
 
 Research is a conditional sidecar, not a mandatory lifecycle stage. Use it only when the evidence gap is material enough to change a downstream decision or needs durable review. Resolve small lookups inline. Accepted findings must be translated into the BRD, PRD, FSD/TDEC, accepted ADR, or audit record that owns the decision.
+
+For unresolved product decisions, `/sc-explore` uses whole-frontier numbered rounds with a recommendation, reason, and trade-off per question. Wait for actual answers; preserve unanswered decisions and reopen affected descendants after corrections. Concrete scope skips interviewing. `/sc-work` preflight applies to both tiers; AI context and live-evidence procedures load conditionally. BRD/PRD/FSD approval remains the authority.
 
 ## Skill Loading
 
@@ -220,3 +222,24 @@ The work is done when:
 - User-facing docs and rules agree with the current public interface.
 - No secrets, cache files, or malformed data were introduced.
 - The final response names the changed areas and verification evidence.
+
+Verified reusable outcomes are captured automatically by their owning writer via
+memory-maintenance JSON operations; framework changes remain reviewed proposals.
+Resume checks the managed checkpoint and fresh ledger before dispatch.
+
+Shared policy lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
+Active intent precedes memory hygiene; dependency-ready goals proceed while
+affected streams recover. Verified deterministic evidence may be reused only
+with matching source/contract/environment/command identity and provenance.
+Context warnings checkpoint and recover; they do not require stopping while
+safe continuation exists.
+
+## Learning and Recovery Authority
+
+Work/debug may reuse/add scoped checks after verified outcomes using
+`.agent/skills/knowledge-compounding/references/prevention-checks.md`; compound
+stores results, evolve proposes skill/workflow/policy changes. Acceptance,
+required verifiers and budgets remain authoritative. Recover active constraints
+and durable receipts via `.agent/skills/context-engineering/references/active-context.md`.
+
+Documentation written or updated follows `.agent/context/output-style.md`. Setup uses `SETUP.md`; `/sc-init setup` installs explicitly while normal init/reload remain read-only. New setup uses separate stage approvals and execution authorization; preserve existing project preferences.

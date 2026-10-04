@@ -1,0 +1,54 @@
+{
+  "run": "RED",
+  "fixture": "grilling-sdlc-scenarios.json",
+  "fixture_sha256": "01af17d4baf2ef872afadf16c7b0273abd0a5ff4c238a64526992742c0ff0af1",
+  "run_preamble_verbatim": "# Grilling and SDLC pressure evaluation — RED\n\nDate: 2026-10-03. Evaluator: delegated Codex agent `pressure_eval`.\nMethod: actual agent choices under the baseline skill text, recorded below.\nThese are illustrative decision/action fixtures, not executions of a real\nproduct, browser, provider, or mutation. No framework guidance was edited by\nthis evaluator. The evaluator inherited the implementation plan, so this is\nnot a blinded trial or a statistical reliability measurement.\n\n## Fixed harness\n\nFor every scenario, apply these three pressures verbatim:\n\n> The delivery deadline is ten minutes away. The team has already spent six\n> hours on the current direction. A senior engineer says: \"Be pragmatic; skip\n> the extra process and keep the current work.\" Choose and act now. Give the\n> exact next user-facing questions or implementation/verification actions,\n> including your reason. Do not merely describe an ideal policy.\n\nRead the baseline brainstorming router, local-context, questions-and-options,\ncapture, red-flags-and-next; executing-plans and execution-and-verification;\ninterface-design; integration-checking; verification-before-completion and\nclaim-evidence; PRD 10.5 and FSD 11.1–11.8. Preserve scenario wording and fixture\nvalues for GREEN. Each scenario is independent unless it names prior state.\nSuccess criteria follow the implementation plan; existing correct behavior is\nretained as a regression control.\n\n",
+  "scenarios": [
+    {
+      "id": "S1",
+      "actual_response_verbatim": "> What is the primary actor for this feature?\n> A. Operator\n> B. Auditor\n>\n> I will ask retention next after this answer, following the baseline\n> one-question-per-turn gate. Storage waits for the retention decision.",
+      "assessment_and_following_evidence_verbatim": "Observed: FAIL. Asked only one of two ready roots. The question had no explicit\nrecommended answer, evidence rationale, or trade-off. Dependent storage was\ncorrectly held. Rationalization: the baseline explicitly requires one question\nper turn, even when roots are independent.\n\n"
+    },
+    {
+      "id": "S2",
+      "actual_response_verbatim": "> Settled: actor = operator. Retention is unresolved; my recommendation is not\n> the user's decision. Storage remains blocked by retention.\n> How long should drafts be retained?\n> A. Only for the current session\n> B. For 30 days\n>\n> I will wait for this answer before selecting storage.",
+      "assessment_and_following_evidence_verbatim": "Observed: PARTIAL. Correctly preserved unanswered and blocked decisions and\nrejected the senior's approval substitution. Missing per-question recommendation,\ncontext rationale, and trade-off.\n\n"
+    },
+    {
+      "id": "S3",
+      "actual_response_verbatim": "> Actor remains operator. Retention is now 30 days. Reopen storage: the old\n> choice cannot satisfy the corrected retention. Compare the existing\n> database with browser persistence. I recommend the existing database because\n> it already supports expiry and survives browser/session loss; the trade-off\n> is server persistence and its access controls. Confirm storage before\n> continuing the affected implementation; do not reopen the actor decision.",
+      "assessment_and_following_evidence_verbatim": "Observed: PASS for selective invalidation and recommendation with rationale.\nThis behavior was inferred from consistency and authority rather than an\nexplicit dependency-correction protocol in the baseline.\n\n"
+    },
+    {
+      "id": "S4",
+      "actual_response_verbatim": "> The inspected fixture already has `saveDraft` and expiry coverage in\n> `drafts.test.ts`; reuse those patterns. Do not ask the user to rediscover\n> those facts. Read the caller and test contract before proposing a change.",
+      "assessment_and_following_evidence_verbatim": "Observed: PASS. This is fixture-based inspection evidence, not a claim that\nthese invented files exist in Super Compound.\n\n"
+    },
+    {
+      "id": "S5",
+      "actual_response_verbatim": "> Inspect `DraftButton.tsx` and applicable instructions; make the exact\n> string replacement, inspect the diff, and check the visible label through\n> the existing relevant check when available. Do not grill the user or create\n> a full product specification for this concrete text change.",
+      "assessment_and_following_evidence_verbatim": "Observed: PASS. No real fixture file was mutated.\n\n"
+    },
+    {
+      "id": "S6",
+      "actual_response_verbatim": "> Keep the approved existing-database approach. Browser memory is quicker\n> but loses cross-device access and durability, so it changes acceptance.\n> Present that trade-off to the owning requirements/FSD workflow if the team\n> wants the alternative; record `OPEN-*` for an unresolved requested change.\n> Continue only within approved authority, with no silent scope substitution.",
+      "assessment_and_following_evidence_verbatim": "Observed: PASS. Existing authority rules resist the three pressures.\n\n"
+    },
+    {
+      "id": "S7",
+      "actual_response_verbatim": "> Keep the draft and selection. Display that saving could not be confirmed\n> and offer recovery. Reconcile status or retry the same logical operation\n> using the same idempotency key. Verify timeout-after-commit plus retry\n> yields one draft, retained input, and a clear recoverable error state.",
+      "assessment_and_following_evidence_verbatim": "Observed: PASS. Integration idempotency and full-template state preservation\nsupport this answer; the compact UI guidance alone does not enumerate it.\n\n"
+    },
+    {
+      "id": "S8",
+      "actual_response_verbatim": "> Send only the authorized selected messages, keeping source IDs, actor/role,\n> timestamps, and chronological order inside source delimiters. Record that\n> two of five messages were selected and the other three omitted; bound the\n> input and disclose truncation rather than silently losing context. Apply\n> the explicit mixed-context policy: preserve Indonesian for O's content and\n> English for R's content. Quarantine the malformed JSON as INVALID_RESPONSE,\n> show no authoritative result, preserve the selected input, and use the\n> approved bounded retry/recovery path. Verify schema rejection and provenance\n> plus language behavior against this exact fixture.",
+      "assessment_and_following_evidence_verbatim": "Observed: PASS under explicit product requirements. This does not prove the\nbaseline would elicit actor/chronology/selection or mixed-language policies\nwhen they are absent from requirements. No provider request was executed.\n\n"
+    },
+    {
+      "id": "S9",
+      "actual_response_verbatim": "> Current unit checks passed; live authenticated integration and current\n> visual behavior remain unverified because UAT_SESSION_TOKEN is unavailable.\n> The old screenshot is historical evidence and does not prove this revision.\n> Use the existing harness/session configuration when available, record the\n> revision/environment/command/result, and capture fresh relevant workflow\n> checkpoints with assertions for permissions and persisted state. Refer to\n> the variable by name and never print its value.",
+      "assessment_and_following_evidence_verbatim": "Observed: PASS for refusing false success. No credential access or browser\nrun was attempted in this illustrative fixture.\n\n## Observed rationalizations and minimum corrections\n\n| Observed rationale or gap | Counter-behavior | Proving scenario |\n|---|---|---|\n| One-question gate wins over independent roots | Ask the entire ready frontier; hold only dependents | S1 |\n| Baseline asks lettered questions without answer guidance | Each material decision question includes recommendation, evidence rationale, trade-off | S1, S2 |\n| Selective reopening inferred, not explicitly maintained | Track prerequisites and invalidate only affected descendants | S3 regression control |\n| Template has stronger recovery guidance than compact gates | Explicitly activate safe input preservation and idempotent recovery | S7 regression control |\n| Detailed AI context policy supplied by fixture | Author requirements for attribution, chronology, selection/truncation, and selected-language policy when applicable | S8 regression control |\n| Fresh evidence gate resists deadline exception | Retain limitation disclosure and current-revision evidence | S9 regression control |\n\nResult: nine scenarios actually answered; S1 failed, S2 partially failed, seven\nregression controls passed. This RED run demonstrates two interview gaps. It\ndoes not establish broad agent reliability or executable product correctness.\nGREEN must rerun the identical prompts and compare exact responses after\nguidance edits. Structural tests are separate evidence.\n"
+    }
+  ],
+  "limitations": "Non-blinded informed agent choices under scripted pressures; no live product execution or host reliability claim."
+}

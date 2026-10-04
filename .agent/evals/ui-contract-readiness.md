@@ -22,7 +22,7 @@ case facts, not invented requirements.
 **Task input:** Greenfield web CRUD. The Business Owner validated the PRD.
 Loading, empty, success, validation, error, and forbidden are covered;
 stale/conflict, partial/degraded, offline, and async are approved `N/A` with
-reason and approver. A wireframe resolves the stable-layout risk. Responsive and
+factual reason. A wireframe resolves the stable-layout risk. Responsive and
 accessibility refs exist. All visible/editable data and actions map to a pinned
 OpenAPI revision. Schema, deterministic fixtures, mock, typed consumer, and
 provider/consumer test refs use that revision. There are no blocking `OPEN-*`.

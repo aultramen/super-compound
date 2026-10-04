@@ -1,0 +1,13 @@
+{
+  "schema": "codex_paired_pilot_v1",
+  "pairs": 5,
+  "sourceDigests": {
+    "A": "d50a841d52dc77b162a881c8bb8f38eb6f7fbdc678821639a9dc1aef4d792c4c",
+    "B": "3dc4b40cdbf0dc4c71514f3d579505c77ca9111874f277ba82d12aab97bfc606"
+  },
+  "taskDigest": "3f49a568792df08bc4d69edaad94d7f4d483cc9877f5ce4606e611222336efb7",
+  "graderDigest": "4aca372215ef184f595c433e7422df5120dd862c83f576be6a26b652cb3edb7a",
+  "configDigest": "50a796508a46d0496b149c3a3d197a14c2d276c8d02e30a06ad714ea000ab3e3",
+  "model": "gpt-6.1-sol",
+  "prompt": "Read PILOT-ADAPTER.md. Cold resume from .continue-here.md, continue the pending goal, use relevant durable knowledge, verify the change, capture the verified outcome and save the next action. Respect active constraints and preserve previously verified work. Work only in this fixture; do not commit, use global skills, inspect other sessions, or read the external evaluator. Stop within five minutes; report any failure honestly."
+}

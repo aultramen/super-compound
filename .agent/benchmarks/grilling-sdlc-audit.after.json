@@ -1,0 +1,89 @@
+{
+  "schema": "super_compound_framework_audit_v2",
+  "generatedAt": "2026-10-03T16:06:28.593Z",
+  "repositoryHead": "337630cdd25883a907e2bc7501626828fffc0b40",
+  "pass": true,
+  "summary": {
+    "manifestSource": "git-active-manifest",
+    "manifestFiles": 431,
+    "auditedFiles": 430,
+    "excludedFiles": [
+      {
+        "path": ".agent/benchmarks/framework-audit.after.json",
+        "reason": "requested output path"
+      }
+    ],
+    "filesRead": 430,
+    "textFiles": 430,
+    "binaryFiles": 0,
+    "bytesRead": 3746740,
+    "linesRead": 53487,
+    "contentDigest": "e5c2b1f97b8c7b4964bc15db1970ffecf9578fcc5618a582e522c333da633e8d",
+    "skillEntrypoints": 36,
+    "skillEntrypointWords": 14845,
+    "maxSkillEntrypointWords": 499,
+    "skillEntrypointWordLimit": 500,
+    "findings": 0,
+    "severityCounts": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    }
+  },
+  "coverage": {
+    "activeManifestEntries": 431,
+    "byteContentAuditedEntries": 430,
+    "specialVerificationEntries": 1,
+    "accountedEntries": 431,
+    "unaccountedEntries": 0,
+    "accountedPercent": 100,
+    "byteContentAuditPercent": 99.768,
+    "classifiedEntries": 431,
+    "unclassifiedEntries": 0,
+    "classCoveragePercent": 100,
+    "auditClassCounts": {
+      "agent": 6,
+      "benchmark-evidence": 5,
+      "benchmark-self-evidence": 1,
+      "data": 36,
+      "documentation": 35,
+      "eval-evidence": 11,
+      "hook": 10,
+      "host-adapter": 4,
+      "host-rule": 27,
+      "repository-config": 5,
+      "rule": 3,
+      "runtime-context": 13,
+      "skill-contract": 7,
+      "skill-entrypoint": 36,
+      "skill-reference": 121,
+      "skill-support": 2,
+      "startup-contract": 3,
+      "template": 15,
+      "test": 34,
+      "tool": 21,
+      "workflow": 18,
+      "workflow-contract": 18
+    },
+    "auditClassDigest": "4be33f446ba4bb634dfc18db690d7cb7271e0c9766f07f22b4b25266a4c0cc64",
+    "contentDigestScope": "byte-content-audited",
+    "specialVerificationRequired": true,
+    "specialEntries": [
+      {
+        "path": ".agent/benchmarks/framework-audit.after.json",
+        "validator": "stored-audit-evidence-v1"
+      }
+    ]
+  },
+  "physicalInventory": {
+    "scope": "physical-authority-worktree-excluding-runtime-roots",
+    "files": 431,
+    "filesRead": 431,
+    "symlinks": 0,
+    "activeManifestEntries": 431,
+    "outsideActiveManifestEntries": 0
+  },
+  "findings": [],
+  "evidenceDigest": "6a958e5f851013f5613a55a5fe2e4c94c08c864d2364bf42d23c676dbf3692ab"
+}
