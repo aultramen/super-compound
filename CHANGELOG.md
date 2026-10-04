@@ -4,6 +4,34 @@
 
 Records public framework behavior changes and their verification evidence.
 
+## 2026-10-04 - Safer tools and a first task for new developers
+
+- Agent projection handles help and invalid arguments before project file access.
+- Design-system page addition preserves edited master bytes; page overwrite
+  targets only the page. Unsupported JSON/stack/domain generation options fail
+  before persistence. Generated guidance leads with decisions and skips generic
+  CSS kits and empty page sections.
+- Quick Start begins with one small task and five entry scenarios. All 18
+  workflows include input, prerequisites, result and next action; Codex adapters
+  recognize plain-language intent while preserving command and write authority.
+- Aligned advisory knowledge, authorized handoffs, progress-based recovery,
+  owning STATE writers, LOCAL_ONLY proof and the `feature` branch default.
+- Simplified simple checkpoints without changing required complex review evidence.
+- Verification and per-file scope: `docs/audits/2026-10-04-new-developer-improvements.md`.
+
+## 2026-10-04 - Answerable human input and authorized handoffs
+
+- Centralized the checkpoint package in a compact runtime contract: retained
+  approvals, concrete need/owner, review material, recommendation, one question,
+  partial progress and automatic resumption.
+- Kept decision/action approval separate from evidence, preserved stage gates
+  and read-only routes, and removed redundant workflow/pointer reapproval.
+- Clarified bounded qualification and evidence dependency cycles: prototype
+  acceptance is not real-provider integration or release/UAT.
+- Readiness BLOCKED text now leads with owner/action guidance; JSON, gates and
+  exit codes remain compatible. Twelve behavior scenarios include unsafe controls.
+- Evidence and limits: `docs/eval-results/hitl-checkpoints-20261004.md`.
+
 ## 2026-10-04 - Documentation quality, stage approvals, and prompt setup
 
 - Replaced document length limits with summary, relevant HLD, evidence, and reference guidance; doc-lint supports advisory mode without hiding input errors.

@@ -1,47 +1,40 @@
 # Checkpoint Types
 
+## Summary
+
+Choose an existing type only for input the agent cannot resolve. All types use
+the single [answerable package](../../../context/checkpoint.contract.md#answerable-package),
+not separate ad-hoc formats or a new schema.
+
 ## Trigger routing
 
-| Situation | Type |
-| --- | --- |
-| Missing business rule or unavailable fact | `needs_info` |
-| Outcome-changing choice among valid approaches | `needs_decision` |
-| Destructive, irreversible, production migration, or high-impact action | `needs_confirmation` |
-| Browser-, device-, account-, or environment-only verification | `needs_testing` |
-| Missing API key, token, or service access | `needs_credentials` |
-| User must deploy, restart, or configure external infrastructure | `needs_deployment_action` |
-| Human judgment is required for code, design, architecture, or user-facing UX | `needs_review` |
+| Remaining need after research/available checks | Type | User-facing kind |
+| --- | --- | --- |
+| Unavailable business fact held by a person | `needs_info` | keputusan |
+| Outcome-changing choice among valid approaches | `needs_decision` | keputusan |
+| Action outside existing authorization | `needs_confirmation` | izin tindakan |
+| Verification possible only in a specific user environment | `needs_testing` | pengujian |
+| Missing service access or credential readiness | `needs_credentials` | akses |
+| External deployment/restart/configuration agent cannot perform | `needs_deployment_action` | akses |
+| Required human acceptance/judgment with reviewable evidence | `needs_review` | review |
 
-Do not checkpoint routine naming, sensible test data, import order, convention-governed file organization, or equivalent reversible approaches. Make the choice and record it when useful.
+Agent-owned research and automated tests are work, not user checkpoints.
+Routine naming, test data, imports, equivalent reversible designs and file
+placement follow conventions without approval. `needs_confirmation` checks
+operation, target, scope and material risk against persistent authorization;
+do not re-request an unchanged authorized action.
 
-## Formats
+## Type-specific material
 
-### `needs_info`
+- Decision: meaningful choices, recommendation/reason/trade-off, exact delta
+  if an accepted decision must change. Retain unrelated accepted decisions.
+- Action: exact target, effects, reversibility/recovery and explicit scoped answer.
+- Review: assessed experience, representative example, walkthrough and linked
+  sections, acceptance question. Prototype acceptance is not integration or UAT.
+- Manual test: setup, numbered steps, expected result, actual-result reporting
+  format and why agent automation cannot exercise the environment.
+- Access/external action: bounded instructions, approved local destination and
+  what resumes. Never ask for secrets in chat.
 
-State what information is missing, why it changes the work, what research or inference was attempted, and one or two specific questions.
-
-### `needs_decision`
-
-State the decision and impact. Compare options in a Pros/Cons table, recommend one with reasons, and ask for a named selection or alternative.
-
-### `needs_confirmation`
-
-Name the exact action, scope, likely impact, reversibility and rollback. Ask for an explicit yes/no before acting.
-
-### `needs_testing`
-
-Name the scenario, provide numbered steps, state the expected result, and ask for observed behavior or errors.
-
-### `needs_credentials`
-
-Name the service, credential type, acquisition instructions, approved local destination, and environment variable. Say explicitly: never paste secrets in chat.
-
-### `needs_deployment_action`
-
-Name the external action and why it cannot be automated. Give bounded instructions and say what work resumes afterward.
-
-### `needs_review`
-
-List the files, design, or architecture to review, the important review questions, and the response that approves continuation or requests revision.
-
-Every format must include sufficient context to answer without reconstructing the entire session.
+Batch same-owner/scope independent needs; separate required stage approvals.
+Keep technical IDs/gate diagnostics below the self-contained human summary.

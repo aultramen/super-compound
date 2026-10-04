@@ -1,5 +1,10 @@
 # File Contracts
 
+## Summary
+
+Select only needed memory artifacts. The authorized owning route checkpoints
+position and evidence; read-only routes return findings to that writer.
+
 Create only the artifacts required by the active workflow.
 
 | File | Contract |
@@ -22,8 +27,9 @@ Ideas). Copy it verbatim when seeding; do not restate it here. Decisions,
 Blockers, Completed Work, and Deferred Ideas appear only when non-empty.
 The progress-log skeleton lives at `.agent/templates/state/Progress-Template.md`.
 
-Every route checkpoints the Next action automatically before compaction or
-handoff and continues authorized work. `/sc-pause` is for actual stopping. The next session
+The authorized owning route checkpoints the Next action automatically before
+compaction or handoff and continues authorized work. Read-only routes return
+evidence to that writer. `/sc-pause` is for actual stopping. The next session
 verifies STATE against the tree with `/sc-status` before acting on it.
 
 ## `.continue-here.md`

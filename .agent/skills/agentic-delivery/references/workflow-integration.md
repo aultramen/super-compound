@@ -66,6 +66,29 @@ observed lessons are advisory until adopted by the decision owner.
 When a host has no subagents, run the same goal and review checks sequentially
 in-thread and report the lack of independent worker isolation.
 
+## Human Input And Internal Handoffs
+
+Apply [the human input runtime contract](../../../context/checkpoint.contract.md)
+before asking, reporting blockers, or reconciling a response. Check acceptance
+and authorization against target, scope, revision, operation and material risk.
+An evidence-only revision does not revoke semantic approval; changed semantics
+require a concrete delta, unaffected approvals retained, and scoped reapproval.
+Approval resolves only the named decision/action, never unperformed tests.
+
+Agent-researchable facts and available automated checks remain agent work.
+Mixed OPEN-* entries are split into needs under existing artifacts and STATE,
+with owner, affected scope and next action; no second approval ledger is added.
+Checkpoint only human/external needs after concrete review material exists.
+
+Under active implementation/delivery intent, invoke the next owner internally
+when scope and authority suffice: PRD -> read-only UI review -> owning PRD
+reconciliation -> FSD planning; verified enabler/first slice -> owning planning
+promotion -> authorized work. Load each receiving contract, announce the scope,
+and preserve its read-only/write boundary. Stage approval and separate execution
+authorization remain required when not already granted. A read-only invocation
+alone authorizes findings, not remediation or a write handoff. Do not require the
+user to type the next /sc-* command merely to transfer already-authorized work.
+
 ## Recovery And Progress
 
 An attempt tests one hypothesis; a fix round batches related corrections and

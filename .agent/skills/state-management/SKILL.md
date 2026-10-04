@@ -17,7 +17,7 @@ Keep continuation state concise enough to load quickly and precise enough that `
 2. Update Current Position, Next Action, active Blockers, Decisions, and Completed Work.
 3. Dedupe before appending. Mark replaced guidance `SUPERSEDED by <reference>` instead of preserving competing truths.
 4. Apply the archive gate: compact when Completed Work exceeds 20 entries or Decisions exceeds 30 entries; never archive active blockers or the next action.
-5. Who writes STATE: `/sc-work`, `/sc-debug`, and `/sc-launch` update the Next action when they close; every other route hands off through `/sc-pause`, the designated STATE writer.
+5. Who writes STATE: the active authorized owning route checkpoints its Next action before compaction or handoff and continues. Read-only routes return evidence to that writer; `/sc-status` remains read-only. Use `/sc-pause` for actual stopping, not a routine checkpoint.
 
 ## When to Use
 

@@ -4,12 +4,22 @@ description: "Preview and run safe Git branch, commit, push, worktree, and Pull 
 
 # Go Workflow
 
+## Summary
+
+
 Use this workflow for explicit Git operations after or before Super Compound work: branch start, optional worktree setup, commit, push, and Pull Request preparation.
 
 Preview first, then run the explicitly authorized operation while its target,
 scope, and material risk remain unchanged; no second confirmation is required.
 Sensitive paths prompt semantic diff inspection, not automatic T2 escalation.
 Ask again only for a material delta outside the existing authorization.
+
+
+## Example
+
+Input: `/sc-go start feature/analytics`.
+Prerequisite: Explicit Git operation intent and configured base/prefix.
+Result and next action: Fresh safety preview and result of the authorized operation; continue the owning development task.
 
 ## Usage
 

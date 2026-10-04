@@ -2,6 +2,10 @@
 
 Purpose: review/design UI read-only or provide interface guidance to an approved goal without loading raw data into model context.
 
+For human input/blockers/handoffs load `.agent/context/checkpoint.contract.md`.
+Present experience/examples/walkthrough and specific acceptance, then return
+internally to the authorized owner. Prototype acceptance is not provider proof/UAT.
+
 Authority: design/review mode is read-only. Existing-screen fixes with no full-tier trigger stay light: /sc-work or /sc-debug. For full implementation intent, fuzzy UI
 routes to `/sc-explore`; an approved BRD without a PRD routes to `/sc-prd`; an
 approved PRD without an FSD routes to `/sc-plan`; an approved FSD `GOAL-*`

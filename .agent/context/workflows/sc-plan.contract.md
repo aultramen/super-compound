@@ -2,6 +2,11 @@
 
 Purpose: convert an approved PRD into an FSD plus lightweight goal issue pointers.
 
+For human input/blockers/handoffs load `.agent/context/checkpoint.contract.md`.
+Evidence/pointer refresh preserves approval; material changes ask only for the delta.
+Check evidence cycles: first-slice completion proof gates scale-out, not its entry;
+executable qualification needs a bounded approved enabler, never a gate bypass.
+
 Entry of the `full` tier (agentic-delivery/references/workflow-integration.md).
 Write authority artifacts only: FSD, accepted ADR, eval, issue pointers; never
 product code, which belongs to an approved `/sc-work` goal.

@@ -4,7 +4,17 @@ description: "Resolve fuzzy ideas into a BRD with business objectives, constrain
 
 # Explore Workflow
 
+## Summary
+
+
 Use this when the work is not ready for product requirements or technical planning. The canonical output is a BRD.
+
+
+## Example
+
+Input: `/sc-explore Dashboard penggunaan untuk admin akun`.
+Prerequisite: User problem and desired outcome; unresolved business choices are allowed.
+Result and next action: BRD with scope, non-goals and acceptance; obtain BRD approval before /sc-prd.
 
 ## Modes
 

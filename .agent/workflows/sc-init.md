@@ -4,6 +4,18 @@ description: "Initialize or refresh project context by scanning the codebase, co
 
 # Init Workflow
 
+## Summary
+
+Inspect project context, then route the first task; use setup mode only for installation.
+
+
+
+## Example
+
+Input: `/sc-init`.
+Prerequisite: Installed framework in the current workspace.
+Result and next action: Detected stack, verification commands and gaps; /sc-status chooses the next task.
+
 ## Usage
 
 ```text

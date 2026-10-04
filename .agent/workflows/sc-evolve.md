@@ -4,7 +4,17 @@ description: "Cluster high-confidence learnings into draft framework proposals f
 
 # Evolve Workflow
 
+## Summary
+
+
 Use this when `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, or `docs/solutions/` accumulate repeated high-confidence entries worth promoting into framework guidance.
+
+
+## Example
+
+Input: `/sc-evolve`.
+Prerequisite: Repeated evidenced lessons; promotion needs 3+ independent origins.
+Result and next action: DRAFT proposals with evidence and proposed diff; human approval/application happens outside this route.
 
 ## Steps
 

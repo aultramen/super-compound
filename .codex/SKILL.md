@@ -1,7 +1,12 @@
 ---
 name: super-compound
-description: Super Compound /sc-* .agent workflows
+description: Use Super Compound .agent workflows for /sc-* commands or plain-language requests to set up, fix a bug, make a small change, deliver a feature, review, or resume work.
 ---
+
+Route intent: setup -> sc-init setup; bug -> sc-debug; small change -> sc-work;
+full feature delivery -> sc-launch; resume -> sc-status; review -> sc-review.
+Explicit /sc-* commands select their named route. Preserve read-only scope and
+existing authorization; natural-language routing adds no approval or write authority.
 
 .agent/context/workflows/sc-X.contract.md before
 references/context/workflows/sc-X.contract.md; full workflow only if needed, never preloaded

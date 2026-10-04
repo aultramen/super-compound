@@ -4,9 +4,19 @@ description: "Generate and filter proactive improvement ideas when goal queues a
 
 # Genius Loop Workflow
 
+## Summary
+
+
 Use this when the user invokes `/sc-geniusloop [scope]`, or when `/sc-status` finds no ready goal issues and no active handoff, blocker, or failing verification that should be handled first.
 
 The goal is continuous improvement and creativity for an existing system. This workflow benchmarks the current state against the user's stated intent, generates at least 10 improvement ideas, asks the read-only Brain evaluator to filter them, then routes the best 1-2 ideas back into the normal Super Compound delivery path.
+
+
+## Example
+
+Input: `/sc-geniusloop onboarding`.
+Prerequisite: Existing system and no more urgent ready work/blocker.
+Result and next action: 10+ GL-* ideas, elimination evidence and 1-2 selections; route the selected idea to its owner.
 
 ## Steps
 

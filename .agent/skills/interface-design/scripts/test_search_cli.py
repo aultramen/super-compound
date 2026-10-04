@@ -13,6 +13,18 @@ SEARCH_SCRIPT = Path(__file__).with_name("search.py")
 
 
 class InterfaceDesignSearchCliTests(unittest.TestCase):
+    def test_unsupported_design_system_options_fail_before_persistence(self):
+        for option in (["--json"], ["--stack", "react"], ["--domain", "ux"]):
+            with self.subTest(option=option), tempfile.TemporaryDirectory() as tmp:
+                completed = subprocess.run(
+                    [sys.executable, str(SEARCH_SCRIPT), "dashboard", "--design-system",
+                     "--persist", "--output-dir", tmp, *option],
+                    capture_output=True, text=True, encoding="utf-8", check=False,
+                )
+                self.assertEqual(completed.returncode, 2, completed.stderr)
+                self.assertIn("--format markdown", completed.stderr)
+                self.assertEqual(list(Path(tmp).iterdir()), [])
+
     def test_cli_help_documents_the_project_scoped_persistence_paths(self):
         completed = subprocess.run(
             [sys.executable, str(SEARCH_SCRIPT), "--help"],

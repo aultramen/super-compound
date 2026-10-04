@@ -1,4 +1,5 @@
 Start from active user intent; when resuming, reconcile docs/STATE.md Next action.
+Checkpoint: `.agent/context/checkpoint.contract.md`.
 Tier first (agentic-delivery/references/workflow-integration.md): `Tier:
 light|full; trigger: T<n>|none`. `light`: a request/pointer; trivial edits execute directly.
 `full`: one approved FSD goal or its pointer. Stop with `OPEN-*` for missing authority. Material escalation: `ESCALATE: T<n>`
@@ -35,6 +36,4 @@ Close: docs/STATE.md Next action, else /sc-pause.
 
 Resume: memory-maintenance.mjs resume; reconcile constraints/inbox and affected drift; skip verified goals.
 
-Apply shared policy in the tier reference above.
-
-Stage mode: approved FSD plus execution authorization; preserve prior authority.
+Stage: FSD approval + execution authorization persist.

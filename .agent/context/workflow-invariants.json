@@ -207,7 +207,7 @@
       ],
       "workflowMarkers": [
         "approved FSD goal",
-        "stop and report `OPEN",
+        "stop only affected execution",
         "verification evidence",
         "pinned contract version"
       ],

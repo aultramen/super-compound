@@ -4,7 +4,18 @@ description: "Save a compact handoff so work can resume in a later session."
 
 # Pause Workflow
 
-Use this before stopping a session or compacting context.
+## Summary
+
+
+Use this when actually stopping a session. During ongoing work, the authorized
+owning route checkpoints before compaction and continues without invoking pause.
+
+
+## Example
+
+Input: `/sc-pause`.
+Prerequisite: An actual stop with current position, evidence and unfinished work.
+Result and next action: STATE plus short handoff pointer; later /sc-status reconciles and resumes.
 
 ## Steps
 

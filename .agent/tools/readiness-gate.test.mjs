@@ -210,6 +210,27 @@ test("CLI exits 0 with readiness_gate_v1 json and text verdict", () => {
   assert.match(text.stdout, /\nverdict: READY_FOR_SLICE\n$/);
 });
 
+test("blocked CLI explains evidence work and review ownership before technical details", () => {
+  const root = fixture({
+    "docs/prd.md": ["VALIDATED", "DRAFT"],
+    "docs/fsd.md": ["blocking_open_refs: []", "blocking_open_refs: [\"OPEN-001\"]"],
+  });
+  const result = runCli([...ARGS, "--root", root]);
+  assert.equal(result.code, 1);
+  assert.match(result.stdout, /^Readiness blocked for the affected UI delivery scope\./);
+  assert.ok(result.stdout.indexOf("Next actions:") < result.stdout.indexOf("FAIL baseline"));
+  assert.match(result.stdout, /Agent.*inspect.*docs\/prd\.md.*acceptance/i);
+  assert.match(result.stdout, /docs\/fsd\.md.*owner and need/i);
+  assert.ok(result.stdout.indexOf("blocking_open_refs=[OPEN-001]") > result.stdout.indexOf("Technical details:"));
+  assert.match(result.stdout, /approval.*does not.*evidence.*pass/i);
+  assert.match(result.stdout, /independent authorized work/i);
+  assert.match(result.stdout, /first slice.*produces.*integration proof/i);
+  // Presentation does not become a second authorization or readiness system.
+  const json = JSON.parse(runCli([...ARGS, "--root", root, "--json"]).stdout);
+  assert.deepEqual(json.failures, ["baseline", "open-blockers"]);
+  assert.equal(json.verdict, "BLOCKED");
+});
+
 const MUTATIONS = {
   enums: { "docs/fsd.md": ["ui_delivery_profile: STANDARD", "ui_delivery_profile: WEIRD"] },
   baseline: { "docs/prd.md": ["VALIDATED", "DRAFT"] },
@@ -310,6 +331,15 @@ const localPatches = {
   "docs/fsd.md": FSD.replace(MANIFEST, LOCAL_MANIFEST).replaceAll("SCHEMA-001 |", "LOCAL-001 |"),
   ...Object.fromEntries(Object.keys(ISSUES).map(file => [file, issue("ready-for-agent", "None", "NOT_APPLICABLE", "None", "NOT_APPLICABLE")])),
 };
+
+test("local blocked guidance does not introduce provider-slice prerequisites", () => {
+  const root = fixture({...localPatches, "docs/prd.md": ["VALIDATED", "DRAFT"]});
+  const result = runCli([...ARGS, "--root", root]);
+  assert.equal(result.code, 1);
+  const summary = result.stdout.split("Technical details:")[0];
+  assert.doesNotMatch(summary, /first slice|scale-out|real integration proof/i);
+  assert.match(summary, /docs\/prd\.md.*acceptance/i);
+});
 test("local-only UI passes mapped checks without fabricated provider assets/goals", async () => {
   const result = await evaluate(localPatches);
   assert.equal(result.verdict, "READY_FOR_SLICE");

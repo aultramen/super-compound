@@ -4,7 +4,17 @@ description: "Show current project/session state and route to the next useful wo
 
 # Status Workflow
 
+## Summary
+
+
 Use this at the start of a session or when orientation is needed.
+
+
+## Example
+
+Input: `/sc-status`.
+Prerequisite: Current workspace; existing STATE/handoff when available.
+Result and next action: Read-only position, evidence and blockers; one exact next route to resume.
 
 ## Steps
 
@@ -16,7 +26,7 @@ Use this at the start of a session or when orientation is needed.
    under `.scratch/*/issues/` without reading all issue bodies. Read the body of
    only the selected ready or blocking issue after the route is chosen.
 4. Check Git status, active branch, upstream, and worktree state when inside a Git repo; do not mutate Git state.
-5. Summarize current position, completed work, remaining work, blockers, issue board status, and verification status. Route a named `OPEN-RESEARCH-*` evidence blocker to `/sc-research`, then back to its owning workflow.
+5. Summarize current position, completed work, remaining work, blockers, issue board status, and verification status. Apply `.agent/context/checkpoint.contract.md`: show newly resolved and remaining needs, each owner and next action, blocked scope and independent ready work. Route a named `OPEN-RESEARCH-*` evidence blocker to `/sc-research`, then back to its owning workflow.
 6. Run `node .agent/tools/memory-maintenance.mjs report`. Prioritize active user
    intent and dependency-ready goals. `STALE_STATE`/`STALE_PROGRESS` are
    reconciliation signals for the owning route, not global blockers. Suggest
@@ -35,6 +45,10 @@ Use this at the start of a session or when orientation is needed.
 
 - Short dashboard.
 - Recommended next action.
+
+Standalone status stays read-only. Within active authorized delivery, return
+the route internally to its owner and continue there after checking authority;
+do not finish with only a command for the user to retype.
 
 Read-only: memory-maintenance.mjs resume reports checkpoint/contract drift; owning routes reconcile missing checkpoints and affected goals, never write memory here.
 

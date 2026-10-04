@@ -68,6 +68,34 @@ class DesignSystemPersistenceSecurityTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 persist_design_system(self.minimal_design_system(), output_dir=tmp)
 
+    def test_adding_and_replacing_pages_preserves_edited_master_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            system = self.minimal_design_system()
+            persist_design_system(system, output_dir=tmp)
+            master = Path(tmp) / "design-system/acme-crm/MASTER.md"
+            original = b"# My edited master\r\nCustom font and colors.\r\n"
+            master.write_bytes(original)
+            for page in ("dashboard", "settings"):
+                result = persist_design_system(system, page=page, output_dir=tmp)
+                self.assertEqual(master.read_bytes(), original)
+                self.assertEqual(len(result["created_files"]), 1)
+            page = master.parent / "pages/dashboard.md"
+            page.write_text("edited page", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                persist_design_system(system, page="dashboard", output_dir=tmp)
+            self.assertEqual(page.read_text(encoding="utf-8"), "edited page")
+            persist_design_system(system, page="dashboard", output_dir=tmp, overwrite=True)
+            self.assertNotEqual(page.read_text(encoding="utf-8"), "edited page")
+            self.assertEqual(master.read_bytes(), original)
+            persist_design_system(system, output_dir=tmp, overwrite=True)
+            self.assertNotEqual(master.read_bytes(), original)
+
+    def test_invalid_page_creates_no_master_or_directories(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(ValueError):
+                persist_design_system(self.minimal_design_system(), page="../bad", output_dir=tmp)
+            self.assertEqual(list(Path(tmp).iterdir()), [])
+
     def test_persisted_links_resolve_within_the_project_scoped_design_system(self):
         with tempfile.TemporaryDirectory() as tmp:
             persist_design_system(

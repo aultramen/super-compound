@@ -5,7 +5,12 @@ description: "Use when human information, judgment, approval, testing, credentia
 
 # Checkpoint Protocol
 
-Use a structured pause instead of an ad-hoc question. Announce that work requires input before proceeding.
+## Summary
+
+Use the [human input runtime contract](../../context/checkpoint.contract.md)
+before interrupting or reporting blockers. It owns the single answerable format;
+this skill routes need types and resolution. Announce the affected scope, and
+continue independent authorized work.
 
 ## When to Use
 
@@ -13,7 +18,9 @@ Choose exactly one type: `needs_info`, `needs_decision`, `needs_confirmation`, `
 
 ## Route
 
-- Select the trigger and copy the appropriate format from [checkpoint types](references/checkpoint-types.md).
+- Check existing acceptance/authorization, research facts and run available tests
+  first. Select the trigger from [checkpoint types](references/checkpoint-types.md)
+  and render the runtime contract's package in the user's language.
 - After the user responds, follow [resolution and resumption](references/resolution.md).
 - Load only the first reference when pausing and only the second when resuming.
 
@@ -22,7 +29,9 @@ Choose exactly one type: `needs_info`, `needs_decision`, `needs_confirmation`, `
 - Batch consequential inputs with the same owner and scope into one concrete request; keep unrelated authority gates separate. Continue independent safe work while waiting.
 - Provide context, the exact blocker, what was tried, the impact of the response, and a concrete resumption path.
 - For choices, present meaningful options and lead with a reasoned recommendation.
-- Record the checkpoint under `STATE.md` Blockers. After resolution, move durable choices to Decisions Made and continue from the exact prior position.
+- Record each unresolved need under `STATE.md` Blockers through the existing
+  state writer; retain partially resolved evidence. Decisions remain in their
+  authoritative document with STATE refs. Resume from the exact prior position.
 - Never ask the user to paste secrets in chat. Direct credentials to an approved local secret store such as `.env` and name only the variable or location.
 - Do not use a checkpoint to transfer routine implementation judgment back to the user.
 

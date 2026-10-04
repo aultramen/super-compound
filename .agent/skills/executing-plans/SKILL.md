@@ -23,9 +23,9 @@ Use an approved FSD goal/pointer for full-tier work; a concrete user request wit
 
 Search symbols, paths, tests, and nearby implementations before creating or declaring anything missing. A narrow search miss is not proof of absence.
 
-Stop with `OPEN-*` on missing/contradictory acceptance or behavior; full-tier work also requires FSD authority, approved `TDEC-*`, and accepted ADRs. Stop on unfinished blockers unless the user explicitly reorders work. Never invent schema, APIs, authorization, roles, workflows, state transitions, business rules, or UI behavior outside approved authority.
+Stop only the affected scope with `OPEN-*` on missing/contradictory acceptance or behavior; full-tier work also requires FSD authority, approved `TDEC-*`, and accepted ADRs. Continue independent dependency-ready authorized work without requiring the user to reorder it. Apply the human input runtime contract for unresolved needs; technical gaps require research/checks, not an "approve blocker" question. Never invent schema, APIs, authorization, roles, workflows, state transitions, business rules, or UI behavior outside approved authority.
 
-For full-tier UI issues, check the pinned contract and role gate; require `ready-for-agent` and `Blocked by` dependencies at `verified`. Missing/stale evidence returns `needs-info`/`blocked` with `OPEN-*`. `HARDENING` requires all applicable slices verified. The first real slice proves auth/permission, success, and representative failure through `integration-checking`; mock-only evidence cannot open scale-out.
+For full-tier UI issues, check the pinned contract, integration topology and role gate; require `ready-for-agent` and `Blocked by` dependencies at `verified`. Missing/stale evidence returns `needs-info`/`blocked` with `OPEN-*`. `HARDENING` requires all applicable slices verified. LOCAL_ONLY uses mapped local checks without synthetic providers. A networked first slice proves real-provider auth/permission, success, and representative failure through `integration-checking`; mock-only evidence cannot open scale-out.
 
 Before product code, verify placement and dependency direction with `architecture-enforcement`; implement behavior through `test-driven-development`.
 

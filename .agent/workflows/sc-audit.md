@@ -4,10 +4,20 @@ description: "Run read-only security, dependency, compatibility, agent-surface, 
 
 # Audit Workflow
 
+## Summary
+
+
 Use this when risk matters: auth, secrets, dependencies, MCP/tools, agent prompts/hooks, PII, payments, compliance, releases, or broad health checks.
 
 Audit remains strictly read-only. Approval to remediate selects an owning
 workflow; it never authorizes changes inside `/sc-audit`.
+
+
+## Example
+
+Input: `/sc-audit agent`.
+Prerequisite: Named risk scope and relevant files/configuration.
+Result and next action: Read-only findings by severity and evidence; route each repair to its authorized owner.
 
 ## Usage
 

@@ -20,8 +20,8 @@ const specs = {
       "qualified-references.md": "bc5f8b87bb0333347f291087ae7a28858b5326ebfd12c09094e5532f21c110eb",
       "context-and-issue-pointers.md": "68c0d02211cd46b95845c2555e0d680075e61e72d3793eae3678a07d69cf8b1d",
       "open-stop-conditions.md": "09dd7d956a1372ea50668f57554110a3f3811d6948a287580aa933c0d1a378eb",
-      "workflow-integration.md": "f87b17f9408f92302ede79f584b1a6043b4c789c22ebfaadc6f2d749f9789f2c",
-      "ui-contract-readiness.md": "092304b0d5f163388deeb91533a456612a95839bf027cde219db02422deb4c36",
+      "workflow-integration.md": "98265685ebf7da7f813a73b7ce013c75e47534ec6cc9c10362d4521d9629ad5c",
+      "ui-contract-readiness.md": "b83a255b28dd994bbe6a690fb634152090eea6b08267884694fd2c659ec5c868",
     },
     invariants: [
       /BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION/,
@@ -50,7 +50,7 @@ const specs = {
     frontmatter:
       '---\nname: plan-verification\ndescription: "Use when an FSD and goal issue board need requirement coverage, goal quality, dependency DAG, sizing, and verification validated before execution."\n---',
     references: {
-      "coverage-and-dependencies.md": "16bea51fefafeca4ba4d4e4186e7cf7f52105f33fe7deb22f4e6394115fd4347",
+      "coverage-and-dependencies.md": "e0c77f317c0b4915d8185b64c5c1da50b9fd64c536708ddf7da05cd391a568fa",
       "links-scope-and-must-haves.md": "d73c1b53afe2bab7a3b5bd8221b3ef62f1705490eb18abba300d6f1218157b7d",
       "sizing.md": "449d2058678489910fbd8d56e839bcd132db1025927ad267f94c2b52d559edb0",
       "tests-and-decisions.md": "67d42a7fe47a0ce7627c095591efb18fba30d1cf29ea9763df95319d19c30149",
@@ -150,7 +150,7 @@ const specs = {
     frontmatter:
       '---\nname: interface-design\ndescription: "Use when building, redesigning, or reviewing frontend UI: pages, components, dashboards, landing pages, mobile screens, charts, and interaction states."\n---',
     references: {
-      "retrieval-workflow.md": "6d73c5506b0fe0f2aa71c1e2a0d42d61deef920b8ca42b2c5365b1b84b6c0c52",
+      "retrieval-workflow.md": "5e5cd0a5d7798cd90ed757ac980d8fa9c14071ea33ecd327806112bc02ff25c1",
       "catalog.md": "a3fd67ddc0d9ea57345e0e6f2f13dcc41d2653e7a33c0e19903262b43b97fa36",
       "implementation-and-checklist.md": "fc26e206fb980a9e923be8fc08e1ae645ce8575e16b2f8369d557346012f091a",
     },

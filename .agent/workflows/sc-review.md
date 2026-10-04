@@ -4,10 +4,20 @@ description: "Review code changes against the requested spec and engineering sta
 
 # Review Workflow
 
+## Summary
+
+
 Use this after implementation or when reviewing a diff/branch.
 
 This route remains strictly read-only. Approval to remediate a finding selects
 an owning workflow; it never converts review into implementation.
+
+
+## Example
+
+Input: `/sc-review`.
+Prerequisite: Diff/files and the request or approved specification.
+Result and next action: Read-only findings with evidence and owners; remediation goes to /sc-work or /sc-debug within authority.
 
 ## Steps
 

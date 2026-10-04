@@ -4,10 +4,20 @@ description: "Run the complete Super Compound lifecycle through BRD, PRD, FSD, g
 
 # Launch Workflow
 
+## Summary
+
+
 Use this when the user wants the whole lifecycle from idea to verified delivery.
 Launch is the `full` delivery tier: use it when intake classified the request
 `full` (triggers T1-T5 in `skills/agentic-delivery/references/workflow-integration.md`);
 a `light` request goes straight to `/sc-work` or `/sc-debug`.
+
+
+## Example
+
+Input: `/sc-launch Dashboard penggunaan untuk admin akun`.
+Prerequisite: Full delivery intent, known users/outcome and existing artifacts.
+Result and next action: BRD -> PRD -> FSD -> verified goals; retain configured stage approvals and separate execution authorization.
 
 ## Pipeline
 
@@ -22,7 +32,7 @@ a `light` request goes straight to `/sc-work` or `/sc-debug`.
 9. `sc-go.md` - preview branch or optional worktree setup when configured or requested.
 10. `sc-work.md` - materialize and verify the bounded contract enabler when needed.
 11. `/sc-plan` - after an enabler, re-index the exact revisions, rerun readiness, and auto-promote unchanged semantics after deterministic gates; request Technical Manager approval only for material deltas before releasing the first slice.
-12. `sc-work.md` - verify the first vertical slice against the real provider, then return to `/sc-plan` to promote only eligible dependents.
+12. `sc-work.md` - for networked UI, verify the first vertical slice against the real provider, then return to `/sc-plan` to promote only eligible dependents. LOCAL_ONLY uses mapped local checks without provider barriers.
 13. `sc-work.md` - perform controlled scale-out only after the first-slice issue is verified and the PRD baseline is `VALIDATED`.
 14. `sc-work.md` - execute the bounded hardening/verification goal for integration, responsive, accessibility, E2E, and visual-regression evidence; obtain Business Owner UAT approval only when required by acceptance or material human judgment.
 15. `sc-review.md` - audit implementation and recorded verification/UAT evidence against authority; it does not manufacture missing evidence.

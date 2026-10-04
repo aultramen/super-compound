@@ -4,7 +4,17 @@ description: "Capture non-trivial solved problems as searchable documentation."
 
 # Compound Workflow
 
+## Summary
+
+
 Use this after a non-obvious fix, debugging session, migration, integration repair, or operational lesson.
+
+
+## Example
+
+Input: `/sc-compound`.
+Prerequisite: Verified reusable outcome with source evidence.
+Result and next action: Searchable capture in applicable knowledge sinks; return to the active owning workflow.
 
 ## Steps
 

@@ -4,6 +4,9 @@ description: "Execute an approved FSD goal or lightweight issue pointer with foc
 
 # Work Workflow
 
+## Summary
+
+
 Use this to implement a bounded change. Classify the delivery tier at intake per
 `skills/agentic-delivery/references/workflow-integration.md` and state it in one
 line: `Tier: light|full; trigger: T<n>|none`. A `light` request is a plain
@@ -12,6 +15,13 @@ approved FSD goal or its issue pointer. A single trivial change: just do it
 directly, with tests and verification.
 
 Before edits in either tier, identify current flow, reusable pattern, affected boundaries and callers/consumers, and proving checks for acceptance/regression. Full scope cites its FSD; light scope uses a brief existing note. Compare material alternatives through `executing-plans/references/authority-and-workspace.md`; changed requirements/acceptance/contracts return to their owner, while reversible details within authority proceed.
+
+
+## Example
+
+Input: `/sc-work Ubah teks tombol Simpan menjadi Simpan perubahan`.
+Prerequisite: Exact light change and expected result; full scope needs approved FSD plus execution authorization.
+Result and next action: Scoped implementation, changed files and actual checks; /sc-review assesses the diff.
 
 ## Steps
 
@@ -26,7 +36,10 @@ Before edits in either tier, identify current flow, reusable pattern, affected b
    consumer revisions match the approved FSD and issue pointer.
 6. If pointer state, dependency, role gate, authority, or contract evidence is
    missing, unsatisfied, stale, or mismatched, leave/return the pointer to
-   `needs-info` or `blocked`, stop and report `OPEN-xxx`. Route scope to
+   `needs-info` or `blocked`, stop only affected execution and explain each need
+   using `.agent/context/checkpoint.contract.md`. Research available facts and
+   run safe checks; retain prior acceptance/authorization, continue independent
+   ready authorized goals, and perform authorized handoffs internally. Route scope to
    `/sc-explore`, observable behavior/AC to `/sc-prd`, and data/API/technical
    contract changes to `/sc-plan`. Do not repair authority drift silently in
    implementation. In `light`, a trigger discovered mid-work (new capability,
@@ -36,7 +49,7 @@ Before edits in either tier, identify current flow, reusable pattern, affected b
 8. Execute one goal at a time by default. A `CONTRACT_ENABLER` materializes
    the pinned schema, deterministic/edge fixtures, mock, typed consumer, and
    provider/consumer contract tests.
-9. A `FIRST_VERTICAL_SLICE` must use a real provider or real backend and prove
+9. For networked UI, a `FIRST_VERTICAL_SLICE` must use a real provider or real backend and prove
    auth/permission, success, and at least one representative failure. Run
    `integration-checking` after the integrated slice. Mock-only evidence does not
    permit scale-out or `FIRST_VERTICAL_SLICE_VERIFIED`.
@@ -66,8 +79,8 @@ Before edits in either tier, identify current flow, reusable pattern, affected b
 15. Summarize changed files, mapped requirement IDs, deviations, and verification evidence.
     If the goal surfaced a non-obvious fix, a costly mistake, or a new convention,
     route to `/sc-compound` before closing.
-16. Close by writing the `docs/STATE.md` Next action; if work remains, hand off
-    with `/sc-pause`.
+16. Write the `docs/STATE.md` Next action and continue authorized ready work.
+    Use `/sc-pause` only when actually stopping.
 
 ## Output
 
