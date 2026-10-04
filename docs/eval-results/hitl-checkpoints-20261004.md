@@ -144,11 +144,14 @@ Executable qualification memerlukan bounded approved enabler dan entry checks.
    action. Periksa apakah pengguna memahami pekerjaan manual berlangsung
    di luar reviewer dan bukan meneruskan call lama.
 
-Source read-only links (available on the original Windows workspace):
-[verification and limitations](D:/BATI/Development/promptshield/.scratch/prototypes/promptshield-ui-v1/VERIFICATION.md),
-[stale walkthrough](D:/BATI/Development/promptshield/.scratch/prototypes/promptshield-ui-v1/evidence/stale-80.txt),
-[actual held PTY walkthrough](D:/BATI/Development/promptshield/.scratch/prototypes/promptshield-ui-v1/evidence/held-pty-80.txt).
-The summary above keeps this scenario readable without that external checkout.
+Historical source locations, available only on the original Windows workspace:
+
+- Verification and limitations: `D:/BATI/Development/promptshield/.scratch/prototypes/promptshield-ui-v1/VERIFICATION.md`
+- Stale walkthrough: `D:/BATI/Development/promptshield/.scratch/prototypes/promptshield-ui-v1/evidence/stale-80.txt`
+- Actual held PTY walkthrough: `D:/BATI/Development/promptshield/.scratch/prototypes/promptshield-ui-v1/evidence/held-pty-80.txt`
+
+These external records are not distributed with this repository. The summary
+above keeps this historical scenario readable without that external checkout.
 
 After a response accepting those two flows, report: **newly resolved** offline
 experience acceptance; **remaining** native-placement judgment (product owner),
