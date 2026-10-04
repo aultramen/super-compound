@@ -10,20 +10,91 @@
 
 `delivery_mode` in `.agent/rules/project-config.md` is `auto` unless a project
 pins `light` or `full`. Under `auto`, classify every request before any read
-fan-out and state one line: `Tier: light|full; trigger: T<n>|none`. The tier
-only rises; intake decides, it never asks.
+fan-out and state one line: `Tier: light|full; trigger: T<n>|none`. Intake decides from changed semantics and material risk, never from session count.
+Reassess when scope changes; administrative coordination alone cannot raise the tier.
 
 | Trigger | `full` when | Owner |
 |---|---|---|
 | T1 | New product capability or user-visible behavior with no approved PRD/FSD covering it (check `docs/prd/`, `docs/fsd/`, `knowledge-search`) | `/sc-explore` without a BRD, else `/sc-prd` -> `/sc-plan` |
-| T2 | Contract surfaces: data model, schema, migrations, public API or wire shape, auth, permissions, roles, billing, payments, PII, external integrations | `/sc-plan` (data/API) or `/sc-prd` (behavior) |
+| T2 | Material changes to data invariants, public API/wire compatibility, access policy, billing/payment effects, PII handling, or external integration behavior | `/sc-plan` (data/API) or `/sc-prd` (behavior) |
 | T3 | New interactive surface: a new screen, page, or user flow, not a change inside an existing screen | `/sc-ui` validation, then `/sc-plan`; the UI contract readiness lifecycle applies |
-| T4 | Multi-session or multi-stream work: issue board, parallel worktrees, handoff between sessions | `/sc-plan` goal pointers |
+| T4 | Coordinated work changes product outcomes, cross-stream contracts, or material risk; issue boards, parallelism, and session handoff alone only require state management | `/sc-plan` goal pointers |
 | T5 | The user asks for BRD/PRD/FSD, or the project pins `delivery_mode: full` | full path |
 
 Everything else is `light`: bug fixes, refactors, config, copy or style inside an
 existing screen, one-module features with existing tests. A single trivial
 change is done directly, with `tdd_mode` and verification still applying. When a
-trigger appears mid-work, stop, write `ESCALATE: T<n>`, hand the trigger to its
-owner, and continue in the higher tier; never step down mid-work. `/sc-go`
-previews and `/sc-review` warn when touched paths match T2 patterns.
+material trigger appears mid-work, write `ESCALATE: T<n>`, return the affected
+decision to its owner, and continue independent authorized work. Sensitive paths
+are inspection signals: assess the diff, compatibility, access, data, and side
+effects before escalating. Contract-preserving maintenance stays light.
+
+## Shared Execution Policy
+
+This reference owns risk, authorization, recovery, and verification policy.
+Compact contracts and full procedures apply the same rules.
+
+- Low risk: read-only investigation, scoped local fixes/tests/docs, and derived
+  assets following approved semantics execute and verify without another approval.
+- Medium risk: reversible technical changes within authority execute with a
+  concise notice, targeted checks, and a recovery path. Scheduler scope amendments
+  remain inside the approved goal and require ownership/dependency checks.
+- High risk: destructive or production mutations, breaking contracts, new access
+  policy, publishing, external spending, or material product decisions outside
+  authority require explicit scoped authorization after concrete review material.
+
+Authorization persists while operation, target, scope, and material risk remain
+unchanged. A fresh preview checks those facts; it does not revoke authorization.
+Implementation authority alone never authorizes commit, push, deploy, publish,
+or destruction. Reversible internal details following repository patterns are
+delegated by default; ambiguity about acceptance, public contracts, policy, or
+security still uses OPEN-*.
+
+For new setup, `conventions.approval_mode: stage` selects four checkpoints:
+BRD approval → PRD approval → FSD + goals + verification approval → separate
+execution authorization. Each stage consumes the separately approved upstream.
+Do not bundle these approvals by default. Preserve existing project configuration
+and previously granted authorization on update. Reapproval is needed only when
+scope, decisions, material risk, or the authorized action changes.
+
+Within an authorized stage, prepare derived boards, pointers, fixtures,
+checkpoints, documentation repairs, and evidence automatically. These are not
+additional approval gates when semantics are unchanged. Review/audit remain
+read-only; route remediation to the owning workflow with existing authorization.
+Accepted decisions require their authoritative source and approval provenance;
+observed lessons are advisory until adopted by the decision owner.
+When a host has no subagents, run the same goal and review checks sequentially
+in-thread and report the lack of independent worker isolation.
+
+## Recovery And Progress
+
+An attempt tests one hypothesis; a fix round batches related corrections and
+verification. At repeated failure (normally 2-3 attempts), reassess evidence and
+seams, change strategy/tool, or escalate to a fresh capable worker when available.
+Numbers trigger reassessment, not universal shutdown. Round 5 adjudication
+records remaining gaps; it never parks mandatory failures as completed work.
+Stop only the affected dependency stream for missing authority/access, hard
+user/host limits, or demonstrated stagnation after available safe alternatives.
+Record what failed, what changed, and the next recovery; continue independent
+goals. Retry idempotent transient tool failures with bounded backoff; preserve
+partial results, timeouts, and RED evidence. Never mask failure as completion.
+
+Context pressure triggers a durable checkpoint, optional-context reduction, and
+host compaction/continuation at a natural boundary. Resume from STATE, artifacts,
+and ledger; skip verified goals. Stop for context only when safe recovery is
+unavailable. Active user intent and ready work precede administrative freshness
+or memory hygiene, reconciled through the owning route.
+
+## Evidence Identity
+
+Evidence can be reused after provenance inspection only when tested source and
+dirty-change digests, contract/fixture revisions, environment/configuration,
+command/arguments, and required scope match. Use the existing evidence artifact
+to retain identity, timestamps, actual pass/fail/skip counts, and locators.
+Independent review inspects the diff and provenance; it reruns checks when state
+changes, after integration/merge, for missing identity, nondeterminism, or
+material risk. One deterministic proving run is sufficient for unchanged scope.
+Regression sensitivity needs RED without the fix and GREEN with it once; an
+extra toggle cycle is required only if original RED is missing or inadequate.
+Repeated independent attempts measure reliability only when nondeterminism or
+explicit acceptance calls for it; do not impose pass^3 on every regression.

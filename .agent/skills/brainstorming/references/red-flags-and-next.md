@@ -2,8 +2,8 @@
 
 | Thought | Better Response |
 |---|---|
-| "The user knows what they want" | Confirm the highest-risk assumption |
-| "I'll ask every question now" | Ask one question, then adapt |
+| "One question per turn is safer" | Ask the whole ready frontier; defer dependent decisions |
+| "The recommended default fills the missing answer" | Keep it unresolved until the user answers |
 | "Let's start coding" | Capture the direction, then plan |
 | "All ideas should be kept" | Name non-goals and cut scope |
 

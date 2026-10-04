@@ -62,6 +62,34 @@ Follow subagent-orchestration for each task.
 Route commit, push, and PR preparation through /sc-go after each accepted task when commits are requested.
 ```
 
+### Dependency-ready dispatch
+
+Waves describe the DAG for reporting, not a global execution barrier. The
+scheduler writes a state JSON file with `verified`, `inProgress`, and `blocked`
+goal-id arrays plus optional `hostSlots` and `resourceSlots` positive integers.
+Populate `verified` only from fresh ledger evidence; include failed/quarantined
+workers in `blocked`. Unknown or conflicting state IDs fail closed.
+
+```bash
+node .agent/tools/goal-waves.mjs --issues-dir .scratch/<feature>/issues \
+  --ready --state <scheduler-state.json>
+```
+
+`goal_dispatch_plan_v1.readyGoals` is bounded by free worker slots and contains
+only undispatched goals whose dependencies are verified. A dependency can
+release its child while unrelated goals in the same reporting wave still run.
+Worker allowance follows host capacity and resource isolation; `--max-workers`
+may request fewer slots but cannot exceed declared capacity. Without host
+capacity use the conservative two-worker fallback. Recompute after each verified
+result or worker failure. Check ownership/isolation and UI gates before acting
+on any recommendation; the planner itself does not certify evidence or create
+workspaces.
+
+The single scheduler serializes ledger and `docs/STATE.md` mutations, uses atomic
+replacement and fresh `expectedVersion`, and writes compact wave summaries at
+natural boundaries. No lock helper exists. Preserve completed evidence and
+recover only affected goals/workspaces; never replay valid verified work.
+
 ### Phase 4: Integrate Back
 
 After all agents complete:
@@ -77,9 +105,11 @@ git push -u origin feature/group-c
 Open PRs for completed branches unless the FSD states a different integration strategy. If local merge, rebase, or worktree cleanup is required, preview commands first and run full verification after resolution.
 
 **If merge conflicts:**
-1. Resolve conflicts manually
-2. Run full test suite after resolution
-3. Never auto-resolve — conflicts mean independence analysis was wrong
+1. Quarantine only the affected stream; preserve both sides and investigate intent.
+2. Resolve automatically only when identical changes or deterministic regeneration
+   prove that both intended edits survive. Record that proof.
+3. Resolve semantic conflicts from approved authority; ask its owner only when
+   that authority is ambiguous. Verify the integrated result and affected checks.
 
 ### Phase 5: Integration Verification
 

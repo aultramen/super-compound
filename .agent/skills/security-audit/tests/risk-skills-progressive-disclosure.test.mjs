@@ -70,7 +70,7 @@ const specs = {
     frontmatter:
       '---\nname: threat-modeling\ndescription: "Use when designing features that handle sensitive data, authentication, or external integrations and need STRIDE, attack-tree, or trust-boundary analysis."\n---',
     references: {
-      "stride.md": "b2a38f4eb5b8428a7722256df60c513710c48c25feafdc7dfc484465130030a4",
+      "stride.md": "31d6dbbdf9f9566c449be987d8f9fe7588b68d7f68a61a5feafaa12cf27b8a68",
       "attack-trees.md": "5a4a87a383ecbe8015b7fd3744e4a7f800cbd438b15409f66771ed977b60ed2a",
       "trust-boundaries.md": "24f2dd2fc77fb2a7945ca240838f4418704d17cdde9fa1020a7f5a788a2414bc",
       "document-template.md": "0806ea7f979e80e0347e9351463d705290fa292d6cf445d9ec76ece283a6ef8e",
@@ -197,14 +197,11 @@ async function readSkillFile(skill, relativePath) {
   );
 }
 
-test("risk skill routers preserve frontmatter and stay within 500 words", async () => {
+test("risk skill routers preserve frontmatter and retain navigable structure", async () => {
   for (const [skill, spec] of Object.entries(specs)) {
     const content = await readSkillFile(skill, "SKILL.md");
     assert.equal(frontmatter(content), spec.frontmatter, `${skill} frontmatter`);
-    assert.ok(
-      whitespaceWords(content) <= 500,
-      `${skill}/SKILL.md has ${whitespaceWords(content)} words`,
-    );
+    assert.match(content, /^## \S/m);
   }
 });
 

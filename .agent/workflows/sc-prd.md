@@ -24,7 +24,7 @@ Use this when approved business requirements need to become product behavior bef
    evidence is mandatory when the material risk is timing, runtime responsive
    behavior, keyboard/focus, realtime, or offline behavior. `STANDARD` may use
    lower-fidelity evidence when it resolves the material risk.
-   Every product state is covered or `N/A - reason + approver`.
+   Every product state is covered or `N/A - factual reason`.
 10. `EXCEPTION_APPROVED` allows only the first vertical slice and needs owner,
     rationale, and follow-up gate; it cannot authorize parallel scale-out.
 11. Do not specify database schema, internal architecture, implementation modules, or technical mechanisms unless they are existing constraints inherited from the BRD or repository.
@@ -33,7 +33,7 @@ Use this when approved business requirements need to become product behavior bef
 14. A chat draft is allowed while requirements are being shaped. Before approval and `/sc-plan`, save the PRD to `docs/prd/prd-<feature>.md` using `.agent/templates/agentic-delivery/skeletons/PRD-Skeleton.md` first and the full template only as a reference.
 15. Route to `sc-plan.md` only after the durable PRD is approved with baseline
     `VALIDATED`, `EXCEPTION_APPROVED`, or `NOT_APPLICABLE`.
-16. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
+16. Checkpoint automatically and continue authorized work; use `/sc-pause` only when actually stopping.
 
 ## Output
 
@@ -44,3 +44,7 @@ Use this when approved business requirements need to become product behavior bef
   to `/sc-ui`; unresolved evidence/business authority goes to `/sc-research` or
   `/sc-explore`; only an approved `VALIDATED`, `EXCEPTION_APPROVED`, or
   `NOT_APPLICABLE` baseline goes to `/sc-plan`.
+
+Stage approvals and execution authority: agentic-delivery/references/workflow-integration.md.
+
+Stage mode: Consume an approved BRD; present the PRD for its own approval before FSD planning. Preserve existing project approval preferences on update.

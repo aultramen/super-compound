@@ -24,12 +24,12 @@ Load command previews only for the requested operation. Load workflow touchpoint
 ## Mandatory Gates
 
 - **Preview gate:** Read `gitWorkflow` configuration and show the exact proposed commands before any mutation. Use `.agent/tools/git-workflow.mjs` for deterministic previews and the PR template for PR text.
-- **Repository gate:** Confirm repository, configured remote, clean state before checkout, `remote/base`, branch availability, and valid prefix/name. Worktrees are optional, not the default.
+- **Repository gate:** Confirm repository, known remote or local base, availability, and safe names/paths. Inventory dirty work; use an isolated worktree when checkout would disturb it. Local/offline setup uses `--local` from a known local base. Never auto-stash/reset/commit user work.
 - **Protected-base gate:** Never edit, commit, or push directly on the protected base. If the requested branch is not active, stop or preview checkout/worktree setup first.
 - **Sensitive-file gate:** Before staging, inspect `git status` and `git diff`; warn about `.env`, secrets, credentials, logs, caches, and build output before `git add .`.
 - **Verification gate:** Require relevant local verification before commit claims or PR creation. Review the actual diff and PR checklist; `/sc-review` and `/sc-audit` remain read-only.
 - **Force gate:** First push uses `git push -u origin <branch>`. After an approved rebase, use only `--force-with-lease`, never `--force`.
-- **Approval gate:** Never run publishing commands, `git reset --hard`, `git clean -fd`, destructive branch deletion, merge, or destructive worktree removal without explicit approval. Validate worktree target paths before cleanup. Prune stale worktree entries preview-first: run `git worktree list`, confirm the stale entries, then `git worktree prune`.
+- **Approval gate:** Explicit scoped authorization persists across previews; ask again only for a changed target, scope, or material risk. Implementation alone does not authorize Git delivery. Never run publishing commands, `git reset --hard`, `git clean -fd`, destructive branch deletion, merge, or destructive worktree removal without explicit approval. Validate worktree target paths before cleanup. Prune stale worktree entries preview-first: run `git worktree list`, confirm the stale entries, then `git worktree prune`.
 
 ## Integration
 

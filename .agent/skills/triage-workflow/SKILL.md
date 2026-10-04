@@ -9,6 +9,8 @@ description: "Use when /sc-plan or /sc-status needs to classify incoming issues,
 
 Move raw requests and existing issue files through a small state machine until each item is either agent-ready, human-owned, waiting for information, or intentionally rejected.
 
+For light scope, reproduction/acceptance and verification in the request or issue suffice; new BRD/PRD/FSD documents are not required. Network contract gates below apply only to networked UI. `LOCAL_ONLY` verifies local state, behavior, and accessibility without synthetic provider/schema/mock assets. Documentation follows `.agent/context/output-style.md`.
+
 Announce: "I'm using the triage-workflow skill to classify and prepare issues."
 
 Use this behind `/sc-plan` and `/sc-status`; do not add a standalone triage command.
@@ -47,8 +49,7 @@ stale evidence returns to `needs-info`/`blocked`.
 
 ### 3. Clarify When Needed
 
-If underspecified, ask one focused question or record established facts and the
-needed decision under `Triage Notes`, then use `needs-info`.
+If underspecified, use [brainstorming rounds](../brainstorming/references/questions-and-options.md). Record facts and unresolved decisions under `Triage Notes`; keep `needs-info` until required answers arrive.
 
 Use `domain-modeling` when terminology is fuzzy or disputed.
 

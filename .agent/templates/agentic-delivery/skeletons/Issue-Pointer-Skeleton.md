@@ -1,5 +1,11 @@
 # GOAL-{{NNN}} - {{ATOMIC_OUTCOME}}
 
+## Summary
+
+<State purpose, scope, key information, and decision/outcome for this document.>
+
+<!-- Apply .agent/context/output-style.md; preserve parser fields. -->
+
 Artifact contract version: `2.0.0`
 Status: needs-info
 Parent FSD: ../../../docs/fsd/fsd-{{feature}}.md  

@@ -22,16 +22,19 @@ Ideas). Copy it verbatim when seeding; do not restate it here. Decisions,
 Blockers, Completed Work, and Deferred Ideas appear only when non-empty.
 The progress-log skeleton lives at `.agent/templates/state/Progress-Template.md`.
 
-`/sc-work`, `/sc-debug`, and `/sc-launch` write the Next action when they
-close; every other route hands off through `/sc-pause`. The next session
+Every route checkpoints the Next action automatically before compaction or
+handoff and continues authorized work. `/sc-pause` is for actual stopping. The next session
 verifies STATE against the tree with `/sc-status` before acting on it.
 
 ## `.continue-here.md`
 
-Exactly these lines, nothing else:
+Keep these pointer lines; a tool-managed sc-checkpoint block may follow:
 
 ```markdown
 # Continue Here
+## Summary
+Continue the recorded work from its authoritative state and next action.
+
 - State: docs/STATE.md
 - Next action: <one executable step or /sc-status>
 - Authoritative artifacts: <paths>

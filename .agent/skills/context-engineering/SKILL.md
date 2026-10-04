@@ -7,7 +7,7 @@ description: "Use when managing AI context budget, selective file loading, histo
 
 ## Purpose
 
-Load minimum useful context, keep durable state on disk, and recommend fresh sessions before quality degrades.
+Load minimum useful context, keep durable state on disk, and recover context at natural boundaries before quality degrades.
 
 Announce: "I'm applying context engineering to keep the working context focused."
 
@@ -76,3 +76,7 @@ At phase ends, persist durable state to `docs/STATE.md`, `docs/progress.md`, or 
 - `systematic-debugging` for investigation scope
 - `brainstorming` for lightweight product context
 - `checkpoint-protocol` for pause and handoff decisions
+
+- Preserve mandatory briefs; optional background becomes pointers. `over_budget` blocks dispatch; text estimates do not prove runtime savings.
+
+- For instruction correction/resume, load [active context](references/active-context.md).

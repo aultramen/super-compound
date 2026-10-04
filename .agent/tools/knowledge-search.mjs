@@ -22,6 +22,7 @@
  *        [--file docs/ERROR_LOG.md] [--limit 3] [--json] [--root <repo-root>]
  */
 
+import {canonicalLocator, isActiveAsset} from './active-assets.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -62,7 +63,10 @@ export function parseFrontmatter(raw) {
     const block = raw.slice(3, end);
     for (const line of block.split('\n')) {
         const m = line.match(/^([A-Za-z_][A-Za-z0-9_-]*):\s*(.*)$/);
-        if (m) meta[m[1]] = m[2].trim();
+        if (m) {
+            const value = m[2].trim();
+            meta[m[1]] = /^(".*"|'.*')$/.test(value) ? value.slice(1, -1) : value;
+        }
     }
     return { meta, body: raw.slice(end + 4) };
 }
@@ -106,6 +110,12 @@ export function splitEntries(body) {
 export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8').replace(/\r\n?/g, '\n')) {
     const docs = [];
     const addDoc = (file, title, meta, body, extra = {}) => {
+        const fields = {...meta};
+        for (const match of body.matchAll(/^- (Status|Origin|Revision|Project|Stack|Version|Applies to|Evidence|Outcome):\s*(.*)$/gm)) {
+            const key = match[1].toLowerCase().replace(/ /g, '_');
+            if (!(key in fields)) fields[key] = match[2].trim();
+        }
+        meta = fields;
         const searchable = [
             title,
             Object.values(meta).join(' '),
@@ -128,6 +138,7 @@ export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8').r
             if (spec.section) entries = entries.filter((e) => e.heading === spec.section);
             if (entries.length > 0 || spec.section) {
                 for (const entry of entries) {
+                    if (entry.heading === 'Quick Reference') continue;
                     const idMatch = entry.heading.match(ENTRY_ID_RE);
                     addDoc(file, entry.heading, meta, entry.text, {
                         entryHeading: entry.heading,
@@ -191,19 +202,25 @@ export function snippetFor(doc, query) {
         .trim();
 }
 
-export function search({ root, dirs = [], files = [], query, limit = MAX_RESULTS }) {
-    const fromDirs = dirs.flatMap((d) => listMarkdownFiles(path.resolve(root, d)));
+export function search({ root, dirs = [], files = [], query, limit = MAX_RESULTS, diagnostic = false, project, stack, version }) {
+    const fromDirs = dirs.flatMap((d) => listMarkdownFiles(path.resolve(root, d)))
+        .filter(file => (diagnostic || isActiveAsset(path.relative(root, file))) && (diagnostic || !file.endsWith(`${path.sep}knowledge-feedback.md`)));
     const fromFiles = files.map((spec) => {
         const f = typeof spec === 'string' ? { file: spec } : spec;
-        return { ...f, file: path.resolve(root, f.file), split: true };
-    });
+        return { ...f, file: path.resolve(root, canonicalLocator(f.file)), split: true };
+    }).filter(spec=>diagnostic||isActiveAsset(path.relative(root,spec.file)));
     const index = buildIndex([...fromDirs, ...fromFiles]);
     return scoreQuery(index, query)
+        .filter(({doc}) => {
+            if (!diagnostic && /^(stale|superseded|contradicted)\b/i.test(doc.meta.status || '')) return false;
+            if (/^(general|global|all)$/i.test(doc.meta.applies_to || '')) return true;
+            return [['project', project], ['stack', stack], ['version', version]].every(([key, requested]) => !requested || !doc.meta[key] || doc.meta[key] === requested);
+        })
         .slice(0, limit)
         .map(({ doc, score }) => {
             const rel = doc.global
                 ? `global:${path.basename(doc.file)}`
-                : path.relative(root, doc.file);
+                : canonicalLocator(path.relative(root, doc.file));
             return {
                 id: doc.entryId || (doc.entryHeading ? `${rel}#${doc.entryHeading}` : rel),
                 path: rel,
@@ -212,6 +229,10 @@ export function search({ root, dirs = [], files = [], query, limit = MAX_RESULTS
                     ? 'global'
                     : doc.meta.category || path.basename(path.dirname(doc.file)),
                 score: Number(score.toFixed(4)),
+                status: doc.meta.status || 'unknown',
+                applicability: {project: doc.meta.project || 'unknown', stack: doc.meta.stack || 'unknown', version: doc.meta.version || 'unknown', scope: doc.meta.applies_to || 'unknown'},
+                origin: doc.meta.origin || null,
+                revision: doc.meta.revision || null,
                 snippet: snippetFor(doc, query),
             };
         });
@@ -225,12 +246,15 @@ function main(argv) {
     let limit = MAX_RESULTS;
     let json = false;
     let root = process.cwd();
+    const context = {};
     for (let i = 0; i < args.length; i += 1) {
         const a = args[i];
         if (a === '--dir') dirs.push(args[++i]);
         else if (a === '--file') files.push(args[++i]);
         else if (a === '--limit') limit = Math.max(1, Number(args[++i]) || MAX_RESULTS);
         else if (a === '--json') json = true;
+        else if (a === '--diagnostic') context.diagnostic = true;
+        else if (['--project', '--stack', '--version'].includes(a)) context[a.slice(2)] = args[++i];
         else if (a === '--root') root = args[++i];
         else if (query === null) query = a;
     }
@@ -244,7 +268,7 @@ function main(argv) {
         dirs.push(...DEFAULT_DIRS);
         files.push(...DEFAULT_FILES, ...globalKnowledgeFiles());
     }
-    const hits = search({ root, dirs, files, query, limit });
+    const hits = search({ root, dirs, files, query, limit, ...context });
     if (json) {
         process.stdout.write(`${JSON.stringify({ query, results: hits }, null, 2)}\n`);
     } else if (hits.length === 0) {

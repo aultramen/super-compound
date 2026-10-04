@@ -22,11 +22,12 @@ Pick the column for the current window and stay at that depth.
 
 ## Output Tier At Intake
 
-Choose the tier before any research, file fan-out, or subagent dispatch; the
-tier bounds the spend, not the other way round.
+Choose a concise return format independently from investigation depth.
+Complexity, risk, uncertainty, separability, and available host capacity determine
+reads and delegation; a short answer never limits required evidence.
 
 | Tier | Choose when | Spend allowed |
 | --- | --- | --- |
 | Direct | The answer is known or one targeted read settles it | No subagents; a few reads |
-| Chat brief | The result fits the route's return cap in `.agent/context/token-budget-gates.md` | Bounded reads; no subagents |
+| Chat brief | The result fits the route's return cap in `.agent/context/token-budget-gates.md` | Investigation/delegation proportional to complexity and risk; summarize evidence |
 | Durable artifact | Evidence exceeds the chat envelope or another route consumes it | Subagents and full fan-out; evidence on disk |

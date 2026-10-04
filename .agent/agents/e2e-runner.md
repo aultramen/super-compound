@@ -14,6 +14,6 @@ Derive critical user flows and observable outcomes from the approved requirement
 - Prefer stable role/label/test-id locators, isolated fixtures, deterministic waits, and existing page abstractions. Do not mask a product defect by weakening assertions or adding arbitrary sleeps.
 - Run in parallel only when tests are isolated and resource-independent. Tests with a shared account, database, port, or state run sequentially.
 - Preserve trace, screenshot, video, and report artifact paths as evidence for every failure; include the exact command, environment, pass/fail/skip counts, and reproduction steps.
-- Load `.agent/skills/verification-before-completion/SKILL.md` before any passing or readiness claim. A missing browser, service, credential, or grader is an explicit gap, not a pass.
+- Load `.agent/skills/verification-before-completion/SKILL.md` before passing/readiness claims; its `references/live-verification.md` owns sessions, credentials, success checkpoints, and revision/environment evidence. Missing browser, service, credential, or grader is a gap, not a pass.
 
 Return critical-flow coverage, fresh results, artifact locations, failures classified as test/product/environment, and residual coverage gaps.

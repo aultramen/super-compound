@@ -1,6 +1,21 @@
 # {{PROJECT_NAME}} - Functional Specification Document
 
+## Summary
+
+<State purpose, scope, key information, and decision/outcome for this document.>
+
+<!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
+
 Use the full FSD template only for sections that need detailed expansion.
+
+## High-Level Design
+
+<!-- Replace this illustrative view with the main actors/components and relationships from this artifact's qualified authority. Keep implementation detail in its owning section. -->
+```mermaid
+flowchart LR
+ Actor[Primary actor] --> Capability[In-scope capability]
+ Capability --> Outcome[Required outcome]
+```
 
 ## Metadata
 
@@ -21,12 +36,12 @@ ui_contract_readiness: NOT_APPLICABLE / DRAFT / BLOCKED / READY_FOR_SLICE
 
 ## Screen & Interaction Contract
 
-For UI-bearing scope, map `UI-STATE-*` and `UIMAP-*` to versioned `SCHEMA-*`
+For networked UI-bearing scope, map `UI-STATE-*` and `UIMAP-*` to versioned `SCHEMA-*`
 and `CONTRACT-*` refs. Pin deterministic fixture, matching mock, typed consumer
 revisions, provider/consumer tests, responsive/accessibility evidence,
 and the real `FIRST_VERTICAL_SLICE`. Expand only FSD Section 8 and the contract
 manifest when detailed authoring is required.
-For `NOT_APPLICABLE`, record an explicit reason and approver. For UI scope,
+For `NOT_APPLICABLE`, record an explicit factual reason. For networked UI scope,
 include one final `HARDENING` goal that depends on all applicable delivery slices.
 
 ## Decisions
@@ -37,4 +52,18 @@ Use approved `TDEC-*` records or linked `ACCEPTED` ADR refs. Stop on missing aut
 
 Define `GOAL-*` packets with UI delivery role, required gate, contract refs,
 scope, dependencies, stop conditions, and verification refs.
-Each goal fact appears once; graph/traceability views are tool-derived, not re-authored.
+Graph/traceability views cite these same qualified goals and verification refs; they do not create a second authority.
+
+## AI Context and Output (conditional)
+
+For product AI runtime only: specify actor/source attribution and versions,
+chronology, authorized selection boundaries/omissions, truncation indicators,
+and output-language policy from explicit requirements and selected context
+(including mixed/empty/ambiguous cases). Reuse versioned output validation,
+authority, fallback, and required review/edit/confirm/regenerate controls.
+Expand FSD Section 11 for exact contracts; otherwise record N/A with reason.
+
+Topology: LOCAL_ONLY maps local screen/state/data behavior to tests without
+artificial wire/schema/mock/provider/consumer assets or first-provider roles.
+Use `topology: LOCAL_ONLY`, `network_actions: []`, mapped UI verification refs,
+and no blocking OPEN refs in the existing index. NETWORKED remains the default.

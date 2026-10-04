@@ -1,46 +1,39 @@
-# Durable Output Style
+# Documentation Output Standard
 
-Applies to every durable file an `/sc-*` route writes. Chat returns follow
-`token-budget-gates.md`; this file governs the file sink.
+## Summary
 
-## Single Projection
+Every documentation file created or updated by Super Compound must help its reader understand its purpose, scope, key information, and next action. Preserve necessary detail without repetition or filler. This standard governs durable files, including short reports, state, logs, and issue pointers; it does not impose word, page, or token limits.
 
-- State each fact exactly once per document; every later mention cites its ID.
-- Omit derived views: dependency graphs, traceability matrices, per-item
-  restatements of summaries, and verdicts that re-explain findings. When a
-  derived view is needed, a tool generates it (`node .agent/tools/goal-waves.mjs`
-  for goal DAGs); never hand-maintain one.
-- One line per finding, hypothesis, idea, or decision. Findings live once in
-  the severity-ordered list; everything else references IDs.
-- No verbatim repetition across sibling files. Shared boilerplate lives once
-  in its skeleton or reference; each file carries only its deviations.
+## Overview
 
-## Empty Sections
+Complete but concise. Simple but not oversimplified. Visual before verbose. Actionable before theoretical. User-friendly before technically impressive.
 
-Emit a section only when it has content, unless a parser requires the heading.
-Protected set (always emit, exact literals):
+Use plain language, direct sentences, and technical terms appropriate to the reader. Explain what, why, how it works, next actions, risks, and dependencies where relevant. Organize detail with tables, grouping, appendices, and references rather than deleting needed information.
 
-- `docs/STATE.md` headings from `.agent/templates/state/STATE-Template.md`.
-- `## Codebase Patterns` in `docs/progress.md`.
-- `## ERR-YYYY-MM-DD-NNN` / `## LRN-YYYY-MM-DD-NNN` headings with their field
-  grammar: `- Symptom:` / `- Root cause:` / `- Correct approach:` /
-  `- Prevention:` and `- Learning:` / `- Confidence:` / `- Applies to:`.
-- `## Quick Reference` in `docs/ERROR_LOG.md` and `docs/LEARNED_KNOWLEDGE.md`.
-- Top-of-line `Blocked by:`, `Contract refs:`, `Contract gate:`, and `Status:`
-  literals in issue pointers.
-- Solution frontmatter keys and `## ` section headings under `docs/solutions/`.
+## High-Level Design
 
-## Compression
+```mermaid
+flowchart LR
+    A[Approved source and evidence] --> B[Summary and relevant sections]
+    B --> C[Diagram when explaining design or flow]
+    C --> D[Structural lint and content review]
+    D --> E[Repair within the authorized stage]
+    E --> F[Stage approval or verified result]
+```
 
-- Sequential IDs use range notation: TEST-015-AC01..AC12, not twelve rows.
-- Collapse uniform tables: when every row shares one status, write one line
-  plus exceptions ("13/13 evals PASS x3 attempts; exceptions: none").
-- Concrete numbers over narrative. One language per document.
-- Status is PASS/FAIL/OPEN text, not emoji.
+## Authoring and Review
 
-## Budgets
+- Start every file with a Summary after required frontmatter/title. Cover purpose, scope, key components or information, and decisions/outcomes when relevant. A short status pointer may need only one sentence.
+- Prefer Summary → Overview → High-Level Design → Main Details → Actions/Recommendations → References. Use only relevant sections; preserve parser-required headings even when empty.
+- Include an HLD when explaining a system, application, infrastructure, workflow, integration, or architecture. Show main components, relationships, and important flow. Use Mermaid in Markdown; use a rendered or readable text diagram elsewhere. Status-only pointers/logs need no decorative diagram.
+- Review HLD relevance and adequacy from the content. Deterministic tools only check structure and syntax; keywords cannot decide whether a diagram explains the design.
+- A summary may repeat information expanded in detail. Retain uniform-status tables when rows convey evidence, coverage, or meaningful differences.
+- Findings may use multiple sentences for the problem, impact, evidence, and recommended action. Remove filler, not explanation.
+- Derived diagrams and tables cite the same requirement/goal authority. They are views, never a second source of decisions.
+- Preserve frontmatter, IDs, anchors, exact parser headings, field grammar, and numbered sections such as FSD Section 8. Add summary/HLD without renumbering these interfaces.
+- Protected structures include STATE headings, `## Codebase Patterns`, ERR/LRN fields, `## Quick Reference`, issue `Blocked by:`, `Contract refs:`, `Contract gate:`, `Status:`, and solution frontmatter/section headings.
+- Run `node .agent/tools/doc-lint.mjs <file> --advisory`; add `--requires-hld` after determining from content that HLD is applicable. Repair omissions within the same stage without an administrative approval checkpoint. Input/execution failures remain nonzero.
 
-Advisory word caps per artifact live in `.agent/context/doc-budgets.json`;
-lint a file with `node .agent/tools/doc-lint.mjs <file.md>`. Caps never
-justify dropping blockers, failed gates, required decisions, or P0/P1
-findings.
+## Context and Limits
+
+Documentation has no numerical length budget, including advisory targets. Word/token counts are diagnostics only. Compose AI context selectively: omit optional background first, preserve mandatory authority, and never truncate source documents to fit a work package. Explicit user/host hard limits remain binding; split logically and link references when necessary. Historical documents are updated only when related work touches them.

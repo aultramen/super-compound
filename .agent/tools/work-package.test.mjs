@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { watch, writeFileSync } from "node:fs";
 import {
   access,
@@ -223,6 +223,11 @@ test("createWorkPackage retry preserves a verified goal byte-for-byte", async ()
       evidence: freshEvidence(),
     });
 
+    const {persistCheckpoint, restoreCheckpoint} = await import('./memory-maintenance.mjs');
+    await persistCheckpoint({root,input:{nextAction:'retry capture', verifiedOutcomes:['goal-001 verified'], blockers:[], artifactRefs:['goal.md'], contractRefs:['goal.md'], ledgerRefs:['.scratch/work-packages/idempotent-run/ledger.json']}});
+    const resumed = await restoreCheckpoint({root});
+    assert.deepEqual(resumed.dispatchable, []);
+    assert.deepEqual(resumed.skippedVerified.map(g => g.id), ['goal-001']);
     const beforeRetry = await readFile(created.ledgerPath);
     const retried = await createWorkPackage(root, {
       runId: "idempotent-run",
@@ -234,6 +239,7 @@ test("createWorkPackage retry preserves a verified goal byte-for-byte", async ()
     const afterRetry = await readFile(created.ledgerPath);
 
     assert.equal(retried.ledgerVersion, 4);
+    assert.equal(retried.dispatchStatus, 'not_ready');
     assert.deepEqual(afterRetry, beforeRetry);
     const ledger = JSON.parse(afterRetry);
     assert.equal(ledger.goals["goal-001"].status, "verified");
@@ -1325,4 +1331,91 @@ test("createReviewPackage rejects an empty scoped review", async () => {
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test('composer preserves mandatory content and exposes mandatory overflow', async () => {
+  const {composePayload} = await import('./work-package.mjs');
+  assert.equal(typeof composePayload, 'function');
+  const mandatory = '# Requirements\nAC-1 must pass\nScope: src/a\nBlocker: approval';
+  const result = composePayload({mandatory, background: [{text: 'optional '.repeat(100), ref: 'docs/design.md'}], maxTokens: 100});
+  assert.ok(result.text.includes(mandatory));
+  assert.ok(result.text.includes('docs/design.md'));
+  assert.equal(result.omissions.length, 1);
+  assert.equal(composePayload({mandatory, background: [], maxTokens: 1}).status, 'over_budget');
+});
+
+test('work-package creation reports overflow before writing any package', async (t) => {
+  const root = await mkdtemp(path.join(tmpdir(), 'compose-overflow-'));
+  t.after(() => rm(root, {recursive:true,force:true}));
+  await writeFile(path.join(root,'goal.md'), '# Requirements\nAC-1 required\nScope: src/a\nBlocker: owner');
+  const result = await createWorkPackage(root,{runId:'run-1',goalId:'goal-1',briefPath:'goal.md',composition:{maxTokens:1}});
+  assert.equal(result.status,'over_budget');
+  await assert.rejects(readFile(path.join(root,'.scratch/work-packages/run-1/ledger.json')), /ENOENT/);
+});
+
+test('optional background pointers cannot overflow a valid mandatory payload', async () => {
+  const {composePayload} = await import('./work-package.mjs');
+  const mandatory = 'm'.repeat(7900);
+  const background = Array.from({length: 20}, (_, index) => ({
+    text: 'optional '.repeat(100), ref: `docs/background-${index}.md`,
+  }));
+  const result = composePayload({mandatory, background, maxTokens: 2000});
+  assert.equal(result.status, 'within_budget');
+  assert.ok(result.estimatedTokens <= 2000);
+  assert.ok(result.text.startsWith(mandatory));
+  assert.equal(result.omissions.length, 20);
+  assert.ok(result.omissions.some(item => item.reason === 'optional_background_omitted'));
+});
+
+test('mandatory content sets the minimum soft allowance but cannot bypass an explicit cap', async () => {
+  const {composePayload} = await import('./work-package.mjs');
+  const mandatory = 'required '.repeat(1200);
+  const soft = composePayload({mandatory});
+  assert.equal(soft.status, 'within_budget');
+  assert.equal(soft.text, mandatory);
+  assert.equal(soft.maxTokens, soft.mandatoryTokens);
+  assert.ok(soft.maxTokens > 2000);
+  const hard = composePayload({mandatory, maxTokens: 2000});
+  assert.equal(hard.status, 'over_budget');
+  assert.equal(hard.text, mandatory);
+  assert.equal(hard.maxTokens, 2000);
+  const advisory = composePayload({mandatory, targetTokens: 10, background:[{text:'optional '.repeat(900),ref:'docs/context.md'}]});
+  assert.equal(advisory.status, 'within_budget');
+  assert.ok(advisory.text.startsWith(mandatory));
+  assert.equal(advisory.targetExceeded,true);
+  assert.equal(advisory.hardLimit,null);
+  assert.equal(advisory.omissions.length,1);
+  const constrained=composePayload({mandatory,targetTokens:100000,maxTokens:1});
+  assert.equal(constrained.status,'over_budget');
+  assert.equal(constrained.maxTokens,1);
+  assert.throws(()=>composePayload({mandatory,targetTokens:0}),/targetTokens/);
+});
+
+test('CLI overflow exits unsuccessfully with dispatch recovery and no package writes', async (t) => {
+  const root = await mkdtemp(path.join(tmpdir(), 'compose-cli-overflow-'));
+  t.after(() => rm(root, {recursive: true, force: true}));
+  await writeFile(path.join(root, 'goal.md'), '# Requirements\nAC-1 must pass\n');
+  await writeFile(path.join(root, 'scope.json'), '["src"]');
+  await writeFile(path.join(root, 'create.json'), JSON.stringify({
+    expectedEvidence: EXPECTED_EVIDENCE, composition: {maxTokens: 1},
+  }));
+  const args = ['create', '--run', 'run-1', '--goal', 'goal-1', '--brief', 'goal.md',
+    '--paths-file', 'scope.json', '--input-file', 'create.json'];
+  const failed = spawnSync(process.execPath, [WORK_PACKAGE_CLI, ...args], {
+    cwd: root, encoding: 'utf8', windowsHide: true,
+  });
+  assert.equal(failed.status, 2);
+  const result = JSON.parse(failed.stdout);
+  assert.equal(result.status, 'over_budget');
+  assert.equal(result.dispatchStatus, 'blocked');
+  assert.equal(result.recovery.action, 'recompose');
+  assert.ok(result.recovery.minimumTokens > 1);
+  await assert.rejects(access(path.join(root, '.scratch')), /ENOENT/);
+  // The owning route can retry without a hard cap, preserving all requirements.
+  await writeFile(path.join(root, 'create.json'), JSON.stringify({
+    expectedEvidence: EXPECTED_EVIDENCE, composition: {},
+  }));
+  const recovered = runWorkPackageCli(root, args);
+  assert.equal(recovered.dispatchStatus, 'ready');
+  assert.equal(await readFile(recovered.briefPath, 'utf8'), await readFile(path.join(root, 'goal.md'), 'utf8'));
 });

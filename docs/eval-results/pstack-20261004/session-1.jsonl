@@ -1,0 +1,5 @@
+{"type":"thread.started","thread_id":"01a104a7-f55b-7083-a5b4-130945456fa8"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I’ll read the adapter and resume notes, then work on the pending goal within this fixture. I’ll verify what I can and report any blocker honestly."}}
+{"type":"item.completed","item":{"id":"item_1","type":"agent_message","text":"Blocked: execution policy rejected both attempts to read `PILOT-ADAPTER.md`, including a single-file read.\n\nI could not load the resume notes, continue GOAL-001, run verification, or save an outcome and next action. The workspace is also configured read-only.\n\nNo files were changed and no commit was made; previously verified work remains untouched. Next action: restore fixture read and write access, then resume from `PILOT-ADAPTER.md` and `.continue-here.md`."}}
+{"type":"turn.completed","usage":{"input_tokens":88153,"cached_input_tokens":75008,"cache_write_input_tokens":0,"output_tokens":321,"reasoning_output_tokens":26}}

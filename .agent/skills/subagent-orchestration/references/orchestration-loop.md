@@ -1,58 +1,84 @@
-# Orchestration Loop: Fix Rounds, Ledger, Waves, Model Tiers
+# Orchestration Loop: Recovery, Ledger, Scheduling, Model Tiers
 
-## Fix rounds (cap 5, model escalation)
+## Fix attempts and escalation
 
-- Rounds 1-3: resume the original implementer; its context is intact and
-  cheapest to reuse.
-- Rounds 4-5: dispatch a fresh implementer on a more capable model with the
-  framing "a prior implementer attempted this N times; you own it now".
-- Round 5 is a circuit breaker: adjudicate every open finding into exactly one
-  of `parked - <ruling>`, `deferred (real, out of scope)`, or `BLOCKED - stop`.
-  Silent discards are forbidden; record each ruling in the ledger.
-- Scoped re-reviews verify only the fix diff; new out-of-scope findings go to
-  the ledger and never extend the loop.
+An attempt is one hypothesis plus its proving check; a fix round is a batch of
+review findings addressed and rechecked. After a failed attempt, record the
+failure and reassess the hypothesis before retrying. Repeated failure with no
+new evidence or progress triggers a fresh worker or a more capable available
+model. A count of two, three, or five attempts is an escalation signal, never
+an automatic shutdown. This rule governs orchestration, debugging, and review.
+
+Stop the affected goal only when authority/access is missing, a hard user/host
+limit is reached, or documented stagnation leaves no safe recovery. Record a
+truthful `blocked` or `failed` status and continue independent goals. Mandatory
+acceptance failures cannot be parked, deferred, or relabeled as success.
+Optional out-of-scope findings may be deferred with a recorded owner and reason.
+Scoped re-reviews cover the fix and its affected dependencies; collect other
+applicable findings together without expanding approved scope.
 
 ## Ledger grammar and recovery
 
-The run ledger (`.scratch/work-packages/<run>/ledger.json`) plus these
-progress lines are the orchestrator's memory. Use exactly:
+The run ledger (`.scratch/work-packages/<run>/ledger.json`) plus these progress
+lines are the scheduler's memory:
 
 ```
-Goal <id>: complete (commits <a7>..<b7>, review clean)
-Goal <id>: fix round <R>/5 (<X> addressed, <Y> open; commits <a7>..<b7>)
-Goal <id>: parked - <finding> - ruling: <why>
+Goal <id>: complete (evidence <ref>, review clean)
+Goal <id>: fix round <R> (<X> addressed, <Y> open; evidence <ref>)
+Goal <id>: deferred - <optional finding> - ruling: <why>
 Goal <id>: BLOCKED - <reason>
 ```
 
-Conversation memory does not survive compaction. After any compaction or
-resume, trust the ledger and `git log` over your own recollection before
-dispatching anything; re-dispatching completed goals is the single most
-expensive failure. A dispatch prompt describes one goal, never the session's
-history.
+After compaction/resume, reconcile the ledger, pinned authority and evidence,
+and repository state before dispatch. Never replay verified goals whose
+relevant source/contract/environment evidence remains valid. A dispatch prompt
+describes one goal, never the session's history.
 
-## Wave boundaries (between-wave reset)
+## Dependency-ready scheduling and reporting waves
 
-- After wave N's goals verify, write a compact wave summary (wave number,
-  verified goal ids, commit range, open rulings) to `docs/STATE.md` while
-  holding the `docs/STATE.md` lock - use the `goal-waves.mjs` / `file-state.mjs`
-  lock primitives, never reimplement locking.
-- Dispatch wave N+1 with fresh subagents; no accumulated transcript crosses a
-  wave boundary. The ledger and `docs/STATE.md` carry everything forward.
-- On mid-wave failure, re-dispatch only goals the work-package ledger leaves
-  unverified (`verified-promise.mjs` is the predicate); never re-run a
-  verified goal.
-- Before dispatching wave N+1, re-check the base: every worker's `HEAD` must
-  equal the wave's recorded base SHA (the brief's `Base SHA`). On divergence,
-  stop dispatching worktree workers and finish the remaining goals
-  sequentially in the main workspace; never edit a diverged copy.
+- Compute the validated DAG with `goal-waves.mjs`. Waves group reporting and
+  context reset; they are not dispatch barriers. As soon as a goal's own
+  dependencies are verified and a safe slot is free, dispatch it.
+- The scheduler supplies `--ready --state <state.json>` with `verified`,
+  `inProgress`, and `blocked` goal-id arrays. `verified` includes only goals
+  with fresh ledger evidence (`verified-promise.mjs`), never merely `done`.
+  `blocked` includes failed/quarantined/unavailable goals. Descendants wait for
+  their dependencies, while independent streams continue.
+- Supply `hostSlots` (total worker allowance for this run) and, when relevant,
+  `resourceSlots` (isolated build/test capacity). Active workers consume slots.
+  `--max-workers` is bounded by those capacities; absent host information the
+  conservative fallback is two. CPU count does not imply available agents.
+- One scheduler serializes shared-state/ledger mutations and writes compact
+  summaries to `docs/STATE.md` with atomic replacement. Use fresh ledger
+  `expectedVersion` checks; there are no filesystem lock helpers to acquire.
+- Check each workspace against its recorded base and ownership before dispatch
+  and integration. Quarantine a diverged or failed worker, preserve its report
+  and edits, and repair/recreate only that workspace. Other safe streams keep
+  running; use sequential execution only for streams without safe isolation.
+
+## Bounded scope repair
+
+The implementer never edits the scheduler-owned allowlist. The scheduler may
+add a necessary test/helper path within approved goal semantics after checking
+file ownership, overlapping workers, contract effects, and existing user edits.
+Use no new product, access-policy, or acceptance decision without its owner.
+
+The runtime pins package scope and has no amend operation. Preserve the old
+package and evidence, record its blocked reason, and create a replacement
+package under a new run id with the revised scheduler scope and fresh pinned
+digests. Record the supersession and changed paths in the report/recovery
+record; resume from preserved work and reverify affected evidence. Never edit
+pinned ledger fields or invent an unsupported transition.
+
+Resolve conflicts automatically only when deterministic regeneration or an
+identical change proves the result preserves both intended edits. Preserve both
+sides, record the proof, and verify the integrated result. Semantic conflicts
+require investigation and an owner decision only when authority is ambiguous.
 
 ## Model tiers
 
-Declare per dispatch: `extraction` (cheapest; transcription, mechanical
-application of complete plan text), `generation` (mid; prose-driven
-implementation and review - turn count beats token price), `ceiling`
-(inherited session model; final whole-branch review and adjudication only).
-Always name the model tier explicitly; omission inherits the most expensive
-session model. Escalate one tier on soft failure; `ceiling` is the cap.
-Per-host model per agent lives in `.agent/context/agent-models.json`;
-`inherit` means the session model.
+Declare per dispatch: `extraction` (mechanical application), `generation`
+(implementation/review), or `ceiling` (inherited session model). Select from
+`.agent/context/agent-models.json`; `inherit` means the session model. Escalate
+when evidence warrants it and a more capable host model is available. Do not
+assume the host supports a model or fabricate a successful escalation.

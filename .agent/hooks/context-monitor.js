@@ -3,7 +3,7 @@
  * Super Compound - Context Monitor Hook (PostToolUse)
  *
  * Injects an agent-facing note when remaining context drops below
- * thresholds: WARNING ("persist state, continue"), CRITICAL ("hand off").
+ * thresholds: WARNING ("persist state, continue"), CRITICAL ("checkpoint, compact, continue").
  * Defaults: 35%/25% remaining on a 200k window, 15%/8% on a detected 1M
  * window. The note never states a remaining-token count: a countdown in
  * context makes the model wrap up early. Each level fires once per session.
@@ -58,6 +58,17 @@ try {
     process.exit(0);
 }
 
+const state = readState(stateFile);
+// Each level is advisory and emitted once; avoid further transcript scans after
+// the final notice. Repeated tool events with unchanged transcript usage input
+// reuse the observation instead of rescanning the tail.
+if (state.criticalFired) process.exit(0);
+let observation = null;
+try {
+    const info = fs.statSync(input.transcript_path);
+    observation = `${createHash('sha256').update(String(input.transcript_path)).digest('hex')}:${info.size}:${info.mtimeMs}`;
+    if (state.observation === observation) process.exit(0);
+} catch { /* The bounded reader below handles missing/unreadable transcripts. */ }
 const usage = readLatestContextTokens(input.transcript_path);
 if (!usage) process.exit(0);
 
@@ -75,15 +86,16 @@ const note = detected
     : ` (window not detected; assumed ${formatWindow(windowTokens)} window, ` +
       'set CLAUDE_CODE_AUTO_COMPACT_WINDOW if larger)';
 
-const state = readState(stateFile);
+state.observation = observation;
 let message = null;
 if (remainingPct <= CRITICAL_REMAINING_PCT && !state.criticalFired) {
     state.criticalFired = true;
     state.warnFired = true;
     message =
         `[Super Compound] CRITICAL: context is nearly exhausted${note}. ` +
-        'Update docs/STATE.md with the exact Next Action, write .continue-here.md, ' +
-        'then hand off via /sc-pause.';
+        'Checkpoint docs/STATE.md with the exact Next Action and verified evidence, ' +
+        'reduce optional context, then compact and continue at a safe boundary. ' +
+        'Stop only if safe host recovery is unavailable; skip verified work on resume.';
 } else if (remainingPct <= WARN_REMAINING_PCT && !state.warnFired) {
     state.warnFired = true;
     message =
@@ -91,14 +103,14 @@ if (remainingPct <= CRITICAL_REMAINING_PCT && !state.criticalFired) {
         'Persist the docs/STATE.md Next Action at the next natural boundary, then continue.';
 }
 
-if (message) {
+if (observation || message) {
     state.updatedAt = new Date().toISOString();
     try {
         atomicWriteFile(stateFile, JSON.stringify(state));
     } catch (error) {
         console.error(`[Super Compound] Context monitor: state write failed: ${error.message}`);
     }
-    process.stdout.write(JSON.stringify({
+    if (message) process.stdout.write(JSON.stringify({
         hookSpecificOutput: {
             hookEventName: 'PostToolUse',
             additionalContext: message,
@@ -123,6 +135,7 @@ function readState(file) {
         return {
             warnFired: parsed.warnFired === true,
             criticalFired: parsed.criticalFired === true,
+            observation: typeof parsed.observation === 'string' ? parsed.observation : null,
             updatedAt: parsed.updatedAt,
         };
     } catch {

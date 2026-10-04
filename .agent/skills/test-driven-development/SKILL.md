@@ -23,7 +23,7 @@ Use before production implementation in strict or balanced mode; balanced is the
 NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
 ```
 
-In strict and balanced modes: code written first? **Delete it. Start over.** Do not keep it as reference, adapt it while testing, or look at it while recreating the behavior.
+Strict/balanced remain test-first. If implementation already exists, preserve user work and scoped results. Add behavioral tests, prove sensitivity against a safe baseline or isolated fix toggle, then GREEN and relevant verification. Record the sequencing deviation; never delete working code merely to recreate the sequence.
 
 Core cycle:
 
@@ -43,7 +43,7 @@ Do not write all tests and then all implementation. Each RED-GREEN pair must cro
 | "The test passes immediately" | Correct the test until it proves missing behavior. |
 | "I manually tested it" | Manual checks do not replace RED. |
 | "It is too simple" | Write the small test. |
-| "I need the implementation as reference" | Delete it in strict/balanced mode. |
+| "I need the implementation as reference" | Preserve work; prove behavioral sensitivity using a safe baseline/toggle. |
 | "Everything must be mocked" | Improve the seam; mock only system boundaries. |
 | "Prototype first" | Throw exploration away, then restart test-first. |
 
@@ -54,3 +54,5 @@ Do not write all tests and then all implementation. Each RED-GREEN pair must cro
 - `architecture-enforcement` improves hard-to-test seams and module boundaries.
 - `verification-before-completion` requires fresh RED/GREEN and suite evidence.
 - `state-management` keeps behavior names aligned with durable project language.
+
+- Verified lessons reuse checks before additive regressions: [prevention checks](../knowledge-compounding/references/prevention-checks.md).

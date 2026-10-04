@@ -1,0 +1,51 @@
+{
+  "label": "session-5",
+  "correctness": false,
+  "checks": {
+    "tests": false,
+    "hiddenArithmetic": false,
+    "constraintCompliance": true,
+    "relevantKnowledge": false,
+    "resume": false,
+    "verification": false,
+    "capture": false,
+    "nextAction": false,
+    "actualWork": false,
+    "complete": true
+  },
+  "verificationOutput": "✖ sum adds its arguments (1.051ms)\nℹ tests 1\nℹ suites 0\nℹ pass 0\nℹ fail 1\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 86.7144\n\n✖ failing tests:\n\ntest at test\\sum.test.js:5:1\n✖ sum adds its arguments (1.051ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  -1 !== 5\n  \n      at TestContext.<anonymous> (D:\\BATI\\Development\\framework\\.scratch\\pstack-codex-pilot-20261004\\session-5\\test\\sum.test.js:6:10)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: -1,\n    expected: 5,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n",
+  "sourceDigest": "d50a841d52dc77b162a881c8bb8f38eb6f7fbdc678821639a9dc1aef4d792c4c",
+  "traceDigest": "e584b94e3f2b909cd2ffe762dff3b978f1bfcf574e7b3bc1c6457f9a558a3b3c",
+  "result": {
+    "exitCode": 0,
+    "latencyMs": 30376,
+    "failure": null,
+    "timestamp": "2026-10-04T02:07:08.504Z",
+    "args": [
+      "exec",
+      "--json",
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--sandbox",
+      "workspace-write",
+      "-c",
+      "approval_policy=\"never\"",
+      "-m",
+      "gpt-6.1-sol",
+      "-"
+    ]
+  },
+  "usage": {
+    "inputTokens": 136529,
+    "outputTokens": 397,
+    "cachedInputTokens": 107520,
+    "totalTokens": 136926,
+    "uncachedInputTokens": 29009,
+    "commandCount": 0,
+    "repeatedCommands": 0,
+    "errorCount": 0,
+    "complete": true,
+    "commands": []
+  }
+}

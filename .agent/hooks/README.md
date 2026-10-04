@@ -19,3 +19,13 @@ Every variable a hook reads is listed here; `.agent/tools/hook-env-surface.test.
 | `COMPACT_STATE_TTL_DAYS` | suggest-compact | days before stale per-session state files are removed (default 14) |
 | `COMPACT_CONTEXT_THRESHOLD` | suggest-compact | context tokens that trigger the compaction suggestion (default 160000; 700000 for 1M windows; 0 disables) |
 | `COMPACT_CONTEXT_INTERVAL` | suggest-compact | context tokens between repeated suggestions (default 60000) |
+
+Pre-compact reads the structured checkpoint through memory-maintenance.mjs resume.
+A missing/invalid checkpoint or contract drift is reported for /sc-pause or
+/sc-status; the timestamp marker does not certify saved actions or outcomes.
+It never runs a background model or reconstructs facts from conversation.
+
+Context monitor reuses unchanged transcript observations and stops scanning
+after its final once-per-session notice. CRITICAL checkpoints evidence, reduces
+optional context, and requests safe host compaction/continuation; it does not
+require a terminal handoff while recovery is available.

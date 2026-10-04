@@ -35,4 +35,4 @@ For async failures, wait for a condition or event rather than sleeping a fixed d
 
 ## Architecture Stop
 
-After three failed fix attempts, stop. Reassess the model, abstraction boundaries, accidental complexity, and test seams. Escalate to redesign or planning rather than stacking a fourth patch.
+After three failed hypotheses/fixes, reassess evidence, abstraction boundaries, and test seams; escalate strategy or worker capability automatically when available. Follow the shared recovery policy in `agentic-delivery/references/workflow-integration.md`. Continue within authority when a safe alternative offers progress; ask only for missing authority/access or proven stagnation after alternatives.

@@ -27,4 +27,7 @@ Load the retrieval workflow first. Load the catalog only to choose a domain/stac
 - **Context gate:** Identify product type, audience, platform, page/screen, stack, project configuration, and style constraints. Use the configured stack; default to `html-tailwind` only for generic web UI.
 - **Design-system gate:** Reuse existing components, tokens, styling conventions, and icon libraries before adding primitives. Persist retrieved guidance only when multiple UI tasks need it and respect overwrite/path protections.
 - **Implementation gate:** Build the requested product experience, not a decorative concept. Cover responsive behavior, stable layout, text overflow, keyboard/focus behavior, accessible names, touch/safe-area needs, chart alternatives, and loading, empty, error, disabled, success, hover, focus, and pressed states.
+- **Recovery gate:** Verify safe draft/selection retention, actionable errors, and retry deduplication through implementation guidance; product confirmation follows approved requirements.
 - **Evidence gate:** Record which design-system/domain/stack searches informed the result and verify mobile/desktop layout, accessibility, interaction states, and stack-specific risks before delivery.
+
+- Selective maintenance: [refresh and cache](references/refresh-and-cache.md). Search results include source signatures and version applicability when recorded. Cache only indexes in process; source changes invalidate them. Selective updates retain pinned provenance and pass relevance checks.

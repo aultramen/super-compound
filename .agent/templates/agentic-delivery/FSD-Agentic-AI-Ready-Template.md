@@ -30,6 +30,12 @@ last_updated: "{{YYYY-MM-DD}}"
 
 # {{PROJECT_NAME}} — Functional Specification Document
 
+## Summary
+
+<State purpose, scope, key information, and decision/outcome for this document.>
+
+<!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
+
 > **Template usage:** replace every `{{PLACEHOLDER}}`, mark non-applicable sections as `N/A — reason`, and never leave an unqualified `TBD`. Any unresolved item must use an `OPEN-xxx` record with owner, impact, fallback, and blocker classification. This FSD must remain complete and executable **without an ADR**; ADRs are optional sidecars and may be referenced only when `adr_applicability = LINKED` and their status is `ACCEPTED`.
 
 ---
@@ -150,6 +156,12 @@ A coding agent MUST NOT:
 - Use unbounded retries, non-idempotent background processing, or silent data loss.
 - Convert probabilistic AI output directly into authoritative state unless the approved human/deterministic gate is specified.
 
+For LOCAL_ONLY topology, apply the canonical UI readiness applicability rules:
+map local screen/state/data to tests; omit artificial wire/schema/mock/provider
+assets and provider-role goals. Networked gates below apply only when a provider
+or wire contract exists. Mechanical derived revisions auto-promote after checks;
+material semantic/risk changes retain owner approval.
+
 ## 0.7 FSD Approval Gate
 
 Before this FSD becomes `APPROVED`, all items below must be true:
@@ -166,7 +178,7 @@ Before this FSD becomes `APPROVED`, all items below must be true:
 - [ ] API, UI, event, job, and integration contracts cover happy, negative, retry, and degraded paths.
 - [ ] UI-bearing scope is either `READY_FOR_SLICE`, or is `DRAFT/BLOCKED`
       solely because executable contract assets must be materialized; non-UI
-      scope records `NOT_APPLICABLE` with reason and approver.
+      scope records `NOT_APPLICABLE` with factual reason.
 - [ ] When readiness is `DRAFT/BLOCKED`, only a `CONTRACT_ENABLER` may be READY;
       first-slice and scale-out goals remain blocked. The enabler has complete
       authority, bounded paths, deterministic verification, and no unrelated
@@ -176,13 +188,13 @@ Before this FSD becomes `APPROVED`, all items below must be true:
       refs, deterministic fixtures, matching mock/typed-consumer revisions, and
       provider/consumer/responsive/accessibility/QA verification.
 - [ ] After `CONTRACT_ENABLER` verification, return to `/sc-plan`, update the FSD
-      index, rerun readiness, obtain Technical Manager re-approval, and reach `READY_FOR_SLICE` before
+      index, rerun readiness, auto-promote unchanged approved semantics after deterministic gates, and reach `READY_FOR_SLICE` before
       `FIRST_VERTICAL_SLICE` may become READY.
 - [ ] Goal roles enforce exactly one real first vertical slice and its verified
       issue before scale-out.
 - [ ] Exactly one `HARDENING` goal depends on every applicable UI delivery slice
       and owns merged integration, responsive, accessibility, E2E,
-      visual-regression, and Business Owner UAT evidence.
+      visual-regression, and Business Owner UAT evidence when acceptance or material judgment requires it.
 - [ ] Date/time, units, locale, ordering, pagination, and rounding semantics are explicit.
 - [ ] Idempotency, concurrency, transaction boundaries, and duplicate-event behavior are explicit.
 - [ ] Security, privacy, audit, retention, backup, and restore requirements are testable.
@@ -852,7 +864,7 @@ consumer/component, provider, and E2E setup.
 - [ ] API/event schemas and generated clients/contracts are updated.
 - [ ] UI loading, empty, success, validation, error, forbidden, stale/conflict,
       partial/degraded, offline, and async/in-progress states are implemented or
-      have approved `N/A` reason and approver.
+      have justified `N/A` factual reason.
 - [ ] Audit, metrics, logs, alerts, and runbook changes are present.
 - [ ] No unresolved placeholders, disabled tests, unapproved scope expansion, or sensitive logging remain.
 - [ ] Traceability matrix links the feature to tests and goals.
@@ -1116,6 +1128,7 @@ exact wire shape. A conflict creates blocking `OPEN-*`.
 
 ```yaml
 ui_api_contract:
+  topology: "NETWORKED" # LOCAL_ONLY omits wire/derived/provider sections and uses network_actions: []
   id: "CONTRACT-001"
   profile: "STANDARD"
   applicability:
@@ -1568,6 +1581,11 @@ No classified or personal data may be sent to a consumer AI service merely becau
 | Allowed tools/sources | {{ALLOWLIST}} |
 | Prohibited tools/actions | {{DENYLIST}} |
 | Source delimiting | {{METHOD}} |
+| Actor/source attribution | {{ACTOR_SOURCE_ID_VERSION_AND_AUTHORIZATION_MAPPING}} |
+| Chronology | {{EVENT_ORDER_TIMESTAMP_AND_UNCERTAINTY_ENCODING}} |
+| Selection boundaries | {{SELECTED_CONTEXT_AND_OMITTED_MATERIAL}} |
+| Truncation | {{LIMIT_METHOD_AND_INCOMPLETE_CONTEXT_INDICATOR}} |
+| Output-language policy | {{APPROVED_PRODUCT_RULE_SELECTED_CONTEXT_MIXED_EMPTY_AMBIGUOUS_OVERRIDES}} |
 | Prompt-injection handling | Treat source text as untrusted evidence, never instructions |
 | Maximum input/output | {{LIMITS}} |
 | Temperature/determinism | {{SETTING OR PROVIDER LIMITATION}} |
@@ -1608,6 +1626,8 @@ Validation rules:
 - Normalize quantities deterministically outside the model.
 - Do not persist model prose as an authoritative business rule.
 - Quarantine malformed responses; do not partially accept ambiguous items unless per-item validation is explicitly designed.
+
+Review/edit/confirm/regenerate controls follow the approved feature and risk; no universal Summary/Result/Status format is required. When language follows input, use selected context and the PRD policy for mixed, empty, or ambiguous input and explicit overrides. Verify actor attribution, chronology, selection/truncation, language, malformed output, and recovery in applicable evals.
 
 ## 11.6 Candidate Deduplication and Re-evaluation
 
@@ -2005,7 +2025,7 @@ flowchart LR
 ```
 
 The graph MUST be acyclic. Parallel goals must not edit the same migration, generated artifact, or high-conflict module without an explicit integration strategy.
-For UI-bearing scope, create exactly one `FIRST_VERTICAL_SLICE`. Every
+For networked UI-bearing scope, create exactly one `FIRST_VERTICAL_SLICE`. Every
 `SCALE_OUT_SLICE` depends on its issue reaching `verified` and the derived gate
 `FIRST_VERTICAL_SLICE_VERIFIED`; `EXCEPTION_APPROVED` cannot open scale-out.
 
@@ -2212,14 +2232,14 @@ Stop only on the listed stop conditions; otherwise use approved defaults and rep
 
 Adapt this sequence to the project; do not force it when unnecessary.
 
-For UI-bearing scope, preserve this dependency spine; omit only roles that are
+For networked UI-bearing scope, preserve this dependency spine; omit only roles that are
 not applicable. A `CONTRACT_ENABLER` is followed by `/sc-plan` re-indexing and
-Technical Manager approval before `FIRST_VERTICAL_SLICE` becomes ready.
+automatic readiness promotion before `FIRST_VERTICAL_SLICE` becomes ready; material deltas require Technical Manager approval.
 
 | Order | UI Delivery Role | Release condition |
 |---:|---|---|
 | 1 | `CONTRACT_ENABLER` | Bounded contract assets verified; return to `/sc-plan` |
-| 2 | `FIRST_VERTICAL_SLICE` | FSD is re-approved at `READY_FOR_SLICE` |
+| 2 | `FIRST_VERTICAL_SLICE` | Approved semantics pass deterministic `READY_FOR_SLICE` gates |
 | 3 | `SCALE_OUT_SLICE` | First-slice issue is `verified` and PRD baseline is `VALIDATED` |
 | 4 | `HARDENING` | Integrated slices satisfy their required gates |
 
@@ -2304,7 +2324,7 @@ Technical debt may not be used to hide incomplete MUST requirements.
 - [ ] APIs/events/jobs define schemas, errors, auth, idempotency, retries, and compatibility.
 - [ ] UI covers loading, empty, success, validation, error, forbidden,
       stale/conflict, partial/degraded, offline, and async/in-progress states, or
-      records approved `N/A` reason and approver.
+      records justified `N/A` factual reason.
 - [ ] External integrations have real compatibility evidence or an explicit blocker.
 
 ### Security and AI

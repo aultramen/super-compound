@@ -2,7 +2,7 @@
 
 Purpose: review/design UI read-only or provide interface guidance to an approved goal without loading raw data into model context.
 
-Authority: design/review mode is read-only. For implementation intent, fuzzy UI
+Authority: design/review mode is read-only. Existing-screen fixes with no full-tier trigger stay light: /sc-work or /sc-debug. For full implementation intent, fuzzy UI
 routes to `/sc-explore`; an approved BRD without a PRD routes to `/sc-prd`; an
 approved PRD without an FSD routes to `/sc-plan`; an approved FSD `GOAL-*`
 hands off to `/sc-work <approved-goal>`. `/sc-ui` never edits directly; when
@@ -10,7 +10,7 @@ used inside active `/sc-work`, mutation authority and verification remain there.
 
 Load first:
 
-- knowledge-search.mjs "<scope>" first; ERR-*/LRN-* hits bind.
+- knowledge-search.mjs "<scope>" first; accepted decisions bind through authority, observed ERR/LRN lessons are advisory.
 - `.agent/skills/agentic-delivery/references/ui-contract-readiness.md` for a
   UI-bearing PRD/FSD validation gate.
 - `.agent/context/skills/interface-design.contract.md`.
@@ -30,4 +30,4 @@ routes to `/sc-explore`, otherwise `/sc-prd`); `FSD_CHANGE_REQUIRED` when data,
 API, or technical interaction routes to `/sc-plan`; or `VERIFICATION_FINDING`
 when implementation diverges and routes to owning `/sc-work`. A new preference
 after acceptance becomes backlog/change request, not an authority mutation.
-If work remains, end with /sc-pause.
+Apply LOCAL_ONLY topology without synthetic provider/schema/mock gates. Checkpoint automatically and continue; /sc-pause is for actual stops.

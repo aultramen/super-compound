@@ -265,7 +265,7 @@ test("stale first-slice version is ignored, blocking-open line fails, second fir
   assertBlocked(await evaluate({ "issues/issue-005-second.md": ISSUES["issues/issue-002-first-slice.md"] }), "first-slice");
 });
 
-test("NOT_APPLICABLE with reason and approver exits 0; without exits 1", async () => {
+test("NOT_APPLICABLE with factual reason exits 0; missing reason exits 1", async () => {
   const approved = runCli([...ARGS, "--root", fixture({ "docs/fsd.md": NA_FSD }), "--json"]);
   assert.equal(approved.code, 0, approved.stderr);
   const parsed = JSON.parse(approved.stdout);
@@ -273,7 +273,7 @@ test("NOT_APPLICABLE with reason and approver exits 0; without exits 1", async (
   assert.deepEqual(parsed.failures, []);
   assert.equal(parsed.gates.filter((gate) => gate.status === "skip").length, 12);
 
-  const unapproved = runCli([...ARGS, "--root", fixture({ "docs/fsd.md": NA_FSD.replace("approved_by: Technical Manager", "approved_by: {{ROLE}}") })]);
+  const unapproved = runCli([...ARGS, "--root", fixture({ "docs/fsd.md": NA_FSD.replace(/reason: .*/, "reason: {{REASON}}") })]);
   assert.equal(unapproved.code, 1);
   assert.match(unapproved.stdout, /^FAIL not-applicable /m);
   assert.match(unapproved.stdout, /verdict: NOT_APPLICABLE/);
@@ -293,4 +293,64 @@ test("usage errors and unreadable inputs exit 2", () => {
   const root = fixture();
   assert.equal(runCli([...ARGS, "--root", root, "--fsd", "../outside.md"]).code, 2);
   assert.equal(runCli([...ARGS, "--root", root, "--issues-dir", "nope"]).code, 2);
+});
+
+const LOCAL_MANIFEST = `${FENCE}yaml
+ui_api_contract:
+  id: "CONTRACT-001"
+  profile: "STANDARD"
+  topology: "LOCAL_ONLY"
+  network_actions: []
+  verification:
+    responsive_accessibility_qa_refs: ["FSD-X#TEST-005"]
+  blocking_open_refs: []
+${FENCE}
+`;
+const localPatches = {
+  "docs/fsd.md": FSD.replace(MANIFEST, LOCAL_MANIFEST).replaceAll("SCHEMA-001 |", "LOCAL-001 |"),
+  ...Object.fromEntries(Object.keys(ISSUES).map(file => [file, issue("ready-for-agent", "None", "NOT_APPLICABLE", "None", "NOT_APPLICABLE")])),
+};
+test("local-only UI passes mapped checks without fabricated provider assets/goals", async () => {
+  const result = await evaluate(localPatches);
+  assert.equal(result.verdict, "READY_FOR_SLICE");
+  assert.equal(result.gates.find(g => g.id === "derived-assets").status, "skip");
+});
+test("local-only topology rejects network declarations and still requires UI proof", async () => {
+  assertBlocked(await evaluate({...localPatches, "docs/fsd.md": localPatches["docs/fsd.md"].replace("network_actions: []", 'network_actions: ["GET /x"]')}), "topology");
+  assertBlocked(await evaluate({...localPatches, "docs/fsd.md": localPatches["docs/fsd.md"].replace('responsive_accessibility_qa_refs: ["FSD-X#TEST-005"]', "responsive_accessibility_qa_refs: []")}), "verification-refs");
+});
+test("factual non-applicability and state reasons need no administrative approver", async () => {
+  const root = fixture({"docs/fsd.md": NA_FSD.replace("approved_by: Technical Manager", "")});
+  assert.equal(runCli([...ARGS, "--root", root]).code, 0);
+  assert.equal((await evaluate({"docs/prd.md": ["; approved by PM", ""]})).verdict, "READY_FOR_SLICE");
+});
+
+function compatibleProofPatch(extra = "") {
+  return {
+    "docs/fsd.md": FSD.replace('version: "1.2.0"', 'version: "1.3.0"').replace('  readiness:', `  change_class: WIRE_COMPATIBLE
+  material_flow_change: false
+  compatible_first_slice_refs: ["FSD-X@1.2.0#CONTRACT-001"]
+  compatibility_verification_refs: ["FSD-X#TEST-003", "FSD-X#TEST-004"]
+  affected_mapping_refs: []
+${extra}  readiness:`),
+    "issues/issue-002-first-slice.md": ["Status: ready-for-agent", "Status: verified"],
+  };
+}
+test("additive compatible revision preserves verified unaffected real-slice proof", async () => {
+  const result = await evaluate(compatibleProofPatch());
+  assert.equal(result.verdict, "READY_FOR_SLICE");
+  assert.match(result.gates.find(g => g.id === "first-slice").detail, /compatible proof/);
+});
+test("affected flow, material change, and missing compatibility evidence require real-slice reproof", async () => {
+  for (const [from,to] of [
+    ['affected_mapping_refs: []', 'affected_mapping_refs: ["FSD-X#UIMAP-001"]'],
+    ['affected_mapping_refs: []', 'affected_mapping_refs: ["FSD-X#UIMAP-999"]'],
+    ['affected_mapping_refs: []', 'affected_mapping_refs: ["typo"]'],
+    ['material_flow_change: false', 'material_flow_change: true'],
+    ['compatibility_verification_refs: ["FSD-X#TEST-003", "FSD-X#TEST-004"]', 'compatibility_verification_refs: []'],
+  ]) {
+    const patch = compatibleProofPatch();
+    patch["docs/fsd.md"] = patch["docs/fsd.md"].replace(from,to);
+    assertBlocked(await evaluate(patch), "first-slice");
+  }
 });

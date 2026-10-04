@@ -17,6 +17,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
+import {isActiveAsset} from './active-assets.mjs';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const canonicalDirectories = [
@@ -53,7 +54,8 @@ function walkFiles(root, current = root) {
 function walkCanonicalFiles(root) {
   return walkFiles(root).filter((path) => {
     const segments = path.split("/");
-    return !segments.includes("__pycache__") && !/\.(?:pyc|pyo)$/i.test(path);
+    const directory = normalizePath(relative(join(repoRoot, '.agent'), root));
+    return isActiveAsset(`.agent/${directory}/${path}`) && !segments.includes("__pycache__") && !/\.(?:pyc|pyo)$/i.test(path);
   });
 }
 
@@ -234,7 +236,7 @@ test("installs an exact, hashed Codex bundle from canonical .agent sources", (t)
   assert.equal(statSync(join(target, "manifest.json")).isFile(), true);
 });
 
-test("verifies drift, repairs stale files, and makes a clean reinstall a no-op", (t) => {
+test("verifies drift, preserves user files, and makes a clean reinstall a no-op", (t) => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), "super-compound-codex-"));
   t.after(() => rmSync(temporaryRoot, { recursive: true, force: true }));
 
@@ -260,8 +262,10 @@ test("verifies drift, repairs stale files, and makes a clean reinstall a no-op",
   );
 
   const repair = runInstaller(codexHome);
-  assert.equal(repair.status, 0, `${repair.stdout}\n${repair.stderr}`);
-  assert.equal(existsSync(staleFile), false);
+  assert.notEqual(repair.status, 0, `${repair.stdout}\n${repair.stderr}`);
+  assert.equal(readFileSync(staleFile, 'utf8'), 'stale\n');
+  // The user explicitly reconciles the unowned fixture before reinstalling.
+  rmSync(staleFile);
 
   const manifestPath = join(target, "manifest.json");
   const manifestBefore = readFileSync(manifestPath, "utf8");
@@ -294,11 +298,8 @@ test("verifies drift, repairs stale files, and makes a clean reinstall a no-op",
   );
 
   const tamperRepair = runInstaller(codexHome);
-  assert.equal(tamperRepair.status, 0, `${tamperRepair.stdout}\n${tamperRepair.stderr}`);
-  assert.equal(
-    sha256(installedWorkflow),
-    sha256(join(repoRoot, ".agent", "workflows", "sc-init.md")),
-  );
+  assert.notEqual(tamperRepair.status, 0);
+  assert.equal(readFileSync(installedWorkflow, 'utf8'), 'tampered\n');
 });
 
 test("refuses a destination reparse point that escapes CODEX_HOME", (t) => {

@@ -3,16 +3,19 @@
  * goal-waves - dependency-graph wave planner for parallel goal execution.
  *
  * Reads goal dependencies (issue pointers' "Blocked by:" lines or a JSON
- * array) and emits execution waves: wave N runs in parallel after wave N-1
- * completes. Fails closed on cycles and unknown dependencies.
+ * array) and emits reporting waves. Dispatch uses verified dependencies and
+ * available slots, never a global wave barrier. Fails closed on invalid graphs.
  *
  * Usage:
  *   node .agent/tools/goal-waves.mjs --issues-dir .scratch/<feature>/issues
  *   node .agent/tools/goal-waves.mjs --input goals.json [--max-workers N]
  *   node .agent/tools/goal-waves.mjs --input goals.json --json
+ *   node .agent/tools/goal-waves.mjs --input goals.json --ready --state state.json
  *
  * --json emits the stable machine shape goal_waves_plan_v1: waves as an
  * array of goal-id arrays plus maxWorkers/goalCount/waveCount metadata.
+ * --ready emits goal_dispatch_plan_v1; state supplies verified/inProgress/blocked
+ * goal ids and optional hostSlots/resourceSlots total worker allowances.
  */
 
 import fs from 'node:fs';
@@ -81,9 +84,48 @@ export function parseIssueDependencies(issuesDir) {
     return goals;
 }
 
-export function resolveMaxWorkers(root, override) {
-    if (Number.isInteger(override) && override >= 1) return override;
-    return 2;
+// Capacity comes from the host/scheduler, not CPU count (agent slots and build
+// resources need not track CPUs). Preserve the conservative fallback when absent.
+export function resolveMaxWorkers(root, override, capacity = {}) {
+    const limits = [override, capacity.hostSlots, capacity.resourceSlots]
+        .filter((value) => value !== null && value !== undefined);
+    if (limits.some((value) => !Number.isSafeInteger(value) || value < 1)) {
+        throw new Error('WAVES_INVALID_WORKERS: capacity must be a positive integer');
+    }
+    const requested = override ?? capacity.hostSlots ?? 2;
+    return Math.min(requested, ...limits);
+}
+
+export function computeReadyGoals(goals, {
+    verified = [], inProgress = [], blocked = [], maxWorkers = 2,
+} = {}) {
+    const waves = computeWaves(goals); // Validate the DAG before trusting partial state.
+    resolveMaxWorkers(null, maxWorkers);
+    const ids = new Set(goals.map((goal) => goal.id));
+    const claimed = new Set();
+    for (const group of [verified, inProgress, blocked]) {
+        if (!Array.isArray(group)) throw new Error('WAVES_INVALID_STATE: expected goal-id arrays');
+        for (const id of group) {
+            if (!ids.has(id)) throw new Error(`WAVES_UNKNOWN_STATE_GOAL: ${id}`);
+            if (claimed.has(id)) throw new Error(`WAVES_CONFLICTING_STATE: ${id}`);
+            claimed.add(id);
+        }
+    }
+    const affected = new Set(blocked);
+    const byId = new Map(goals.map((goal) => [goal.id, goal]));
+    for (const wave of waves) {
+        for (const id of wave) {
+            if ((byId.get(id).dependsOn ?? []).some((dep) => affected.has(dep))) {
+                affected.add(id);
+            }
+        }
+    }
+    const proven = new Set(verified);
+    const availableSlots = Math.max(0, maxWorkers - inProgress.length);
+    return goals.filter((goal) => !claimed.has(goal.id) && !affected.has(goal.id) &&
+        (goal.dependsOn ?? []).every((dep) => proven.has(dep)))
+        .map((goal) => goal.id).sort((a, b) => a.localeCompare(b))
+        .slice(0, availableSlots);
 }
 
 function main(argv) {
@@ -93,6 +135,8 @@ function main(argv) {
     let maxWorkers = null;
     let root = process.cwd();
     let json = false;
+    let ready = false;
+    let stateFile = null;
     for (let i = 0; i < args.length; i += 1) {
         const a = args[i];
         if (a === '--issues-dir') issuesDir = args[++i];
@@ -100,6 +144,8 @@ function main(argv) {
         else if (a === '--max-workers') maxWorkers = Number(args[++i]);
         else if (a === '--root') root = args[++i];
         else if (a === '--json') json = true;
+        else if (a === '--ready') ready = true;
+        else if (a === '--state') stateFile = args[++i];
     }
     let goals;
     if (inputFile) {
@@ -108,12 +154,24 @@ function main(argv) {
         goals = parseIssueDependencies(issuesDir);
     } else {
         process.stderr.write(
-            'usage: goal-waves.mjs (--issues-dir <dir> | --input <goals.json>) [--max-workers N] [--root <path>] [--json]\n'
+            'usage: goal-waves.mjs (--issues-dir <dir> | --input <goals.json>) [--max-workers N] [--root <path>] [--json] [--ready --state <state.json>]\n'
         );
         return 2;
     }
     const waves = computeWaves(goals);
-    const workers = resolveMaxWorkers(root, maxWorkers);
+    const state = stateFile ? JSON.parse(fs.readFileSync(stateFile, 'utf8')) : {};
+    if (!state || typeof state !== 'object' || Array.isArray(state)) {
+        throw new Error('WAVES_INVALID_STATE: expected state object');
+    }
+    const workers = resolveMaxWorkers(root, maxWorkers, state);
+    if (ready) {
+        const readyGoals = computeReadyGoals(goals, { ...state, maxWorkers: workers });
+        process.stdout.write(`${JSON.stringify({
+            schema: 'goal_dispatch_plan_v1', maxWorkers: workers,
+            readyGoals, waves,
+        })}\n`);
+        return 0;
+    }
     if (json) {
         process.stdout.write(
             `${JSON.stringify({

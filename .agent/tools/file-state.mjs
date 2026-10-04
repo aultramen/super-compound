@@ -48,7 +48,8 @@ export async function resolveRepositoryPath(root, candidate, options = {}) {
   }
 
   const safeRoot = path.resolve(root);
-  const absolute = path.resolve(safeRoot, candidate);
+  // Legacy persisted Windows locators remain readable on every host.
+  const absolute = path.resolve(safeRoot, candidate.replaceAll('\\', '/'));
   const relative = path.relative(safeRoot, absolute);
   if (relative.startsWith("..") || path.isAbsolute(relative)) {
     throw new Error(`${label} resolves outside repository root`);
@@ -162,9 +163,9 @@ export async function writeFileAtomic(root, candidate, content, options = {}) {
     await options.assertOwnership?.();
     await options.assertBeforeReplace?.();
     try {
-      await rename(temp, absolute);
+      await (options.renameFile ?? rename)(temp, absolute);
     } catch (error) {
-      if (!RENAME_BUSY.has(error?.code)) throw error;
+      if (options.fallbackOnBusy === false || !RENAME_BUSY.has(error?.code)) throw error;
       atomicReplace = false;
       await writeFile(absolute, buffer, { mode: options.mode ?? 0o600 });
     }

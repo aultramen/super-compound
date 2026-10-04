@@ -6,6 +6,7 @@
 //   node .agent/tools/session-baseline.mjs seed [--dir <dir>] [--force]
 //   node .agent/tools/session-baseline.mjs run --label <label> [--dir <dir>] [--only status,debug,work]
 //   node .agent/tools/session-baseline.mjs report [--dir <dir>] [--out <markdown>]
+import {activeCopyFilter} from './active-assets.mjs';
 import { spawnSync } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import fs from "node:fs";
@@ -62,7 +63,7 @@ export const SESSIONS = Object.freeze([
 
 // ---------------------------------------------------------------- seed
 
-function seedFiles(today) {
+export function seedFiles(today) {
   const stamp = `${today} 09:00`;
   return {
     "package.json": `${JSON.stringify({ name: "baseline-dummy", private: true, scripts: { test: "node --test" } }, null, 2)}\n`,
@@ -208,7 +209,7 @@ function seed(dir, { force = false } = {}) {
     fs.cpSync(path.join(REPO_ROOT, name), path.join(seedDir, name), {
       recursive: true,
       dereference: true,
-      filter: (source) => !source.includes(`${path.sep}.compact-state`),
+      filter: (source) => activeCopyFilter(REPO_ROOT)(source) && !source.includes(`${path.sep}.compact-state`),
     });
   }
   const today = new Date().toISOString().slice(0, 10);
@@ -432,7 +433,7 @@ function syncFrameworkIntoSeed(dir, label) {
     fs.cpSync(path.join(REPO_ROOT, name), path.join(seedDir, name), {
       recursive: true,
       dereference: true,
-      filter: (source) => !source.includes(`${path.sep}.compact-state`),
+      filter: (source) => activeCopyFilter(REPO_ROOT)(source) && !source.includes(`${path.sep}.compact-state`),
     });
   }
   const git = (...args) =>

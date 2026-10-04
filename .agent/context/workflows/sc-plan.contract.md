@@ -10,7 +10,7 @@ Load first:
 
 - Approved PRD and qualified upstream BRD refs.
 - `.agent/context/skills/sc-plan.contract.md`.
-- `node .agent/tools/knowledge-search.mjs "<feature area>"` hits; cite matching ERR-*/LRN-*/solution IDs verbatim as plan constraints.
+- `node .agent/tools/knowledge-search.mjs "<feature area>"` hits; cite applicable ERR-*/LRN-*/solution IDs as advisory evidence; accepted decisions retain authority.
 - `.agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md`,
   `.agent/templates/agentic-delivery/skeletons/ADR-Skeleton-OPTIONAL.md` only if
   justified, and
@@ -32,11 +32,19 @@ Gates:
 - If executable assets are missing, define `CONTRACT_ENABLER`, then exactly one
   blocked `FIRST_VERTICAL_SLICE`. Only the enabler may be ready while readiness
   is `DRAFT/BLOCKED`; after its verification, return to `/sc-plan`, refresh the
-  index, rerun the gate, and obtain Technical Manager approval at
+  index, rerun the gate, and auto-promote unchanged semantics after deterministic gates; request Technical Manager approval only for material deltas at
   `READY_FOR_SLICE`. Every `SCALE_OUT_SLICE` requires
   `FIRST_VERTICAL_SLICE_VERIFIED` and depends on its verified issue. Create
   exactly one `HARDENING` goal that depends on all applicable UI delivery slices
   and owns final merged-system verification and Business Owner UAT evidence.
 
 Escalate to full `sc-plan.md` or full skills when writing/reviewing the detailed FSD procedure.
-If work remains, end with /sc-pause. Lessons: /sc-compound.
+Checkpoint automatically and continue; /sc-pause is only for actual stops. Lessons: /sc-compound.
+
+UI topology, affected proof, and conditional UAT follow the canonical UI readiness reference.
+
+Shared policy: `.agent/skills/agentic-delivery/references/workflow-integration.md`.
+
+Stage approvals and execution authority: agentic-delivery/references/workflow-integration.md.
+
+Stage mode: approved PRD → FSD/goals/verification approval → separate execution authorization. No pointer reapproval.

@@ -15,7 +15,7 @@ approved `/sc-work` goal. `/sc-plan` is the entry of the `full` delivery tier
 
 1. Load `skills/agentic-delivery/SKILL.md` and `skills/writing-plans/SKILL.md` when following the full planning procedure.
 2. Read the approved PRD, upstream BRD references, advisory research notes, exploration notes, codebase conventions, and existing tests. Research recommendations are evidence only; translate accepted conclusions into FSD `TDEC-*`, constraints, or an accepted ADR before they become implementation authority.
-3. Run `node .agent/tools/knowledge-search.mjs "<feature area>"` and cite matching `ERR-*`/`LRN-*`/solution IDs verbatim as plan constraints; a hit whose prevention rule applies is binding until superseded.
+3. Run `node .agent/tools/knowledge-search.mjs "<feature area>"` and cite applicable knowledge IDs as evidence; observed lessons are advisory until adopted into an accepted decision.
 4. Use `.agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md` first; expand full template sections only when needed.
 5. For UI work, load `skills/interface-design/SKILL.md`.
    Load `skills/agentic-delivery/references/ui-contract-readiness.md` only for
@@ -43,7 +43,7 @@ approved `/sc-work` goal. `/sc-plan` is the entry of the `full` delivery tier
     exactly one blocked `FIRST_VERTICAL_SLICE` pointer for the critical/highest-risk
     flow. The FSD may be approved with `DRAFT/BLOCKED` readiness only to release
     the bounded enabler. After it is verified, return to `/sc-plan`, update the
-    FSD index, rerun the readiness gate, and obtain Technical Manager re-approval;
+    FSD index, rerun the readiness gate, and auto-promote unchanged semantics after deterministic gates; request Technical Manager approval only for material deltas;
     `READY_FOR_SLICE` then releases the first slice.
     Every `SCALE_OUT_SLICE` records `required_gate =
     FIRST_VERTICAL_SLICE_VERIFIED` and depends on the first-slice issue. These
@@ -52,7 +52,7 @@ approved `/sc-work` goal. `/sc-plan` is the entry of the `full` delivery tier
     applicable UI delivery slices and owns merged integration, responsive,
     accessibility, E2E, visual-regression, and Business Owner UAT evidence.
 19. Use `skills/plan-verification/SKILL.md` and its ten dimensions before execution.
-20. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
+20. Checkpoint automatically and continue authorized work; use `/sc-pause` only when actually stopping.
 
 ## Output
 
@@ -62,3 +62,9 @@ approved `/sc-work` goal. `/sc-plan` is the entry of the `full` delivery tier
 - Suggested Git branch names and optional worktree candidates when useful.
 - Risks, assumptions, and out-of-scope notes.
 - Every durable artifact follows `.agent/context/output-style.md`.
+
+UI topology, affected proof, and conditional UAT follow the canonical UI readiness reference.
+
+Stage approvals and execution authority: agentic-delivery/references/workflow-integration.md.
+
+Stage mode: Consume an approved PRD; present FSD, goals, and verification for FSD approval, then request separate execution authorization. Derived pointers and board fixes need no repeated approval. Preserve existing project approval preferences on update.

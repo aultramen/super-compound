@@ -1,33 +1,40 @@
-Start from docs/STATE.md Next action.
+Start from active user intent; when resuming, reconcile docs/STATE.md Next action.
 Tier first (agentic-delivery/references/workflow-integration.md): `Tier:
-light|full; trigger: T<n>|none`. `light`: a plain request or
-`.scratch/<feature>/issues/` pointer; a single trivial change is done directly.
-`full`: one approved FSD goal or its pointer. Stop with `OPEN-*` on missing
-authority; never invent it. A trigger found mid-work: `ESCALATE: T<n>`, route to
-its owner, continue in `full`.
+light|full; trigger: T<n>|none`. `light`: a request/pointer; trivial edits execute directly.
+`full`: one approved FSD goal or its pointer. Stop with `OPEN-*` for missing authority. Material escalation: `ESCALATE: T<n>`
+to its owner; continue independent authorized work.
 
-Load only:
+Load:
 
-- The issue or exact FSD `GOAL-*`, referenced authority, target files, and tests.
+- Issue/FSD `GOAL-*`, authority refs, target files/tests.
 - `.agent/context/skills/sc-work.contract.md`.
-- `node .agent/tools/knowledge-search.mjs "<goal>"` hits; a matching ERR-*/LRN-* rule is binding.
+- `node .agent/tools/knowledge-search.mjs "<goal>"`; ERR-*/LRN-* lessons advise; accepted decisions bind.
 - `.agent/context/skills/git-workflow-operation.contract.md` only when needed.
 
 In `full`, before edit/execution require `ready-for-agent` and every `Blocked by`
 dependency `verified`. Check the pinned contract version and `ui_delivery_role`
 against its `required_gate`; `HARDENING` requires every delivery slice verified.
-Missing, unsatisfied, stale, or mismatched evidence returns `needs-info`/`blocked`
-and stops with `OPEN-*`.
+Invalid evidence blocks affected goals with `OPEN-*`.
 
-A `FIRST_VERTICAL_SLICE` uses a real provider/backend and proves auth/permission,
-success, and representative failure through `integration-checking`; mock-only
-evidence cannot permit scale-out. Once verified, return to `/sc-plan` to promote
-eligible `SCALE_OUT_SLICE` pointers. Parallel scale-out also requires 2+
-independent streams, baseline `VALIDATED`, unchanged contract, one shared-file
-writer, and isolated worktrees.
+Networked `FIRST_VERTICAL_SLICE`: real provider, auth/permission, success and
+representative failure via `integration-checking`; mock-only proof cannot release
+scale-out. Once verified, `/sc-plan` promotes eligible `SCALE_OUT_SLICE` pointers. Parallel scale-out: independent goals,
+baseline VALIDATED, applicable pinned contract, one shared writer, isolation.
+LOCAL_ONLY uses mapped local checks without provider barriers.
 
+Both tiers: current flow, reusable pattern, affected boundaries/callers, proving checks.
+Full: FSD refs; light: acceptance/regression note. Alternatives: approach -> alternative
+-> benefit/trade-off -> impact -> recommendation. Changed acceptance/contracts
+return to owner; reversible details proceed. UI/integration: safe recovery, no duplicate retry effects.
+Live proof: verification-before-completion/references/live-verification.md.
 Block protected-base edits. Test-first per `tdd_mode`; run mapped verification
 before completion; bounded `HARDENING` covers required integration/UI evidence
-and UAT approval.
-Route non-obvious fixes, agent mistakes, or new conventions to `/sc-compound` before closing.
+and applicable human judgment/UAT per approved acceptance.
+Verified reusable outcomes: `/sc-compound` before close; checkpoint evidence before retry.
 Close: docs/STATE.md Next action, else /sc-pause.
+
+Resume: memory-maintenance.mjs resume; reconcile constraints/inbox and affected drift; skip verified goals.
+
+Apply shared policy in the tier reference above.
+
+Stage mode: approved FSD plus execution authorization; preserve prior authority.

@@ -9,7 +9,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 - Use the `sc-` workflow prefix for all command triggers to avoid collisions with native agent commands.
 - Keep detailed procedures in skills. Rules stay short because they are always-on context.
 - Use `.agent/context/` for compact runtime routing, skill contracts, template skeletons, and token budget gates before loading full files.
-- Delivery adapts per request: `light` changes go straight to `/sc-work` or `/sc-debug`; `full` scope (new capability, contract surface, new screen, multi-stream work) takes `BRD -> PRD -> FSD -> GOAL`. A single trivial change is done directly.
+- Delivery adapts per request: `light` changes go straight to `/sc-work` or `/sc-debug`; `full` scope (new capability, material contract change, new screen, or coordinated semantic/risk change) takes `BRD -> PRD -> FSD -> GOAL`. A single trivial change is done directly.
 - Prefer existing project conventions, tools, and architecture over new abstractions.
 - Treat hooks, prompts, skills, workflows, MCP config, and dependency changes as security-sensitive.
 - Preserve user work. Do not overwrite unrelated local changes.
@@ -69,3 +69,5 @@ Super Compound is a compact agent framework for disciplined software work: under
 ## Completion Bar
 
 Apply the "Before Completion" gates in `quality-gates.md`: prove the claim with a fresh command or inspection and fix the specific gap before expanding scope.
+
+Documentation: `.agent/context/output-style.md`. Installation: `SETUP.md`, via `/sc-init setup`. Init/reload remain read-only.

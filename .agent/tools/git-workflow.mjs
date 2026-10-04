@@ -131,8 +131,7 @@ export function validateBranchName(branch, config = {}) {
   return { valid: errors.length === 0, errors };
 }
 
-// Paths whose change usually means a contract surface moved (delivery tier T2):
-// the preview warns so the change cites its PRD/FSD or escalates before commit.
+// Sensitive paths prompt semantic inspection, never automatic T2 escalation.
 const SCOPE_TRIGGER_PATTERNS = [
   /(^|[/\\])migrations?([/\\]|$)/i,
   /(^|[/\\])prisma([/\\]|$)/i,
@@ -156,23 +155,25 @@ export function detectSensitiveFiles(files = []) {
   );
 }
 
-export function planStart({ branch, base, config = {}, repoState = {} } = {}) {
+export function planStart({ branch, base, local = false, config = {}, repoState = {} } = {}) {
   const normalizedConfig = normalizeConfig(config);
   const targetBase = base ?? normalizedConfig.defaultBaseBranch;
   const remote = normalizedConfig.remote;
   const errors = [
-    ...validateCommonRepoState(repoState, normalizedConfig),
+    ...validateCommonRepoState(repoState, normalizedConfig, !local),
     ...validateBranchName(branch, normalizedConfig).errors,
   ];
 
-  if (normalizedConfig.requireCleanWorkingTree && repoState.workingTreeClean === false) {
-    errors.push("Working tree is not clean. Commit or stash local changes before changing branches.");
+  if (normalizedConfig.requireCleanWorkingTree && repoState.workingTreeClean === false
+    && !(local && repoState.currentBranch === targetBase)) {
+    errors.push("Working tree is not clean. Inventory user changes and use an isolated worktree; do not auto-stash/reset/commit.");
   }
 
-  if (!hasRemoteBranch(repoState, remote, targetBase)) {
-    errors.push(`Target base branch \`${remote}/${targetBase}\` was not found.`);
+  if (local ? !asSet(repoState.localBranches).has(targetBase) : !hasRemoteBranch(repoState, remote, targetBase)) {
+    errors.push(`Target base branch \`${local ? targetBase : `${remote}/${targetBase}`}\` was not found.`);
   }
 
+  if (!targetBase || SHELL_RISKY.test(targetBase) || targetBase.startsWith("-") || targetBase.includes("..")) errors.push("Invalid base branch.");
   errors.push(...validateBranchDoesNotExist(repoState, remote, branch));
 
   return {
@@ -181,7 +182,7 @@ export function planStart({ branch, base, config = {}, repoState = {} } = {}) {
     warnings: [],
     commands:
       errors.length === 0
-        ? [
+        ? local ? [`git checkout -b ${branch} ${targetBase}`] : [
             `git checkout ${targetBase}`,
             `git pull ${normalizedConfig.useFastForwardOnly ? "--ff-only " : ""}${remote} ${targetBase}`,
             `git checkout -b ${branch}`,
@@ -194,6 +195,7 @@ export function planWorktree({
   branch,
   path,
   base,
+  local = false,
   config = {},
   repoState = {},
 } = {}) {
@@ -201,7 +203,7 @@ export function planWorktree({
   const targetBase = base ?? normalizedConfig.defaultBaseBranch;
   const remote = normalizedConfig.remote;
   const errors = [
-    ...validateCommonRepoState(repoState, normalizedConfig),
+    ...validateCommonRepoState(repoState, normalizedConfig, !local),
     ...validateBranchName(branch, normalizedConfig).errors,
   ];
 
@@ -209,14 +211,15 @@ export function planWorktree({
     errors.push("Git worktree workflow is disabled by configuration.");
   }
 
-  if (!path || /[\r\n;]/.test(path)) {
-    errors.push("Worktree path must be provided and must not contain newlines or semicolons.");
+  if (!path || /[^A-Za-z0-9_./\\:-]/.test(path) || path.startsWith("-")) {
+    errors.push("Worktree path must be provided and must use safe path characters and must not start with a dash.");
   }
 
-  if (!hasRemoteBranch(repoState, remote, targetBase)) {
-    errors.push(`Target base branch \`${remote}/${targetBase}\` was not found.`);
+  if (local ? !asSet(repoState.localBranches).has(targetBase) : !hasRemoteBranch(repoState, remote, targetBase)) {
+    errors.push(`Target base branch \`${local ? targetBase : `${remote}/${targetBase}`}\` was not found.`);
   }
 
+  if (!targetBase || SHELL_RISKY.test(targetBase) || targetBase.startsWith("-") || targetBase.includes("..")) errors.push("Invalid base branch.");
   errors.push(...validateBranchDoesNotExist(repoState, remote, branch));
 
   return {
@@ -227,7 +230,10 @@ export function planWorktree({
     ],
     commands:
       errors.length === 0
-        ? [
+        ? local ? [
+            `git worktree add -b ${branch} ${path} ${targetBase}`,
+            `cd ${path}`,
+          ] : [
             `git fetch ${remote}`,
             `git worktree add -b ${branch} ${path} ${remote}/${targetBase}`,
             `cd ${path}`,
@@ -284,7 +290,7 @@ export function planFinish({
   const scopeTriggers = detectScopeTriggers(repoState.changedFiles ?? []);
   if (scopeTriggers.length > 0) {
     warnings.push(
-      `Full-tier paths touched (delivery trigger T2): ${scopeTriggers.join(", ")}; cite the owning PRD/FSD or escalate before this mutation.`,
+      `Contract-sensitive paths touched (inspection signal): ${scopeTriggers.join(", ")}; assess semantic compatibility, access, data and side effects; escalate only material changes outside authority.`,
     );
   }
 
@@ -316,7 +322,7 @@ export function planCommit({
   const targetBase = base ?? normalizedConfig.defaultBaseBranch;
   const activeBranch = repoState.currentBranch;
   const targetBranch = branch ?? activeBranch;
-  const errors = validateCommonRepoState(repoState, normalizedConfig);
+  const errors = validateCommonRepoState(repoState, normalizedConfig, false);
   const warnings = [];
 
   if (!targetBranch) {
@@ -352,7 +358,7 @@ export function planCommit({
   const scopeTriggers = detectScopeTriggers(repoState.changedFiles ?? []);
   if (scopeTriggers.length > 0) {
     warnings.push(
-      `Full-tier paths touched (delivery trigger T2): ${scopeTriggers.join(", ")}; cite the owning PRD/FSD or escalate before this mutation.`,
+      `Contract-sensitive paths touched (inspection signal): ${scopeTriggers.join(", ")}; assess semantic compatibility, access, data and side effects; escalate only material changes outside authority.`,
     );
   }
 
@@ -484,14 +490,14 @@ export function collectGitState(cwd = process.cwd()) {
   };
 }
 
-function validateCommonRepoState(repoState, config) {
+function validateCommonRepoState(repoState, config, requireRemote = true) {
   const errors = [];
 
   if (repoState.isGitRepository !== true) {
     errors.push("Current directory is not a Git repository.");
   }
 
-  if (!asSet(repoState.remotes).has(config.remote)) {
+  if (requireRemote && !asSet(repoState.remotes).has(config.remote)) {
     errors.push(`Required remote \`${config.remote}\` is not configured.`);
   }
 
@@ -577,6 +583,8 @@ function parseArgs(argv) {
     } else if (arg === "--message" || arg === "-m") {
       options.message = next;
       index += 1;
+    } else if (arg === "--local") {
+      options.local = true;
     } else if (arg === "--json") {
       options.json = true;
     } else if (arg === "--create") {
@@ -597,8 +605,8 @@ function parseArgs(argv) {
 function usage() {
   return `Usage:
   node .agent/tools/git-workflow.mjs status [--json]
-  node .agent/tools/git-workflow.mjs start <branch> [--base main] [--json]
-  node .agent/tools/git-workflow.mjs worktree <branch> --path ../worktree [--base main] [--json]
+  node .agent/tools/git-workflow.mjs start <branch> [--base main] [--local] [--json]
+  node .agent/tools/git-workflow.mjs worktree <branch> --path ../worktree [--base main] [--local] [--json]
   node .agent/tools/git-workflow.mjs commit --message "Commit message" [--branch feature/name] [--json]
   node .agent/tools/git-workflow.mjs push [--branch feature/name] [--json]
   node .agent/tools/git-workflow.mjs finish --message "Commit message" [--branch feature/name] [--json]
@@ -659,6 +667,7 @@ async function main() {
     plan = planStart({
       branch: options.branch ?? positionalBranch,
       base: options.base,
+      local: options.local,
       repoState,
     });
   } else if (command === "worktree") {
@@ -666,6 +675,7 @@ async function main() {
       branch: options.branch ?? positionalBranch,
       base: options.base,
       path: options.path,
+      local: options.local,
       repoState,
     });
   } else if (command === "finish") {
@@ -686,6 +696,7 @@ async function main() {
     plan = planPush({
       branch: options.branch,
       base: options.base,
+      local: options.local,
       repoState,
     });
   } else if (command === "pr") {

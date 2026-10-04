@@ -16,10 +16,13 @@ not cover. A full workflow never reloads its compact contract.
 - FSD and accepted ADRs remain implementation authority.
 - `OPEN-*` blockers stop unsafe invention.
 - Issue files stay pointers; they do not duplicate artifact prose.
-- UI-bearing PRD validation precedes FSD readiness; one real first slice precedes scale-out.
+- UI-bearing validation follows topology; networked scale-out requires one real first slice.
 - Interface-design data is retrieved by search scripts, not model preload.
 - Verification commands remain mapped before completion.
 - Git operations remain preview-first and route through `/sc-go`.
 - Chat returns follow `token-budget-gates.md`; full evidence stays in artifacts.
-- Durable file outputs follow `.agent/context/output-style.md`: single
-  projection, non-empty sections only, uniform tables collapsed.
+- Durable file outputs follow `.agent/context/output-style.md`: summary first, relevant HLD, preserved evidence and parser fields.
+
+Shared policy: `.agent/skills/agentic-delivery/references/workflow-integration.md`.
+Apply its risk, persistent authorization, scoped recovery, and evidence identity
+rules consistently in compact and full routes.

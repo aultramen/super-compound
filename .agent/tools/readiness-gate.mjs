@@ -12,7 +12,7 @@
  *
  * Usage:
  *   node .agent/tools/readiness-gate.mjs --fsd <path> --prd <path> --issues-dir <dir> [--root <path>] [--json]
- * Exit 0 = READY_FOR_SLICE or approved NOT_APPLICABLE; 1 = BLOCKED; 2 = usage/unreadable/no manifest.
+ * Exit 0 = READY_FOR_SLICE or justified NOT_APPLICABLE; 1 = BLOCKED; 2 = usage/unreadable/no manifest.
  */
 
 import fs from "node:fs";
@@ -131,9 +131,7 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
   // S1
   if (profile === "NOT_APPLICABLE") {
     const reason = m("reason")[0] ?? leaf(fsdBody, "reason");
-    const approver = m("approved_by")[0] ?? leaf(fsdBody, "approved_by");
-    gate("not-applicable", !isPlaceholder(reason) && !isPlaceholder(approver),
-      `reason=${reason || "?"} approved_by=${approver || "?"}`);
+    gate("not-applicable", !isPlaceholder(reason), `reason=${reason || "?"}`);
     for (const id of SKIPPABLE_GATES) skip(id, "profile NOT_APPLICABLE");
     return finish("NOT_APPLICABLE");
   }
@@ -141,13 +139,21 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
     throw new Error(`no ui_api_contract manifest in ${fsdPath} for profile ${profile || "?"}`);
   }
   skip("not-applicable", `profile ${profile}`);
+  const topology = m("topology")[0] ?? "NETWORKED";
+  const localOnly = topology === "LOCAL_ONLY";
+  if (topology !== "NETWORKED") {
+    gate("topology", localOnly && manifest.network_actions !== undefined
+      && m("network_actions").length === 0 && m("schema_ref").length === 0
+      && m("revision").length === 0 && m("generated_from").length === 0,
+    `topology=${topology}; LOCAL_ONLY requires no network/wire/derived declarations`);
+  }
 
   // G1
   gate("baseline", BASELINES.has(baseline), `experience_baseline_status=${baseline || "?"}`);
 
   // G2
   const prdLines = lines(prdText);
-  const covered = (line) => /COVERED/.test(line) || (/N\/A\s*-/.test(line) && /approv/i.test(line));
+  const covered = (line) => /COVERED/.test(line) || /N\/A\s*-\s*\S/.test(line);
   const missingStates = CRITICAL_STATES
     .filter(([, pattern]) => !prdLines.some((line) => pattern.test(line) && covered(line)))
     .map(([state]) => state);
@@ -158,11 +164,15 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
   const rows = lines(fsdBody).map((line) => line.trim()).filter((line) => /^\|\s*UIMAP-/.test(line));
   const badRows = rows.filter((row) => {
     const cells = row.split("|").slice(1, -1).map((cell) => cell.trim());
-    return cells.some((cell) => !cell || cell.includes("{{")) || !/SCHEMA-|CONTRACT-/.test(row);
+    return cells.some((cell) => !cell || cell.includes("{{")) || !(localOnly ? /LOCAL-|UI-STATE-|TEST-/ : /SCHEMA-|CONTRACT-/).test(row);
   }).map((row) => row.split("|")[1].trim());
   gate("uimap", rows.length > 0 && badRows.length === 0,
     !rows.length ? "no UIMAP rows" : badRows.length ? `incomplete rows: ${badRows.join(", ")}` : `${rows.length} UIMAP rows`);
 
+  if (localOnly) {
+    skip("revisions", "LOCAL_ONLY: no wire contract");
+    skip("derived-assets", "LOCAL_ONLY: no provider or generated consumer");
+  } else {
   // G4
   const revisions = m("revision");
   const schemaRevision = m("schema_revision");
@@ -180,9 +190,12 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
   });
   gate("derived-assets", derivedOk, `generated_from=[${derived}] wire=[${revisions}]`);
 
+  }
+
   // G6
   const badRefs = [];
-  for (const key of VERIFICATION_KEYS) {
+  const applicableVerification = localOnly ? ["responsive_accessibility_qa_refs"] : VERIFICATION_KEYS;
+  for (const key of applicableVerification) {
     const refs = m(key);
     if (refs.length === 0) badRefs.push(`${key}: empty`);
     for (const ref of refs) {
@@ -192,7 +205,7 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
     }
   }
   gate("verification-refs", badRefs.length === 0,
-    badRefs.length ? badRefs.join("; ") : `${VERIFICATION_KEYS.length} verification arrays resolved`);
+    badRefs.length ? badRefs.join("; ") : `${applicableVerification.length} verification arrays resolved`);
 
   // G7
   if (profile === "HIGH_INTERACTION") {
@@ -219,15 +232,49 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
     issues.push({ file, ...parseIssuePointer(await read(path.join(issuesAbs, file), "Issue")) });
   }
   const byRole = (role) => issues.filter((issue) => issue.role === role);
+  if (localOnly) {
+    let graphError = "";
+    try { computeWaves(parseIssueDependencies(issuesAbs)); }
+    catch (error) { graphError = error.message; }
+    const providerRoles = new Set(["CONTRACT_ENABLER", "FIRST_VERTICAL_SLICE", "SCALE_OUT_SLICE"]);
+    gate("local-goals", issues.length > 0 && !graphError
+      && issues.every(issue => !providerRoles.has(issue.role) && issue.gate === "NOT_APPLICABLE"),
+    graphError || "local goals use applicable behavior verification without provider barriers");
+    for (const id of ["first-slice", "scale-out", "hardening", "enablers"]) skip(id, "LOCAL_ONLY topology");
+    return finish();
+  }
 
   // B1
   const version = m("version")[0];
   const firstSlices = byRole("FIRST_VERTICAL_SLICE");
   const current = firstSlices.filter((issue) => version && issue.contractRefs.includes(`@${version}#`));
-  const first = current.length === 1 ? current[0] : null;
+  let first = current.length === 1 ? current[0] : null;
+  let reused = false;
+  // Compatible revision identity is not enough: require an explicit impact
+  // assessment and mapped provider/consumer checks before reusing historical proof.
+  const compatibilityRefs = m("compatibility_verification_refs");
+  const validCompatibility = compatibilityRefs.length >= 2 && compatibilityRefs.every(ref => {
+    const hit = ref.match(/^FSD-[A-Z0-9-]+#(TEST-\d+)$/);
+    return hit && new RegExp(`\\b${hit[1]}\\b`).test(fsdBody);
+  }) && m("provider_contract_refs").some(ref => compatibilityRefs.includes(ref))
+    && m("consumer_contract_refs").some(ref => compatibilityRefs.includes(ref));
+  const validImpact = manifest.affected_mapping_refs !== undefined && m("affected_mapping_refs").every(ref => {
+    const hit = ref.match(/^FSD-[A-Z0-9-]+#(UIMAP-\d+)$/);
+    return hit && rows.some(row => row.split("|")[1].trim() === hit[1]);
+  });
+  if (!first && current.length === 0 && m("change_class")[0] === "WIRE_COMPATIBLE"
+    && m("material_flow_change")[0] === "false" && validCompatibility
+    && validImpact) {
+    const affected = m("affected_mapping_refs").map(ref => ref.split("#").at(-1));
+    const proofs = firstSlices.filter(issue => issue.status === "verified"
+      && issue.gate === "READY_FOR_SLICE" && /#UIMAP-\d+/.test(issue.contractRefs)
+      && m("compatible_first_slice_refs").some(ref => issue.contractRefs.split(",").map(s => s.trim()).includes(ref))
+      && !affected.some(id => issue.contractRefs.split(",").some(ref => ref.trim().split("#").at(-1) === id)));
+    if (proofs.length === 1) { first = proofs[0]; reused = true; }
+  }
   gate("first-slice", first !== null && first.gate === "READY_FOR_SLICE",
     first
-      ? `${first.file} gate=${first.gate} @${version}`
+      ? `${first.file} gate=${first.gate} @${version}${reused ? " compatible proof retained after affected checks" : ""}`
       : `${current.length} FIRST_VERTICAL_SLICE issues at @${version ?? "?"} (${firstSlices.length} total)`);
 
   // B2

@@ -81,12 +81,12 @@ test("route contracts carry the persistence spine (STATE entry, close, or pause 
     );
   }
   for (const route of ["sc-status", "sc-work", "sc-launch"]) {
-    assert.match(contracts[route], /(?:Start|Resume) from docs\/STATE\.md Next action/);
+    assert.match(contracts[route], /(?:Start|Resume) from (?:docs\/STATE\.md Next action|active user intent; when resuming, reconcile docs\/STATE\.md Next action)/);
   }
   assert.match(contracts["sc-pause"], /State, Next action, Artifacts lines only/);
   assert.match(contracts["sc-init"], /\/sc-status/);
   for (const route of ["sc-explore", "sc-prd", "sc-plan", "sc-eval", "sc-go", "sc-audit", "sc-ui"]) {
-    assert.match(contracts[route], /If work remains, end with \/sc-pause\./, route);
+    assert.match(contracts[route], /[Cc]heckpoint automatically[\s\S]*\/sc-pause[\s\S]*actual stops/, route);
   }
 });
 
@@ -464,7 +464,7 @@ test("UI-bearing PRDs validate an experience baseline before approval", async ()
   for (const text of [launch, launchContract]) {
     assert.match(
       text,
-      /contract enabler[\s\S]*\/sc-plan[\s\S]*(?:re-approve|approval|approved)[\s\S]*first vertical slice/i,
+      /contract enabler[\s\S]*\/sc-plan[\s\S]*(?:approved|unchanged semantics|promotion)[\s\S]*first vertical slice/i,
     );
   }
 });
@@ -647,7 +647,7 @@ test("full and compact work entry fail closed on pointer state, dependencies, an
   }
 });
 
-test("UI contract revisions invalidate stale derived scale-out gates", async () => {
+test("UI contract revisions invalidate only affected proof and preserve independent evidence", async () => {
   const [canonical, qualityGates] = await Promise.all([
     readRepositoryFile(
       ".agent/skills/agentic-delivery/references/ui-contract-readiness.md",
@@ -657,7 +657,7 @@ test("UI contract revisions invalidate stale derived scale-out gates", async () 
 
   assert.match(
     canonical,
-    /contract (?:version|revision)[\s\S]*(?:invalidate|stale)[\s\S]*FIRST_VERTICAL_SLICE_VERIFIED[\s\S]*(?:rerun|re-verify)/i,
+    /version\/revision change invalidates only proof[\s\S]*unrelated flow evidence[\s\S]*material flow\/auth\/error\/compatibility change requires[\s\S]*re-verification/i,
   );
   for (const text of [canonical, qualityGates]) {
     assert.match(text, /EXCEPTION_APPROVED[\s\S]*first vertical slice/i);

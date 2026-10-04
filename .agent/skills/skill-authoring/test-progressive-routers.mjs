@@ -47,7 +47,7 @@ const criticalMarkers = {
     /needs_credentials/,
     /needs_deployment_action/,
     /needs_review/,
-    /one checkpoint at a time/i,
+    /same owner and scope/i,
   ],
   "skill-authoring": [
     /RED/,
@@ -80,8 +80,7 @@ function readSkill(name) {
 for (const name of skillNames) {
   test(`${name} is a progressive router with valid references`, () => {
     const body = readSkill(name);
-    const wordCount = body.match(/\S+/g)?.length ?? 0;
-    assert.ok(wordCount <= 500, `${name}: ${wordCount} words exceeds 500`);
+    assert.match(body, /^## \S/m);
     assert.match(body, /^description:\s*["']?Use when/im);
 
     for (const heading of [

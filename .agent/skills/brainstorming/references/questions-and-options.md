@@ -1,30 +1,41 @@
-### 2. Ask One Useful Question At A Time
+# Decision Rounds and Options
 
-Use one concise question per turn. Prefer lettered options when natural choices exist:
+Load when material user decisions remain; skip interviewing a concrete specification with settled scope and acceptance. Do not make a small request undergo full delivery merely to use this protocol.
+
+## Context and design tree
+
+Inspect repository evidence and learned context first. Separate discoverable facts from user decisions. A code/test fact describes current behavior; it does not override approved product policy. Track a lightweight list: question ID, decision, prerequisites, evidence, answer/status, and descendants. No graph engine or new artifact is required.
+
+Investigate facts with relevant existing tools; a pending investigation is an unsettled prerequisite. Continue independent questions while investigating. Do not ask users to rediscover repository facts.
+
+## Whole frontier per round
+
+The frontier contains consequential unresolved decisions whose prerequisites are settled. Use repository facts and delegated defaults for reversible preferences. Bundle questions with the same owner/scope; normally ask 1-3 high-impact questions per interaction and defer the rest by dependency and cognitive load. A dependent question waits for its prerequisite. A concrete specification needs no interview.
+
+Each question uses:
 
 ```text
-What is the primary outcome?
-A. Increase conversion
-B. Reduce support work
-C. Add a missing workflow
-D. Explore options first
+Q1 - <Decision>
+<Neutral question and relevant choices>
+
+Recommendation: <choice>.
+Reason: <context/evidence supporting it>.
+Trade-off: <main consequence>.
 ```
 
-Start broad, then narrow:
+Recommendations prefer the simplest sufficient option and include alternatives when meaningful. A free-text decision still gets a proposed answer and rationale; identify uncertain evidence instead of presenting it as fact. For significant approaches compare 2-3 options with description, pros, cons, and fit.
 
-- Target user and job-to-be-done
-- Success criteria
-- Constraints and non-goals
-- Existing patterns to respect
-- Risks, edge cases, and reversibility
+Wait for user answers before the next round. Recommendations, preselected options, silence, and elapsed time are not answers or approval. With partial answers, settle only answered IDs; retain unanswered questions and do not unlock their descendants. Do independent fact-finding while waiting. Recompute the frontier from actual answers and evidence, rather than from recommended defaults.
 
-### 3. Offer 2-3 Approaches
+If an answer changes, reopen only affected descendants and explain which earlier decisions need reconsideration; keep independent answers settled. Reconfirm changed material decisions through the owning artifact's existing gate.
 
-For each approach include:
+## Finish and ownership
 
-- Short description
-- Pros
-- Cons
-- When it fits
+Finish when all material decisions in scope are settled, not when an arbitrary number of rounds ends. Name assumptions and non-goals. Record blocking unresolved decisions as OPEN-* with owner/next action; use existing prototyping for questions requiring direct experience. A deliberately deferred blocker does not count as a settled prerequisite.
 
-Lead with a recommendation. Prefer the simplest approach that satisfies the goal and keeps future change possible.
+Return decisions to their BRD/PRD/FSD owner. Exploration never authorizes implementation; existing artifact approvals remain the gate, with no additional shared-understanding confirmation. Advisory/read-only callers return proposals without writing a sidecar or glossary.
+
+## Provenance
+
+Adapted from Matt Pocock's `grilling`, local `mattpocock-skills` snapshot 1.2.3, commit `d81f3a183412e71a5b1e84ca21bc1a35eea03a60`.
+Source: `https://github.com/mattpocock/skills`, `skills/productivity/grilling/SKILL.md`. The local adaptation preserves Super Compound authority and capture ownership. License notice: [MIT](grilling-MIT.txt).

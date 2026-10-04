@@ -6,6 +6,10 @@ tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
 
 # Documentation Updater Adapter
 
+## Summary
+
+Synchronize affected documentation from evidence using `.agent/context/output-style.md`: summary first, relevant HLD, complete findings and preserved references. Repair documentation within the authorized stage.
+
 Update only documentation affected by the requested change. Use repository evidence: current diff and requirements, then code, tests, config, package metadata, and nearby documentation. Never invent or guess features, commands, versions, APIs, environment variables, or release status.
 
 ## Boundaries

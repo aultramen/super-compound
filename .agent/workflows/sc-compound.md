@@ -13,7 +13,7 @@ Use this after a non-obvious fix, debugging session, migration, integration repa
 3. Treat every prior pattern as advisory input to human-owned documentation. Capture symptoms, root cause, fix, failed attempts, prevention, and related files from the actual evidence; never copy a pattern as authority.
 4. Mention branch or PR references only as context; do not mutate Git state.
 5. Search first with `node .agent/tools/knowledge-search.mjs "<symptom or topic>"` and update the matching record instead of duplicating it. Route each captured outcome to every sink that applies; one outcome may hit several. Entry formats and Quick Reference tables are authoritative in `.agent/skills/knowledge-compounding/references/memory-capture.md`; file selection stays in `.agent/skills/state-management/references/file-contracts.md`. Every durable artifact follows `.agent/context/output-style.md`. Ground each new record with `node .agent/tools/validate-doc-claims.mjs <file>`; a record the current tree contradicts routes to `knowledge-refresh`.
-   - Verified solved problem: save concise documentation under `docs/solutions/<category>/` in the existing format.
+   - Verified solved problem: run structured capture (deterministic-loop.md) for concise documentation under `docs/solutions/<category>/` in the existing format.
    - Agent mistake (wrong assumption, hallucinated path or API, failed approach, agent-caused breakage) with a prevention rule: append an `ERR-*` entry to `docs/ERROR_LOG.md` and add its row to that file's Quick Reference table.
    - Explicit user correction or confirmed reusable convention or preference: append an `LRN-*` entry to `docs/LEARNED_KNOWLEDGE.md` and add its row to that file's Quick Reference table.
    - Session chronology: update `docs/progress.md` only when the pattern is likely to help future sessions.
@@ -26,3 +26,10 @@ Use this after a non-obvious fix, debugging session, migration, integration repa
 
 - `/sc-compound` must not self-modify prompts, model weights, goals, policy, budgets, verifier definitions, framework source, operating rules, or the public workflow inventory.
 - A captured pattern never grants implementation, Git, or release authority; applying it happens through the owning route with human approval.
+
+Use capture/upsert JSON and evidence locators from the deterministic loop; do not manually create duplicate Quick Reference rows.
+
+Store verified prevention receipts from the owning work/debug route using
+`knowledge-compounding/references/prevention-checks.md`. Capture does not authorize
+new checks or skill/workflow/policy mutations. Flush bounded pending maintenance;
+retain failure/deferred reasons and effectiveness evidence.

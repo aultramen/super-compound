@@ -1,8 +1,81 @@
 # Changelog
 
+## Summary
+
+Records public framework behavior changes and their verification evidence.
+
+## 2026-10-04 - Documentation quality, stage approvals, and prompt setup
+
+- Replaced document length limits with summary, relevant HLD, evidence, and reference guidance; doc-lint supports advisory mode without hiding input errors.
+- New setup defaults to separate BRD, PRD, FSD approvals plus execution authorization; recovery retains authority, light UI stays light, lessons remain advisory.
+- Added a shared Node setup engine, six native adapters, owned manifests, managed blocks, conflict reporting, staged rollback, and read-only doctor/dry-run. Legacy PowerShell/Bash wrappers retain parameters and bundle paths, but preserve user modifications as conflicts.
+- Added cross-OS setup CI and behavior tests. Live host invocation and the five-pair productivity pilot remain separate from structural validation.
+- macOS setup recognizes the standard `/var`, `/tmp`, and `/etc` aliases to `/private` while rejecting other symlink ancestors and destination escapes.
+- Bash wrapper argument handling supports the older Bash shipped with macOS, including read-only dry runs.
+
+## 2026-10-04 - pstack evidence and recovery enhancements
+
+- Added exact-path retirement selection without removing restored user assets;
+  active discovery/install/audit/retrieval/pilot share the selector.
+- Canonicalized public Windows locators and preserved legacy reads/origins.
+- Added optional constraint provenance/supersession, durable completion receipts,
+  check learning lifecycle, bounded maintenance flush and effectiveness feedback.
+- Added repeated paired evaluation, Codex JSONL pilot adapter and maintained
+  verification recipes. Existing 36 skills and 18 workflows remain the surface.
+- Verification and runtime limitations: docs/audits/2026-10-04-pstack-gap-analysis.md.
+
+## 2026-10-04 - Autonomous delivery and scoped recovery
+
+- Align light/full tiering with semantic impact; preserve authorization and
+  reversible implementation judgment across compact/full procedures.
+- Derive issue boards and promote unchanged contract readiness without redundant
+  approval; local-only UI uses applicable behavior verification.
+- Preserve mandatory dispatch context, expose genuine overflow through CLI exit
+  2, schedule dependency-ready goals using host/resource allowances, and isolate
+  checkpoint drift/blockers to affected descendants.
+- Document supported package transitions, bounded scope repair, proportional
+  review, evidence reuse, non-punitive TDD recovery, and escalation by progress.
+- Recover context instead of terminal handoff; archive capture overflow losslessly
+  with pending recovery and offer cross-platform `npm run test:local`.
+
+
 All notable changes to the Super Compound framework are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and version entries follow the repository's delivery history. Dates use `YYYY-MM-DD`.
+
+## [2026-10-03] - Decision Frontier and Proportional SDLC Guidance
+
+- Replaced one-question interviews with dependency-aware whole-frontier rounds,
+  recommendations/reasons/trade-offs, partial-answer handling, and correction
+  invalidation; existing authority and read-only capture boundaries remain.
+- Activated both-tier execution preflight, authority-preserving alternatives,
+  safe UI recovery/retry checks, and conditional AI context/language authoring.
+- Added on-demand live verification for existing harnesses/sessions and fresh
+  success/failure evidence with revision/environment provenance.
+- Adapted Matt Pocock grilling snapshot 1.2.3 with MIT notice; added structural
+  contracts and separate agent pressure-evaluation evidence. Scenario results
+  do not establish multi-host runtime reliability.
+
+## [2026-10-03] - Deterministic Knowledge Loop and Context Continuity
+
+- Added JSON memory capture/upsert, reviewed refresh, bounded feedback, structured
+  checkpoints and read-only resume; stable origins and evidence hashes prevent
+  retry/copy/revision recurrence. Memory writes preserve old bytes on busy rename.
+- Promotion requires three independent observed/confirmed origins with evidence;
+  PATTERN no longer bypasses the threshold. Existing proposals carry disposition
+  and evidence digests so unchanged candidates are not offered again.
+- Retrieval excludes explicit stale/superseded status by default, supports diagnostic
+  and project/stack/version filtering, and preserves general prevention guidance.
+- Work-package composition preserves mandatory briefs, exposes optional omissions
+  and overflow. Paired optimization verdicts require comparable quality/cost evidence;
+  action grading checks recorded verification/capture/review order.
+- Removed references to deleted controller/evaluator/locks; audit checks active
+  executable locators. Budget docs match the route ratio gate and startup caps.
+- UI indexes have bounded signature caching with paired local timing and result-digest
+  evidence. Existing version-sensitive guidance exposes applicability/provenance;
+  pinned dataset content and local transformations are retained.
+- Host behavioral reliability and runtime token improvements remain unmeasured.
+  Details: docs/audits/2026-10-03-knowledge-loop-gap-analysis.md.
 
 ## [2026-09-20] - Simplify Wave: Loop Runtime v2 Removed, Adaptive Delivery Restored
 

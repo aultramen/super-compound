@@ -5,6 +5,10 @@ description: "Use when following the Super Compound BRD -> PRD -> FSD -> GOAL ->
 
 # Agentic Delivery
 
+## Summary
+
+Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
+
 ## Purpose
 
 Keep delivery artifact-driven, traceable, and light on context. The canonical path is:

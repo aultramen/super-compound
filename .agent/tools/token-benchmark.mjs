@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {selectActiveAssets} from './active-assets.mjs';
 import { createHash } from "node:crypto";
 import { execFile, spawn } from "node:child_process";
 import {
@@ -573,7 +574,7 @@ export async function expandPatterns(root, patterns, options = {}) {
     }
   }
 
-  return ordered;
+  return options.activeOnly ? selectActiveAssets(ordered) : ordered;
 }
 
 function addSelected(selected, ordered, file) {
@@ -668,6 +669,7 @@ async function countScenarioSurface(root, scenario, side) {
   }
   return countScenarioTokens(root, scenario[side], {
     requireEveryPattern: true,
+    activeOnly: side === 'after',
   });
 }
 

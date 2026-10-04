@@ -43,6 +43,6 @@ Prefer memorable, precise leading terms over repeated explanations. Use imperati
 - Demonstrated loopholes closed (REFACTOR)
 - Red flags match observed rationalizations
 - Relevant integration is explicit
-- Router remains below 500 words; conditional detail is linked
+- Router stays navigable; conditional detail is linked by relevance
 - No-op, duplication, sediment, and unconditional reference loading removed
 - Fresh tests verify behavior, links, and structural constraints

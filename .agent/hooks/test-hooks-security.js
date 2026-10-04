@@ -370,8 +370,26 @@ withTempProject((root) => {
     assert.match(warning, /CLAUDE_CODE_AUTO_COMPACT_WINDOW/);
     assert(!/%/.test(warning));
 
+    const critical = run('critical', 'claude-test', 170000);
+    const recovery = JSON.parse(critical.stdout).hookSpecificOutput.additionalContext;
+    assert.match(recovery, /CRITICAL/);
+    assert.match(recovery, /checkpoint|STATE/);
+    assert.match(recovery, /compact.*continue/);
+    assert.doesNotMatch(recovery, /then hand off|then stop/);
+
     const marked = run('marked', 'claude-test[1m]', 130000);
     assert.strictEqual(marked.stdout, '');
 });
 
 console.log('hook security tests passed');
+
+withTempProject((root) => {
+    fs.writeFileSync(path.join(root, 'docs', 'STATE.md'), '# State\nLast updated: 2026-10-03\n');
+    fs.writeFileSync(path.join(root, '.continue-here.md'), '# Continue Here\n');
+    const result = spawnSync(process.execPath, [path.join(__dirname, 'pre-compact.js')], {
+        encoding: 'utf8', env: {...process.env, SUPER_COMPOUND_PROJECT_ROOT: root},
+    });
+    assert.strictEqual(result.status, 0);
+    assert.match(result.stderr, /checkpoint missing or invalid/i);
+    assert.match(fs.readFileSync(path.join(root, 'docs', 'STATE.md'), 'utf8'), /sc:last-compaction/);
+});

@@ -5,6 +5,10 @@ description: "Use when creative product, feature, UI, or behavior work needs int
 
 # Brainstorming
 
+## Summary
+
+Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
+
 ## Purpose
 
 Turn a rough idea into a clear business direction before writing a BRD, PRD, FSD, or code.
@@ -35,7 +39,7 @@ Load local context first, questions/options while deciding, and capture only onc
 ## Mandatory Gates
 
 - **Context-before-questions gate:** Inspect easy-to-find similar code/docs, recent `docs/brainstorms/`, `docs/solutions/`, learned knowledge, and relevant `interface-design` search results before asking what the repository can already answer.
-- **Question gate:** Ask one concise question per turn. Start with user/job/outcome, then success, constraints, non-goals, existing patterns, risk, edge cases, and reversibility. Prefer lettered choices when natural.
+- **Question gate:** Ask consequential decisions with settled prerequisites in small numbered batches; use delegated defaults for reversible preferences; each question includes a recommendation, evidence-based reason, and trade-off. Wait for actual answers; partial answers settle only answered IDs. Reopen affected descendants when an answer changes. Follow questions/options above.
 - **Options gate:** Offer 2-3 approaches with description, pros, cons, and fit. Lead with a recommendation; prefer the simplest option that meets the goal while preserving future change.
 - **UI gate:** Ground interface exploration in `interface-design`, concrete decisions, accessibility, responsiveness, and existing components. Use diagrams only when they clarify architecture, flows, states, data, or ownership.
 - **Capture gate:** Outside advisory read-only mode, save useful decisions to `docs/brainstorms/YYYY-MM-DD-<topic>-brainstorm.md` with purpose, rationale, alternatives, decisions, open questions, and recommended next workflow. Name non-goals explicitly.

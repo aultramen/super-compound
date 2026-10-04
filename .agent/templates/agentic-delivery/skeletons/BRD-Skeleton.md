@@ -1,5 +1,11 @@
 # {{PROJECT_NAME}} - Business Requirements Document
 
+## Summary
+
+<State purpose, scope, key information, and decision/outcome for this document.>
+
+<!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
+
 Use the full BRD template only for sections that need detailed expansion.
 State each fact once; omit sections with no content; expand only risk-relevant full-template sections.
 
@@ -11,6 +17,15 @@ MINIMAL is forbidden for regulatory impact, sensitive data, external vendor or
 data egress, material financial investment, high-risk automation/AI,
 cross-department process change, or irreversible migration. Expand only the
 risk-relevant full-template section for STANDARD/HIGH_RISK work.
+
+## High-Level Design
+
+<!-- Replace this illustrative view with the main actors/components and relationships from this artifact's qualified authority. Keep implementation detail in its owning section. -->
+```mermaid
+flowchart LR
+ Actor[Primary actor] --> Capability[In-scope capability]
+ Capability --> Outcome[Required outcome]
+```
 
 ## Metadata
 

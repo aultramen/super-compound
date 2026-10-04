@@ -47,7 +47,7 @@ Validate before publishing:
 - Blockers come before dependents.
 - No circular dependencies exist.
 - Parallel candidates do not require the same unmerged files unless the FSD states an integration strategy.
-- UI DAG order is optional `CONTRACT_ENABLER` -> `/sc-plan` re-approval -> exactly
+- UI DAG order is optional `CONTRACT_ENABLER` -> `/sc-plan` mechanical readiness promotion -> exactly
   one active real `FIRST_VERTICAL_SLICE` per pinned revision -> dependent
   `SCALE_OUT_SLICE` issues -> one `HARDENING` issue blocked by all applicable UI
   delivery slices. Scale-out also requires a `VALIDATED` PRD baseline.
@@ -57,17 +57,12 @@ Validate before publishing:
 
 If there is a cycle, missing authority, or unresolved decision, revise the FSD or create an `OPEN-*` blocker before writing ready issues.
 
-### 4. Get Human Review
+### 4. Validate The Derived Board
 
-Before writing issue files, present the proposed board:
-
-```markdown
-| Goal | Title | Blocked by | Contract refs/gate | Upstream refs | Technical refs | Verification refs |
-|---|---|---|---|---|---|---|
-| GOAL-001 | <title> | None | FSD-CCC@1.1.0#CONTRACT-001 / READY_FOR_SLICE | PRD-CCC#FR-001 | FSD-CCC#TDEC-001 | FSD-CCC#TEST-001 |
-```
-
-Ask whether the granularity and blocking relationships are correct. Revise until approved or clearly state any assumption if the user asked to proceed without review.
+Validate goal coverage, qualified refs, dependency ordering, ownership, and
+applicable gates, then write the board without re-approval of approved decisions.
+Notify the user with a concise goal/dependency summary and validation results.
+Only a material change outside approved authority returns to the decision owner.
 
 ### 5. Publish Local Issues
 

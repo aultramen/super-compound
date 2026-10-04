@@ -1,0 +1,44 @@
+{
+  "basis": "local_perf_counter_seconds",
+  "tasks": [
+    [
+      "performance trackBy",
+      "angular"
+    ],
+    [
+      "caching explicitly",
+      "nextjs"
+    ]
+  ],
+  "searches_per_attempt": 200,
+  "independent_pairs": 5,
+  "samples": {
+    "before": [
+      0.21687257301528007,
+      0.22256458198535256,
+      0.23423030000412837,
+      0.24688419201993383,
+      0.25051783499657176
+    ],
+    "after": [
+      0.07390599697828293,
+      0.08277014500345103,
+      0.08309659498627298,
+      0.08569577100570314,
+      0.10152028198353946
+    ]
+  },
+  "medians": {
+    "before": 0.23423030000412837,
+    "after": 0.08309659498627298
+  },
+  "quality_equal": true,
+  "result_digests": {
+    "before": "c7dc541876e91747912fc413cad089b208fba7b9299f28be3799cf8fb74dd20b",
+    "after": "c7dc541876e91747912fc413cad089b208fba7b9299f28be3799cf8fb74dd20b"
+  },
+  "decision": "KEEP",
+  "reduction": 0.6452355011934477,
+  "runtime_tokens": "unknown",
+  "scope": "in-process repeated search only"
+}

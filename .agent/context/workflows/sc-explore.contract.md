@@ -4,7 +4,13 @@ Purpose: resolve fuzzy intent into BRD-ready business context. The BRD is the
 only durable output; prototype code stays throwaway under `.scratch/prototypes/`
 and is never a production seed.
 
-knowledge-search.mjs "<scope>" first; ERR-*/LRN-* hits bind.
+knowledge-search.mjs "<scope>" first; Accepted decisions bind through authority; observed lessons are advisory.
+For unresolved decisions, use brainstorming/references/questions-and-options.md:
+ask small batches of consequential decisions with settled prerequisites plus
+recommendation/reason/trade-off. Discover facts first; investigate pending facts
+while asking independent decisions. Wait for answers; partial answers stay open,
+recommendations are not approval, corrections reopen affected descendants.
+Skip grilling concrete scope; capture in the owning BRD/PRD/FSD, no extra gate.
 Load user request, nearby context, prior brainstorms, and accepted ADRs only if
 relevant. Use the BRD skeleton; record objectives, scope, non-goals, rules,
 acceptance, and `OPEN-*`. A prototype is throwaway/non-production and must stay
@@ -20,4 +26,8 @@ disposition. UI evidence returns to `/sc-ui`; it is never authority.
 Exploration may remain a chat draft, but before approval and `/sc-prd` it must
 be saved at `docs/brd/brd-<feature>.md`. Use brainstorming and domain modeling
 advisory read-only modes unless a separate sidecar mutation is explicitly owned.
-If work remains, end with /sc-pause.
+Checkpoint automatically and continue; /sc-pause is only for actual stops.
+
+Stage approvals and execution authority: agentic-delivery/references/workflow-integration.md.
+
+Stage mode: approve BRD before PRD authoring.

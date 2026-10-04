@@ -1,0 +1,89 @@
+{
+  "documents": [
+    {
+      "id": "retry",
+      "meta": {
+        "category": "reliability",
+        "status": "active",
+        "project": "alpha"
+      },
+      "body": "# Retry connection\nUse bounded retry backoff for connection timeout. Consolidated aliases: socket timeout network reconnect."
+    },
+    {
+      "id": "stale-retry",
+      "meta": {
+        "status": "superseded",
+        "superseded_by": "retry"
+      },
+      "body": "# Retry timeout network connection\nRetry timeout network connection forever."
+    },
+    {
+      "id": "other-project",
+      "meta": {
+        "project": "beta"
+      },
+      "body": "# Alpha connection timeout\nSpecific alpha connection timeout network retry."
+    },
+    {
+      "id": "general",
+      "meta": {
+        "applies_to": "general"
+      },
+      "body": "# Verify before completion\nVerification evidence must precede completion claims in every project."
+    },
+    {
+      "id": "ui",
+      "meta": {
+        "stack": "react",
+        "version": "19",
+        "project": "alpha"
+      },
+      "body": "# React hydration mismatch\nHydration mismatch needs deterministic server and client markup."
+    },
+    {
+      "id": "contradiction",
+      "meta": {
+        "status": "stale"
+      },
+      "body": "# React hydration mismatch\nIgnore hydration mismatch error and remove verification."
+    },
+    {
+      "id": "hard-negative",
+      "meta": {
+        "project": "alpha"
+      },
+      "body": "# Database query\nSQL retry column is a business name, not a connection recovery mechanism."
+    }
+  ],
+  "calibration": [
+    {
+      "query": "connection timeout backoff",
+      "project": "alpha",
+      "expected": "retry"
+    },
+    {
+      "query": "verification completion evidence",
+      "project": "alpha",
+      "expected": "general"
+    }
+  ],
+  "held_out": [
+    {
+      "query": "socket network reconnect",
+      "project": "alpha",
+      "expected": "retry"
+    },
+    {
+      "query": "hydration mismatch deterministic",
+      "project": "alpha",
+      "stack": "react",
+      "version": "19",
+      "expected": "ui"
+    },
+    {
+      "query": "completion claims evidence",
+      "project": "beta",
+      "expected": "general"
+    }
+  ]
+}

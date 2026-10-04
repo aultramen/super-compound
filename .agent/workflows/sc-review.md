@@ -18,11 +18,11 @@ an owning workflow; it never converts review into implementation.
 5. Review the standards axis: security, architecture, tests, maintainability, performance, and docs. Load only the applicable sections of `docs/engineering-standards.md`, or the project's `CODING_STANDARDS.md` when one exists; standards are enforced here, not during implementation, so implementation context stays small.
 6. For PR readiness, load `skills/git-workflow-operation/SKILL.md` and review the PR checklist/template, but do not commit or push unless routed through `/sc-go`.
 7. Verify each claim against the diff or a command result; name the claims that could not be verified and why.
-   Check tier consistency: when the diff touches full-tier paths (schema, migrations, API, auth, billing; the same patterns `git-workflow.mjs` previews warn on) without a cited PRD/FSD, report a finding `ESCALATE: T2` with `/sc-plan` as owner.
+   Check tier consistency: sensitive paths signal inspection of the actual diff, compatibility, access, data, and side effects. Report `ESCALATE: T2` only for material semantic/risk changes outside authority; contract-preserving maintenance stays light.
 8. If complete evidence exceeds the chat envelope, save it to
    `docs/reviews/YYYY-MM-DD-<scope>.md` and return the path; never omit a
    finding to satisfy an output cap. Then run
-   `node .agent/tools/doc-lint.mjs <artifact>` and adjudicate its findings
+   `node .agent/tools/doc-lint.mjs <artifact> --advisory` and adjudicate its findings
    (advisory).
 9. Assign each remediation owner:
    - business scope or policy -> `/sc-explore`;

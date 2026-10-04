@@ -17,7 +17,7 @@ Enforce clean architecture aligned with each framework's best practices. Detect 
 
 - Before creating any new file — verify it goes in the correct directory
 - Before adding imports — verify dependency direction is allowed
-- During code review — check for architectural violations (P1 Critical)
+- During code review — check for architectural violations by demonstrated impact
 - When setting up a new project — load the matching preset
 
 ## Process
@@ -27,7 +27,7 @@ Enforce clean architecture aligned with each framework's best practices. Detect 
 3. For project setup only, copy the matching [preset](references/presets.md) into `.agent/rules/project-config.md`.
 4. Apply every gate before writing or approving the change.
 
-If unmatched, retain the nearest project conventions; do not invent a layout. If ambiguous, inspect only candidate references needed to decide.
+If unmatched, follow repository conventions. If ambiguous, inspect candidate references.
 
 ### Preset Router
 
@@ -62,7 +62,7 @@ If unmatched, retain the nearest project conventions; do not invent a layout. If
 - **Placement gate:** The target belongs in the detected guide's folder and layer.
 - **Dependency gate:** Every new import follows that guide's arrows and `NEVER` rules.
 - **Security gate:** Every framework MUST implement the patterns in [HTTP/security](references/http-security.md). Load it for HTTP, middleware, auth, CORS, headers, rate limits, public endpoints, or architecture review; placement follows the detected guide.
-- **Review gate:** Report architecture violations as P1 Critical.
+- **Review gate:** Severity follows demonstrated runtime/security/data/coupling impact. Placement drift alone is minor; P1 requires a material defect. Cite evidence and a proportional fix.
 
 ## Integration
 

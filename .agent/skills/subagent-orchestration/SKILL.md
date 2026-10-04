@@ -5,8 +5,9 @@ description: "Use when executing FSD goals with independent work packages. Dispa
 
 # Subagent Orchestration
 
-Dispatch one fresh agent per independent FSD goal. Keep briefs, reports, diffs,
-and review evidence on disk; messages carry paths and verdicts.
+Delegate when independence justifies overhead. Keep evidence on disk; messages carry paths/verdicts.
+
+If the host has no subagent capability, execute goals and the same review checks sequentially in-thread. Preserve scope, authority, and evidence; disclose that review lacked independent worker isolation. Host limitations alone do not create an approval checkpoint.
 
 Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
 
@@ -32,12 +33,13 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
      --paths-file <scheduler-scope.json> --input-file <create-input.json>
    ```
 
-2. Send the implementer only the returned `briefPath`, `reportPath`,
-   read-only `pathsPath`, exact target paths, and this constraint: implement one
-   goal, use TDD when behavior changes, never edit the scheduler-owned scope,
-   keep full evidence in `reportPath`, and return only outcome, paths,
-   verification status, and blockers. Seed from
-   `.agent/templates/orchestration/Implementer-Brief-Skeleton.md`.
+2. Scheduler records `ready -> in-progress -> implemented -> verified` in order;
+   never jump from `ready` to `verified`. Each transition uses current
+   `ledgerVersion` as `expectedVersion`; generate JSON from
+   [review contract](references/review-contract.md#scheduler-input-and-transition-contract).
+   Send `briefPath`, `reportPath`, read-only `pathsPath`, target paths, TDD
+   requirement, and outcome/evidence/blocker return format. Implementers never
+   edit scheduler scope. Seed `.agent/templates/orchestration/Implementer-Brief-Skeleton.md`.
 3. Run parallel goals only in isolated worktrees/workspaces. Review rejects a
    changed scope digest and any new working-tree edit outside the allowlist.
 4. After implementation, freeze one working-tree review package:
@@ -50,22 +52,21 @@ Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
    The scheduler-owned allowlist is mandatory. A parallel goal without an
    isolated workspace must fall back to sequential execution.
 
-5. One fresh reviewer reads the brief, report, and patch once, then writes two
+5. Use scheduler self-review for mechanical, low-risk goals; use a fresh
+   independent reviewer for material behavior, security, contracts, or complex
+   changes. The reviewer reads the brief, report, and patch, then writes two
    separate verdicts: `SPEC` and `QUALITY`. Use
    `references/review-contract.md` for the detailed checklist. Seed from
    `.agent/templates/orchestration/Reviewer-Brief-Skeleton.md`.
 6. Batch critical/important fixes into one correction wave. Rebuild the patch
-   and re-review once. Fix rounds cap at 5 with model escalation and a
-   round-5 adjudication circuit breaker:
+   and re-review affected evidence. Failed attempts trigger reassessment and
+   escalation; mandatory failures stay open until fixed or truthfully blocked:
    [orchestration loop](references/orchestration-loop.md).
 7. Record the result:
 
-   A `FIRST_VERTICAL_SLICE` must use a real provider or backend to prove
-   auth/permission, success, and representative failure, with
-   `integration-checking` evidence. Only then may its status be recorded
-   `verified`; mock-only evidence is insufficient. Recheck `ui_delivery_role`,
-   `required_gate`, and pinned contract revision immediately before recording any
-   UI result.
+   Networked `FIRST_VERTICAL_SLICE` requires real provider auth/permission,
+   success, and failure proof through `integration-checking`; mock-only proof
+   cannot release dependents. Recheck role, applicable gate, and pinned revision.
 
    ```bash
    node .agent/tools/work-package.mjs record \
@@ -82,6 +83,8 @@ tier ladder: [orchestration loop](references/orchestration-loop.md).
 
 ## Invariants
 
+- Composer/recovery checks: [bounded payloads](references/bounded-payloads.md).
+
 - Never paste whole BRD/PRD/FSD/ADR or diff bodies into dispatch messages.
 - Never invent schema, API, authorization, workflow, role, state, or UI behavior.
 - Shared builds/tests run serially; safe search and isolated edits may fan out.
@@ -93,3 +96,5 @@ tier ladder: [orchestration loop](references/orchestration-loop.md).
 
 `context-engineering`, `executing-plans`, `test-driven-development`,
 `code-review`, `verification-before-completion`.
+
+- Completion/recovery: [inbox](references/completion-inbox.md); classify before acknowledgement.

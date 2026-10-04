@@ -277,3 +277,39 @@ test('entry results stay top-3 and snippet-bounded as entries grow', (t) => {
         assert.ok(hit.snippet.length <= 240);
     }
 });
+
+test('explicit stale and superseded entries are diagnostic-only; applicability keeps general rules', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'knowledge-status-'));
+    try {
+        fs.mkdirSync(path.join(root, 'docs'), {recursive: true});
+        fs.writeFileSync(path.join(root, 'docs/LEARNED_KNOWLEDGE.md'), '# Memory\n\n## LRN-2026-10-03-001 - retry\n- Status: SUPERSEDED by LRN-2026-10-03-002\n- Learning: retry timeout\n\n## LRN-2026-10-03-002 - retry\n- Learning: retry timeout\n- Project: other\n\n## LRN-2026-10-03-003 - retry\n- Learning: retry timeout\n- Applies to: general\n');
+        const options = {root, files: ['docs/LEARNED_KNOWLEDGE.md'], query: 'retry timeout'};
+        assert.ok(!search(options).some(h => h.id.endsWith('001')));
+        assert.ok(search({...options, diagnostic: true}).some(h => h.id.endsWith('001')));
+        assert.deepEqual(search({...options, project: 'current'}).map(h => h.id), ['LRN-2026-10-03-003']);
+    } finally { fs.rmSync(root, {recursive:true, force:true}); }
+});
+
+test('calibration and held-out relevance retain aliases, reject contradictions, and preserve general rules', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'knowledge-heldout-'));
+    t.after(() => fs.rmSync(root, {recursive:true, force:true}));
+    const fixture = JSON.parse(fs.readFileSync(new URL('../evals/knowledge-relevance.json', import.meta.url), 'utf8'));
+    const dir = path.join(root, 'docs/solutions');
+    fs.mkdirSync(dir, {recursive:true});
+    for (const doc of fixture.documents) fs.writeFileSync(path.join(dir, `${doc.id}.md`), `---\n${Object.entries(doc.meta).map(([k,v]) => `${k}: ${v}`).join('\n')}\n---\n${doc.body}`);
+    for (const group of ['calibration','held_out']) for (const item of fixture[group]) {
+        const hits = search({root, dirs:['docs/solutions'], ...item});
+        assert.equal(hits[0]?.id, `docs/solutions/${item.expected}.md`, `${group}: ${item.query}`);
+        assert.ok(!hits.some(h => /stale-retry|contradiction|other-project/.test(h.id)));
+    }
+});
+
+test('quoted stale metadata and feedback logs do not pollute default retrieval', (t) => {
+    const root=fs.mkdtempSync(path.join(os.tmpdir(),'quoted-status-'));
+    t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+    fs.mkdirSync(path.join(root,'docs/solutions'),{recursive:true});
+    fs.mkdirSync(path.join(root,'docs/learnings'),{recursive:true});
+    fs.writeFileSync(path.join(root,'docs/solutions/old.md'),'---\nstatus: "stale"\n---\n# Timeout\nTimeout retry.\n');
+    fs.writeFileSync(path.join(root,'docs/learnings/knowledge-feedback.md'),'# Feedback\nTimeout timeout retry retry.\n');
+    assert.deepEqual(search({root,dirs:['docs/solutions','docs/learnings'],query:'timeout retry'}), []);
+});

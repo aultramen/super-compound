@@ -6,7 +6,7 @@ Read the approved `docs/brd/` artifact, relevant `docs/brainstorms/`, existing `
 
 Use `domain-modeling` when actors, roles, or glossary terms are ambiguous. Use `codebase-design` only when public seams or module boundaries must be understood for testable product requirements.
 
-Ask three to five essential questions only when evidence cannot answer them. Prefer lettered options and focus on target user, core actions, measurable success, non-goals, constraints, edge cases, and BRD decisions that cannot change. If asked to synthesize known context, draft it and place remaining uncertainty under Open Questions.
+For unresolved decisions use the whole-frontier protocol in `brainstorming/references/questions-and-options.md`; preserve approved BRD decisions and route any change upstream. If asked to synthesize known context, draft it and place remaining uncertainty under Open Questions.
 
 ## Required coverage
 
@@ -36,3 +36,5 @@ As a <user>, I want <capability> so that <benefit>.
 ```
 
 Mark omitted full-template sections explicitly `N/A` or out of scope. Testing decisions name the highest practical public behavior or seam; they do not prescribe internal design.
+
+For product AI runtime, load [AI context and output](ai-context-and-output.md) for selected-context product decisions and acceptance.
