@@ -1,24 +1,24 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-10-04T03:54:55.279Z",
-  "repositoryHead": "337630cdd25883a907e2bc7501626828fffc0b40",
+  "generatedAt": "2026-10-04T04:16:23.301Z",
+  "repositoryHead": "57f3fb86a305660242323fe824b1f08f9d2206be",
   "pass": true,
   "summary": {
     "manifestSource": "git-active-manifest",
-    "manifestFiles": 501,
-    "auditedFiles": 500,
+    "manifestFiles": 499,
+    "auditedFiles": 498,
     "excludedFiles": [
       {
         "path": ".agent/benchmarks/framework-audit.after.json",
         "reason": "requested output path"
       }
     ],
-    "filesRead": 500,
-    "textFiles": 500,
+    "filesRead": 498,
+    "textFiles": 498,
     "binaryFiles": 0,
-    "bytesRead": 4266952,
-    "linesRead": 59882,
-    "contentDigest": "120191603c8a882cc4e21a9e6975b38f05413b79e12de93a1801a37f3700eca1",
+    "bytesRead": 4237553,
+    "linesRead": 59587,
+    "contentDigest": "7bf38e04a7cc345ba632e38a523d8f06e602b4350543598cc529db9f52945990",
     "skillEntrypoints": 36,
     "skillEntrypointWords": 15465,
     "maxSkillEntrypointWords": 535,
@@ -32,14 +32,14 @@
     }
   },
   "coverage": {
-    "activeManifestEntries": 501,
-    "byteContentAuditedEntries": 500,
+    "activeManifestEntries": 499,
+    "byteContentAuditedEntries": 498,
     "specialVerificationEntries": 1,
-    "accountedEntries": 501,
+    "accountedEntries": 499,
     "unaccountedEntries": 0,
     "accountedPercent": 100,
-    "byteContentAuditPercent": 99.8004,
-    "classifiedEntries": 501,
+    "byteContentAuditPercent": 99.7996,
+    "classifiedEntries": 499,
     "unclassifiedEntries": 0,
     "classCoveragePercent": 100,
     "auditClassCounts": {
@@ -47,7 +47,7 @@
       "benchmark-evidence": 7,
       "benchmark-self-evidence": 1,
       "data": 36,
-      "documentation": 77,
+      "documentation": 75,
       "eval-evidence": 13,
       "hook": 10,
       "host-adapter": 4,
@@ -67,7 +67,7 @@
       "workflow": 18,
       "workflow-contract": 18
     },
-    "auditClassDigest": "5c2b247538cce750123e1e2c156d6599b3b76c6f87e2ad1a8c7e4881b0ae6c08",
+    "auditClassDigest": "cce6d0e43e4c4e7ab106b2d67d5cc30a0b3beef1d787f3bbc8d88346a05d8bb7",
     "contentDigestScope": "byte-content-audited",
     "specialVerificationRequired": true,
     "specialEntries": [
@@ -79,362 +79,18 @@
   },
   "physicalInventory": {
     "scope": "physical-authority-worktree-excluding-runtime-roots",
-    "files": 596,
-    "filesRead": 596,
+    "files": 500,
+    "filesRead": 500,
     "symlinks": 0,
-    "activeManifestEntries": 501,
-    "outsideActiveManifestEntries": 95,
+    "activeManifestEntries": 499,
+    "outsideActiveManifestEntries": 1,
     "retiredAssets": [
-      {
-        "path": "docs/loop-runtime-v2.md",
-        "digest": "b700ebce4ccb5d8100519322557507915e986b70314a49ef08c0b0968e70cbfe"
-      },
-      {
-        "path": "docs/solutions/adr-0001-loop-run-controller-v2.md",
-        "digest": "3396979cc0ea2916218239906625050428fa300d0029852b05a1f6b33b349aec"
-      },
-      {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-002-gap-01-review.md",
-        "digest": "7495c45b6cce3d51557754468c3f62951d6c65a03423c4943b68ec0d4afe5b01"
-      },
-      {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-002-review.md",
-        "digest": "efaec58e57622c359a4b30f3364c5ec8a852d898856f4e456aab6d3ae7e0c8ea"
-      },
-      {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-003-final-review.md",
-        "digest": "6a007ad1d8f52129c9e1c7e022ef51d46ff6003825d42ba128f030ad17c8013f"
-      },
-      {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-003-gap-01-retry-review.md",
-        "digest": "34db50791cd7bc59d3208cabae9c4979ece01192559c73606560d18ad05e22d4"
-      },
-      {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-003-review.md",
-        "digest": "6ef810f6186620ad8e7c7cc3982b441a5e7add1282ef456730c3439316696a06"
-      },
-      {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-plan-verification.md",
-        "digest": "4d9ca0eb47967c79dc6eea3568aad3aede3788599803681b08da30448f2f7de8"
-      },
-      {
-        "path": "docs/prd/prd-loop-runtime-v2.md",
-        "digest": "53b9980c1264abbb5dde6d6933660cbb8d1b6275200aa1d142d65d1b4c5d74cd"
-      },
-      {
-        "path": "docs/fsd/fsd-loop-runtime-v2.md",
-        "digest": "73cbf5021d720138f5880ccba5ca548b36fb1fcd6e4081b9ae90c66fa17791b2"
-      },
-      {
-        "path": "docs/brd/brd-loop-runtime-v2.md",
-        "digest": "37b8607a0babdbad925686b6cc775da1c26c12ba6fc7abd9198c9524c0d611d6"
-      },
-      {
-        "path": ".agent/tools/action-adapter.mjs",
-        "digest": "c66e4337d5d3d0ad00430a2e992d5706173431becabac47c7aa615ed00f99331"
-      },
-      {
-        "path": ".agent/tools/action-adapter.test.mjs",
-        "digest": "ac2220d8bb8a1ca233ddd7aca4de4262f667148f8d34ad2dd50ef0638e0b060c"
-      },
-      {
-        "path": ".agent/tools/action-capability-model.mjs",
-        "digest": "e0e92f576714c23a88deb63765be64d3db7ee1b33a46e1b8c30327f0fa95db2b"
-      },
-      {
-        "path": ".agent/tools/action-capability-model.test.mjs",
-        "digest": "68aaf157b0babc5f73d4b614388b941ae6cf3ee2a43e85582093717033abe7cb"
-      },
-      {
-        "path": ".agent/tools/background-execution-model.mjs",
-        "digest": "67c3d088f4e28cbb52da8da8a9d9912761636c4e3cd4b7e24aef0eb4b5ad37d5"
-      },
-      {
-        "path": ".agent/tools/background-execution-model.test.mjs",
-        "digest": "038379cf80fc279e5b27632e4f605131a7578c6ef00c6716371aed60caaa8b9b"
-      },
-      {
-        "path": ".agent/tools/background-execution.mjs",
-        "digest": "48f5a50517af67af6b5bc2a38d7608a947a2770451f92fb7d2ef099ad4f2bb66"
-      },
-      {
-        "path": ".agent/tools/background-execution.test.mjs",
-        "digest": "a38f2cbd0a03c03f857a73be650834c77b7f00fa93527f9f1fbce30e17882ba7"
-      },
-      {
-        "path": ".agent/tools/background-handoff.test.mjs",
-        "digest": "eb7cd0c44cc8020a5b80167c6ecdef81ae96d9bb6f3dffe91beb3163bba642a9"
-      },
-      {
-        "path": ".agent/tools/background-pilot-harness.test-support.mjs",
-        "digest": "981dc50a97e1cb3445910893a7ed2d53f5c65dd4a91196c9ae344c95f59d88ec"
-      },
-      {
-        "path": ".agent/tools/background-policy.mjs",
-        "digest": "83005e8ca788384db1a1aeccbdb21f7c3b70e1ff0cbf818ccba229e80ba8c7b3"
-      },
-      {
-        "path": ".agent/tools/background-policy.test.mjs",
-        "digest": "8a5523e374e308159ac446cb99ce7712eb0430d65473847ffeb99f79e414f86e"
-      },
-      {
-        "path": ".agent/tools/budget-wizard.mjs",
-        "digest": "f8df66d0ef6057fafdf78d6106cc5b97e1527af32dfd681cf26f3adfb3d95f8f"
-      },
-      {
-        "path": ".agent/tools/budget-wizard.test.mjs",
-        "digest": "8a2069d3aba862d1d5a71f9b6e65855371b8b8a2427c245244d8fcbd3edde512"
-      },
-      {
-        "path": ".agent/tools/canonical-workflow-capability.test.mjs",
-        "digest": "a201100f452f17d1c69c646f2c624e285de4f40594e69963683445492573ab18"
-      },
-      {
-        "path": ".agent/tools/eval-gate-model.mjs",
-        "digest": "1ca566f5a896d24989e18282f95e21411a397d9aa959b5165c123b32d0df5222"
-      },
-      {
-        "path": ".agent/tools/eval-gate-model.test.mjs",
-        "digest": "05cc731cfa84cf54a4df9a8895ce2d3061e37ca8a313d7b5844d2f0298409b8d"
-      },
-      {
-        "path": ".agent/tools/external-action-store.mjs",
-        "digest": "61810de400a967833631cafedc6acf0568ebbe503ae279d0067a0965992bd40f"
-      },
-      {
-        "path": ".agent/tools/external-action-store.test.mjs",
-        "digest": "57dafa7b8b9ed3c1f1e7c27f365e61ea1c843aef15c29774b1262969cdad585b"
-      },
-      {
-        "path": ".agent/tools/loop-cancellation-coordinator.mjs",
-        "digest": "760a4307e65b3ef863204e24fe329fafe33a45271d0e0cc962b88ee8f28a7331"
-      },
-      {
-        "path": ".agent/tools/loop-cancellation-coordinator.test.mjs",
-        "digest": "afb0d2574325adcbe7bd359370ed10c7fcaac9066c8faeaec07fa277ef767e97"
-      },
-      {
-        "path": ".agent/tools/loop-learning-model.mjs",
-        "digest": "0b1a4e9e9179d2a2bbf9ee394996dcf86666fba544034b4dcc030831998dc175"
-      },
-      {
-        "path": ".agent/tools/loop-learning-model.test.mjs",
-        "digest": "6479573f3b2e00179c2fa23ae27de90347f2ae7fd5e7ed87963428af11bd5c47"
-      },
-      {
-        "path": ".agent/tools/loop-learning-store.mjs",
-        "digest": "6f363bd972d7bc18c0b198dc24ca17fda07775ece9cdc4a6a48847461aa71f17"
-      },
-      {
-        "path": ".agent/tools/loop-learning-store.test.mjs",
-        "digest": "60a91a5984877956f3410a639ac6fa4e97e02c709f58bd079f2454edc9ca0901"
-      },
-      {
-        "path": ".agent/tools/loop-queue-model.mjs",
-        "digest": "5578a1bb0c937a3d7a33e6570d835a657d2e38eb449ddc8636a07c5dd09a7de0"
-      },
-      {
-        "path": ".agent/tools/loop-queue-model.test.mjs",
-        "digest": "bc4d9e21e92a23181feb2b1764bdc1341b0070a102544928487d06c83b28ef74"
-      },
-      {
-        "path": ".agent/tools/loop-queue.mjs",
-        "digest": "be596baa25491e4566fcc0e7937ccf988a629da30be326f8e09cc7f1222cba7e"
-      },
-      {
-        "path": ".agent/tools/loop-queue.test.mjs",
-        "digest": "6af1d59f0a9e93c63ad9da65b22819b93463aa9786fc76f44c59150677450732"
-      },
-      {
-        "path": ".agent/tools/loop-run-model.mjs",
-        "digest": "d464bba91ceaa336f3081a8ed67f3b19f9e323e2d872fb6ab3c63366cecb96f5"
-      },
-      {
-        "path": ".agent/tools/loop-run-model.test.mjs",
-        "digest": "a59d6fb32359b342a38b792a66bc6d6277a590429344dbedba2fa94415eb321d"
-      },
-      {
-        "path": ".agent/tools/loop-run.mjs",
-        "digest": "c491da5291859177412d55a1051975c0883ac1499e40698c1bd45e8c50ea0f12"
-      },
-      {
-        "path": ".agent/tools/loop-run.test.mjs",
-        "digest": "15c1fc2a2affe90d30319b4939b994c0e0cfc6c1541d91d12d26765592d4d202"
-      },
-      {
-        "path": ".agent/tools/loop-telemetry-model.mjs",
-        "digest": "e86869b1150db91dfd2509244c7dde08f817bbe6126f26522e37b1fe1607bcc3"
-      },
-      {
-        "path": ".agent/tools/loop-telemetry-model.test.mjs",
-        "digest": "447b3ad05218007ed4c486a8842ffcbef2358a61f2d1254132091443f224a126"
-      },
-      {
-        "path": ".agent/tools/loop-telemetry-store.mjs",
-        "digest": "e42a2fcc94d17fca787e4064d111d0d5a7977c8b0ce4bb1249f08a0c3e3fddfd"
-      },
-      {
-        "path": ".agent/tools/loop-telemetry-store.test.mjs",
-        "digest": "d1342778160c6b4da1ab366d77133e4ec46997e5c839fc2867b6df2c70c18b3d"
-      },
-      {
-        "path": ".agent/tools/migrate-loop-v2.mjs",
-        "digest": "30aa359ec321ae792ff903bf794f0e12e78c5645a899e3151cca59190c0b7d21"
-      },
-      {
-        "path": ".agent/tools/migrate-loop-v2.test.mjs",
-        "digest": "9a00c0f45352ecf5e666a73971f0b339063cb0f8c991e9998a0d1ca0aeb242e8"
-      },
-      {
-        "path": ".agent/tools/project-config.mjs",
-        "digest": "ea5f52b3356c93c86d79528c560ef6a3c60a30ccd0a51748f20d310f604d7e7b"
-      },
-      {
-        "path": ".agent/tools/project-config.test.mjs",
-        "digest": "bb424f37cbc57016bad6d19c763811cee20fd9e02f83d59354d34566b266014e"
-      },
-      {
-        "path": ".agent/tools/project-safety-state.mjs",
-        "digest": "d3a26923576097976f31c41e210da0013459d0a442d15284fc638b81b29aa594"
-      },
-      {
-        "path": ".agent/tools/project-safety-state.test.mjs",
-        "digest": "3e1c4781dac9bd5db5bb8ff40614f87ba98c1e03071c26cb30f59cff73bb78dd"
-      },
-      {
-        "path": ".agent/tools/public-docs-loop-runtime.test.mjs",
-        "digest": "7b93f2dc717135a93940aa7de7ce71b15a5272e7f3236911269ea65b7e85121e"
-      },
-      {
-        "path": ".agent/tools/release-cutover.mjs",
-        "digest": "cf3a1593606ebf31fed158985932df5a4da6fb5b35b554ee7be229e98b3ae954"
-      },
-      {
-        "path": ".agent/tools/release-cutover.test.mjs",
-        "digest": "c7192a8a7c6fd9550089d35da504d2e2ebc742f12a709b738a0a507137ab8f4f"
-      },
-      {
-        "path": ".agent/tools/runtime-contracts.test.mjs",
-        "digest": "23886e3c61e704b9722f2f39fd9836c53b9e5f7a95f9ccc76accf99728894533"
-      },
-      {
-        "path": ".agent/tools/schema-validator.mjs",
-        "digest": "f96a99fdfe461f093d1e72fcd4c4aa80ec15b247d90aa1beaf6fa648c0a50dc0"
-      },
-      {
-        "path": ".agent/tools/schema-validator.test.mjs",
-        "digest": "06990dee70c8685852b7f323fffd8a0b753feb5a35d573512a948ab0abbe983c"
-      },
-      {
-        "path": ".agent/tools/workflow-admission.mjs",
-        "digest": "d7552a87d469953518d3804148d84caf467cc1c12fd678ae66690d4ec4db89ff"
-      },
-      {
-        "path": ".agent/tools/workflow-admission.test.mjs",
-        "digest": "00af6064a8e6da17c6e30c7df0764c0c8e79973d9a5af4aace4c153515493cfb"
-      },
-      {
-        "path": ".agent/tools/workflow-capability-bridge.test.mjs",
-        "digest": "8c4d63c26e46c5bd11f6b9b6316b5070ad5d596eddeceb46394ccb733830508f"
-      },
-      {
-        "path": ".agent/evals/loop-runtime-v2.md",
-        "digest": "b48eb5cc80b484ba9cf4d5ca5392e95ca2ff1de390f4a32fc25bdc6f79c938e2"
-      },
-      {
-        "path": ".agent/evals/fixtures/background-pilots-v2.json",
-        "digest": "aff7ace33ba0fcd29ea8691ed81ac50ba1f78518592eb9b5b5ad4900b39fc035"
-      },
       {
         "path": ".agent/context/doc-budgets.json",
         "digest": "e164bfff9165a8d65c095a606d90b77b2ea6577dd37a10eaf7504400deece248"
-      },
-      {
-        "path": ".agent/context/operation-inventory.json",
-        "digest": "fe48c6e77d3b674f71bf4cc136badd7efd65fa585ba070e18626c7091357d15f"
-      },
-      {
-        "path": ".agent/context/project-config.json",
-        "digest": "2a5aa08453753550bb8fc187a141e9e985d47f6fc186ac3968a5ac5ab4453f8a"
-      },
-      {
-        "path": ".agent/context/schemas/authority-artifact-v2.schema.json",
-        "digest": "4b89b4657a5ed93ce2b941225a98e03909bb54d8d022a326f986c6b2b03ec436"
-      },
-      {
-        "path": ".agent/context/schemas/automation-trigger-v2.schema.json",
-        "digest": "250e2ed14298d747d09c26621e032317d499dd26a95f50d9684dda38d9834224"
-      },
-      {
-        "path": ".agent/context/schemas/background-dispatch-v2.schema.json",
-        "digest": "e30ff75d8df2a6e6510d50b012d664cf8e83c62aca54090a8c71ac65d3e5b4c3"
-      },
-      {
-        "path": ".agent/context/schemas/budget-confirmation-v2.schema.json",
-        "digest": "025722d79acd616bb6a856578a7c21ade4423d73644a499cd7b65f7c295d1094"
-      },
-      {
-        "path": ".agent/context/schemas/budget-proposal-v2.schema.json",
-        "digest": "423b836958b38939d04735dc845d221bf04bc2db17d8e28f401f26b01425e9dd"
-      },
-      {
-        "path": ".agent/context/schemas/eval-result-v2.schema.json",
-        "digest": "f5f1c0dac41e1f05744360efa390b7e8340f3f2c78367674557777b3345ce8e6"
-      },
-      {
-        "path": ".agent/context/schemas/geniusloop-outcome-v2.schema.json",
-        "digest": "5bfcb6868deb9adc58f37bdf5acaaace3dab21d8e72aa0b8e783fc86c0ef95ac"
-      },
-      {
-        "path": ".agent/context/schemas/host-capability-v2.schema.json",
-        "digest": "c6be0fdbc9ad312d0d1feb66e961f5559e1bf5fa582fe8ee9e8b52c040c011d1"
-      },
-      {
-        "path": ".agent/context/schemas/iteration-learning-v2.schema.json",
-        "digest": "760ac77271ed77aa74e9bea4fc182cab437fa2ead40e568c1c679ad2da2375ee"
-      },
-      {
-        "path": ".agent/context/schemas/loop-run-contract-v2.schema.json",
-        "digest": "4fe4b337d357290c6c75e370706845302ea04b6bc56e8f5e21e6378ac5bd1a61"
-      },
-      {
-        "path": ".agent/context/schemas/loop-run-event-v2.schema.json",
-        "digest": "09d9bd2c38ab0ad92ea1d4268d15bcf2717dec618ae483004b2138c451783fd0"
-      },
-      {
-        "path": ".agent/context/schemas/loop-run-state-v2.schema.json",
-        "digest": "f92f265415cf277a31fd0dec8afea7dd141360d1eedd3dc90192445216533b6b"
-      },
-      {
-        "path": ".agent/context/schemas/operation-inventory-v2.schema.json",
-        "digest": "f43c4e7b41e265172ef41906852321a304c9e241056c92eb691076377b526745"
-      },
-      {
-        "path": ".agent/context/schemas/project-config-v2.schema.json",
-        "digest": "f7ae864ad17eefb3a53e3dc022c16729944d4b8eae3c743d3490a9de5842ed63"
-      },
-      {
-        "path": ".agent/context/schemas/project-mode-capability-v2.schema.json",
-        "digest": "2cc8327a8a18f38de6640481ab811de503461b0ded1a5ad1a3d66f0cb0cc0648"
-      },
-      {
-        "path": ".agent/context/schemas/runtime-common-v2.schema.json",
-        "digest": "973b00946ee1f77dfa3ccdaed87333148ad6489af1485ba08af21012be80381c"
-      },
-      {
-        "path": ".agent/context/schemas/usage-receipt-v2.schema.json",
-        "digest": "ef9b1071c588aa5194e099c64ab910390ae1ea650110833954c11e3246ba17e9"
-      },
-      {
-        "path": ".agent/context/schemas/verified-pattern-v2.schema.json",
-        "digest": "c82896474220010828b1999244d97a37d5829f90c50a09fddd43b19453289a1c"
-      },
-      {
-        "path": ".agent/context/schemas/work-package-ledger-v2.schema.json",
-        "digest": "a09eab76991d18e298ac2a2975427bc4f5450cd99299b0cab659572f69f92590"
       }
     ]
   },
   "findings": [],
-  "evidenceDigest": "dedd30d6d19023bcfc29cd2b0e151252cd66ebb9509a8dfbdd6fa2a7a75bb570"
+  "evidenceDigest": "666d7b6f6bd14105373701f19ebdb27db0c78671030f08bc56fac9b759db14c1"
 }

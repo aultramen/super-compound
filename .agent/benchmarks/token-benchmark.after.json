@@ -10,7 +10,7 @@
     },
     "limitation": "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens."
   },
-  "generatedAt": "2026-10-04T03:54:53.641Z",
+  "generatedAt": "2026-10-04T04:16:21.590Z",
   "observedRuntimeTokens": "unknown",
   "hostInjectedSurfaceTokens": "unknown",
   "claimScope": {
@@ -41,7 +41,7 @@
         "afterTokens": 124,
         "reductionPercent": 97.2657,
         "maxAfterTokens": null,
-        "afterDigest": "405d67b07cfc800354dd5fb4114de349d7facd7ae7aa2e529c8e204c50a3a7dd",
+        "afterDigest": "ba879db71ea22f8c575ad0ff3a721c4249a9787bf52f4e79254de7719ef3f23f",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -429,7 +429,7 @@
         "afterTokens": 3283,
         "reductionPercent": 94.4497,
         "maxAfterTokens": null,
-        "afterDigest": "75be919f77b09e615884854a42f32d37354797aec5eb164ad7db6b2a8af1c161",
+        "afterDigest": "469f0105070abda2e239c67868cfa98a24116339639a42d6e2c1bd2a3cad2da3",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -622,7 +622,7 @@
         "afterTokens": 1139,
         "reductionPercent": 90.0193,
         "maxAfterTokens": null,
-        "afterDigest": "f3c7d25a971641af0b330befa3ff634dc209397ef23a7ab2e2935227664bce48",
+        "afterDigest": "841f098845407d17265889db97126fb0dd4b34a42736bda547f256acac40780d",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1070,7 +1070,7 @@
         "afterTokens": 1031,
         "reductionPercent": 99.0861,
         "maxAfterTokens": null,
-        "afterDigest": "f3b824a88c5490f480f69a69371b01e79c7428e25acf7f1842d23f3009607137",
+        "afterDigest": "027afb3caeb4fb8b6eddc5ee62b9d0a52850239634393591f0c7e9926ef7dba1",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1133,7 +1133,7 @@
         "afterTokens": 2185,
         "reductionPercent": 99.4168,
         "maxAfterTokens": null,
-        "afterDigest": "b3d79923f2a764b0f7aec2dbd6e9d3be186988efd86852fcfc0b8944ebd2f212",
+        "afterDigest": "9c605784d74a8cf1179cee3592223cb94005ff32ed7b68e01c987f079dd943be",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1217,14 +1217,14 @@
   "evidenceDigests": {
     "workflowInvariants": "61b644c07101a457d51f86853fc1cc179cb904c5e7afa537eacfff1df3fbd3ba",
     "outputBudgets": "ca63a13ba8c0198c55d8fc43130b0e3776f22741fae7767c571d13e7f643e94f",
-    "workflowMatrix": "0774061c013ad30c29ad0320f5b4d3a8e2b7d9114bc31581cd31f042cfb79dba"
+    "workflowMatrix": "7f718b222f9d4aeb04b424c2ed89e54676378567582ed9302163f99233c7e9de"
   },
   "digests": {
     "baseline": "6105f25f49cba281efc529f37912a9e1ff5952220534fea9d88156808d266e4a",
     "suiteDefinition": "ba0a5d1698ec73ffb12ca00842474e4be378a324628f1a6d553d187e4fd0afd3",
     "workflowInvariants": "61b644c07101a457d51f86853fc1cc179cb904c5e7afa537eacfff1df3fbd3ba",
     "outputBudgets": "ca63a13ba8c0198c55d8fc43130b0e3776f22741fae7767c571d13e7f643e94f",
-    "workflowMatrix": "0774061c013ad30c29ad0320f5b4d3a8e2b7d9114bc31581cd31f042cfb79dba"
+    "workflowMatrix": "7f718b222f9d4aeb04b424c2ed89e54676378567582ed9302163f99233c7e9de"
   },
   "runtimeEvidence": {
     "status": "unknown",
@@ -1241,7 +1241,7 @@
   "deterministic": true,
   "runDigests": [
     {
-      "digest": "e75a5d6bc3c64f31a179ef44b3c7d4dba79f683bbce966ae631f3e4b9adc1f37",
+      "digest": "d7a2c50477aef7c42d5767e97e8c939bd44dba0c69711817b71b274a4aa1194f",
       "count": 3
     }
   ],
@@ -1254,7 +1254,7 @@
         "beforeTokens": 516436,
         "afterTokens": 2891,
         "pass": true,
-        "afterDigest": "85180562eaa8714e6073334beab57669ff3e130b03d4264d118ea5565c14cb0e",
+        "afterDigest": "997656fcca8d95c2fbd9384de4e91455e85a2fd3c0c0cac7c9527be2a78ab44d",
         "reductionPercent": 99.4402
       },
       {
@@ -1313,7 +1313,7 @@
         "beforeTokens": 4535,
         "afterTokens": 124,
         "pass": true,
-        "afterDigest": "405d67b07cfc800354dd5fb4114de349d7facd7ae7aa2e529c8e204c50a3a7dd",
+        "afterDigest": "ba879db71ea22f8c575ad0ff3a721c4249a9787bf52f4e79254de7719ef3f23f",
         "reductionPercent": 97.2657
       },
       {
@@ -1367,7 +1367,7 @@
         "beforeTokens": 59150,
         "afterTokens": 3283,
         "pass": true,
-        "afterDigest": "75be919f77b09e615884854a42f32d37354797aec5eb164ad7db6b2a8af1c161",
+        "afterDigest": "469f0105070abda2e239c67868cfa98a24116339639a42d6e2c1bd2a3cad2da3",
         "reductionPercent": 94.4497
       },
       {
@@ -1394,7 +1394,7 @@
         "beforeTokens": 11412,
         "afterTokens": 1139,
         "pass": true,
-        "afterDigest": "f3c7d25a971641af0b330befa3ff634dc209397ef23a7ab2e2935227664bce48",
+        "afterDigest": "841f098845407d17265889db97126fb0dd4b34a42736bda547f256acac40780d",
         "reductionPercent": 90.0193
       },
       {
@@ -1457,7 +1457,7 @@
         "beforeTokens": 112816,
         "afterTokens": 1031,
         "pass": true,
-        "afterDigest": "f3b824a88c5490f480f69a69371b01e79c7428e25acf7f1842d23f3009607137",
+        "afterDigest": "027afb3caeb4fb8b6eddc5ee62b9d0a52850239634393591f0c7e9926ef7dba1",
         "reductionPercent": 99.0861
       },
       {
@@ -1466,7 +1466,7 @@
         "beforeTokens": 374638,
         "afterTokens": 2185,
         "pass": true,
-        "afterDigest": "b3d79923f2a764b0f7aec2dbd6e9d3be186988efd86852fcfc0b8944ebd2f212",
+        "afterDigest": "9c605784d74a8cf1179cee3592223cb94005ff32ed7b68e01c987f079dd943be",
         "reductionPercent": 99.4168
       },
       {
@@ -1475,7 +1475,7 @@
         "beforeTokens": 98427,
         "afterTokens": 2794,
         "pass": true,
-        "afterDigest": "40c1ad2b7380fe601a2ccb5c6a3025f009099cf1595f62d2196311cb36b26c05",
+        "afterDigest": "850f6c0e64d7840b66016e31feca9a64c6e3107a5e75bc9d3fd44fe4f806012d",
         "reductionPercent": 97.1613
       },
       {
@@ -1520,7 +1520,7 @@
         "beforeTokens": 95066,
         "afterTokens": 2794,
         "pass": true,
-        "afterDigest": "40c1ad2b7380fe601a2ccb5c6a3025f009099cf1595f62d2196311cb36b26c05",
+        "afterDigest": "850f6c0e64d7840b66016e31feca9a64c6e3107a5e75bc9d3fd44fe4f806012d",
         "reductionPercent": 97.061
       },
       {
