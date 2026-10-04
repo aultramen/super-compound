@@ -16,7 +16,19 @@ const begin = '<!-- super-compound:begin -->', end = '<!-- super-compound:end --
 
 function safePath(root, relative) {
   if (path.isAbsolute(relative) || path.win32.isAbsolute(relative) || relative.split(/[\\/]/).some(p=>p==='..') || /[\x00-\x1f]/.test(relative)) throw new Error(`Unsafe path: ${relative}`);
-  const full = path.resolve(root, relative);
+  let full = path.resolve(root, relative);
+  // macOS exposes these system directories through fixed /private aliases.
+  // Resolve only those exact links, then check every canonical ancestor below.
+  if (process.platform === 'darwin') {
+    for (const alias of ['/var', '/tmp', '/etc']) {
+      if ((full === alias || full.startsWith(alias + '/'))
+        && fs.lstatSync(alias).isSymbolicLink()
+        && path.resolve(path.dirname(alias), fs.readlinkSync(alias)) === `/private${alias}`) {
+        full = `/private${full}`;
+        break;
+      }
+    }
+  }
   let cursor = full;
   while (true) {
     try { if (fs.lstatSync(cursor).isSymbolicLink()) throw new Error(`Path confinement: symlink/reparse point at ${cursor}`); }

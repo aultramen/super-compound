@@ -69,6 +69,10 @@ test('symlink destination cannot escape target and invalid CLI never writes',t=>
   assert.notEqual(run(f,'install').status,0);
   assert.deepEqual(fs.readdirSync(f.home),[]);
   assert.notEqual(run(f,'install','--unknown').status,0);
+  const alias=path.join(f.root,'untrusted-alias');
+  fs.symlinkSync(f.home,alias,process.platform==='win32'?'junction':'dir');
+  assert.throws(()=>setup({source,target:path.join(alias,'project'),home:f.home,scope:'project',host:'codex'}),/symlink\/reparse/);
+  assert.deepEqual(fs.readdirSync(f.home),[]);
 });
 test('existing instructions and config survive; user-owned collisions are batched', t => {
   const f = fixture(t);

@@ -1,6 +1,6 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-10-04T04:16:23.301Z",
+  "generatedAt": "2026-10-04T04:22:14.433Z",
   "repositoryHead": "57f3fb86a305660242323fe824b1f08f9d2206be",
   "pass": true,
   "summary": {
@@ -16,9 +16,9 @@
     "filesRead": 498,
     "textFiles": 498,
     "binaryFiles": 0,
-    "bytesRead": 4237553,
-    "linesRead": 59587,
-    "contentDigest": "7bf38e04a7cc345ba632e38a523d8f06e602b4350543598cc529db9f52945990",
+    "bytesRead": 4238525,
+    "linesRead": 59604,
+    "contentDigest": "879bf107e84495d8059ee2f822064dc5b12c239bfe4163db1648bf684f8d06de",
     "skillEntrypoints": 36,
     "skillEntrypointWords": 15465,
     "maxSkillEntrypointWords": 535,
@@ -92,5 +92,5 @@
     ]
   },
   "findings": [],
-  "evidenceDigest": "666d7b6f6bd14105373701f19ebdb27db0c78671030f08bc56fac9b759db14c1"
+  "evidenceDigest": "60e16e082e4717e6367127395a69285cd30ad475c91f9d7e26ee37a6c081171e"
 }
