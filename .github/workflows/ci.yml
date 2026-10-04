@@ -6,6 +6,19 @@ on:
   pull_request:
 
 jobs:
+  setup-matrix:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Setup, ownership, six-adapter discovery and rollback
+        run: node --test .agent/tools/setup.test.mjs .agent/tools/documentation-quality.test.mjs
   verify:
     runs-on: ubuntu-latest
     steps:
@@ -29,3 +42,15 @@ jobs:
         run: npm run test:python
       - name: Framework audit
         run: npm run audit
+
+  windows-recovery:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Retrieval, persistence, dispatch and installer parity
+        run: node --test .agent/tools/knowledge-search.test.mjs .agent/tools/memory-maintenance.test.mjs .agent/tools/file-state.test.mjs .agent/tools/work-package.test.mjs .agent/tools/instruction-context.test.mjs .agent/tools/completion-receipts.test.mjs .agent/tools/prevention-checks.test.mjs .agent/tools/maintenance-recovery.test.mjs .agent/tools/active-assets.test.mjs .agent/tools/codex-install.test.mjs

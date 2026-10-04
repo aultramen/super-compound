@@ -22,9 +22,9 @@ import { fileURLToPath } from "node:url";
 import { parseFrontmatter } from "./knowledge-search.mjs";
 
 const REPO_ROOT = path.resolve(fileURLToPath(new URL("../..", import.meta.url)));
-const AGENTS_DIR = path.join(".agent", "agents");
-const MODELS_FILE = path.join(".agent", "context", "agent-models.json");
-const OUT_DIR = path.join(".claude", "agents");
+const AGENTS_DIR = '.agent/agents';
+const MODELS_FILE = '.agent/context/agent-models.json';
+const OUT_DIR = '.claude/agents';
 const CLAUDE_HOST = "claude-code";
 const CLAUDE_MODELS = new Set(["inherit", "sonnet", "opus", "haiku"]);
 
@@ -57,8 +57,8 @@ export function loadModels(root, names) {
   return hosts;
 }
 
-function render(name, raw, model) {
-  const { meta } = parseFrontmatter(raw);
+export function render(name, raw, model) {
+  const { meta } = parseFrontmatter(raw.replace(/\r\n?/g, '\n'));
   if (!meta.tools) throw new MappingError(`${AGENTS_DIR}/${name}.md: frontmatter has no tools`);
   const tools = JSON.parse(meta.tools).join(", ");
   // The projected body is a pointer, not a copy: `.agent/agents/<name>.md`
@@ -75,7 +75,7 @@ export function projectAgents({ root = REPO_ROOT, write = true } = {}) {
   for (const name of names) {
     const raw = fs.readFileSync(path.join(root, AGENTS_DIR, `${name}.md`), "utf8");
     const content = render(name, raw, models[name]);
-    const relative = path.join(OUT_DIR, `${name}.md`);
+    const relative = path.posix.join(OUT_DIR, `${name}.md`);
     const target = path.join(root, relative);
     if (write) {
       fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -84,7 +84,7 @@ export function projectAgents({ root = REPO_ROOT, write = true } = {}) {
       continue;
     }
     if (!fs.existsSync(target)) drifted.push(`${relative} (missing)`);
-    else if (fs.readFileSync(target, "utf8") !== content) drifted.push(`${relative} (drifted)`);
+    else if (fs.readFileSync(target, "utf8").replace(/\r\n?/g,'\n') !== content) drifted.push(`${relative} (drifted)`);
   }
   return { names, written, drifted };
 }
