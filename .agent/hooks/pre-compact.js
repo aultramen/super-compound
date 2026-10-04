@@ -11,6 +11,7 @@ if ((process.env.SC_DISABLED_HOOKS || '').split(',').map((s) => s.trim()).includ
 }
 
 const fs = require('fs');
+const { spawnSync } = require('child_process');
 const path = require('path');
 const {
     atomicWriteFile,
@@ -55,8 +56,21 @@ if (fs.existsSync(stateFile)) {
     console.error('[Super Compound] Pre-compact: No STATE.md found. Run /sc-pause before compacting for best results.');
 }
 
-if (fs.existsSync(continueFile)) {
-    console.error('[Super Compound] Pre-compact: .continue-here.md present - /sc-status can route the next session');
+try {
+    const restored = spawnSync(process.execPath, [
+        path.resolve(__dirname, '..', 'tools', 'memory-maintenance.mjs'),
+        'resume', '--root', projectRoot, '--json',
+    ], {encoding: 'utf8', timeout: 5000, maxBuffer: 128 * 1024});
+    const state = restored.status === 0 ? JSON.parse(restored.stdout) : null;
+    if (!state?.checkpoint) {
+        console.error('[Super Compound] Pre-compact: checkpoint missing or invalid; run /sc-pause. Timestamp alone is not a handoff.');
+    } else if (state.drift.length) {
+        console.error('[Super Compound] Pre-compact: checkpoint contract drift; reconcile with /sc-status before dispatch.');
+    } else {
+        console.error('[Super Compound] Pre-compact: structured checkpoint available; verify STATE and ledger on resume.');
+    }
+} catch {
+    console.error('[Super Compound] Pre-compact: checkpoint missing or invalid; run /sc-pause.');
 }
 
 console.error('');

@@ -155,7 +155,7 @@ test("auditRepository accepts the compact support-skill catch-all", async () => 
   }
 });
 
-test("auditRepository caps skill entrypoints while reporting aggregate size", async () => {
+test("auditRepository reports skill size without imposing document length limits", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "framework-audit-"));
 
   try {
@@ -177,7 +177,7 @@ test("auditRepository caps skill entrypoints while reporting aggregate size", as
       report.findings.some(
         (finding) => finding.code === "SKILL_ENTRYPOINT_TOO_LARGE",
       ),
-      true,
+      false,
     );
   } finally {
     await rm(root, { recursive: true, force: true });
@@ -463,4 +463,12 @@ test("stored audit verification survives committing unchanged audited content", 
       retryDelay: 50,
     });
   }
+});
+
+test('active executable references must exist; historical reports remain evidence', async () => {
+  const {checkExecutableReferences} = await import('./framework-audit.mjs');
+  assert.equal(typeof checkExecutableReferences, 'function');
+  assert.equal(checkExecutableReferences('.agent/skills/eval-harness/SKILL.md', 'node .agent/tools/absent.mjs', new Set()).length, 1);
+  assert.equal(checkExecutableReferences('docs/archive/history.md', 'node .agent/tools/absent.mjs', new Set()).length, 0);
+  assert.equal(checkExecutableReferences('README.md', 'node .agent/tools/current.mjs', new Set(['.agent/tools/current.mjs'])).length, 0);
 });

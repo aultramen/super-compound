@@ -10,6 +10,136 @@ import {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+import {validateConstraints, contextDigest, constraintBlock, relevantConstraints} from './instruction-context.mjs';
+
+export async function amendWorkPackageConstraints(root, options) {
+  const runId = validateId('runId', options.runId), goalId = validateId('goalId', options.goalId);
+  const ledgerPath = await resolveRepositoryPath(root, `.scratch/work-packages/${runId}/ledger.json`);
+  const constraints = validateConstraints(options.constraints);
+  return withLedgerLock(ledgerPath, async lock => {
+    const ledger = await readLedger(root, ledgerPath, runId);
+    const goal = ledger.goals[goalId];
+    if (!goal) throw new Error('Unknown goal');
+    if (goal.constraintDigest === contextDigest(constraints)) return {action:'unchanged',ledgerVersion:ledger.ledgerVersion};
+    assertExpectedVersion(ledger.ledgerVersion,options.expectedVersion,'work-package ledger version');
+    // Corrections append provenance and supersession; they cannot erase history.
+    for (const prior of goal.constraints || []) if (!constraints.some(c => JSON.stringify(c) === JSON.stringify(prior))) throw new Error('constraint history must be retained');
+    goal.constraints = constraints;
+    goal.constraintDigest = contextDigest(constraints);
+    incrementLedgerVersion(ledger);
+    await writeJsonAtomic(root,ledgerPath,ledger,lock);
+    return {action:'updated',ledgerVersion:ledger.ledgerVersion};
+  });
+}
+
+export async function readDispatchContext(root, options) {
+  const runId = validateId('runId',options.runId), goalId = validateId('goalId',options.goalId);
+  const ledger = await readLedger(root,`.scratch/work-packages/${runId}/ledger.json`,runId);
+  const goal = ledger.goals[goalId];
+  if (!goal) throw new Error('Unknown goal');
+  const raw = await readBoundedFile(root,goal.briefPath,{encoding:'utf8',maxBytes:MAX_BRIEF_BYTES});
+  const text = raw.replace(/\n\n<!-- sc-constraints:start -->[\s\S]*?<!-- sc-constraints:end -->/g,'') + constraintBlock(goal.constraints || [],goalId);
+  const composition = composePayload({mandatory:text,maxTokens:options.maxTokens,targetTokens:options.targetTokens});
+  return {...composition,constraints:relevantConstraints(goal.constraints || [],goalId),constraintDigest:goal.constraintDigest || contextDigest([]),ledgerVersion:ledger.ledgerVersion,dispatchStatus:goal.status === 'verified' ? 'skip_verified' : composition.status === 'over_budget' ? 'blocked' : goal.status === 'ready' ? 'ready' : 'not_ready'};
+}
+
+function validateAssignment(value) {
+  if (!value || Object.keys(value).some(k => !['workerId','attempt'].includes(k)) || !Number.isSafeInteger(value.attempt) || value.attempt < 1) throw new Error('invalid worker assignment');
+  validateId('workerId',value.workerId);
+  return {...value};
+}
+
+async function mutateCompletion(root, options, operation) {
+  const runId=validateId('runId',options.runId), goalId=validateId('goalId',options.goalId);
+  const ledgerPath=await resolveRepositoryPath(root,`.scratch/work-packages/${runId}/ledger.json`);
+  return withLedgerLock(ledgerPath, async lock => {
+    const ledger=await readLedger(root,ledgerPath,runId,{checkEvidence:false}), goal=ledger.goals[goalId];
+    if (!goal) throw new Error('Unknown goal');
+    const result=await operation(goal,ledger,goalId);
+    if (result.action !== 'unchanged') {
+      incrementLedgerVersion(ledger);
+      await writeJsonAtomic(root,ledgerPath,ledger,lock);
+    }
+    return {...result,ledgerVersion:ledger.ledgerVersion};
+  });
+}
+
+export async function submitCompletionReceipt(root, options) {
+  const assignment=validateAssignment({workerId:options.workerId,attempt:options.attempt});
+  return mutateCompletion(root,options,async (goal,ledger,goalId) => {
+    if (JSON.stringify(assignment)!==JSON.stringify(goal.assignment)) throw new Error('worker assignment mismatch');
+    const reportPath=validateStoredPath(options.reportPath,'reportPath');
+    if (reportPath !== goal.reportPath) throw new Error('receipt report must match scheduler-owned report');
+    const report=await readBoundedFile(root,reportPath,{maxBytes:MAX_BRIEF_BYTES});
+    const reportDigest=createHash('sha256').update(report).digest('hex');
+    const evidence=await materializeResultEvidence(root,goal.expectedEvidence,options.evidence);
+    const identity={...assignment,goalId,reportPath,reportDigest,evidence,constraintDigest:goal.constraintDigest || contextDigest([])};
+    const receiptId=contextDigest(identity);
+    if (goal.receipts?.[receiptId]) return {action:'unchanged',receiptId};
+    if (!['in-progress','implemented'].includes(goal.status)) throw new Error('goal cannot receive a new completion');
+    if (Object.keys(goal.receipts || {}).length >= 20) throw new Error('completion inbox full');
+    if (options.expectedVersion !== undefined) assertExpectedVersion(ledger.ledgerVersion,options.expectedVersion,'work-package ledger version');
+    goal.receipts ??= {};
+    goal.receipts[receiptId]={...identity,state:'received'};
+    return {action:'received',receiptId};
+  });
+}
+
+export async function classifyCompletionReceipt(root, options) {
+  return mutateCompletion(root,options,async (goal,ledger,goalId) => {
+    const receipt=goal.receipts?.[options.receiptId];
+    if (!receipt) throw new Error('Unknown receipt');
+    if (receipt.state !== 'received') return {action:'unchanged',receiptId:options.receiptId,classification:receipt.classification};
+    assertExpectedVersion(ledger.ledgerVersion,options.expectedVersion,'work-package ledger version');
+    let reason;
+    if (options.workerAvailable === false || JSON.stringify(goal.assignment)!==JSON.stringify({workerId:receipt.workerId,attempt:receipt.attempt})) reason='worker_lost';
+    else if (receipt.constraintDigest !== (goal.constraintDigest || contextDigest([]))) reason='constraint_drift';
+    else {
+      try {
+        const report=await readBoundedFile(root,receipt.reportPath,{maxBytes:MAX_BRIEF_BYTES});
+        if (createHash('sha256').update(report).digest('hex') !== receipt.reportDigest) throw new Error('report digest mismatch');
+        validateResultEvidence(goal.expectedEvidence,receipt.evidence,{stored:true});
+        await assertEvidenceArtifactsFresh(root,goalId,receipt.evidence);
+      } catch (error) { reason=`stale_evidence: ${error.message}`; }
+    }
+    if (!['implemented','verified'].includes(options.status)) throw new Error('classification requires implemented or verified');
+    if (reason) {
+      // A previously verified goal is never rerun solely for inbox maintenance.
+      if (goal.status !== 'verified') {
+        if (goal.evidence) {
+          goal.quarantinedEvidence = goal.evidence;
+          delete goal.evidence;
+        }
+        goal.status='blocked';
+        goal.statusReason={code:'COMPLETION_RECONCILE',detail:reason.slice(0,500)};
+        goal.verification=reason;
+      }
+      receipt.classification={disposition:'blocked',reason};
+    } else {
+      if (goal.status !== 'verified') {
+        if (!TRANSITIONS.get(goal.status)?.has(options.status)) throw new Error('receipt classification cannot bypass ordered review transitions');
+        goal.status=options.status;
+        goal.evidence=receipt.evidence;
+        goal.verification=`completion receipt ${options.receiptId}`;
+      }
+      receipt.classification={disposition:goal.status,reason:'fresh scheduler-reviewed evidence'};
+    }
+    receipt.state='classified';
+    return {action:'classified',receiptId:options.receiptId,classification:receipt.classification};
+  });
+}
+
+export async function acknowledgeCompletionReceipt(root, options) {
+  return mutateCompletion(root,options,async (goal,ledger) => {
+    const receipt=goal.receipts?.[options.receiptId];
+    if (!receipt) throw new Error('Unknown receipt');
+    if (receipt.state==='acknowledged') return {action:'unchanged',receiptId:options.receiptId};
+    if (receipt.state!=='classified') throw new Error('classify receipt before acknowledgement');
+    assertExpectedVersion(ledger.ledgerVersion,options.expectedVersion,'work-package ledger version');
+    receipt.state='acknowledged';
+    return {action:'acknowledged',receiptId:options.receiptId};
+  });
+}
 
 import {
   assertExpectedVersion,
@@ -58,15 +188,66 @@ const TRANSITIONS = new Map([
   ["verified", new Set()],
 ]);
 
+// The issue/goal brief is entirely mandatory. Only explicitly optional
+// background may become a pointer; estimates never imply runtime billing.
+export function composePayload({mandatory, background = [], maxTokens, targetTokens = 2000}) {
+  if (typeof mandatory !== 'string' || !mandatory.trim() || !Array.isArray(background) || background.length > 20 || (maxTokens !== undefined && (!Number.isSafeInteger(maxTokens) || maxTokens < 1))) {
+    throw new Error('Invalid composition input');
+  }
+  if (!Number.isSafeInteger(targetTokens) || targetTokens < 1) throw new Error('Invalid targetTokens');
+  const estimate = text => Math.ceil(Buffer.byteLength(text, 'utf8') / 4);
+  const mandatoryTokens = estimate(mandatory);
+  // An omitted limit is a soft target. Explicit host/user limits remain hard.
+  const explicitMax = maxTokens;
+  const contextTarget = Math.min(maxTokens ?? Infinity, Math.max(targetTokens, mandatoryTokens));
+  maxTokens ??= Math.max(targetTokens, mandatoryTokens);
+  let text = mandatory;
+  const omissions = [];
+  for (const item of background) {
+    if (typeof item.text !== 'string' || typeof item.ref !== 'string' || !REPOSITORY_PATH_PATTERN.test(item.ref)) throw new Error('Invalid background pointer');
+    const full = `${text}\n\n${item.text}`;
+    if (estimate(full) <= contextTarget) text = full;
+    else {
+      const pointer = `${text}\n\nBackground: ${item.ref}`;
+      if (estimate(pointer) <= contextTarget) {
+        text = pointer;
+        omissions.push({ref: item.ref, reason: 'optional_background_pointer'});
+      } else {
+        omissions.push({ref: item.ref, reason: 'optional_background_omitted'});
+      }
+    }
+  }
+  const estimatedTokens = estimate(text);
+  return {text, omissions, estimatedTokens, mandatoryTokens, maxTokens, targetTokens, targetExceeded: estimatedTokens > targetTokens, hardLimit: explicitMax ?? null, measurement: 'utf8_bytes_div_4_estimate', status: estimatedTokens > maxTokens ? 'over_budget' : 'within_budget'};
+}
+
 export async function createWorkPackage(root, options) {
   const safeRoot = path.resolve(root);
+  const assignment = options.assignment ? validateAssignment(options.assignment) : undefined;
   const runId = validateId("runId", options.runId);
   const goalId = validateId("goalId", options.goalId);
-  const brief = await readBoundedFile(safeRoot, options.briefPath, {
+  const constraints = validateConstraints(options.constraints);
+  const sourceBrief = (await readBoundedFile(safeRoot, options.briefPath, {
     encoding: "utf8",
     label: "briefPath",
     maxBytes: MAX_BRIEF_BYTES,
-  });
+  })) + constraintBlock(constraints, goalId);
+  let composition;
+  if (options.composition) {
+    for (const item of options.composition.background || []) await readBoundedFile(safeRoot, item.ref);
+    composition = composePayload({...options.composition, mandatory: sourceBrief});
+    if (composition.status === 'over_budget') return {
+      ...composition,
+      dispatchStatus: 'blocked',
+      recovery: {
+        action: 'recompose',
+        minimumTokens: composition.mandatoryTokens,
+        reason: 'mandatory_content_exceeds_explicit_cap',
+        detail: 'Preserve mandatory requirements. Reduce optional background; retry only within the host/user cap or use a supported handoff with complete mandatory content.',
+      },
+    };
+  }
+  const brief = composition?.text ?? sourceBrief;
   if (!options.pathsFile) {
     throw new Error("Scheduler-owned pathsFile is required when creating a work package");
   }
@@ -112,6 +293,7 @@ export async function createWorkPackage(root, options) {
   );
 
   let ledgerVersion;
+  let dispatchStatus = 'ready';
   await withLedgerLock(ledgerPath, async (lock) => {
     const ledger = await readLedger(safeRoot, ledgerPath, runId);
     const existing = ledger.goals[goalId];
@@ -126,6 +308,7 @@ export async function createWorkPackage(root, options) {
         throw new Error(`expectedEvidence already pinned for goalId: ${goalId}`);
       }
       ledgerVersion = ledger.ledgerVersion;
+      dispatchStatus = existing.status === 'ready' ? 'ready' : 'not_ready';
       return;
     }
     ledger.goals[goalId] = {
@@ -138,6 +321,8 @@ export async function createWorkPackage(root, options) {
       baselineDirty,
       verification: "pending",
       ...(expectedEvidence ? { expectedEvidence } : {}),
+      ...(options.constraints ? {constraints, constraintDigest: contextDigest(constraints)} : {}),
+      ...(assignment ? {assignment} : {}),
     };
     incrementLedgerVersion(ledger);
     await writeJsonAtomic(safeRoot, ledgerPath, ledger, lock);
@@ -145,6 +330,7 @@ export async function createWorkPackage(root, options) {
   });
 
   return {
+    dispatchStatus,
     packageDir,
     briefPath,
     reportPath,
@@ -152,6 +338,7 @@ export async function createWorkPackage(root, options) {
     reviewPackagePath,
     ledgerPath,
     ledgerVersion,
+    ...(composition ? {composition} : {}),
   };
 }
 
@@ -816,7 +1003,7 @@ async function writeIfMissing(root, target, content, maxBytes) {
   }
 }
 
-async function readLedger(root, ledgerPath, runId) {
+export async function readLedger(root, ledgerPath, runId, {checkEvidence=true}={}) {
   const content = await readBoundedFile(root, ledgerPath, {
     encoding: "utf8",
     label: "Work-package ledger",
@@ -845,7 +1032,7 @@ async function readLedger(root, ledgerPath, runId) {
     );
   }
   validateLedger(ledger, runId);
-  await assertLedgerEvidenceFresh(root, ledger);
+  if (checkEvidence) await assertLedgerEvidenceFresh(root, ledger);
   return ledger;
 }
 
@@ -920,13 +1107,34 @@ function validateLedgerGoal(goalId, goal) {
     ...required,
     "expectedEvidence",
     "evidence",
+    "quarantinedEvidence",
     "requiresFreshVerification",
     "statusReason",
     "recovery",
+    "constraints",
+    "constraintDigest",
+    "receipts",
+    "assignment",
   ]);
   const unknown = Object.keys(goal).find((key) => !allowed.has(key));
   if (unknown) throw new Error(`Unsupported ledger goal field: ${unknown}`);
   const missing = required.find((key) => !(key in goal));
+  if (goal.constraints !== undefined) {
+    validateConstraints(goal.constraints);
+    if (goal.constraintDigest !== contextDigest(goal.constraints)) throw new Error('constraint digest mismatch');
+  } else if (goal.constraintDigest !== undefined) throw new Error('constraints missing');
+  if (goal.assignment !== undefined) validateAssignment(goal.assignment);
+  if (goal.receipts !== undefined) {
+    if (!goal.receipts || Array.isArray(goal.receipts) || typeof goal.receipts !== 'object' || Object.keys(goal.receipts).length > 20) throw new Error('invalid completion inbox');
+    for (const [id,receipt] of Object.entries(goal.receipts)) {
+      if (!receipt || Object.keys(receipt).some(k=>!['workerId','attempt','goalId','reportPath','reportDigest','evidence','constraintDigest','state','classification'].includes(k))) throw new Error('invalid receipt fields');
+      validateAssignment({workerId:receipt.workerId,attempt:receipt.attempt});
+      const {state,classification,...identity}=receipt;
+      if (id!==contextDigest(identity) || receipt.goalId!==goalId || receipt.reportPath!==goal.reportPath || !DIGEST_PATTERN.test(receipt.reportDigest) || !DIGEST_PATTERN.test(receipt.constraintDigest)) throw new Error('receipt identity mismatch');
+      validateResultEvidence(goal.expectedEvidence,receipt.evidence,{stored:true});
+      if (!['received','classified','acknowledged'].includes(state) || (state === 'received' ? classification!==undefined : !classification || !['implemented','verified','blocked'].includes(classification.disposition) || typeof classification.reason !== 'string')) throw new Error('invalid receipt lifecycle');
+    }
+  }
   if (missing) throw new Error(`Invalid work-package ledger goal missing ${missing}`);
   if (!STATUSES.has(goal.status)) {
     throw new Error(`Invalid work-package ledger status: ${goal.status}`);
@@ -962,6 +1170,9 @@ function validateLedgerGoal(goalId, goal) {
     : undefined;
   if (goal.evidence) {
     validateResultEvidence(expected, goal.evidence, { stored: true });
+  }
+  if (goal.quarantinedEvidence) {
+    validateResultEvidence(expected, goal.quarantinedEvidence, { stored: true });
   }
   if (goal.requiresFreshVerification !== undefined) {
     if (goal.requiresFreshVerification !== true) {
@@ -1010,6 +1221,7 @@ async function writeJsonAtomic(root, target, value, lock = {}) {
     label: "Work-package ledger",
     maxBytes: MAX_LEDGER_BYTES,
     mode: 0o600,
+    fallbackOnBusy: false,
   });
 }
 
@@ -1034,7 +1246,7 @@ export async function withLedgerLock(ledgerPath, operation) {
 }
 
 function reportSkeleton(goalId) {
-  return `# ${goalId} Report\n\nStatus: in-progress\n\n<!-- Append Outcome, Changed Files, Verification, and Blockers sections; omit empty sections. -->\n`;
+  return `# ${goalId} Report\n\n## Summary\n\nTracks implementation, evidence, and remaining work for ${goalId}. Verification is pending.\n\nStatus: in-progress\n\n<!-- Update summary on completion. Append Outcome, Changed Files, Verification, and Blockers; omit empty sections. -->\n`;
 }
 
 function parseArgs(argv) {
@@ -1109,7 +1321,7 @@ async function main() {
     ]);
     const input = await readCliInput(root, options["input-file"], {
       label: "create",
-      allowedFields: ["expectedEvidence"],
+      allowedFields: ["expectedEvidence", "composition", "constraints", "assignment"],
       requiredFields: ["expectedEvidence"],
     });
     result = await createWorkPackage(root, {
@@ -1118,7 +1330,15 @@ async function main() {
       briefPath: options.brief,
       pathsFile: options["paths-file"],
       expectedEvidence: input.expectedEvidence,
+      composition: input.composition,
+      constraints: input.constraints,
+      assignment: input.assignment,
     });
+  } else if (['dispatch','constraints','submit','classify','ack'].includes(command)) {
+    assertCliOptions(command,options,['run','goal','input-file']);
+    const fields={dispatch:['maxTokens','targetTokens'],constraints:['constraints','expectedVersion'],submit:['workerId','attempt','reportPath','evidence','expectedVersion'],classify:['receiptId','expectedVersion','status','workerAvailable'],ack:['receiptId','expectedVersion']}[command];
+    const input = options['input-file'] ? await readCliInput(root,options['input-file'],{label:command,allowedFields:fields,requiredFields:command==='dispatch'?[]:command==='submit'?['workerId','attempt','reportPath','evidence']:['expectedVersion']}) : {};
+    result = await ({dispatch:readDispatchContext,constraints:amendWorkPackageConstraints,submit:submitCompletionReceipt,classify:classifyCompletionReceipt,ack:acknowledgeCompletionReceipt}[command])(root,{...input,runId:options.run,goalId:options.goal});
   } else if (command === "review") {
     assertCliOptions(command, options, ["run", "goal", "base", "paths-file"]);
     result = await createReviewPackage(root, {
@@ -1156,6 +1376,7 @@ async function main() {
     );
   }
   process.stdout.write(`${JSON.stringify(result)}\n`);
+  if (result.status === 'over_budget') process.exitCode = 2;
 }
 
 const isCli = process.argv[1] === fileURLToPath(import.meta.url);

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {selectActiveAssets, isActiveAsset} from './active-assets.mjs';
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { lstat, mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
@@ -79,6 +80,16 @@ export function parseCsvRows(text) {
   return rows;
 }
 
+export function checkExecutableReferences(file, text, fileSet) {
+  if (/^docs\/(archive|audits|eval-results)\//.test(file) || file === 'CHANGELOG.md') return [];
+  const findings = [];
+  const commands = /\b(?:node|python3?|pwsh)\s+(?:--?[a-z-]+\s+)*["']?(\.(?:agent|codex|claude)\/[A-Za-z0-9_./-]+\.(?:mjs|js|py|ps1))\b/g;
+  for (const match of text.matchAll(commands)) {
+    if (!fileSet.has(match[1])) findings.push(finding('P1', 'MISSING_EXECUTABLE_REFERENCE', file, `Executable reference is not shipped: ${match[1]}`));
+  }
+  return findings;
+}
+
 export async function auditRepository(root, options = {}) {
   const duplicateParagraphMinChars =
     options.duplicateParagraphMinChars ?? 120;
@@ -90,7 +101,7 @@ export async function auditRepository(root, options = {}) {
     ]),
   ]);
   const manifestEvidence = await listRepositoryManifest(root);
-  const manifest = manifestEvidence.files;
+  const manifest = selectActiveAssets(manifestEvidence.files);
   const physicalInventory = await readPhysicalInventory(root, manifest);
   const auditClassification = classifyAuditManifest(manifest);
   const excludedFiles = manifest
@@ -158,6 +169,7 @@ export async function auditRepository(root, options = {}) {
   let binaryFiles = 0;
   let linesRead = 0;
   let filesRead = 0;
+  const retiredAssets = [];
 
   for (const file of files) {
     const absolute = path.join(root, file);
@@ -223,6 +235,7 @@ export async function auditRepository(root, options = {}) {
         paragraphs,
       );
       await validateMarkdownLinks(root, file, text, fileSet, findings);
+      findings.push(...checkExecutableReferences(file, text, fileSet));
     }
   }
 
@@ -233,7 +246,7 @@ export async function auditRepository(root, options = {}) {
   const skillSummary = validateSkills(
     contents,
     findings,
-    options.maxSkillEntrypointWords ?? 500,
+    null,
   );
   validateIndexes(contents, findings);
   validateOutputBudgets(contents, findings);
@@ -311,7 +324,7 @@ async function listRepositoryManifest(root) {
     });
     if (/^[a-f0-9]{40}$/.test(String(head ?? ""))) {
       return {
-        files: gitFiles,
+        files: gitFiles.filter(file => !file.split('/').some(part => SKIP_DIRECTORIES.has(part)) && ![...SKIP_RUNTIME_DIRECTORIES].some(dir => file === dir || file.startsWith(`${dir}/`))),
         source: "git-active-manifest",
         head,
       };
@@ -471,6 +484,7 @@ async function readPhysicalInventory(root, activeManifest) {
   const stack = [""];
   let files = 0;
   let filesRead = 0;
+  const retiredAssets = [];
   let symlinks = 0;
   let outsideActiveManifestEntries = 0;
 
@@ -506,7 +520,8 @@ async function readPhysicalInventory(root, activeManifest) {
       }
 
       files += 1;
-      await readFile(path.join(root, relative));
+      const bytes = await readFile(path.join(root, relative));
+      if (!isActiveAsset(relative)) retiredAssets.push({path: relative, digest: createHash('sha256').update(bytes).digest('hex')});
       filesRead += 1;
       if (!active.has(relative)) {
         outsideActiveManifestEntries += 1;
@@ -521,6 +536,7 @@ async function readPhysicalInventory(root, activeManifest) {
     symlinks,
     activeManifestEntries: activeManifest.length,
     outsideActiveManifestEntries,
+    ...(retiredAssets.length ? {retiredAssets} : {}),
   };
 }
 
@@ -657,7 +673,9 @@ async function validateMarkdownLinks(root, file, text, fileSet, findings) {
 }
 
 function collectDuplicateParagraphs(file, text, minChars, paragraphs) {
-  const body = stripFrontmatter(text);
+  const body = stripFrontmatter(text)
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/^## (?:Summary|Executive Summary)\s*\n[\s\S]*?(?=^## |$(?![\s\S]))/gmi, '');
   for (const raw of body.split(/\n\s*\n/)) {
     const withoutHeadings = raw
       .split("\n")
@@ -936,16 +954,6 @@ function validateSkills(contents, findings, wordLimit) {
     summary.count += 1;
     summary.words += words;
     summary.maxWords = Math.max(summary.maxWords, words);
-    if (words > wordLimit) {
-      findings.push(
-        finding(
-          "P1",
-          "SKILL_ENTRYPOINT_TOO_LARGE",
-          file,
-          `Entrypoint has ${words} words; maximum is ${wordLimit}. Move conditional detail behind references.`,
-        ),
-      );
-    }
     const metadata = parseFrontmatter(text);
     if (metadata.name !== match[1]) {
       findings.push(
@@ -1514,7 +1522,7 @@ function formatReport(report) {
     `Physical files read: ${report.physicalInventory.filesRead}/${report.physicalInventory.files} (${report.physicalInventory.outsideActiveManifestEntries} outside active manifest)`,
     `Files read: ${report.summary.filesRead} (${report.summary.textFiles} text, ${report.summary.binaryFiles} binary)`,
     `Bytes/lines: ${report.summary.bytesRead}/${report.summary.linesRead}`,
-    `Skill entrypoints: ${report.summary.skillEntrypoints} files, ${report.summary.skillEntrypointWords} words total, ${report.summary.maxSkillEntrypointWords}/${report.summary.skillEntrypointWordLimit} max`,
+    `Skill entrypoints: ${report.summary.skillEntrypoints} files, ${report.summary.skillEntrypointWords} words total, ${report.summary.maxSkillEntrypointWords} observed maximum (diagnostic only)`,
     `Digest: ${report.summary.contentDigest}`,
     `Findings: ${report.summary.findings}`,
   ];

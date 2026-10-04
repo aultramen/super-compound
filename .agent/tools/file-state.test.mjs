@@ -184,3 +184,15 @@ test("atomic writes replace in place, enforce CAS, and tolerate filesystems with
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test("strict atomic replacement preserves old bytes on busy rename", async (t) => {
+  const root = await mkdtemp(path.join(tmpdir(), "strict-write-"));
+  t.after(() => rm(root, {recursive: true, force: true}));
+  await writeFile(path.join(root, 'memory.md'), 'old');
+  const {writeFileAtomic} = await loadFileState();
+  await assert.rejects(writeFileAtomic(root, 'memory.md', 'new', {
+    fallbackOnBusy: false,
+    renameFile: async () => { throw Object.assign(new Error('busy'), {code: 'EBUSY'}); },
+  }), /busy/);
+  assert.equal(await readFile(path.join(root, 'memory.md'), 'utf8'), 'old');
+});

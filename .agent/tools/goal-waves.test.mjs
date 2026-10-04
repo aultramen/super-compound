@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
     computeWaves,
+    computeReadyGoals,
     parseIssueDependencies,
     resolveMaxWorkers,
 } from './goal-waves.mjs';
@@ -126,3 +127,66 @@ test('default CLI output keeps the goal_waves_v1 shape', (t) => {
     assert.deepEqual(plan.waves[1], { wave: 2, parallel: 2, goals: ['api', 'ui'] });
 });
 
+
+test('dispatch releases a dependent while its unrelated reporting wave peer runs', () => {
+    const goals = [
+        { id: 'a', dependsOn: [] },
+        { id: 'b', dependsOn: [] },
+        { id: 'c', dependsOn: ['a'] },
+        { id: 'd', dependsOn: ['b'] },
+    ];
+    assert.deepEqual(computeReadyGoals(goals, {
+        verified: ['a'], inProgress: ['b'], maxWorkers: 2,
+    }), ['c']);
+});
+
+test('blocked stream leaves independent goals dispatchable and respects slots', () => {
+    const goals = [
+        { id: 'blocked', dependsOn: [] },
+        { id: 'child', dependsOn: ['blocked'] },
+        { id: 'free', dependsOn: [] },
+        { id: 'other', dependsOn: [] },
+    ];
+    assert.deepEqual(computeReadyGoals(goals, { blocked: ['blocked'], maxWorkers: 1 }), ['free']);
+    assert.deepEqual(computeReadyGoals(goals, { blocked: ['blocked'], inProgress: ['free'], maxWorkers: 1 }), []);
+});
+
+test('dispatch requires verified dependencies and rejects malformed state', () => {
+    const goals = [{ id: 'a' }, { id: 'b', dependsOn: ['a'] }];
+    assert.deepEqual(computeReadyGoals(goals, { inProgress: ['a'], maxWorkers: 2 }), []);
+    assert.throws(() => computeReadyGoals(goals, { verified: ['unknown'] }), /WAVES_UNKNOWN_STATE_GOAL/);
+    assert.throws(() => computeReadyGoals(goals, { verified: ['a'], blocked: ['a'] }), /WAVES_CONFLICTING_STATE/);
+    assert.throws(() => computeReadyGoals(goals, { maxWorkers: 0 }), /WAVES_INVALID_WORKERS/);
+    assert.throws(() => computeReadyGoals([{ id: 'a', dependsOn: ['a'] }]), /WAVES_CYCLE_DETECTED/);
+});
+
+test('worker allowance follows host and resource capacity with a conservative fallback', () => {
+    assert.equal(resolveMaxWorkers('.', null, { hostSlots: 6 }), 6);
+    assert.equal(resolveMaxWorkers('.', 8, { hostSlots: 6, resourceSlots: 3 }), 3);
+    assert.equal(resolveMaxWorkers('.', null, { resourceSlots: 1 }), 1);
+    assert.throws(() => resolveMaxWorkers('.', null, { hostSlots: 0 }), /WAVES_INVALID_WORKERS/);
+});
+
+test('--ready emits dependency-ready dispatch independently of reporting waves', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'waves-ready-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    const statePath = path.join(dir, 'state.json');
+    fs.writeFileSync(statePath, JSON.stringify({ verified: ['schema'], inProgress: ['api'], hostSlots: 3 }));
+    const plan = JSON.parse(execFileSync(process.execPath,
+        [cliPath, '--input', writeGoalsFile(dir), '--ready', '--state', statePath], { encoding: 'utf8' }));
+    assert.equal(plan.schema, 'goal_dispatch_plan_v1');
+    assert.equal(plan.maxWorkers, 3);
+    assert.deepEqual(plan.readyGoals, ['ui']);
+});
+
+test('a blocked ancestor suppresses dispatch even if an intermediate proof remains listed', () => {
+    const goals = [
+        { id: 'root' },
+        { id: 'child', dependsOn: ['root'] },
+        { id: 'leaf', dependsOn: ['child'] },
+        { id: 'free' },
+    ];
+    assert.deepEqual(computeReadyGoals(goals, {
+        blocked: ['root'], verified: ['child'], maxWorkers: 2,
+    }), ['free']);
+});

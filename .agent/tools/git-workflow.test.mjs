@@ -237,7 +237,7 @@ test("exports safe default configuration", () => {
   assert.equal(DEFAULT_CONFIG.protectMainBranch, true);
 });
 
-test("flags full-tier paths so a light change cannot silently cross a contract surface", () => {
+test("flags sensitive paths for semantic inspection without automatic escalation", () => {
   assert.deepEqual(
     detectScopeTriggers(["src/app.ts", "migrations/001_add_column.sql", "src/auth/session.ts", "README.md"]),
     ["migrations/001_add_column.sql", "src/auth/session.ts"],
@@ -252,5 +252,22 @@ test("flags full-tier paths so a light change cannot silently cross a contract s
       changedFiles: ["migrations/001_add_column.sql"],
     },
   });
-  assert.ok(preview.warnings.some((line) => /Full-tier paths touched/.test(line)));
+  assert.ok(preview.warnings.some((line) => /Contract-sensitive paths touched/.test(line)));
+});
+
+test("local-only setup uses known base without remote or network commands", () => {
+  const state = {...cleanRepo, remotes: [], remoteBranches: [], currentBranch: "main"};
+  const start = planStart({branch: "fix/offline", local: true, repoState: state});
+  assert.deepEqual(start.errors, []);
+  assert.deepEqual(start.commands, ["git checkout -b fix/offline main"]);
+  const worktree = planWorktree({branch: "fix/offline", path: "../offline", local: true, repoState: {...state, workingTreeClean: false}});
+  assert.deepEqual(worktree.errors, []);
+  assert.deepEqual(worktree.commands, ["git worktree add -b fix/offline ../offline main", "cd ../offline"]);
+  assert.doesNotMatch(worktree.commands.join("\n"), /fetch|pull|stash|reset|commit/);
+});
+test("local setup refuses unknown base and checkout across dirty user work", () => {
+  const state = {...cleanRepo, remotes: [], remoteBranches: []};
+  assert.ok(planStart({branch: "fix/offline", local: true, base: "unknown", repoState: state}).errors.length);
+  assert.ok(planStart({branch: "fix/offline", local: true, repoState: {...state, workingTreeClean: false}}).errors.length);
+  assert.deepEqual(planStart({branch: "fix/offline", local: true, repoState: {...state, currentBranch: "main", workingTreeClean: false}}).errors, []);
 });
