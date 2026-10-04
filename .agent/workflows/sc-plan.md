@@ -4,12 +4,27 @@ description: "Create an FSD from an approved PRD, then slice FSD goals into ligh
 
 # Plan Workflow
 
+## Summary
+
+
 Use this when approved product requirements are ready to become a technical implementation contract. The FSD is the primary output and implementation authority.
 
 Planning writes authority artifacts only: FSD, accepted ADR, eval definition,
 and issue pointers. It never edits product code; implementation belongs to an
 approved `/sc-work` goal. `/sc-plan` is the entry of the `full` delivery tier
 (`skills/agentic-delivery/references/workflow-integration.md`, triggers T1-T5).
+
+Apply `.agent/context/checkpoint.contract.md` for input, blockers and handoffs.
+Check evidence dependencies for self-produced entry requirements. Missing
+qualification assets/actions need a bounded approved enabler under the canonical
+UI readiness reference; never start a blocked product goal to evade its gate.
+
+
+## Example
+
+Input: `/sc-plan docs/prd/prd-analytics.md`.
+Prerequisite: Approved PRD and required experience evidence.
+Result and next action: FSD, goals and mapped verification; require FSD approval and execution authorization before /sc-work.
 
 ## Steps
 

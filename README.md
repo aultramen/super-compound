@@ -8,6 +8,47 @@ Super Compound is a compact AI-assisted development framework for Antigravity ID
 
 It keeps the public command surface small, pushes detailed procedures into skills, and treats verification as part of the work rather than a final ritual.
 
+Human input uses one [answerable checkpoint](.agent/context/checkpoint.contract.md):
+what remains approved, the blocked result, owner, recommendation, direct review
+material, one question and automatic continuation. Agent research/tests proceed
+first; evidence refresh does not repeat approval. Authorized owner handoffs run
+internally while configured stage checkpoints and read-only boundaries remain.
+See the [PromptShield example and regression evidence](docs/eval-results/hitl-checkpoints-20261004.md).
+
+## Quick Start
+
+Start with [setup](SETUP.md), then try one small task. Node 22+ is required;
+Python is needed only for interface search and Python checks.
+
+```text
+/sc-init
+/sc-debug Form login menerima email kosong; reproduksi dan perbaiki validasinya
+```
+
+Expected result: a focused fix with regression evidence and one next action:
+
+```text
+Hasil: Validasi form sudah diperbaiki.
+Verifikasi: 6 pengujian terkait lulus.
+Berikutnya: Review perubahan melalui /sc-review.
+Detail: [tautan laporan]
+```
+
+The numbers above illustrate the format; the agent reports actual check results.
+
+| Your task | Start here | What you provide | Result and next action |
+|---|---|---|---|
+| Setup | [SETUP.md](SETUP.md), then `/sc-init` | Project path, host and project/global scope | Doctor result and detected verification commands; try a small task |
+| Bug | `/sc-debug Email kosong lolos validasi login` | Symptom, reproduction and expected behavior | Root cause, tested fix and evidence; review the change |
+| Small change | `/sc-work Ubah teks tombol Simpan menjadi Simpan perubahan` | Exact change and expected result in the existing screen | Scoped edit and relevant checks; review |
+| New feature | `/sc-launch Tambahkan dashboard penggunaan untuk admin akun` | Users, outcome and known constraints | BRD -> PRD -> FSD -> verified goals within stage approvals and execution authorization |
+| Resume | `/sc-status` | Existing workspace and handoff, plus any changed intent | Current evidence/blockers and one exact next action; continue authorized ready work |
+
+All 18 commands use `/sc-*`; Claude Code exposes native slash commands after
+installation. Other hosts use their adapters. In Codex, plain language such as
+“fix this bug” or “resume the task” routes to the same compact contracts.
+See [Public Workflows](#public-workflows) for input/output examples.
+
 ## Delivery Tiers
 
 The framework decides how much process a request needs. Intake states one line, `Tier: light|full; trigger: T<n>|none`. `light` (bug fixes, refactors, config, one-module features) goes straight to `/sc-work` or `/sc-debug` with tests and verification; a single trivial change is done directly. `full` (new capability without approved PRD/FSD, material contract/access/data/side-effect change, new screen or flow, coordination that changes outcomes or risk, or an explicit BRD/PRD/FSD request) takes `BRD -> PRD -> FSD -> GOAL`. A trigger found mid-work escalates; it never blocks at intake. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
@@ -96,27 +137,22 @@ contracts. See `.codex/README.md` for isolated install and verification commands
 
 For Antigravity IDE, keep `.agent/rules/super-compound.md` lowercase. The root `SUPER-COMPOUND.md` is the concise human/Claude operating contract; `.agent/rules/super-compound.md` is the canonical Antigravity rule.
 
-## Quick Start
+## Lifecycle Reference
 
-All public commands use the `/sc-*` prefix to avoid collisions with native Claude Code planning and review slash commands. In Claude Code, the copied `.claude/commands/` surface exposes them directly as slash commands.
+After implementation, review and audit before explicitly requested Git delivery:
 
 ```text
-/sc-init
-/sc-geniusloop <scope>
-/sc-explore <idea>
-/sc-research "<specific evidence question>"  # optional
-/sc-prd <feature>
-/sc-ui review <PRD draft>  # required for UI-bearing scope
-/sc-plan <approved PRD>
-/sc-go start feature/<name>
-/sc-work <goal issue or FSD goal>
+/sc-work <approved-goal>
 /sc-review
 /sc-audit
-/sc-go commit "Describe the change"
+/sc-go commit "Describe the verified change"
 /sc-go push
 /sc-go pr
-/sc-compound
 ```
+
+Git commands require explicit intent for each operation. Authorized internal
+workflow handoffs continue automatically; the list is a reference, not a queue
+of commands the user must retype.
 
 For product work with an interactive surface, the default hybrid lifecycle is:
 
@@ -170,7 +206,7 @@ For continuation:
 - `/sc-plan` writes only FSD and issue pointers. `/sc-work` materializes missing
   schemas, fixtures, mock, typed consumer, and contract tests through a
   `CONTRACT_ENABLER` goal.
-- Exactly one `FIRST_VERTICAL_SLICE` proves real-provider auth/permission,
+- For networked UI, exactly one `FIRST_VERTICAL_SLICE` proves real-provider auth/permission,
   success, and a representative failure. Mock-only evidence cannot open
   `SCALE_OUT_SLICE` work.
 - Parallelism starts at 2+ genuinely independent streams only when saved time
@@ -202,24 +238,24 @@ Only these workflow files are public:
 
 | Workflow | Use When |
 |---|---|
-| `/sc-init` | Set up or reload framework context |
-| `/sc-status` | Inspect current state and route the next action |
-| `/sc-geniusloop` | Generate and filter proactive improvement ideas when goal queues are empty |
-| `/sc-explore` | Shape fuzzy ideas into a BRD with business objectives, constraints, policies, and acceptance |
-| `/sc-research` | Resolve a named factual or technical gap with an advisory research note, then return to the decision owner |
-| `/sc-prd` | Write PRD product requirements from an approved BRD |
-| `/sc-plan` | Produce the FSD, ADR applicability decision, goal issue pointers, risk checks, and verification |
-| `/sc-eval` | Define and run evaluation criteria before or after implementation |
-| `/sc-go` | Preview branch, worktree, commit, push, and Pull Request operations |
-| `/sc-work` | Execute an approved FSD goal or goal issue pointer sequentially or with safe parallel slices |
-| `/sc-debug` | Reproduce, isolate, and fix root causes |
-| `/sc-review` | Review changes for correctness, maintainability, and missing tests |
-| `/sc-audit` | Check security, compatibility, compliance, agent surface, and release readiness |
-| `/sc-compound` | Capture reusable solutions and lessons |
-| `/sc-evolve` | Cluster verified learnings into draft framework proposals for human approval |
-| `/sc-pause` | Save durable handoff state |
-| `/sc-launch` | Start a focused project or feature lifecycle |
-| `/sc-ui` | Design or review UI read-only; route approved implementation to `/sc-work` |
+| [/sc-init](.agent/workflows/sc-init.md) | Set up or reload framework context |
+| [/sc-status](.agent/workflows/sc-status.md) | Inspect current state and route the next action |
+| [/sc-geniusloop](.agent/workflows/sc-geniusloop.md) | Generate and filter proactive improvement ideas when goal queues are empty |
+| [/sc-explore](.agent/workflows/sc-explore.md) | Shape fuzzy ideas into a BRD with business objectives, constraints, policies, and acceptance |
+| [/sc-research](.agent/workflows/sc-research.md) | Resolve a named factual or technical gap with an advisory research note, then return to the decision owner |
+| [/sc-prd](.agent/workflows/sc-prd.md) | Write PRD product requirements from an approved BRD |
+| [/sc-plan](.agent/workflows/sc-plan.md) | Produce the FSD, ADR applicability decision, goal issue pointers, risk checks, and verification |
+| [/sc-eval](.agent/workflows/sc-eval.md) | Define and run evaluation criteria before or after implementation |
+| [/sc-go](.agent/workflows/sc-go.md) | Preview branch, worktree, commit, push, and Pull Request operations |
+| [/sc-work](.agent/workflows/sc-work.md) | Execute an approved FSD goal or goal issue pointer sequentially or with safe parallel slices |
+| [/sc-debug](.agent/workflows/sc-debug.md) | Reproduce, isolate, and fix root causes |
+| [/sc-review](.agent/workflows/sc-review.md) | Review changes for correctness, maintainability, and missing tests |
+| [/sc-audit](.agent/workflows/sc-audit.md) | Check security, compatibility, compliance, agent surface, and release readiness |
+| [/sc-compound](.agent/workflows/sc-compound.md) | Capture reusable solutions and lessons |
+| [/sc-evolve](.agent/workflows/sc-evolve.md) | Cluster verified learnings into draft framework proposals for human approval |
+| [/sc-pause](.agent/workflows/sc-pause.md) | Save durable handoff state |
+| [/sc-launch](.agent/workflows/sc-launch.md) | Start a focused project or feature lifecycle |
+| [/sc-ui](.agent/workflows/sc-ui.md) | Design or review UI read-only; route approved implementation to `/sc-work` |
 
 Non-trivial debug evidence that would not fit the chat return is stored at
 `docs/debug/YYYY-MM-DD-<slug>.md`; `/sc-compound` remains reserved for verified,
@@ -312,11 +348,11 @@ Supporting skills:
 Captured knowledge runs a closed loop: capture -> read-back -> maintenance -> evolve.
 
 - `/sc-compound` routes outcomes to four sinks: `docs/solutions/` (solved problems), `ERR-*` entries in `docs/ERROR_LOG.md` (agent mistakes plus an IF-THEN prevention rule), `LRN-*` entries in `docs/LEARNED_KNOWLEDGE.md` (user corrections and confirmed conventions), and `docs/progress.md` (chronology). Entry formats and the capture guide live in `.agent/skills/knowledge-compounding/references/memory-capture.md`; `.agent/skills/state-management/references/file-contracts.md` only selects the file.
-- `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; matching `ERR-*`/`LRN-*` prevention rules are binding until superseded. The corpus is entry-granular over `docs/solutions/`, `docs/learnings/`, `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, and the Codebase Patterns head of `docs/progress.md`, still top-3 bounded.
+- `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; matching `ERR-*`/`LRN-*` lessons are evidence to validate against the current code and context. Decisions bind only through their authoritative source and approval provenance. The corpus is entry-granular over `docs/solutions/`, `docs/learnings/`, `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, and the Codebase Patterns head of `docs/progress.md`, still top-3 bounded.
 - `/sc-status` counts memory entries via `node .agent/tools/memory-maintenance.mjs report` and recommends `/sc-evolve` at 3+ independent observed/confirmed origins with evidence; `/sc-evolve` consumes the report's promotion candidates but still writes drafts only for human approval. `memory-maintenance.mjs` supports `check` (format and cap validation), `report`, JSON `capture`/`refresh`/`feedback`/`checkpoint`, read-only `resume`, and `archive --dry-run`; applying archives stays human-approved.
 - The `stop-check` hook emits one advisory `/sc-compound` suggestion when a session edited source but captured no knowledge.
 - The compact contracts carry the loop's spine, not just the full workflows: `sc-work`, `sc-debug`, and `sc-plan` read back first, `sc-work` and `sc-debug` close through `/sc-compound`, `sc-status` runs the maintenance report, `sc-pause` captures unlogged entries, and `sc-compound` names the four sinks. A spine test in `.agent/tools/workflow-contracts.test.mjs` keeps it that way, because the contract-first path never loads the full workflow body.
-- `memory-maintenance.mjs report` also prints a `freshness` block comparing `docs/STATE.md` and `docs/progress.md` dates with the newest commit; `STALE_STATE` or `STALE_PROGRESS` makes `/sc-status` recommend `/sc-pause` before any other route.
+- `memory-maintenance.mjs report` also prints a `freshness` block comparing `docs/STATE.md` and `docs/progress.md` dates with the newest commit. `STALE_STATE` or `STALE_PROGRESS` is reconciled through the authorized owning route; active intent and dependency-ready work take priority. `/sc-status` remains read-only and `/sc-pause` is for actual stopping.
 - Optional global store: set `SC_GLOBAL_KNOWLEDGE_DIR` and `knowledge-search.mjs` adds `<dir>/LEARNED_KNOWLEDGE.md` to the corpus (hits show as `global:`); `Applies to: global` entries are captured there too. Unset, the corpus stays repository-local.
 
 ## Git Workflow Operation

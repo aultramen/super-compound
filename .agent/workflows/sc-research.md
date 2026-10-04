@@ -4,7 +4,17 @@ description: "Run a bounded evidence spike for a named factual or technical gap 
 
 # Research Workflow
 
+## Summary
+
+
 Use this as a conditional evidence gate when a decision is already framed but the available facts are insufficient, stale, conflicting, or expensive to assume. A research note is advisory evidence, not business, product, or implementation authority.
+
+
+## Example
+
+Input: `/sc-research Can the current event store meet the approved 15-minute freshness requirement?`.
+Prerequisite: Named evidence question, target decision and owning workflow.
+Result and next action: Evidence, uncertainty and a note when durable; return to the named decision owner.
 
 ## Use When
 

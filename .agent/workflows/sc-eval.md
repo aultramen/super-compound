@@ -4,10 +4,20 @@ description: "Define and run eval-driven success criteria before or after implem
 
 # Eval Workflow
 
+## Summary
+
+
 Use this when a feature needs measurable pass/fail behavior, reliability checks, or repeatable quality measurement.
 
 Eval writes only `.agent/evals/` criteria and results. It never edits the
 implementation it grades, creates approval, or closes a finding by self-report.
+
+
+## Example
+
+Input: `/sc-eval check analytics`.
+Prerequisite: Defined measurable criteria and an implementation to exercise.
+Result and next action: Actual pass/fail/unknown results and evidence; route failures to the owning /sc-work or /sc-debug.
 
 ## Usage
 

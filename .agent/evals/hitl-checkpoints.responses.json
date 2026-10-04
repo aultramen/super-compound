@@ -1,0 +1,381 @@
+{
+  "basis": "one informed in-thread scripted contract-application attempt; not independent host reliability",
+  "cases": [
+    {
+      "id": "H01",
+      "response": "PRD/FSD tetap disetujui. Evidence prototype baru tidak mengubah behavior atau risiko. Saya rekonsiliasi referensi melalui owner PRD/FSD dan memperbarui pointer tanpa approval ulang.",
+      "actions": [
+        "inspect_authority",
+        "inspect_evidence_identity",
+        "handoff_prd",
+        "handoff_plan",
+        "refresh_pointer"
+      ],
+      "preserved": [
+        "prd",
+        "fsd"
+      ],
+      "resolved": [],
+      "remaining": [],
+      "requests": []
+    },
+    {
+      "id": "H02",
+      "response": "Execution GOAL-002 tetap diotorisasi; GOAL-001 sudah verified untuk mock lokal. Yang belum terbukti adalah descriptor subscription/auth, inventory protocol, isolasi OS dan dependency pins. Saya meneliti fakta yang tersedia melalui research read-only. Kebutuhan eksperimen executable dirutekan ke plan untuk qualification bounded dengan authority jelas. Kode product GOAL-002 masih blocked; approval Anda tidak diperlukan untuk menyatakan bukti yang belum ada sebagai PASS.",
+      "actions": [
+        "inspect_authority",
+        "research_facts",
+        "run_available_checks",
+        "handoff_plan_qualification",
+        "keep_product_blocked"
+      ],
+      "preserved": [
+        "prd",
+        "fsd",
+        "execution_goal_002"
+      ],
+      "resolved": [],
+      "remaining": [
+        "native_auth",
+        "protocol",
+        "os_isolation",
+        "dependency_pins",
+        "experience_acceptance"
+      ],
+      "requests": []
+    },
+    {
+      "id": "H03",
+      "response": "Paket review lengkap di checkpoint berikut; penerimaan hanya untuk pengalaman prototype offline.",
+      "actions": [
+        "inspect_authority",
+        "inspect_walkthrough",
+        "request_review"
+      ],
+      "preserved": [
+        "prd",
+        "fsd",
+        "execution_goal_002"
+      ],
+      "resolved": [],
+      "remaining": [
+        "experience_acceptance",
+        "native_auth"
+      ],
+      "requests": [
+        {
+          "owner": "product_owner",
+          "scope": "offline_experience",
+          "needs": [
+            "experience_acceptance"
+          ]
+        }
+      ],
+      "checkpoint": {
+        "title": "PERLU INPUT ANDA — Review pengalaman PromptShield offline",
+        "kind": "review",
+        "blocks": "Acceptance pengalaman prototype untuk kesiapan GOAL-002; bukan izin execution baru.",
+        "completed": "PRD/FSD dan execution GOAL-002 tetap berlaku. GOAL-001 verified: 15 contract tests dan 46 scenario runs lokal. UI direction dan label Indonesia sudah diterima.",
+        "need": "Acceptance apakah penolakan pilihan lama setelah perubahan mode dan penutupan call setelah Manual cukup jelas pada prototype offline.",
+        "why_user": "Yang tersisa adalah penilaian pengalaman oleh owner produk sesuai acceptance yang belum selesai; agent sudah memeriksa walkthrough dan tes lokal. Sumber: ui-contract-readiness.md bagian Authority And Decision Rights. Ini tidak meminta keputusan produk lama ulang.",
+        "recommendation": "Terima pengalaman offline bila dua walkthrough jelas. Ini memungkinkan baseline prototype direkonsiliasi; trade-off: penempatan native, auth, accessibility environment khusus dan integration tetap belum terbukti.",
+        "materials": [
+          {
+            "path": "docs/eval-results/hitl-checkpoints-20261004.md#walkthrough-ringkas",
+            "inspect": "Pilihan lama menghasilkan STALE setelah mode berubah; lihat pesan refresh dan revisi baru."
+          },
+          {
+            "path": "docs/eval-results/hitl-checkpoints-20261004.md#walkthrough-ringkas",
+            "inspect": "Manual menghasilkan MANUAL_HANDOFF lalu CANCELLED/revoked; call lama tidak dilanjutkan."
+          }
+        ],
+        "example": "STALE: Pilihan lama ditolak. Muat ulang status dan tinjau revisi baru. Manual: Call lama berakhir; pekerjaan manual dilakukan di luar reviewer.",
+        "question": "Apakah kedua alur offline ini cukup jelas untuk diterima sebagai pengalaman prototype, dengan penempatan native dan integrasi tetap pending?",
+        "choices": [
+          "Terima kedua alur prototype (direkomendasikan)",
+          "Minta revisi: sebutkan alur/pesan yang membingungkan",
+          "Butuh walkthrough tambahan: sebutkan skenario"
+        ],
+        "free_text": true,
+        "after": "Saya rekonsiliasi acceptance pengalaman melalui /sc-prd, lalu /sc-plan memperbarui evidence/index tanpa approval ulang jika semantics sama. Native placement dan subscription/auth/OS qualification tetap terpisah; GOAL-002 hanya dimulai setelah entry gates PASS dengan authorization yang sudah ada.",
+        "waiting": "Saya melanjutkan riset subscription/protocol dan pemeriksaan OS/dependency yang tersedia dalam scope read-only; executable qualification membutuhkan paket enabler bounded yang approved."
+      }
+    },
+    {
+      "id": "H04",
+      "response": "Baru selesai: acceptance kedua alur prototype offline oleh owner produk. Approval PRD/FSD dan execution GOAL-002 tetap berlaku. Masih tersisa: native/auth qualification, owner agent/maintainer; langkah berikutnya research dan bounded qualification sesuai authority. GOAL-002 product execution masih blocked. Agent merekonsiliasi baseline pengalaman dan index melalui PRD/plan tanpa mengulang review offline; acceptance ini tidak menyelesaikan bagian native placement atau memberi integration PASS.",
+      "actions": [
+        "resolve_experience_only",
+        "handoff_prd",
+        "handoff_plan",
+        "research_native",
+        "keep_product_blocked"
+      ],
+      "preserved": [
+        "prd",
+        "fsd",
+        "execution_goal_002"
+      ],
+      "resolved": [
+        "experience_acceptance"
+      ],
+      "remaining": [
+        "native_auth",
+        "native_placement"
+      ],
+      "requests": []
+    },
+    {
+      "id": "H05",
+      "response": "Saya menggabungkan review pilihan kedaluwarsa dan held/manual dalam paket H03 karena owner dan scope prototype sama serta keduanya independen. Pertanyaan: apakah kedua alur dapat diterima, atau bagian mana perlu revisi? Jawaban parsial menutup hanya alur yang disebut. Ini tidak menggabungkan PRD/FSD/execution stage approval.",
+      "actions": [
+        "inspect_walkthrough",
+        "request_coordinated_review"
+      ],
+      "preserved": [
+        "prd",
+        "fsd"
+      ],
+      "resolved": [],
+      "remaining": [
+        "stale_review",
+        "held_review"
+      ],
+      "requests": [
+        {
+          "owner": "product_owner",
+          "scope": "offline_experience",
+          "needs": [
+            "stale_review",
+            "held_review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "H06",
+      "response": "GOAL-002 tetap blocked oleh fakta native. Goal dokumentasi independen sudah ready dan diotorisasi; saya mengerjakannya sekarang lalu menjalankan verifikasi link/isi. Tidak memerlukan Anda memilih workflow atau menyetujui urutan ulang.",
+      "actions": [
+        "keep_product_blocked",
+        "execute_independent_docs",
+        "verify_docs"
+      ],
+      "preserved": [
+        "execution_goal_002",
+        "execution_docs"
+      ],
+      "resolved": [],
+      "remaining": [
+        "native_auth"
+      ],
+      "requests": []
+    },
+    {
+      "id": "H07",
+      "response": "Delta: dari simulasi offline ke eksperimen live native dengan akses OS baru. Approval lama hanya mencakup offline dan tidak mencakup efek live tersebut; PRD/FSD offline dan execution lama tetap berlaku. Saya siapkan target, efek, recovery dan verifikasi eksperimen bounded di FSD. Rekomendasi: izinkan qualification synthetic bounded setelah security/access entry checks, atau pertahankan offline. Pertanyaan hanya tentang scope/izin eksperimen baru; sebelum jawaban tidak ada live action.",
+      "actions": [
+        "inspect_authority",
+        "prepare_delta_review",
+        "request_delta_only"
+      ],
+      "delta": {
+        "change": "offline_to_live_os_access",
+        "excluded_because": "prior_scope_offline",
+        "retained": [
+          "prd",
+          "fsd",
+          "execution_offline"
+        ]
+      },
+      "preserved": [
+        "prd",
+        "fsd",
+        "execution_offline"
+      ],
+      "resolved": [],
+      "remaining": [
+        "live_action_authorization"
+      ],
+      "requests": [
+        {
+          "owner": "authorized_action_owner",
+          "scope": "live_qualification_delta",
+          "needs": [
+            "live_action_authorization"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "H08",
+      "response": "Silence, timeout dan pilihan preselected belum menghasilkan jawaban. 'Oke' untuk paket yang mencampur beberapa scope tidak cukup untuk memastikan bagian mana diterima. Saya mempertahankan approval lama dan menanyakan hanya acceptance/aksi yang belum jelas; tidak memperluas authorization dan tidak mengulang penelitian yang sudah valid.",
+      "actions": [
+        "retain_pending_input",
+        "clarify_unresolved_scope",
+        "continue_safe_research"
+      ],
+      "preserved": [
+        "prd",
+        "fsd"
+      ],
+      "resolved": [],
+      "remaining": [
+        "experience_acceptance",
+        "live_action_authorization"
+      ],
+      "requests": [
+        {
+          "owner": "product_owner",
+          "scope": "offline_experience",
+          "needs": [
+            "experience_acceptance"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "H09",
+      "response": "Prototype experience diterima. Itu hanya acceptance simulasi mock; provider integration belum verified dan release/UAT belum accepted. Saya memperbarui acceptance melalui owner PRD, mempertahankan native evidence gaps, lalu menjalankan qualification yang tersedia.",
+      "actions": [
+        "resolve_experience_only",
+        "handoff_prd",
+        "research_native"
+      ],
+      "preserved": [
+        "prd",
+        "fsd"
+      ],
+      "resolved": [
+        "experience_acceptance"
+      ],
+      "remaining": [
+        "real_provider_integration",
+        "release_uat"
+      ],
+      "requests": []
+    },
+    {
+      "id": "H10",
+      "response": "Provider success/failure dan auth proof adalah hasil FIRST_VERTICAL_SLICE, bukan prasyarat memulai slice itu. Karena qualification assets belum tersedia, saya meneliti fakta read-only dan menyerahkan paket qualification bounded ke /sc-plan sebagai CONTRACT_ENABLER dengan entry checks dan authority sendiri. Product slice tetap blocked sampai prerequisite yang memang mendahuluinya terpenuhi; scale-out menunggu real slice verified. Tidak ada bypass safety atau menjalankan kode produk blocked.",
+      "actions": [
+        "separate_entry_from_done",
+        "research_facts",
+        "handoff_plan_qualification",
+        "require_bounded_enabler_authority",
+        "keep_product_blocked",
+        "keep_scale_out_blocked"
+      ],
+      "preserved": [
+        "prd",
+        "fsd",
+        "execution_goal_002"
+      ],
+      "resolved": [],
+      "remaining": [
+        "qualification_assets",
+        "real_provider_integration"
+      ],
+      "requests": []
+    },
+    {
+      "id": "H11",
+      "response": "Dalam pekerjaan aktif authorized, saya memanggil /sc-ui read-only, kembali ke /sc-prd untuk evidence reconciliation, lalu /sc-plan untuk index/pointer. Saya memeriksa authority tiap receiving route; produk hanya diedit di /sc-work yang diotorisasi. Bila permintaan awal hanya review read-only, saya mengembalikan findings dan route tanpa menjalankan remediation atau menulis state/authority.",
+      "actions": [
+        "check_ui_authority",
+        "ui_read_only",
+        "check_prd_authority",
+        "prd_evidence_write",
+        "check_plan_authority",
+        "plan_pointer_write",
+        "return_to_authorized_work"
+      ],
+      "standalone_actions": [
+        "ui_read_only",
+        "return_findings"
+      ],
+      "preserved": [
+        "prd",
+        "fsd",
+        "execution_goal_002"
+      ],
+      "resolved": [],
+      "remaining": [],
+      "requests": []
+    },
+    {
+      "id": "H12",
+      "response": "Preference owner diterima sebatas preferensi; kegagalan security, accessibility, integrity dan contract conformance masih unresolved. Release scope terdampak tetap blocked. Agent memperbaiki pada owning authorized goal dan menjalankan ulang pemeriksaan terkait; approval tidak dapat menghapus failure tersebut atau menjadi release PASS.",
+      "actions": [
+        "record_preference_only",
+        "keep_release_blocked",
+        "agent_remediate",
+        "rerun_failed_checks"
+      ],
+      "preserved": [
+        "prd",
+        "fsd"
+      ],
+      "resolved": [
+        "preference"
+      ],
+      "remaining": [
+        "security_failure",
+        "accessibility_failure",
+        "integrity_failure",
+        "conformance_failure"
+      ],
+      "requests": []
+    }
+  ],
+  "source_revalidation": {
+    "date": "2026-10-04",
+    "basis": "in-thread content review of H01-H12 against the shorter checkpoint display, workflow examples and topology applicability; not independent host reliability",
+    "outcome": "Responses and action decisions remain valid. H03 is a complex package and retains its additional evidence and choices. No stage approval, read-only boundary or networked proof gate was relaxed.",
+    "previous_source_digests": {
+    ".agent/context/checkpoint.contract.md": "5253d50556207a5c5bbc4b412d3db14e52f733f964f0cd6d4254178262a8f71f",
+    ".agent/context/workflow-dispatch.md": "e9d584d116681527544f6f6d697738226edb6ba4ccc7657f0d4e56ed5ea03879",
+    ".agent/skills/agentic-delivery/references/workflow-integration.md": "98265685ebf7da7f813a73b7ce013c75e47534ec6cc9c10362d4521d9629ad5c",
+    ".agent/skills/agentic-delivery/references/ui-contract-readiness.md": "b83a255b28dd994bbe6a690fb634152090eea6b08267884694fd2c659ec5c868",
+    ".agent/skills/checkpoint-protocol/SKILL.md": "26f5f88a03631a502d97ebee387d81a3f296596b5caa9452be3ec01f86ee35d5",
+    ".agent/skills/checkpoint-protocol/references/checkpoint-types.md": "949c4716094939b62c3c313ee6f4899ab3241dbee563d8381bd9c69e545c14b2",
+    ".agent/skills/checkpoint-protocol/references/resolution.md": "098a1c86c088a909e477c8e2a6ee55bfbfdc9eb9ea489a772fd1b88c637dc2c3",
+    ".agent/skills/plan-verification/SKILL.md": "098dba521902cce186c293f534d030681c731e5fb3f4ea178633596ecf41364c",
+    ".agent/skills/plan-verification/references/coverage-and-dependencies.md": "e0c77f317c0b4915d8185b64c5c1da50b9fd64c536708ddf7da05cd391a568fa",
+    ".agent/skills/executing-plans/SKILL.md": "f152d30f0128a14f11047310dd0eda6b0f504184bb83a74503216ccd4f868860",
+    ".agent/skills/prd-generator/SKILL.md": "2c32b4ae0eb0d056d7001df1e5d25ea34027e76adbe7f7b59ae40e0f72f89de7",
+    ".agent/context/workflows/sc-prd.contract.md": "e9ab52c4024eefb8f6962f23c324d930aba913106fa156683abfbd6bc5ebabcc",
+    ".agent/workflows/sc-prd.md": "260b806d2f7a75b7c8e1db518878378cc4c1cf6ec1b9f486d3909a201baa4014",
+    ".agent/context/workflows/sc-ui.contract.md": "a05909f467cbd8f4833b56a1f1506ff326dc4b3c2aae1d16b6a9d303b9c82f94",
+    ".agent/workflows/sc-ui.md": "4b79e7c4032125a0b26ed70da3a9469baf7fcc85ab6ea5b3bec552e2d6fa453f",
+    ".agent/context/workflows/sc-plan.contract.md": "393376340b94ed52ec4caf24ba2b0fdc013302ab36eee13f51bfe133146fcc10",
+    ".agent/workflows/sc-plan.md": "b419ebac3d1faf92975f86d83e63c445c2224617a8dabf79589b1729c2b7d34d",
+    ".agent/context/workflows/sc-work.contract.md": "601fc0c92f0e5471fcbaa199880014c3960f3eb18a7d03394214b8d9e9af1382",
+    ".agent/workflows/sc-work.md": "c24ba523c0433e3c9ab0909e67f44bb3ae62db6b95e76d1b7501a7b44a1af06f",
+    ".agent/context/workflows/sc-status.contract.md": "ede36ba6f11b12d000a12af6fd84fceaa569b07da30858ed873a9bdf30942f99",
+    ".agent/workflows/sc-status.md": "1ca438409d69a871729aafc8b61bfd8666110255a139937a862b343fb6d3adfe"
+  }
+  },
+  "source_digests": {
+    ".agent/context/checkpoint.contract.md": "a6e019c615acd19e1444fb3ad609a63622db7955694bd66e8cdda22b4c01f51e",
+    ".agent/context/workflow-dispatch.md": "e9d584d116681527544f6f6d697738226edb6ba4ccc7657f0d4e56ed5ea03879",
+    ".agent/skills/agentic-delivery/references/workflow-integration.md": "98265685ebf7da7f813a73b7ce013c75e47534ec6cc9c10362d4521d9629ad5c",
+    ".agent/skills/agentic-delivery/references/ui-contract-readiness.md": "b83a255b28dd994bbe6a690fb634152090eea6b08267884694fd2c659ec5c868",
+    ".agent/skills/checkpoint-protocol/SKILL.md": "26f5f88a03631a502d97ebee387d81a3f296596b5caa9452be3ec01f86ee35d5",
+    ".agent/skills/checkpoint-protocol/references/checkpoint-types.md": "949c4716094939b62c3c313ee6f4899ab3241dbee563d8381bd9c69e545c14b2",
+    ".agent/skills/checkpoint-protocol/references/resolution.md": "098a1c86c088a909e477c8e2a6ee55bfbfdc9eb9ea489a772fd1b88c637dc2c3",
+    ".agent/skills/plan-verification/SKILL.md": "098dba521902cce186c293f534d030681c731e5fb3f4ea178633596ecf41364c",
+    ".agent/skills/plan-verification/references/coverage-and-dependencies.md": "e0c77f317c0b4915d8185b64c5c1da50b9fd64c536708ddf7da05cd391a568fa",
+    ".agent/skills/executing-plans/SKILL.md": "38abf3b1ce70b934a5d95d858fa4d121e48f3b13e31d308ac9fd428ba863641a",
+    ".agent/skills/prd-generator/SKILL.md": "2c32b4ae0eb0d056d7001df1e5d25ea34027e76adbe7f7b59ae40e0f72f89de7",
+    ".agent/context/workflows/sc-prd.contract.md": "e9ab52c4024eefb8f6962f23c324d930aba913106fa156683abfbd6bc5ebabcc",
+    ".agent/workflows/sc-prd.md": "fd6dafc36bee6e621305735126fb4c14955c864fb714d91ab748f5105a3d2ae6",
+    ".agent/context/workflows/sc-ui.contract.md": "a05909f467cbd8f4833b56a1f1506ff326dc4b3c2aae1d16b6a9d303b9c82f94",
+    ".agent/workflows/sc-ui.md": "faed0378e7868871dc2e7b8d1d64ab93d1b913340514fdfc8ca5f94b7560ef12",
+    ".agent/context/workflows/sc-plan.contract.md": "393376340b94ed52ec4caf24ba2b0fdc013302ab36eee13f51bfe133146fcc10",
+    ".agent/workflows/sc-plan.md": "d39f35678fd3c012e7a376701aab1950499f4e7acb8e4cb622230f4abbc751fb",
+    ".agent/context/workflows/sc-work.contract.md": "601fc0c92f0e5471fcbaa199880014c3960f3eb18a7d03394214b8d9e9af1382",
+    ".agent/workflows/sc-work.md": "1dd501989b21e03ad09405d1cddcee0aa3b0cd39bf091b70a32cf559395d7843",
+    ".agent/context/workflows/sc-status.contract.md": "ede36ba6f11b12d000a12af6fd84fceaa569b07da30858ed873a9bdf30942f99",
+    ".agent/workflows/sc-status.md": "3f3e4ec1cef531a902d622ded6f2fa7b2aeb58f5f9ba873269d2c9de573b1a82"
+  }
+}

@@ -4,12 +4,22 @@ description: "Reproduce, diagnose root cause, fix, and verify bugs or unexpected
 
 # Debug Workflow
 
+## Summary
+
+
 Use this for errors, failing tests, regressions, performance surprises, or behavior that differs from expectations.
 
 Diagnosis is read-only. The fix phase is `light` by default: once the root cause
 is proven, fix it with a regression test. If the fix materially changes contract compatibility, access policy, data,
 or side effects (trigger T2) or a new capability (T1), write
 `ESCALATE: T<n>` and route to `/sc-plan` or `/sc-prd` instead of widening the fix.
+
+
+## Example
+
+Input: `/sc-debug Email kosong lolos validasi login`.
+Prerequisite: Symptom, reproduction and expected behavior.
+Result and next action: Proven root cause, regression-tested fix and evidence; capture reusable lessons and /sc-review.
 
 ## Steps
 
@@ -23,8 +33,8 @@ or side effects (trigger T2) or a new capability (T1), write
 8. Run verification and report evidence.
 9. If a non-trivial investigation would exceed the chat envelope, save the complete investigation to `docs/debug/YYYY-MM-DD-<slug>.md` and return its path. Shape it as: reproduction as exact commands; every hypothesis, including failed ones, with sufficient explanation (`H1: cause -> test -> disproving evidence`); root cause as one paragraph; fix as the changed-path list; verification as command plus result. Never drop failed hypotheses or evidence. Then run `node .agent/tools/doc-lint.mjs <artifact> --advisory` and adjudicate its findings (advisory).
 10. After a verified non-trivial root cause, route to `/sc-compound`. When the bug originated from an agent mistake, appending the `ERR-*` entry is mandatory.
-11. Close by writing the `docs/STATE.md` Next action; if work remains, hand off
-    with `/sc-pause`.
+11. Write the `docs/STATE.md` Next action and continue authorized ready work.
+    Use `/sc-pause` only when actually stopping.
 
 ## Output
 

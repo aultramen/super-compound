@@ -30,6 +30,10 @@ Run ten verification dimensions initially; after revision recheck affected dimen
 - **Coverage gate:** Map every requirement/acceptance criterion to FSD authority, verification, and a goal pointer. Missing must-have coverage is Critical.
 - **Goal gate:** Every goal needs action, verification, done criteria, dependencies, and one coherent outcome. `Blocked by` paths exist, precede dependents, and form an acyclic graph.
 - **Link gate:** Database, API, UI, shared-type, workflow, and other key connections must be ordered and specified before consumers rely on them.
+  Check evidence dependencies as well as issue paths: a goal's completion proof
+  cannot be its own entry condition. Require a bounded approved qualification/
+  enabler path when facts/assets are missing; apply the canonical UI readiness
+  reference. First-slice real integration proof gates scale-out, not first-slice entry.
 - **Scope gate:** Derive endpoint/page/workflow capability, critical error handling, and user validation. Split separate features or oversized work; merge tiny mechanical work. A coherent tracer bullet may cross layers and must not be rejected merely for doing so.
 - **Test gate:** Every critical path, edge case, and error path needs a verification step.
 - **Decision gate:** Every approved `TDEC-*` and every applicable obligation from a linked `ACCEPTED` ADR must map by exact ID to at least one `GOAL-*` and one `TEST-*`. Blocked or superseded decisions stay out of executable goals. Missing exact-ID coverage blocks execution. Fuzzy text similarity may warn after implementation but must never create a blocking match.

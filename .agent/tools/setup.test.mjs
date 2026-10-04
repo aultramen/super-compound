@@ -27,6 +27,12 @@ test('dry run is read-only; six adapters install and reinstall is a no-op', t =>
   assert.equal(next.status,0,JSON.stringify(next));
   assert.equal(next.report.changed,0);
   for(const rel of ['.agents/skills/super-compound/SKILL.md','.claude/commands/sc-init.md','.agents/skills/sc-init/SKILL.md','.cursor/skills/sc-init/SKILL.md','.windsurf/workflows/sc-init.md','.gemini/commands/sc-init.toml']) assert.ok(fs.existsSync(path.join(f.target,rel)),rel);
+  const codex = fs.readFileSync(path.join(f.target,'.agents/skills/super-compound/SKILL.md'),'utf8');
+  assert.match(codex, /description: Use when.*plain-language/);
+  assert.match(codex, /bug.*sc-debug/);
+  assert.match(codex, /resume.*sc-status/);
+  assert.match(codex, /small change.*sc-work/);
+  assert.match(codex, /feature.*sc-launch/);
   assert.match(fs.readFileSync(path.join(f.target,'.agent/rules/project-config.md'),'utf8'),/approval_mode:.*stage/);
   assert.equal(fs.existsSync(path.join(f.target,'.agent/tools/budget-wizard.mjs')),false);
   assert.equal(run(f,'doctor').status,0);

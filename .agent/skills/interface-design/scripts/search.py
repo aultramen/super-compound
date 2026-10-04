@@ -12,7 +12,7 @@ Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtj
 Persistence (Master + Overrides pattern):
   --persist    Save to design-system/<project-slug>/MASTER.md
   --page       Also create an override in design-system/<project-slug>/pages/
-  --overwrite  Replace existing persisted files
+  --overwrite  Replace the target page; without --page, replace MASTER.md
 """
 
 import argparse
@@ -109,9 +109,16 @@ if __name__ == "__main__":
         help="Create an override in design-system/<project-slug>/pages/",
     )
     parser.add_argument("--output-dir", "-o", type=str, default=None, help="Output directory for persisted files (default: current directory)")
-    parser.add_argument("--overwrite", action="store_true", help="Replace existing persisted design-system files")
+    parser.add_argument("--overwrite", action="store_true", help="Replace the target page; without --page, replace MASTER.md")
 
     args = parser.parse_args()
+
+    if args.design_system and (args.json or args.stack or args.domain):
+        parser.error("--design-system does not support --json, --stack or --domain; use --format markdown, then run stack/domain search separately")
+    if (args.persist or args.page or args.overwrite or args.output_dir) and not args.design_system:
+        parser.error("persistence options require --design-system --persist")
+    if (args.page or args.overwrite or args.output_dir) and not args.persist:
+        parser.error("--page, --overwrite and --output-dir require --persist")
 
     # Design system takes priority
     if args.design_system:

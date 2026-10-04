@@ -1,4 +1,5 @@
 Start from active user intent; when resuming, reconcile docs/STATE.md Next action.
+Input/blockers/handoffs: `.agent/context/checkpoint.contract.md`.
 Issue headers only, without reading all issue bodies; open the selected issue.
 Return read-only Git state and one exact /sc-* route with its tier: light ->
 /sc-work or /sc-debug directly; full -> /sc-explore, /sc-prd, or /sc-plan by the

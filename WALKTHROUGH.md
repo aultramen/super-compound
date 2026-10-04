@@ -10,6 +10,22 @@ Every command starts with `/sc-*` so it stays separate from native Claude Code s
 
 ## Delivery tier checkpoint
 
+For your first task, use the [five Quick Start scenarios](README.md#quick-start):
+setup -> `/sc-init`; bug -> `/sc-debug`; small change -> `/sc-work`;
+new feature -> `/sc-launch`; resume -> `/sc-status`. Provide the expected result
+and a reproduction for bugs. A useful return names the outcome, actual
+verification, and one next action with a link to supporting detail.
+
+Knowledge search supplies lessons to validate against current evidence;
+decisions bind only through their authoritative source and approval provenance.
+Active authorized work takes priority over administrative freshness.
+
+Human input follows [one checkpoint package](.agent/context/checkpoint.contract.md).
+It names the remaining need and owner, direct review material, recommendation,
+one question and the steps that resume automatically. Technical evidence stays
+separate from approval. Same-owner/scope inputs are coordinated; independent
+authorized work continues. See the [PromptShield before/after example](docs/eval-results/hitl-checkpoints-20261004.md).
+
 Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or a one-module change is `light`: `/sc-debug` or `/sc-work` starts immediately, tests and verification still apply, and a single trivial change is simply done. A new capability, a material contract/access/data change, a new screen, or coordinated work that changes outcomes or risk is `full` and takes the lifecycle below. The scenario that follows is `full`.
 
 ## High-Level Design
@@ -326,8 +342,12 @@ Blocked by: GOAL-002 and all applicable scale-out issues verified
 
 If the pinned executable assets already exist and pass the contract gate,
 `GOAL-001` may be omitted. Otherwise, after `GOAL-001` is verified, `/sc-plan`
-must update the FSD contract index, rerun readiness, and obtain Technical Manager
-readiness promotion before `GOAL-002` can become ready; material changes still need owner approval.
+must update the FSD contract index, rerun readiness, and automatically promote
+unchanged approved semantics before `GOAL-002` can become ready; only material
+semantic/risk changes need scoped owner approval. Real integration proof is
+produced by `GOAL-002`, not required before it starts. Missing executable
+qualification needs a bounded approved enabler, as specified by the canonical
+UI readiness reference.
 
 For a local Journey board, run:
 

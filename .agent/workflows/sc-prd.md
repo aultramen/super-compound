@@ -4,7 +4,21 @@ description: "Create a Product Requirements Document from an approved BRD, focus
 
 # PRD Workflow
 
+## Summary
+
+
 Use this when approved business requirements need to become product behavior before FSD planning.
+
+Apply `.agent/context/checkpoint.contract.md` for input, blockers and handoffs.
+Preserve evidence-only approval; perform authorized UI validation/owner return
+internally, without merging configured stage checkpoints.
+
+
+## Example
+
+Input: `/sc-prd docs/brd/brd-analytics.md`.
+Prerequisite: Approved durable BRD; PRD-only scope ends with this artifact.
+Result and next action: Observable PRD acceptance; UI drafts go to /sc-ui, approved PRD goes to /sc-plan within authorization.
 
 ## Steps
 

@@ -612,7 +612,7 @@ def persist_design_system(design_system: dict, page: str = None, output_dir: str
         page: Optional page name for page-specific override file
         output_dir: Optional output directory (defaults to current working directory)
         page_query: Optional query string for intelligent page override generation
-        overwrite: Replace existing files when True
+        overwrite: Replace the target page, or MASTER.md when no page is supplied
     
     Returns:
         dict with created file paths and status
@@ -624,26 +624,30 @@ def persist_design_system(design_system: dict, page: str = None, output_dir: str
     project_slug = _slugify_path_part(project_name, "project_name")
     
     design_system_dir = _resolve_within_base(base_dir, "design-system", project_slug)
-    pages_dir = design_system_dir / "pages"
-    
-    created_files = []
-    
-    # Create directories
-    design_system_dir.mkdir(parents=True, exist_ok=True)
-    pages_dir.mkdir(parents=True, exist_ok=True)
-    
-    master_file = design_system_dir / "MASTER.md"
-    
-    # Generate and write MASTER.md
-    master_content = format_master_md(design_system)
-    _write_new_file(master_file, master_content, overwrite)
-    created_files.append(str(master_file))
-    
-    # If page is specified, create page override file with intelligent content
+    master_file = _resolve_within_base(base_dir, "design-system", project_slug, "MASTER.md")
+    page_file = None
+    # Validate paths and collisions before creating directories or writing the master.
     if page:
         page_slug = _slugify_path_part(page, "page")
         page_file = _resolve_within_base(base_dir, "design-system", project_slug, "pages", f"{page_slug}.md")
+    targets = ([master_file] if not page or not master_file.exists() else [])
+    if page_file:
+        targets.append(page_file)
+    for target in targets:
+        if target.exists() and not overwrite:
+            raise FileExistsError(f"Refusing to overwrite existing file without --overwrite: {target}")
+
+    created_files = []
+    if master_file in targets:
+        master_file.parent.mkdir(parents=True, exist_ok=True)
+        _write_new_file(master_file, format_master_md(design_system), overwrite)
+        created_files.append(str(master_file))
+
+    # A page inherits the existing master, including user edits. Updating that
+    # master is a separate invocation without --page.
+    if page_file:
         page_content = format_page_override_md(design_system, page, page_query)
+        page_file.parent.mkdir(parents=True, exist_ok=True)
         _write_new_file(page_file, page_content, overwrite)
         created_files.append(str(page_file))
     
@@ -670,6 +674,12 @@ def format_master_md(design_system: dict) -> str:
     
     # Logic header
     lines.append("# Design System Master File")
+    lines.append("")
+    lines.append("## Summary")
+    lines.append("")
+    lines.append(f"{project}: {style.get('name', 'Minimalism')} with {pattern.get('name', 'project layout')}.")
+    lines.append(f"Typography: {typography.get('heading', 'Inter')} headings and {typography.get('body', 'Inter')} body.")
+    lines.append("Next: review these recommendations against project requirements, then implement using the selected stack.")
     lines.append("")
     lines.append("> **LOGIC:** When building a specific page, first check `pages/[page-name].md`.")
     lines.append("> If that file exists, its rules **override** this Master file.")
@@ -756,105 +766,12 @@ def format_master_md(design_system: dict) -> str:
     lines.append("| `--shadow-xl` | `0 20px 25px rgba(0,0,0,0.15)` | Hero images, featured cards |")
     lines.append("")
     
-    # Component Specs section
-    lines.append("---")
-    lines.append("")
-    lines.append("## Component Specs")
-    lines.append("")
-    
-    # Buttons
-    lines.append("### Buttons")
-    lines.append("")
-    lines.append("```css")
-    lines.append("/* Primary Button */")
-    lines.append(".btn-primary {")
-    lines.append(f"  background: {colors.get('cta', '#F97316')};")
-    lines.append("  color: white;")
-    lines.append("  padding: 12px 24px;")
-    lines.append("  border-radius: 8px;")
-    lines.append("  font-weight: 600;")
-    lines.append("  transition: all 200ms ease;")
-    lines.append("  cursor: pointer;")
-    lines.append("}")
-    lines.append("")
-    lines.append(".btn-primary:hover {")
-    lines.append("  opacity: 0.9;")
-    lines.append("  transform: translateY(-1px);")
-    lines.append("}")
-    lines.append("")
-    lines.append("/* Secondary Button */")
-    lines.append(".btn-secondary {")
-    lines.append(f"  background: transparent;")
-    lines.append(f"  color: {colors.get('primary', '#2563EB')};")
-    lines.append(f"  border: 2px solid {colors.get('primary', '#2563EB')};")
-    lines.append("  padding: 12px 24px;")
-    lines.append("  border-radius: 8px;")
-    lines.append("  font-weight: 600;")
-    lines.append("  transition: all 200ms ease;")
-    lines.append("  cursor: pointer;")
-    lines.append("}")
-    lines.append("```")
-    lines.append("")
-    
-    # Cards
-    lines.append("### Cards")
-    lines.append("")
-    lines.append("```css")
-    lines.append(".card {")
-    lines.append(f"  background: {colors.get('background', '#FFFFFF')};")
-    lines.append("  border-radius: 12px;")
-    lines.append("  padding: 24px;")
-    lines.append("  box-shadow: var(--shadow-md);")
-    lines.append("  transition: all 200ms ease;")
-    lines.append("  cursor: pointer;")
-    lines.append("}")
-    lines.append("")
-    lines.append(".card:hover {")
-    lines.append("  box-shadow: var(--shadow-lg);")
-    lines.append("  transform: translateY(-2px);")
-    lines.append("}")
-    lines.append("```")
-    lines.append("")
-    
-    # Inputs
-    lines.append("### Inputs")
-    lines.append("")
-    lines.append("```css")
-    lines.append(".input {")
-    lines.append("  padding: 12px 16px;")
-    lines.append("  border: 1px solid #E2E8F0;")
-    lines.append("  border-radius: 8px;")
-    lines.append("  font-size: 16px;")
-    lines.append("  transition: border-color 200ms ease;")
-    lines.append("}")
-    lines.append("")
-    lines.append(".input:focus {")
-    lines.append(f"  border-color: {colors.get('primary', '#2563EB')};")
-    lines.append("  outline: none;")
-    lines.append(f"  box-shadow: 0 0 0 3px {colors.get('primary', '#2563EB')}20;")
-    lines.append("}")
-    lines.append("```")
-    lines.append("")
-    
-    # Modals
-    lines.append("### Modals")
-    lines.append("")
-    lines.append("```css")
-    lines.append(".modal-overlay {")
-    lines.append("  background: rgba(0, 0, 0, 0.5);")
-    lines.append("  backdrop-filter: blur(4px);")
-    lines.append("}")
-    lines.append("")
-    lines.append(".modal {")
-    lines.append("  background: white;")
-    lines.append("  border-radius: 16px;")
-    lines.append("  padding: 32px;")
-    lines.append("  box-shadow: var(--shadow-xl);")
-    lines.append("  max-width: 500px;")
-    lines.append("  width: 90%;")
-    lines.append("}")
-    lines.append("```")
-    lines.append("")
+    # Implementation follows the selected stack instead of a generic CSS kit.
+    lines.extend([
+        "## Implementation", "",
+        "Use the project's selected stack, existing components and styling conventions.",
+        "For implementation examples, run search.py with --stack <stack> separately.", "",
+    ])
     
     # Style section
     lines.append("---")
@@ -896,15 +813,6 @@ def format_master_md(design_system: dict) -> str:
             if anti:
                 lines.append(f"- ❌ {anti}")
     lines.append("")
-    lines.append("### Additional Forbidden Patterns")
-    lines.append("")
-    lines.append("- ❌ **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)")
-    lines.append("- ❌ **Missing cursor:pointer** — All clickable elements must have cursor:pointer")
-    lines.append("- ❌ **Layout-shifting hovers** — Avoid scale transforms that shift layout")
-    lines.append("- ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio")
-    lines.append("- ❌ **Instant state changes** — Always use transitions (150-300ms)")
-    lines.append("- ❌ **Invisible focus states** — Focus states must be visible for a11y")
-    lines.append("")
     
     # Pre-Delivery Checklist
     lines.append("---")
@@ -929,111 +837,32 @@ def format_master_md(design_system: dict) -> str:
 
 
 def format_page_override_md(design_system: dict, page_name: str, page_query: str = None) -> str:
-    """Format a page-specific override file with intelligent AI-generated content."""
+    """Render meaningful page guidance; inherit all other rules from the master."""
     project = design_system.get("project_name", "PROJECT")
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    page_title = page_name.replace("-", " ").replace("_", " ").title()
-    
-    # Detect page type and generate intelligent overrides
-    page_overrides = _generate_intelligent_overrides(page_name, page_query, design_system)
-    
-    lines = []
-    
-    lines.append(f"# {page_title} Page Overrides")
-    lines.append("")
-    lines.append(f"> **PROJECT:** {project}")
-    lines.append(f"> **Generated:** {timestamp}")
-    lines.append(f"> **Page Type:** {page_overrides.get('page_type', 'General')}")
-    lines.append("")
-    lines.append("> ⚠️ **IMPORTANT:** Rules in this file **override** the Master file (`../MASTER.md`).")
-    lines.append("> Only deviations from the Master are documented here. For all other rules, refer to the Master.")
-    lines.append("")
-    lines.append("---")
-    lines.append("")
-    
-    # Page-specific rules with actual content
-    lines.append("## Page-Specific Rules")
-    lines.append("")
-    
-    # Layout Overrides
-    lines.append("### Layout Overrides")
-    lines.append("")
-    layout = page_overrides.get("layout", {})
-    if layout:
-        for key, value in layout.items():
-            lines.append(f"- **{key}:** {value}")
-    else:
-        lines.append("- No overrides — use Master layout")
-    lines.append("")
-    
-    # Spacing Overrides
-    lines.append("### Spacing Overrides")
-    lines.append("")
-    spacing = page_overrides.get("spacing", {})
-    if spacing:
-        for key, value in spacing.items():
-            lines.append(f"- **{key}:** {value}")
-    else:
-        lines.append("- No overrides — use Master spacing")
-    lines.append("")
-    
-    # Typography Overrides
-    lines.append("### Typography Overrides")
-    lines.append("")
-    typography = page_overrides.get("typography", {})
-    if typography:
-        for key, value in typography.items():
-            lines.append(f"- **{key}:** {value}")
-    else:
-        lines.append("- No overrides — use Master typography")
-    lines.append("")
-    
-    # Color Overrides
-    lines.append("### Color Overrides")
-    lines.append("")
-    colors = page_overrides.get("colors", {})
-    if colors:
-        for key, value in colors.items():
-            lines.append(f"- **{key}:** {value}")
-    else:
-        lines.append("- No overrides — use Master colors")
-    lines.append("")
-    
-    # Component Overrides
-    lines.append("### Component Overrides")
-    lines.append("")
-    components = page_overrides.get("components", [])
-    if components:
-        for comp in components:
-            lines.append(f"- {comp}")
-    else:
-        lines.append("- No overrides — use Master component specs")
-    lines.append("")
-    
-    # Page-Specific Components
-    lines.append("---")
-    lines.append("")
-    lines.append("## Page-Specific Components")
-    lines.append("")
-    unique_components = page_overrides.get("unique_components", [])
-    if unique_components:
-        for comp in unique_components:
-            lines.append(f"- {comp}")
-    else:
-        lines.append("- No unique components for this page")
-    lines.append("")
-    
-    # Recommendations
-    lines.append("---")
-    lines.append("")
-    lines.append("## Recommendations")
-    lines.append("")
-    recommendations = page_overrides.get("recommendations", [])
-    if recommendations:
-        for rec in recommendations:
-            lines.append(f"- {rec}")
-    lines.append("")
-    
+    title = page_name.replace("-", " ").replace("_", " ").title()
+    overrides = _generate_intelligent_overrides(page_name, page_query, design_system)
+    lines = [
+        f"# {title} Page Overrides", "", "## Summary", "",
+        f"Page guidance for {project}: {overrides.get('page_type', 'General')}.",
+        "Only the changes below override the existing master (`../MASTER.md`).",
+        "Next: review these changes against [the master](../MASTER.md); inherit all other rules and its verification checklist.",
+        "", f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", "",
+    ]
+    for key, heading in (
+        ("layout", "Layout Overrides"), ("spacing", "Spacing Overrides"),
+        ("typography", "Typography Overrides"), ("colors", "Color Overrides"),
+        ("components", "Component Overrides"), ("unique_components", "Page-Specific Components"),
+        ("recommendations", "Recommendations"),
+    ):
+        values = overrides.get(key)
+        if not values:
+            continue
+        lines.extend([f"## {heading}", ""])
+        if isinstance(values, dict):
+            lines.extend(f"- **{name}:** {value}" for name, value in values.items() if value)
+        else:
+            lines.extend(f"- {value}" for value in values if value)
+        lines.append("")
     return "\n".join(lines)
 
 

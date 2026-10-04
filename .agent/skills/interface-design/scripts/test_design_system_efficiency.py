@@ -5,10 +5,29 @@
 import unittest
 from unittest.mock import patch
 
-from design_system import DesignSystemGenerator
+from design_system import DesignSystemGenerator, format_master_md, format_page_override_md
 
 
 class DesignSystemEfficiencyTests(unittest.TestCase):
+    def test_master_starts_with_decisions_and_avoids_unselected_stack_boilerplate(self):
+        result = format_master_md({"project_name": "Acme", "style": {"name": "Minimalism"},
+                                   "typography": {"heading": "Inter", "body": "Inter"}})
+        self.assertIn("## Summary", result)
+        self.assertLess(result.index("## Summary"), result.index("## Global Rules"))
+        self.assertNotIn(".btn-primary", result)
+        self.assertIn("project's selected stack", result)
+
+    def test_page_omits_empty_override_sections_and_inherits_master(self):
+        overrides = {"page_type": "Dashboard", "layout": {"Grid": "12 columns"}}
+        with patch("design_system._generate_intelligent_overrides", return_value=overrides):
+            result = format_page_override_md({"project_name": "Acme"}, "dashboard")
+        self.assertIn("## Summary", result)
+        self.assertIn("12 columns", result)
+        self.assertIn("../MASTER.md", result)
+        self.assertNotIn("No overrides", result)
+        self.assertNotIn("Typography Overrides", result)
+        self.assertNotIn("Page-Specific Components", result)
+
     def test_generation_searches_the_product_catalog_once(self):
         calls = []
 

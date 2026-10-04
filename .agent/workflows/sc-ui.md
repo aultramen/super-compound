@@ -4,6 +4,9 @@ description: "Design or review UI read-only, or supply interface guidance to an 
 
 # UI Workflow
 
+## Summary
+
+
 Use this workflow as a UI capability sidecar with two explicit modes:
 
 - Design/review mode is read-only and may run without implementation authority.
@@ -14,6 +17,13 @@ Use this workflow as a UI capability sidecar with two explicit modes:
   FSD routes to `/sc-plan`, and an approved FSD `GOAL-*` hands off to `/sc-work`.
   UI guidance may be used inside that active work goal, but mutation authority
   remains with `/sc-work`.
+
+
+## Example
+
+Input: `/sc-ui review docs/prd/prd-analytics.md`.
+Prerequisite: PRD draft or named existing UI scope; review stays read-only.
+Result and next action: One classification plus evidence and owner; the PRD/FSD/work owner records or implements accepted changes.
 
 ## Steps
 
@@ -51,6 +61,11 @@ A new preference after acceptance becomes a backlog item or change request. It
 does not silently rewrite the accepted baseline.
 
 ## Output
+
+For unresolved human judgment use `.agent/context/checkpoint.contract.md`:
+experience summary, representative result, walkthrough, recommendation and one
+acceptance question. Internally return evidence to the authorized owner; this
+read-only workflow never edits. Prototype acceptance is not provider proof or UAT.
 
 - Read-only design/review findings, or a deterministic handoff to the owning workflow.
 - Exactly one classification with evidence refs, impacted qualified IDs, and next owner.

@@ -39,7 +39,7 @@ Do not use when requirements or architecture are genuinely undecided; return to 
 | "Rewrite the component" | Target the root cause with the smallest repair. |
 | "Start planning from scratch" | Preserve verified work and plan only gaps. |
 | "The new test passes, so done" | Re-run the original verification and regressions. |
-| "One more closure loop" beyond the cap | Stop and escalate remaining evidence. |
+| "Repeat the same closure loop" after repeated failure | Reassess evidence, change strategy, and stop only affected scope when safe recovery is exhausted. |
 
 ## Integration
 

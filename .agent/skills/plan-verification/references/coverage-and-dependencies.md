@@ -23,5 +23,10 @@ For each goal or issue with dependencies:
 - Do dependencies actually exist in the FSD, ledger, or issue board?
 - Do dependencies come before dependents?
 - Are there circular dependencies?
+- Does an entry requirement demand evidence this goal itself must produce?
+  Reject that semantic cycle even if issue paths form a DAG. First-slice
+  integration proof is its done condition and a scale-out prerequisite. Missing
+  qualification facts/assets need available research or a bounded authorized
+  enabler with its own entry checks, not approval of an unresolved technical blocker.
 - If using issue files, do `Blocked by` paths exist and form a DAG?
 - If invalid, flag: `Goal <X> depends on <Y> which does not exist, comes after, or creates a cycle`.

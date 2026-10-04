@@ -78,7 +78,7 @@ function adapterAssets(source, selected, global) {
       if (host === 'gemini') add(`.gemini/commands/${route}.toml`,`description = ${JSON.stringify(`Super Compound ${route}`)}\nprompt = ${JSON.stringify(routing(route)+'\nRequest: {{args}}')}\n`);
     }
     const overview = `## Super Compound\n\nUse project .agent core before ${fallback}. Route /sc-* through context/workflows/sc-X.contract.md, then full workflow as needed. Follow context/output-style.md. Full-tier checkpoints: BRD approval, PRD approval, FSD approval, then separate execution authorization. Existing project authorization persists. Without subagents, run sequentially in-thread.`;
-    if (host==='codex') add(`${global?'.codex':'.agents'}/skills/super-compound/SKILL.md`,`---\nname: super-compound\ndescription: Super Compound /sc-* .agent workflows\n---\n\n# Super Compound\n\n## Summary\n\n${routing('sc-X')}\n`);
+    if (host==='codex') add(`${global?'.codex':'.agents'}/skills/super-compound/SKILL.md`,`---\nname: super-compound\ndescription: Use when handling Super Compound /sc-* commands or plain-language requests to set up, fix a bug, make a small change, deliver a feature, review, or resume work.\n---\n\n# Super Compound\n\n## Summary\n\nRoute intent: setup -> sc-init setup; bug -> sc-debug; small change -> sc-work; full feature delivery -> sc-launch; resume -> sc-status; review -> sc-review. Explicit /sc-* commands select their named route. Preserve read-only scope and existing authorization; routing adds no approval or write authority.\n\n${routing('sc-X')}\n`);
     if (host==='codex') add(global?'.codex/AGENTS.md':'AGENTS.md',overview,'block');
     if (host==='claude') {
       add(global?'.claude/CLAUDE.md':'CLAUDE.md',overview,'block');

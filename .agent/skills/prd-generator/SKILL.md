@@ -51,4 +51,4 @@ For unresolved product choices, use [brainstorming rounds](../brainstorming/refe
 
 ## Integration
 
-Upstream: `/sc-explore`, `brainstorming`, `agentic-delivery`, `domain-modeling`, `codebase-design`, and `interface-design`. Downstream: `writing-plans`, `issue-workflow`, and `plan-verification`. The pipeline is BRD → PRD → FSD/GOAL → execution; stop after saving and reporting the PRD unless further work is explicitly requested.
+Upstream: `/sc-explore`, `brainstorming`, `agentic-delivery`, `domain-modeling`, `codebase-design`, and `interface-design`. Downstream: `writing-plans`, `issue-workflow`, and `plan-verification`. The pipeline is BRD → PRD → FSD/GOAL → execution. A PRD-only request ends with the PRD; active authorized delivery continues internally to its next owner, preserving separate stage approvals and execution authorization per `workflow-integration.md`.

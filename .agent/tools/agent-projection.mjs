@@ -91,9 +91,25 @@ export function projectAgents({ root = REPO_ROOT, write = true } = {}) {
 
 function main(argv) {
   const args = argv.slice(2);
-  const check = args.includes("--check");
-  const rootIndex = args.indexOf("--root");
-  const root = rootIndex === -1 ? REPO_ROOT : path.resolve(args[rootIndex + 1]);
+  const usage = "Usage: node .agent/tools/agent-projection.mjs [--check] [--root <repo-root>] [--help]\nDefault: write projected agents. --check: report drift without writing.\n";
+  let check = false;
+  let root = REPO_ROOT;
+  let help = false;
+  // Parse everything before opening any project file, including when help is present.
+  for (let i = 0; i < args.length; i += 1) {
+    if (args[i] === "--help" || args[i] === "-h") help = true;
+    else if (args[i] === "--check") check = true;
+    else if (args[i] === "--root" && args[i + 1] && !args[i + 1].startsWith("-")) {
+      root = path.resolve(args[++i]);
+    } else {
+      process.stderr.write(`Invalid argument: ${args[i]}. Use --help for usage.\n`);
+      return 2;
+    }
+  }
+  if (help) {
+    process.stdout.write(usage);
+    return 0;
+  }
   let result;
   try {
     result = projectAgents({ root, write: !check });

@@ -160,6 +160,31 @@ writer for schemas/generated artifacts/migrations/lockfiles, isolated
 worktrees. After the streams merge, merged-system integration verification is
 mandatory before `HARDENING` or feature completion.
 
+## Qualification Without Circular Prerequisites
+
+Separate entry evidence from the proof a goal produces. Prototype experience
+acceptance belongs to the PRD baseline; native/provider integration is first-slice
+completion proof; release/UAT belongs to hardening. Do not require real-provider
+first-slice success before that slice starts, or release acceptance before a
+bounded qualification. Test refs/seams at entry are not passing integration results.
+
+For missing upstream/auth/OS facts, research and available read-only checks run
+before product execution without reopening accepted product decisions. If
+qualification needs executable assets/actions, `/sc-plan` must define or amend
+a bounded `CONTRACT_ENABLER` in the existing FSD: target/environment, authorized
+actions, access/security limits, verification and output evidence, followed by
+the blocked dependent slice. Preserve prior approval for unchanged scope; obtain
+only genuinely missing stage/action authorization or material-delta approval.
+Never execute a blocked product goal or use an enabler to evade mandatory safety
+checks. Unknown impact remains blocked for the affected stream.
+
+An OPEN-* combines needs, not votes: prototype acceptance can resolve its human
+part while native qualification remains open. `human baseline`, `DRAFT`, `OPEN`
+and `HIGH_INTERACTION` alone do not add acceptance gates. Request human judgment
+only where approved acceptance/configuration or unresolved material judgment
+requires it, using `context/checkpoint.contract.md`. Preference never clears
+security, accessibility, conformance or integrity failures.
+
 ## Integration Ready And Done
 
 Frontend/backend integration is ready when the PRD baseline is acceptable, FSD

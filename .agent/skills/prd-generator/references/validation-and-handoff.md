@@ -1,5 +1,11 @@
 # Validation and Handoff
 
+## Summary
+
+Validate traceability and acceptance, then hand off within existing authorization.
+A PRD-only request ends with the PRD and its next route; delivery intent continues
+through the owning route once its required stage approval is available.
+
 ## Story sizing
 
 Each story should fit one focused implementation session. Split when it spans unrelated roles or systems, has distinct release risk or verification, or has acceptance criteria too broad to review together. Preserve end-to-end user value in each vertical slice.
@@ -24,7 +30,10 @@ Confirm:
 
 ## Handoff
 
-Save the PRD, report its path and unresolved blockers, and stop. Available next routes are:
+Save the PRD and report its path, verification, unresolved blockers, and next action.
+For a PRD-only request, return here without extending scope. For active authorized
+delivery, load the next owning route's contract and continue internally; preserve
+separate stage approvals and execution authorization. Available next routes are:
 
 1. Review and refine the PRD.
 2. For a UI-bearing draft, validate it read-only with `/sc-ui`, absorb accepted

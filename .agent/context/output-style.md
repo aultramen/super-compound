@@ -10,6 +10,22 @@ Complete but concise. Simple but not oversimplified. Visual before verbose. Acti
 
 Use plain language, direct sentences, and technical terms appropriate to the reader. Explain what, why, how it works, next actions, risks, and dependencies where relevant. Organize detail with tables, grouping, appendices, and references rather than deleting needed information.
 
+Lead human reports with the result, consequential decisions/findings, actual
+verification and one next action. Link supporting detail; expand only what the
+reader needs to review. A small completed task can return:
+
+```text
+Hasil: [concrete outcome]
+Verifikasi: [actual command/check result]
+Berikutnya: [one action, or complete within the requested scope]
+Detail: [artifact link when useful]
+```
+
+Keep skeleton-first authoring, authority IDs, acceptance criteria and required
+evidence. Do not add another template layer or universal word limit. When adding
+a human summary to a machine CLI, use additive `--text`; preserve existing JSON,
+parser fields, defaults and exit codes.
+
 ## High-Level Design
 
 ```mermaid

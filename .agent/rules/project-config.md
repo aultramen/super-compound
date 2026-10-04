@@ -1,8 +1,11 @@
 # Project Configuration
 
-This Markdown file holds the project's hints and adaptive knobs. Routes read it
-directly; there is no machine-side policy file. Customize it per project and
-leave discovery hints empty only when auto-detection is acceptable.
+## Summary
+
+Configure stack hints, commands and conventions here; Git prefix validation uses
+`gitWorkflow.branchPrefixes`. Keep `conventions.branch_prefix` within that list.
+
+Routes read this file directly. Empty discovery hints allow auto-detection.
 
 ```yaml
 project_name: ""
@@ -50,7 +53,7 @@ commands:
 conventions:
   approval_mode: "stage"      # See workflow-integration.md
   architecture: ""            # clean | mvc | hexagonal | layered | modular
-  branch_prefix: "feat"
+  branch_prefix: "feature"
   default_branch: "main"
   commit_convention: "conventional"
   tdd_mode: "balanced"        # strict | balanced | relaxed

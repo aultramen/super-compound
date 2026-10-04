@@ -41,6 +41,26 @@ function run(root, ...flags) {
   return spawnSync(process.execPath, [TOOL, "--root", root, ...flags], { encoding: "utf8" });
 }
 
+test("help and invalid arguments preserve user agent bytes and create no files", () => {
+  const cases = [
+    [["--help"], 0], [["-h"], 0], [["--chek"], 2],
+    [["--root"], 2], [["--root", "--check"], 2], [["unexpected"], 2],
+  ];
+  for (const [flags, status] of cases) {
+    const root = fixture(GOOD);
+    const target = path.join(root, ".claude", "agents", "alpha.md");
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    const original = Buffer.from("local instructions\r\n\0", "utf8");
+    fs.writeFileSync(target, original);
+    const result = run(root, ...flags);
+    assert.equal(result.status, status, result.stderr);
+    assert.deepEqual(fs.readFileSync(target), original, flags.join(" "));
+    assert.deepEqual(fs.readdirSync(path.dirname(target)), ["alpha.md"]);
+    if (status === 0) assert.match(result.stdout, /Usage:/);
+    else assert.match(result.stderr, /--help/);
+  }
+});
+
 test("projects prompt plus claude-code model into .claude/agents deterministically", () => {
   const root = fixture(GOOD);
   const first = projectAgents({ root });

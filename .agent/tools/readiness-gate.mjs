@@ -323,6 +323,39 @@ function usage() {
   return 2;
 }
 
+// Human-facing guidance only. Gate facts, JSON schema and exit codes stay authoritative.
+function nextActions(result, opts) {
+  const actions = {
+    enums: `Agent /sc-plan: reconcile profile/readiness declarations in ${opts.fsdPath}.`,
+    "not-applicable": `Agent /sc-plan: document factual UI applicability in ${opts.fsdPath}.`,
+    topology: `Agent /sc-plan: reconcile local/network declarations in ${opts.fsdPath}.`,
+    baseline: `Agent /sc-prd: inspect ${opts.prdPath} acceptance and existing evidence; preserve approved decisions. Request only unresolved experience judgment from its product owner with a concrete review package.`,
+    "state-coverage": `Agent /sc-prd: research and map missing states in ${opts.prdPath}; ask the product owner only for an unresolved behavior decision.`,
+    uimap: `Agent /sc-plan: complete affected screen/data/action mappings in ${opts.fsdPath}.`,
+    revisions: `Agent: check schema/fixture identity and validation evidence referenced by ${opts.fsdPath}; missing assets belong to a bounded authorized enabler.`,
+    "derived-assets": `Agent: regenerate and verify mock/consumer assets through the authorized enabler; /sc-plan reconciles ${opts.fsdPath}.`,
+    "verification-refs": `Agent /sc-plan: repair mapped test references in ${opts.fsdPath}; a reference is not a passing test result.`,
+    "high-interaction-evidence": `Agent: produce or inspect runnable evidence for the interaction risk; a HIGH_INTERACTION label alone does not require another human gate.`,
+    "open-blockers": `Agent: split each OPEN-* in ${opts.fsdPath} and ${opts.prdPath} into its actual owner and need (decision, action authorization, research, automated/manual test, or external access). Resolve available facts/checks first; request only the human or external remainder.`,
+    "local-goals": `Agent /sc-plan: reconcile local goal gates/dependencies in ${opts.issuesDir}.`,
+    "first-slice": `Agent /sc-plan: reconcile the pinned first-slice pointer in ${opts.issuesDir}; the first slice produces real integration proof, which is required before scale-out, not before starting that slice.`,
+    "scale-out": `Agent /sc-plan: keep affected scale-out pointers blocked until first-slice proof and baseline gates are satisfied.`,
+    hardening: `Agent /sc-plan: link hardening to applicable delivery slices in ${opts.issuesDir}.`,
+    enablers: `Agent /sc-plan: repair enabler gates/dependency cycles in ${opts.issuesDir}; never require a goal's own output to start it.`,
+  };
+  return [
+    "Readiness blocked for the affected UI delivery scope.",
+    "Existing approval remains valid within unchanged scope; approval does not turn missing technical evidence into a pass.",
+    "Next actions:",
+    ...result.gates.filter(entry => entry.status === "fail").map(entry =>
+      `- ${actions[entry.id] ?? `Agent: inspect ${entry.id} in ${opts.fsdPath}.`}`),
+    "Continue independent authorized work. This gate does not grant execution authority or change issue status.",
+    ...(result.gates.some(entry => entry.id === "first-slice" && entry.status !== "skip")
+      ? ["Check prerequisites separately from completion proof: the first slice produces real integration proof; scale-out waits for it. Qualification requiring executable assets must use a bounded approved enabler, not bypass a blocked product goal."] : []),
+    "Technical details:",
+  ].join("\n") + "\n";
+}
+
 async function main(argv) {
   const flags = { "--fsd": "fsdPath", "--prd": "prdPath", "--issues-dir": "issuesDir", "--root": "root" };
   const opts = { root: process.cwd(), json: false };
@@ -344,6 +377,7 @@ async function main(argv) {
   if (opts.json) {
     process.stdout.write(`${JSON.stringify(result)}\n`);
   } else {
+    if (result.failures.length) process.stdout.write(nextActions(result, opts));
     for (const entry of result.gates) {
       process.stdout.write(`${entry.status.toUpperCase()} ${entry.id} ${entry.detail}\n`);
     }

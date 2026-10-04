@@ -1,5 +1,7 @@
 # Super Compound Operating Contract
 
+## Summary
+
 Super Compound is a disciplined operating layer for AI-assisted engineering. Discipline compounds: each unit of work makes the next one easier. It keeps work small, evidence-driven, and durable.
 
 ## Core Principles
@@ -38,8 +40,9 @@ issues remain pointers to these authorities.
 `EXCEPTION_APPROVED` cannot waive security,
 accessibility baseline, contract conformance, data integrity, or a blocking
 `OPEN-*`. Exceptions permit only the first slice. Parallel scale-out waits for a
-`VALIDATED` baseline and a first-slice issue verified against the real provider;
-mock-only evidence is not integration proof.
+`VALIDATED` baseline and, for networked UI, a first-slice issue verified against
+the real provider; mock-only evidence is not integration proof. LOCAL_ONLY uses
+mapped local behavior/accessibility checks without synthetic provider assets.
 
 When contract assets are absent, the only executable goal is the bounded
 `CONTRACT_ENABLER`. After it is verified, return to `/sc-plan` to pin exact
@@ -189,7 +192,7 @@ Use:
 - `.scratch/<feature>/issues/*.md` for local FSD goal issue pointers
 - `docs/solutions/` for reusable solved problems and optional linked accepted ADRs
 
-`/sc-compound` also routes agent mistakes to `ERR-*` entries in `docs/ERROR_LOG.md` and user corrections or confirmed conventions to `LRN-*` entries in `docs/LEARNED_KNOWLEDGE.md`, per `.agent/skills/knowledge-compounding/references/memory-capture.md`. `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; a matching `ERR-*`/`LRN-*` prevention rule is binding until superseded.
+`/sc-compound` also routes agent mistakes to `ERR-*` entries in `docs/ERROR_LOG.md` and user corrections or confirmed conventions to `LRN-*` entries in `docs/LEARNED_KNOWLEDGE.md`, per `.agent/skills/knowledge-compounding/references/memory-capture.md`. `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; matching `ERR-*`/`LRN-*` lessons are evidence validated against current context; decisions bind only through their authoritative source and approval provenance.
 
 The next session should be able to run `/sc-status` and continue from disk.
 
@@ -243,3 +246,8 @@ required verifiers and budgets remain authoritative. Recover active constraints
 and durable receipts via `.agent/skills/context-engineering/references/active-context.md`.
 
 Documentation written or updated follows `.agent/context/output-style.md`. Setup uses `SETUP.md`; `/sc-init setup` installs explicitly while normal init/reload remain read-only. New setup uses separate stage approvals and execution authorization; preserve existing project preferences.
+
+Human input/blockers/authorized handoffs: load `.agent/context/checkpoint.contract.md`.
+Preserve accepted decisions; technical gaps remain agent research/tests until a
+specific human/external need is proven. Return authorized owner handoffs internally
+while preserving each route's authority and configured stage checkpoints.

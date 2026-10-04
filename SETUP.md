@@ -73,6 +73,13 @@ The legacy `.codex/install-super-compound.ps1` (`-CodexHome`, `-VerifyOnly`, `-D
 
 ## Doctor and Troubleshooting
 
+After doctor succeeds, run `/sc-init` in the selected host. Confirm it reports
+the project context and verification commands, then try one small task such as
+`/sc-debug Email kosong lolos validasi login`. The expected return is a focused
+fix, actual check results, and one next action. The [Quick Start](README.md#quick-start)
+also covers small changes, new features, and resume. Keep full lifecycle details
+for work that needs them.
+
 | Observation | Action |
 | --- | --- |
 | No host detected | Pass `--host` explicitly; directory absence does not establish application absence |
