@@ -10,7 +10,7 @@
     },
     "limitation": "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens."
   },
-  "generatedAt": "2026-10-04T14:40:32.248Z",
+  "generatedAt": "2026-10-04T22:13:01.280Z",
   "observedRuntimeTokens": "unknown",
   "hostInjectedSurfaceTokens": "unknown",
   "claimScope": {
@@ -1241,7 +1241,7 @@
   "deterministic": true,
   "runDigests": [
     {
-      "digest": "1517697233765bf5a4b892426acb081c68bb3cddfe3ebb0a80fda3210eb8caed",
+      "digest": "eb87f79c226b1d63cc318eb1f599db5394f0a893951aa0cdfe8285ad1c0aeee8",
       "count": 3
     }
   ],
@@ -1290,10 +1290,10 @@
       {
         "name": "startup-codex-adapter-metadata",
         "stage": "input",
-        "beforeTokens": 41,
-        "afterTokens": 41,
+        "beforeTokens": 43,
+        "afterTokens": 43,
         "pass": true,
-        "afterDigest": "2fcc764e138de9d6d5f3e62d2948f204a67b80a0857fe7a87befb760cf319079",
+        "afterDigest": "6003f9d21686afa04a1b38f48746397d534fe12a60cc520c78d12f67d4fec173",
         "gateType": "budget",
         "maxAfterTokens": 200
       },

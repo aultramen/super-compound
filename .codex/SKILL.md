@@ -1,6 +1,6 @@
 ---
 name: super-compound
-description: Use when handling Super Compound /sc-* commands or plain-language requests to set up, fix a bug, make a small change, deliver a feature, review, or resume work.
+description: Use Super Compound .agent workflows for /sc-* commands or plain-language requests to set up, fix a bug, make a small change, deliver a feature, review, or resume work.
 ---
 
 Route intent: setup -> sc-init setup; bug -> sc-debug; small change -> sc-work;
