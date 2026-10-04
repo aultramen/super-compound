@@ -116,6 +116,9 @@ test('Bash wrapper uses the same active hashed bundle as the Node engine',t=>{
   if(probe.error || probe.status!==0){t.skip('Bash unavailable on this host');return;}
   const direct=path.join(f.root,'direct'),wrapped=path.join(f.root,'bash path 日本');
   installCodexBundle({command:'install',source,'codex-home':direct});
+  const dry=spawnSync(bash,[path.join(source,'.codex/install-super-compound.sh'),'--codex-home',wrapped,'--dry-run'],{encoding:'utf8'});
+  assert.equal(dry.status,0,dry.stdout+dry.stderr);
+  assert.equal(fs.existsSync(wrapped),false);
   const result=spawnSync(bash,[path.join(source,'.codex/install-super-compound.sh'),'--codex-home',wrapped],{encoding:'utf8'});
   assert.equal(result.status,0,result.stdout+result.stderr);
   assert.equal(fs.readFileSync(path.join(direct,'skills/super-compound/manifest.json'),'utf8'),fs.readFileSync(path.join(wrapped,'skills/super-compound/manifest.json'),'utf8'));

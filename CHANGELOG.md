@@ -11,6 +11,7 @@ Records public framework behavior changes and their verification evidence.
 - Added a shared Node setup engine, six native adapters, owned manifests, managed blocks, conflict reporting, staged rollback, and read-only doctor/dry-run. Legacy PowerShell/Bash wrappers retain parameters and bundle paths, but preserve user modifications as conflicts.
 - Added cross-OS setup CI and behavior tests. Live host invocation and the five-pair productivity pilot remain separate from structural validation.
 - macOS setup recognizes the standard `/var`, `/tmp`, and `/etc` aliases to `/private` while rejecting other symlink ancestors and destination escapes.
+- Bash wrapper argument handling supports the older Bash shipped with macOS, including read-only dry runs.
 
 ## 2026-10-04 - pstack evidence and recovery enhancements
 
