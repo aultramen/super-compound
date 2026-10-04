@@ -1,4 +1,10 @@
 # Project State
+
+## Summary
+
+<State purpose, scope, key information, and decision/outcome for this document.>
+
+<!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
 Last updated: YYYY-MM-DD HH:mm
 
 ## Current Position
@@ -22,7 +28,7 @@ Last updated: YYYY-MM-DD HH:mm
 <!--
 Contract: .agent/skills/state-management/references/file-contracts.md
 Emit Decisions, Blockers, Completed Work, and Deferred Ideas only when non-empty.
-Archive when Completed Work > 20 or Decisions > 30 entries; doc-lint owns size.
+Archive older entries when hot context needs reduction; retain linked evidence. Doc-lint checks structure, never document size.
 Update on every interruption, including rate-limit or quota cutoffs, so a fresh
 session can resume from Next Action without asking.
 Never copy artifact prose or tool output into STATE; link to it.

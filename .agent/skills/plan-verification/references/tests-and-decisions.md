@@ -25,7 +25,7 @@ For UI-bearing scope, load the canonical
 `agentic-delivery/references/ui-contract-readiness.md` policy and verify:
 
 - The PRD experience baseline and FSD Screen & Interaction Contract are current.
-- `node .agent/tools/readiness-gate.mjs` exits 0: every hard gate passes; `N/A` has reason/approver.
+- `node .agent/tools/readiness-gate.mjs` exits 0: every hard gate passes; `N/A` has factual reason.
 - Every visible/editable datum and network action maps through `UIMAP-*` to an
   operation, schema, outcome/error, named state, deterministic fixture, and test.
 - Schema, fixture, mock, and typed-consumer revisions are pinned and consistent.
@@ -46,5 +46,7 @@ one bounded `CONTRACT_ENABLER` while readiness is `DRAFT/BLOCKED`. It requires
 complete semantic authority and deterministic verification; all first-slice and
 scale-out pointers stay blocked. Re-enter `/sc-plan` after the enabler is
 verified and rerun dimension 10 before releasing the first slice.
-The refreshed FSD/contract index needs Technical Manager approval before that
-first-slice pointer becomes ready.
+The refreshed index and pointer auto-promote when semantics remain approved
+and deterministic gates pass; material changes return to the Technical Manager.
+
+LOCAL_ONLY applicability and affected proof follow the canonical UI readiness reference.

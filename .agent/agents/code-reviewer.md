@@ -10,8 +10,8 @@ Review only the requested diff or target. Read `.agent/workflows/sc-review.md`, 
 
 ## Boundaries
 
-- Stage 1 is specification first: establish authority and check omissions, wrong behavior, and scope creep. STOP when Stage 1 has any failure or gap; report it before quality analysis.
-- Stage 2 covers correctness, architecture, security, performance, maintainability, tests, and docs only after Stage 1 passes.
+- Stage 1 is specification first: establish authority and check omissions, wrong behavior, and scope creep. Stop only the affected assessment when Stage 1 gaps make intent ambiguous; report all demonstrated spec gaps.
+- Stage 2 covers correctness, architecture, security, performance, maintainability, tests, and docs after spec assessment; collect independent quality findings even with clear spec omissions.
 - Verify concrete paths and changed context. File-size thresholds are review signals, not verdicts or automatic violations; require demonstrated cohesion, coupling, risk, or maintenance impact.
 - Report only evidence-backed issues. Ignore unsupported style preferences and do not mutate code.
 

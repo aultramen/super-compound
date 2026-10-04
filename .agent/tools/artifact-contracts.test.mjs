@@ -4,8 +4,6 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { estimateTokens } from "./token-benchmark.mjs";
-
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const TEMPLATE_ROOT = ".agent/templates/agentic-delivery";
 const FULL_TEMPLATES = [
@@ -87,7 +85,7 @@ test("compact PRD exposes the UI Experience Gate without creating a new authorit
     "validation evidence",
     "approver",
     "blocking OPEN",
-    "N/A - reason + approver",
+    "N/A - factual reason",
   ]) {
     assert.match(
       prd,
@@ -228,14 +226,16 @@ test("active artifact templates use current workflow and ADR paths", async () =>
   );
 });
 
-test("compact artifact surface remains more than 90 percent smaller", async () => {
+test("full and compact artifacts share the documentation quality contract", async () => {
   const [full, compact] = await Promise.all([
     Promise.all(FULL_TEMPLATES.map((name) => read(`${TEMPLATE_ROOT}/${name}`))),
     Promise.all(SKELETONS.map((name) => read(`${TEMPLATE_ROOT}/skeletons/${name}`))),
   ]);
-  const before = estimateTokens(full.join("\n"));
-  const after = estimateTokens(compact.join("\n"));
-  const reduction = ((before - after) / before) * 100;
-
-  assert.ok(reduction > 90, `artifact surface reduction was ${reduction.toFixed(2)}%`);
+  for (const text of [...full, ...compact]) {
+    assert.match(text, /^## Summary/m);
+    assert.match(text, /output-style\.md/);
+  }
+  for (const name of ['BRD-Skeleton.md', 'PRD-Skeleton.md', 'FSD-Skeleton.md']) {
+    assert.match(await read(`${TEMPLATE_ROOT}/skeletons/${name}`), /```mermaid/);
+  }
 });

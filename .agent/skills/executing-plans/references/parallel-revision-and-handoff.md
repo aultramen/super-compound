@@ -24,8 +24,9 @@ When verification fails:
 1. Identify the exact failing check.
 2. Fix only that behavior.
 3. Re-run the failed check.
-4. Repeat for at most three focused iterations.
-5. If still failing, stop and report evidence and blocker.
+4. After repeated failure, reassess evidence and escalate strategy/capability.
+5. Follow shared recovery policy; stop affected work only for missing authority/
+   access, hard limits, or demonstrated stagnation after safe alternatives.
 
 Allowed: failing-test, lint/type, wiring, boundary-validation, and behavior-doc corrections. Avoid new features, broad refactors, scope expansion, and unrelated cosmetic churn.
 
@@ -44,7 +45,8 @@ The next session must be able to run `/sc-status` and continue safely.
 
 ## Finish Line
 
-- Goals are complete or explicitly deferred.
+- Mandatory goals are verified; optional out-of-scope findings may be deferred.
+  A partial result with mandatory gaps remains incomplete.
 - Source issues and durable state are current.
 - Verification ran and failures are disclosed.
 - Behavior/setup/architecture documentation matches implementation.

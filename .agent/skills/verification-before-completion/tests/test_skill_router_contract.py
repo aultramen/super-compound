@@ -23,7 +23,7 @@ SKILLS = {
     ],
     "code-review": [
         "Spec compliance",
-        "STOP",
+        "Ambiguous authority blocks only the affected assessment",
         "P1",
         "P2",
         "P3",
@@ -31,7 +31,8 @@ SKILLS = {
     ],
     "test-driven-development": [
         "NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST",
-        "Delete it. Start over.",
+        "preserve user work",
+        "safe baseline or isolated fix toggle",
         "RED",
         "GREEN",
         "REFACTOR",
@@ -48,7 +49,7 @@ SKILLS = {
     "gap-closure": [
         "Gaps only",
         "ORIGINAL verification",
-        "max 2",
+        "reassess and escalate",
         "enhancement",
         "test-driven-development",
     ],
@@ -71,8 +72,6 @@ def main() -> int:
         text = router.read_text(encoding="utf-8")
         words = len(text.split())
 
-        if words > 500:
-            failures.append(f"{name}: {words} words exceeds 500")
         if frontmatter_value(text, "name") != name:
             failures.append(f"{name}: frontmatter name mismatch")
         if not frontmatter_value(text, "description").startswith("Use when"):

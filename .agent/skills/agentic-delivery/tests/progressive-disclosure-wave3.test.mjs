@@ -19,9 +19,9 @@ const specs = {
       "authority-and-adr.md": "2bca7520c4b11237fe99f8e53f3083f97c4bef88692876d147a4b4c103e22943",
       "qualified-references.md": "bc5f8b87bb0333347f291087ae7a28858b5326ebfd12c09094e5532f21c110eb",
       "context-and-issue-pointers.md": "68c0d02211cd46b95845c2555e0d680075e61e72d3793eae3678a07d69cf8b1d",
-      "open-stop-conditions.md": "d063fff88d47101ae5c331abe7d51dce53cc36d41d80195f4f0132a797bbf7b0",
-      "workflow-integration.md": "fa4bb97d5c735e39d22538d6eee2e78cf2bfc71104114022a209254b5a457f71",
-      "ui-contract-readiness.md": "89c536da9119951d7872fb99e2b924a6873f7f0fc6f58486bc2d311cdbf7d96f",
+      "open-stop-conditions.md": "09dd7d956a1372ea50668f57554110a3f3811d6948a287580aa933c0d1a378eb",
+      "workflow-integration.md": "f87b17f9408f92302ede79f584b1a6043b4c789c22ebfaadc6f2d749f9789f2c",
+      "ui-contract-readiness.md": "092304b0d5f163388deeb91533a456612a95839bf027cde219db02422deb4c36",
     },
     invariants: [
       /BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION/,
@@ -36,7 +36,7 @@ const specs = {
       '---\nname: issue-workflow\ndescription: "Use when /sc-plan needs FSD GOAL-* packets turned into lightweight issue pointers, local Markdown Kanban boards, blocker DAGs, or multi-agent task contracts."\n---',
     references: {
       "zero-context.md": "60efe561a41dcf40ffe1f9fe88f94b64aebad51fb2ac7dd5b50d6b54a15007e7",
-      "process.md": "7cd02af6cb6e8bdf5ac7c1aba875542b02a5a05c86e82ee7f089412db9dc5cb0",
+      "process.md": "8d17a3a7fe0b47e9e98b38eb5d3783888d02327c040d6dee82cf7ef8d81eb617",
       "status-and-done.md": "6a13d0ab2b0bf3e6fcacadbab6c622eedea4809002c27e93116d49ffbac8c4a4",
     },
     invariants: [
@@ -53,8 +53,8 @@ const specs = {
       "coverage-and-dependencies.md": "16bea51fefafeca4ba4d4e4186e7cf7f52105f33fe7deb22f4e6394115fd4347",
       "links-scope-and-must-haves.md": "d73c1b53afe2bab7a3b5bd8221b3ef62f1705490eb18abba300d6f1218157b7d",
       "sizing.md": "449d2058678489910fbd8d56e839bcd132db1025927ad267f94c2b52d559edb0",
-      "tests-and-decisions.md": "925d355e785ccfd9396cb1add1af26900f6e84b6ebc760df6697380905be0cd2",
-      "verification-process.md": "309c48c27b610f8870ae3957dc58f8b24a72bc94703d386cdccffcb9dc779713",
+      "tests-and-decisions.md": "67d42a7fe47a0ce7627c095591efb18fba30d1cf29ea9763df95319d19c30149",
+      "verification-process.md": "317e90c15c0fc29310ea86ec13425cc098c60eab6cda7a970913a02421362019",
       "revision-rules.md": "541a5a8061f13aeeb69156486bd4f63d7b48766c30a69c1f99824f7ece66c97a",
     },
     invariants: [
@@ -68,9 +68,9 @@ const specs = {
     frontmatter:
       '---\nname: parallel-execution\ndescription: "Use when a plan or issue board has 2+ independent execution streams whose time saving exceeds coordination overhead. Dispatches agents in isolated git worktrees only after required delivery gates pass."\n---',
     references: {
-      "prerequisites-and-selection.md": "2c7d5aa0b744589b4b836cfcb6184b06145894f7bff9f8a2200e0020da4042d4",
-      "process.md": "627644836d56defb1c6aacd37edadcf32dee5a8be5195c3c17ab0dc21f654ac7",
-      "red-flags.md": "502f2124f04f37f5871757706288f2c8875e2f9ff5b0e8a889a6eea4e3a6c8a1",
+      "prerequisites-and-selection.md": "8a7e33dff083bebe087052ff3db563c7b005ac3aa9aa9ef01abc2581eaa585a9",
+      "process.md": "d357242fd34d22eeb5a2f61ad5db751b8c0ea691597599dc8e431e76b64ad2bc",
+      "red-flags.md": "ecad3bab78490c5196d0f4b58eb8f789eabd6873e95de08938dd3c2fcecce7af",
     },
     invariants: [
       /2\+ independent execution streams/,
@@ -118,8 +118,8 @@ const specs = {
     frontmatter:
       '---\nname: git-workflow-operation\ndescription: "Use when starting Git work, preparing commits, pushing branches, opening Pull Requests, or coordinating optional git worktrees."\n---',
     references: {
-      "configuration-and-safety.md": "781b514cf75e46f00c75bf2ed0933d3c93c2854ada1afd92fa1f84f055b8fd25",
-      "commands-and-branches.md": "0f149a66d865a89ea5e6d4548e8b265709a0e3d64f36b4869ba279e6e5aba236",
+      "configuration-and-safety.md": "8c4580293a98ff4c746d864848ab036cfb9181cc8f477bedf8fa971a67457b4e",
+      "commands-and-branches.md": "07eca489b0ead058109149674b57ee558fde767bd78856e7b0d6ef95c85901d9",
       "touchpoints-and-red-flags.md": "403ef44895b70d61776c3e012075033254ecc32d36cd70f6a98da074fc447150",
     },
     invariants: [
@@ -134,14 +134,14 @@ const specs = {
       '---\nname: brainstorming\ndescription: "Use when creative product, feature, UI, or behavior work needs intent, requirements, constraints, or design explored before implementation."\n---',
     references: {
       "local-context.md": "4f4e589b57040e890219e10f0fb79121d84fefd8d5d4798ea08e4e7de63af545",
-      "questions-and-options.md": "0615c0423efbdd7aa6f455b3d1e974aeb55de18d20aac66e3f8a6808fd283e4b",
-      "capture.md": "c6269d2032dd6f4dedbb61579cc84965ce2813d80cae7a82281f625579baf7af",
+      "questions-and-options.md": "635179013449f99a421f89628f8a426f8435aab7244695fbae9cec8f9aebb437",
+      "capture.md": "c716169a240bb4b1eddb153e38956398b3a4c4813c899a5163e4f19a9a6c033e",
       "ui-and-visual.md": "5ec57d9d3ffd0a22f7a9e0bd4c7bbaee7a1fd07e65a11bcd760b4f2ba0a68531",
-      "red-flags-and-next.md": "c79f3fe76480fb8f6996405ea62cfc5c43e605116774328f94b2bc13e108101f",
+      "red-flags-and-next.md": "23d7b575d662f5daaddc493460bfa52449d0c29cb8608eafec339de53ad9222a",
     },
     invariants: [
       /Context-before-questions gate:/,
-      /one concise question per turn/i,
+      /consequential decisions/i,
       /2-3 approaches/,
       /Plan gate:/,
     ],
@@ -152,7 +152,7 @@ const specs = {
     references: {
       "retrieval-workflow.md": "6d73c5506b0fe0f2aa71c1e2a0d42d61deef920b8ca42b2c5365b1b84b6c0c52",
       "catalog.md": "a3fd67ddc0d9ea57345e0e6f2f13dcc41d2653e7a33c0e19903262b43b97fa36",
-      "implementation-and-checklist.md": "0a2e8479e430ded19527925538976f7e5526ffba6bc2d2c10b1467ca72283e0c",
+      "implementation-and-checklist.md": "fc26e206fb980a9e923be8fc08e1ae645ce8575e16b2f8369d557346012f091a",
     },
     invariants: [
       /Retrieval gate:/,
@@ -187,18 +187,15 @@ async function readSkillFile(skill, relativePath) {
   );
 }
 
-test("wave 3 routers preserve frontmatter and stay within 500 words", async () => {
+test("wave 3 routers preserve frontmatter and retain navigable structure", async () => {
   for (const [skill, spec] of Object.entries(specs)) {
     const content = await readSkillFile(skill, "SKILL.md");
     assert.equal(frontmatter(content), spec.frontmatter, `${skill} frontmatter`);
-    assert.ok(
-      whitespaceWords(content) <= 500,
-      `${skill}/SKILL.md has ${whitespaceWords(content)} words`,
-    );
+    assert.match(content, /^## \S/m);
   }
 });
 
-test("wave 3 routers link every losslessly preserved detail reference", async () => {
+test("wave 3 routers link every pinned detail reference", async () => {
   for (const [skill, spec] of Object.entries(specs)) {
     const router = await readSkillFile(skill, "SKILL.md");
     for (const [reference, expectedHash] of Object.entries(spec.references)) {

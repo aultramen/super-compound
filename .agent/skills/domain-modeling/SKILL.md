@@ -52,7 +52,7 @@ Call out overloaded or conflicting terms immediately:
 - "Does account mean customer account or login identity?"
 - "The glossary says cancellation is order-level, but this story mentions item-level cancellation. Which is true?"
 
-Use concrete scenarios to force clarity.
+Use concrete scenarios to force clarity. Check terminology and factual claims against code and tests; expose conflicts with evidence. Current implementation does not silently replace approved policy. Use brainstorming rounds for unresolved user decisions.
 
 ### 3. Update The Glossary Inline
 

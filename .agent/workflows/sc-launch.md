@@ -21,10 +21,10 @@ a `light` request goes straight to `/sc-work` or `/sc-debug`.
 8. `sc-eval.md` - define measurable pass/fail checks when useful.
 9. `sc-go.md` - preview branch or optional worktree setup when configured or requested.
 10. `sc-work.md` - materialize and verify the bounded contract enabler when needed.
-11. `/sc-plan` - after an enabler, re-index the exact revisions, rerun readiness, and obtain Technical Manager re-approval before releasing the first slice.
+11. `/sc-plan` - after an enabler, re-index the exact revisions, rerun readiness, and auto-promote unchanged semantics after deterministic gates; request Technical Manager approval only for material deltas before releasing the first slice.
 12. `sc-work.md` - verify the first vertical slice against the real provider, then return to `/sc-plan` to promote only eligible dependents.
 13. `sc-work.md` - perform controlled scale-out only after the first-slice issue is verified and the PRD baseline is `VALIDATED`.
-14. `sc-work.md` - execute the bounded hardening/verification goal for integration, responsive, accessibility, E2E, and visual-regression evidence; obtain Business Owner UAT approval.
+14. `sc-work.md` - execute the bounded hardening/verification goal for integration, responsive, accessibility, E2E, and visual-regression evidence; obtain Business Owner UAT approval only when required by acceptance or material human judgment.
 15. `sc-review.md` - audit implementation and recorded verification/UAT evidence against authority; it does not manufacture missing evidence.
 16. `sc-audit.md` - run risk checks when the change affects users, data, dependencies, auth, release, or agent surfaces.
 17. `sc-go.md` - preview the finish flow and PR template after verification; commit, push, and PR run through `/sc-go` on explicit confirmation.
@@ -45,7 +45,9 @@ only `docs/STATE.md` and never mutates implementation directly.
 
 - Skip stages only when the input is already clear and evidence exists.
 - Do not run research as lifecycle ceremony; return its advisory note to the workflow that owns the decision.
-- Ask for approval at meaningful gates.
+- In stage mode, stop for BRD approval, PRD approval, FSD/goals/verification approval, and then separate execution authorization. Preserve prior grants; do not turn internal corrections or derived pointers into additional checkpoints.
 - Keep BRD, PRD, FSD, and ADR content in durable artifacts; keep goal issues to qualified references.
 - Do not treat launch as permission to deploy or publish.
 - Do not treat launch as permission to commit, push, or create a PR without routing through `/sc-go`.
+
+UI topology, affected proof, and conditional UAT follow the canonical UI readiness reference.

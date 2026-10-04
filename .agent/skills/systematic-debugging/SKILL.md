@@ -41,7 +41,7 @@ If reproduction is impossible, gather more data and report uncertainty.
 | "I know the cause" | State and test its prediction. |
 | "I cannot reproduce it, but..." | Instrument or collect data; do not patch. |
 | "A try/catch will handle it" | Explain and fix the originating invalid state. |
-| "Another tweak might work" after repeated attempts | Stop after 3+ attempts and question architecture. |
+| "Another tweak might work" after repeated attempts | At 3+ attempts reassess evidence/seams, escalate strategy, and continue safe recovery. |
 
 ## Integration
 

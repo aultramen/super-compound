@@ -5,6 +5,10 @@ description: "Use when ideas or tasks surface during work and must be captured, 
 
 # Todo Management
 
+## Summary
+
+Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
+
 ## Overview
 
 Capture out-of-scope ideas immediately, then return to the active task. Review and route them later without turning capture into an unauthorized context switch.

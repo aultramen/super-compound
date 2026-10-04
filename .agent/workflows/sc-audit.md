@@ -39,9 +39,9 @@ workflow; it never authorizes changes inside `/sc-audit`.
 10. If complete evidence exceeds the chat envelope, save it to
     `docs/audits/YYYY-MM-DD-<scope>.md` and return the path; never omit a
     finding to satisfy an output cap. Then run
-    `node .agent/tools/doc-lint.mjs <artifact>` and adjudicate its findings
+    `node .agent/tools/doc-lint.mjs <artifact> --advisory` and adjudicate its findings
     (advisory).
-11. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
+11. Checkpoint automatically and continue authorized work; use `/sc-pause` only when actually stopping.
 
 ## Output
 

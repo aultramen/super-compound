@@ -40,6 +40,12 @@ downstream_artifacts:
 
 # {{PROJECT_NAME}} — Business Requirements Document
 
+## Summary
+
+<State purpose, scope, key information, and decision/outcome for this document.>
+
+<!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
+
 > **How to use this template**
 >
 > 1. Replace every `{{PLACEHOLDER}}` with verifiable facts, decisions, or references.

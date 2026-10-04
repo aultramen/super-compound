@@ -5,6 +5,10 @@ description: "Use when a non-trivial problem is solved or substantial work shoul
 
 # Knowledge Compounding
 
+## Summary
+
+Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
+
 Turn proven solutions and reusable session learnings into searchable project memory. Announce use before writing documentation.
 
 ## When to Use
@@ -20,9 +24,11 @@ Use after a difficult debugging fix, non-obvious root cause, recurring workaroun
 
 ## Invariants
 
+- After each verified reusable outcome, run structured capture before closeout: [deterministic loop](references/deterministic-loop.md).
+
 - Search before writing in `docs/solutions/`; cross-link related records and create a new record only for a distinct root cause.
 - Every solution record explains problem, observable symptoms, root cause, proven solution, and prevention. Preserve exact errors and useful file or version context.
-- Store solution records under `docs/solutions/<category>/`; when three or 3+ related issues establish a reusable pattern, add a pattern record.
+- Store solution records under `docs/solutions/<category>/`; when three independent observed/confirmed origins with evidence establish a reusable pattern, add a pattern record.
 - Keep `docs/progress.md` append-only for session entries while consolidating reusable patterns at its top.
 - Capture only verified knowledge. Never turn a hypothesis or failed attempt into prescribed guidance.
 
@@ -36,3 +42,5 @@ Use after a difficult debugging fix, non-obvious root cause, recurring workaroun
 ## Integration
 
 Triggered after `systematic-debugging`, tricky `executing-plans` work, compound workflows, or before pause handoff. Outputs feed `writing-plans`, `brainstorming`, and resume context restoration. Present the created or updated path, then return to the active workflow.
+
+- To assess prevention gaps and reuse/add checks in owning work/debug, load [prevention checks](references/prevention-checks.md).

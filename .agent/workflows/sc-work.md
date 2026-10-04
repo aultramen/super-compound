@@ -11,11 +11,13 @@ instruction or a `.scratch/<feature>/issues/` pointer; a `full` goal is an
 approved FSD goal or its issue pointer. A single trivial change: just do it
 directly, with tests and verification.
 
+Before edits in either tier, identify current flow, reusable pattern, affected boundaries and callers/consumers, and proving checks for acceptance/regression. Full scope cites its FSD; light scope uses a brief existing note. Compare material alternatives through `executing-plans/references/authority-and-workspace.md`; changed requirements/acceptance/contracts return to their owner, while reversible details within authority proceed.
+
 ## Steps
 
 1. Load `skills/agentic-delivery/SKILL.md`, `skills/context-engineering/SKILL.md`, and `skills/executing-plans/SKILL.md` when following the full execution procedure. Do not load `docs/engineering-standards.md` or a project `CODING_STANDARDS.md` here; `/sc-review` enforces standards so implementation context stays small.
-2. Start from the `docs/STATE.md` Next action. Read the `.scratch/<feature>/issues/<NN>-<slug>.md` issue or direct FSD goal when one exists, then dynamically load only the referenced FSD sections, upstream BRD/PRD IDs, linked accepted ADRs, blockers, verification refs, and relevant code/tests. In `full`, an issue pointer must be `ready-for-agent` before any edit or execution.
-   Search durable knowledge first with `node .agent/tools/knowledge-search.mjs "<goal area>"`; a matching `ERR-*`/`LRN-*` prevention rule is binding until superseded.
+2. Start from active user intent; reconcile the `docs/STATE.md` Next action when resuming. Read the `.scratch/<feature>/issues/<NN>-<slug>.md` issue or direct FSD goal when one exists, then dynamically load only the referenced FSD sections, upstream BRD/PRD IDs, linked accepted ADRs, blockers, verification refs, and relevant code/tests. In `full`, an issue pointer must be `ready-for-agent` before any edit or execution.
+   Search durable knowledge first with `node .agent/tools/knowledge-search.mjs "<goal area>"`; validate matching lessons against current evidence; accepted decisions bind only through their authoritative source.
 3. In `full`, before any edit or execution, confirm every `Blocked by` dependency is
    satisfied at `verified`, not merely `done`; `HARDENING` requires every
    applicable UI delivery slice to be `verified`.
@@ -28,7 +30,7 @@ directly, with tests and verification.
    `/sc-explore`, observable behavior/AC to `/sc-prd`, and data/API/technical
    contract changes to `/sc-plan`. Do not repair authority drift silently in
    implementation. In `light`, a trigger discovered mid-work (new capability,
-   schema/API/auth/billing surface, new screen) is written as `ESCALATE: T<n>`
+   material contract/access/data/side-effect change, new screen) is written as `ESCALATE: T<n>`
    and routed the same way; never widen a light change silently.
 7. If `gitWorkflow.enabled` is true, load `skills/git-workflow-operation/SKILL.md`, block direct work on protected base branches, and preview `/sc-go start <branch>` commands before edits when the task is feature, refactor, docs, or chore work.
 8. Execute one goal at a time by default. A `CONTRACT_ENABLER` materializes
@@ -46,15 +48,17 @@ directly, with tests and verification.
    dependency/shared files, a single writer for contract/schema/generated
    artifacts/migrations/lockfiles, an experience baseline of `VALIDATED`, and an
    isolated Git worktree per stream. `EXCEPTION_APPROVED` never opens scale-out.
-   Plan streams as dependency waves with `node .agent/tools/goal-waves.mjs
-   --issues-dir .scratch/<feature>/issues`; run wave N in parallel only after
-   wave N-1 is `verified`. Each stream owns its worktree's `docs/STATE.md`; the
-   orchestrator merges handoffs.
+   Validate the DAG using `goal-waves.mjs --issues-dir <dir>`; dispatch
+   dependency-ready goals with `--ready --state <state.json>` and host/resource
+   slot limits. Waves are reporting boundaries, never global barriers. One
+   scheduler serializes shared state with atomic replacement/version checks;
+   quarantine only affected workers and preserve independent progress.
 11. For UI tasks, follow `skills/interface-design/SKILL.md`.
 12. Use `skills/test-driven-development/SKILL.md` for behavior changes and regressions, at the strictness `tdd_mode` sets.
 13. Run task-level verification after each meaningful change. A `HARDENING` goal
     executes and records mapped integration, responsive, accessibility, E2E, and
-    visual-regression checks; the Business Owner performs or approves UAT.
+    visual-regression checks where applicable; Business Owner UAT is required only
+    for explicit acceptance or unresolved material human judgment.
 14. Run final verification with `skills/verification-before-completion/SKILL.md`.
     For multi-goal runs, completion additionally requires the machine-checked
     predicate `node .agent/tools/verified-promise.mjs --run <run-id>` to print
@@ -73,3 +77,29 @@ directly, with tests and verification.
 - After a verified first slice, deterministic handoff to `/sc-plan` to promote
   only eligible dependent scale-out pointers; do not mutate unrelated pointers.
 - `OPEN-*` blockers, `ESCALATE: T<n>` notes, residual risks, or follow-up goals.
+
+## Automatic knowledge closeout
+
+After verification, the owning writer runs capture from
+`knowledge-compounding/references/deterministic-loop.md` before closing. Skip
+trivial solution records at the worth gate; retain ERR/LRN corrections and
+conventions. Save evidence and checkpoint first so retry repeats only capture.
+Before resumed dispatch, run memory-maintenance.mjs resume and reconcile STATE,
+affected contract drift, and ledger; never re-run verified goals merely for hygiene.
+
+LOCAL_ONLY UI follows the canonical topology applicability: mapped local behavior
+checks, no artificial provider assets/roles. Unchanged enabler semantics
+auto-promote through `/sc-plan`; compatible proof reuse follows affected mappings.
+Independent authorized goals continue while an affected stream is blocked.
+
+## Prevention and Recovery
+
+After verified capture, load `knowledge-compounding/references/prevention-checks.md`:
+reuse existing checks first; add only an evidenced scoped regression. Save the
+receipt and negative/deferred outcomes; acceptance and verifier authority remain.
+At closeout or owning resume, run `memory-maintenance.mjs flush` once (max three
+pending jobs). Retry only unfinished maintenance. Before fresh/resumed dispatch,
+load `context-engineering/references/active-context.md`, reconcile constraints
+and pending completion receipts, and skip valid verified goals.
+
+Stage mode: For full-tier implementation require approved FSD plus separate execution authorization. Retain prior authorization across recovery and unchanged derived artifacts. Preserve existing project approval preferences on update.

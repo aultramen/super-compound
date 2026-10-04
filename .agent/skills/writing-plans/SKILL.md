@@ -5,11 +5,17 @@ description: "Use when an approved PRD needs an implementation-authoritative FSD
 
 # Writing Plans
 
+## Summary
+
+Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
+
 Turn an approved PRD into the FSD authority consumed by `/sc-work`. Announce: "I'm using writing-plans to create the FSD and goal slices."
 
 ## When to Use
 
 Use after BRD/PRD approval and before implementation. Do not plan from memory, invent missing product policy, or proceed while an `OPEN-*` blocker prevents a safe technical contract.
+
+Bounded draft packages: [approval policy](../agentic-delivery/references/workflow-integration.md).
 
 ## Route
 
@@ -17,6 +23,8 @@ Use after BRD/PRD approval and before implementation. Do not plan from memory, i
 2. Load [FSD authoring](references/fsd-authoring.md) for evidence selection, risk branches, contract shape, acceptance, and handoff.
 3. After the contract is stable, load [goal slicing](references/goal-slicing.md) only when defining `GOAL-*` packets, a task ledger, or a measured wide refactor.
 4. Read only the needed sections of the full FSD template; never preload it merely to orient.
+
+For product AI runtime, use [AI context and output](../prd-generator/references/ai-context-and-output.md) and expand only FSD Section 11.
 
 ## Invariants
 
@@ -40,6 +48,8 @@ Use after BRD/PRD approval and before implementation. Do not plan from memory, i
 | "One horizontal layer is cleaner" | Use a vertical slice unless the measured wide-refactor exception applies. |
 | "Tests can wait" | Map verification beside each risky goal. |
 | "We can choose the package later" | Resolve compatibility and supply-chain risk first. |
+
+Resolve missing planning decisions through [brainstorming rounds](../brainstorming/references/questions-and-options.md); preserve the owning authority and skip settled scope.
 
 ## Integration
 

@@ -29,4 +29,9 @@ implementation it grades, creates approval, or closes a finding by self-report.
    commit/push/PR gate consumes the criteria or result, it must be saved to
    `.agent/evals/<feature>.md`; never make an approval depend on a chat-only eval.
    The durable eval artifact follows `.agent/context/output-style.md`.
-8. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
+8. Checkpoint automatically and continue authorized work; use `/sc-pause` only when actually stopping.
+
+For repeated optimization or blinded evaluation, load
+`eval-harness/references/paired-experiments.md`. Keep the identical task prompt,
+external rubric and anonymous labels; grade actual commands/artifacts and save
+every attempt, including failures. Missing runtime evidence is INCONCLUSIVE.

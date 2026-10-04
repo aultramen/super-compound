@@ -58,8 +58,7 @@ also return every P0/P1 finding. Full evidence lives in the route's artifact
 (`docs/geniusloop/YYYY-MM-DD-<scope>.md`, `.agent/evals/<feature>.md`,
 `docs/debug/YYYY-MM-DD-<slug>.md`, `docs/reviews/YYYY-MM-DD-<scope>.md`, or
 `docs/audits/YYYY-MM-DD-<scope>.md` when no normal artifact exists) and follows
-`.agent/context/output-style.md` plus the advisory caps in
-`.agent/context/doc-budgets.json`. Expand inline only when the user asks for
+`.agent/context/output-style.md`. Documentation length is unrestricted. Expand inline only when the user asks for
 detail; never omit blockers, failed gates, required decisions, or findings to
 shorten a return. Subagents return the same items; detailed evidence stays on disk.
 `.agent/context/output-budgets.json` is tooling configuration read by

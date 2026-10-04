@@ -48,6 +48,7 @@ commands:
   container_up: ""
 
 conventions:
+  approval_mode: "stage"      # See workflow-integration.md
   architecture: ""            # clean | mvc | hexagonal | layered | modular
   branch_prefix: "feat"
   default_branch: "main"

@@ -8,7 +8,7 @@ Load this reference only after investigation confirms the root cause.
 2. Run it and confirm an expected failure, not a setup error.
 3. Implement the smallest change at the root-cause level, not at the visible symptom.
 4. Run the test and confirm it passes.
-5. Prove regression sensitivity: remove or disable the fix safely and confirm the test fails, then restore it and confirm it passes. If this cannot be done safely, retain the original RED evidence and state why.
+5. Preserve original RED/GREEN sensitivity evidence. If RED is absent or inadequate, use an isolated baseline or safe toggle; never disturb user work or repeat an already-proven deterministic cycle.
 6. Run nearby and broader relevant checks.
 
 Do not replace diagnosis with workarounds, broad exception handling, retries, or validation only at the symptom layer. If the correct fix exceeds the task's approved scope, stop and create or request a plan.

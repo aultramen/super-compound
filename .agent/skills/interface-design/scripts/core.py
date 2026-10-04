@@ -5,10 +5,12 @@ Interface Design Core - BM25 search engine for UI/UX design guidance
 """
 
 import csv
+import json
 import re
 from pathlib import Path
 from math import log
 from collections import defaultdict
+from functools import lru_cache
 
 # ============ CONFIGURATION ============
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -212,19 +214,33 @@ def _load_csv(filepath):
         return rows
 
 
+_SEARCH_CACHE_ENABLED = True
+
+
+def _source_signature(filepath):
+    stat = filepath.stat()
+    return (stat.st_mtime_ns, stat.st_ctime_ns, stat.st_size, stat.st_ino)
+
+
+@lru_cache(maxsize=16)
+def _cached_index(filepath, signature, search_cols):
+    data = _load_csv(filepath)
+    documents = [" ".join(str(row.get(col, "")) for col in search_cols) for row in data]
+    bm25 = BM25()
+    bm25.fit(documents)
+    return data, bm25
+
+
 def _search_csv(filepath, search_cols, output_cols, query, max_results):
     """Core search function using BM25"""
     if not filepath.exists():
         return []
 
-    data = _load_csv(filepath)
-
-    # Build documents from search columns
-    documents = [" ".join(str(row.get(col, "")) for col in search_cols) for row in data]
-
-    # BM25 search
-    bm25 = BM25()
-    bm25.fit(documents)
+    signature = _source_signature(filepath)
+    if _SEARCH_CACHE_ENABLED:
+        data, bm25 = _cached_index(filepath.resolve(), signature, tuple(search_cols))
+    else:
+        data, bm25 = _cached_index.__wrapped__(filepath, signature, tuple(search_cols))
     ranked = bm25.score(query)
 
     # Get top results with score > 0
@@ -274,6 +290,30 @@ def detect_domain(query):
     return best if scores[best] > 0 else "style"
 
 
+@lru_cache(maxsize=2)
+def _provenance_manifest(filepath, signature):
+    return json.loads(filepath.read_text(encoding="utf-8"))
+
+
+def _guidance_metadata(filepath, results):
+    skill_root = Path(__file__).resolve().parents[1]
+    relative = "data/" + filepath.relative_to(DATA_DIR).as_posix()
+    manifest_path = skill_root / "UPSTREAM.json"
+    manifest = _provenance_manifest(manifest_path, _source_signature(manifest_path))
+    mirrored = next((item for item in manifest["files"] if item["local_path"] == relative), None)
+    applicability = []
+    for row in results:
+        guideline = row.get("Guideline", "")
+        recorded = manifest.get("guidance_applicability", {}).get(relative, {}).get(guideline)
+        applicability.append(dict(recorded) if recorded else {"guideline": guideline, "version": "unknown", "source": row.get("Docs URL", "unknown")})
+    return {
+        "provenance": {"path": relative, "source_signature": list(_source_signature(filepath)),
+                       "upstream_revision": manifest["upstream"]["commit"] if mirrored else "unknown",
+                       "status": mirrored["status"] if mirrored else "local_reference"},
+        "applicability": applicability,
+    }
+
+
 def search(query, domain=None, max_results=MAX_RESULTS):
     """Main search function with auto-domain detection"""
     if domain is None:
@@ -300,6 +340,7 @@ def search(query, domain=None, max_results=MAX_RESULTS):
         "query": query,
         "file": config["file"],
         "count": len(results),
+        **_guidance_metadata(filepath, results),
         "results": results
     }
 
@@ -330,5 +371,6 @@ def search_stack(query, stack, max_results=MAX_RESULTS):
         "query": query,
         "file": STACK_CONFIG[stack]["file"],
         "count": len(results),
+        **_guidance_metadata(filepath, results),
         "results": results
     }

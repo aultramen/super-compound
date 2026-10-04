@@ -19,7 +19,7 @@ Split when domains are unrelated, the outcome needs more than a focused session,
 For UI-integrated scope, create an optional `CONTRACT_ENABLER`, then exactly one
 active `FIRST_VERTICAL_SLICE` per pinned contract revision for the highest-risk
 critical flow. After an enabler, `/sc-plan` refreshes the FSD index and obtains
-Technical Manager approval before releasing that slice. It must prove the real
+deterministic readiness promotion before releasing that slice; approval is needed only for material semantic/risk changes. It must prove the real
 provider, auth/permission, success, and representative failure. Every
 `SCALE_OUT_SLICE` depends on its verified issue, pins the same contract version,
 and requires a `VALIDATED` PRD baseline; mock-only evidence cannot release the
@@ -45,3 +45,5 @@ If callers are unknown, verification is deferred, or the scope is merely “clea
 Use `docs/tasks/tasks-<feature>.json` only for multi-session or independent multi-agent execution. Keep it synchronized with the FSD. Each entry needs `GOAL-*` ID, title, status, parent FSD, blockers, qualified upstream refs, optional issue path, bounded files, and verification commands.
 
 Issue pointers under `.scratch/<feature>/issues/` stay lightweight: link to FSD/requirement/test/decision IDs instead of copying artifact prose.
+
+LOCAL_ONLY applicability and affected proof follow the canonical UI readiness reference.

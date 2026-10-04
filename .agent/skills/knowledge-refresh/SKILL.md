@@ -48,3 +48,7 @@ audited for a long period. Not for writing new learnings - that is
 Fed by `knowledge-compounding` (contradiction discovered while writing a new
 record), `/sc-evolve` (a promotion candidate contradicts a record), and `/sc-audit`. Report actions taken per record, then return to the
 active workflow.
+
+- Deterministic metadata refresh, locator validation, and reviewed content changes: [tool protocol](../knowledge-compounding/references/deterministic-loop.md).
+
+- Revalidate current harness recipes and prevention effectiveness using [verification recipes](../verification-before-completion/references/verification-recipes.md) and `memory-maintenance.mjs report`.

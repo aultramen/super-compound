@@ -19,7 +19,7 @@ Choose exactly one type: `needs_info`, `needs_decision`, `needs_confirmation`, `
 
 ## Invariants
 
-- Present one checkpoint at a time; never batch unrelated gates.
+- Batch consequential inputs with the same owner and scope into one concrete request; keep unrelated authority gates separate. Continue independent safe work while waiting.
 - Provide context, the exact blocker, what was tried, the impact of the response, and a concrete resumption path.
 - For choices, present meaningful options and lead with a reasoned recommendation.
 - Record the checkpoint under `STATE.md` Blockers. After resolution, move durable choices to Decisions Made and continue from the exact prior position.

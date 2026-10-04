@@ -6,13 +6,13 @@ Load when turning review evidence into feedback or reviewing your own change.
 
 | Level | Meaning | Action |
 |---|---|---|
-| P1 Critical | Bug, exploitable security issue, data loss, broken architecture/contract | Must fix before merge |
+| P1 Critical | Material runtime defect, exploitable security issue, data loss, broken public contract | Must fix before merge |
 | P2 Important | Material design, edge-case, reliability, or performance issue | Should fix; disposition explicitly |
 | P3 Suggestion | Minor maintainability, naming, or style improvement | Optional |
 
 ## Finding Format
 
-Each finding is one line: tight `file:line` location, then the violated requirement or invariant, concrete impact and trigger conditions, the evidence establishing it, and a focused fix.
+Each finding explains problem, impact, evidence, and action; use as many sentences as needed. Include `file:line` location, then the violated requirement or invariant, concrete impact and trigger conditions, the evidence establishing it, and a focused fix.
 
 Group findings by severity and related root cause; omit empty severity tiers. Do not inflate counts by splitting one issue across symptoms. Add a Strengths line only when it informs the merge decision. The verdict states the decision only and never restates findings. Include Residual Risk only when it is non-empty.
 

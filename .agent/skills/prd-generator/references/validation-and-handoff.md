@@ -13,7 +13,7 @@ Confirm:
 - BRD IDs and requirement IDs provide complete traceability.
 - Canonical rules and state semantics do not conflict.
 - UI work specifies accessibility, responsive behavior, and important states.
-- Every UI state is covered or has `N/A - reason + approver`; the Experience
+- Every UI state is covered or has `N/A - factual reason`; the Experience
   Baseline is `VALIDATED`, `EXCEPTION_APPROVED`, or `NOT_APPLICABLE`.
 - `HIGH_INTERACTION` has interactive evidence; timing, runtime responsive,
   keyboard/focus, realtime, or offline risk has runnable evidence.

@@ -29,7 +29,7 @@ Do not use when requirements or architecture are genuinely undecided; return to 
 3. Create minimal fix tasks and explicit out-of-scope boundaries.
 4. Execute through `test-driven-development` and focused edits.
 5. Re-run the ORIGINAL verification, then relevant regression checks.
-6. If new gaps appear, stop after max 2 additional closure iterations and report what remains.
+6. At repeated gaps, reassess and escalate using the shared recovery policy; preserve results, continue independent work, and report mandatory gaps honestly. Stop only for missing authority/access, hard limits, or demonstrated stagnation.
 
 ## Red Flags
 
@@ -47,3 +47,5 @@ Do not use when requirements or architecture are genuinely undecided; return to 
 - Uses `executing-plans` for fix tasks and `test-driven-development` for behavior.
 - Uses `systematic-debugging` when root cause is not yet established.
 - Returns to `verification-before-completion` and `state-management` after repair.
+
+- At verified defect closeout, assess the prevention gap using [prevention checks](../knowledge-compounding/references/prevention-checks.md).

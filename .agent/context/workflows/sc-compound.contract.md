@@ -5,3 +5,5 @@ Search first: knowledge-search.mjs "<topic>"; extend a match, never duplicate.
 Each ERR/LRN entry needs its Quick Reference row.
 
 Learning is capture-automatic, apply-human: every pattern is advisory to human-owned documentation, never authority, and never self-modifies prompts, policy, budgets, verifier, framework, goals, or routes.
+
+Use memory-maintenance JSON capture/upsert with stable origin, revision, and verification refs; apply the full-solution worth gate.

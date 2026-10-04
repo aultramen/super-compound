@@ -34,6 +34,12 @@ downstream_artifacts:
 
 # {{PROJECT_NAME}} — Product Requirements Document
 
+## Summary
+
+<State purpose, scope, key information, and decision/outcome for this document.>
+
+<!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
+
 > **How to use this template**
 >
 > 1. Replace every `{{PLACEHOLDER}}` with real decisions or data.
@@ -230,7 +236,7 @@ The PRD may only have `APPROVED` status when:
 - [ ] All features have a stable ID and priority.
 - [ ] Business rules, canonical states, enums, date/unit semantics, and precedence do not conflict.
 - [ ] Acceptance criteria cover the relevant happy, negative, authorization, empty, duplicate, stale, and failure paths.
-- [ ] `ui_delivery_profile` and `experience_baseline_status` have been set; every UI state is `COVERED` or `N/A - reason + approver`.
+- [ ] `ui_delivery_profile` and `experience_baseline_status` have been set; every UI state is `COVERED` or `N/A - factual reason`.
 - [ ] UI-bearing scope has responsive/accessibility intent, risk-appropriate evidence, and a Business Owner approver; `HIGH_INTERACTION` has interactive evidence, with runnable evidence for timing, runtime responsive, keyboard/focus, realtime, or offline risk, or an explicit exception.
 - [ ] Security, privacy, compliance, audit, classification, retention, and AI authority boundaries have been assessed.
 - [ ] NFRs have measurable targets and load/usage context.
@@ -898,6 +904,11 @@ Enter `N/A — reason` when the feature does not use AI/automation.
 | Purpose | {{WHAT_AI_AUTOMATION_DOES}} |
 | Authority | ADVISORY / DRAFT_ONLY / DETERMINISTIC_AUTOMATION / HUMAN_APPROVAL_REQUIRED / AUTONOMOUS_WITH_LIMITS |
 | Inputs allowed | {{DATA_SCOPE}} |
+| Actor/source attribution | {{ACTOR_SOURCE_VERSIONS_AND_AUTHORIZED_INFORMATION}} |
+| Chronology | {{EVENT_ORDER_TIME_AND_UNCERTAINTY}} |
+| Selection and truncation | {{SELECTED_BOUNDARIES_OMISSIONS_INCOMPLETE_CONTEXT_INDICATOR}} |
+| Output-language policy | {{EXPLICIT_REQUIREMENT_SELECTED_CONTEXT_MIXED_EMPTY_AMBIGUOUS_OVERRIDES}} |
+| Output controls | {{REVIEW_EDIT_CONFIRM_REGENERATE_AS_REQUIRED_BY_PRODUCT_RISK}} |
 | Inputs prohibited | {{SENSITIVE_OR_UNTRUSTED_DATA}} |
 | Required evidence | {{CITATION_CONFIDENCE_STRUCTURED_OUTPUT}} |
 | Human gate | {{WHO_APPROVES_WHAT}} |
@@ -945,10 +956,10 @@ production seed.
 
 ##### State Applicability Matrix
 
-Every row is `COVERED` or `N/A - reason + approver`. Material edge cases are
+Every row is `COVERED` or `N/A - factual reason`. Material edge cases are
 named scenarios, not a generic `Edge` state.
 
-| State | Applicability | Observable behavior / recovery | AC refs | N/A reason + approver |
+| State | Applicability | Observable behavior / recovery | AC refs | N/A factual reason |
 |---|---|---|---|---|
 | Loading | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
 | Empty | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |

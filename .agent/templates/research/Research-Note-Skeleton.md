@@ -1,5 +1,11 @@
 # Research Note: <topic>
 
+## Summary
+
+<State purpose, scope, key information, and decision/outcome for this document.>
+
+<!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
+
 > Evidence only. This note does not replace approved BRD, PRD, FSD/TDEC, ADR, or audit authority.
 
 - **Status:** DRAFT | READY | INCONCLUSIVE | SUPERSEDED

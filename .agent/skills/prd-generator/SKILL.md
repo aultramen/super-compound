@@ -5,17 +5,24 @@ description: "Use when an approved BRD must be translated into observable produc
 
 # PRD Generator
 
+## Summary
+
+Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
+
 Define users, observable product behavior, rules, acceptance criteria, and outcomes between BRD exploration and technical FSD planning. Announce use before authoring.
 
 ## When to Use
 
 Use after an approved BRD exists and before `/sc-plan`. If no BRD is approved, return upstream. If a PRD already covers the topic, ask whether to revise it or create a separately scoped document.
 
+Bounded draft packages: [approval policy](../agentic-delivery/references/workflow-integration.md).
+
 ## Route
 
 - For evidence collection, clarifying questions, required sections, and the compact shape, load [PRD authoring](references/prd-authoring.md).
 - For story sizing, validation, storage, and downstream routing, load [validation and handoff](references/validation-and-handoff.md).
 - Load the validation branch only after a draft exists.
+- For product AI runtime, load [AI context and output](references/ai-context-and-output.md).
 
 ## Invariants
 
@@ -39,6 +46,8 @@ Use after an approved BRD exists and before `/sc-plan`. If no BRD is approved, r
 - Technical design masquerading as product requirements.
 - UI requirements without accessibility/responsiveness, or data/security/privacy requirements without failure and abuse cases.
 - Proceeding to FSD while a scope- or policy-changing open item remains.
+
+For unresolved product choices, use [brainstorming rounds](../brainstorming/references/questions-and-options.md); preserve the owning authority and skip settled scope.
 
 ## Integration
 

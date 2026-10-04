@@ -57,6 +57,9 @@ tags: [tag1, tag2]
 
 # <Problem Title>
 
+## Summary
+<Purpose, affected scope, verified fix, and reusable outcome. Add relevant HLD for design explanations.>
+
 ## Symptoms
 <Exact errors and observed behavior>
 
@@ -67,7 +70,7 @@ tags: [tag1, tag2]
 <Verified code or configuration changes, stated once; before/after examples when useful>
 
 ## What Didn't Work
-<Failed attempts, one line each; omit this section when no attempt failed>
+<Failed attempts, explain evidence and outcome; omit this section when no attempt failed>
 
 ## Prevention
 <IF-THEN rule that adds something beyond the Solution; omit when it would restate the Solution>
@@ -80,22 +83,22 @@ Good records are specific, searchable, reproducible, and explanatory. Never incl
 
 ## 3b. Ground the record
 
-Run the mechanical validator and the single-projection doc lint before finishing:
+Run the mechanical validator and the documentation quality lint before finishing:
 
 ```bash
 node .agent/tools/validate-doc-claims.mjs docs/solutions/<category>/<file>.md
-node .agent/tools/doc-lint.mjs docs/solutions/<category>/<file>.md
+node .agent/tools/doc-lint.mjs docs/solutions/<category>/<file>.md --advisory
 ```
 
 It flags missing cited paths, broken relative links, unknown commit SHAs, and
 leftover drafting scaffold. Adjudicate every finding yourself; the tool never
 edits the record. A claim that cannot be grounded gets rewritten or removed,
 not left as-is. The doc lint flags empty shells, duplicated paragraphs, and
-boilerplate; keep the record single-projection - state each fact once.
+boilerplate; follow Documentation Output Standard; summaries may recap detail.
 
 ## 4. Compound patterns
 
-Add `Related` links in both directions. At 3+ similar records, create `docs/solutions/patterns/<pattern-name>.md` containing the common symptom, underlying cause, general solution pattern, and links to at least three examples.
+Add `Related` links in both directions. At 3+ independent observed/confirmed origins with evidence, create `docs/solutions/patterns/<pattern-name>.md` containing the common symptom, underlying cause, general solution pattern, and links to at least three examples.
 
 ## 5. Discoverability check
 

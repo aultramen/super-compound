@@ -15,7 +15,7 @@
       "upstream_path": "src/ui-ux-pro-max/scripts/core.py",
       "upstream_lf_sha256": "ab9f398b493e34404448cefc766239ee86119c7a21d8581ba965cabdc698b0a8",
       "local_path": "scripts/core.py",
-      "local_lf_sha256": "597b4d07ec0368a1ef6a9dc1a1457abb6a489d72ae5b7d628f47ccd03417ceab",
+      "local_lf_sha256": "7c710d8c7e1d480511b52f677eebd439c26a191f7706e63a5c131bb29544ead1",
       "status": "transformed"
     },
     {
@@ -166,6 +166,13 @@
         "data/stacks/javafx.csv"
       ],
       "description": "Replace backslash-escaped quotes with RFC 4180 doubled quotes so Java code cells round-trip through the standard CSV parser."
+    },
+    {
+      "id": "bounded-signature-index-cache",
+      "files": [
+        "scripts/core.py"
+      ],
+      "description": "Cache 16 in-process BM25 indexes by path and source stat signature; retain strict CSV validation, fresh result dictionaries, and explicit applicability/provenance. Repeated-query benefit measured locally."
     }
   ],
   "local_only": [
@@ -196,6 +203,10 @@
     {
       "path": "scripts/test_upstream_provenance.py",
       "reason": "Local integrity checks for this selective provenance manifest."
+    },
+    {
+      "path": "scripts/benchmark_search.py",
+      "reason": "Local paired cache-disabled/cache-enabled benchmark with identical result digests."
     }
   ],
   "intentionally_not_imported": [
@@ -219,5 +230,15 @@
       "feature": "design dials",
       "reason": "Deferred because the upstream dial implementation crosses local persistence and formatting protections; existing retrieval defaults remain unchanged."
     }
-  ]
+  ],
+  "guidance_applicability": {
+    "data/stacks/nextjs.csv": {
+      "Configure caching explicitly (Next.js 15+)": {
+        "guideline": "Configure caching explicitly (Next.js 15+)",
+        "version": "Next.js 15+",
+        "source": "https://nextjs.org/docs/app/building-your-application/upgrading/version-15",
+        "basis": "existing local guidance row; not a new upstream refresh"
+      }
+    }
+  }
 }

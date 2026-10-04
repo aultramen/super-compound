@@ -6,12 +6,18 @@ Read `gitWorkflow` from `.agent/rules/project-config.md`. Defaults are: remote `
 
 Before branch or worktree setup:
 
-1. Confirm the directory is a Git repository.
-2. Confirm the configured remote exists.
-3. Confirm the working tree is clean before checkout.
-4. Confirm `remote/base` exists.
-5. Confirm the new branch does not exist locally or remotely.
-6. Validate branch name and prefix.
+1. Confirm the directory is a Git repository and inventory dirty paths.
+2. For remote setup, confirm configured remote and `remote/base`. For offline
+   or local-only setup use `--local` with a known local base; do not fetch/pull.
+3. Branch from the active known base only when no checkout will overwrite user
+   changes; otherwise use an isolated worktree from that base. Dirty work in
+   the original workspace does not block isolated setup.
+4. Confirm branch availability and validate branch/base names and worktree paths.
+5. Never automatically stash, reset, clean, or commit user work to make setup pass.
+
+A requested operation remains authorized while target, scope, and material risk
+are unchanged. Run the fresh preview and proceed; ask again only for an
+unauthorized delta. Implementation scope alone never authorizes Git delivery.
 
 Before commit/push/PR:
 

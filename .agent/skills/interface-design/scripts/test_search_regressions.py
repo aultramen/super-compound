@@ -3,12 +3,40 @@
 """Regression tests for interface-design search retrieval."""
 
 import unittest
+import tempfile
+from pathlib import Path
+from unittest.mock import patch
+import core
 
 from core import search, search_stack
 from search import format_output
 
 
 class InterfaceDesignSearchRegressionTests(unittest.TestCase):
+    def test_repeated_search_caches_index_and_source_change_invalidates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / 'rules.csv'
+            source.write_text('Guideline\nretry timeout\n', encoding='utf-8')
+            with patch.object(core, '_SEARCH_CACHE_ENABLED', True, create=True), patch.object(core, '_load_csv', wraps=core._load_csv) as loader:
+                first = core._search_csv(source, ['Guideline'], ['Guideline'], 'retry', 3)
+                second = core._search_csv(source, ['Guideline'], ['Guideline'], 'retry', 3)
+                self.assertEqual(first, second)
+                self.assertEqual(loader.call_count, 1)
+                first[0]['Guideline'] = 'caller mutation'
+                self.assertEqual(second[0]['Guideline'], 'retry timeout')
+                source.write_text('Guideline\nretry backoff changed\n', encoding='utf-8')
+                changed = core._search_csv(source, ['Guideline'], ['Guideline'], 'retry', 3)
+                self.assertEqual(changed[0]['Guideline'], 'retry backoff changed')
+                self.assertEqual(loader.call_count, 2)
+
+    def test_version_sensitive_guidance_exposes_applicability_and_source(self):
+        result = search_stack('Configure caching explicitly Next.js 15', 'nextjs', max_results=1)
+        self.assertIn('provenance', result)
+        self.assertEqual(result['applicability'][0]['version'], 'Next.js 15+')
+        self.assertIn('version-15', result['applicability'][0]['source'])
+        self.assertEqual(result['provenance']['path'], 'data/stacks/nextjs.csv')
+        self.assertIn('source_signature', result['provenance'])
+
     def assert_top_style(self, query, expected_style):
         result = search(query, domain="style", max_results=1)
 

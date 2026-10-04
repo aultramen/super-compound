@@ -20,4 +20,4 @@ Load before quality review whenever authoritative requirements exist.
 - Public contracts remain compatible unless the approved plan authorizes a break.
 - The change follows domain language and ownership defined by authoritative artifacts.
 
-If any item fails, stop Stage 2 and report the compliance gap with its source requirement and affected code. Quality review resumes only after compliance passes.
+Report spec gaps with source requirements and affected code. Collect applicable quality findings in the same pass when omissions do not make intent ambiguous. Ambiguous authority blocks only the affected assessment; never discard independently demonstrable findings.

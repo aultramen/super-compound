@@ -9,7 +9,7 @@ existing PRD, FSD, goal-pointer, implementation, and verification authorities.
 Set `ui_delivery_profile` for every scope:
 
 - `NOT_APPLICABLE`: no interactive end-user surface. The UI hard gates are
-  skipped with a reason and approver.
+  skipped with a factual reason; no administrative approval is needed.
 - `STANDARD`: canonical page, form, or CRUD interaction. Wireframe, static, or
   clickable evidence may be sufficient when it resolves the material risk.
 - `HIGH_INTERACTION`: conditional multi-step flow, optimistic update, realtime,
@@ -22,6 +22,18 @@ required when the risk is timing, runtime responsive behavior, keyboard/focus,
 realtime, or offline behavior. In brownfield work, first characterize current
 UI, API, design-system, and compatibility behavior as evidence; existing
 behavior is not product authority.
+
+## Topology And Applicability
+
+For `LOCAL_ONLY` UI (no provider, network operation, wire contract, or external
+side effect), retain screen/state/data-to-test mappings and responsive/keyboard/
+accessibility checks for changed behavior. Set `topology: LOCAL_ONLY` and
+`network_actions: []` in the existing index; no artificial schema, mock, typed
+consumer, provider test, enabler, first-provider slice, or hardening goal is
+required. Use a normal bounded goal and mapped local verification. The gate
+rejects contradictory network/wire declarations. `NETWORKED` remains the
+backward-compatible default and retains real provider proof before scale-out.
+HIGH_INTERACTION local UI still requires runnable interaction evidence.
 
 ## Evidence Selection And Record
 
@@ -81,12 +93,13 @@ do not silently select one.
 ## Hard Gates
 
 `READY_FOR_SLICE` is binary: `node .agent/tools/readiness-gate.mjs --fsd <fsd>
---prd <prd> --issues-dir <dir>` must exit 0. `N/A` counts only with a reason
-and approver; `NOT_APPLICABLE` skips the gates with a reason and approver. All
-must pass:
+--prd <prd> --issues-dir <dir>` must exit 0. Applicability is derived from topology and changed behavior. `N/A` needs a
+factual reason, not an administrative approver. `NOT_APPLICABLE` requires no
+interactive surface. Real risk exceptions still require the authorized owner.
+All applicable gates must pass:
 
 1. Experience baseline is `VALIDATED` or `EXCEPTION_APPROVED`.
-2. Every critical state is covered or approved `N/A`.
+2. Every applicable critical state is covered or factually justified `N/A`.
 3. One hundred percent of visible/editable data and network actions are mapped.
 4. Schema and fixture revisions match and a validation command exists.
 5. Mock and typed consumer derive from the same revision, or an approved
@@ -123,14 +136,17 @@ UI delivery roles and gates are:
 `/sc-plan` writes only the FSD and issue pointers. If machine assets are absent,
 it creates a `CONTRACT_ENABLER` goal. An FSD with readiness `DRAFT` or `BLOCKED`
 may be approved only to make that bounded enabler ready; first-slice and
-scale-out issues remain blocked. After the enabler is verified, return to
-`/sc-plan`, update the FSD index, rerun the readiness gate, and obtain Technical
-Manager approval for the updated contract. Only
+scale-out issues remain blocked. After the enabler is verified, the owning
+`/sc-plan` route updates derived revisions/index, reruns deterministic readiness,
+and releases the first-slice pointer automatically when approved semantics are
+unchanged. Record the diff/evidence and notify; Technical Manager re-approval is
+required only for a material semantic change or risk exception. Only
 `READY_FOR_SLICE` releases exactly one active `FIRST_VERTICAL_SLICE` for the
 critical/highest-risk flow. Every `SCALE_OUT_SLICE` depends on the verified
 first-slice issue. `/sc-plan` also creates exactly one `HARDENING` goal that
 depends on all applicable UI delivery slices and owns final merged-system
-integration, responsive, accessibility, E2E, visual-regression, and UAT evidence.
+integration and the responsive, accessibility, E2E, visual-regression, or UAT
+evidence required by changed behavior and approved acceptance.
 
 `CONTRACT_ENABLER` materializes schema, deterministic and edge fixtures, mock,
 typed consumer, and contract tests. `FIRST_VERTICAL_SLICE` must use the real
@@ -160,8 +176,9 @@ auth/permission and scoped responsive/accessibility behavior are proven, and
 `OPEN-*`; mock-only evidence cannot release dependents.
 
 Feature/release verification is complete only when the `HARDENING` goal records
-merged-system integration, full mapped responsive/accessibility, E2E,
-visual-regression, and Business Owner UAT evidence for all delivery slices.
+merged-system integration and all applicable mapped verification for changed
+behavior. Business Owner UAT is required for unresolved material human judgment
+or explicit acceptance, not as an administrative default for every UI change.
 
 ## Change Routing And Compatibility
 
@@ -182,13 +199,25 @@ Every authority or contract change lists impacted qualified IDs, owner/approver,
 version transition, derived assets to regenerate, tests to rerun, and issues to
 return to `needs-info` or `blocked`. Never repair drift silently.
 
-A contract version or revision change makes the previous derived
-`FIRST_VERTICAL_SLICE_VERIFIED` gate stale for affected not-started or dependent
-work. Keep the historical verified issue as immutable audit evidence, but do not
-reuse it to release the new revision. `/sc-plan` creates exactly one active
-versioned first-slice re-verification pointer for the newly pinned revision and
-repoints affected not-started dependents to it; historical pointers remain
-immutable. Re-verify that slice before scale-out.
+A version/revision change invalidates only proof depending on affected
+operations, flows, auth/permissions, errors, fixtures, or compatibility. Record
+impacted qualified IDs and compare evidence identity before release. Preserve
+historical verified issues and unrelated flow evidence. Additive compatible
+changes regenerate assets and run affected provider/consumer checks; they do
+not automatically require another real slice or rewire every dependency.
+A material flow/auth/error/compatibility change requires a versioned real-slice
+re-verification pointer and blocks its affected descendants until verified.
+Unknown impact fails closed for affected contract consumers, not other streams.
+
+For deterministic reuse across an additive version change, the existing index
+records `change_class: WIRE_COMPATIBLE`, `material_flow_change: false`,
+`compatible_first_slice_refs` (historical qualified contract refs),
+`affected_mapping_refs` (qualified UIMAP IDs, including explicit empty scope),
+and `compatibility_verification_refs` (mapped provider and consumer TEST refs).
+Only one verified, unaffected historical real-slice pointer may satisfy the
+gate; affected or unknown proof requires current-version real-slice evidence.
+Record actual affected check results and provenance before pointer promotion;
+manifest declarations do not replace running those checks.
 
 - Outcome, scope, or policy change -> `/sc-explore`.
 - Observable behavior or acceptance change -> `/sc-prd`.

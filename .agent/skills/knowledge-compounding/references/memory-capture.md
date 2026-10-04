@@ -48,7 +48,7 @@ format. Append the entry to its file, newest last:
 - Source: <user statement | repeated observation | verified experiment>
 ```
 
-Keep each field to one line; no narrative paragraphs.
+Preserve field labels and add explanation as needed.
 
 Global scope: when `SC_GLOBAL_KNOWLEDGE_DIR` is set, an `Applies to: global`
 `LRN-*` entry (with its Quick Reference row) is also appended to
@@ -66,8 +66,8 @@ invisible.
 
 ## 4. Promote recurrences
 
-When one category or prevention rule recurs 3+ times at `observed` or
-`confirmed` confidence, flag it `PATTERN` and route it to `/sc-evolve` for a
+When one category or prevention rule has 3+ independent stable origins with evidence at `observed` or
+`confirmed` confidence, mark `PATTERN` for inspection (never a threshold bypass) and route it to `/sc-evolve` for a
 draft framework proposal. Proposals stay drafts; a human approves any
 framework change.
 
@@ -80,3 +80,5 @@ On overflow, first consolidate duplicate root causes into one entry
 (`Consolidated from: ERR-...`), then move superseded, lowest-confidence, or
 oldest resolved entries to the knowledge/error archive files under
 `docs/archive/` (created on first archive). Archive, never delete.
+
+Structured capture and metadata: [deterministic loop](deterministic-loop.md).

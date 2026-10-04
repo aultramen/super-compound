@@ -29,5 +29,7 @@ the moves where the surviving set is explicit (STATE, handoff, brief).
 
 - `context-monitor` WARNING (context running low): drive to the nearest
   boundary and choose from the table.
-- `context-monitor` CRITICAL (context nearly exhausted): option 3 - update
-  `docs/STATE.md` with the exact Next Action, write `.continue-here.md`, stop.
+- `context-monitor` CRITICAL: persist the exact Next Action and verified goal
+  evidence, reduce optional context, then compact/continue at the nearest safe
+  boundary using host recovery. Stop only when safe recovery is unavailable or
+  a hard host/user cap prevents progress; never replay verified work.

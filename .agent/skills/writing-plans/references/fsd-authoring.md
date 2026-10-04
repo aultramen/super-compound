@@ -35,7 +35,7 @@ Run only branches supported by a signal:
 - **Standard:** normal feature/refactor/API/UI; context, paths, sequence, risks, tests.
 - **Comprehensive:** architecture, migration, security, release, or independent multi-agent slices; alternatives, observability, rollout, rollback, documentation.
 
-Ask one concise question only when scope or acceptance cannot be inferred safely.
+For unresolved scope or acceptance decisions use `brainstorming/references/questions-and-options.md`; return product decisions to their owner rather than inferring new authority.
 
 ## FSD Contract
 
@@ -62,7 +62,7 @@ Author every goal/ID fact exactly once:
 
 - `GOAL-*` packets are the only hand-authored serialization of the goal/ID graph.
 - Generate the dependency graph with `node .agent/tools/goal-waves.mjs --issues-dir <dir>`; never hand-draw it a second time.
-- End-to-End Traceability and Requirement-to-Test matrices are derived views; omit them from authored FSDs unless a reviewer requests them. Per-goal Verification refs are the source.
+- Include diagrams or traceability views when they aid understanding; cite the same per-goal Verification refs and qualified requirement IDs as authority.
 - Specify each `TDEC-*` once in the decision register; goals cite decision IDs only, and feature sections reference goal IDs without restating packet content.
 - Use sequential IDs in range notation (for example `GOAL-001..GOAL-005`).
 
@@ -71,3 +71,5 @@ Author every goal/ID fact exactly once:
 Confirm user-visible behavior, edge/failure cases, and tests at the highest practical public seam. UI includes accessibility/responsiveness; security/privacy includes negative cases; data changes include compatibility, migration, and rollback.
 
 Then offer: review the FSD, execute sequentially with `/sc-work`, create/review an issue board, safely parallelize independent slices, or stop with the approved artifact saved. Use only current `/sc-*` workflow names.
+
+For product AI runtime, load [AI context and output](../../prd-generator/references/ai-context-and-output.md) and carry approved policy into the existing versioned prompt/tool/schema contract.

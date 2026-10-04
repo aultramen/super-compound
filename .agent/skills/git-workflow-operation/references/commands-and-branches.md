@@ -16,6 +16,16 @@ git worktree add -b feature/example ../project-feature origin/main
 cd ../project-feature
 ```
 
+Local/offline isolated setup from a known local base (dirty original work is preserved):
+
+```bash
+node .agent/tools/git-workflow.mjs worktree fix/example --path ../project-fix --base main --local
+# Preview: git worktree add -b fix/example ../project-fix main
+```
+
+Local branch start uses `start fix/example --base main --local`; a dirty tree
+is allowed only when already on that base, so no checkout overwrites user work.
+
 Finish flow:
 
 ```bash

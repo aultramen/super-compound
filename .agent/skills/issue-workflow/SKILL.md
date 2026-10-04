@@ -5,6 +5,10 @@ description: "Use when /sc-plan needs FSD GOAL-* packets turned into lightweight
 
 # Issue Workflow
 
+## Summary
+
+Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
+
 ## Purpose
 
 Turn approved FSD `GOAL-*` packets into local Markdown issue pointers that agents can execute independently without copying upstream prose.
@@ -16,7 +20,7 @@ The default board is `.scratch/<feature-slug>/issues/*.md`; an optional `.scratc
 ## Reference Router
 
 - Allowed pointer content and prohibited duplication: [zero-context contract](references/zero-context.md)
-- Source gathering, goal slicing, DAG construction, human review, and publishing: [process](references/process.md)
+- Source gathering, goal slicing, DAG construction, validation, and publishing: [process](references/process.md)
 - Status meanings and board completion checks: [status and done](references/status-and-done.md)
 
 Load the process while creating or revising a board. Load status details only when assigning or reviewing state.
@@ -32,7 +36,7 @@ Load the process while creating or revising a board. Load status details only wh
   One `HARDENING` pointer depends on all applicable UI delivery slices.
 - **Sizing gate:** One issue produces one coherent, independently verifiable outcome. Foundational goals are allowed only when independently testable and necessary.
 - **DAG gate:** Every blocker path must exist or be created earlier; blockers precede dependents; cycles are forbidden; parallel candidates must not share unmerged files without an FSD integration strategy. Every ADR ref must be linked and `ACCEPTED`.
-- **Review gate:** Present the proposed board and blocking relationships before writing files. Revise with the user, or state assumptions only when explicitly asked to proceed without review.
+- **Review gate:** Derive and write the board automatically from approved goals after coverage/DAG validation; notify the result. Ask only for a material scope, acceptance, or dependency decision absent from authority.
 - **Skeleton gate:** Create each pointer from `.agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md`. Do not restate the template. Populate qualified references, dependency paths, and concise goal-specific boundaries only.
 - **Fail-closed creation gate:** New pointers start `needs-info`; promote them
   only after authority, dependency, verification, and applicable contract gates

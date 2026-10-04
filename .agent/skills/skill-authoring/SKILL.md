@@ -5,6 +5,10 @@ description: "Use when creating, editing, or verifying a skill before deployment
 
 # Skill Authoring
 
+## Summary
+
+Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
+
 Treat process documentation as code: create pressure tests, observe failure, teach the minimum behavior, then close demonstrated loopholes. Announce use before authoring.
 
 ## When to Use
@@ -24,7 +28,7 @@ Use for every new skill, behavioral change to an existing skill, invocation rede
 - REFACTOR: add counters only for loopholes actually exposed and rerun all pressure scenarios.
 - Combine at least three pressure sources when testing discipline: time, sunk cost, authority, exhaustion, or “pragmatic” exception claims.
 - The frontmatter description starts with `Use when` and states triggering conditions, not a workflow summary. Choose model- versus user-invocation deliberately.
-- Keep every `SKILL.md` router below 500 whitespace words; `node .agent/tools/framework-audit.mjs` fails `SKILL_ENTRYPOINT_TOO_LARGE` otherwise. Move branch-specific detail behind explicit reference links and load only the selected branch.
+- Keep routers navigable and move conditional detail behind relevant reference links. Documentation has no word limit; follow `.agent/context/output-style.md`.
 - Preserve evidence of RED and GREEN; prose review alone is not verification.
 
 ## Red Flags

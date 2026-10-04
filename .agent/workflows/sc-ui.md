@@ -17,7 +17,7 @@ Use this workflow as a UI capability sidecar with two explicit modes:
 
 ## Steps
 
-1. Determine design/review versus implementation intent and apply the authority routing above before loading detailed guidance.
+1. Classify light/full with the shared workflow-integration policy. A contract-preserving fix within an existing screen stays light and routes directly to `/sc-work` or `/sc-debug`; it does not require new BRD/PRD/FSD artifacts. Then determine design/review versus implementation intent.
 2. For UI-bearing validation, load
    `skills/agentic-delivery/references/ui-contract-readiness.md`; load
    `skills/interface-design/SKILL.md` only when following the full UI procedure.
@@ -30,7 +30,7 @@ Use this workflow as a UI capability sidecar with two explicit modes:
    and approver gates. Runnable evidence is required for timing, runtime
    responsive behavior, keyboard/focus, realtime, or offline risk. Also check
    accessibility, text overflow, and every applicable named state.
-9. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
+9. Checkpoint automatically at compaction/handoff and continue authorized work. Use `/sc-pause` only when actually stopping.
 
 ## Result Classification And Routing
 

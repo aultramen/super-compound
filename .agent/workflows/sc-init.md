@@ -9,7 +9,16 @@ description: "Initialize or refresh project context by scanning the codebase, co
 ```text
 /sc-init
 /sc-init reload
+/sc-init setup
 ```
+
+## Setup Submode
+
+Only `/sc-init setup` authorizes installation. Read `SETUP.md`, detect OS/host,
+ask the missing scope (project/global/both), preserve existing configuration,
+then run setup install/update and doctor. Use project core before global cache;
+activate projects from `~/.super-compound/framework` when no checkout is present.
+Installation never authorizes project implementation, Git delivery, or publication.
 
 ## Steps
 

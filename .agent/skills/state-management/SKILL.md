@@ -5,6 +5,10 @@ description: "Use when non-trivial work needs durable, bounded project memory ac
 
 # State Management
 
+## Summary
+
+Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
+
 Keep continuation state concise enough to load quickly and precise enough that `/sc-status` can resume without guessing. Announce use before changing durable memory.
 
 ## Quick Reference
@@ -27,6 +31,8 @@ Use when starting, pausing, or completing non-trivial workflow work; recording a
 
 ## Invariants
 
+- Persist next action, verified outcomes, blockers, artifact refs, and contract digests with [checkpoint protocol](references/checkpoint-protocol.md); inspect it and the ledger before dispatch.
+
 - Read before writing; keep entries short, dated, scoped, and linked to authoritative artifacts.
 - Create only files the work needs. Do not copy BRD, PRD, FSD, issue, or solution contents into state.
 - Decisions remain constraints until explicitly reopened. Blockers name owner and required input.
@@ -46,3 +52,5 @@ Use when starting, pausing, or completing non-trivial workflow work; recording a
 ## Integration
 
 Pairs with `context-engineering` for selective loading, `checkpoint-protocol` for blockers, `executing-plans` and `issue-workflow` for progress, `agentic-delivery` for BRD→PRD→FSD→GOAL authority, `todo-management` for deferrals, and pause/status workflows for continuation.
+
+- Checkpoint active constraint provenance/digest and reconcile pending completion receipts: [active context](../context-engineering/references/active-context.md).

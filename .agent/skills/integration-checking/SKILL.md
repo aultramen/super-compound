@@ -37,6 +37,8 @@ User action / external event
 | Auth | Protected paths enforce auth and authorization at the boundary |
 | Config | Required env vars exist in `.env.example` and are loaded |
 | UI | Component is reachable, state updates, loading/error/empty states work |
+| Recovery | Preserve safe draft/selection; errors explain problem, known cause, recovery and retained state |
+| Retry | Assert no duplicate side effects, including uncertain outcomes and reconciliation |
 | UI state mapping | Success, validation, forbidden, conflict, degraded, offline, and async outcomes map to named states or approved N/A |
 | Fixtures | Synthetic deterministic fixtures validate against the pinned schema and cover representative failure |
 | Responsive/a11y | Reflow, overflow, keyboard, focus, semantics, announcements, errors, contrast, zoom, and motion are verified |
@@ -78,5 +80,6 @@ User action / external event
 
 - Called by `executing-plans`, `verification-before-completion`, and `gap-closure`.
 - Required after the first integrated vertical slice and after merged parallel streams.
-- Pair with the repository's mapped browser/E2E verification harness for
-  browser-visible workflows; do not invent a missing skill or command.
+- For browser/live-service evidence, use [live verification](../verification-before-completion/references/live-verification.md) with the repository harness and session.
+
+- Maintain the mapped harness with [verification recipes](../verification-before-completion/references/verification-recipes.md); retain evidence before cleanup.

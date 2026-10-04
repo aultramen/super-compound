@@ -68,6 +68,8 @@ Record in the PRD when behavior needs clarification, in the FSD when implementat
 
 Do not introduce abstraction for imagined future variation.
 
+Clarify uncertain seam choices with [brainstorming rounds](../brainstorming/references/questions-and-options.md); preserve the owning authority and skip settled scope.
+
 ## Related Skills
 
 - `domain-modeling` names domain concepts

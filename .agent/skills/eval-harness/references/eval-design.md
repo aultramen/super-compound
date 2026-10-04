@@ -25,6 +25,6 @@ Regression evals ask whether protected behavior still works. Name an immutable b
 | --- | --- | --- |
 | `pass@1` | Success on the first attempt | ≥70% for standard features |
 | `pass@3` | At least one success within three independent attempts | ≥90% for capability evals |
-| `pass^3` | All three independent attempts succeed | 100% for critical and regression paths |
+| `pass^3` | All three independent attempts succeed | When nondeterminism or explicit acceptance requires repeated reliability evidence |
 
-Runs are independent only when inputs and environment are reset consistently. Record failures; do not discard or silently rerun them. Auth flows, payments, and data migrations require `pass^3`.
+Runs are independent only when inputs and environment are reset consistently. Record failures; do not discard or silently rerun them. Choose repeat count from nondeterminism, material risk, and explicit acceptance. One proving run plus regression sensitivity suffices for deterministic unchanged scope. Independent reliability attempts never substitute for safety/contract checks.

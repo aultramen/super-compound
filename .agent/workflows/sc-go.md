@@ -6,10 +6,10 @@ description: "Preview and run safe Git branch, commit, push, worktree, and Pull 
 
 Use this workflow for explicit Git operations after or before Super Compound work: branch start, optional worktree setup, commit, push, and Pull Request preparation.
 
-Preview first. On explicit confirmation for that operation, run the previewed
-commands. A preview that warns about full-tier paths (schema, migrations, API,
-auth, billing) must cite the owning PRD/FSD or escalate (`ESCALATE: T2`) before
-the mutation runs.
+Preview first, then run the explicitly authorized operation while its target,
+scope, and material risk remain unchanged; no second confirmation is required.
+Sensitive paths prompt semantic diff inspection, not automatic T2 escalation.
+Ask again only for a material delta outside the existing authorization.
 
 ## Usage
 
@@ -17,9 +17,9 @@ the mutation runs.
 /sc-go status
 /sc-go start feature/name
 /sc-go worktree feature/name --path ../project-feature
-/sc-go commit "Describe the change"   # preview, then run on confirmation
-/sc-go push                           # preview, then run on confirmation
-/sc-go pr                             # preview, then run on confirmation
+/sc-go commit "Describe the change"   # fresh preview, then run within authorization
+/sc-go push                           # fresh preview, then run within authorization
+/sc-go pr                             # fresh preview, then run within authorization
 ```
 
 ## Steps
@@ -31,7 +31,7 @@ the mutation runs.
 5. If the user mentions a branch different from the active branch, stop or preview checkout/worktree commands before commit, push, or PR.
 6. Never commit, push, force-push, create a PR, delete a branch, remove a worktree, reset, or clean without explicit user intent and a fresh preview.
 7. For PRs, use `.agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md`; use `gh` or `glab` only when available and explicitly requested.
-8. If work remains, end with `/sc-pause` so `docs/STATE.md` carries the exact next action.
+8. Checkpoint automatically and continue authorized work; use `/sc-pause` only when actually stopping.
 
 ## Output
 
