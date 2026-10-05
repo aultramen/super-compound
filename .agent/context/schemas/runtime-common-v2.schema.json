@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:runtime-common-v2",
+  "title": "Loop Runtime Common Envelope v2",
+  "type": "object",
+  "properties": {
+    "schema": { "const": "runtime_common_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "resource_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["schema", "contract_version", "resource_id", "digest", "created_at"],
+  "additionalProperties": false
+}

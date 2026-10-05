@@ -3,6 +3,7 @@
   "metric": "deterministic_estimated_tokens_v1",
   "routes": {
     "sc-init": { "maxEstimatedTokens": 400, "maxCharacters": 1600 },
+    "sc-hints": { "maxEstimatedTokens": 600, "maxCharacters": 2400 },
     "sc-status": { "maxEstimatedTokens": 400, "maxCharacters": 1600 },
     "sc-geniusloop": { "maxEstimatedTokens": 600, "maxCharacters": 2400 },
     "sc-explore": { "maxEstimatedTokens": 500, "maxCharacters": 2000 },

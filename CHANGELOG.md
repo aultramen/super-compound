@@ -1,5 +1,63 @@
 # Changelog
 
+## 2026-10-05 - Canonical audit finding closure
+
+- Generate canonical evidence from LF source bytes per `.gitattributes` so
+  Windows and Linux checkouts agree; fence illustrative absolute review links
+  to keep examples distinct from active document references.
+- Replace the repeated checkpoint paragraph in 13 workflow contracts with the
+  shared human-input pointer; retain stable IDs, complete ready lists, approval
+  boundaries and resume rules in the unchanged checkpoint authority.
+- Archive pre-regeneration canonical snapshots and SHA-256 digests under
+  `.scratch/global-audit-closure-2026-10-05T08-11-45-316Z/`; preserve the historical
+  baseline, dated six-finding audit and unrelated local changes.
+- Review recorded checkpoint/questions/hints responses, retain previous source
+  digests and refresh relevant fingerprints without claiming new host experiments.
+- Close all six findings with three identical benchmark repetitions and canonical
+  audit/snapshot verification. All 100 related tests pass. Runtime reduction
+  remains UNPROVEN; see `docs/eval-results/context-efficiency-20261005.md`.
+
+## 2026-10-05 - Context loading and current-snapshot measurement
+
+- Reuse resident instructions, apply covered mandatory checks from contracts,
+  load policy sections by event and keep discovery summary-first at all windows.
+- Split simple checkpoints from complex presentation; preserve authorization,
+  stable IDs, ready frontier, partial answers and existing resolution semantics.
+- Default role models to inherit; preserve explicit installation model overrides
+  and project them consistently. Effort remains advice, with no model switching.
+- Add cumulative payload/range replay and six fixture seeds with a balanced-pair
+  median/MAD gate. Codex rollout and exec telemetry avoid cache/reasoning double counting.
+- Usage log v2 reports unknown totals, known subtotals and field coverage; hooks
+  retain reasoning counts. Old logs remain readable with incomplete fields unknown.
+- Work entry estimates no longer preload the pointer-authoring skeleton. Historical
+  baseline stays unchanged. Runtime target remains UNPROVEN after pilot reads
+  were blocked by CLI policy; see docs/eval-results/context-efficiency-20261005.md.
+
+## 2026-10-05 - Practical guidance through /sc-hints
+
+- Added the nineteenth public workflow, compact contract and `hints` skill;
+  consultation is read-only and execution requests return to existing owners/gates.
+- Integrated dispatch, natural-language consultation, adapters/installers, budgets,
+  invariant/evidence coverage (19 routes / 57 static cells) and runtime route enums.
+- Added current-full-vs-compact live comparison; new route measurements remain
+  separate from unchanged Git baseline and historical reduction totals.
+- Adapted routing/phase framing from Matt Pocock's ask-matt at commit
+  `c5b98691982c4f0d3a5e40ab09566b3b84721e00`, retaining MIT attribution/license.
+- Evidence and limitations: `docs/eval-results/hints-20261005.md`.
+
+## 2026-10-05 - Complete active-work questions and answer guidance
+
+- Show all ready questions/approvals for active work with stable IDs, per-item
+  recommendations, rationale/consequences, complete clickable absolute review
+  paths and sections. Dependent items name prerequisites and next action.
+- All 18 compact/full workflow routes reach the shared checkpoint format; dialog
+  question limits retain the full list in conversation text. Saved refs stay portable.
+- Always show bulk/exception reply examples. Explicit bulk agreement, exceptions,
+  partial replies, unknown IDs and corrections preserve target/revision/stage
+  boundaries; approval never manufactures information, tests or access readiness.
+- Eval responses, negative controls and limits:
+  `docs/eval-results/questions-and-hints-20261005.md`.
+
 ## Summary
 
 Records public framework behavior changes and their verification evidence.

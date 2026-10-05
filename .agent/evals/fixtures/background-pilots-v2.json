@@ -1,0 +1,287 @@
+{
+  "schema": "background_pilot_suite_v2",
+  "contract_version": "2.0.0",
+  "base_reservation_input": {
+    "dispatch_id": "dispatch.goal014.pilot01",
+    "queue_claim": {
+      "queue_item_id": "queue.goal014.pilot01",
+      "queue_version": 2,
+      "queue_state": "CLAIMED",
+      "run_id": "run.goal014.pilot",
+      "phase": "START",
+      "expected_run_version": 0,
+      "goal_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "authority_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "verifier_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "eval_definition_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "project_config_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "policy_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "operation_inventory_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "risk_profile": "HIGH",
+      "autonomy_profile": "BACKGROUND",
+      "required_gates": ["fresh-verifier", "human-budget-confirmation"],
+      "run_head_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "approval_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "approval_expires_at": "2026-07-22T06:00:00.000Z",
+      "dispatch_commit": null,
+      "lease": {
+        "lease_id": "lease.goal014.pilot01",
+        "worker_ref": "worker.goal014.pilot01",
+        "attempt": 1,
+        "expires_at": "2026-07-22T05:50:00.000Z"
+      }
+    },
+    "host_attestation": {
+      "schema": "host_capability_v2",
+      "contract_version": "2.0.0",
+      "attestation_id": "attestation.goal014.pilot",
+      "host_ref": "host.local.reference",
+      "run_id": "run.goal014.pilot",
+      "run_head_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "authority_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "verifier_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "project_config_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "operation_inventory_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "policy_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "approval_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "capabilities": [
+        "CREDENTIAL_SCOPE_ENFORCEMENT",
+        "DURABLE_AUDIT",
+        "DURABLE_LOCAL_STATE",
+        "FINITE_NO_PROGRESS_CAP",
+        "FINITE_RUNTIME_CAP",
+        "HARD_WRITE_INTERCEPTION",
+        "ISOLATED_WORKTREE",
+        "LEASE_RECOVERY",
+        "NETWORK_EGRESS_ENFORCEMENT",
+        "PERMISSION_BYPASS_PREVENTION",
+        "PROCESS_ISOLATION"
+      ],
+      "credential_scopes": { "read": ["repo.worktree.read"], "write": ["repo.worktree.write"] },
+      "egress_ids": [],
+      "isolation": "HARDENED",
+      "issued_at": "2026-07-22T05:00:00.000Z",
+      "expires_at": "2026-07-22T06:00:00.000Z",
+      "evidence_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "host_verification": { "verified": true, "evidence_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    "capability_decision": {
+      "allowed": true,
+      "code": "ACTION_CAPABILITY_VERIFIED",
+      "effective_isolation": "HARDENED",
+      "required_capabilities": [
+        "CREDENTIAL_SCOPE_ENFORCEMENT",
+        "DURABLE_AUDIT",
+        "DURABLE_LOCAL_STATE",
+        "FINITE_NO_PROGRESS_CAP",
+        "FINITE_RUNTIME_CAP",
+        "HARD_WRITE_INTERCEPTION",
+        "ISOLATED_WORKTREE",
+        "LEASE_RECOVERY",
+        "NETWORK_EGRESS_ENFORCEMENT",
+        "PERMISSION_BYPASS_PREVENTION",
+        "PROCESS_ISOLATION"
+      ]
+    },
+    "worktree_attestation": {
+      "schema": "background_worktree_attestation_v2",
+      "contract_version": "2.0.0",
+      "attestation_id": "worktree-attestation.goal014.pilot01",
+      "host_ref": "host.local.reference",
+      "run_id": "run.goal014.pilot",
+      "queue_item_id": "queue.goal014.pilot01",
+      "lease_id": "lease.goal014.pilot01",
+      "worker_ref": "worker.goal014.pilot01",
+      "worktree_ref": "worktree.goal014.pilot01",
+      "root_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "base_git_sha": "4444444444444444444444444444444444444444",
+      "dedicated": true,
+      "main_workspace": false,
+      "path_confined": true,
+      "symlink_free": true,
+      "issued_at": "2026-07-22T05:00:00.000Z",
+      "expires_at": "2026-07-22T05:55:00.000Z",
+      "evidence_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "worktree_verification": {
+      "schema": "background_worktree_verification_v2",
+      "contract_version": "2.0.0",
+      "verified": true,
+      "attestation_id": "worktree-attestation.goal014.pilot01",
+      "run_id": "run.goal014.pilot",
+      "queue_item_id": "queue.goal014.pilot01",
+      "lease_id": "lease.goal014.pilot01",
+      "worker_ref": "worker.goal014.pilot01",
+      "worktree_ref": "worktree.goal014.pilot01",
+      "root_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "base_git_sha": "4444444444444444444444444444444444444444",
+      "evidence_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "verified_at": "2026-07-22T05:10:00.000Z"
+    },
+    "expected_base_git_sha": "4444444444444444444444444444444444444444",
+    "effective_limits": { "max_runtime_ms": 600000, "max_no_progress_iterations": 3, "max_tokens": null },
+    "effective_limits_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "aggregate_policy": { "max_workers": 2, "max_reserved_tokens": null, "max_reserved_runtime_ms": 1200000, "max_remote_calls": 0, "max_reviewers": 2 },
+    "aggregate_policy_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "policy_verification": {
+      "schema": "background_policy_verification_v2",
+      "contract_version": "2.0.0",
+      "verified": true,
+      "run_id": "run.goal014.pilot",
+      "queue_item_id": "queue.goal014.pilot01",
+      "confirmation_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "project_config_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "policy_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "operation_inventory_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "effective_limits_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "aggregate_policy_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "issued_at": "2026-07-22T05:00:00.000Z",
+      "expires_at": "2026-07-22T06:00:00.000Z",
+      "evidence_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "reservation": { "workers": 1, "tokens": null, "runtime_ms": 600000, "remote_calls": 0, "reviewers": 1 },
+    "now": "2026-07-22T05:10:00.000Z"
+  },
+  "pilots": [
+    {
+      "pilot_id": "PILOT-01",
+      "scenario": "success",
+      "steps": ["reserve", "heartbeat", "arm", "host-dispatch", "observe", "authorize-source-write", "complete"],
+      "expected": {
+        "queue_state": "COMPLETED",
+        "ticket_state": "COMPLETED",
+        "reservation_status": "RELEASED",
+        "worktree_disposition": "RELEASED",
+        "dispatch_count": 1,
+        "host_calls": 1,
+        "budget_binding_schema": "background_budget_binding_v2",
+        "budget_binding_confirmation_matches": true,
+        "budget_binding_current_head_matches": true,
+        "budget_remaining_runtime_ms": 10800000,
+        "budget_remaining_no_progress_iterations": 3,
+        "reserved_budget_binding_schema": "background_budget_binding_v2",
+        "armed_budget_binding_matches_gate": true
+      }
+    },
+    {
+      "pilot_id": "PILOT-02",
+      "scenario": "duplicate-reservation",
+      "steps": ["reserve-concurrently", "retry-identical", "retry-conflicting", "arm", "host-dispatch", "replay-arm"],
+      "expected": {
+        "ticket_state": "UNKNOWN_OUTCOME",
+        "created_count": 1,
+        "event_count": 3,
+        "dispatch_count": 1,
+        "reservation_status": "HELD",
+        "worktree_disposition": "QUARANTINED",
+        "requires_new_approval": true,
+        "replay_handoff_granted": false,
+        "host_calls": 1,
+        "error_code": "BACKGROUND_DISPATCH_CONFLICT"
+      }
+    },
+    {
+      "pilot_id": "PILOT-03",
+      "scenario": "isolation-mismatch",
+      "setup": { "worktree_dedicated": false },
+      "steps": ["reserve"],
+      "expected": {
+        "queue_state": "CLAIMED",
+        "ticket_state": null,
+        "event_count": 0,
+        "error_code": "BACKGROUND_ADMISSION_DENIED"
+      }
+    },
+    {
+      "pilot_id": "PILOT-04",
+      "scenario": "cap-exhaustion",
+      "dimensions": ["worker", "token", "runtime", "remote_call", "reviewer"],
+      "steps": ["reserve-winner", "reserve-contender-per-dimension"],
+      "expected": {
+        "winner_ticket_state": "RESERVED",
+        "loser_event_count": 0,
+        "error_codes": [
+          "BACKGROUND_WORKER_CAP_EXHAUSTED",
+          "BACKGROUND_TOKEN_CAP_EXHAUSTED",
+          "BACKGROUND_RUNTIME_CAP_EXHAUSTED",
+          "BACKGROUND_REMOTE_CAP_EXHAUSTED",
+          "BACKGROUND_REVIEWER_CAP_EXHAUSTED"
+        ]
+      }
+    },
+    {
+      "pilot_id": "PILOT-05",
+      "scenario": "token-unknown",
+      "setup": { "finite_token_cap": true, "reservation_tokens": null },
+      "steps": ["reserve"],
+      "expected": {
+        "ticket_state": null,
+        "event_count": 0,
+        "error_code": "BACKGROUND_TOKEN_ACCOUNTING_UNKNOWN"
+      }
+    },
+    {
+      "pilot_id": "PILOT-06",
+      "scenario": "cancel",
+      "steps": ["reserve", "arm", "cancel-request", "observe-authoritatively", "complete"],
+      "expected": {
+        "intermediate_ticket_state": "CANCEL_REQUESTED",
+        "ticket_state": "COMPLETED",
+        "reservation_status": "RELEASED",
+        "worktree_disposition": "RELEASED",
+        "dispatch_count": 1,
+        "host_calls": 1
+      }
+    },
+    {
+      "pilot_id": "PILOT-07",
+      "scenario": "crash",
+      "fault": "after-host-dispatch-before-observation",
+      "steps": ["reserve", "arm", "host-dispatch", "restart", "recover", "observe-unknown"],
+      "expected": {
+        "ticket_state": "UNKNOWN_OUTCOME",
+        "reservation_status": "HELD",
+        "worktree_disposition": "QUARANTINED",
+        "requires_new_approval": true,
+        "dispatch_count": 1,
+        "host_calls": 1
+      }
+    },
+    {
+      "pilot_id": "PILOT-08",
+      "scenario": "lease-loss",
+      "steps": ["reserve", "expire-lease", "reconcile-queue", "record-lease-loss", "deny-old-fence"],
+      "expected": {
+        "queue_state": "APPROVAL_REQUIRED",
+        "ticket_state": "UNKNOWN_OUTCOME",
+        "reservation_status": "HELD",
+        "worktree_disposition": "QUARANTINED",
+        "requires_new_approval": true
+      }
+    },
+    {
+      "pilot_id": "PILOT-09",
+      "scenario": "resume-approval",
+      "steps": ["deny-old-confirmation", "confirm-resume", "submit", "claim-attempt-2", "reserve-child-dispatch"],
+      "expected": {
+        "phase": "RESUME",
+        "lease_attempt": 2,
+        "old_ticket_state": "RECONCILED",
+        "new_ticket_state": "RESERVED",
+        "fresh_approval_required": true
+      }
+    },
+    {
+      "pilot_id": "PILOT-10",
+      "scenario": "quarantine-retention",
+      "steps": ["recover-unknown", "reconcile-quarantined", "deny-worktree-reuse", "reserve-different-worktree"],
+      "expected": {
+        "old_ticket_state": "RECONCILED",
+        "reservation_status": "RELEASED",
+        "worktree_disposition": "QUARANTINED",
+        "reuse_error_code": "BACKGROUND_WORKTREE_UNAVAILABLE",
+        "automatic_retry": false
+      }
+    }
+  ]
+}

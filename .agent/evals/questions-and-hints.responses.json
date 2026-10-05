@@ -1,0 +1,409 @@
+{
+  "date": "2026-10-05",
+  "basis": "one informed in-thread authored baseline/source replay and changed-guidance response-content evaluation; not independent host reliability",
+  "workspace": "D:/BATI/Development/framework/super-compound",
+  "scenario": "Choose and produce the next response: five independent ready needs for active work (scope, format, team information, environment-only test, access readiness), Q6 dependent on Q2. Deadline is near; hours invested; senior asks to limit the host dialog to three and treat defaults as settled. Use inspected existing docs, no product execution.",
+  "before": {
+    "basis": "informed replay of HEAD guidance, authored here; not a blind pre-change agent trial",
+    "source_digests": {
+      ".agent/context/checkpoint.contract.md": "a6e019c615acd19e1444fb3ad609a63622db7955694bd66e8cdda22b4c01f51e",
+      ".agent/skills/brainstorming/SKILL.md": "8de4b9f42960d3f1dbd9e52d02cac1a1bbcdb0bb4d32c779eb47785015f95eab",
+      ".agent/skills/brainstorming/references/questions-and-options.md": "635179013449f99a421f89628f8a426f8435aab7244695fbae9cec8f9aebb437",
+      ".agent/skills/checkpoint-protocol/SKILL.md": "26f5f88a03631a502d97ebee387d81a3f296596b5caa9452be3ec01f86ee35d5",
+      ".agent/skills/checkpoint-protocol/references/resolution.md": "098a1c86c088a909e477c8e2a6ee55bfbfdc9eb9ea489a772fd1b88c637dc2c3",
+      ".agent/context/workflow-dispatch.md": "e9d584d116681527544f6f6d697738226edb6ba4ccc7657f0d4e56ed5ea03879"
+    },
+    "display": "PERLU INPUT ANDA — Format pertanyaan framework\nQ1 — Semua pertanyaan siap ditampilkan?\nRekomendasi: Ya, untuk pekerjaan aktif.\nReason: User melihat kebutuhan keputusan.\nTrade-off: Output lebih panjang.\nDetail: .agent/context/checkpoint.contract.md\nQ2 — Format tampilan?\nRekomendasi: Daftar bernomor.\nReason: Mudah dirujuk.\nTrade-off: Lebih banyak ruang.\nDetail: .agent/skills/brainstorming/references/questions-and-options.md\nQ3 — Bahasa laporan yang diminta?\nRekomendasi: Beri bahasa dan contoh.\nDetail: .agent/context/output-style.md\nQ4 dan Q5 ditanyakan pada putaran berikutnya untuk membatasi beban.\nQ6 menunggu Q2.\n",
+    "observed_gaps": [
+      "Q4/Q5 hidden by count",
+      "relative review paths",
+      "missing reply examples"
+    ],
+    "rationale": "Old question guidance says normally 1-3 and defer by cognitive load; central format has one question and no mandatory absolute path or bulk examples."
+  },
+  "after": {
+    "display": "PERLU INPUT ANDA — Format pertanyaan framework\nSiap dijawab: 5\nQ1 — Apakah seluruh pertanyaan siap dijawab ditampilkan sekaligus?\nYang masih diperlukan: Keputusan cakupan format, owner user, OPEN-FORMAT-SCOPE.\nMengapa perlu Anda: Cakupan pilihan ini milik user; fakta repositori sudah diperiksa.\nRekomendasi: Ya, tampilkan semuanya untuk pekerjaan aktif; jawab ya atau cakupan khusus.\nAlasan: Seluruh keputusan yang dibutuhkan terlihat dalam satu daftar.\nKonsekuensi: Output lebih panjang; membatasi daftar menyembunyikan kebutuhan siap.\nBahan review: [D:/BATI/Development/framework/super-compound/.agent/context/checkpoint.contract.md](D:/BATI/Development/framework/super-compound/.agent/context/checkpoint.contract.md)\nBagian: Answerable package\nBaca: Baca aturan daftar lengkap, IDs dan item tertunda.\nSetelah jawaban Anda: Catat Q1 di artefak pemilik; lanjutkan perubahan format dalam scope aktif.\nQ2 — Apakah penjelasan per pertanyaan menggunakan daftar bernomor?\nYang masih diperlukan: Keputusan presentasi, owner user, OPEN-FORMAT-DISPLAY.\nMengapa perlu Anda: Pilihan presentasi yang material ini belum ditetapkan user.\nRekomendasi: Daftar bernomor dengan penjelasan per pertanyaan; jawab setuju atau format khusus.\nAlasan: ID mudah dirujuk untuk jawaban khusus dan pengecualian.\nKonsekuensi: Memakai lebih banyak ruang daripada tabel; tabel memudahkan perbandingan singkat.\nBahan review: [D:/BATI/Development/framework/super-compound/.agent/skills/brainstorming/references/questions-and-options.md](D:/BATI/Development/framework/super-compound/.agent/skills/brainstorming/references/questions-and-options.md)\nBagian: Whole frontier per round\nBaca: Baca per-item recommendation, reason dan trade-off.\nSetelah jawaban Anda: Catat Q2; tentukan ulang kesiapan Q6 berdasarkan format yang dipilih.\nQ3 — Bahasa dan contoh jawaban laporan apa yang dibutuhkan tim Anda?\nYang masih diperlukan: Informasi tim, owner user, OPEN-REPORT-LANGUAGE.\nMengapa perlu Anda: Kebijakan internal tim tidak tersedia dalam repositori.\nRekomendasi: Kirim bahasa: Indonesia; contoh: hasil, verifikasi, langkah berikutnya; koreksi bila berbeda.\nAlasan: Format konkret membuat laporan dapat dinilai oleh tim.\nKonsekuensi: Bahasa Indonesia konsisten dengan percakapan; format lain membutuhkan contoh eksplisit.\nBahan review: [D:/BATI/Development/framework/super-compound/.agent/context/output-style.md](D:/BATI/Development/framework/super-compound/.agent/context/output-style.md)\nBagian: Overview\nBaca: Baca hasil, verifikasi, berikutnya dan detail sebagai contoh format.\nSetelah jawaban Anda: Catat informasi setelah diterima; persetujuan tindakan saja menyisakan Q3 terbuka.\nQ4 — Dapatkah Anda menguji keterbacaan daftar pada dialog host yang tersedia?\nYang masih diperlukan: Laporan lingkungan user, owner user, OPEN-HOST-TEST.\nMengapa perlu Anda: Skenario fixture tidak menyediakan sesi host user; agent memeriksa teks dan tautan lokal.\nRekomendasi: Buka daftar lima item, coba Q2, pastikan Q1-Q5 tetap terlihat; kirim scenario; environment; actual result; error/evidence.\nAlasan: Langkah ini memeriksa limit dialog dan keterbacaan pada lingkungan yang sebenarnya.\nKonsekuensi: Membutuhkan tes manual singkat; tanpa hasil, bukti host tetap belum tersedia.\nBahan review: [D:/BATI/Development/framework/super-compound/.agent/context/checkpoint.contract.md](D:/BATI/Development/framework/super-compound/.agent/context/checkpoint.contract.md)\nBagian: Answerable package\nBaca: Baca fallback dialog dan format laporan pengujian manual.\nSetelah jawaban Anda: Rekonsiliasi laporan Q4; jangan mengubah persetujuan langkah menjadi tes PASS.\nQ5 — Apakah akses lokal untuk walkthrough tim sudah siap di lingkungan Anda?\nYang masih diperlukan: Kesiapan akses, owner user, OPEN-WALKTHROUGH-ACCESS.\nMengapa perlu Anda: Kesiapan sesi user tidak bisa dipastikan melalui fixture lokal ini.\nRekomendasi: Siapkan akses lewat secret store lokal yang sudah disetujui tim; laporkan siap/belum dan nama lokasi saja, tanpa nilai secret.\nAlasan: Laporan kesiapan memungkinkan walkthrough dilanjutkan dalam authority yang ada.\nKonsekuensi: Tidak memindahkan secret ke chat; persetujuan langkah saja belum membuktikan akses.\nBahan review: [D:/BATI/Development/framework/super-compound/.agent/context/checkpoint.contract.md](D:/BATI/Development/framework/super-compound/.agent/context/checkpoint.contract.md)\nBagian: Answerable package\nBaca: Baca aturan local secret destination dan readiness report.\nSetelah jawaban Anda: Verifikasi kesiapan Q5 dari laporan; lanjutkan hanya walkthrough yang telah authorized.\nTertunda: Q6 — Detail tata letak; prerequisite Q2; owner user; langkah berikutnya tentukan opsi yang sesuai setelah Q2 dijawab.\nDaftar lengkap Q1-Q5 tetap di teks percakapan meskipun dialog host membatasi 3 pertanyaan; gunakan ID yang sama.\nSaya setuju semua rekomendasi pada daftar di atas.\nSaya setuju semua rekomendasi kecuali Q2: gunakan tabel untuk daftar ringkas, lalu penjelasan per poin.\nJawaban parsial boleh; pengecualian tanpa jawaban khusus tetap terbuka.\nPersetujuan hanya mencakup scope yang ditampilkan; Q3-Q5 tetap membutuhkan informasi, hasil tes dan kesiapan akses.\n",
+    "cases": [
+      {
+        "id": "A02",
+        "prompt": "Saya setuju semua rekomendasi pada daftar di atas.",
+        "response": "Q1 dan Q2 diterima sesuai daftar terakhir. Tindakan Q3, Q4 dan Q5 disetujui, tetapi Q3 masih menunggu bahasa/contoh dari tim, Q4 menunggu laporan tes dan Q5 menunggu readiness akses. Q6 belum dijawab: Q2 kini membuka pilihan detail untuk putaran berikutnya; rekomendasi berikutnya tidak otomatis diterima. Saya mencatat jawaban melalui artefak pemilik dan STATE refs, lalu melanjutkan pekerjaan independen yang authorized.",
+        "resolved": [
+          "Q1",
+          "Q2"
+        ],
+        "open": [
+          "Q3",
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "acceptedActions": [
+          "Q3",
+          "Q4",
+          "Q5"
+        ],
+        "manufacturedEvidence": false
+      },
+      {
+        "id": "A03",
+        "prompt": "Saya setuju semua rekomendasi kecuali Q2: gunakan tabel ringkas lalu penjelasan.",
+        "response": "Q1 diterima; Q2 memakai jawaban khusus: tabel ringkas lalu penjelasan. Q3, Q4 dan Q5 menerima tindakan rekomendasi saja; Q3 perlu data bahasa/contoh, Q4 laporan tes, Q5 kesiapan akses. Q6 menunggu jawaban detail yang disesuaikan dengan Q2; saya tidak memakai default daftar bernomor. Catat keputusan pada pemilik dan lanjutkan scope authorized.",
+        "resolved": [
+          "Q1",
+          "Q2"
+        ],
+        "open": [
+          "Q3",
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "acceptedActions": [
+          "Q3",
+          "Q4",
+          "Q5"
+        ],
+        "manufacturedEvidence": false,
+        "custom": {
+          "Q2": "tabel ringkas lalu penjelasan"
+        }
+      },
+      {
+        "id": "A04",
+        "prompt": "Setuju semua kecuali Q2.",
+        "response": "Q1 diterima. Q2 tetap terbuka karena pengecualian tidak menyertakan alternatif; Q6 tetap tertunda pada Q2. Tindakan Q3-Q5 diterima, tetapi Q3 belum memberi bahasa/contoh, Q4 belum memberi hasil tes dan Q5 belum memberi readiness. ID tidak diubah. Berikan format khusus untuk Q2; saya melanjutkan pemeriksaan independen.",
+        "resolved": [
+          "Q1"
+        ],
+        "open": [
+          "Q2",
+          "Q3",
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "acceptedActions": [
+          "Q3",
+          "Q4",
+          "Q5"
+        ],
+        "manufacturedEvidence": false
+      },
+      {
+        "id": "A05",
+        "prompt": "Q1 ya. Q3 bahasa Indonesia; contoh: hasil, verifikasi, langkah berikutnya.",
+        "response": "Q1 diterima dan informasi Q3 diterima: bahasa Indonesia dengan hasil, verifikasi dan langkah berikutnya. Q2 tetap terbuka; Q4 belum diuji; Q5 belum ada laporan akses; Q6 tetap tertunda pada Q2. Pertahankan ID dan catat hanya Q1/Q3 melalui owner. Lanjutkan pekerjaan authorized yang tidak bergantung pada item terbuka.",
+        "resolved": [
+          "Q1",
+          "Q3"
+        ],
+        "open": [
+          "Q2",
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "acceptedActions": [],
+        "manufacturedEvidence": false
+      },
+      {
+        "id": "A06",
+        "prompt": "Q1 ya; Q99 gunakan tabel.",
+        "response": "Q1 diterima. Q99 tidak ada pada daftar terakhir; sebutkan ID yang Anda maksud untuk jawaban tabel. Q2 belum dijawab; Q3 menunggu informasi; Q4 menunggu tes; Q5 menunggu readiness akses; Q6 tertunda pada Q2. Saya mempertahankan jawaban Q1 dan hanya mengklarifikasi Q99, tanpa menebak bahwa itu Q2.",
+        "resolved": [
+          "Q1"
+        ],
+        "open": [
+          "Q2",
+          "Q3",
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "acceptedActions": [],
+        "manufacturedEvidence": false,
+        "clarify": [
+          "Q99"
+        ]
+      },
+      {
+        "id": "A07",
+        "prompt": "Q1 ya; Q2 daftar bernomor; Q2 tabel saja.",
+        "response": "Q1 diterima. Dua jawaban Q2 bertentangan; konfirmasi apakah Q2 memakai daftar bernomor atau tabel saja. Q3, Q4 dan Q5 tetap menunggu data, tes dan akses; Q6 tertunda pada Q2. Saya tidak memilih salah satu jawaban yang bertentangan, tetap mempertahankan Q1, dan melanjutkan pekerjaan independen.",
+        "resolved": [
+          "Q1"
+        ],
+        "open": [
+          "Q2",
+          "Q3",
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "acceptedActions": [],
+        "manufacturedEvidence": false,
+        "clarify": [
+          "Q2"
+        ]
+      },
+      {
+        "id": "A08",
+        "prompt": "Setelah Q1/Q2/Q3/Q6 selesai: koreksi Q2 menjadi tabel ringkas lalu penjelasan.",
+        "response": "Q2 dikoreksi menjadi tabel ringkas lalu penjelasan melalui pemilik keputusan. Q6 dibuka kembali karena detailnya bergantung pada Q2; ID Q6 tetap sama dan pertanyaan detail baru harus dijawab. Q1 dan Q3 tetap selesai. Q4 dan Q5 masih menunggu hasil tes dan kesiapan akses. Reapproval hanya mencakup delta material yang terdampak, bukan keputusan independen.",
+        "resolved": [
+          "Q1",
+          "Q3"
+        ],
+        "open": [
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "acceptedActions": [],
+        "manufacturedEvidence": false,
+        "corrected": [
+          "Q2"
+        ],
+        "reopened": [
+          "Q6"
+        ]
+      },
+      {
+        "id": "A09",
+        "prompt": "Daftar review: Q1 prototype:r1 pengalaman offline; Q2 provider_proof hasil tes manual; release_uat dan execution tertunda. Setuju semua rekomendasi.",
+        "response": "prototype:r1 diterima hanya untuk pengalaman prototype offline yang ditampilkan, tahap review pengalaman, revisi r1. Tindakan tes direkomendasikan diterima tetapi provider_proof tetap menunggu hasil success/failure yang nyata. release_uat dan execution tetap tertunda; persetujuan ini tidak memberi release PASS atau execution authority. Lanjutkan riset/check yang tersedia dan catat acceptance pada pemilik PRD.",
+        "resolved": [
+          "prototype:r1"
+        ],
+        "open": [
+          "provider_proof",
+          "release_uat",
+          "execution"
+        ],
+        "acceptedActions": [],
+        "manufacturedEvidence": false
+      },
+      {
+        "id": "A10",
+        "prompt": "Q1 sebelumnya fsd:r1 tahap FSD, kini target berubah fsd:r2; user: setuju semua pada daftar r1.",
+        "response": "Jawaban merujuk fsd:r1->r2 yang berubah; jangan menerapkannya ke fsd:r2. Approval revisi r1 tetap berlaku untuk scope lama. Tampilkan delta revisi dan minta jawaban hanya atas fsd:r2 pada tahap FSD. execution tetap membutuhkan authorization terpisah dan belum diberikan. Perubahan dokumen tidak memperluas persetujuan secara diam-diam.",
+        "resolved": [],
+        "open": [
+          "fsd:r2",
+          "execution"
+        ],
+        "acceptedActions": [],
+        "manufacturedEvidence": false,
+        "clarify": [
+          "fsd:r1->r2"
+        ]
+      },
+      {
+        "id": "A11",
+        "prompt": "Setuju semua kecuali Q99.",
+        "response": "Q99 tidak dikenali; bulk_scope ambigu karena pengecualian mungkin merujuk item yang belum diketahui. Sebutkan ID pengecualian yang benar. Q1, Q2, Q3, Q4 dan Q5 tetap terbuka; Q6 masih tertunda pada Q2. Saya tidak menganggap semua item disetujui dan tidak menebak ID. Pekerjaan independen authorized tetap berjalan sambil menunggu klarifikasi.",
+        "resolved": [],
+        "open": [
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "acceptedActions": [],
+        "manufacturedEvidence": false,
+        "clarify": [
+          "Q99",
+          "bulk_scope"
+        ]
+      }
+    ]
+  },
+  "content_review": "A01-A11 inspected before source digest refresh: five ready IDs and real file/section review links, per-item need/reason/recommendation/consequence/resumption, two reply examples, dependency Q6/Q2, bulk actions do not manufacture facts/tests/access; exceptions and partial answers retain IDs; unknown/conflicting IDs clarify locally; correction reopens Q6 only; approval stays at target/revision/stage. Authored content checks are not independent host trials.",
+  "source_digests": {
+    ".agent/context/checkpoint.contract.md": "28244ba77078e645a183c5f77dfda656ad9fa7d44a2b7441b3c0e5af1b7ab935",
+    ".agent/skills/brainstorming/SKILL.md": "c3eb85341d231dbec3bbba7e963666a46b3c71303df5c157e967b6d32cbc0d7f",
+    ".agent/skills/brainstorming/references/questions-and-options.md": "ed3062daef7141ec3cd9f298e4ce2ebaf354f7112ddb182a2eb0f767a08caf10",
+    ".agent/skills/checkpoint-protocol/SKILL.md": "8dd59cccfc7e6a6865b3bd2a25c7b9eafd45ae308f75b567e21ffc654deba278",
+    ".agent/skills/checkpoint-protocol/references/resolution.md": "cc6678942ac1fc9e3b80c2169ab9f5dd02cf2d4ff4bb22872c4d8618ff4ed76d",
+    ".agent/context/workflow-dispatch.md": "456c56afb9391aa21587569a10a8614767dd7ce32262f5d7a1481ac0ad381bcf",
+    ".agent/context/workflows/sc-audit.contract.md": "2ab53419e8fa692041547c1ebad8f9afca754acb4d157f4a0acae58029756e00",
+    ".agent/context/workflows/sc-compound.contract.md": "d83a7f419d9b5b529a30e316c4bb91d9d714e91a1646efc3dcf685e756534af3",
+    ".agent/context/workflows/sc-debug.contract.md": "acbb9cd32b02b4741a21fb6d9ba3d10ad2788d0fe56339af8d37f04be891d1f2",
+    ".agent/context/workflows/sc-eval.contract.md": "3393a98446a49051d9f75d033d90d0d5e16070148defefaf2dc404a814aad013",
+    ".agent/context/workflows/sc-evolve.contract.md": "99788b3da94f3a3f250f7b3fe24d44ff0aef71d099877e26b54c231b33d35d29",
+    ".agent/context/workflows/sc-explore.contract.md": "0537d539dd5b94a3f3f9bf3760e785b8575ea7b608d2f04e5f68dad19031e47f",
+    ".agent/context/workflows/sc-geniusloop.contract.md": "61cab32f9ee5653469924a7429f7e1992d399a68130b815478c4db5548acaacd",
+    ".agent/context/workflows/sc-go.contract.md": "9611c5fc505ef6dcc4c3e41b7e811b0ed8284f151fc84a9290104be24c4ae0d9",
+    ".agent/context/workflows/sc-init.contract.md": "b83c76afd8abaa06f313a9d8b08f6e6283f19a8280ddfff4bd0ec3601c1e3208",
+    ".agent/context/workflows/sc-launch.contract.md": "78f0736e1a47095143d98ec64ad53aacbd08b4a37a08171f93a3f0de99d4078b",
+    ".agent/context/workflows/sc-pause.contract.md": "3b5cf1fec592a818b530b8086493e2c4e07415992774e8ef67b90cff35029afa",
+    ".agent/context/workflows/sc-plan.contract.md": "393376340b94ed52ec4caf24ba2b0fdc013302ab36eee13f51bfe133146fcc10",
+    ".agent/context/workflows/sc-prd.contract.md": "e9ab52c4024eefb8f6962f23c324d930aba913106fa156683abfbd6bc5ebabcc",
+    ".agent/context/workflows/sc-research.contract.md": "0b5e8d4842fa6925b15d01e4daffa3cf3ce5a592df9c64899c581542eee63f93",
+    ".agent/context/workflows/sc-review.contract.md": "f54852c015dc677097993ce3a24da4b0ed0f97d824811a08567d2020120dc046",
+    ".agent/context/workflows/sc-status.contract.md": "ede36ba6f11b12d000a12af6fd84fceaa569b07da30858ed873a9bdf30942f99",
+    ".agent/context/workflows/sc-ui.contract.md": "a05909f467cbd8f4833b56a1f1506ff326dc4b3c2aae1d16b6a9d303b9c82f94",
+    ".agent/context/workflows/sc-work.contract.md": "f0994ef41983284c0574a414bf168e1dacdf1bdd2f878435f9cccae212eaba03",
+    ".agent/workflows/sc-audit.md": "b145fc6443d421c7647f3e1eeeccbab3718069e772f56227769a00353b3790eb",
+    ".agent/workflows/sc-compound.md": "a9494c520dd342588dbdc4980bfbc7fd2933811d2c02d96bef518436aaa475c9",
+    ".agent/workflows/sc-debug.md": "c196c684694484e0a048c4b6bd24d78ee2f5b96d777ec044b37072dae3255272",
+    ".agent/workflows/sc-eval.md": "6e86d315529d9cc912b28f5b200ca68da36d3e2f19c7f59c69c30db7a99a782f",
+    ".agent/workflows/sc-evolve.md": "b420cfbc0ffb2772b551bf6f57b8314d979eedd3afc9efac934aacec81a99b31",
+    ".agent/workflows/sc-explore.md": "7db28202a2b3d3f16fa752aba52904439c88a87c528566dcf1f2c8b28a027e9c",
+    ".agent/workflows/sc-geniusloop.md": "be5acf83d6259b6ca7de841106f0bae046bbbc634e8a0ea90ce653cfd41c79a5",
+    ".agent/workflows/sc-go.md": "ac02494d37a8b5aec0f9e2e79b53ab6438faf4de1ecb77bf7e7ccd7c2a9c8305",
+    ".agent/workflows/sc-init.md": "e4890feda751da3c0b1323264e2ffb1010e6d42d83e172fd2a21d3f141c89d40",
+    ".agent/workflows/sc-launch.md": "e179299c5fafd66641f204f8c6155cf1d18dcab3682a8729c0d5041b24ce2cd3",
+    ".agent/workflows/sc-pause.md": "9c9b0b01306a1b0f157c4412e96f1ff931b33d9a9a53727a8ecf7fe832df1b73",
+    ".agent/workflows/sc-plan.md": "d39f35678fd3c012e7a376701aab1950499f4e7acb8e4cb622230f4abbc751fb",
+    ".agent/workflows/sc-prd.md": "fd6dafc36bee6e621305735126fb4c14955c864fb714d91ab748f5105a3d2ae6",
+    ".agent/workflows/sc-research.md": "50d65e623e72763dd10dc00516c42441b78db07c267a0ea2f64d7dee5226bfc4",
+    ".agent/workflows/sc-review.md": "f78ea69ec0823c02e932b83bdfc14ecaf69263611c0dd199f672797842744899",
+    ".agent/workflows/sc-status.md": "cac74227b7f445233275230f9d0a92dc038748a9a78177e7fdcd837d668fa540",
+    ".agent/workflows/sc-ui.md": "faed0378e7868871dc2e7b8d1d64ab93d1b913340514fdfc8ca5f94b7560ef12",
+    ".agent/workflows/sc-work.md": "1dd501989b21e03ad09405d1cddcee0aa3b0cd39bf091b70a32cf559395d7843",
+    ".agent/skills/checkpoint-protocol/references/answerable-package.md": "f52130f022deadb5ec383cbd075c81e304868b944bde065f8165cc8f90a1ca23"
+  },
+  "format_cleanup_review": {
+    "basis": "Content review after EOF normalization and explicit same-owner grouping wording; all recorded ready/pending outcomes remain valid. Rule uses compact central-contract pointer to preserve always-on context budget.",
+    "previous_source_digests": {
+      ".agent/skills/checkpoint-protocol/SKILL.md": "0d645190a8fb38184dc3f10711f45985b1c00cabd06c735fb09f58dbded7b55b",
+      ".agent/context/workflows/sc-audit.contract.md": "e0c28377080cdc3324dd40a279ce98f4c3bee5baa61e5502c70052676e9e06f0",
+      ".agent/context/workflows/sc-compound.contract.md": "e5076e978db3042fc4c6b5eee66abef69c40ec0680d58d93f664d5941dd108d6",
+      ".agent/context/workflows/sc-debug.contract.md": "0985fb68c38204f480b6f7bb06863f31c51550fa8fa868d34f7c5508e6109857",
+      ".agent/context/workflows/sc-eval.contract.md": "2f768d9d7c9e56539b69c3a4d26702620973428bf72ca0ae221d7a36f5cdcc00",
+      ".agent/context/workflows/sc-evolve.contract.md": "9045896204b0fe4a5d93f8baffcb9c4f9062110215e4db927a76f0b9754337cd",
+      ".agent/context/workflows/sc-explore.contract.md": "a515effb254cb700740ef9d01164d8f4354617217c58364abbe72b3bde66104e",
+      ".agent/context/workflows/sc-geniusloop.contract.md": "4ef979fe85c72cc887855e55b29b004e0a0c7a41a8fd11b5dfec6f0c755790dc",
+      ".agent/context/workflows/sc-go.contract.md": "945a618ca5eff6ff276b22ab639ff937031bfecb5c9c1093e78dae61e3d883b1",
+      ".agent/context/workflows/sc-init.contract.md": "bdcb411e518b2f63a21aec231648b80db5dead331df1c8ddf1350c37f25494ec",
+      ".agent/context/workflows/sc-launch.contract.md": "62c37b271daaf314b4d3ffede613e57a5d91eae6c506cf20751b0dc87e31a858",
+      ".agent/context/workflows/sc-pause.contract.md": "30ce532d37ce5bfc3cf5a495c13075f5ea410c1bf97e44d178c0833c3c83835f",
+      ".agent/context/workflows/sc-research.contract.md": "16cfc9d49cc9a1d8ee3ba61ada7d265c2505184dc2885f648e1a84d53f81d0e7",
+      ".agent/context/workflows/sc-review.contract.md": "58426d5ba6301f8927e6fcc0096d6f4f314de1fad82ab576adf7bcabc2b72f45"
+    }
+  },
+  "hints_integration_review": {
+    "basis": "Existing recorded responses reviewed after dispatch adds read-only consultation and status route list adds hints. H01-H12 and A01-A11 outcomes, approvals and checkpoint contents remain unchanged; not a new host trial.",
+    "previous_source_digests": {
+      ".agent/context/workflow-dispatch.md": "7ff7e3565b4d556fc0fc1b3ac499358871b52419f42a476124c9d0f587e9bf9d",
+      ".agent/workflows/sc-status.md": "3f3e4ec1cef531a902d622ded6f2fa7b2aeb58f5f9ba873269d2c9de573b1a82"
+    }
+  },
+  "source_review_history": [
+    {
+      "date": "2026-10-05",
+      "source_digests": {
+        ".agent/context/checkpoint.contract.md": "6dd9b5bcbb4459d4067fb6b2f816646225178f04feb7e7c29cd80e005e9443eb",
+        ".agent/skills/brainstorming/SKILL.md": "18a5cb985e32cf6d554cf0fc750f9ef52bafecb13e3e7e92bc9a354d8dabc328",
+        ".agent/skills/brainstorming/references/questions-and-options.md": "ed3062daef7141ec3cd9f298e4ce2ebaf354f7112ddb182a2eb0f767a08caf10",
+        ".agent/skills/checkpoint-protocol/SKILL.md": "8dd59cccfc7e6a6865b3bd2a25c7b9eafd45ae308f75b567e21ffc654deba278",
+        ".agent/skills/checkpoint-protocol/references/resolution.md": "cc6678942ac1fc9e3b80c2169ab9f5dd02cf2d4ff4bb22872c4d8618ff4ed76d",
+        ".agent/context/workflow-dispatch.md": "456c56afb9391aa21587569a10a8614767dd7ce32262f5d7a1481ac0ad381bcf",
+        ".agent/context/workflows/sc-audit.contract.md": "bca8bfaa5d632879a05b1eeca2b98c789effbc7a607512023355a190e9c4d617",
+        ".agent/context/workflows/sc-compound.contract.md": "be0bd638c1b926fb7bb9019e76d8a7fca50b7e462d63664d37cf6fe31c397096",
+        ".agent/context/workflows/sc-debug.contract.md": "4bbb168cdeaade736b4e75c0b796b62955ced626b5a685036884e20639301116",
+        ".agent/context/workflows/sc-eval.contract.md": "b3f171522155776fd79e2570290c422d8557d3176947f05ab17ce8008ca0f77d",
+        ".agent/context/workflows/sc-evolve.contract.md": "18efbf42d6eba41662d8b1381fc30268f53be885e51c00820b35de45421aaffa",
+        ".agent/context/workflows/sc-explore.contract.md": "6758ec50edf805cc4d4b86c3c63bb8f2f8764de2a4ec5fea84c88979af8fdb1a",
+        ".agent/context/workflows/sc-geniusloop.contract.md": "220d223d2cb8f470eaac08fc7c95b04bbee1e3d1c980a9ea9350fe617e18d855",
+        ".agent/context/workflows/sc-go.contract.md": "b927e04d8e457f342db416b5d3d9048b2fcec39145a4e86c5f382580e0eef63f",
+        ".agent/context/workflows/sc-init.contract.md": "ba0026948f211b3856648d14eaf7e4fcfb447b540496d4152127c5db37e4b3f3",
+        ".agent/context/workflows/sc-launch.contract.md": "1226754e9f5501ab030604e50573d7aeffc2aac46d25aaaee7b0a89e90894534",
+        ".agent/context/workflows/sc-pause.contract.md": "d71bfb3aa2b4a96e8eba98b0dfa6a77c93797a575f154f9b290df9697a8feb31",
+        ".agent/context/workflows/sc-plan.contract.md": "393376340b94ed52ec4caf24ba2b0fdc013302ab36eee13f51bfe133146fcc10",
+        ".agent/context/workflows/sc-prd.contract.md": "e9ab52c4024eefb8f6962f23c324d930aba913106fa156683abfbd6bc5ebabcc",
+        ".agent/context/workflows/sc-research.contract.md": "48cf55d7e14f8faed05f82b26a29948460115492abfa745aa1f658c5d84abf86",
+        ".agent/context/workflows/sc-review.contract.md": "4b9cabfc56a34b07c50ba9e4958622b22a680253d44bb43fc585309819bb8324",
+        ".agent/context/workflows/sc-status.contract.md": "ede36ba6f11b12d000a12af6fd84fceaa569b07da30858ed873a9bdf30942f99",
+        ".agent/context/workflows/sc-ui.contract.md": "a05909f467cbd8f4833b56a1f1506ff326dc4b3c2aae1d16b6a9d303b9c82f94",
+        ".agent/context/workflows/sc-work.contract.md": "601fc0c92f0e5471fcbaa199880014c3960f3eb18a7d03394214b8d9e9af1382",
+        ".agent/workflows/sc-audit.md": "b145fc6443d421c7647f3e1eeeccbab3718069e772f56227769a00353b3790eb",
+        ".agent/workflows/sc-compound.md": "a9494c520dd342588dbdc4980bfbc7fd2933811d2c02d96bef518436aaa475c9",
+        ".agent/workflows/sc-debug.md": "c196c684694484e0a048c4b6bd24d78ee2f5b96d777ec044b37072dae3255272",
+        ".agent/workflows/sc-eval.md": "6e86d315529d9cc912b28f5b200ca68da36d3e2f19c7f59c69c30db7a99a782f",
+        ".agent/workflows/sc-evolve.md": "b420cfbc0ffb2772b551bf6f57b8314d979eedd3afc9efac934aacec81a99b31",
+        ".agent/workflows/sc-explore.md": "4b747e225334b0c5ef1e342313c1688704aee564629243841225f8d4209c971c",
+        ".agent/workflows/sc-geniusloop.md": "be5acf83d6259b6ca7de841106f0bae046bbbc634e8a0ea90ce653cfd41c79a5",
+        ".agent/workflows/sc-go.md": "ac02494d37a8b5aec0f9e2e79b53ab6438faf4de1ecb77bf7e7ccd7c2a9c8305",
+        ".agent/workflows/sc-init.md": "e4890feda751da3c0b1323264e2ffb1010e6d42d83e172fd2a21d3f141c89d40",
+        ".agent/workflows/sc-launch.md": "e179299c5fafd66641f204f8c6155cf1d18dcab3682a8729c0d5041b24ce2cd3",
+        ".agent/workflows/sc-pause.md": "9c9b0b01306a1b0f157c4412e96f1ff931b33d9a9a53727a8ecf7fe832df1b73",
+        ".agent/workflows/sc-plan.md": "d39f35678fd3c012e7a376701aab1950499f4e7acb8e4cb622230f4abbc751fb",
+        ".agent/workflows/sc-prd.md": "fd6dafc36bee6e621305735126fb4c14955c864fb714d91ab748f5105a3d2ae6",
+        ".agent/workflows/sc-research.md": "50d65e623e72763dd10dc00516c42441b78db07c267a0ea2f64d7dee5226bfc4",
+        ".agent/workflows/sc-review.md": "f78ea69ec0823c02e932b83bdfc14ecaf69263611c0dd199f672797842744899",
+        ".agent/workflows/sc-status.md": "cac74227b7f445233275230f9d0a92dc038748a9a78177e7fdcd837d668fa540",
+        ".agent/workflows/sc-ui.md": "faed0378e7868871dc2e7b8d1d64ab93d1b913340514fdfc8ca5f94b7560ef12",
+        ".agent/workflows/sc-work.md": "1dd501989b21e03ad09405d1cddcee0aa3b0cd39bf091b70a32cf559395d7843"
+      },
+      "review": "Existing recorded response content reviewed against split simple/complex checkpoint and unchanged authorization/resolution boundaries; this is compatibility adjudication, not a fresh independent host attempt."
+    },
+    {
+      "date": "2026-10-05",
+      "source_digests": {
+        ".agent/context/checkpoint.contract.md": "28244ba77078e645a183c5f77dfda656ad9fa7d44a2b7441b3c0e5af1b7ab935",
+        ".agent/skills/brainstorming/SKILL.md": "c3eb85341d231dbec3bbba7e963666a46b3c71303df5c157e967b6d32cbc0d7f",
+        ".agent/skills/brainstorming/references/questions-and-options.md": "ed3062daef7141ec3cd9f298e4ce2ebaf354f7112ddb182a2eb0f767a08caf10",
+        ".agent/skills/checkpoint-protocol/SKILL.md": "8dd59cccfc7e6a6865b3bd2a25c7b9eafd45ae308f75b567e21ffc654deba278",
+        ".agent/skills/checkpoint-protocol/references/resolution.md": "cc6678942ac1fc9e3b80c2169ab9f5dd02cf2d4ff4bb22872c4d8618ff4ed76d",
+        ".agent/context/workflow-dispatch.md": "456c56afb9391aa21587569a10a8614767dd7ce32262f5d7a1481ac0ad381bcf",
+        ".agent/context/workflows/sc-audit.contract.md": "bca8bfaa5d632879a05b1eeca2b98c789effbc7a607512023355a190e9c4d617",
+        ".agent/context/workflows/sc-compound.contract.md": "be0bd638c1b926fb7bb9019e76d8a7fca50b7e462d63664d37cf6fe31c397096",
+        ".agent/context/workflows/sc-debug.contract.md": "4bbb168cdeaade736b4e75c0b796b62955ced626b5a685036884e20639301116",
+        ".agent/context/workflows/sc-eval.contract.md": "b3f171522155776fd79e2570290c422d8557d3176947f05ab17ce8008ca0f77d",
+        ".agent/context/workflows/sc-evolve.contract.md": "18efbf42d6eba41662d8b1381fc30268f53be885e51c00820b35de45421aaffa",
+        ".agent/context/workflows/sc-explore.contract.md": "4a4f8d2423f7825bbd95dec35af91d7e909ff786d34b2f6401338017143fc8f8",
+        ".agent/context/workflows/sc-geniusloop.contract.md": "220d223d2cb8f470eaac08fc7c95b04bbee1e3d1c980a9ea9350fe617e18d855",
+        ".agent/context/workflows/sc-go.contract.md": "b927e04d8e457f342db416b5d3d9048b2fcec39145a4e86c5f382580e0eef63f",
+        ".agent/context/workflows/sc-init.contract.md": "ba0026948f211b3856648d14eaf7e4fcfb447b540496d4152127c5db37e4b3f3",
+        ".agent/context/workflows/sc-launch.contract.md": "1226754e9f5501ab030604e50573d7aeffc2aac46d25aaaee7b0a89e90894534",
+        ".agent/context/workflows/sc-pause.contract.md": "d71bfb3aa2b4a96e8eba98b0dfa6a77c93797a575f154f9b290df9697a8feb31",
+        ".agent/context/workflows/sc-plan.contract.md": "393376340b94ed52ec4caf24ba2b0fdc013302ab36eee13f51bfe133146fcc10",
+        ".agent/context/workflows/sc-prd.contract.md": "e9ab52c4024eefb8f6962f23c324d930aba913106fa156683abfbd6bc5ebabcc",
+        ".agent/context/workflows/sc-research.contract.md": "48cf55d7e14f8faed05f82b26a29948460115492abfa745aa1f658c5d84abf86",
+        ".agent/context/workflows/sc-review.contract.md": "4b9cabfc56a34b07c50ba9e4958622b22a680253d44bb43fc585309819bb8324",
+        ".agent/context/workflows/sc-status.contract.md": "ede36ba6f11b12d000a12af6fd84fceaa569b07da30858ed873a9bdf30942f99",
+        ".agent/context/workflows/sc-ui.contract.md": "a05909f467cbd8f4833b56a1f1506ff326dc4b3c2aae1d16b6a9d303b9c82f94",
+        ".agent/context/workflows/sc-work.contract.md": "f0994ef41983284c0574a414bf168e1dacdf1bdd2f878435f9cccae212eaba03",
+        ".agent/workflows/sc-audit.md": "b145fc6443d421c7647f3e1eeeccbab3718069e772f56227769a00353b3790eb",
+        ".agent/workflows/sc-compound.md": "a9494c520dd342588dbdc4980bfbc7fd2933811d2c02d96bef518436aaa475c9",
+        ".agent/workflows/sc-debug.md": "c196c684694484e0a048c4b6bd24d78ee2f5b96d777ec044b37072dae3255272",
+        ".agent/workflows/sc-eval.md": "6e86d315529d9cc912b28f5b200ca68da36d3e2f19c7f59c69c30db7a99a782f",
+        ".agent/workflows/sc-evolve.md": "b420cfbc0ffb2772b551bf6f57b8314d979eedd3afc9efac934aacec81a99b31",
+        ".agent/workflows/sc-explore.md": "7db28202a2b3d3f16fa752aba52904439c88a87c528566dcf1f2c8b28a027e9c",
+        ".agent/workflows/sc-geniusloop.md": "be5acf83d6259b6ca7de841106f0bae046bbbc634e8a0ea90ce653cfd41c79a5",
+        ".agent/workflows/sc-go.md": "ac02494d37a8b5aec0f9e2e79b53ab6438faf4de1ecb77bf7e7ccd7c2a9c8305",
+        ".agent/workflows/sc-init.md": "e4890feda751da3c0b1323264e2ffb1010e6d42d83e172fd2a21d3f141c89d40",
+        ".agent/workflows/sc-launch.md": "e179299c5fafd66641f204f8c6155cf1d18dcab3682a8729c0d5041b24ce2cd3",
+        ".agent/workflows/sc-pause.md": "9c9b0b01306a1b0f157c4412e96f1ff931b33d9a9a53727a8ecf7fe832df1b73",
+        ".agent/workflows/sc-plan.md": "d39f35678fd3c012e7a376701aab1950499f4e7acb8e4cb622230f4abbc751fb",
+        ".agent/workflows/sc-prd.md": "fd6dafc36bee6e621305735126fb4c14955c864fb714d91ab748f5105a3d2ae6",
+        ".agent/workflows/sc-research.md": "50d65e623e72763dd10dc00516c42441b78db07c267a0ea2f64d7dee5226bfc4",
+        ".agent/workflows/sc-review.md": "f78ea69ec0823c02e932b83bdfc14ecaf69263611c0dd199f672797842744899",
+        ".agent/workflows/sc-status.md": "cac74227b7f445233275230f9d0a92dc038748a9a78177e7fdcd837d668fa540",
+        ".agent/workflows/sc-ui.md": "faed0378e7868871dc2e7b8d1d64ab93d1b913340514fdfc8ca5f94b7560ef12",
+        ".agent/workflows/sc-work.md": "1dd501989b21e03ad09405d1cddcee0aa3b0cd39bf091b70a32cf559395d7843",
+        ".agent/skills/checkpoint-protocol/references/answerable-package.md": "83a742f80bf2b91a8de8f0721a9c5ba44dffe2a13ab3ca4620a2a2e831d64d92"
+      },
+      "review": "Recorded H01-H12 and A01-A11 responses reviewed against the 13 shortened checkpoint pointers. Each still routes to the unchanged shared authority: stable IDs, all ready needs and pending dependencies, bulk/exception replies, target/revision/stage approval boundaries and exact-position resume remain applicable. Response content and outcomes retained; compatibility review only, not a new host experiment."
+    },
+    {
+      "date": "2026-10-05",
+      "source_digests": {
+        ".agent/skills/checkpoint-protocol/references/answerable-package.md": "83a742f80bf2b91a8de8f0721a9c5ba44dffe2a13ab3ca4620a2a2e831d64d92"
+      },
+      "review": "Recorded responses reviewed after fencing the illustrative absolute review link for portable document auditing. Only Markdown example formatting changed; stable IDs, ready lists, approval boundaries and resume behavior remain unchanged. Compatibility review only, not a new host trial."
+    },
+    {
+      "date": "2026-10-05",
+      "source_digests": {
+        ".agent/skills/checkpoint-protocol/references/answerable-package.md": "0400145aa8586668ad17a13693d746c550020ad15d349cf6ff080cce657ada26"
+      },
+      "review": "Recorded responses reviewed after switching the fenced illustrative link to an absolute POSIX example and describing drive-qualified Windows paths in prose. Only example presentation changed; stable IDs, ready lists, approval boundaries and resume behavior remain unchanged. Compatibility review only, not a new host trial."
+    }
+  ]
+}

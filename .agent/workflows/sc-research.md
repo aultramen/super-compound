@@ -6,6 +6,8 @@ description: "Run a bounded evidence spike for a named factual or technical gap 
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this as a conditional evidence gate when a decision is already framed but the available facts are insufficient, stale, conflicting, or expensive to assume. A research note is advisory evidence, not business, product, or implementation authority.
 

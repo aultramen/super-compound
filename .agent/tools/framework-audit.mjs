@@ -1354,6 +1354,8 @@ async function validateBenchmarkEvidence(root, contents, findings) {
       row.stage !== scenario.stage ||
       row.afterDigest !== scenario.after.contentDigest ||
       row.pass !== scenario.pass ||
+      row.comparisonBasis !== scenario.comparisonBasis ||
+      row.beforeDigest !== scenario.beforeDigest ||
       row.gateType !==
         (scenario.gateType === "budget" ? "budget" : undefined) ||
       row.maxAfterTokens !== scenario.maxAfterTokens ||
@@ -1436,7 +1438,7 @@ async function validateBenchmarkEvidence(root, contents, findings) {
           "P1",
           "WORKFLOW_EVIDENCE_MATRIX_STALE",
           reportPath,
-          "Rerun benchmark; the 18x3 workflow evidence matrix is stale.",
+          "Rerun benchmark; the 19x3 workflow evidence matrix is stale.",
         ),
       );
     }

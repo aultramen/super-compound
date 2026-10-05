@@ -10,9 +10,16 @@ It keeps the public command surface small, pushes detailed procedures into skill
 
 Human input uses one [answerable checkpoint](.agent/context/checkpoint.contract.md):
 what remains approved, the blocked result, owner, recommendation, direct review
-material, one question and automatic continuation. Agent research/tests proceed
+material and all ready active-work questions/approvals with stable IDs and automatic continuation. Agent research/tests proceed
 first; evidence refresh does not repeat approval. Authorized owner handoffs run
 internally while configured stage checkpoints and read-only boundaries remain.
+Every item includes a concrete recommendation, rationale/consequences and a
+clickable full absolute review path with the section to inspect. Dependent items
+are pending with prerequisites and next action. Both bulk agreement and
+exception reply examples are always shown; partial replies keep unanswered IDs open.
+Approval does not supply missing information, test evidence or access readiness.
+See [how to answer](WALKTHROUGH.md#answering-a-checkpoint) and the
+[question/answer eval](docs/eval-results/questions-and-hints-20261005.md).
 See the [PromptShield example and regression evidence](docs/eval-results/hitl-checkpoints-20261004.md).
 
 ## Quick Start
@@ -43,11 +50,52 @@ The numbers above illustrate the format; the agent reports actual check results.
 | Small change | `/sc-work Ubah teks tombol Simpan menjadi Simpan perubahan` | Exact change and expected result in the existing screen | Scoped edit and relevant checks; review |
 | New feature | `/sc-launch Tambahkan dashboard penggunaan untuk admin akun` | Users, outcome and known constraints | BRD -> PRD -> FSD -> verified goals within stage approvals and execution authorization |
 | Resume | `/sc-status` | Existing workspace and handoff, plus any changed intent | Current evidence/blockers and one exact next action; continue authorized ready work |
+| Advice | `/sc-hints <question or condition>` | A question, or active work context | Recommendation, owner command, prerequisites and expected result; consultation writes no files |
 
-All 18 commands use `/sc-*`; Claude Code exposes native slash commands after
+All 19 commands use `/sc-*`; Claude Code exposes native slash commands after
 installation. Other hosts use their adapters. In Codex, plain language such as
 “fix this bug” or “resume the task” routes to the same compact contracts.
 See [Public Workflows](#public-workflows) for input/output examples.
+
+### Practical guidance with `/sc-hints`
+
+```text
+/sc-hints
+/sc-hints Saya punya PRD approved, langkah berikutnya apa?
+/sc-hints Mengapa test modul order ini sulit ditulis?
+/sc-hints Kapan saya perlu prototype sebelum membuat FSD?
+/sc-hints Bagaimana melanjutkan pekerjaan setelah compact?
+```
+
+Hints uses active context or the supplied question. With neither, it shows
+examples and asks what you need. It inspects focused evidence and separates
+verified facts, assumptions and unknowns. Advice stays in chat; accepting a
+recommendation does not start implementation. Ask to execute it to continue
+through its owner under existing authorization and gates.
+
+| Need | Command |
+|---|---|
+| Focused advice or a specific obstacle | `/sc-hints` |
+| Project position or resume | `/sc-status` |
+| Improvement inventory with Brain filtering | `/sc-geniusloop` |
+| Business scope and decisions | `/sc-explore` |
+| A factual evidence gap | `/sc-research` |
+| Change review or failure diagnosis | `/sc-review` or `/sc-debug` |
+
+```mermaid
+flowchart LR
+    Q[Question or active context] --> H[sc-hints: inspect evidence]
+    H --> A[Advice with owner, prerequisites and result]
+    A --> R[Agreement: advice accepted]
+    A --> E[Execution request]
+    E --> G[Owner checks authority and gates]
+    G --> W[Authorized work]
+```
+
+For example, after verifying PRD approval and finding no FSD in the checked
+locations, the answer recommends `/sc-plan <PRD path>`, explains why full-tier
+implementation needs FSD authority, links the inspected approval section, and
+names the expected FSD/GOAL result. See [worked examples](.agent/skills/hints/references/examples.md).
 
 ## Delivery Tiers
 
@@ -77,7 +125,7 @@ flowchart LR
 
 ## What It Provides
 
-- 18 public workflows for common development operations
+- 19 public workflows for common development operations
 - Canonical product delivery path: `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`
 - Modular skills for agentic delivery, planning, execution, debugging, review, audit, UI, state, and verification
 - Full BRD/PRD/FSD/optional ADR templates under `.agent/templates/agentic-delivery/`
@@ -114,7 +162,7 @@ distribution for offline transfer:
 node .agent/tools/active-assets.mjs copy <new-bundle-directory>
 ```
 
-Selecting Claude installs `.claude/commands/` pointers for all 18 routes,
+Selecting Claude installs `.claude/commands/` pointers for all 19 routes,
 so `/sc-*` works as native Claude Code slash commands. Each pointer is a thin
 contract-first stub that loads the compact route contract on demand.
 
@@ -239,6 +287,7 @@ Only these workflow files are public:
 | Workflow | Use When |
 |---|---|
 | [/sc-init](.agent/workflows/sc-init.md) | Set up or reload framework context |
+| [/sc-hints](.agent/workflows/sc-hints.md) | Practical evidence-backed guidance; read-only until an owner execution request |
 | [/sc-status](.agent/workflows/sc-status.md) | Inspect current state and route the next action |
 | [/sc-geniusloop](.agent/workflows/sc-geniusloop.md) | Generate and filter proactive improvement ideas when goal queues are empty |
 | [/sc-explore](.agent/workflows/sc-explore.md) | Shape fuzzy ideas into a BRD with business objectives, constraints, policies, and acceptance |
@@ -293,6 +342,7 @@ Removed workflows are intentionally not aliases. Route them this way:
 | loop, handoff, parallel execution | `/sc-work` |
 | branch, commit, push, PR, worktree | `/sc-go` |
 | security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
+| focused consultation, next-step advice | `/sc-hints` |
 | progress, resume | `/sc-status` |
 | reload | `/sc-init reload` |
 
@@ -448,7 +498,7 @@ The CSV loader fails fast when a row does not match its header width, so malform
   skills/       modular task procedures
   templates/    BRD, PRD, FSD, optional ADR, research-note, and PR templates
   tools/        deterministic local framework utilities
-  workflows/    18 public workflows
+  workflows/    19 public workflows
 .claude/        Claude Code path-scoped rules
 .codex/         Codex skill adapter and hash-verified installer
 docs/           engineering standards, archives, and runtime project docs
@@ -501,11 +551,13 @@ node .agent/tools/framework-audit.mjs --output .agent/benchmarks/framework-audit
 node .agent/tools/framework-audit.mjs --verify-existing .agent/benchmarks/framework-audit.after.json
 ```
 
-The benchmark separates immutable historical eager-preload evidence from current repository-owned startup budgets for Codex, Claude Code, Antigravity, the native Codex adapter, and bundled skill metadata. It also emits an 18-route x 3-cell static matrix: input context reduction, process wiring/authority, and output sink/budget/next-owner coverage. Every route contract must stay at or below 10% of its full workflow/skill context (`.agent/context/token-budget-gates.md`); startup surfaces retain absolute caps, every hotspot reduction must exceed 90%, and all 54 static cells must pass. Totals are scenario-weighted and may count shared files more than once. Output-authoring measures context and contracts, not generated prose. Host reasoning, generated-output, injected-context, latency, and billing tokens remain `unknown`; the static matrix is not a runtime end-to-end claim. The baseline is remeasured from recorded ancestor commit blobs on every authoritative run. A runtime claim requires paired attributable before/current traces for every route, not one after-only transcript.
+The new `/sc-hints` row uses `liveBefore` with basis `current-full-vs-compact`, measured from current full workflow/skill sources. Its compact ratio must be at most 10%; it is excluded from historical reduction totals and the Git baseline is unchanged.
+
+The benchmark separates immutable historical eager-preload evidence from current repository-owned startup budgets for Codex, Claude Code, Antigravity, the native Codex adapter, and bundled skill metadata. It also emits a 19-route x 3-cell static matrix: input context reduction, process wiring/authority, and output sink/budget/next-owner coverage. Every route contract must stay at or below 10% of its full workflow/skill context (`.agent/context/token-budget-gates.md`); startup surfaces retain absolute caps, every hotspot reduction must exceed 90%, and all 57 static cells must pass. Totals are scenario-weighted and may count shared files more than once. Output-authoring measures context and contracts, not generated prose. Host reasoning, generated-output, injected-context, latency, and billing tokens remain `unknown`; the static matrix is not a runtime end-to-end claim. The baseline is remeasured from recorded ancestor commit blobs on every authoritative run. A runtime claim requires paired attributable before/current traces for every route, not one after-only transcript.
 
 Runtime token telemetry complements the static gates: `.agent/hooks/session-end.js` measures the host transcript (when the host provides `transcript_path`) through `.agent/tools/transcript-usage.mjs` into a runtime usage log under `.agent/.compact-state/`, and `npm run usage` aggregates it. Usage is counted once per `message.id` (streamed transcripts repeat lines), and each log entry carries an `assetReads` histogram of Read calls on `.agent/` contracts, workflows, and skills, which is the activation evidence the static matrix cannot supply. Static benchmark gates are unchanged.
 
-The framework audit enumerates the exact active Git manifest: tracked files plus untracked, non-ignored files. It byte-reads the physical tree outside `.git`, classifies every active path into a declared audit class, and fails on any unclassified entry. The self-generated audit report is necessarily outside its own raw content digest, so `--verify-existing` validates it separately and emits a 100%-accounted verification envelope. The recorded `repositoryHead` is digest-bound provenance; freshness is content/manifest based so committing the excluded report does not invalidate otherwise identical evidence. The envelope reports whether stored and current heads match. The report distinguishes byte/content coverage, audit-class coverage, and specialized self-evidence instead of calling them one uniform semantic audit. It also validates UTF-8, JSON, CSV shape, Markdown links, workflow/skill contracts, duplicate content, output budgets, the 18x3 matrix, and fresh benchmark evidence. Invalid payload content is never echoed into findings.
+The framework audit enumerates the exact active Git manifest: tracked files plus untracked, non-ignored files. It byte-reads the physical tree outside `.git`, classifies every active path into a declared audit class, and fails on any unclassified entry. The self-generated audit report is necessarily outside its own raw content digest, so `--verify-existing` validates it separately and emits a 100%-accounted verification envelope. The recorded `repositoryHead` is digest-bound provenance; freshness is content/manifest based so committing the excluded report does not invalidate otherwise identical evidence. The envelope reports whether stored and current heads match. The report distinguishes byte/content coverage, audit-class coverage, and specialized self-evidence instead of calling them one uniform semantic audit. It also validates UTF-8, JSON, CSV shape, Markdown links, workflow/skill contracts, duplicate content, output budgets, the 19x3 matrix, and fresh benchmark evidence. Invalid payload content is never echoed into findings.
 
 Also check:
 
@@ -551,3 +603,13 @@ The [pstack delivery analysis](docs/audits/2026-10-04-pstack-gap-analysis.md)
 links acceptance and implementation evidence. Runtime savings require measured
 paired sessions; static context reduction is not runtime token/latency proof.
 See [paired experiments](.agent/skills/eval-harness/references/paired-experiments.md).
+
+## Context efficiency and session models
+
+Use contracts for covered mandatory checks and load procedure sections only for
+uncovered facts, material risk, conflicts or editing them. Reuse unchanged resident
+rules. Conditional detail: [.agent/context/policy-loading.md](.agent/context/policy-loading.md).
+Bundled roles inherit the session model; installation updates preserve explicit
+model overrides. Effort/API guidance: [.agent/context/model-guidance.md](.agent/context/model-guidance.md).
+Runtime savings require paired real-work evidence against the current snapshot;
+static historical reduction is separate. Protocol: [.agent/evals/context-efficiency.md](.agent/evals/context-efficiency.md).

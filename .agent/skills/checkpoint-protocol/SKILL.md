@@ -26,7 +26,7 @@ Choose exactly one type: `needs_info`, `needs_decision`, `needs_confirmation`, `
 
 ## Invariants
 
-- Batch consequential inputs with the same owner and scope into one concrete request; keep unrelated authority gates separate. Continue independent safe work while waiting.
+- Show every ready input/approval for active work together, grouped by the same owner and scope; keep authority gates separate and show dependent items as pending. Use stable IDs, per-item recommendations, complete review paths and both reply examples from the runtime contract. Continue independent safe work while waiting.
 - Provide context, the exact blocker, what was tried, the impact of the response, and a concrete resumption path.
 - For choices, present meaningful options and lead with a reasoned recommendation.
 - Record each unresolved need under `STATE.md` Blockers through the existing

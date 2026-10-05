@@ -18,3 +18,5 @@ preview changes target, scope, or material risk beyond authorization. Existing
 explicit authorization persists; a fresh preview needs no redundant confirmation. Checkpoint automatically and continue; /sc-pause is only for actual stops.
 
 Shared policy: `.agent/skills/agentic-delivery/references/workflow-integration.md`.
+
+Human input/approval: .agent/context/checkpoint.contract.md

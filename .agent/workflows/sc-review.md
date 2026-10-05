@@ -6,6 +6,8 @@ description: "Review code changes against the requested spec and engineering sta
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this after implementation or when reviewing a diff/branch.
 

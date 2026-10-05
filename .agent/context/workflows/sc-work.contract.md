@@ -1,5 +1,5 @@
 Start from active user intent; when resuming, reconcile docs/STATE.md Next action.
-Checkpoint: `.agent/context/checkpoint.contract.md`.
+Checkpoint only for human input/blockers/replies: `.agent/context/checkpoint.contract.md`.
 Tier first (agentic-delivery/references/workflow-integration.md): `Tier:
 light|full; trigger: T<n>|none`. `light`: a request/pointer; trivial edits execute directly.
 `full`: one approved FSD goal or its pointer. Stop with `OPEN-*` for missing authority. Material escalation: `ESCALATE: T<n>`

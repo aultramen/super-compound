@@ -7,6 +7,45 @@ import test from "node:test";
 
 import { aggregateUsageLog, analyzeTranscript, assetKey } from "./transcript-usage.mjs";
 
+test('verified Codex exec turn usage sums turns with inclusive token semantics',async()=>{
+  const root=await mkdtemp(path.join(tmpdir(),'codex-exec-'));
+  const file=path.join(root,'exec.jsonl');
+  try {
+    const entry={type:'turn.completed',usage:{input_tokens:100,cached_input_tokens:80,cache_write_input_tokens:0,output_tokens:10,reasoning_output_tokens:3}};
+    await writeFile(file,[entry,entry].map(JSON.stringify).join('\n'));
+    const report=await analyzeTranscript(file);
+    assert.equal(report.totals.totalTokens,220);
+    assert.equal(report.totals.cacheReadTokens,160);
+    assert.equal(report.diagnostics.completeness,'COMPLETE');
+  } finally {await rm(root,{recursive:true,force:true});}
+});
+
+test('verified Codex cumulative rollout counts cache/reasoning subsets once', async () => {
+  const root=await mkdtemp(path.join(tmpdir(),'codex-usage-'));
+  const file=path.join(root,'rollout.jsonl');
+  const event=(n)=>({type:'event_msg',payload:{type:'token_count',info:{
+    total_token_usage:{input_tokens:n,cached_input_tokens:20,cache_write_input_tokens:0,output_tokens:10,reasoning_output_tokens:4,total_tokens:n+10},
+    last_token_usage:{input_tokens:1,output_tokens:1,total_tokens:2},
+  }}});
+  try {
+    await writeFile(file,[event(100),event(100),event(150)].map(JSON.stringify).join('\n'));
+    const report=await analyzeTranscript(file);
+    assert.equal(report.totals.totalTokens,160);
+    assert.equal(report.totals.inputTokens,150);
+    assert.equal(report.totals.reasoningTokens,4);
+    assert.equal(report.diagnostics.completeness,'COMPLETE');
+    const child=await analyzeTranscript(file,{contributorId:'worker-1'});
+    assert.equal(child.main,null);
+    assert.equal(Object.values(child.subagents)[0].totalTokens,160);
+    const partial=event(100); delete partial.payload.info.total_token_usage.cache_write_input_tokens;
+    await writeFile(file,JSON.stringify(partial));
+    assert.equal((await analyzeTranscript(file)).totals.cacheCreationTokens,null);
+    assert.equal((await analyzeTranscript(file)).totals.totalTokens,null);
+    await writeFile(file,[event(150),event(100)].map(JSON.stringify).join('\n'));
+    await assert.rejects(analyzeTranscript(file),/decreased/);
+  } finally { await rm(root,{recursive:true,force:true}); }
+});
+
 test("assistant usage counts once per message.id (last line wins) and Read calls attribute to framework assets", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "transcript-usage-"));
   const transcript = path.join(root, "streamed.jsonl");
@@ -440,19 +479,18 @@ test("aggregateUsageLog aggregates runtime usage-log entries", async () => {
 
     const report = await aggregateUsageLog(logFile);
 
-    assert.equal(report.schema, "usage_log_report_v1");
+    assert.equal(report.schema, "usage_log_report_v2");
     assert.equal(report.sessions, 3);
     assert.equal(report.measured, 2);
     assert.equal(report.unmeasured, 1);
     assert.equal(report.invalidLines, 1);
-    assert.deepEqual(report.totals, {
-      inputTokens: 150,
-      outputTokens: 30,
-      cacheCreationTokens: 30,
-      cacheReadTokens: 220,
-      conservativeTokens: 430,
-    });
-    assert.equal(report.cacheHitRatio, 0.55);
+    assert.equal(report.totals.inputTokens, null);
+    assert.equal(report.knownSubtotal.inputTokens, 150);
+    assert.equal(report.knownSubtotal.conservativeTokens, 430);
+    assert.equal(report.completeness, "PARTIAL");
+    assert.equal(report.fieldCoverage.inputTokens.known, 2);
+    assert.equal(report.fieldCoverage.inputTokens.unknown, 1);
+    assert.equal(report.cacheHitRatio, null);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -468,6 +506,24 @@ test("aggregateUsageLog returns an empty report for a missing log", async () => 
   assert.equal(report.unmeasured, 0);
   assert.equal(report.invalidLines, 0);
   assert.equal(report.cacheHitRatio, null);
+});
+
+test('usage logs retain inclusive cache ratio and reject mixed-provider totals',async()=>{
+  const root=await mkdtemp(path.join(tmpdir(),'usage-semantics-'));
+  const file=path.join(root,'log.jsonl');
+  const entry={measurement:'MEASURED',tokenSemantics:'input_includes_cache_output_includes_reasoning',inputTokens:100,outputTokens:10,reasoningTokens:3,cacheCreationTokens:0,cacheReadTokens:80,conservativeTokens:110};
+  try {
+    await writeFile(file,JSON.stringify(entry));
+    const inclusive=await aggregateUsageLog(file);
+    assert.equal(inclusive.cacheHitRatio,0.8);
+    assert.equal(inclusive.completeness,'COMPLETE');
+    await writeFile(file,[entry,{...entry,tokenSemantics:'input_excludes_cache_output_excludes_reasoning'}].map(JSON.stringify).join('\n'));
+    const mixed=await aggregateUsageLog(file);
+    assert.equal(mixed.totals.inputTokens,null);
+    assert.equal(mixed.knownSubtotal.inputTokens,200);
+    assert.equal(mixed.cacheHitRatio,null);
+    assert.equal(mixed.completeness,'PARTIAL');
+  } finally {await rm(root,{recursive:true,force:true});}
 });
 
 test("aggregateUsageLog enforces a file-size cap", async () => {

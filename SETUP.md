@@ -6,6 +6,13 @@ Install or update one canonical framework with native adapters for Codex, Claude
 
 ## Overview
 
+Installation includes `/sc-hints` as the nineteenth public route and the `hints`
+skill with its references/MIT notice. Claude, Antigravity, Cursor, Windsurf and
+Gemini receive native route pointers; Codex routes explicit commands and clear
+consultation intent through its framework skill and bundled fallback. Try
+`/sc-hints Saya punya PRD approved, langkah berikutnya apa?` after setup.
+Clear implementation, debugging, review and resume requests still select their owner.
+
 Paste this prompt into your AI host:
 
 > Setup Super Compound untuk workspace ini dari repository aultramen/super-compound. Baca SETUP.md, deteksi OS dan host AI, tanyakan cakupan project/global/keduanya, pertahankan konfigurasi saya, pasang adapter yang relevan, dan jalankan doctor. Gunakan persetujuan per tahap, izin eksekusi terpisah, serta Documentation Output Standard.
@@ -61,7 +68,7 @@ New project configuration sets `conventions.approval_mode: stage`: approve BRD, 
 | Windsurf/Cascade | `.windsurf/workflows/sc-*.md` and managed rule block | `~/.codeium/windsurf/global_workflows/` and managed global rule block |
 | Gemini CLI | `.gemini/commands/sc-*.toml` and managed `GEMINI.md` block | `~/.gemini/commands/` and managed `~/.gemini/GEMINI.md` block |
 
-Public workflows remain 18. Adapters load compact contracts first and full detail on demand. Hosts without subagents run the same checks sequentially in-thread. Host trust restrictions or enterprise policies may affect discovery; file validity cannot prove live invocation.
+Public workflows remain 19. Adapters load compact contracts first and full detail on demand. Hosts without subagents run the same checks sequentially in-thread. Host trust restrictions or enterprise policies may affect discovery; file validity cannot prove live invocation.
 
 ## Ownership, Updates, and Recovery
 

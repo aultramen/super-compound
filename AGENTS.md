@@ -57,7 +57,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - Rules in `.agent/rules/` are high-level and always-on for Antigravity; keep them focused.
 - Context contracts in `.agent/context/` are compact runtime indexes; keep them shorter than the full workflows/skills/templates they route to.
 - Skills in `.agent/skills/*/SKILL.md` hold detailed, task-specific procedures and may be longer.
-- Workflows in `.agent/workflows/` route work clearly; the 18 public workflows are the whole surface.
+- Workflows in `.agent/workflows/` route work clearly; the 19 public workflows are the whole surface.
 - Agent prompts in `.agent/agents/` stay role-specific; per-host models live in `.agent/context/agent-models.json` and project into `.claude/agents/` via `npm run agents:project`.
 - Hooks in `.agent/hooks/` must stay deterministic, local-first, and safe to run repeatedly.
 - Documentation changes should keep `README.md`, `SUPER-COMPOUND.md`, `WALKTHROUGH.md`, and `.agent/` references consistent.

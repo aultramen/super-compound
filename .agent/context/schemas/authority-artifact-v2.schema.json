@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:authority-artifact-v2",
+  "title": "Loop Runtime Authority Artifact v2",
+  "type": "object",
+  "properties": {
+    "schema": { "const": "authority_artifact_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "artifact_contract_version": { "const": "2.0.0" },
+    "artifact_type": { "enum": ["PRD", "FSD", "ISSUE", "EVAL"] },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[A-Z][A-Z0-9-]*$"
+    },
+    "artifact_version": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)$"
+    },
+    "status": {
+      "enum": [
+        "DRAFT",
+        "APPROVED",
+        "READY",
+        "VERIFIED",
+        "FROZEN",
+        "SUPERSEDED"
+      ]
+    },
+    "source_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9._/-]+$"
+    },
+    "content_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "authority_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "requires_fresh_verification": { "type": "boolean" },
+    "recorded_at": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "artifact_contract_version",
+    "artifact_type",
+    "artifact_id",
+    "artifact_version",
+    "status",
+    "source_path",
+    "content_digest",
+    "authority_digest",
+    "requires_fresh_verification",
+    "recorded_at"
+  ],
+  "additionalProperties": false
+}

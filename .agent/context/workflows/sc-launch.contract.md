@@ -19,3 +19,5 @@ Return research to its decision owner. Skip only with evidence. Launch grants no
 deploy, publish, commit, push, or PR permission.
 
 UI topology, affected proof, and conditional UAT follow the canonical UI readiness reference.
+
+Human input/approval: .agent/context/checkpoint.contract.md

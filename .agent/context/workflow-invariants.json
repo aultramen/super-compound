@@ -37,6 +37,29 @@
         "one exact"
       ]
     },
+    "sc-hints": {
+      "authority": "advisory-guidance-only",
+      "mutation": "read-only",
+      "evidenceSink": "chat only",
+      "nextOwners": [
+        "dynamic-public-route"
+      ],
+      "workflowMarkers": [
+        "strictly",
+        "read-only",
+        "accepts advice only"
+      ],
+      "contractMarkers": [
+        "Read-only guidance",
+        "Agreement accepts advice only",
+        "through the owner"
+      ],
+      "loopRuntimeRole": "READ_ONLY",
+      "writeClasses": [],
+      "wizardPolicy": "NEVER",
+      "requiredOperationGate": [],
+      "loopStateAccess": "READ_ONLY"
+    },
     "sc-geniusloop": {
       "authority": "advisory-ideation",
       "mutation": "geniusloop-report-only",

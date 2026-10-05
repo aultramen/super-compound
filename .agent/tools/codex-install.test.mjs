@@ -166,6 +166,8 @@ test("installs an exact, hashed Codex bundle from canonical .agent sources", (t)
   );
 
   const installedSkill = readFileSync(join(target, "SKILL.md"), "utf8");
+  assert.match(installedSkill, /consultation.*sc-hints/);
+  for (const rel of ['context/workflows/sc-hints.contract.md', 'workflows/sc-hints.md', 'skills/hints/SKILL.md', 'skills/hints/references/route-selection.md', 'skills/hints/references/LICENSE']) assert.ok(existsSync(join(target, 'references', rel)), rel);
   assert.ok(
     installedSkill.indexOf(".agent/context/workflows/sc-X.contract.md") <
       installedSkill.indexOf("references/context/workflows/sc-X.contract.md"),

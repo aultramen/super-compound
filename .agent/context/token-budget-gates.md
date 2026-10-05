@@ -11,6 +11,7 @@ Budgets use `.agent/tools/token-benchmark.mjs` with `deterministic_estimated_tok
 | Native skill discovery | <= 2,500 tokens | count repository skill `name` + `description`; bodies stay on demand |
 | sc-init | <= 10% of baseline | route contract first |
 | sc-status | <= 10% of baseline | route contract first |
+| sc-hints | <= 10% of current full context | live full-vs-compact; excluded from historical savings |
 | sc-geniusloop | <= 10% of baseline | load route contract and scoped evidence before Brain |
 | sc-explore | <= 10% of baseline | route contract first |
 | sc-research | <= 10% of baseline | route contract first |
@@ -41,7 +42,7 @@ Static measurements cover repository-owned files only. Parent/system/user instru
 tool schemas, conversation history, and model-specific billing tokens require runtime
 telemetry and must not be inferred from the legacy eager-preload reduction.
 
-The benchmark's 18 x 3 matrix proves static route coverage: modeled context
+The benchmark's 19 x 3 matrix proves static route coverage: modeled context
 entry, process wiring/authority, and output sink/budget/next owner. It does not
 measure hidden reasoning or generated output. Runtime session totals are
 collected locally at SessionEnd into a runtime usage log under `.agent/.compact-state/`
@@ -49,6 +50,10 @@ collected locally at SessionEnd into a runtime usage log under `.agent/.compact-
 from the same log's `assetReads` histogram (Read and framework-tool Bash calls
 on `.agent/` contracts, workflows, skills, and tools), the activation evidence
 the static matrix cannot supply.
+
+`sc-hints` uses `liveBefore` with comparison basis `current-full-vs-compact`.
+Its ratio is measured from current workflow/skill sources and is excluded from
+historical reduction totals. Consultation evidence stays in chat; no report is created.
 
 ## Orchestrator Return Envelopes
 

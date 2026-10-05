@@ -39,7 +39,7 @@ Load local context first, questions/options while deciding, and capture only onc
 ## Mandatory Gates
 
 - **Context-before-questions gate:** Inspect easy-to-find similar code/docs, recent `docs/brainstorms/`, `docs/solutions/`, learned knowledge, and relevant `interface-design` search results before asking what the repository can already answer.
-- **Question gate:** Ask consequential decisions with settled prerequisites in small numbered batches; use delegated defaults for reversible preferences; each question includes a recommendation, evidence-based reason, and trade-off. Wait for actual answers; partial answers settle only answered IDs. Reopen affected descendants when an answer changes. Follow questions/options above.
+- **Question gate:** Ask consequential decisions with settled prerequisites together for active work with stable numbered IDs; use delegated defaults for reversible preferences; each question includes a recommendation, evidence-based reason, and trade-off. Wait for actual answers; partial answers settle only answered IDs. Reopen affected descendants when an answer changes. Load the [shared checkpoint format](../../context/checkpoint.contract.md) before asking, including complete review paths, pending dependencies and both bulk/exception reply examples. Follow questions/options above.
 - **Options gate:** Offer 2-3 approaches with description, pros, cons, and fit. Lead with a recommendation; prefer the simplest option that meets the goal while preserving future change.
 - **UI gate:** Ground interface exploration in `interface-design`, concrete decisions, accessibility, responsiveness, and existing components. Use diagrams only when they clarify architecture, flows, states, data, or ownership.
 - **Capture gate:** Outside advisory read-only mode, save useful decisions to `docs/brainstorms/YYYY-MM-DD-<topic>-brainstorm.md` with purpose, rationale, alternatives, decisions, open questions, and recommended next workflow. Name non-goals explicitly.
@@ -48,3 +48,11 @@ Load local context first, questions/options while deciding, and capture only onc
 ## Related Skills
 
 Use `prd-generator`, `writing-plans`, `interface-design`, and `knowledge-compounding` for requirements, FSD goals, frontend grounding, and reusable lessons.
+
+## Exploration depth
+
+Initial ideation uses at most three candidates with selection reasons and a
+recommendation. An explicit broad exploration uses the complete procedure:
+at least ten ideas, then Brain evaluation of fit, trade-offs and risks. Use the
+Brain role sequentially when delegation is unavailable or unauthorized.
+This changes depth, not BRD approval or implementation authority.

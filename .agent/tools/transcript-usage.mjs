@@ -31,6 +31,8 @@ export async function analyzeTranscript(filePath, options = {}) {
   let usageRecords = 0;
   let unattributedUsageRecords = 0;
   let unaccountedUsageRecords = 0;
+  const codexUsage = new Map();
+  let codexFormat = null;
   const lines = readline.createInterface({
     input: createReadStream(absolute, { encoding: "utf8" }),
     crlfDelay: Infinity,
@@ -48,6 +50,37 @@ export async function analyzeTranscript(filePath, options = {}) {
     }
 
     let supported = false;
+    if (entry?.type === "turn.completed" && isUsageObject(entry.usage)) {
+      if (codexFormat && codexFormat !== "exec") throw new Error("Mixed Codex transcript formats");
+      codexFormat = "exec";
+      const usage = entry.usage;
+      const normalized = { ...usage, total_tokens: safeSum([
+        measuredToken(usage.input_tokens), measuredToken(usage.output_tokens)]) };
+      const previous = codexUsage.get("main");
+      codexUsage.set("main", previous ? Object.fromEntries(
+        ["input_tokens", "output_tokens", "cached_input_tokens", "cache_write_input_tokens",
+          "reasoning_output_tokens", "total_tokens"].map(field => [field,
+            safeSum([measuredToken(previous[field]), measuredToken(normalized[field])])])) : normalized);
+      usageRecords += 1;
+      continue;
+    }
+    if (entry?.type === "event_msg" && entry.payload?.type === "token_count") {
+      const usage = entry.payload.info?.total_token_usage;
+      if (isUsageObject(usage)) {
+        if (codexFormat && codexFormat !== "rollout") throw new Error("Mixed Codex transcript formats");
+        codexFormat = "rollout";
+        // Verified Codex rollout shape: totals are cumulative per session,
+        // cached input and reasoning output are subsets, not additive tokens.
+        const id = options.contributorId ?? "main";
+        const previous = codexUsage.get(id);
+        if (previous && usage.total_tokens < previous.total_tokens) {
+          throw new Error("Codex cumulative usage decreased; split sessions before analysis");
+        }
+        codexUsage.set(id, usage);
+        usageRecords += 1;
+      }
+      continue;
+    }
     let accountedUsageRecords = 0;
     if (
       entry?.type === "assistant" &&
@@ -97,6 +130,39 @@ export async function analyzeTranscript(filePath, options = {}) {
   }
 
   for (const usage of assistantUsageById.values()) addUsage(main, usage);
+
+  if (codexUsage.size) {
+    if (assistantUsageById.size || subagentMap.size || unattributedUsageRecords) {
+      throw new Error("Mixed provider token semantics; analyze contributors separately");
+    }
+    const raw = [...codexUsage.values()][0];
+    const fields = {
+      inputTokens: measuredToken(raw.input_tokens),
+      outputTokens: measuredToken(raw.output_tokens),
+      reasoningTokens: measuredToken(raw.reasoning_output_tokens),
+      cacheReadTokens: measuredToken(raw.cached_input_tokens),
+      cacheCreationTokens: measuredToken(raw.cache_write_input_tokens),
+      totalTokens: measuredToken(raw.total_tokens),
+    };
+    const complete = invalidJsonLines === 0 && unaccountedUsageRecords === 0 &&
+      Object.values(fields).every(v => v !== null) &&
+      fields.totalTokens === fields.inputTokens + fields.outputTokens &&
+      fields.cacheReadTokens <= fields.inputTokens && fields.reasoningTokens <= fields.outputTokens;
+    const usage = { ...fields, measurement: complete ? "MEASURED" : "UNMEASURED" };
+    if (!complete) usage.totalTokens = null;
+    const id = options.contributorId ? opaqueContributorRef(options.contributorId) : null;
+    return {
+      schema: "codex_transcript_token_usage_v1",
+      format: codexFormat,
+      tokenSemantics: "input_includes_cache_output_includes_reasoning",
+      diagnostics: { linesRead, usageRecords, invalidJsonLines, unsupportedLines,
+        unaccountedUsageRecords, completeness: complete ? "COMPLETE" : "PARTIAL" },
+      main: id ? null : usage,
+      subagents: id ? { [id]: usage } : {},
+      totals: usage,
+      assetReads: finalizeAssetReads(readCountsByAsset),
+    };
+  }
 
   if (usageRecords === 0) {
     throw new Error("Transcript contains no supported token usage records");
@@ -387,6 +453,7 @@ function isUsageObject(value) {
 const USAGE_LOG_TOKEN_FIELDS = [
   "inputTokens",
   "outputTokens",
+  "reasoningTokens",
   "cacheCreationTokens",
   "cacheReadTokens",
   "conservativeTokens",
@@ -408,6 +475,7 @@ export async function aggregateUsageLog(filePath, options = {}) {
   }
 
   const report = emptyUsageLogReport();
+  const semantics = new Set();
   const lines = readline.createInterface({
     input: createReadStream(absolute, { encoding: "utf8" }),
     crlfDelay: Infinity,
@@ -426,26 +494,39 @@ export async function aggregateUsageLog(filePath, options = {}) {
       continue;
     }
     report.sessions += 1;
+    semantics.add(entry.tokenSemantics ?? "input_excludes_cache_output_excludes_reasoning");
     if (entry.measurement === "MEASURED") report.measured += 1;
     else report.unmeasured += 1;
     accumulateAssetReads(report.assetReads, entry.assetReads);
     for (const field of USAGE_LOG_TOKEN_FIELDS) {
       const value = entry[field];
-      if (!Number.isSafeInteger(value) || value < 0) continue;
-      const next = report.totals[field] + value;
+      if (!Number.isSafeInteger(value) || value < 0) {
+        report.fieldCoverage[field].unknown += 1;
+        continue;
+      }
+      report.fieldCoverage[field].known += 1;
+      const next = report.knownSubtotal[field] + value;
       if (!Number.isSafeInteger(next)) {
         throw new Error("Usage log token totals exceed the safe integer bound");
       }
-      report.totals[field] = next;
+      report.knownSubtotal[field] = next;
     }
   }
 
-  const cacheDenominator =
-    report.totals.inputTokens +
-    report.totals.cacheCreationTokens +
-    report.totals.cacheReadTokens;
+  report.tokenSemantics = semantics.size === 1 ? [...semantics][0] : semantics.size ? "mixed" : "unknown";
+  const knownSemantics = ["input_excludes_cache_output_excludes_reasoning", "input_includes_cache_output_includes_reasoning"].includes(report.tokenSemantics);
+  for (const field of USAGE_LOG_TOKEN_FIELDS) {
+    report.totals[field] = report.sessions > 0 && report.invalidLines === 0 &&
+      knownSemantics && report.fieldCoverage[field].unknown === 0 ? report.knownSubtotal[field] : null;
+  }
+  report.completeness = report.sessions > 0 && report.invalidLines === 0 &&
+    report.unmeasured === 0 && Object.values(report.totals).every(v => v !== null)
+    ? "COMPLETE" : "PARTIAL";
+  const cacheDenominator = report.tokenSemantics === "input_includes_cache_output_includes_reasoning"
+    ? report.totals.inputTokens : safeSum([
+      report.totals.inputTokens, report.totals.cacheCreationTokens, report.totals.cacheReadTokens]);
   report.cacheHitRatio =
-    cacheDenominator > 0
+    report.totals.inputTokens !== null && cacheDenominator > 0
       ? Math.round((report.totals.cacheReadTokens / cacheDenominator) * 10000) /
         10000
       : null;
@@ -472,18 +553,16 @@ function accumulateAssetReads(target, assetReads) {
 
 function emptyUsageLogReport() {
   return {
-    schema: "usage_log_report_v1",
+    schema: "usage_log_report_v2",
     sessions: 0,
     measured: 0,
     unmeasured: 0,
     invalidLines: 0,
-    totals: {
-      inputTokens: 0,
-      outputTokens: 0,
-      cacheCreationTokens: 0,
-      cacheReadTokens: 0,
-      conservativeTokens: 0,
-    },
+    completeness: "PARTIAL",
+    tokenSemantics: "unknown",
+    totals: Object.fromEntries(USAGE_LOG_TOKEN_FIELDS.map(field => [field, null])),
+    knownSubtotal: Object.fromEntries(USAGE_LOG_TOKEN_FIELDS.map(field => [field, 0])),
+    fieldCoverage: Object.fromEntries(USAGE_LOG_TOKEN_FIELDS.map(field => [field, {known: 0, unknown: 0}])),
     cacheHitRatio: null,
     assetReads: { total: 0, top: {} },
   };

@@ -17,6 +17,19 @@ function run(f, command, ...args) {
   const p = spawnSync(process.execPath, [engine, command, '--source',source,'--target',f.target,'--scope','project','--host','codex,claude,antigravity,cursor,windsurf,gemini','--json',...args], {encoding:'utf8',env:{...process.env, SUPER_COMPOUND_HOME:f.home}});
   return {status:p.status, report: (()=>{try{return JSON.parse(p.stdout)}catch{return p.stderr}})()};
 }
+test('update retains explicit model overrides and projects them into host agents', t => {
+  const f=fixture(t);
+  assert.equal(run(f,'install').status,0);
+  const mappingPath=path.join(f.target,'.agent/context/agent-models.json');
+  const mapping=JSON.parse(fs.readFileSync(mappingPath,'utf8'));
+  mapping.hosts['claude-code']['build-fixer']='haiku';
+  mapping.hosts.codex['build-fixer']='user-model';
+  fs.writeFileSync(mappingPath,JSON.stringify(mapping,null,2)+'\n');
+  const update=run(f,'update');
+  assert.equal(update.status,0,JSON.stringify(update));
+  assert.deepEqual(JSON.parse(fs.readFileSync(mappingPath,'utf8')),mapping);
+  assert.match(fs.readFileSync(path.join(f.target,'.claude/agents/build-fixer.md'),'utf8'), /model: haiku/);
+});
 test('dry run is read-only; six adapters install and reinstall is a no-op', t => {
   const f = fixture(t);
   const dry = run(f,'install','--dry-run');
@@ -33,6 +46,8 @@ test('dry run is read-only; six adapters install and reinstall is a no-op', t =>
   assert.match(codex, /resume.*sc-status/);
   assert.match(codex, /small change.*sc-work/);
   assert.match(codex, /feature.*sc-launch/);
+  assert.match(codex, /consultation.*sc-hints/);
+  for (const rel of ['.claude/commands/sc-hints.md', '.agents/skills/sc-hints/SKILL.md', '.cursor/skills/sc-hints/SKILL.md', '.windsurf/workflows/sc-hints.md', '.gemini/commands/sc-hints.toml', '.agent/skills/hints/references/LICENSE']) assert.ok(fs.existsSync(path.join(f.target, rel)), rel);
   assert.match(fs.readFileSync(path.join(f.target,'.agent/rules/project-config.md'),'utf8'),/approval_mode:.*stage/);
   assert.equal(fs.existsSync(path.join(f.target,'.agent/tools/budget-wizard.mjs')),false);
   assert.equal(run(f,'doctor').status,0);

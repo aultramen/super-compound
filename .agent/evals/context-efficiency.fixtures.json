@@ -1,0 +1,11 @@
+{
+  "schema": "context_efficiency_fixtures_v1",
+  "fixtures": [
+    {"name":"consultation","route":"sc-hints","tier":"light","prompt":"/sc-hints Given the README goal, which workflow should fix a one-line typo? Explain the prerequisite and do not edit files.","mode":"correct"},
+    {"name":"light-edit","route":"sc-work","tier":"light","prompt":"/sc-work Correct only 'additon' to 'addition' in README.md. This reversible edit is authorized; inspect and verify proportionately.","mode":"correct"},
+    {"name":"fsd-execution","route":"sc-work","tier":"full","prompt":"/sc-work Execute approved GOAL-001 in docs/fsd/fsd-arithmetic.md. Execution is authorized. Prove RED/GREEN and preserve the multiply placeholder for GOAL-002.","mode":"bug"},
+    {"name":"debugging","route":"sc-debug","tier":"light","prompt":"/sc-debug node --test test/sum.test.cjs fails. Diagnose and fix sum only; preserve the existing test and verify the regression. Implementation is authorized.","mode":"bug"},
+    {"name":"review","route":"sc-review","tier":"light","prompt":"/sc-review Review src/sum.cjs against the addition requirement and test/sum.test.cjs. Return the bug location and consequence. Read-only; do not remediate.","mode":"bug"},
+    {"name":"multi-goal-resume","route":"sc-work","tier":"full","prompt":"/sc-work Resume docs/STATE.md. GOAL-001 is verified; implement only GOAL-002 from docs/fsd/fsd-arithmetic.md. Execution is authorized. Preserve verified addition behavior and prove multiply RED/GREEN.","mode":"resume"}
+  ]
+}

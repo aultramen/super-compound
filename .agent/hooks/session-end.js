@@ -95,8 +95,10 @@ function recordSessionUsage(root, payload) {
                 transcriptSessionId(payload.transcript_path)
             ),
             measurement: totals.measurement === 'MEASURED' ? 'MEASURED' : 'UNMEASURED',
+            tokenSemantics: parsed.tokenSemantics || 'input_excludes_cache_output_excludes_reasoning',
             inputTokens: safeToken(totals.inputTokens),
             outputTokens: safeToken(totals.outputTokens),
+            reasoningTokens: safeToken(totals.reasoningTokens),
             cacheCreationTokens: safeToken(totals.cacheCreationTokens),
             cacheReadTokens: safeToken(totals.cacheReadTokens),
             conservativeTokens: safeToken(totals.totalTokens ?? totals.conservativeTokens),

@@ -15,6 +15,7 @@ function readRepositoryFile(relativePath) {
 const PUBLIC_ROUTES = [
   "sc-init",
   "sc-status",
+  "sc-hints",
   "sc-geniusloop",
   "sc-explore",
   "sc-research",
@@ -65,7 +66,7 @@ test("route contracts carry the persistence spine (STATE entry, close, or pause 
     await Promise.all(PUBLIC_ROUTES.map(async (route) => [route, await contract(route)])),
   );
   // Read-only routes that already return their next owner carry no STATE line.
-  const returnsToOwner = new Set(["sc-geniusloop", "sc-review", "sc-research", "sc-compound", "sc-evolve"]);
+  const returnsToOwner = new Set(["sc-hints", "sc-geniusloop", "sc-review", "sc-research", "sc-compound", "sc-evolve"]);
   for (const [route, text] of Object.entries(contracts)) {
     if (returnsToOwner.has(route)) continue;
     assert.match(
@@ -455,7 +456,7 @@ test("UI-bearing PRDs validate an experience baseline before approval", async ()
   }
 
   const routes = JSON.parse(invariants).routes;
-  assert.equal(Object.keys(routes).length, 18);
+  assert.equal(Object.keys(routes).length, 19);
   assert.ok(routes["sc-prd"].nextOwners.includes("sc-ui"));
   assert.match(
     prd,

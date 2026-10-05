@@ -6,17 +6,17 @@
       "code-reviewer": "inherit",
       "architect": "inherit",
       "brain": "inherit",
-      "build-fixer": "sonnet",
-      "doc-updater": "sonnet",
-      "e2e-runner": "sonnet"
+      "build-fixer": "inherit",
+      "doc-updater": "inherit",
+      "e2e-runner": "inherit"
     },
     "codex": {
       "code-reviewer": "inherit",
       "architect": "inherit",
       "brain": "inherit",
-      "build-fixer": "gpt-5.6-terra",
-      "doc-updater": "gpt-5.6-terra",
-      "e2e-runner": "gpt-5.6-terra"
+      "build-fixer": "inherit",
+      "doc-updater": "inherit",
+      "e2e-runner": "inherit"
     }
   }
 }

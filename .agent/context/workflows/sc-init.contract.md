@@ -9,3 +9,5 @@ exposed, otherwise `unknown`. Reload only changed framework files and summarize
 the delta. Then /sc-status.
 
 Exception: explicit `/sc-init setup` reads SETUP.md, asks missing scope, installs via setup.mjs, then doctor. Project core precedes global cache. Preserve config and authorization.
+
+Human input/approval: .agent/context/checkpoint.contract.md

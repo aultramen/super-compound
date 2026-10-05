@@ -11,10 +11,10 @@ Read the goal issue or FSD goal completely, then only context needed for the nex
 - named files, tests, interfaces, design-system artifacts, and domain notes;
 - `.scratch/<feature>/issues/<NN>-<slug>.md` and each `Blocked by` issue;
 - nearby code implementing similar behavior;
-- project README, package metadata, nearest agent instructions, `SUPER-COMPOUND.md`, and `.agent/rules/super-compound.md`;
+- relevant README sections and package metadata; reuse resident nearest agent instructions, `SUPER-COMPOUND.md`, and applicable host rules. Reload only when unavailable, changed, conflicting, or being edited;
 - existing `docs/STATE.md`, `docs/progress.md`, or task ledger when present.
 
-Search symbols, paths, tests, and nearby implementations before creating or declaring anything missing. Expand queries, inspect likely directories, and confirm naming conventions.
+Before expanding discovery, name the missing fact; retrieve the section or symbol that answers it. Search symbols, paths, tests, and nearby implementations before creating or declaring anything missing. Expand only to resolve an outstanding fact; stop once authority, affected boundaries, and proving checks suffice.
 
 ## Stop Conditions
 

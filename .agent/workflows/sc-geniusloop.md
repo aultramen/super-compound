@@ -6,6 +6,8 @@ description: "Generate and filter proactive improvement ideas when goal queues a
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this when the user invokes `/sc-geniusloop [scope]`, or when `/sc-status` finds no ready goal issues and no active handoff, blocker, or failing verification that should be handled first.
 

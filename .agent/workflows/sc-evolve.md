@@ -6,6 +6,8 @@ description: "Cluster high-confidence learnings into draft framework proposals f
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this when `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, or `docs/solutions/` accumulate repeated high-confidence entries worth promoting into framework guidance.
 

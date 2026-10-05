@@ -1,0 +1,145 @@
+{
+  "schema": "context_efficiency_evidence_v1",
+  "baseline": {
+    "head": "50650d89e3724dbbae05ac205ce30d1ab48b7c17",
+    "digest": "d1f3f025b6a034d31f459d11142bd5f2ee04647c097928f2d22ea9edb8eef026",
+    "files": 612,
+    "archive": ".scratch/context-efficiency/baseline.zip"
+  },
+  "hotspots": {
+    "preflight": {
+      "potentialBeforeTokens": 16142,
+      "paths": [
+        "README.md",
+        "AGENTS.md",
+        "SUPER-COMPOUND.md",
+        ".agent/rules/super-compound.md",
+        ".agent/rules/quality-gates.md"
+      ]
+    },
+    "execution-skills": {
+      "potentialBeforeTokens": 4700,
+      "paths": [
+        ".agent/skills/agentic-delivery/SKILL.md",
+        ".agent/skills/context-engineering/SKILL.md",
+        ".agent/skills/executing-plans/SKILL.md",
+        ".agent/skills/test-driven-development/SKILL.md",
+        ".agent/skills/integration-checking/SKILL.md",
+        ".agent/skills/verification-before-completion/SKILL.md"
+      ]
+    },
+    "checkpoint-policy": {
+      "potentialBeforeTokens": 3138,
+      "paths": [
+        ".agent/context/checkpoint.contract.md",
+        ".agent/skills/agentic-delivery/references/workflow-integration.md"
+      ]
+    },
+    "work-entry": {
+      "potentialBeforeTokens": 816,
+      "paths": [
+        ".agent/context/workflows/sc-work.contract.md",
+        ".agent/context/skills/sc-work.contract.md"
+      ]
+    }
+  },
+  "hotspotClaim": "potential source loads, not observed activation",
+  "pilots": [
+    {
+      "name": "pilot-sol",
+      "model": "gpt-6.1-sol",
+      "fixture": "review",
+      "realWork": false,
+      "fixtureAccess": false,
+      "reason": "CLI execution policy rejected read commands before execution",
+      "usage": {
+        "inputTokens": 94339,
+        "outputTokens": 316,
+        "reasoningTokens": 15,
+        "cacheReadTokens": 79616,
+        "cacheCreationTokens": 0,
+        "totalTokens": 94655,
+        "measurement": "MEASURED"
+      },
+      "tokenSemantics": "input_includes_cache_output_includes_reasoning"
+    },
+    {
+      "name": "pilot-sol-rtk",
+      "model": "gpt-6.1-sol",
+      "fixture": "review",
+      "realWork": false,
+      "fixtureAccess": false,
+      "reason": "CLI execution policy rejected read commands before execution",
+      "usage": {
+        "inputTokens": 41016,
+        "outputTokens": 155,
+        "reasoningTokens": 11,
+        "cacheReadTokens": 32768,
+        "cacheCreationTokens": 0,
+        "totalTokens": 41171,
+        "measurement": "MEASURED"
+      },
+      "tokenSemantics": "input_includes_cache_output_includes_reasoning"
+    }
+  ],
+  "runtimeGate": {
+    "schema": "context_pairs_v1",
+    "groups": [
+      {
+        "model": "gpt-6.1-sol",
+        "fixture": "consultation",
+        "pairs": 0,
+        "medianReduction": null,
+        "mad": null,
+        "status": "UNPROVEN"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "fixture": "light-edit",
+        "pairs": 0,
+        "medianReduction": null,
+        "mad": null,
+        "status": "UNPROVEN"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "fixture": "fsd-execution",
+        "pairs": 0,
+        "medianReduction": null,
+        "mad": null,
+        "status": "UNPROVEN"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "fixture": "debugging",
+        "pairs": 0,
+        "medianReduction": null,
+        "mad": null,
+        "status": "UNPROVEN"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "fixture": "review",
+        "pairs": 0,
+        "medianReduction": null,
+        "mad": null,
+        "status": "UNPROVEN"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "fixture": "multi-goal-resume",
+        "pairs": 0,
+        "medianReduction": null,
+        "mad": null,
+        "status": "UNPROVEN"
+      }
+    ],
+    "status": "UNPROVEN"
+  },
+  "astra": "not tested: shared host fixture-access precondition failed",
+  "hostInstructions": "unknown and reported separately",
+  "toolSchemas": "unknown and reported separately",
+  "cost": "unknown",
+  "totalUsageSavings": "unknown",
+  "durationSavings": "unknown"
+}

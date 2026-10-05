@@ -134,7 +134,7 @@ const specs = {
       '---\nname: brainstorming\ndescription: "Use when creative product, feature, UI, or behavior work needs intent, requirements, constraints, or design explored before implementation."\n---',
     references: {
       "local-context.md": "4f4e589b57040e890219e10f0fb79121d84fefd8d5d4798ea08e4e7de63af545",
-      "questions-and-options.md": "635179013449f99a421f89628f8a426f8435aab7244695fbae9cec8f9aebb437",
+      "questions-and-options.md": "ed3062daef7141ec3cd9f298e4ce2ebaf354f7112ddb182a2eb0f767a08caf10",
       "capture.md": "c716169a240bb4b1eddb153e38956398b3a4c4813c899a5163e4f19a9a6c033e",
       "ui-and-visual.md": "5ec57d9d3ffd0a22f7a9e0bd4c7bbaee7a1fd07e65a11bcd760b4f2ba0a68531",
       "red-flags-and-next.md": "23d7b575d662f5daaddc493460bfa52449d0c29cb8608eafec339de53ad9222a",

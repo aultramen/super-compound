@@ -6,6 +6,8 @@ description: "Initialize or refresh project context by scanning the codebase, co
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 Inspect project context, then route the first task; use setup mode only for installation.
 
 

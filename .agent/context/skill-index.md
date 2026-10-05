@@ -1,10 +1,10 @@
 # Super Compound Skill Index
 
-This is the compact skill contract. Each `SKILL.md` keeps YAML `name` and `description`; use this index for routing, then load the full skill only when executing or reviewing its detailed procedure.
+This is the compact skill contract. Each `SKILL.md` keeps YAML `name` and `description`; use this index for routing and the matching contract for covered mandatory checks.
 
 ## Full-Load Triggers
 
-- The active workflow explicitly says to follow the skill procedure.
+- A named required detail is not covered by the active contract, or the user explicitly requests the complete procedure.
 - The task is security/privacy/compliance sensitive.
 - The agent is editing that skill.
 - A compact contract conflicts with the full skill or repo rules.
@@ -24,6 +24,7 @@ any full skill:
 | Skill | Use for |
 |---|---|
 | `agentic-delivery` | BRD -> PRD -> FSD -> GOAL authority, UI contract readiness, traceability, OPEN stops |
+| `hints` | focused consultation and next-step advice; read-only by default |
 | `brainstorming` | fuzzy ideas, options, constraints |
 | `prd-generator` | PRD from approved BRD |
 | `writing-plans` | FSD and technical plan |
@@ -51,4 +52,4 @@ any full skill:
 
 ## Contract Rule
 
-Compact contracts are routing aids, not replacement authority. When a task reaches implementation, audit, verification, or skill editing, read the full relevant `SKILL.md`.
+Compact contracts carry mandatory checks with links to their authority; they do not change that authority. Implementation, audit, or verification alone does not trigger full-load. Use covered checks directly; load the relevant procedure only for an uncovered detail, material risk, a conflict, or editing that skill. If a contract lacks a required check or authority reference, consult the source and repair the omission rather than silently skipping it. Host/user instructions requiring a skill still take precedence.

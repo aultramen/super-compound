@@ -2,80 +2,60 @@
 
 ## Summary
 
-Use this contract for human input, blocker reporting, and authorized handoffs.
-It is the shared presentation/resumption contract, not a new approval authority.
-Risk and stage policy remain in `skills/agentic-delivery/references/workflow-integration.md`.
+Load only when human input, a blocker, response reconciliation or an authorized
+handoff occurs. This is presentation/resumption guidance, not approval authority.
+Risk and stage authority: `skills/agentic-delivery/references/workflow-integration.md`.
 
 ## Before interrupting
 
-- Inspect existing authorization and acceptance: authoritative target, scope,
-  revision, operation, material risk and provenance. Evidence/index/pointer/docs
-  updates and workflow transitions do not reopen unchanged approved decisions.
-- Preserve configured BRD, PRD, FSD and execution checkpoints separately. For
-  reapproval, name the concrete delta, why prior approval excludes it, and what
-  remains approved; ask only for that delta.
-- Split a mixed blocker into existing document/STATE needs: human decision or
-  acceptance; action authorization; agent research; agent-runnable test;
-  environment-only manual test; external access/action. Name owner, affected
-  goal, evidence and next action for each. Approval resolves only its named
-  decision/action; missing technical proof stays unresolved.
-- Research facts and run available checks first. `OPEN`, `DRAFT`, `human baseline`
-  or `HIGH_INTERACTION` alone never creates a human gate. Preserve mandatory
-  security, accessibility, contract and integrity checks; preference cannot waive them.
-- Batch independent inputs with the same owner/scope into one coordinated
-  checkpoint; keep stage/authority boundaries separate. Ask one answerable
-  question about that package, not a chain depending on unseen prior answers.
+Research discoverable facts and run available checks first. Check existing
+authorization against operation, target, scope, revision, material risk and
+provenance; unchanged semantic approval persists through evidence-only updates.
+Preserve BRD, PRD, FSD and execution gates separately. Reapproval names only the
+concrete delta and retained approvals. OPEN/DRAFT/HIGH_INTERACTION alone adds no gate.
+Split mixed blockers into human decision/acceptance, action authorization,
+agent research/test, environment-only testing and external access/action under
+existing artifacts/STATE, each with owner, affected scope, evidence and next action.
+Approval resolves its named decision/action, never missing technical proof.
+Preserve mandatory security, accessibility, contract and integrity checks.
 
 ## Answerable package
 
-Render in the user's language; these Indonesian labels illustrate the format.
-Lead with the concrete need. For a simple decision, use the six fields below.
-Keep IDs, digests and raw gate output in supporting detail. No empty placeholders.
+For a simple need use a short item: stable Q<n> ID mapped to the existing need,
+concrete question and why human input is required, recommendation with evidence
+and consequence, review material, explicit approval target/revision/stage when
+applicable, and the automatic resume step with remaining blockers. No empty fields.
+Show all ready active-work items together, grouped by owner/scope/stage; show
+dependent items as pending with prerequisite ID, owner and next action. No arbitrary cap.
+Use full absolute clickable review paths; verify files/sections exist. Keep stored
+refs repository-relative. A host dialog is an input aid; present the complete
+ready list and pending dependencies first when its limits cannot fit that list.
+
+Include both reply examples, localized and using an actual listed ID:
 
 ```text
-PERLU INPUT ANDA — [concrete title]
-Yang masih diperlukan:
-[specific unresolved need and affected deliverable, not just OPEN-* or DRAFT]
-Mengapa perlu Anda:
-[why agent research/automation cannot resolve it; exact policy link/quote if required]
-Rekomendasi:
-[suggested choice, short reason and principal trade-off]
-Bahan review:
-[direct file/section/preview links and what to inspect; representative example]
-Pertanyaan:
-[one self-contained question, explicit acceptance/action boundary]
-Setelah jawaban Anda:
-[concrete automatic resumption and blockers that remain]
+Saya setuju semua rekomendasi pada daftar di atas.
+Saya setuju semua rekomendasi kecuali Q1: [jawaban khusus untuk Q1].
 ```
 
-Add completed evidence, retained approvals, owner, 2–3 answer choices, and work
-while waiting only when they help assess this need. Complex packages retain all
-relevant scope, authority and evidence in supporting detail; this shorter display
-does not change parser fields, approval boundaries, or mandatory review material.
+An exception without a replacement stays open. Partial answers are welcome;
+approval covers displayed targets/revisions/stages only, never pending or future work.
+Silence, elapsed time, preselection or ambiguous agreement never grants approval.
 
-Product review names the experience assessed, shows an example result, links a
-walkthrough, and asks specific acceptance. Distinguish prototype experience,
-qualification/real-provider first slice, and release/UAT; none substitutes for another.
-Manual testing supplies setup, short steps, expected result, and reporting format
-(`scenario; environment; actual result; error/evidence`), plus why available
-automation cannot exercise that environment. Agent-runnable checks stay with agent.
-Access requests name an approved local secret destination; never paste secrets in chat.
+For complex/mixed needs, product acceptance, manual tests, credentials or missing
+review material, load [detailed package](../skills/checkpoint-protocol/references/answerable-package.md#answerable-package).
+It supplies per-need presentation detail without changing these boundaries.
 
 ## Response and continuation
 
-Silence, timeout, preselection and ambiguous "oke" are not blanket approval.
-An unambiguous answer to one explicitly scoped question resolves that need only.
-Reconcile the response with existing authority and evidence, retain partial progress,
-and report newly resolved/remaining needs, each owner/next action, blocked scope and
-scope that can run. Persist through the existing STATE writer, not a new ledger.
-Resume at the last position; reuse valid evidence and do not repeat completed review
-or approval without an invalidating delta.
+On replies load [resolution](../skills/checkpoint-protocol/references/resolution.md)
+for bulk agreement, exceptions, partial answers, unknown IDs and corrections.
+Retain resolved evidence and approvals; persist through the existing STATE writer.
+Resume at the last position, skip verified goals and reuse valid fingerprinted
+evidence. Continue independent authorized work while waiting.
 
-Within active authorized work, perform owner handoffs internally and return to
-the caller after evidence reconciliation. Announce receiving route and scope;
-load its contract and check its authority before acting. `/sc-ui`, review, research
-and status stay read-only; PRD/FSD/pointer writes use their owning routes, product
-code uses authorized `/sc-work`. Standalone read-only requests return findings;
-they do not authorize remediation. Never end with only "run /sc-X" when that
-step is already authorized. Continue independent ready work while waiting;
-never offer "continue anyway" across a mandatory gate.
+Within active authorized work, announce receiving route/scope, load its contract,
+check authority and hand off internally. UI/review/research/status stay read-only;
+artifact writes use their owner and product code uses authorized sc-work.
+A standalone read-only request returns findings without remediation authority.
+Never require another command merely to transfer already-authorized work.

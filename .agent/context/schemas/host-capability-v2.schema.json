@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:host-capability-v2",
+  "title": "Loop Runtime Host Capability Attestation v2",
+  "type": "object",
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "stableIdSet": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/stableId" },
+      "uniqueItems": true
+    },
+    "capability": {
+      "enum": [
+        "AUTHORITATIVE_READBACK",
+        "COMPENSATION",
+        "COST_METERING",
+        "CREDENTIAL_SCOPE_ENFORCEMENT",
+        "DURABLE_AUDIT",
+        "DURABLE_INTENT",
+        "DURABLE_LOCAL_STATE",
+        "FINITE_NO_PROGRESS_CAP",
+        "FINITE_RUNTIME_CAP",
+        "HARD_WRITE_INTERCEPTION",
+        "IDEMPOTENCY",
+        "ISOLATED_WORKTREE",
+        "LEASE_RECOVERY",
+        "NETWORK_EGRESS_ENFORCEMENT",
+        "PERMISSION_BYPASS_PREVENTION",
+        "PROCESS_ISOLATION",
+        "TOKEN_METERING"
+      ]
+    },
+    "credentialScopes": {
+      "type": "object",
+      "properties": {
+        "read": { "$ref": "#/$defs/stableIdSet" },
+        "write": { "$ref": "#/$defs/stableIdSet" }
+      },
+      "required": ["read", "write"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "host_capability_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "attestation_id": { "$ref": "#/$defs/stableId" },
+    "host_ref": { "$ref": "#/$defs/stableId" },
+    "run_id": { "$ref": "#/$defs/stableId" },
+    "run_head_digest": { "$ref": "#/$defs/digest" },
+    "authority_digest": { "$ref": "#/$defs/digest" },
+    "verifier_digest": { "$ref": "#/$defs/digest" },
+    "project_config_digest": { "$ref": "#/$defs/digest" },
+    "operation_inventory_digest": { "$ref": "#/$defs/digest" },
+    "policy_digest": { "$ref": "#/$defs/digest" },
+    "approval_digest": { "$ref": "#/$defs/digest" },
+    "capabilities": {
+      "type": "array",
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/capability" },
+      "uniqueItems": true
+    },
+    "credential_scopes": { "$ref": "#/$defs/credentialScopes" },
+    "egress_ids": { "$ref": "#/$defs/stableIdSet" },
+    "isolation": {
+      "enum": ["NONE", "WORKTREE", "PROCESS", "NETWORK", "CREDENTIAL", "HARDENED"]
+    },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "evidence_digest": { "$ref": "#/$defs/digest" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "attestation_id",
+    "host_ref",
+    "run_id",
+    "run_head_digest",
+    "authority_digest",
+    "verifier_digest",
+    "project_config_digest",
+    "operation_inventory_digest",
+    "policy_digest",
+    "approval_digest",
+    "capabilities",
+    "credential_scopes",
+    "egress_ids",
+    "isolation",
+    "issued_at",
+    "expires_at",
+    "evidence_digest"
+  ],
+  "additionalProperties": false
+}
