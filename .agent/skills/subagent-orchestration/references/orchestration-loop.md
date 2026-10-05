@@ -5,8 +5,9 @@
 An attempt is one hypothesis plus its proving check; a fix round is a batch of
 review findings addressed and rechecked. After a failed attempt, record the
 failure and reassess the hypothesis before retrying. Repeated failure with no
-new evidence or progress triggers a fresh worker or a more capable available
-model. A count of two, three, or five attempts is an escalation signal, never
+new evidence or progress triggers a revised strategy or an authorized fresh
+worker. Recommend effort changes for complex diagnosis; preserve explicit user
+settings and the session model. A count of two, three, or five attempts is an escalation signal, never
 an automatic shutdown. This rule governs orchestration, debugging, and review.
 
 Stop the affected goal only when authority/access is missing, a hard user/host
@@ -75,10 +76,11 @@ identical change proves the result preserves both intended edits. Preserve both
 sides, record the proof, and verify the integrated result. Semantic conflicts
 require investigation and an owner decision only when authority is ambiguous.
 
-## Model tiers
+## Session model and effort
 
-Declare per dispatch: `extraction` (mechanical application), `generation`
-(implementation/review), or `ceiling` (inherited session model). Select from
-`.agent/context/agent-models.json`; `inherit` means the session model. Escalate
-when evidence warrants it and a more capable host model is available. Do not
-assume the host supports a model or fabricate a successful escalation.
+Use `.agent/context/agent-models.json`; bundled roles inherit the session model.
+Preserve explicit installation overrides. Recommend low effort for mechanical
+tasks, medium for normal implementation and high for complex reasoning or
+stalled diagnosis. User settings win; unsupported controls are advice only.
+No automatic Sol/Astra switching. See `.agent/context/model-guidance.md` for
+model-specific controls and optional API caching/tool-calling guidance.

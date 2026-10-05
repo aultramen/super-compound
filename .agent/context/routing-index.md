@@ -10,6 +10,10 @@ already resident, changed, conflicts, or is being edited. Escalate from a route
 contract to the matching full workflow only for a named detail the contract does
 not cover. A full workflow never reloads its compact contract.
 
+For clear consultation (which step, how to approach an obstacle, phase/context
+advice), select `sc-hints`. Clear implementation, debugging, review and resume
+requests select their owning route directly; agreement with advice adds no authority.
+
 ## Smart-Zone Invariants
 
 - BRD -> PRD -> FSD -> GOAL remains the delivery path.
@@ -23,6 +27,7 @@ not cover. A full workflow never reloads its compact contract.
 - Chat returns follow `token-budget-gates.md`; full evidence stays in artifacts.
 - Durable file outputs follow `.agent/context/output-style.md`: summary first, relevant HLD, preserved evidence and parser fields.
 
-Shared policy: `.agent/skills/agentic-delivery/references/workflow-integration.md`.
+.agent/context/policy-loading.md routes conditional details by event.
+Shared authority (read the applicable section only): `.agent/skills/agentic-delivery/references/workflow-integration.md`.
 Apply its risk, persistent authorization, scoped recovery, and evidence identity
 rules consistently in compact and full routes.

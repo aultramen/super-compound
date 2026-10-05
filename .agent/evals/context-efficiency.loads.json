@@ -1,0 +1,216 @@
+{
+  "schema": "context_load_manifest_v1",
+  "evidenceClass": "modeled-static-cumulative",
+  "scenarios": [
+    {
+      "name": "consultation",
+      "route": "sc-hints",
+      "tier": "light",
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-hints.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/context/workflows/sc-hints.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework"
+        }
+      ]
+    },
+    {
+      "name": "light-edit",
+      "route": "sc-work",
+      "tier": "light",
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true
+        },
+        {
+          "path": ".agent/context/skills/sc-work.contract.md",
+          "reason": "covered execution checks",
+          "phase": "execution",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework"
+        }
+      ]
+    },
+    {
+      "name": "fsd-execution",
+      "route": "sc-work",
+      "tier": "full",
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true
+        },
+        {
+          "path": ".agent/context/skills/sc-work.contract.md",
+          "reason": "covered execution checks",
+          "phase": "execution",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework"
+        }
+      ]
+    },
+    {
+      "name": "debugging",
+      "route": "sc-debug",
+      "tier": "light",
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-debug.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/context/workflows/sc-debug.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework"
+        }
+      ]
+    },
+    {
+      "name": "review",
+      "route": "sc-review",
+      "tier": "light",
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-review.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/context/workflows/sc-review.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework"
+        }
+      ]
+    },
+    {
+      "name": "multi-goal-resume",
+      "route": "sc-work",
+      "tier": "full",
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true
+        },
+        {
+          "path": ".agent/context/skills/sc-work.contract.md",
+          "reason": "covered execution checks",
+          "phase": "execution",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework"
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework"
+        }
+      ]
+    }
+  ]
+}

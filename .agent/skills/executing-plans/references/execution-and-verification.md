@@ -1,6 +1,7 @@
 # Execution and Verification
 
-Load for each ready goal.
+Apply to each ready goal; reuse unchanged procedure context. Load the sections
+needed to resolve an uncovered execution detail.
 
 ## Goal Loop
 
@@ -26,3 +27,8 @@ Capture unrelated improvements as follow-up notes instead of refactoring them no
 | Completion | Before final response/next goal | Relevant lint, typecheck, build, tests, manual checks, stale-reference scan |
 
 Use `integration-checking` after multi-component work and `verification-before-completion` before status claims. For release-bound, security-sensitive, dependency-heavy, or agent-surface work, run `/sc-audit` or the relevant audit skill.
+
+Select verification by acceptance and affected boundaries. Full suite runs when
+CI/acceptance mandates it or cross-component impact needs it. Preserve single-read
+SPEC/QUALITY review and reuse fingerprinted evidence; rerun after relevant change,
+integration, missing identity or nondeterminism per workflow-integration.md#evidence-identity.

@@ -15,8 +15,8 @@ Execute approved scope through focused edits, durable progress, and evidence. Se
 
 Use an approved FSD goal/pointer for full-tier work; a concrete user request with acceptance and verification suffices for light-tier work. Read the authority/workspace preflight for either tier; a discovered full-tier trigger returns to its owner.
 
-- Before editing, load [Authority and Workspace](references/authority-and-workspace.md) to resolve sources, blockers, repository state, and Git boundaries.
-- For each ready goal, load [Execution and Verification](references/execution-and-verification.md).
+- Before editing, apply covered authority/workspace checks from the active contract; load [Authority and Workspace](references/authority-and-workspace.md) only for an uncovered detail, conflict, material risk or editing this procedure.
+- For each ready goal, inspect its acceptance and mapped checks; reuse unchanged procedure context. Load [Execution and Verification](references/execution-and-verification.md) for a named uncovered execution detail.
 - Load [Parallel, Revision, and Handoff](references/parallel-revision-and-handoff.md) only when considering parallel agents, responding to failed verification, spanning sessions, or closing the plan.
 
 ## Authority Gate

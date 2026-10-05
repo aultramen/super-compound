@@ -1,11 +1,11 @@
 # Read-Depth Scaling
 
-Read depth follows the host context window actually available, not curiosity.
-Pick the column for the current window and stay at that depth.
+Read depth follows the missing fact and task risk. All windows use summary-first;
+a large window permits more relevant evidence, not automatic full-body loading.
 
 | Source | Small window (~200k) | Large window (>=1M) |
 | --- | --- | --- |
-| Subagent reports (`reportPath`) | Frontmatter/summary lines only; open one section only to adjudicate a finding | Full body permitted |
+| Subagent reports (`reportPath`) | Frontmatter/summary first; open a section to adjudicate a finding | Same; full body only for named unresolved facts |
 | Workflow routes | Contract files under `.agent/context/workflows/` only | Contract first; full workflow only for a named uncovered detail |
 | Agent definitions under `.agent/agents/` | Never read bodies the host auto-loads | Same; resident text is never reloaded |
 | BRD/PRD/FSD/ADR | Qualified refs plus the section under active edit | Section-on-demand still applies |
@@ -17,8 +17,12 @@ Pick the column for the current window and stay at that depth.
   the contract does not cover. Window size never overrides that order.
 - Never read agent definition bodies under `.agent/agents/` when the host auto-loads them;
   re-reading resident text buys nothing and spends budget.
-- At small windows, treat every full-body read as a spend decision: name the
+- At every window size, treat every expansion as a spend decision: name the
   single fact the read supplies before opening the file.
+- Bound discovery candidates and tool output; retrieve the chosen tool schema
+  only when the host supports lazy schemas. Stop after authority, affected
+  boundaries and proving checks are sufficient. Host schemas remain separate
+  measurement overhead when the framework cannot control them.
 
 ## Output Tier At Intake
 
