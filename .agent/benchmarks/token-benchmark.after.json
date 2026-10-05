@@ -10,7 +10,7 @@
     },
     "limitation": "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens."
   },
-  "generatedAt": "2026-10-05T08:22:27.797Z",
+  "generatedAt": "2026-10-05T08:28:39.709Z",
   "observedRuntimeTokens": "unknown",
   "hostInjectedSurfaceTokens": "unknown",
   "claimScope": {
@@ -287,7 +287,7 @@
         "afterTokens": 923,
         "reductionPercent": 97.1454,
         "maxAfterTokens": null,
-        "afterDigest": "3b5fbb35ec1c7c11eb519a2b9a8971be53d15f1e9a066bb090c9786c762c71b3",
+        "afterDigest": "73770ec7434c980086a080284bee0e5316de09ecd100b1ce283713e352e41856",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -681,7 +681,7 @@
         "afterTokens": 901,
         "reductionPercent": 92.1048,
         "maxAfterTokens": null,
-        "afterDigest": "6f8177043659695d5fa57648f5f4acc2a2148b6c5a8067a8852ee0d8def57882",
+        "afterDigest": "732e0da74c626153b9ed79e5630fc283b313e690aab21a064b768f33d99d9ea0",
         "observedRuntimeTokens": null,
         "pass": true
       },
@@ -1274,16 +1274,16 @@
     }
   },
   "evidenceDigests": {
-    "workflowInvariants": "a8817890751fd041e84734a8762213f65dc2da6f75e65822954e0fb78a1f10ae",
+    "workflowInvariants": "e29f0af3aa9b37b726f317fbd285030485867e7a1d6fca6329c528c20d489358",
     "outputBudgets": "b64be5c5d037c1b4b3920016734de66822949bc90d2b5824f9644e367547a04b",
-    "workflowMatrix": "0a290b666ce7a7aa247dc0f8889d65c534301d656635f977a6050c19e12eb6fb"
+    "workflowMatrix": "67fad44b4cd4070f9057b2dd14da4c6f89ae8fe83b59a7e48d24eac2b69055b5"
   },
   "digests": {
     "baseline": "6105f25f49cba281efc529f37912a9e1ff5952220534fea9d88156808d266e4a",
     "suiteDefinition": "5ef55c154e08a8deec2a49e288af76d1393fb643ced0ed4ec81185ef3ae7f8b1",
-    "workflowInvariants": "a8817890751fd041e84734a8762213f65dc2da6f75e65822954e0fb78a1f10ae",
+    "workflowInvariants": "e29f0af3aa9b37b726f317fbd285030485867e7a1d6fca6329c528c20d489358",
     "outputBudgets": "b64be5c5d037c1b4b3920016734de66822949bc90d2b5824f9644e367547a04b",
-    "workflowMatrix": "0a290b666ce7a7aa247dc0f8889d65c534301d656635f977a6050c19e12eb6fb"
+    "workflowMatrix": "67fad44b4cd4070f9057b2dd14da4c6f89ae8fe83b59a7e48d24eac2b69055b5"
   },
   "runtimeEvidence": {
     "status": "unknown",
@@ -1300,7 +1300,7 @@
   "deterministic": true,
   "runDigests": [
     {
-      "digest": "40b51860ba1761afad1a8c63c365f3e61cd0a171dd1ee03a8d21e3df09a85887",
+      "digest": "26d92171b938b96cac3f62580a93465fc140a1aebc53f472c0748d04677df69f",
       "count": 3
     }
   ],
@@ -1313,7 +1313,7 @@
         "beforeTokens": 516436,
         "afterTokens": 3204,
         "pass": true,
-        "afterDigest": "3cdd7b980a5abbbdf22df1b9ac1a7aeee0e1a1d719c8a1d79b985db4c76d2323",
+        "afterDigest": "ac50551500c3eb2ed2e1c4ce857bcc3acc4903024c439ee9cff3672dfff1300a",
         "reductionPercent": 99.3796
       },
       {
@@ -1410,7 +1410,7 @@
         "beforeTokens": 32334,
         "afterTokens": 923,
         "pass": true,
-        "afterDigest": "3b5fbb35ec1c7c11eb519a2b9a8971be53d15f1e9a066bb090c9786c762c71b3",
+        "afterDigest": "73770ec7434c980086a080284bee0e5316de09ecd100b1ce283713e352e41856",
         "reductionPercent": 97.1454
       },
       {
@@ -1464,7 +1464,7 @@
         "beforeTokens": 11412,
         "afterTokens": 901,
         "pass": true,
-        "afterDigest": "6f8177043659695d5fa57648f5f4acc2a2148b6c5a8067a8852ee0d8def57882",
+        "afterDigest": "732e0da74c626153b9ed79e5630fc283b313e690aab21a064b768f33d99d9ea0",
         "reductionPercent": 92.1048
       },
       {
