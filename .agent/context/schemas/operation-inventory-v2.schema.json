@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:operation-inventory-v2",
+  "title": "Loop Runtime Operation Inventory v2",
+  "type": "object",
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "stableIdSet": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/stableId" },
+      "uniqueItems": true
+    },
+    "positiveIntegerOrNull": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "backgroundAggregatePolicy": {
+      "type": "object",
+      "properties": {
+        "max_workers": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_reserved_tokens": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_reserved_runtime_ms": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_remote_calls": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "max_reviewers": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 }
+      },
+      "required": [
+        "max_workers",
+        "max_reserved_tokens",
+        "max_reserved_runtime_ms",
+        "max_remote_calls",
+        "max_reviewers"
+      ],
+      "additionalProperties": false
+    },
+    "capability": {
+      "enum": [
+        "AUTHORITATIVE_READBACK",
+        "COMPENSATION",
+        "COST_METERING",
+        "CREDENTIAL_SCOPE_ENFORCEMENT",
+        "DURABLE_AUDIT",
+        "DURABLE_INTENT",
+        "DURABLE_LOCAL_STATE",
+        "FINITE_NO_PROGRESS_CAP",
+        "FINITE_RUNTIME_CAP",
+        "HARD_WRITE_INTERCEPTION",
+        "IDEMPOTENCY",
+        "ISOLATED_WORKTREE",
+        "LEASE_RECOVERY",
+        "NETWORK_EGRESS_ENFORCEMENT",
+        "PERMISSION_BYPASS_PREVENTION",
+        "PROCESS_ISOLATION",
+        "TOKEN_METERING"
+      ]
+    },
+    "credentialScopes": {
+      "type": "object",
+      "properties": {
+        "read": { "$ref": "#/$defs/stableIdSet" },
+        "write": { "$ref": "#/$defs/stableIdSet" }
+      },
+      "required": ["read", "write"],
+      "additionalProperties": false
+    },
+    "safetyDeclaration": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "strategy_ref": { "$ref": "#/$defs/stableId" }
+      },
+      "required": ["required", "strategy_ref"],
+      "additionalProperties": false
+    },
+    "operation": {
+      "type": "object",
+      "properties": {
+        "operation_id": { "$ref": "#/$defs/stableId" },
+        "target_ref": { "$ref": "#/$defs/stableId" },
+        "write_class": { "enum": ["implementation_write", "external_write"] },
+        "credential_scopes": { "$ref": "#/$defs/credentialScopes" },
+        "egress_ids": { "$ref": "#/$defs/stableIdSet" },
+        "idempotency": {
+          "type": "object",
+          "properties": {
+            "required": { "type": "boolean" },
+            "key_scope": { "enum": ["RUN_OPERATION", "RUN_ACTION"] }
+          },
+          "required": ["required", "key_scope"],
+          "additionalProperties": false
+        },
+        "authoritative_readback": { "$ref": "#/$defs/safetyDeclaration" },
+        "compensation": { "$ref": "#/$defs/safetyDeclaration" },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "expires_at": { "type": "string", "format": "date-time" },
+        "audit_sink_ref": { "$ref": "#/$defs/stableId" },
+        "owner_ref": { "$ref": "#/$defs/stableId" },
+        "risk": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "human_gate": { "const": "REQUIRED" },
+        "required_capabilities": {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "$ref": "#/$defs/capability" },
+          "uniqueItems": true
+        },
+        "required_isolation": {
+          "enum": ["NONE", "WORKTREE", "PROCESS", "NETWORK", "CREDENTIAL", "HARDENED"]
+        }
+      },
+      "required": [
+        "operation_id",
+        "target_ref",
+        "write_class",
+        "credential_scopes",
+        "egress_ids",
+        "idempotency",
+        "authoritative_readback",
+        "compensation",
+        "timeout_ms",
+        "expires_at",
+        "audit_sink_ref",
+        "owner_ref",
+        "risk",
+        "human_gate",
+        "required_capabilities",
+        "required_isolation"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "operation_inventory_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "inventory_id": { "$ref": "#/$defs/stableId" },
+    "project_config_digest": { "$ref": "#/$defs/digest" },
+    "background_aggregate_policy": { "$ref": "#/$defs/backgroundAggregatePolicy" },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "operations": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/operation" }
+    }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "inventory_id",
+    "project_config_digest",
+    "issued_at",
+    "expires_at",
+    "operations"
+  ],
+  "additionalProperties": false
+}

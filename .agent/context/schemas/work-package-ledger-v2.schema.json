@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://super-compound.local/schemas/work-package-ledger-v2.schema.json",
+  "title": "Super Compound Work Package Ledger v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "runId", "ledgerVersion", "goals"],
+  "properties": {
+    "schema": { "const": "work_package_ledger_v2" },
+    "runId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$" },
+    "ledgerVersion": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "goals": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/goal" }
+    }
+  },
+  "$defs": {
+    "repositoryPath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*[\\\\:\\u0000-\\u001F\\u007F])[^/]+(?:/[^/]+)*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "digestBundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authorityDigest", "evalDigest", "reviewerDigest"],
+      "properties": {
+        "authorityDigest": { "$ref": "#/$defs/digest" },
+        "evalDigest": { "$ref": "#/$defs/digest" },
+        "reviewerDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorityDigest",
+        "evalDigest",
+        "reviewerDigest",
+        "evidenceRefs",
+        "evidenceArtifacts"
+      ],
+      "properties": {
+        "authorityDigest": { "$ref": "#/$defs/digest" },
+        "evalDigest": { "$ref": "#/$defs/digest" },
+        "reviewerDigest": { "$ref": "#/$defs/digest" },
+        "evidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/repositoryPath" }
+        },
+        "evidenceArtifacts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": { "$ref": "#/$defs/evidenceArtifact" }
+        }
+      }
+    },
+    "evidenceArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repositoryPath" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "statusReason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "detail"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,63}$" },
+        "detail": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "evidenceRef"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,63}$" },
+        "evidenceRef": { "$ref": "#/$defs/repositoryPath" }
+      }
+    },
+    "goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "briefPath",
+        "reportPath",
+        "pathsPath",
+        "reviewPackagePath",
+        "scopeDigest",
+        "baselineDirty",
+        "verification"
+      ],
+      "properties": {
+        "status": {
+          "enum": ["ready", "in-progress", "implemented", "verified", "blocked", "failed"]
+        },
+        "briefPath": { "$ref": "#/$defs/repositoryPath" },
+        "reportPath": { "$ref": "#/$defs/repositoryPath" },
+        "pathsPath": { "$ref": "#/$defs/repositoryPath" },
+        "reviewPackagePath": { "$ref": "#/$defs/repositoryPath" },
+        "scopeDigest": { "$ref": "#/$defs/digest" },
+        "baselineDirty": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/repositoryPath" },
+          "additionalProperties": { "type": "string", "maxLength": 256 }
+        },
+        "verification": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "expectedEvidence": { "$ref": "#/$defs/digestBundle" },
+        "evidence": { "$ref": "#/$defs/evidence" },
+        "requiresFreshVerification": { "const": true },
+        "statusReason": { "$ref": "#/$defs/statusReason" },
+        "recovery": { "$ref": "#/$defs/recovery" }
+      },
+      "allOf": [
+        {
+          "not": {
+            "required": ["requiresFreshVerification"],
+            "properties": {
+              "status": { "not": { "const": "implemented" } }
+            }
+          }
+        },
+        {
+          "not": {
+            "required": ["requiresFreshVerification", "evidence"]
+          }
+        }
+      ],
+      "anyOf": [
+        {
+          "properties": {
+            "status": { "enum": ["ready", "in-progress", "blocked", "failed"] }
+          }
+        },
+        {
+          "required": ["evidence"],
+          "properties": {
+            "status": { "enum": ["implemented", "verified"] }
+          }
+        },
+        {
+          "required": ["requiresFreshVerification"],
+          "properties": {
+            "status": { "const": "implemented" }
+          }
+        }
+      ]
+    }
+  }
+}

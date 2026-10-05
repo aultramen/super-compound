@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:project-config-v2",
+  "title": "Loop Runtime Project Config v2",
+  "type": "object",
+  "$defs": {
+    "positiveIntegerOrNull": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "runtimeMinutesOrNull": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 150119987579
+    },
+    "stringSet": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+      },
+      "uniqueItems": true
+    },
+    "positiveDays": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3650
+    },
+    "backgroundAggregatePolicy": {
+      "type": "object",
+      "properties": {
+        "max_workers": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_reserved_tokens": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_reserved_runtime_ms": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_remote_calls": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "max_reviewers": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 }
+      },
+      "required": [
+        "max_workers",
+        "max_reserved_tokens",
+        "max_reserved_runtime_ms",
+        "max_remote_calls",
+        "max_reviewers"
+      ],
+      "additionalProperties": false
+    },
+    "pathPrefixSet": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 192,
+        "pattern": "^(?:[A-Za-z0-9._-]+/)+$"
+      },
+      "uniqueItems": true
+    },
+    "pathSet": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "pattern": "^[A-Za-z0-9._/-]+$"
+      },
+      "uniqueItems": true
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "max_iterations": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_runtime_minutes": { "$ref": "#/$defs/runtimeMinutesOrNull" },
+        "max_no_progress_iterations": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_tokens": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_cost_micro": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "approval_ttl_minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 525600
+        },
+        "allowlisted_operations": { "$ref": "#/$defs/stringSet" },
+        "credential_scopes": { "$ref": "#/$defs/stringSet" },
+        "required_gates": { "$ref": "#/$defs/stringSet" },
+        "risk": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "isolation": {
+          "enum": ["NONE", "WORKTREE", "PROCESS", "NETWORK", "CREDENTIAL", "HARDENED"]
+        },
+        "expires_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "max_iterations",
+        "max_runtime_minutes",
+        "max_no_progress_iterations",
+        "max_tokens",
+        "max_cost_micro",
+        "approval_ttl_minutes",
+        "allowlisted_operations",
+        "credential_scopes",
+        "required_gates",
+        "risk",
+        "isolation",
+        "expires_at"
+      ],
+      "additionalProperties": false
+    },
+    "retention": {
+      "type": "object",
+      "properties": {
+        "run_metadata_days": { "$ref": "#/$defs/positiveDays" },
+        "audit_evidence_days": { "$ref": "#/$defs/positiveDays" },
+        "legal_hold_behavior": { "const": "PRESERVE" }
+      },
+      "required": ["run_metadata_days", "audit_evidence_days", "legal_hold_behavior"],
+      "additionalProperties": false
+    },
+    "telemetry": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "persistence_required": { "type": "boolean" },
+        "redaction_revision": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+        },
+        "retention_days": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 3650
+        },
+        "max_file_bytes": {
+          "type": ["integer", "null"],
+          "minimum": 1024,
+          "maximum": 1073741824
+        },
+        "purpose": {
+          "const": "LOOP_RUNTIME_OPERATIONAL_ASSURANCE"
+        },
+        "classification": {
+          "const": "INTERNAL_OPERATIONAL_NO_RAW_CONTENT"
+        },
+        "acl": {
+          "type": "object",
+          "properties": {
+            "read_roles": { "$ref": "#/$defs/stringSet" },
+            "write_roles": { "$ref": "#/$defs/stringSet" },
+            "export_roles": { "$ref": "#/$defs/stringSet" }
+          },
+          "required": ["read_roles", "write_roles", "export_roles"],
+          "additionalProperties": false
+        },
+        "rotation": {
+          "type": "object",
+          "properties": {
+            "strategy": { "const": "PER_RUN_SEGMENTED_JSONL" },
+            "max_segments": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 256
+            }
+          },
+          "required": ["strategy", "max_segments"],
+          "additionalProperties": false
+        },
+        "disposition": { "const": "DELETE_DERIVED_TELEMETRY" },
+        "pricing_revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+        },
+        "pricing_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "enabled",
+        "persistence_required",
+        "redaction_revision",
+        "retention_days",
+        "max_file_bytes"
+      ],
+      "additionalProperties": false
+    },
+    "riskPolicy": {
+      "type": "object",
+      "properties": {
+        "default_profile": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "maximum_autonomy": { "enum": ["READ_ONLY", "INTERACTIVE", "BACKGROUND"] },
+        "external_write_policy": { "enum": ["DENY", "ALLOWLIST_ONLY"] }
+      },
+      "required": ["default_profile", "maximum_autonomy", "external_write_policy"],
+      "additionalProperties": false
+    },
+    "writeClassification": {
+      "type": "object",
+      "properties": {
+        "runtime_audit_prefixes": { "$ref": "#/$defs/pathPrefixSet" },
+        "authority_prefixes": { "$ref": "#/$defs/pathPrefixSet" },
+        "authority_exact_paths": { "$ref": "#/$defs/pathSet" },
+        "unknown_path_class": { "const": "implementation_write" }
+      },
+      "required": [
+        "runtime_audit_prefixes",
+        "authority_prefixes",
+        "authority_exact_paths",
+        "unknown_path_class"
+      ],
+      "additionalProperties": false
+    },
+    "capabilityRequirements": {
+      "type": "object",
+      "properties": {
+        "enforce": { "$ref": "#/$defs/stringSet" },
+        "background": { "$ref": "#/$defs/stringSet" },
+        "external_write": { "$ref": "#/$defs/stringSet" }
+      },
+      "required": ["enforce", "background", "external_write"],
+      "additionalProperties": false
+    },
+    "artifactAuthority": {
+      "type": "object",
+      "properties": {
+        "required_contract_version": { "const": "2.0.0" },
+        "execution_authority_types": {
+          "type": "array",
+          "items": { "enum": ["PRD", "FSD", "ISSUE", "EVAL"] },
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "legacy_action": { "const": "REPLAN_REQUIRED" }
+      },
+      "required": [
+        "required_contract_version",
+        "execution_authority_types",
+        "legacy_action"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "project_config_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "config_version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "mode_version": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "mode": { "enum": ["DISABLED", "OBSERVE", "ENFORCE", "HALTED"] },
+    "policy": { "$ref": "#/$defs/policy" },
+    "background_aggregate_policy": { "$ref": "#/$defs/backgroundAggregatePolicy" },
+    "billing_currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "retention": { "$ref": "#/$defs/retention" },
+    "telemetry": { "$ref": "#/$defs/telemetry" },
+    "risk": { "$ref": "#/$defs/riskPolicy" },
+    "write_classification": { "$ref": "#/$defs/writeClassification" },
+    "capability_requirements": { "$ref": "#/$defs/capabilityRequirements" },
+    "artifact_authority": { "$ref": "#/$defs/artifactAuthority" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "config_version",
+    "mode_version",
+    "mode",
+    "policy",
+    "background_aggregate_policy",
+    "billing_currency",
+    "retention",
+    "telemetry",
+    "risk",
+    "write_classification",
+    "capability_requirements",
+    "artifact_authority"
+  ],
+  "additionalProperties": false
+}

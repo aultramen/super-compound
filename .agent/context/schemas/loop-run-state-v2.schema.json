@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:loop-run-state-v2",
+  "title": "Loop Run State v2",
+  "type": "object",
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "positiveIntegerOrNull": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "runtimeMinutesOrNull": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 150119987579
+    },
+    "effectiveBudget": {
+      "type": "object",
+      "properties": {
+        "max_iterations": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "max_runtime_minutes": { "$ref": "#/$defs/runtimeMinutesOrNull" },
+        "max_no_progress_iterations": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_tokens": { "$ref": "#/$defs/positiveIntegerOrNull" },
+        "max_cost_micro": { "$ref": "#/$defs/positiveIntegerOrNull" }
+      },
+      "required": [
+        "max_iterations",
+        "max_runtime_minutes",
+        "max_no_progress_iterations",
+        "max_tokens",
+        "max_cost_micro"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "loop_run_state_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "run_id": { "$ref": "#/$defs/identifier" },
+    "mode": { "enum": ["DISABLED", "OBSERVE", "ENFORCE", "HALTED"] },
+    "status": {
+      "enum": [
+        "READY",
+        "RUNNING",
+        "OBSERVED",
+        "VERIFYING",
+        "PAUSED",
+        "RESUMING",
+        "SUCCESS",
+        "BLOCKED",
+        "NO_PROGRESS",
+        "BUDGET_EXHAUSTED",
+        "TIMEOUT",
+        "POLICY_STOP",
+        "FATAL",
+        "UNKNOWN_OUTCOME",
+        "CANCELLED"
+      ]
+    },
+    "version": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "sequence": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "authority_digest": { "$ref": "#/$defs/digest" },
+    "policy_digest": { "$ref": "#/$defs/digest" },
+    "effective_budget": { "$ref": "#/$defs/effectiveBudget" },
+    "counters": {
+      "type": "object",
+      "properties": {
+        "iterations": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "active_runtime_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "no_progress_iterations": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "tokens": { "type": ["integer", "null"], "minimum": 0, "maximum": 9007199254740991 },
+        "token_measurement": { "enum": ["MEASURED", "UNMEASURED"] },
+        "cost_micro": { "type": ["integer", "null"], "minimum": 0, "maximum": 9007199254740991 },
+        "cost_measurement": { "enum": ["MEASURED", "UNMEASURED"] },
+        "usage_iteration": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "usage_receipt_count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "usage_complete": { "type": "boolean" },
+        "usage_completion_digest": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "iterations",
+        "active_runtime_ms",
+        "no_progress_iterations",
+        "tokens",
+        "token_measurement",
+        "cost_micro",
+        "cost_measurement",
+        "usage_iteration",
+        "usage_receipt_count",
+        "usage_complete",
+        "usage_completion_digest"
+      ],
+      "additionalProperties": false
+    },
+    "approval": {
+      "type": ["object", "null"],
+      "properties": {
+        "confirmation_digest": { "$ref": "#/$defs/digest" },
+        "phase": { "enum": ["START", "RESUME"] },
+        "expected_run_version": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "expires_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["confirmation_digest", "phase", "expected_run_version", "expires_at"],
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["NOT_RUN", "PASS", "FAIL", "ERROR", "STALE"] },
+        "fresh": { "type": "boolean" },
+        "gates_satisfied": { "type": "boolean" },
+        "fingerprint": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" }
+      },
+      "required": ["status", "fresh", "gates_satisfied", "fingerprint"],
+      "additionalProperties": false
+    },
+    "active_action": {
+      "type": ["object", "null"],
+      "properties": {
+        "action_id": { "$ref": "#/$defs/identifier" },
+        "idempotency_key": { "$ref": "#/$defs/identifier" }
+      },
+      "required": ["action_id", "idempotency_key"],
+      "additionalProperties": false
+    },
+    "paused_from": { "enum": [null, "RUNNING", "OBSERVED", "VERIFYING"] },
+    "terminal_reason": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Z0-9][A-Z0-9_.:-]{0,127}$"
+    },
+    "last_progress_fingerprint": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "last_approach_id": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "last_event_hash": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "run_id",
+    "mode",
+    "status",
+    "version",
+    "sequence",
+    "authority_digest",
+    "policy_digest",
+    "effective_budget",
+    "counters",
+    "approval",
+    "verification",
+    "active_action",
+    "paused_from",
+    "terminal_reason",
+    "last_progress_fingerprint",
+    "last_approach_id",
+    "last_event_hash"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,425 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:super-compound:schema:automation-trigger-v2",
+  "title": "Loop Runtime Local One-Shot Automation Trigger v2",
+  "type": "object",
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "nullableDigest": {
+      "anyOf": [
+        { "$ref": "#/$defs/digest" },
+        { "type": "null" }
+      ]
+    },
+    "nullableDateTime": {
+      "anyOf": [
+        { "type": "string", "format": "date-time" },
+        { "type": "null" }
+      ]
+    },
+    "nullableStableId": {
+      "anyOf": [
+        { "$ref": "#/$defs/stableId" },
+        { "type": "null" }
+      ]
+    },
+    "stableIdSet": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/stableId" },
+      "uniqueItems": true
+    },
+    "runBinding": {
+      "type": "object",
+      "properties": {
+        "run_id": { "$ref": "#/$defs/stableId" },
+        "phase": { "enum": ["START", "RESUME"] },
+        "expected_run_version": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "goal_digest": { "$ref": "#/$defs/digest" },
+        "authority_digest": { "$ref": "#/$defs/digest" },
+        "verifier_digest": { "$ref": "#/$defs/digest" },
+        "eval_definition_digest": { "$ref": "#/$defs/digest" },
+        "project_config_digest": { "$ref": "#/$defs/digest" },
+        "policy_digest": { "$ref": "#/$defs/digest" },
+        "operation_inventory_digest": { "$ref": "#/$defs/digest" },
+        "risk_profile": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "autonomy_profile": { "const": "BACKGROUND" },
+        "required_gates": { "$ref": "#/$defs/stableIdSet" },
+        "run_head_digest": { "$ref": "#/$defs/nullableDigest" },
+        "approval_digest": { "$ref": "#/$defs/nullableDigest" },
+        "approval_expires_at": { "$ref": "#/$defs/nullableDateTime" }
+      },
+      "required": [
+        "run_id",
+        "phase",
+        "expected_run_version",
+        "goal_digest",
+        "authority_digest",
+        "verifier_digest",
+        "eval_definition_digest",
+        "project_config_digest",
+        "policy_digest",
+        "operation_inventory_digest",
+        "risk_profile",
+        "autonomy_profile",
+        "required_gates",
+        "run_head_digest",
+        "approval_digest",
+        "approval_expires_at"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "trigger_id": { "$ref": "#/$defs/stableId" },
+        "actor_ref": { "$ref": "#/$defs/stableId" },
+        "source_ref": { "$ref": "#/$defs/stableId" }
+      },
+      "required": ["trigger_id", "actor_ref", "source_ref"],
+      "additionalProperties": false
+    },
+    "leasePolicy": {
+      "type": "object",
+      "properties": {
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "heartbeat_interval_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["duration_ms", "heartbeat_interval_ms"],
+      "additionalProperties": false
+    },
+    "retryPolicy": {
+      "type": "object",
+      "properties": {
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "backoff_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["max_attempts", "backoff_ms"],
+      "additionalProperties": false
+    },
+    "concurrency": {
+      "type": "object",
+      "properties": {
+        "key": { "$ref": "#/$defs/stableId" },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["key", "limit"],
+      "additionalProperties": false
+    },
+    "rateLimit": {
+      "type": "object",
+      "properties": {
+        "key": { "$ref": "#/$defs/stableId" },
+        "max_claims": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "window_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["key", "max_claims", "window_ms"],
+      "additionalProperties": false
+    },
+    "lease": {
+      "type": "object",
+      "properties": {
+        "lease_id": { "$ref": "#/$defs/stableId" },
+        "worker_ref": { "$ref": "#/$defs/stableId" },
+        "claimed_at": { "type": "string", "format": "date-time" },
+        "heartbeat_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time" },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        }
+      },
+      "required": [
+        "lease_id",
+        "worker_ref",
+        "claimed_at",
+        "heartbeat_at",
+        "expires_at",
+        "attempt"
+      ],
+      "additionalProperties": false
+    },
+    "cancellation": {
+      "type": "object",
+      "properties": {
+        "actor_ref": { "$ref": "#/$defs/stableId" },
+        "reason_ref": { "$ref": "#/$defs/stableId" },
+        "requested_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["actor_ref", "reason_ref", "requested_at"],
+      "additionalProperties": false
+    },
+    "dispatchCommit": {
+      "type": "object",
+      "properties": {
+        "dispatch_id": { "$ref": "#/$defs/stableId" },
+        "operation": { "const": "work" },
+        "action_id": { "$ref": "#/$defs/stableId" },
+        "idempotency_key": { "$ref": "#/$defs/stableId" },
+        "controller_intent_digest": { "$ref": "#/$defs/digest" },
+        "action_run_head_digest": { "$ref": "#/$defs/digest" },
+        "action_run_version": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "authorization_expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "background_record_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "background_record_digest": { "$ref": "#/$defs/digest" },
+        "lease_id": { "$ref": "#/$defs/stableId" },
+        "worker_ref": { "$ref": "#/$defs/stableId" },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 256
+        },
+        "committed_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "dispatch_id",
+        "operation",
+        "action_id",
+        "idempotency_key",
+        "controller_intent_digest",
+        "action_run_head_digest",
+        "action_run_version",
+        "authorization_expires_at",
+        "background_record_version",
+        "background_record_digest",
+        "lease_id",
+        "worker_ref",
+        "attempt",
+        "committed_at"
+      ],
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "outcome": { "enum": ["KNOWN_RESULT", "UNKNOWN_OUTCOME"] },
+        "result_digest": { "$ref": "#/$defs/digest" },
+        "worker_ref": { "$ref": "#/$defs/stableId" },
+        "lease_id": { "$ref": "#/$defs/stableId" },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "outcome",
+        "result_digest",
+        "worker_ref",
+        "lease_id",
+        "recorded_at"
+      ],
+      "additionalProperties": false
+    },
+    "reconciliation": {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "enum": [
+            "TRIGGER_EXPIRED",
+            "LEASE_EXPIRED",
+            "LEASE_EXPIRED_AFTER_DISPATCH_COMMIT",
+            "MAX_ATTEMPTS_EXHAUSTED",
+            "RESOLVED"
+          ]
+        },
+        "actor_ref": { "$ref": "#/$defs/stableId" },
+        "result_digest": { "$ref": "#/$defs/nullableDigest" },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["outcome", "actor_ref", "result_digest", "recorded_at"],
+      "additionalProperties": false
+    },
+    "recovery": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "enum": [
+            null,
+            "UNKNOWN_OUTCOME",
+            "TRIGGER_EXPIRED",
+            "LEASE_EXPIRED",
+            "LEASE_EXPIRED_AFTER_DISPATCH_COMMIT",
+            "APPROVAL_EXPIRED",
+            "APPROVAL_MISMATCH",
+            "MAX_ATTEMPTS_EXHAUSTED"
+          ]
+        },
+        "previous_lease_id": { "$ref": "#/$defs/nullableStableId" },
+        "requires_new_approval": { "type": "boolean" },
+        "reconciled_at": { "$ref": "#/$defs/nullableDateTime" }
+      },
+      "required": [
+        "reason",
+        "previous_lease_id",
+        "requires_new_approval",
+        "reconciled_at"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schema": { "const": "automation_trigger_v2" },
+    "contract_version": { "const": "2.0.0" },
+    "queue_item_id": { "$ref": "#/$defs/stableId" },
+    "version": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "state": {
+      "enum": [
+        "PREPARED",
+        "SUBMITTED",
+        "CLAIMED",
+        "CANCEL_REQUESTED",
+        "APPROVAL_REQUIRED",
+        "COMPLETED",
+        "CANCELLED",
+        "UNKNOWN_OUTCOME",
+        "RECONCILED",
+        "EXPIRED"
+      ]
+    },
+    "run_binding": { "$ref": "#/$defs/runBinding" },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "dedupe_identity_digest": { "$ref": "#/$defs/digest" },
+    "payload_digest": { "$ref": "#/$defs/digest" },
+    "prepared_at": { "type": "string", "format": "date-time" },
+    "available_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "missed_run_policy": { "const": "CANCEL" },
+    "lease_policy": { "$ref": "#/$defs/leasePolicy" },
+    "retry_policy": { "$ref": "#/$defs/retryPolicy" },
+    "concurrency": { "$ref": "#/$defs/concurrency" },
+    "rate_limit": { "$ref": "#/$defs/rateLimit" },
+    "result_sink_ref": { "$ref": "#/$defs/stableId" },
+    "policy_ref": { "$ref": "#/$defs/stableId" },
+    "attempts": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "claim_history": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "type": "string", "format": "date-time" }
+    },
+    "retry_not_before": { "$ref": "#/$defs/nullableDateTime" },
+    "lease": {
+      "anyOf": [
+        { "$ref": "#/$defs/lease" },
+        { "type": "null" }
+      ]
+    },
+    "dispatch_commit": {
+      "anyOf": [
+        { "$ref": "#/$defs/dispatchCommit" },
+        { "type": "null" }
+      ]
+    },
+    "cancellation_requested": { "type": "boolean" },
+    "cancellation": {
+      "anyOf": [
+        { "$ref": "#/$defs/cancellation" },
+        { "type": "null" }
+      ]
+    },
+    "result": {
+      "anyOf": [
+        { "$ref": "#/$defs/result" },
+        { "type": "null" }
+      ]
+    },
+    "reconciliation": {
+      "anyOf": [
+        { "$ref": "#/$defs/reconciliation" },
+        { "type": "null" }
+      ]
+    },
+    "recovery": { "$ref": "#/$defs/recovery" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "schema",
+    "contract_version",
+    "queue_item_id",
+    "version",
+    "state",
+    "run_binding",
+    "provenance",
+    "dedupe_identity_digest",
+    "payload_digest",
+    "prepared_at",
+    "available_at",
+    "expires_at",
+    "missed_run_policy",
+    "lease_policy",
+    "retry_policy",
+    "concurrency",
+    "rate_limit",
+    "result_sink_ref",
+    "policy_ref",
+    "attempts",
+    "claim_history",
+    "retry_not_before",
+    "lease",
+    "dispatch_commit",
+    "cancellation_requested",
+    "cancellation",
+    "result",
+    "reconciliation",
+    "recovery",
+    "updated_at"
+  ],
+  "additionalProperties": false
+}
