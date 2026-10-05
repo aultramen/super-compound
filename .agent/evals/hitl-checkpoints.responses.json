@@ -385,7 +385,7 @@
     ".agent/workflows/sc-work.md": "1dd501989b21e03ad09405d1cddcee0aa3b0cd39bf091b70a32cf559395d7843",
     ".agent/context/workflows/sc-status.contract.md": "ede36ba6f11b12d000a12af6fd84fceaa569b07da30858ed873a9bdf30942f99",
     ".agent/workflows/sc-status.md": "cac74227b7f445233275230f9d0a92dc038748a9a78177e7fdcd837d668fa540",
-    ".agent/skills/checkpoint-protocol/references/answerable-package.md": "0400145aa8586668ad17a13693d746c550020ad15d349cf6ff080cce657ada26",
+    ".agent/skills/checkpoint-protocol/references/answerable-package.md": "f52130f022deadb5ec383cbd075c81e304868b944bde065f8165cc8f90a1ca23",
     ".agent/context/workflows/sc-audit.contract.md": "2ab53419e8fa692041547c1ebad8f9afca754acb4d157f4a0acae58029756e00",
     ".agent/context/workflows/sc-compound.contract.md": "d83a7f419d9b5b529a30e316c4bb91d9d714e91a1646efc3dcf685e756534af3",
     ".agent/context/workflows/sc-debug.contract.md": "acbb9cd32b02b4741a21fb6d9ba3d10ad2788d0fe56339af8d37f04be891d1f2",
@@ -666,6 +666,13 @@
         ".agent/skills/checkpoint-protocol/references/answerable-package.md": "83a742f80bf2b91a8de8f0721a9c5ba44dffe2a13ab3ca4620a2a2e831d64d92"
       },
       "review": "Recorded responses reviewed after fencing the illustrative absolute review link for portable document auditing. Only Markdown example formatting changed; stable IDs, ready lists, approval boundaries and resume behavior remain unchanged. Compatibility review only, not a new host trial."
+    },
+    {
+      "date": "2026-10-05",
+      "source_digests": {
+        ".agent/skills/checkpoint-protocol/references/answerable-package.md": "0400145aa8586668ad17a13693d746c550020ad15d349cf6ff080cce657ada26"
+      },
+      "review": "Recorded responses reviewed after switching the fenced illustrative link to an absolute POSIX example and describing drive-qualified Windows paths in prose. Only example presentation changed; stable IDs, ready lists, approval boundaries and resume behavior remain unchanged. Compatibility review only, not a new host trial."
     }
   ]
 }

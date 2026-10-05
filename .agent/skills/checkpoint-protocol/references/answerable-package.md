@@ -63,11 +63,12 @@ exist before displaying them. Show the complete absolute path as the clickable
 label and target, for example:
 
 ```text
-[D:/project/docs/prd.md](D:/project/docs/prd.md)
+[/project/docs/prd.md](/project/docs/prd.md)
 Section: Acceptance; inspect the changed behavior
 ```
 
-For spaces use
+Windows targets use drive-qualified absolute paths, such as
+`D:/project/docs/prd.md`. For spaces use
 `angle brackets around the link target`; on POSIX use `/...`.
 These are syntax examples, not existing review files. Keep stored document refs
 repository-relative and portable. If a planned document does not exist, prepare
