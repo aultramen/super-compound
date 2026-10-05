@@ -91,7 +91,7 @@ function attributableTraces() {
 test("buildWorkflowEvidenceMatrix covers every workflow with input/process/output static evidence", () => {
   const evidence = buildWorkflowEvidenceMatrix(matrixFixture());
 
-  assert.equal(WORKFLOW_SCENARIOS.length, 18);
+  assert.equal(WORKFLOW_SCENARIOS.length, 19);
   assert.equal(evidence.schema, "workflow_evidence_matrix_v1");
   assert.deepEqual(evidence.claimScope, {
     evidenceClass: "repository-owned-static",
@@ -101,14 +101,14 @@ test("buildWorkflowEvidenceMatrix covers every workflow with input/process/outpu
     generatedOutputTokens: "unknown",
   });
   assert.deepEqual(evidence.coverage, {
-    expectedRoutes: 18,
-    coveredRoutes: 18,
+    expectedRoutes: 19,
+    coveredRoutes: 19,
     stagesPerRoute: 3,
-    expectedCells: 54,
-    coveredCells: 54,
+    expectedCells: 57,
+    coveredCells: 57,
     percent: 100,
   });
-  assert.equal(Object.keys(evidence.workflowMatrix).length, 18);
+  assert.equal(Object.keys(evidence.workflowMatrix).length, 19);
   assert.equal(evidence.workflowMatrix["sc-research"].input.observedRuntimeTokens, null);
   assert.equal(
     evidence.workflowMatrix["sc-research"].process.contractPath,
@@ -127,24 +127,24 @@ test("buildWorkflowEvidenceMatrix covers every workflow with input/process/outpu
     ["caller"],
   );
   assert.deepEqual(evidence.gates.inputContextReduction, {
-    expected: 18,
-    passed: 18,
+    expected: 19,
+    passed: 19,
     minimumReductionPercent: 95,
     pass: true,
   });
   assert.deepEqual(evidence.gates.processWiring, {
-    expected: 18,
-    passed: 18,
+    expected: 19,
+    passed: 19,
     pass: true,
   });
   assert.deepEqual(evidence.gates.outputContracts, {
-    expected: 18,
-    passed: 18,
+    expected: 19,
+    passed: 19,
     pass: true,
   });
   assert.deepEqual(evidence.gates.runtimeEndToEnd, {
     status: "not-evaluated",
-    expectedPairedTraceCount: 18,
+    expectedPairedTraceCount: 19,
     pairedTraceCount: 0,
     pass: null,
   });
@@ -162,11 +162,11 @@ test("buildWorkflowEvidenceMatrix rejects incomplete workflow coverage", () => {
 
   assert.throws(
     () => buildWorkflowEvidenceMatrix(fixture),
-    /exactly 18 workflow routes/i,
+    /exactly 19 workflow routes/i,
   );
 });
 
-test("runtimePass cannot be true without 18 paired attributable traces", () => {
+test("runtimePass cannot be true without 19 paired attributable traces", () => {
   assert.throws(
     () =>
       buildWorkflowEvidenceMatrix(
@@ -178,7 +178,7 @@ test("runtimePass cannot be true without 18 paired attributable traces", () => {
           },
         }),
       ),
-    /runtimePass=true requires 18 paired attributable traces/i,
+    /runtimePass=true requires 19 paired attributable traces/i,
   );
 });
 
@@ -197,8 +197,8 @@ test("runtimePass may be true with one paired attributable trace per workflow", 
   assert.equal(evidence.claimScope.runtimeEndToEnd, "paired-attributable-traces");
   assert.deepEqual(evidence.gates.runtimeEndToEnd, {
     status: "evaluated",
-    expectedPairedTraceCount: 18,
-    pairedTraceCount: 18,
+    expectedPairedTraceCount: 19,
+    pairedTraceCount: 19,
     pass: true,
   });
 });

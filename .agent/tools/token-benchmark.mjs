@@ -97,6 +97,14 @@ const STARTUP_BUDGET_SCENARIOS = [
 
 const WORKFLOW_SCENARIOS = [
   {
+    name: "sc-hints",
+    description: "/sc-hints current-full-vs-compact guidance surface (not historical savings).",
+    before: [".agent/workflows/sc-hints.md", ".agent/skills/hints/SKILL.md", ".agent/skills/hints/references/route-selection.md", ".agent/skills/hints/references/examples.md"],
+    after: [".agent/context/workflows/sc-hints.contract.md"],
+    liveBefore: true,
+    comparisonBasis: "current-full-vs-compact",
+  },
+  {
     name: "sc-init",
     description: "/sc-init project scan and config orientation.",
     before: [
@@ -243,7 +251,6 @@ const WORKFLOW_SCENARIOS = [
     after: [
       ".agent/context/workflows/sc-work.contract.md",
       ".agent/context/skills/sc-work.contract.md",
-      ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md",
     ],
   },
   {
@@ -720,6 +727,8 @@ export function digestBenchmarkSuite(scenarios) {
       ? scenario.maxAfterTokens
       : null,
     semanticContract: scenario.semanticContract ?? null,
+    liveBefore: scenario.liveBefore === true,
+    comparisonBasis: scenario.comparisonBasis ?? null,
   }));
   return createHash("sha256").update(JSON.stringify(definitions)).digest("hex");
 }
@@ -1098,7 +1107,8 @@ export async function evaluateScenarios(
       ? baselineScenarios[scenario.name]
       : await countScenarioSurface(root, scenario, "before");
     const after = await countScenarioSurface(root, scenario, "after");
-    const reductionPercent = !measured
+    const liveComparison = scenario.liveBefore === true && scenario.comparisonBasis === "current-full-vs-compact";
+    const reductionPercent = !measured && !liveComparison
       ? null
       : before.tokens === 0
         ? 0
@@ -1113,9 +1123,10 @@ export async function evaluateScenarios(
       gateType: isBudget ? "budget" : "reduction",
       maxAfterTokens: isBudget ? scenario.maxAfterTokens : undefined,
       reductionPercent,
+      ...(liveComparison ? { comparisonBasis: scenario.comparisonBasis, beforeDigest: before.contentDigest } : {}),
       pass: isBudget
         ? after.tokens <= scenario.maxAfterTokens
-        : reductionPercent > threshold,
+        : liveComparison ? reductionPercent >= threshold : reductionPercent > threshold,
     });
   }
 
@@ -1126,7 +1137,7 @@ export async function evaluateScenarios(
   );
   const budgetResults = results.filter((result) => result.gateType === "budget");
   const measuredResults = results.filter(
-    (result) => result.reductionPercent !== null,
+    (result) => result.reductionPercent !== null && result.comparisonBasis !== "current-full-vs-compact",
   );
   const totalBeforeTokens = sum(
     measuredResults,
@@ -1142,7 +1153,7 @@ export async function evaluateScenarios(
     stageNames.map((stage) => {
       const stageResults = results.filter((result) => result.stage === stage);
       const stageReductions = stageResults.filter(
-        (result) => result.reductionPercent !== null,
+        (result) => result.reductionPercent !== null && result.comparisonBasis !== "current-full-vs-compact",
       );
       const stageBudgets = stageResults.filter(
         (result) => result.gateType === "budget",
@@ -1290,6 +1301,10 @@ function compactBenchmarkResult(result) {
         afterTokens: scenario.after.tokens,
         pass: scenario.pass,
       };
+      if (scenario.comparisonBasis) {
+        compact.comparisonBasis = scenario.comparisonBasis;
+        compact.beforeDigest = scenario.beforeDigest;
+      }
       if (scenario.after.contentDigest) {
         compact.afterDigest = scenario.after.contentDigest;
       }
@@ -1527,6 +1542,8 @@ export function formatTable(result, runLabel = "") {
   lines.push(`Token benchmark${suffix}`);
   lines.push(`Metric: ${result.metric}`);
   lines.push(`Reduction gates: >${result.threshold}%`);
+  const liveRows = result.scenarios.filter(row => row.comparisonBasis === "current-full-vs-compact");
+  if (liveRows.length) lines.push(`Current-full-vs-compact (excluded from historical totals): ${liveRows.map(row => row.name).join(", ")}; >=${result.threshold}% reduction.`);
   if (result.scenarios.some((scenario) => scenario.gateType === "budget")) {
     lines.push("Budget gates: scenario-specific maximum");
   }
@@ -1551,7 +1568,9 @@ export function formatTable(result, runLabel = "") {
     const gate =
       scenario.gateType === "budget"
         ? `<=${scenario.maxAfterTokens}`
-        : `>${result.threshold}%`;
+        : scenario.comparisonBasis === "current-full-vs-compact"
+          ? `>=${result.threshold}%`
+          : `>${result.threshold}%`;
     lines.push(
       [
         scenario.name.padEnd(34),
@@ -1596,8 +1615,8 @@ function usage() {
 
 Default suite:
   legacy eager-preload reduction, real repository-owned startup budgets for
-  Codex/Claude/Antigravity, all 18 public workflows (absolute after-token
-  budgets; reduction against the frozen baseline is reported, not gated),
+  Codex/Claude/Antigravity, all 19 public workflows (existing Git-baseline
+  comparisons plus sc-hints current-full-vs-compact, excluded from historical totals),
   artifact surfaces, skills, templates, interface-design data/scripts, hooks,
   agents, workflows, and rules.
 

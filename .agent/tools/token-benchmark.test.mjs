@@ -543,6 +543,7 @@ test("default benchmark covers all workflows and related hotspots", () => {
   const workflows = [
     "sc-init",
     "sc-status",
+  "sc-hints",
     "sc-geniusloop",
     "sc-explore",
     "sc-research",
@@ -757,7 +758,7 @@ test("buildBenchmarkReport rejects a forged runtimePass without paired attributa
         authoritative: true,
         staticEvidence,
       }),
-    /runtimePass=true requires 18 paired attributable traces/i,
+    /runtimePass=true requires 19 paired attributable traces/i,
   );
 });
 

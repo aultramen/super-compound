@@ -33,7 +33,7 @@ Result and next action: Read-only position, evidence and blockers; one exact nex
    `/sc-evolve` for 3+ independent evidenced origins as optional maintenance;
    it never displaces ready work. Actual authority drift blocks affected goals only.
 7. If no ready goal issues exist and there is no active handoff, blocker, or failing verification, recommend `/sc-geniusloop`.
-8. Recommend one exact route from `/sc-init`, `/sc-status`, `/sc-geniusloop`,
+8. Recommend one exact route from `/sc-init`, `/sc-status`, `/sc-hints`, `/sc-geniusloop`,
    `/sc-explore`, `/sc-research`, `/sc-prd`, `/sc-plan`, `/sc-eval`, `/sc-go`,
    `/sc-work`, `/sc-debug`, `/sc-review`, `/sc-audit`, `/sc-compound`,
    `/sc-evolve`, `/sc-pause`, `/sc-launch`, or `/sc-ui`.

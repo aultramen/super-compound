@@ -60,12 +60,12 @@ function managedPart(text) {
   block(text,'validation');
   return text.slice(text.indexOf(begin),text.indexOf(end)+end.length);
 }
-function adapterAssets(source, selected, global) {
+function adapterAssets(source, selected, global, modelRoot=source) {
   const result = new Map();
   const fallback = global ? '~/.super-compound/framework/.agent' : '.agent';
   const routing = route => `Use the project's .agent/context/workflows/${route}.contract.md first; otherwise use ${fallback}/context/workflows/${route}.contract.md. Load the full workflow only when needed. Preserve project authorization. Follow output-style.md in the same context directory. If no subagent capability exists, execute sequentially in-thread. For /sc-init setup, read ${global ? '~/.super-compound/framework/' : ''}SETUP.md and activate project core from the local cache. Arguments are user input, never shell code.`;
   const routes = files(source,'.agent/workflows').filter(p=>/\/sc-[^/]+\.md$/.test(p)).map(p=>path.basename(p,'.md'));
-  if (routes.length !== 18) throw new Error('Expected exactly 18 public workflows');
+  if (routes.length !== 19) throw new Error('Expected exactly 19 public workflows');
   const add = (p,text, mode='owned') => result.set(p,{bytes:Buffer.from(text),mode});
   for (const host of selected) {
     for (const route of routes) {
@@ -78,12 +78,12 @@ function adapterAssets(source, selected, global) {
       if (host === 'gemini') add(`.gemini/commands/${route}.toml`,`description = ${JSON.stringify(`Super Compound ${route}`)}\nprompt = ${JSON.stringify(routing(route)+'\nRequest: {{args}}')}\n`);
     }
     const overview = `## Super Compound\n\nUse project .agent core before ${fallback}. Route /sc-* through context/workflows/sc-X.contract.md, then full workflow as needed. Follow context/output-style.md. Full-tier checkpoints: BRD approval, PRD approval, FSD approval, then separate execution authorization. Existing project authorization persists. Without subagents, run sequentially in-thread.`;
-    if (host==='codex') add(`${global?'.codex':'.agents'}/skills/super-compound/SKILL.md`,`---\nname: super-compound\ndescription: Use when handling Super Compound /sc-* commands or plain-language requests to set up, fix a bug, make a small change, deliver a feature, review, or resume work.\n---\n\n# Super Compound\n\n## Summary\n\nRoute intent: setup -> sc-init setup; bug -> sc-debug; small change -> sc-work; full feature delivery -> sc-launch; resume -> sc-status; review -> sc-review. Explicit /sc-* commands select their named route. Preserve read-only scope and existing authorization; routing adds no approval or write authority.\n\n${routing('sc-X')}\n`);
+    if (host==='codex') add(`${global?'.codex':'.agents'}/skills/super-compound/SKILL.md`,`---\nname: super-compound\ndescription: Use when handling Super Compound /sc-* commands or plain-language requests to set up, fix a bug, make a small change, deliver a feature, review, resume work, or ask for guidance.\n---\n\n# Super Compound\n\n## Summary\n\nRoute intent: setup -> sc-init setup; bug -> sc-debug; small change -> sc-work; full feature delivery -> sc-launch; resume -> sc-status; review -> sc-review; consultation -> sc-hints. Clear implementation, debugging, review and resume requests select their owner directly; hints is guidance only. Explicit /sc-* commands select their named route. Preserve read-only scope and existing authorization; routing adds no approval or write authority.\n\n${routing('sc-X')}\n`);
     if (host==='codex') add(global?'.codex/AGENTS.md':'AGENTS.md',overview,'block');
     if (host==='claude') {
       add(global?'.claude/CLAUDE.md':'CLAUDE.md',overview,'block');
       const names=files(source,'.agent/agents').filter(p=>p.endsWith('.md')).map(p=>path.basename(p,'.md'));
-      const models=loadModels(source,names)['claude-code'];
+      const models=loadModels(modelRoot,names)['claude-code'];
       for(const name of names) {
         let text=render(name,fs.readFileSync(safePath(source,`.agent/agents/${name}.md`),'utf8'),models[name]);
         if(global)text+=`\nIf absent, read ~/.super-compound/framework/.agent/agents/${name}.md.\n`;
@@ -101,7 +101,7 @@ function adapterAssets(source, selected, global) {
 }
 function coreAssets(source) {
   const assets = new Map();
-  for (const dir of coreDirs) for (const rel of files(source,`.agent/${dir}`)) assets.set(rel,{bytes:fs.readFileSync(safePath(source,rel)),mode:rel==='.agent/rules/project-config.md'?'preserve':'owned'});
+  for (const dir of coreDirs) for (const rel of files(source,`.agent/${dir}`)) assets.set(rel,{bytes:fs.readFileSync(safePath(source,rel)),mode:['.agent/rules/project-config.md','.agent/context/agent-models.json'].includes(rel)?'preserve':'owned'});
   for (const rel of ['SETUP.md','SUPER-COMPOUND.md']) if(exists(path.join(source,rel))) assets.set(rel,{bytes:fs.readFileSync(safePath(source,rel)),mode:'preserve-unowned'});
   return assets;
 }
@@ -203,10 +203,11 @@ export function setup(options={}) {
   if(!core.has('.agent/context/retired-assets.json'))throw new Error('Source is not an active framework checkout/cache');
   const sourceDigest=digest([...core].map(([p,a])=>p+':'+digest(a.bytes)).join('\n'));
   const plans=[];
-  if(scope!=='global')plans.push(planRoot(target,new Map([...core,...adapterAssets(source,selected,false)]),sourceDigest,selected));
+  const modelRoot = root => exists(safePath(root,'.agent/context/agent-models.json')) ? root : source;
+  if(scope!=='global')plans.push(planRoot(target,new Map([...core,...adapterAssets(source,selected,false,modelRoot(target))]),sourceDigest,selected));
   if(scope!=='project') {
     plans.push(planRoot(path.join(home,'.super-compound/framework'),core,sourceDigest,selected));
-    plans.push(planRoot(home,adapterAssets(source,selected,true),sourceDigest,selected));
+    plans.push(planRoot(home,adapterAssets(source,selected,true,modelRoot(path.join(home,'.super-compound/framework'))),sourceDigest,selected));
   }
   const changes=plans.flatMap(p=>p.changes),conflicts=plans.flatMap(p=>p.conflicts),checks=plans.flatMap(p=>p.checks);
   const healthy=!conflicts.length && !checks.some(c=>c.status==='missing-or-outdated');
