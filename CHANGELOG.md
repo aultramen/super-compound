@@ -2,6 +2,9 @@
 
 ## 2026-10-05 - Canonical audit finding closure
 
+- Generate canonical evidence from LF source bytes per `.gitattributes` so
+  Windows and Linux checkouts agree; fence illustrative absolute review links
+  to keep examples distinct from active document references.
 - Replace the repeated checkpoint paragraph in 13 workflow contracts with the
   shared human-input pointer; retain stable IDs, complete ready lists, approval
   boundaries and resume rules in the unchanged checkpoint authority.

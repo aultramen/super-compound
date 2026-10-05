@@ -60,8 +60,14 @@ Tertunda: [ID, prerequisite ID/need, owner and next action; omit when none]
 
 Resolve review paths against the current workspace and verify files/sections
 exist before displaying them. Show the complete absolute path as the clickable
-label and target, for example `[D:/project/docs/prd.md](D:/project/docs/prd.md)`
-with `Section: Acceptance; inspect the changed behavior`. For spaces use
+label and target, for example:
+
+```text
+[D:/project/docs/prd.md](D:/project/docs/prd.md)
+Section: Acceptance; inspect the changed behavior
+```
+
+For spaces use
 `angle brackets around the link target`; on POSIX use `/...`.
 These are syntax examples, not existing review files. Keep stored document refs
 repository-relative and portable. If a planned document does not exist, prepare

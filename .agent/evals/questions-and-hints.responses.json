@@ -265,7 +265,7 @@
     ".agent/workflows/sc-status.md": "cac74227b7f445233275230f9d0a92dc038748a9a78177e7fdcd837d668fa540",
     ".agent/workflows/sc-ui.md": "faed0378e7868871dc2e7b8d1d64ab93d1b913340514fdfc8ca5f94b7560ef12",
     ".agent/workflows/sc-work.md": "1dd501989b21e03ad09405d1cddcee0aa3b0cd39bf091b70a32cf559395d7843",
-    ".agent/skills/checkpoint-protocol/references/answerable-package.md": "83a742f80bf2b91a8de8f0721a9c5ba44dffe2a13ab3ca4620a2a2e831d64d92"
+    ".agent/skills/checkpoint-protocol/references/answerable-package.md": "0400145aa8586668ad17a13693d746c550020ad15d349cf6ff080cce657ada26"
   },
   "format_cleanup_review": {
     "basis": "Content review after EOF normalization and explicit same-owner grouping wording; all recorded ready/pending outcomes remain valid. Rule uses compact central-contract pointer to preserve always-on context budget.",
@@ -390,6 +390,13 @@
         ".agent/skills/checkpoint-protocol/references/answerable-package.md": "83a742f80bf2b91a8de8f0721a9c5ba44dffe2a13ab3ca4620a2a2e831d64d92"
       },
       "review": "Recorded H01-H12 and A01-A11 responses reviewed against the 13 shortened checkpoint pointers. Each still routes to the unchanged shared authority: stable IDs, all ready needs and pending dependencies, bulk/exception replies, target/revision/stage approval boundaries and exact-position resume remain applicable. Response content and outcomes retained; compatibility review only, not a new host experiment."
+    },
+    {
+      "date": "2026-10-05",
+      "source_digests": {
+        ".agent/skills/checkpoint-protocol/references/answerable-package.md": "83a742f80bf2b91a8de8f0721a9c5ba44dffe2a13ab3ca4620a2a2e831d64d92"
+      },
+      "review": "Recorded responses reviewed after fencing the illustrative absolute review link for portable document auditing. Only Markdown example formatting changed; stable IDs, ready lists, approval boundaries and resume behavior remain unchanged. Compatibility review only, not a new host trial."
     }
   ]
 }
