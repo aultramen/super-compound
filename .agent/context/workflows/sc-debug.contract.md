@@ -9,3 +9,5 @@ automatic /sc-compound structured capture before closing; an agent-caused bug ma
 Close: docs/STATE.md Next action, else /sc-pause.
 
 Resume: memory-maintenance.mjs resume; reconcile affected drift and skip verified ledger goals.
+
+Human input/approval: .agent/context/checkpoint.contract.md

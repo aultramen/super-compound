@@ -10,3 +10,5 @@ For material evidence, use
 `.agent/templates/research/Research-Note-Skeleton.md`; save
 `docs/research/YYYY-MM-DD-<slug>.md`. Emit `OPEN-RESEARCH-*` if insufficient.
 Never implement or approve; return to the owner.
+
+Human input/approval: .agent/context/checkpoint.contract.md

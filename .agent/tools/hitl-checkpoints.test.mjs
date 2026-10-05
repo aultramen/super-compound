@@ -64,7 +64,12 @@ function grade(record) {
       assert.ok(c.materials.length);
       for (const material of c.materials) {
         assert.ok(material.inspect.trim().length > 10);
-        assert.ok(fs.existsSync(path.join(root, material.path.split("#")[0])), "broken review locator");
+        const locator = material.path.split("#")[0];
+        assert.ok(path.posix.isAbsolute(locator) || path.win32.isAbsolute(locator), "review locator must be absolute");
+        assert.ok(locator.startsWith(`${attempt.workspace}/`), "review locator not bound to captured workspace");
+        const relative = locator.slice(attempt.workspace.length + 1);
+        assert.ok(fs.existsSync(path.join(root, relative)), "broken review locator");
+        assert.ok(read(relative).toLowerCase().includes(`## ${material.section}`.toLowerCase()), "broken review section");
       }
       assert.equal(record.requests.length, 1);
       assert.deepEqual(record.requests[0].needs, ["experience_acceptance"]);
@@ -82,6 +87,7 @@ function grade(record) {
       assert.equal(record.requests[0].owner, "product_owner");
       assert.equal(record.requests[0].scope, "offline_experience");
       assert.deepEqual(record.requests[0].needs, ["stale_review", "held_review"]);
+      assert.deepEqual(record.question_ids, {Q1: "stale_review", Q2: "held_review"});
       break;
     case "H06":
       noRequest(); unresolved(["native_auth"]);
@@ -158,7 +164,10 @@ for (const record of attempt.cases) {
 test("compact and full routes reach one checkpoint format, without a second authority", () => {
   const contract = ".agent/context/checkpoint.contract.md";
   assert.ok(fs.existsSync(path.join(root, contract)));
-  for (const route of ["sc-prd", "sc-ui", "sc-plan", "sc-work", "sc-status"]) {
+  const routes = fs.readdirSync(path.join(root, ".agent/workflows"))
+    .filter(file => /^sc-.*\.md$/.test(file)).map(file => file.slice(0, -3));
+  assert.equal(routes.length, 19);
+  for (const route of routes) {
     for (const file of [`.agent/context/workflows/${route}.contract.md`, `.agent/workflows/${route}.md`]) {
       assert.ok(read(file).includes(contract), `${file} cannot reach the shared package`);
     }

@@ -6,7 +6,7 @@ and is never a production seed.
 
 knowledge-search.mjs "<scope>" first; Accepted decisions bind through authority; observed lessons are advisory.
 For unresolved decisions, use brainstorming/references/questions-and-options.md:
-ask small batches of consequential decisions with settled prerequisites plus
+show all consequential decisions with settled prerequisites for active work plus
 recommendation/reason/trade-off. Discover facts first; investigate pending facts
 while asking independent decisions. Wait for answers; partial answers stay open,
 recommendations are not approval, corrections reopen affected descendants.
@@ -31,3 +31,12 @@ Checkpoint automatically and continue; /sc-pause is only for actual stops.
 Stage approvals and execution authority: agentic-delivery/references/workflow-integration.md.
 
 Stage mode: approve BRD before PRD authoring.
+
+Human input/approval: .agent/context/checkpoint.contract.md
+
+## Exploration depth
+
+Initial ideation: at most three candidates, selection reasons and recommendation.
+Explicit broad exploration: complete procedure, at least ten ideas and Brain
+evaluation; sequential Brain role if delegation is unavailable/unauthorized.
+Authority and capture remain unchanged; source: brainstorming/SKILL.md.

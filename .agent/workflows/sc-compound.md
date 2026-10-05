@@ -6,6 +6,8 @@ description: "Capture non-trivial solved problems as searchable documentation."
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this after a non-obvious fix, debugging session, migration, integration repair, or operational lesson.
 

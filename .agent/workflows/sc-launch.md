@@ -6,6 +6,8 @@ description: "Run the complete Super Compound lifecycle through BRD, PRD, FSD, g
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this when the user wants the whole lifecycle from idea to verified delivery.
 Launch is the `full` delivery tier: use it when intake classified the request

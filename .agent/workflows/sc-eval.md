@@ -6,6 +6,8 @@ description: "Define and run eval-driven success criteria before or after implem
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this when a feature needs measurable pass/fail behavior, reliability checks, or repeatable quality measurement.
 

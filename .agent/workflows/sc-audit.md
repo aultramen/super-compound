@@ -6,6 +6,8 @@ description: "Run read-only security, dependency, compatibility, agent-surface, 
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this when risk matters: auth, secrets, dependencies, MCP/tools, agent prompts/hooks, PII, payments, compliance, releases, or broad health checks.
 

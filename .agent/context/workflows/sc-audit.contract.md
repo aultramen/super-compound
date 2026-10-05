@@ -11,3 +11,5 @@ approval. Route scope to `/sc-explore`, product gaps to `/sc-prd`, authority to
 actions to `/sc-go`. If evidence exceeds the return envelope, save it to
 `docs/audits/YYYY-MM-DD-<scope>.md`; never omit a finding.
 Checkpoint automatically and continue; /sc-pause is only for actual stops.
+
+Human input/approval: .agent/context/checkpoint.contract.md

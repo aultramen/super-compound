@@ -6,6 +6,8 @@ description: "Save a compact handoff so work can resume in a later session."
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this when actually stopping a session. During ongoing work, the authorized
 owning route checkpoints before compaction and continues without invoking pause.

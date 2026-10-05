@@ -6,6 +6,8 @@ description: "Resolve fuzzy ideas into a BRD with business objectives, constrain
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this when the work is not ready for product requirements or technical planning. The canonical output is a BRD.
 
@@ -50,7 +52,7 @@ not a new authority artifact.
    runtime responsive, keyboard/focus, realtime, or offline behavior is the risk.
    Return the evidence to `/sc-ui` or `/sc-prd`.
 7. If a named factual or current-doc gap blocks the BRD, record `OPEN-RESEARCH-*`, route that question through `sc-research.md`, then return here. Do not use research to decide a user preference, policy, or business trade-off.
-8. Use `brainstorming/references/questions-and-options.md`: ask small batches of consequential ready decisions with numbered questions, recommendation, reason, and trade-off. Investigate discoverable facts before asking; pending facts defer only dependent decisions. Wait for actual answers, keep partially unanswered IDs open, and reopen affected descendants after corrections. Skip grilling already concrete scope; use the existing artifact approval gate.
+8. Use `brainstorming/references/questions-and-options.md`: show all consequential ready decisions for active work with stable numbered IDs, recommendation, reason, trade-off and the shared checkpoint review/reply guidance; show dependent decisions as pending with prerequisites and next action. Investigate discoverable facts before asking; pending facts defer only dependent decisions. Wait for actual answers, keep partially unanswered IDs open, and reopen affected descendants after corrections. Skip grilling already concrete scope; use the existing artifact approval gate.
 9. Capture objectives, scope, non-goals, business rules, policies, constraints, acceptance gates, and `OPEN-*` blockers.
 10. Capture Git workflow constraints only when they affect delivery scope; do not mutate Git state.
 11. A chat draft is allowed during exploration. Before approval and `/sc-prd`, save the BRD to `docs/brd/brd-<feature>.md` using `.agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md` first and the full template only as a reference.
@@ -68,3 +70,9 @@ not a new authority artifact.
 Stage approvals and execution authority: agentic-delivery/references/workflow-integration.md.
 
 Stage mode: Present the BRD for its own approval before PRD authoring. Preserve existing project approval preferences on update.
+
+## Exploration depth
+
+Apply brainstorming/SKILL.md#exploration-depth: three candidates at most for
+initial ideation; explicit broad exploration retains ten or more ideas and Brain
+evaluation. This selects depth within the existing approval gates.

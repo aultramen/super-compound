@@ -6,6 +6,8 @@ description: "Reproduce, diagnose root cause, fix, and verify bugs or unexpected
 
 ## Summary
 
+Before requesting input or approval, load `.agent/context/checkpoint.contract.md`; use its complete active-work list and reply guidance.
+
 
 Use this for errors, failing tests, regressions, performance surprises, or behavior that differs from expectations.
 

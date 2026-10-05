@@ -9,3 +9,5 @@ drafts pending human approval; apply happens outside this route. Never
 self-modify prompts policy budgets verifier framework rules skills or public routes.
 
 Persist candidate_key/evidence_digest and DRAFT disposition; human APPLIED/DISMISSED/DEFERRED suppress repeat proposals without new evidence. Prefer existing checks.
+
+Human input/approval: .agent/context/checkpoint.contract.md
