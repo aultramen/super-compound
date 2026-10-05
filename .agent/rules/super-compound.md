@@ -1,6 +1,6 @@
 # Super Compound
 
-Super Compound is a compact agent framework for disciplined software work: understand first, move through BRD -> PRD -> FSD -> GOAL before code, verify before claims, and capture useful knowledge after non-trivial fixes.
+Super Compound: understand first, follow BRD -> PRD -> FSD -> GOAL for full scope, verify claims, and capture reusable knowledge.
 
 ## Core Rules
 
@@ -8,7 +8,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 - Keep the workflow surface small. Public workflows live in `.agent/workflows/` and are limited to the core set below.
 - Use the `sc-` workflow prefix for all command triggers to avoid collisions with native agent commands.
 - Keep detailed procedures in skills. Rules stay short because they are always-on context.
-- Use `.agent/context/` for compact runtime routing, skill contracts, template skeletons, and token budget gates before loading full files.
+- Load `.agent/context/` contracts before full assets; human input/approval uses `checkpoint.contract.md`.
 - Delivery adapts per request: `light` changes go straight to `/sc-work` or `/sc-debug`; `full` scope (new capability, material contract change, new screen, or coordinated semantic/risk change) takes `BRD -> PRD -> FSD -> GOAL`. A single trivial change is done directly.
 - Prefer existing project conventions, tools, and architecture over new abstractions.
 - Treat hooks, prompts, skills, workflows, MCP config, and dependency changes as security-sensitive.
@@ -23,6 +23,7 @@ Super Compound is a compact agent framework for disciplined software work: under
 | Workflow | Use For |
 |----------|---------|
 | `sc-init.md` | New/imported project scan and rule reload via `/sc-init reload` |
+| `sc-hints.md` | Read-only advice |
 | `sc-status.md` | Session orientation and saved handoff resume |
 | `sc-geniusloop.md` | Proactive improvement ideation when goal queues are empty |
 | `sc-explore.md` | Fuzzy ideas, business direction, BRD creation, prototypes, and open decisions |

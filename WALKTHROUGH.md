@@ -8,6 +8,33 @@ This walkthrough shows the current Super Compound flow after the 2026-06-20 clea
 
 Every command starts with `/sc-*` so it stays separate from native Claude Code slash commands.
 
+## Practical guidance
+
+Use `/sc-hints` with active context, or add a question:
+
+```text
+/sc-hints
+/sc-hints Saya punya PRD approved, langkah berikutnya apa?
+/sc-hints Mengapa test modul order ini sulit ditulis?
+/sc-hints Kapan saya perlu prototype sebelum membuat FSD?
+/sc-hints Bagaimana melanjutkan pekerjaan setelah compact?
+```
+
+The response names the current condition, verified facts/assumptions/unknowns,
+main recommendation, reason and consequences, openable sources, next command,
+prerequisites and expected result. Empty context prompts for your need.
+Consultation writes no STATE, report, branch or code. “Setuju rekomendasinya”
+accepts advice; “Laksanakan rekomendasi itu” transfers to the owning workflow,
+which reuses valid authorization and checks remaining gates.
+
+For example: a verified approved PRD with no FSD in checked locations leads to
+`/sc-plan <PRD path>`, with the inspected approval section linked and FSD/GOAL
+as the expected result. A small concrete edit receives a light-tier step.
+Missing facts lead to a targeted evidence action; conflicting FSD advice returns
+to the artifact owner. Context recovery reuses context-engineering and `/sc-status`.
+See the [command comparison and flow](README.md#practical-guidance-with-sc-hints)
+and [examples](.agent/skills/hints/references/examples.md).
+
 ## Delivery tier checkpoint
 
 For your first task, use the [five Quick Start scenarios](README.md#quick-start):
@@ -22,11 +49,51 @@ Active authorized work takes priority over administrative freshness.
 
 Human input follows [one checkpoint package](.agent/context/checkpoint.contract.md).
 It names the remaining need and owner, direct review material, recommendation,
-one question and the steps that resume automatically. Technical evidence stays
+all ready questions/approvals for active work with stable IDs and automatic resumption. Technical evidence stays
 separate from approval. Same-owner/scope inputs are coordinated; independent
 authorized work continues. See the [PromptShield before/after example](docs/eval-results/hitl-checkpoints-20261004.md).
 
 Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or a one-module change is `light`: `/sc-debug` or `/sc-work` starts immediately, tests and verification still apply, and a single trivial change is simply done. A new capability, a material contract/access/data change, a new screen, or coordinated work that changes outcomes or risk is `full` and takes the lifecycle below. The scenario that follows is `full`.
+
+## Answering a checkpoint
+
+The agent shows every ready item for active work together, grouped by owner and
+stage. Each numbered item names the concrete need, why your input is necessary,
+a recommendation, its rationale/consequences, full clickable absolute paths,
+the relevant section and what to inspect, and what resumes after your answer.
+Paths come from your current workspace; saved document references stay portable.
+Dependent questions appear as pending with their prerequisite and next action.
+The full list remains in conversation text when a host dialog shows fewer items.
+
+For example, a framework-format review could ask Q1 whether to show all ready
+items (recommendation: yes, for active work; consequence: longer output), and Q2
+whether to use numbered explanations (recommendation: yes; consequence: more
+space than a table). Review the actual workspace's
+`.agent/context/checkpoint.contract.md`, section **Answerable package**, for Q1,
+and `.agent/skills/brainstorming/references/questions-and-options.md`, section
+**Whole frontier per round**, for Q2. These portable documentation refs illustrate
+the sources; the live request expands them to existing full absolute clickable paths.
+After your answer, the owner records decisions and continues authorized work.
+
+Every request includes both answer examples in your language:
+
+```text
+Saya setuju semua rekomendasi pada daftar di atas.
+```
+
+```text
+Saya setuju semua rekomendasi kecuali Q2:
+gunakan tabel untuk daftar ringkas, lalu penjelasan per poin.
+```
+
+Bulk agreement covers only ready items on that latest list and their displayed
+targets, revisions and stages. An exception without a custom answer leaves that
+item open; `Q1: ya` resolves only Q1. Unknown IDs or contradictory answers trigger
+clarification of the ambiguous part. Independent clear answers remain valid.
+Corrections reopen affected dependent decisions, preserving unrelated answers.
+Approval of an information/test/access action still requires the requested
+information, result report or access-readiness evidence. Prototype acceptance,
+provider qualification, release/UAT and execution authorization remain separate.
 
 ## High-Level Design
 
@@ -650,6 +717,7 @@ Use these replacements:
 | loop execution, handoff, swarm work | `/sc-work` |
 | branch, worktree, commit, push, PR | `/sc-go` |
 | security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
+| focused advice or a specific obstacle | `/sc-hints` |
 | progress or resume | `/sc-status` |
 | reload | `/sc-init reload` |
 | UI design/review | `/sc-ui` |
@@ -657,7 +725,7 @@ Use these replacements:
 
 ## Quality Checklist
 
-For framework maintenance, the token benchmark emits 54 static evidence cells:
+For framework maintenance, the token benchmark emits 57 static evidence cells:
 input context reduction, process contract/authority wiring, and output
 sink/budget/next-owner coverage for every public workflow. Every route must stay
 within the 10% contract-to-full-context ratio gate; startup caps remain absolute and hotspot reductions must exceed 90%.
@@ -729,3 +797,14 @@ and [learning lifecycle](.agent/skills/knowledge-compounding/references/preventi
 Use the [project verification recipe](.agent/skills/verification-before-completion/references/verification-recipes.md)
 to preserve proof through cleanup. Runtime benefit is decided by the paired pilot,
 not by the static text benchmark.
+
+## Context efficiency and session models
+
+For a small edit, read the work contract and changed seam; reuse resident rules.
+Open a full procedure only when a required fact is missing. A checkpoint loads
+only when a human need arises. See [conditional policy loading](.agent/context/policy-loading.md).
+When resuming several goals, inspect the next goal and changed evidence; keep
+verified goals closed. Worker handoffs carry references and bounded verdicts.
+[Session model guidance](.agent/context/model-guidance.md) documents inherit and
+user overrides. [The evaluation protocol](.agent/evals/context-efficiency.md)
+separates cumulative payload estimates, real paired evidence and billing usage.

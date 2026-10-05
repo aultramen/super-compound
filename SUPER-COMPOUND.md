@@ -59,11 +59,12 @@ stakeholder preferences from preventable rework.
 
 ## Public Workflows
 
-Use these workflow names only; these 18 are the whole surface, and wrapper or alias workflows are not added. The `/sc-*` prefix is mandatory so Super Compound commands do not collide with native Claude Code planning and review commands.
+Use these workflow names only; these 19 are the whole surface, and wrapper or alias workflows are not added. The `/sc-*` prefix is mandatory so Super Compound commands do not collide with native Claude Code planning and review commands.
 
 | Workflow | Purpose |
 |---|---|
 | `/sc-init` | Initialize or reload project/framework context |
+| `/sc-hints` | Get focused advice; execution only on request through the owner |
 | `/sc-status` | Inspect state and choose the next route |
 | `/sc-geniusloop` | Generate and filter proactive improvement ideas when goal queues are empty |
 | `/sc-explore` | Shape fuzzy ideas into a BRD with business objectives, constraints, and acceptance |
@@ -110,15 +111,24 @@ Use these workflow names only; these 18 are the whole surface, and wrapper or al
 
 Research is a conditional sidecar, not a mandatory lifecycle stage. Use it only when the evidence gap is material enough to change a downstream decision or needs durable review. Resolve small lookups inline. Accepted findings must be translated into the BRD, PRD, FSD/TDEC, accepted ADR, or audit record that owns the decision.
 
-For unresolved product decisions, `/sc-explore` uses whole-frontier numbered rounds with a recommendation, reason, and trade-off per question. Wait for actual answers; preserve unanswered decisions and reopen affected descendants after corrections. Concrete scope skips interviewing. `/sc-work` preflight applies to both tiers; AI context and live-evidence procedures load conditionally. BRD/PRD/FSD approval remains the authority.
+For unresolved product decisions, `/sc-explore` shows the complete ready active-work frontier with stable numbered IDs, a recommendation, reason and trade-off per item; dependent items name prerequisites and next action. Wait for actual answers; preserve unanswered decisions and reopen affected descendants after corrections. Concrete scope skips interviewing. `/sc-work` preflight applies to both tiers; AI context and live-evidence procedures load conditionally. BRD/PRD/FSD approval remains the authority.
 
 ## Skill Loading
+
+`/sc-hints [question or condition]` gives focused advice from active context and
+targeted evidence. Empty context gets examples and one needs question. It is
+read-only: no STATE, report, branch or implementation. Agreement accepts advice;
+an execution request transfers to the owner with existing gates. For context
+boundaries use `context-engineering`; human needs use `checkpoint.contract.md`.
+See [hints](.agent/skills/hints/SKILL.md) and [examples](.agent/skills/hints/references/examples.md).
 
 Use `.agent/context/` as the compact runtime layer before full workflow/skill/template reads. Load a full `SKILL.md` only when its procedure is active or being edited/reviewed. When that entrypoint routes to `references/`, load only the branch needed for the current decision; never preload the whole reference directory.
 
 Load skills only when their detailed procedure is relevant. Announce the skill and follow its `SKILL.md`.
 
 Common routes:
+
+- `/sc-hints` -> `hints`; context questions use `context-engineering`, human needs use the central checkpoint contract
 
 - `/sc-explore` -> `agentic-delivery`, `brainstorming`, plus `domain-modeling`, `codebase-design`, or `prototyping` when needed
 - `/sc-research` -> `context7-docs` for current public library/API evidence; use formal compatibility gates in `/sc-plan` or `/sc-audit` as appropriate
@@ -248,6 +258,12 @@ and durable receipts via `.agent/skills/context-engineering/references/active-co
 Documentation written or updated follows `.agent/context/output-style.md`. Setup uses `SETUP.md`; `/sc-init setup` installs explicitly while normal init/reload remain read-only. New setup uses separate stage approvals and execution authorization; preserve existing project preferences.
 
 Human input/blockers/authorized handoffs: load `.agent/context/checkpoint.contract.md`.
+It owns all ready active-work items, per-item recommendations, full clickable
+review paths/sections and both bulk/exception reply examples, including dialog fallback.
 Preserve accepted decisions; technical gaps remain agent research/tests until a
 specific human/external need is proven. Return authorized owner handoffs internally
 while preserving each route's authority and configured stage checkpoints.
+
+Context loading and session models: .agent/context/policy-loading.md and
+.agent/context/model-guidance.md on demand; paired measurement protocol:
+.agent/evals/context-efficiency.md.

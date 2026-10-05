@@ -1,0 +1,723 @@
+{
+  "schema": "context_load_suite_v1",
+  "evidenceClass": "modeled-static-cumulative",
+  "scenarios": [
+    {
+      "schema": "context_load_v1",
+      "metric": "deterministic_estimated_tokens_v1",
+      "framework": {
+        "reads": 3,
+        "bytes": 6695,
+        "tokens": 1264,
+        "repeatedTokens": 0
+      },
+      "host": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "toolSchema": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "phases": {
+        "cold-entry": {
+          "reads": 1,
+          "bytes": 697,
+          "tokens": 141,
+          "repeatedTokens": 0
+        },
+        "warm-reuse": {
+          "reads": 0,
+          "bytes": 0,
+          "tokens": 0,
+          "repeatedTokens": 0
+        },
+        "execution": {
+          "reads": 0,
+          "bytes": 0,
+          "tokens": 0,
+          "repeatedTokens": 0
+        },
+        "checkpoint": {
+          "reads": 1,
+          "bytes": 3470,
+          "tokens": 633,
+          "repeatedTokens": 0
+        },
+        "resume": {
+          "reads": 1,
+          "bytes": 2528,
+          "tokens": 490,
+          "repeatedTokens": 0
+        }
+      },
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-hints.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework",
+          "start": 1,
+          "end": 11,
+          "digest": "3deaaa4110ec066b5e1a67247d36a936888496fdea3293c49b4d298faaf99b40",
+          "payloadDigest": "3deaaa4110ec066b5e1a67247d36a936888496fdea3293c49b4d298faaf99b40",
+          "bytes": 697,
+          "tokens": 141,
+          "repeated": false
+        },
+        {
+          "path": ".agent/context/workflows/sc-hints.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true,
+          "start": 1,
+          "end": 11,
+          "digest": "3deaaa4110ec066b5e1a67247d36a936888496fdea3293c49b4d298faaf99b40",
+          "payloadDigest": "3deaaa4110ec066b5e1a67247d36a936888496fdea3293c49b4d298faaf99b40",
+          "bytes": 0,
+          "tokens": 0,
+          "repeated": true
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework",
+          "start": 1,
+          "end": 61,
+          "digest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "payloadDigest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "bytes": 3470,
+          "tokens": 633,
+          "repeated": false
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework",
+          "start": 1,
+          "end": 39,
+          "digest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "payloadDigest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "bytes": 2528,
+          "tokens": 490,
+          "repeated": false
+        }
+      ],
+      "replayDigest": "fcb8255f46512c3470779ea3342d4dd29004fc77fde28bafac75682250be6ba6",
+      "route": "sc-hints",
+      "tier": "light",
+      "name": "consultation"
+    },
+    {
+      "schema": "context_load_v1",
+      "metric": "deterministic_estimated_tokens_v1",
+      "framework": {
+        "reads": 4,
+        "bytes": 10189,
+        "tokens": 2024,
+        "repeatedTokens": 0
+      },
+      "host": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "toolSchema": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "phases": {
+        "cold-entry": {
+          "reads": 1,
+          "bytes": 2538,
+          "tokens": 563,
+          "repeatedTokens": 0
+        },
+        "warm-reuse": {
+          "reads": 0,
+          "bytes": 0,
+          "tokens": 0,
+          "repeatedTokens": 0
+        },
+        "execution": {
+          "reads": 1,
+          "bytes": 1653,
+          "tokens": 338,
+          "repeatedTokens": 0
+        },
+        "checkpoint": {
+          "reads": 1,
+          "bytes": 3470,
+          "tokens": 633,
+          "repeatedTokens": 0
+        },
+        "resume": {
+          "reads": 1,
+          "bytes": 2528,
+          "tokens": 490,
+          "repeatedTokens": 0
+        }
+      },
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework",
+          "start": 1,
+          "end": 39,
+          "digest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "payloadDigest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "bytes": 2538,
+          "tokens": 563,
+          "repeated": false
+        },
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true,
+          "start": 1,
+          "end": 39,
+          "digest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "payloadDigest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "bytes": 0,
+          "tokens": 0,
+          "repeated": true
+        },
+        {
+          "path": ".agent/context/skills/sc-work.contract.md",
+          "reason": "covered execution checks",
+          "phase": "execution",
+          "source": "framework",
+          "start": 1,
+          "end": 26,
+          "digest": "9a65ef4925cda00e2699adea555d69cf72c5d21de1f9b605fa28a63f47bda256",
+          "payloadDigest": "9a65ef4925cda00e2699adea555d69cf72c5d21de1f9b605fa28a63f47bda256",
+          "bytes": 1653,
+          "tokens": 338,
+          "repeated": false
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework",
+          "start": 1,
+          "end": 61,
+          "digest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "payloadDigest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "bytes": 3470,
+          "tokens": 633,
+          "repeated": false
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework",
+          "start": 1,
+          "end": 39,
+          "digest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "payloadDigest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "bytes": 2528,
+          "tokens": 490,
+          "repeated": false
+        }
+      ],
+      "replayDigest": "a542f7cb070309c2c3afe536aa851a6267ffc90b1c0a2396189ae292374aa094",
+      "route": "sc-work",
+      "tier": "light",
+      "name": "light-edit"
+    },
+    {
+      "schema": "context_load_v1",
+      "metric": "deterministic_estimated_tokens_v1",
+      "framework": {
+        "reads": 4,
+        "bytes": 10189,
+        "tokens": 2024,
+        "repeatedTokens": 0
+      },
+      "host": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "toolSchema": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "phases": {
+        "cold-entry": {
+          "reads": 1,
+          "bytes": 2538,
+          "tokens": 563,
+          "repeatedTokens": 0
+        },
+        "warm-reuse": {
+          "reads": 0,
+          "bytes": 0,
+          "tokens": 0,
+          "repeatedTokens": 0
+        },
+        "execution": {
+          "reads": 1,
+          "bytes": 1653,
+          "tokens": 338,
+          "repeatedTokens": 0
+        },
+        "checkpoint": {
+          "reads": 1,
+          "bytes": 3470,
+          "tokens": 633,
+          "repeatedTokens": 0
+        },
+        "resume": {
+          "reads": 1,
+          "bytes": 2528,
+          "tokens": 490,
+          "repeatedTokens": 0
+        }
+      },
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework",
+          "start": 1,
+          "end": 39,
+          "digest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "payloadDigest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "bytes": 2538,
+          "tokens": 563,
+          "repeated": false
+        },
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true,
+          "start": 1,
+          "end": 39,
+          "digest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "payloadDigest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "bytes": 0,
+          "tokens": 0,
+          "repeated": true
+        },
+        {
+          "path": ".agent/context/skills/sc-work.contract.md",
+          "reason": "covered execution checks",
+          "phase": "execution",
+          "source": "framework",
+          "start": 1,
+          "end": 26,
+          "digest": "9a65ef4925cda00e2699adea555d69cf72c5d21de1f9b605fa28a63f47bda256",
+          "payloadDigest": "9a65ef4925cda00e2699adea555d69cf72c5d21de1f9b605fa28a63f47bda256",
+          "bytes": 1653,
+          "tokens": 338,
+          "repeated": false
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework",
+          "start": 1,
+          "end": 61,
+          "digest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "payloadDigest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "bytes": 3470,
+          "tokens": 633,
+          "repeated": false
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework",
+          "start": 1,
+          "end": 39,
+          "digest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "payloadDigest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "bytes": 2528,
+          "tokens": 490,
+          "repeated": false
+        }
+      ],
+      "replayDigest": "a542f7cb070309c2c3afe536aa851a6267ffc90b1c0a2396189ae292374aa094",
+      "route": "sc-work",
+      "tier": "full",
+      "name": "fsd-execution"
+    },
+    {
+      "schema": "context_load_v1",
+      "metric": "deterministic_estimated_tokens_v1",
+      "framework": {
+        "reads": 3,
+        "bytes": 6913,
+        "tokens": 1342,
+        "repeatedTokens": 0
+      },
+      "host": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "toolSchema": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "phases": {
+        "cold-entry": {
+          "reads": 1,
+          "bytes": 915,
+          "tokens": 219,
+          "repeatedTokens": 0
+        },
+        "warm-reuse": {
+          "reads": 0,
+          "bytes": 0,
+          "tokens": 0,
+          "repeatedTokens": 0
+        },
+        "execution": {
+          "reads": 0,
+          "bytes": 0,
+          "tokens": 0,
+          "repeatedTokens": 0
+        },
+        "checkpoint": {
+          "reads": 1,
+          "bytes": 3470,
+          "tokens": 633,
+          "repeatedTokens": 0
+        },
+        "resume": {
+          "reads": 1,
+          "bytes": 2528,
+          "tokens": 490,
+          "repeatedTokens": 0
+        }
+      },
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-debug.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework",
+          "start": 1,
+          "end": 13,
+          "digest": "4bbb168cdeaade736b4e75c0b796b62955ced626b5a685036884e20639301116",
+          "payloadDigest": "4bbb168cdeaade736b4e75c0b796b62955ced626b5a685036884e20639301116",
+          "bytes": 915,
+          "tokens": 219,
+          "repeated": false
+        },
+        {
+          "path": ".agent/context/workflows/sc-debug.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true,
+          "start": 1,
+          "end": 13,
+          "digest": "4bbb168cdeaade736b4e75c0b796b62955ced626b5a685036884e20639301116",
+          "payloadDigest": "4bbb168cdeaade736b4e75c0b796b62955ced626b5a685036884e20639301116",
+          "bytes": 0,
+          "tokens": 0,
+          "repeated": true
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework",
+          "start": 1,
+          "end": 61,
+          "digest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "payloadDigest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "bytes": 3470,
+          "tokens": 633,
+          "repeated": false
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework",
+          "start": 1,
+          "end": 39,
+          "digest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "payloadDigest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "bytes": 2528,
+          "tokens": 490,
+          "repeated": false
+        }
+      ],
+      "replayDigest": "ed78cc4402a6ef6f508d4e2eba9dda8bb83401643dda117c8c02663325fdd39d",
+      "route": "sc-debug",
+      "tier": "light",
+      "name": "debugging"
+    },
+    {
+      "schema": "context_load_v1",
+      "metric": "deterministic_estimated_tokens_v1",
+      "framework": {
+        "reads": 3,
+        "bytes": 6715,
+        "tokens": 1304,
+        "repeatedTokens": 0
+      },
+      "host": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "toolSchema": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "phases": {
+        "cold-entry": {
+          "reads": 1,
+          "bytes": 717,
+          "tokens": 181,
+          "repeatedTokens": 0
+        },
+        "warm-reuse": {
+          "reads": 0,
+          "bytes": 0,
+          "tokens": 0,
+          "repeatedTokens": 0
+        },
+        "execution": {
+          "reads": 0,
+          "bytes": 0,
+          "tokens": 0,
+          "repeatedTokens": 0
+        },
+        "checkpoint": {
+          "reads": 1,
+          "bytes": 3470,
+          "tokens": 633,
+          "repeatedTokens": 0
+        },
+        "resume": {
+          "reads": 1,
+          "bytes": 2528,
+          "tokens": 490,
+          "repeatedTokens": 0
+        }
+      },
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-review.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework",
+          "start": 1,
+          "end": 9,
+          "digest": "4b9cabfc56a34b07c50ba9e4958622b22a680253d44bb43fc585309819bb8324",
+          "payloadDigest": "4b9cabfc56a34b07c50ba9e4958622b22a680253d44bb43fc585309819bb8324",
+          "bytes": 717,
+          "tokens": 181,
+          "repeated": false
+        },
+        {
+          "path": ".agent/context/workflows/sc-review.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true,
+          "start": 1,
+          "end": 9,
+          "digest": "4b9cabfc56a34b07c50ba9e4958622b22a680253d44bb43fc585309819bb8324",
+          "payloadDigest": "4b9cabfc56a34b07c50ba9e4958622b22a680253d44bb43fc585309819bb8324",
+          "bytes": 0,
+          "tokens": 0,
+          "repeated": true
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework",
+          "start": 1,
+          "end": 61,
+          "digest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "payloadDigest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "bytes": 3470,
+          "tokens": 633,
+          "repeated": false
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework",
+          "start": 1,
+          "end": 39,
+          "digest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "payloadDigest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "bytes": 2528,
+          "tokens": 490,
+          "repeated": false
+        }
+      ],
+      "replayDigest": "c982f25ccf04fbace87bc616ef5ad549c86c84550ba1d5cb1de00327d6406418",
+      "route": "sc-review",
+      "tier": "light",
+      "name": "review"
+    },
+    {
+      "schema": "context_load_v1",
+      "metric": "deterministic_estimated_tokens_v1",
+      "framework": {
+        "reads": 4,
+        "bytes": 10189,
+        "tokens": 2024,
+        "repeatedTokens": 0
+      },
+      "host": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "toolSchema": {
+        "reads": 0,
+        "bytes": 0,
+        "tokens": 0,
+        "repeatedTokens": 0
+      },
+      "phases": {
+        "cold-entry": {
+          "reads": 1,
+          "bytes": 2538,
+          "tokens": 563,
+          "repeatedTokens": 0
+        },
+        "warm-reuse": {
+          "reads": 0,
+          "bytes": 0,
+          "tokens": 0,
+          "repeatedTokens": 0
+        },
+        "execution": {
+          "reads": 1,
+          "bytes": 1653,
+          "tokens": 338,
+          "repeatedTokens": 0
+        },
+        "checkpoint": {
+          "reads": 1,
+          "bytes": 3470,
+          "tokens": 633,
+          "repeatedTokens": 0
+        },
+        "resume": {
+          "reads": 1,
+          "bytes": 2528,
+          "tokens": 490,
+          "repeatedTokens": 0
+        }
+      },
+      "loads": [
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "known route authority",
+          "phase": "cold-entry",
+          "source": "framework",
+          "start": 1,
+          "end": 39,
+          "digest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "payloadDigest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "bytes": 2538,
+          "tokens": 563,
+          "repeated": false
+        },
+        {
+          "path": ".agent/context/workflows/sc-work.contract.md",
+          "reason": "unchanged resident contract",
+          "phase": "warm-reuse",
+          "source": "framework",
+          "reused": true,
+          "start": 1,
+          "end": 39,
+          "digest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "payloadDigest": "5a86a63ed0e186b2cdb89c9a4fdbb5718c996e3c78a60d97a21969cd78f43d69",
+          "bytes": 0,
+          "tokens": 0,
+          "repeated": true
+        },
+        {
+          "path": ".agent/context/skills/sc-work.contract.md",
+          "reason": "covered execution checks",
+          "phase": "execution",
+          "source": "framework",
+          "start": 1,
+          "end": 26,
+          "digest": "9a65ef4925cda00e2699adea555d69cf72c5d21de1f9b605fa28a63f47bda256",
+          "payloadDigest": "9a65ef4925cda00e2699adea555d69cf72c5d21de1f9b605fa28a63f47bda256",
+          "bytes": 1653,
+          "tokens": 338,
+          "repeated": false
+        },
+        {
+          "path": ".agent/context/checkpoint.contract.md",
+          "reason": "conditional human input event",
+          "phase": "checkpoint",
+          "source": "framework",
+          "start": 1,
+          "end": 61,
+          "digest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "payloadDigest": "a1f071b022a91fa8473ef921dbc41c4b4da7f2e195150c7bc881068f8ced14ac",
+          "bytes": 3470,
+          "tokens": 633,
+          "repeated": false
+        },
+        {
+          "path": ".agent/skills/context-engineering/references/active-context.md",
+          "reason": "conditional resume with constraint reconciliation",
+          "phase": "resume",
+          "source": "framework",
+          "start": 1,
+          "end": 39,
+          "digest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "payloadDigest": "171a73b358c5ec4be7631103d14c734871671e5f24fbe6f1fa9b16a6b396fd95",
+          "bytes": 2528,
+          "tokens": 490,
+          "repeated": false
+        }
+      ],
+      "replayDigest": "a542f7cb070309c2c3afe536aa851a6267ffc90b1c0a2396189ae292374aa094",
+      "route": "sc-work",
+      "tier": "full",
+      "name": "multi-goal-resume"
+    }
+  ]
+}
