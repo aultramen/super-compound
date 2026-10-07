@@ -101,11 +101,45 @@ function readStdinJson(maxBytes = 1024 * 1024) {
     return input ? JSON.parse(input) : {};
 }
 
+function inspectPendingLearning(projectRoot) {
+    const pending = new Set();
+    let coverage = 'legacy-unknown';
+    try {
+        const file = safeProjectFile(projectRoot, ['.continue-here.md']);
+        if (fs.existsSync(file)) {
+            if (fs.statSync(file).size > 256 * 1024) return {pending:0,coverage:'incomplete'};
+            const raw = fs.readFileSync(file,'utf8');
+            const marker = raw.match(/<!-- sc-checkpoint:start -->[\s\S]*?<!-- sc-checkpoint:end -->/);
+            if (marker) {
+                const records = JSON.parse(marker[0].match(/```json\n([\s\S]*?)\n```/)[1]).learningCloseouts;
+                if (records !== undefined) {
+                    if (!Array.isArray(records) || records.length > 20 || records.some(record=>!record || !['pending','captured','skipped-trivial','legacy-unknown'].includes(record.disposition))) return {pending:0,coverage:'incomplete'};
+                    coverage = 'recorded';
+                    for (const [index,record] of records.entries()) if (record.disposition==='pending') pending.add(record.captureInputRef || `checkpoint-${index}`);
+                }
+            }
+        }
+        const directory = safeProjectFile(projectRoot,['.scratch','pending-captures']);
+        if (fs.existsSync(directory)) {
+            const handle = fs.opendirSync(directory);
+            try {
+                let entry, count=0;
+                while ((entry=handle.readSync())) {
+                    if (++count > 100) return {pending:pending.size,coverage:'incomplete'};
+                    if (entry.isFile() && entry.name.endsWith('.json')) pending.add(`.scratch/pending-captures/${entry.name}`);
+                }
+            } finally { handle.closeSync(); }
+        }
+        return {pending:pending.size,coverage};
+    } catch { return {pending:pending.size,coverage:'incomplete'}; }
+}
+
 module.exports = {
     END_MARKER,
     START_MARKER,
     atomicWriteFile,
     buildCompactionMarker,
+    inspectPendingLearning,
     readPositiveInteger,
     readStdinJson,
     redactSensitiveText,

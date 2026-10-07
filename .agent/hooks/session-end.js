@@ -2,7 +2,7 @@
 /**
  * Super Compound - Session End Hook
  *
- * Prints a lightweight closeout checklist and appends session token usage
+ * Reports pending closeout exceptions and appends session token usage
  * to the runtime usage log. It does not mutate project files; it only
  * writes runtime cache under `.agent/.compact-state/`.
  */
@@ -15,7 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const { createHash } = require('crypto');
-const { readStdinJson, resolveHookProjectRoot, safeProjectFile } = require('./lib/hook-utils');
+const { readStdinJson, resolveHookProjectRoot, safeProjectFile, inspectPendingLearning } = require('./lib/hook-utils');
 
 const USAGE_TOOL_TIMEOUT_MS = 20000;
 
@@ -27,43 +27,20 @@ try {
 }
 
 let projectRoot;
-let stateFile;
-let continueFile;
 
 try {
     projectRoot = resolveHookProjectRoot(
         process.env.SUPER_COMPOUND_PROJECT_ROOT || path.resolve(__dirname, '..', '..')
     );
-    stateFile = safeProjectFile(projectRoot, ['docs', 'STATE.md']);
-    continueFile = safeProjectFile(projectRoot, ['.continue-here.md']);
 } catch (error) {
     console.error(`[Super Compound] Session end: ${error.message}`);
 }
 
-const hasState = stateFile ? fs.existsSync(stateFile) : false;
-const hasContinue = continueFile ? fs.existsSync(continueFile) : false;
-
-console.error('');
-console.error('[Super Compound] Session ending. Checklist:');
-console.error('');
-
-if (!hasState) {
-    console.error('  [ ] Consider /sc-pause to create a durable handoff');
-    console.error('  [ ] Consider /sc-compound if you solved a reusable problem');
-} else {
-    console.error('  [OK] STATE.md exists - state is tracked');
-    console.error('  [ ] If you solved non-trivial problems, run /sc-compound');
+if (projectRoot) {
+    const learning = inspectPendingLearning(projectRoot);
+    if (learning.pending) console.error(`[Super Compound] ${learning.pending} pending learning closeout(s); retry /sc-compound without replaying verified work`);
+    if (learning.coverage==='incomplete') console.error('[Super Compound] Learning closeout inspection incomplete; inspect through /sc-status');
 }
-
-if (hasContinue) {
-    console.error('  [OK] .continue-here.md exists - /sc-status can route the next session');
-}
-
-console.error('');
-console.error('[Super Compound] To preserve context across sessions:');
-console.error('  - Run /sc-pause before closing');
-console.error('  - Run /sc-compound to document reusable solutions');
-console.error('');
 
 recordSessionUsage(projectRoot, input);
 
@@ -71,7 +48,7 @@ recordSessionUsage(projectRoot, input);
  * Best-effort runtime telemetry: measure the ending session's transcript
  * with the deterministic transcript-usage tool and append one compact JSON
  * line to the audit-invisible runtime cache. Failures stay silent; the
- * closeout checklist above already printed.
+ * pending closeout notices above are independent of telemetry.
  */
 function recordSessionUsage(root, payload) {
     try {
