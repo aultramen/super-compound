@@ -22,6 +22,7 @@ import { fileURLToPath } from "node:url";
 
 import { readBoundedFile, resolveRepositoryPath } from "./file-state.mjs";
 import { computeWaves, parseIssueDependencies } from "./goal-waves.mjs";
+import {verifyCompletionEvidence} from './verification-recipe.mjs';
 
 const PROFILES = new Set(["NOT_APPLICABLE", "STANDARD", "HIGH_INTERACTION"]);
 const READINESS = new Set(["NOT_APPLICABLE", "DRAFT", "BLOCKED", "READY_FOR_SLICE"]);
@@ -128,10 +129,25 @@ export function parseIssuePointer(text) {
     role: leaf(text, "UI delivery role"),
     contractRefs: leaf(text, "Contract refs"),
     gate: leaf(text, "Contract gate"),
+    ...(leaf(text,'Goal ID') ? {goalId:leaf(text,'Goal ID')} : {}),
+    ...(leaf(text,'Completion contract') ? {completionContract:leaf(text,'Completion contract')} : {}),
+    ...(leaf(text,'Completion evidence') ? {completionEvidence:leaf(text,'Completion evidence')} : {}),
     blockedBy: /^none$/i.test(blocked)
       ? []
       : blocked.split(",").map((token) => path.basename(token.trim())).filter(Boolean),
   };
+}
+
+async function inspectFirstSliceCompletion(root, issue) {
+  const pin=(issue.completionContract || issue.completionEvidence || '').match(/^(.*?)\s*\/\s*([a-f0-9]{64})$/);
+  if (!pin || !issue.goalId) return {allowed:false,reason:'first-slice completion requires goal identity and pinned completion evidence'};
+  const contractPath=pin[1].trim(),contractDigest=pin[2];
+  try {
+    const contract=JSON.parse(await readBoundedFile(root,contractPath,{encoding:'utf8',label:'Completion contract'}));
+    if (contract.taskId!==issue.goalId.split('#').at(-1)) return {allowed:false,reason:'first-slice completion task identity mismatch'};
+    const verdict=await verifyCompletionEvidence(root,{contractPath,contractDigest});
+    return {allowed:verdict.allowed,reason:verdict.issues.join('; ')};
+  } catch(error) {return {allowed:false,reason:error.message};}
 }
 
 export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath, issuesDir }) {
@@ -315,9 +331,12 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
       && !affected.some(id => issue.contractRefs.split(",").some(ref => ref.trim().split("#").at(-1) === id)));
     if (proofs.length === 1) { first = proofs[0]; reused = true; }
   }
-  gate("first-slice", first !== null && first.gate === "READY_FOR_SLICE",
+  const firstClaimsCompletion=first && ['done','verified'].includes(first.status);
+  const firstProof=firstClaimsCompletion ? await inspectFirstSliceCompletion(root,first) : {allowed:false,reason:'first slice not verified'};
+  gate("first-slice", first !== null && first.gate === "READY_FOR_SLICE"
+    && (!firstClaimsCompletion || firstProof.allowed),
     first
-      ? `${first.file} gate=${first.gate} @${version}${reused ? " compatible proof retained after affected checks" : ""}`
+      ? `${first.file} gate=${first.gate} @${version}${reused ? " compatible proof retained after affected checks" : ""}${firstClaimsCompletion&&!firstProof.allowed?`; ${firstProof.reason}`:''}`
       : `${current.length} FIRST_VERTICAL_SLICE issues at @${version ?? "?"} (${firstSlices.length} total)`);
 
   // B2
@@ -326,7 +345,8 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
   const badScaleOuts = scaleOuts.filter((issue) =>
     issue.gate !== "FIRST_VERTICAL_SLICE_VERIFIED"
     || first === null || !issue.blockedBy.includes(first.file)
-    || (exception && ACTIVE_STATUSES.has(issue.status))).map((issue) => issue.file);
+    || ((ACTIVE_STATUSES.has(issue.status)||['done','verified'].includes(issue.status))
+      && (exception || first?.status!=='verified' || !firstProof.allowed))).map((issue) => issue.file);
   gate("scale-out", badScaleOuts.length === 0,
     badScaleOuts.length
       ? `violations: ${badScaleOuts.join(", ")}`

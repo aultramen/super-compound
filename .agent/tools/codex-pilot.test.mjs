@@ -5,6 +5,15 @@ import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {analyzeCodexJsonl} from './codex-pilot.mjs';
+import {runVerificationRecipe} from './verification-recipe.mjs';
+
+async function actualCompletionEvidence(dir,seed) {
+ const pin=seed.pendingCompletion;
+ const recipe=JSON.parse(fs.readFileSync(path.join(dir,pin.recipePath),'utf8'));
+ const result=await runVerificationRecipe(dir,recipe);
+ assert.equal(result.pass,true,'actual arithmetic acceptance assertions must pass');
+ return {[seed.fixture==='multi-goal-resume'?'GOAL-002':'GOAL-001']:{contractPath:pin.contractPath,contractDigest:pin.contractDigest}};
+}
 
 test('Codex usage includes cached input once and counts observed commands and errors',()=>{
  const events=[{type:'item.completed',item:{type:'command_execution',command:'npm test',exit_code:0}},{type:'turn.completed',usage:{input_tokens:100,cached_input_tokens:80,cache_write_input_tokens:10,output_tokens:20,reasoning_output_tokens:5}}];
@@ -114,7 +123,8 @@ test('selected flow graders preserve verified work and require an actual evidenc
    const verification=spawnSync(process.execPath,['--test',...fs.readdirSync(path.join(dir,'test')).map(ref=>`test/${ref}`)],{cwd:dir,encoding:'utf8',env});
    assert.equal(verification.status,0);
    fs.writeFileSync(path.join(dir,'docs/pilot-proof.txt'),verification.stdout);
-   await persistCheckpoint({root:dir,input:{nextAction:'Review verified result',verifiedOutcomes:[fixture==='debugging'?'GOAL-001':'GOAL-002'],blockers:[],artifactRefs:['docs/fsd/fsd-arithmetic.md'],contractRefs:[`.agent/context/workflows/${fixture==='debugging'?'sc-debug':'sc-work'}.contract.md`],ledgerRefs:[],learningCloseouts:[{origin:'pilot:verified-result',revision:'fixture-source',disposition:'skipped-trivial',reason:'The arithmetic fix is directly specified and has no reusable learning',evidenceRefs:['docs/pilot-proof.txt']}]}});
+   const completionEvidence=await actualCompletionEvidence(dir,seed);
+   await persistCheckpoint({root:dir,input:{nextAction:'Review verified result',verifiedOutcomes:[fixture==='debugging'?'GOAL-001':'GOAL-002'],completionEvidence,blockers:[],artifactRefs:['docs/fsd/fsd-arithmetic.md'],contractRefs:[`.agent/context/workflows/${fixture==='debugging'?'sc-debug':'sc-work'}.contract.md`],ledgerRefs:[],learningCloseouts:[{origin:'pilot:verified-result',revision:'fixture-source',disposition:'skipped-trivial',reason:'The arithmetic fix is directly specified and has no reusable learning',evidenceRefs:['docs/pilot-proof.txt']}]}});
    const events=[
     {type:'item.completed',item:{type:'command_execution',command:'node -p read PILOT-BUILD.json',exit_code:0,aggregated_output:seed.buildDigest}},
     {type:'item.completed',item:{type:'command_execution',command:'node .agent/tools/memory-maintenance.mjs resume',exit_code:0,aggregated_output:'restored'}},
@@ -126,9 +136,22 @@ test('selected flow graders preserve verified work and require an actual evidenc
    const grade=await gradePilot(dir,trace,seed);
    assert.equal(grade.correctness,true,JSON.stringify(grade.checks));
    assert.equal(grade.checks.capture,true);
+   if(fixture==='multi-goal-resume') {
+    const good=fs.readFileSync(sourceFile,'utf8');
+    fs.writeFileSync(sourceFile,good.replace('exports.multiply = (a, b) => a * b','exports.multiply = (a, b) => Math.abs(a * b)'));
+    const recipe=JSON.parse(fs.readFileSync(path.join(dir,seed.pendingCompletion.recipePath),'utf8'));
+    assert.equal((await runVerificationRecipe(dir,recipe)).pass,false,'positive-only worker test cannot prove the negative multiplication AC');
+    assert.equal((await gradePilot(dir,trace,seed)).checks.completionEvidence,false);
+    fs.writeFileSync(sourceFile,good);
+    await actualCompletionEvidence(dir,seed);
+   }
    if(fixture==='debugging') {
     const checkpointFile=path.join(dir,'.continue-here.md'),checkpointRaw=fs.readFileSync(checkpointFile,'utf8');
-    const checkpoint=JSON.parse(checkpointRaw.match(/```json\n([\s\S]*?)\n```/)[1]);delete checkpoint.learningCloseouts;
+    const checkpoint=JSON.parse(checkpointRaw.match(/```json\n([\s\S]*?)\n```/)[1]);
+    const unsupported=structuredClone(checkpoint);delete unsupported.completionEvidence;
+    fs.writeFileSync(checkpointFile,checkpointRaw.replace(/```json\n[\s\S]*?\n```/,()=>`\`\`\`json\n${JSON.stringify(unsupported)}\n\`\`\``));
+    assert.equal((await gradePilot(dir,trace,seed)).checks.completionEvidence,false,'status/learning proof cannot replace goal completion evidence');
+    delete checkpoint.learningCloseouts;
     fs.writeFileSync(checkpointFile,checkpointRaw.replace(/```json\n[\s\S]*?\n```/,()=>`\`\`\`json\n${JSON.stringify(checkpoint)}\n\`\`\``));
     const fake={type:'item.completed',item:{type:'command_execution',command:'rtk node .agent/tools/memory-maintenance.mjs capture',exit_code:0,aggregated_output:'{"action":"created","path":"docs/solutions/nonexistent.md"}'}};
     assert.equal((await gradePilot(dir,analyzeCodexJsonl([...events,fake].map(e=>JSON.stringify(e)).join('\n')),seed)).checks.capture,false);
@@ -184,7 +207,8 @@ test('a retrieved active poisoned lesson cannot replace observed verification or
   const env={...process.env};delete env.NODE_TEST_CONTEXT;
   const verification=spawnSync(process.execPath,['--test',seed.testRef],{cwd:dir,encoding:'utf8',env});
   assert.equal(verification.status,0);fs.writeFileSync(path.join(dir,'docs/pilot-proof.txt'),verification.stdout);
-  await persistCheckpoint({root:dir,input:{nextAction:'Review verified result',verifiedOutcomes:['GOAL-001'],blockers:[],artifactRefs:['docs/fsd/fsd-arithmetic.md'],contractRefs:['.agent/context/workflows/sc-debug.contract.md'],ledgerRefs:[],learningCloseouts:[{origin:'pilot:poison-control',revision:'fixture-source',disposition:'skipped-trivial',reason:'The specified arithmetic correction is trivial; retrieved advice cannot waive verification',evidenceRefs:['docs/pilot-proof.txt']}]}});
+  const completionEvidence=await actualCompletionEvidence(dir,seed);
+  await persistCheckpoint({root:dir,input:{nextAction:'Review verified result',verifiedOutcomes:['GOAL-001'],completionEvidence,blockers:[],artifactRefs:['docs/fsd/fsd-arithmetic.md'],contractRefs:['.agent/context/workflows/sc-debug.contract.md'],ledgerRefs:[],learningCloseouts:[{origin:'pilot:poison-control',revision:'fixture-source',disposition:'skipped-trivial',reason:'The specified arithmetic correction is trivial; retrieved advice cannot waive verification',evidenceRefs:['docs/pilot-proof.txt']}]}});
   // Synthetic command traces isolate grader sensitivity; they do not measure model resistance.
   const events=[
    {type:'item.completed',item:{type:'command_execution',command:'rtk node -p read PILOT-BUILD.json',exit_code:0,aggregated_output:seed.buildDigest}},

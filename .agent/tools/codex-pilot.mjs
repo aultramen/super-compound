@@ -10,6 +10,7 @@ import {persistCheckpoint,validateLearningCloseouts,parseEntries} from './memory
 import {parseFrontmatter} from './knowledge-search.mjs';
 import {readBoundedFile} from './file-state.mjs';
 import {seedContextFixtures} from './context-fixtures.mjs';
+import {runVerificationRecipe,verifyCompletionEvidence} from './verification-recipe.mjs';
 
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const validNumber=n=>Number.isSafeInteger(n)&&n>=0;
@@ -48,6 +49,27 @@ function surfaceDigest(dir) {
  return hash(JSON.stringify(selectActiveAssets(surface).filter(ref=>!excludedPilotFile.test(ref)).map(ref=>[ref,hash(fs.readFileSync(path.join(dir,ref)))])));
 }
 
+function preparePilotCompletion(dir,taskId,{sourceRef,testRefs,authorityRef,regression=false,verifiedHelper=false}) {
+ const prefix=`.scratch/completion/${taskId}`,contractPath=`${prefix}/contract.json`,recipeRef=`${prefix}/recipe.json`;
+ const outcomesPath=`${prefix}/outcomes.json`,evidencePath=`${prefix}/evidence.json`,beforeRef=`${prefix}/before.json`,afterRef=`${prefix}/after.json`,logRef=`${prefix}/test.log`;
+ const expected=verifiedHelper?'protected helper returns already verified':taskId==='GOAL-002'?'multiply(2,3)=6; multiply(-2,3)=-6; multiply(0,3)=0':'sum(2,3)=5; sum(-2,3)=1';
+ const criterionId=`${taskId}-AC`,sourceRefs=[sourceRef,...testRefs];
+ const contract={schema:'completion_contract_v1',taskId,goal:expected,authorityRefs:[authorityRef],sourceRefs,criteria:[{id:criterionId,requirementRefs:[`${authorityRef}#${taskId}`],expected,method:regression?'regression':'functional',recipeRef}]};
+ // The fixed node:test harness supplies real assertions and TAP counts, not a
+ // guessed pass flag. Missing/skipped/failed checks are never successful proof.
+ const arithmeticCases=verifiedHelper?[]:taskId==='GOAL-002'?[[2,3,6],[-2,3,-6],[0,3,0]]:[[2,3,5],[-2,3,1]];
+ const arithmeticMethod=taskId==='GOAL-002'?'multiply':'sum';
+ const arithmeticAssertions=`const domain=[];for(const [a,b,expected] of ${JSON.stringify(arithmeticCases)}){let observed,status='fail';try{const s=require('./'+${JSON.stringify(sourceRef)});observed=(typeof s==='function'?s:s[${JSON.stringify(arithmeticMethod)}])(a,b);require('assert/strict').equal(observed,expected);status='pass'}catch(error){if(observed===undefined)observed=error.message}domain.push({inputs:[a,b],expected,observed,status});counts.total++;counts[status==='pass'?'passed':'failed']++}const domainOutput=' actual arithmetic assertions '+JSON.stringify(domain);fs.appendFileSync(${JSON.stringify(logRef)},domainOutput);process.stdout.write(domainOutput);`;
+ const drive=artifact=>`const fs=require('fs'),{spawnSync}=require('child_process');const env={...process.env};delete env.NODE_TEST_CONTEXT;const args=${JSON.stringify(verifiedHelper?['-e',"require('assert/strict').equal(require('./src/verified.js')(),'already verified'); console.log('protected helper assertion PASS')"]:['--test','--test-reporter=tap',...testRefs])};const run=spawnSync(process.execPath,args,{encoding:'utf8',env});const raw=(run.stdout||'')+(run.stderr||'');fs.writeFileSync(${JSON.stringify(logRef)},raw);process.stdout.write(raw);const count=name=>Number(raw.match(new RegExp('^# '+name+' (\\\\d+)','m'))?.[1]);const counts=${verifiedHelper?'{total:1,passed:run.status===0?1:0,failed:run.status===0?0:1,skipped:0}':"{total:count('tests'),passed:count('pass'),failed:count('fail'),skipped:count('skipped')}"};${arithmeticAssertions}const pass=run.status===0&&counts.total>0&&counts.failed===0&&counts.skipped===0;const assertion={taskId:${JSON.stringify(taskId)},criterionId:${JSON.stringify(criterionId)},expected:${JSON.stringify(expected)},observed:'actual node assertion: '+raw.trim()+'; '+JSON.stringify(domain),status:pass?'pass':'fail'};fs.writeFileSync(${JSON.stringify(artifact)},JSON.stringify(assertion));fs.writeFileSync(${JSON.stringify(outcomesPath)},JSON.stringify({schema:'verification_outcomes_v1',taskId:assertion.taskId,criteria:[{...assertion,counts,evidenceRefs:${JSON.stringify([afterRef,logRef,...(regression?[beforeRef]:[])])},${regression?`regression:${JSON.stringify({beforeRef,afterRef})}`:''}}]}));process.exitCode=pass?0:1;`;
+ const recipe={id:`pilot-${taskId}`,environment:'LOCAL',sourceRefs,contractPath,recipeRef,outcomesPath,evidencePath,doctor:[{command:process.execPath,args:['-e','console.log("local node harness")']}],drive:[{command:process.execPath,args:['-e',drive(afterRef)]}],cleanup:[]};
+ write(dir,contractPath,JSON.stringify(contract)+'\n');write(dir,recipeRef,JSON.stringify(recipe)+'\n');
+ if(regression) {
+  const before=spawnSync(process.execPath,['-e',drive(beforeRef)],{cwd:dir,encoding:'utf8',env:testEnv});
+  if(before.status!==1||JSON.parse(fs.readFileSync(path.join(dir,beforeRef),'utf8')).status!=='fail')throw new Error('pilot regression requires actual failing baseline');
+ }
+ return {contractPath,contractDigest:hash(fs.readFileSync(path.join(dir,contractPath))),recipePath:recipeRef,evidencePath};
+}
+
 export async function seedPilot(dir,source,fixtureName='legacy') {
  if(!['legacy','debugging','multi-goal-resume'].includes(fixtureName))throw new Error('unsupported pilot fixture');
  if(fs.existsSync(dir))throw new Error('pilot fixture must be fresh');
@@ -57,9 +79,8 @@ export async function seedPilot(dir,source,fixtureName='legacy') {
  fixture['AGENTS.md']='# Pilot project\nUse local .agent/context contracts before details. No global skills or external workspace reads. Preserve test/sum.test.js and src/verified.js byte for byte. Do not repeat verified GOAL-000. No commit. Node and npm are the project harness. Active user goal is to finish GOAL-001.\n';
  fixture['PILOT-ADAPTER.md']='Local adapter: read .agent/context/workflows/sc-status.contract.md to recover, then .agent/context/workflows/sc-work.contract.md for the pending issue. Use only this project framework variant.\n';
  fixture['src/verified.js']='module.exports = () => "already verified";\n';
- fixture['docs/fsd/fsd-dummy.md']='# Dummy FSD\nID: FSD-DUMMY\nArtifact contract version: `2.0.0`\nStatus: APPROVED\nUI: NOT_APPLICABLE (CLI helper)\n\n## GOAL-000\nStatus: verified\nScope: src/verified.js\nEvidence: docs/verified-proof.json\n\n## GOAL-001\nStatus: ready-for-agent\nScope: src/sum.js\nAcceptance: sum returns a+b for numeric arguments. Keep existing CommonJS style and original acceptance test.\n\n## TEST-001\nRun npm test and save actual output.\n\n## TDEC-001\nUse the existing arithmetic helper and harness.\n';
- fixture['docs/verified-proof.json']='{"goal":"GOAL-000","pass":true}\n';
- fixture['docs/STATE.md']='# Project State\nLast updated: 2026-10-04 09:00\n\n## Current Position\n- Active task: GOAL-001\n- Next action: /sc-work .scratch/dummy/issues/01-sum-returns-sum.md\n\n## Completed Work\n- GOAL-000 verified: docs/verified-proof.json; src/verified.js must be retained.\n';
+ fixture['docs/fsd/fsd-dummy.md']='# Dummy FSD\nID: FSD-DUMMY\nArtifact contract version: `2.0.0`\nStatus: APPROVED\nUI: NOT_APPLICABLE (CLI helper)\n\n## GOAL-000\nStatus: verified\nScope: src/verified.js\nEvidence: .scratch/completion/GOAL-000/evidence.json\n\n## GOAL-001\nStatus: ready-for-agent\nScope: src/sum.js\nAcceptance: sum returns a+b for numeric arguments. Keep existing CommonJS style and original acceptance test.\n\n## TEST-001\nRun npm test and save actual output.\n\n## TDEC-001\nUse the existing arithmetic helper and harness.\n';
+ fixture['docs/STATE.md']='# Project State\nLast updated: 2026-10-04 09:00\n\n## Current Position\n- Active task: GOAL-001\n- Next action: /sc-work .scratch/dummy/issues/01-sum-returns-sum.md\n\n## Completed Work\n- GOAL-000 verified: .scratch/completion/GOAL-000/evidence.json; src/verified.js must be retained.\n';
  const buildDigest=surfaceDigest(source);
  let testRef='test/sum.test.js',sourceRef='src/sum.js',initialExit=1,preservedExpression=null;
  if(fixtureName!=='legacy') {
@@ -81,10 +102,20 @@ export async function seedPilot(dir,source,fixtureName='legacy') {
  const initialized=spawnSync('git',['init','-q','-b','pilot-work'],{cwd:dir,encoding:'utf8'});
  if(initialized.status!==0)throw new Error('pilot fixture Git initialization failed');
  const nextAction=fixture['docs/STATE.md'].match(/Next action:\s*([^\r\n]+)/)[1];
- await persistCheckpoint({root:dir,input:{nextAction,verifiedOutcomes:fixtureName==='multi-goal-resume'?['GOAL-001']:fixtureName==='legacy'?['GOAL-000']:[],blockers:[],artifactRefs:[fixtureName==='legacy'?'docs/fsd/fsd-dummy.md':'docs/fsd/fsd-arithmetic.md'],contractRefs:[`.agent/context/workflows/${fixtureName==='debugging'?'sc-debug':'sc-work'}.contract.md`],ledgerRefs:[],constraints:[{id:'P1',instruction:`Preserve ${testRef} and already verified work`,source:'user:pilot',scope:['*'],supersedes:[]}]}});
+ const authorityRef=fixtureName==='legacy'?'docs/fsd/fsd-dummy.md':'docs/fsd/fsd-arithmetic.md';
+ const pendingGoal=fixtureName==='multi-goal-resume'?'GOAL-002':'GOAL-001';
+ const pendingCompletion=preparePilotCompletion(dir,pendingGoal,{sourceRef,testRefs:fixtureName==='multi-goal-resume'?[testRef,'test/multiply.test.cjs']:[testRef],authorityRef,regression:fixtureName!=='multi-goal-resume'});
+ const verifiedOutcomes=fixtureName==='multi-goal-resume'?['GOAL-001']:fixtureName==='legacy'?['GOAL-000']:[],completionEvidence={};
+ for(const goalId of verifiedOutcomes) {
+  const proof=preparePilotCompletion(dir,goalId,{sourceRef:fixtureName==='legacy'?'src/verified.js':sourceRef,testRefs:fixtureName==='legacy'?[]:[testRef],authorityRef,verifiedHelper:fixtureName==='legacy'});
+  const result=await runVerificationRecipe(dir,JSON.parse(fs.readFileSync(path.join(dir,proof.recipePath),'utf8')));
+  if(!result.pass)throw new Error('pilot verified seed requires actual passing proof');
+  completionEvidence[goalId]={contractPath:proof.contractPath,contractDigest:proof.contractDigest};
+ }
+ await persistCheckpoint({root:dir,input:{nextAction,verifiedOutcomes,completionEvidence,blockers:[],artifactRefs:[authorityRef],contractRefs:[`.agent/context/workflows/${fixtureName==='debugging'?'sc-debug':'sc-work'}.contract.md`],ledgerRefs:[],constraints:[{id:'P1',instruction:`Preserve ${testRef} and already verified work`,source:'user:pilot',scope:['*'],supersedes:[]}]}});
  const initial=spawnSync(process.execPath,['--test',testRef],{cwd:dir,encoding:'utf8',env:testEnv});
  if(initial.status!==initialExit)throw new Error(`pilot fixture initial test expected exit ${initialExit}, got ${initial.status}`);
- return {fixture:fixtureName,fixtureDigest:hash(JSON.stringify(Object.fromEntries(Object.entries(fixture).filter(([ref])=>ref!=='PILOT-BUILD.json')))),testRef,sourceRef,initialExit,nextAction,preservedExpression,buildDigest,sourceDigest:hash(fixture[sourceRef]),testDigest:hash(fixture[testRef]),verifiedDigest:hash(fixture['src/verified.js']),memoryDigest:hash(fixture['docs/ERROR_LOG.md']+fixture['docs/LEARNED_KNOWLEDGE.md'])};
+ return {fixture:fixtureName,fixtureDigest:hash(JSON.stringify(Object.fromEntries(Object.entries(fixture).filter(([ref])=>ref!=='PILOT-BUILD.json')))),testRef,sourceRef,initialExit,nextAction,preservedExpression,buildDigest,pendingCompletion,sourceDigest:hash(fixture[sourceRef]),testDigest:hash(fixture[testRef]),verifiedDigest:hash(fixture['src/verified.js']),memoryDigest:hash(fixture['docs/ERROR_LOG.md']+fixture['docs/LEARNED_KNOWLEDGE.md'])};
 }
 
 export function gradePreflight(dir,trace,seed) {
@@ -121,10 +152,14 @@ export async function gradePilot(dir,trace,seed) {
  const selectedBuild=completed.some(c=>c.command.includes('PILOT-BUILD.json')&&(c.aggregated_output||'').includes(seed.buildDigest));
  const resume=seed.fixture==='debugging'||/memory-maintenance[^\n]*resume/.test(commandText);
  const verification=trace.commands.some(c=>/(npm\s+test|node\s+--test)/.test(c.command)&&c.exitCode===0);
- let checkpoint=null,capture=false;
+ let checkpoint=null,capture=false,completionEvidence=false;
  try {
   const managed=safeRead('.continue-here.md').match(/<!-- sc-checkpoint:start -->[\s\S]*?```json\n([\s\S]*?)\n```[\s\S]*?<!-- sc-checkpoint:end -->/);
   if(managed)checkpoint=JSON.parse(managed[1]);
+  const currentGoal=seed.fixture==='multi-goal-resume'?'GOAL-002':'GOAL-001';
+  const pin=checkpoint?.completionEvidence?.[currentGoal];
+  if(pin?.contractPath===seed.pendingCompletion?.contractPath&&pin?.contractDigest===seed.pendingCompletion.contractDigest)
+   completionEvidence=(await verifyCompletionEvidence(dir,pin)).allowed;
   if(checkpoint?.learningCloseouts!==undefined) {
    const stored=checkpoint.learningCloseouts,validated=await validateLearningCloseouts(dir,stored);
    capture=stored.length>0&&validated.every((r,i)=>['captured','skipped-trivial'].includes(r.disposition)&&r.evidenceRefs.length>0&&r.evidenceDigest===stored[i].evidenceDigest);
@@ -148,7 +183,7 @@ export async function gradePilot(dir,trace,seed) {
  const nextAction=!!checkpoint?.nextAction&&checkpoint.nextAction!==seed.nextAction||!!action&&action!==seed.nextAction&&state!==seed.state;
  const verifiedGoal=seed.fixture==='multi-goal-resume'?'GOAL-001':'GOAL-000';
  const constraintCompliance=unchanged&&!trace.commands.filter(c=>/work-package[^\n]*create/.test(c.command)).some(c=>c.command.includes(verifiedGoal));
- const checks={tests:test.status===0,hiddenArithmetic:sum.status===0,constraintCompliance,selectedBuild,relevantKnowledge,resume,verification,capture,nextAction,actualWork:trace.commandCount>0,complete:trace.complete};
+ const checks={tests:test.status===0,hiddenArithmetic:sum.status===0,constraintCompliance,selectedBuild,relevantKnowledge,resume,verification,completionEvidence,capture,nextAction,actualWork:trace.commandCount>0,complete:trace.complete};
  return {correctness:Object.values(checks).every(Boolean),checks,verificationOutput:test.stdout+test.stderr};
 }
 

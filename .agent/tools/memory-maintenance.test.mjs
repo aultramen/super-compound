@@ -7,6 +7,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import {copyActiveDistribution} from './active-assets.mjs';
+import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
 
 import {
     buildReport,
@@ -409,11 +410,12 @@ test('refresh validates locators and preserves conflicting records until reviewe
     assert.match(fs.readFileSync(path.join(root, record), 'utf8'), /status: stale/);
 });
 
-test('checkpoint restores next action and blockers, skipping verified goals and detecting drift', (t) => {
+test('checkpoint restores next action and blockers, skipping verified goals and detecting drift', async (t) => {
     const root = makeRoot(t);
+    const proof=await provisionCompletionFixture(root,{taskId:'GOAL-001'});
     fs.writeFileSync(path.join(root, 'contract.md'), 'approved');
     fs.writeFileSync(path.join(root, '.continue-here.md'), '# Owner handoff\nKeep this note\n');
-    fs.writeFileSync(path.join(root, 'checkpoint.json'), JSON.stringify({nextAction: 'retry knowledge capture', verifiedOutcomes: ['GOAL-001 tests passed'], blockers: ['capture pending'], artifactRefs: ['contract.md'], contractRefs: ['contract.md'], ledgerRefs: []}));
+    fs.writeFileSync(path.join(root, 'checkpoint.json'), JSON.stringify({nextAction: 'retry knowledge capture', verifiedOutcomes: ['GOAL-001 tests passed'], completionEvidence:{'GOAL-001 tests passed':{contractPath:proof.contractPath,contractDigest:proof.contractDigest}}, blockers: ['capture pending'], artifactRefs: ['contract.md'], contractRefs: ['contract.md'], ledgerRefs: []}));
     const run = command => spawnSync(process.execPath, [TOOL, command, '--root', root, ...(command === 'checkpoint' ? ['--input-file', 'checkpoint.json'] : []), '--json'], {encoding: 'utf8'});
     assert.equal(run('checkpoint').status, 0);
     const restored = run('resume');
@@ -423,6 +425,56 @@ test('checkpoint restores next action and blockers, skipping verified goals and 
     assert.match(fs.readFileSync(path.join(root, '.continue-here.md'), 'utf8'), /Keep this note/);
     fs.writeFileSync(path.join(root, 'contract.md'), 'changed');
     assert.equal(JSON.parse(run('resume').stdout).drift.length, 1);
+});
+
+test('checkpoint refuses newly persisted completion prose without outcome evidence', async (t) => {
+    const {persistCheckpoint}=await import('./memory-maintenance.mjs');
+    const root=makeRoot(t),input={nextAction:'continue',verifiedOutcomes:['task done'],blockers:[],artifactRefs:[],contractRefs:[],ledgerRefs:[]};
+    await assert.rejects(persistCheckpoint({root,input}),/completionEvidence/);
+    assert.equal(fs.existsSync(path.join(root,'.continue-here.md')),false);
+});
+
+test('checkpoint accepts actual complete proof, diagnoses stale proof and refuses promotion before writing', async (t) => {
+    const {persistCheckpoint,restoreCheckpoint}=await import('./memory-maintenance.mjs');
+    const root=makeRoot(t),proof=await provisionCompletionFixture(root,{taskId:'single-task'});
+    const input={nextAction:'continue',verifiedOutcomes:['healthy outcome'],completionEvidence:{'healthy outcome':{contractPath:proof.contractPath,contractDigest:proof.contractDigest}},blockers:[],artifactRefs:[],contractRefs:[],ledgerRefs:[]};
+    await persistCheckpoint({root,input});
+    assert.deepEqual((await restoreCheckpoint({root})).completionIssues,[]);
+    const bytes=fs.readFileSync(path.join(root,'.continue-here.md'),'utf8');
+    assert.equal((await persistCheckpoint({root,input})).action,'unchanged');
+    fs.writeFileSync(path.join(root,proof.sourcePath),'changed implementation');
+    const restored=await restoreCheckpoint({root});
+    assert.equal(restored.status,'needs_validation');
+    assert.equal(restored.completionIssues[0].outcome,'healthy outcome');
+    await assert.rejects(persistCheckpoint({root,input}),/completionEvidence Needs Validation/);
+    assert.equal(fs.readFileSync(path.join(root,'.continue-here.md'),'utf8'),bytes);
+});
+
+test('failed and skipped acceptance evidence cannot become checkpoint verified outcomes', async (t) => {
+    const {persistCheckpoint}=await import('./memory-maintenance.mjs');
+    for (const status of ['fail','skip']) {
+        const root=makeRoot(t),proof=await provisionCompletionFixture(root,{taskId:status,status});
+        const input={nextAction:'continue',verifiedOutcomes:['goal achieved'],completionEvidence:{'goal achieved':{contractPath:proof.contractPath,contractDigest:proof.contractDigest}},blockers:[],artifactRefs:[],contractRefs:[],ledgerRefs:[]};
+        await assert.rejects(persistCheckpoint({root,input}),/completionEvidence Needs Validation/);
+        assert.equal(fs.existsSync(path.join(root,'.continue-here.md')),false);
+    }
+});
+
+test('legacy checkpoint stays readable but unproven verified metadata cannot skip or release its dependency', async (t) => {
+    const {persistCheckpoint,restoreCheckpoint}=await import('./memory-maintenance.mjs');
+    const root=makeRoot(t),ref=await writeReadyLedger(root),key=id=>`${ref}#${id}`;
+    const input={nextAction:'continue independent A',verifiedOutcomes:[],blockers:[],artifactRefs:[],contractRefs:[],ledgerRefs:[ref],goalScopes:{dependencies:{[key('A')]:[],[key('B')]:[key('A')],[key('C')]:[key('D')],[key('D')]:[]},blockers:{},contracts:{}}};
+    await persistCheckpoint({root,input});
+    const ledger=JSON.parse(fs.readFileSync(path.join(root,ref),'utf8'));
+    delete ledger.goals.D.completionContract;
+    fs.writeFileSync(path.join(root,ref),JSON.stringify(ledger));
+    const file=path.join(root,'.continue-here.md');
+    fs.writeFileSync(file,fs.readFileSync(file,'utf8').replace('"verifiedOutcomes": []','"verifiedOutcomes": ["D historically complete"]'));
+    const restored=await restoreCheckpoint({root});
+    assert.equal(restored.completionIssues[0].status,'Needs Validation');
+    assert.deepEqual(restored.skippedVerified,[]);
+    assert.deepEqual(restored.dispatchable,[{ledger:ref,id:'A'}]);
+    assert.deepEqual(restored.blocked.map(goal=>goal.id).sort(),['C','D']);
 });
 
 test('dismissed/deferred proposal is not reoffered without new evidence', (t) => {
@@ -771,11 +823,11 @@ test('maintenance catalog fails safely on unreadable scope rather than claiming 
 
 test('checkpoint preserves pending learning across updates and keeps verified work skipped', async (t) => {
     const {persistCheckpoint,restoreCheckpoint,captureMemory}=await import('./memory-maintenance.mjs');
-    const root=makeRoot(t),ref=writeReadyLedger(root);
+    const root=makeRoot(t),ref=await writeReadyLedger(root);
     const captureInputRef='.scratch/pending-captures/learning.json';
     fs.mkdirSync(path.dirname(path.join(root,captureInputRef)),{recursive:true});
     fs.writeFileSync(path.join(root,captureInputRef),JSON.stringify({input:captureInput('verified-work')}));
-    const base={nextAction:'dispatch',verifiedOutcomes:['D verified'],blockers:[],artifactRefs:[],contractRefs:[],ledgerRefs:[ref]};
+    const base={nextAction:'dispatch',verifiedOutcomes:['D verified'],completionEvidence:{'D verified':{ledgerRef:ref,goalId:'D'}},blockers:[],artifactRefs:[],contractRefs:[],ledgerRefs:[ref]};
     const pending={origin:'verified-work',revision:'1',disposition:'pending',reason:'retry capture',evidenceRefs:['proof.txt'],captureInputRef};
     await persistCheckpoint({root,input:{...base,learningCloseouts:[pending]}});
     const first=await restoreCheckpoint({root});
@@ -1002,7 +1054,7 @@ test('failed solution write retains validated pending input and retries idempote
 test('learning receipt reference preserves completion identity through pending overflow', async (t) => {
     const {persistCheckpoint,restoreCheckpoint}=await import('./memory-maintenance.mjs');
     const {contextDigest}=await import('./instruction-context.mjs');
-    const root=makeRoot(t),ref=writeReadyLedger(root),ledgerFile=path.join(root,ref);
+    const root=makeRoot(t),ref=await writeReadyLedger(root),ledgerFile=path.join(root,ref);
     const ledger=JSON.parse(fs.readFileSync(ledgerFile,'utf8'));
     const identity={workerId:'worker-1',attempt:1,goalId:'D',reportPath:ledger.goals.D.reportPath,reportDigest:'d'.repeat(64),evidence:ledger.goals.D.evidence,constraintDigest:contextDigest([])};
     const receiptId=contextDigest(identity);
@@ -1093,21 +1145,22 @@ test('failed archive retains active records and pending capture for safe retry',
     assert.equal(fs.readdirSync(path.join(root,'.scratch/pending-captures')).length,0);
 });
 
-function writeReadyLedger(root) {
+async function writeReadyLedger(root) {
     const ref='.scratch/work-packages/run-1/ledger.json';
     const goal=id=>({status:'ready',briefPath:`.scratch/${id}.md`,reportPath:`.scratch/${id}-report.md`,pathsPath:`.scratch/${id}.json`,reviewPackagePath:`.scratch/${id}.patch`,scopeDigest:'a'.repeat(64),baselineDirty:{},verification:'pending'});
     fs.mkdirSync(path.dirname(path.join(root,ref)),{recursive:true});
     fs.writeFileSync(path.join(root,'proof.txt'),'verified');
     const digests={authorityDigest:'a'.repeat(64),evalDigest:'b'.repeat(64),reviewerDigest:'c'.repeat(64)};
-    const evidence={...digests,evidenceRefs:['proof.txt'],evidenceArtifacts:[{path:'proof.txt',digest:createHash('sha256').update('verified').digest('hex')}]};
-    fs.writeFileSync(path.join(root,ref),JSON.stringify({schema:'work_package_ledger_v2',runId:'run-1',ledgerVersion:1,goals:{A:goal('A'),B:goal('B'),C:goal('C'),D:{...goal('D'),status:'verified',expectedEvidence:digests,evidence}}}));
+    const proof=await provisionCompletionFixture(root,{taskId:'D'});
+    const evidence={...digests,evidenceRefs:['proof.txt',proof.evidencePath],evidenceArtifacts:[{path:'proof.txt',digest:createHash('sha256').update('verified').digest('hex')},proof.evidenceRef]};
+    fs.writeFileSync(path.join(root,ref),JSON.stringify({schema:'work_package_ledger_v2',runId:'run-1',ledgerVersion:1,goals:{A:goal('A'),B:goal('B'),C:goal('C'),D:{...goal('D'),status:'verified',expectedEvidence:digests,completionContract:{path:proof.contractPath,digest:proof.contractDigest},evidence}}}));
     return ref;
 }
 
 test('resume diagnoses stale proof per goal and blocks only its dependency consumers', async (t) => {
     const {persistCheckpoint,restoreCheckpoint}=await import('./memory-maintenance.mjs');
-    const root=makeRoot(t),ref=writeReadyLedger(root),key=id=>`${ref}#${id}`;
-    const input={nextAction:'dispatch ready goals',verifiedOutcomes:['D previously verified'],blockers:[],artifactRefs:[],contractRefs:[],ledgerRefs:[ref],goalScopes:{dependencies:{[key('A')]:[],[key('B')]:[key('A')],[key('C')]:[key('D')],[key('D')]:[]},blockers:{},contracts:{}}};
+    const root=makeRoot(t),ref=await writeReadyLedger(root),key=id=>`${ref}#${id}`;
+    const input={nextAction:'dispatch ready goals',verifiedOutcomes:['D previously verified'],completionEvidence:{'D previously verified':{ledgerRef:ref,goalId:'D'}},blockers:[],artifactRefs:[],contractRefs:[],ledgerRefs:[ref],goalScopes:{dependencies:{[key('A')]:[],[key('B')]:[key('A')],[key('C')]:[key('D')],[key('D')]:[]},blockers:{},contracts:{}}};
     await persistCheckpoint({root,input});
     fs.writeFileSync(path.join(root,'proof.txt'),'changed');
     const result=await restoreCheckpoint({root});
@@ -1115,7 +1168,7 @@ test('resume diagnoses stale proof per goal and blocks only its dependency consu
     assert.deepEqual(result.blocked.map(goal=>goal.id).sort(),['C','D']);
     assert.deepEqual(result.skippedVerified,[]);
     assert.equal(result.staleEvidence[0].goalId,'D');
-    assert.equal((await persistCheckpoint({root,input:{...input,nextAction:'continue independent goal A'}})).action,'checkpointed');
+    assert.equal((await persistCheckpoint({root,input:{...input,verifiedOutcomes:[],completionEvidence:{},nextAction:'continue independent goal A'}})).action,'checkpointed');
     const ledger=JSON.parse(fs.readFileSync(path.join(root,ref),'utf8')); ledger.goals.D.scopeDigest='invalid';
     fs.writeFileSync(path.join(root,ref),JSON.stringify(ledger));
     await assert.rejects(restoreCheckpoint({root}),/scopeDigest/);
@@ -1123,7 +1176,7 @@ test('resume diagnoses stale proof per goal and blocks only its dependency consu
 
 test('resume blocks scoped drift and descendants while independent goals proceed', async (t) => {
     const {persistCheckpoint,restoreCheckpoint}=await import('./memory-maintenance.mjs');
-    const root=makeRoot(t), ref=writeReadyLedger(root), key=id=>`${ref}#${id}`;
+    const root=makeRoot(t), ref=await writeReadyLedger(root), key=id=>`${ref}#${id}`;
     fs.writeFileSync(path.join(root,'contract.md'),'approved');
     await persistCheckpoint({root,input:{nextAction:'dispatch ready goals',verifiedOutcomes:[],blockers:[],artifactRefs:[],contractRefs:['contract.md'],ledgerRefs:[ref],goalScopes:{dependencies:{[key('A')]:[],[key('B')]:[key('A')],[key('C')]:[],[key('D')]:[]},blockers:{},contracts:{'contract.md':[key('A')]}}}});
     fs.writeFileSync(path.join(root,'contract.md'),'changed');
@@ -1135,7 +1188,7 @@ test('resume blocks scoped drift and descendants while independent goals proceed
 
 test('resume fails closed for unknown blocker scope and rejects incomplete dependency scope', async (t) => {
     const {persistCheckpoint,restoreCheckpoint}=await import('./memory-maintenance.mjs');
-    const root=makeRoot(t), ref=writeReadyLedger(root);
+    const root=makeRoot(t), ref=await writeReadyLedger(root);
     await persistCheckpoint({root,input:{nextAction:'dispatch',verifiedOutcomes:[],blockers:['access needed'],artifactRefs:[],contractRefs:[],ledgerRefs:[ref]}});
     assert.deepEqual((await restoreCheckpoint({root})).dispatchable,[]);
     await assert.rejects(persistCheckpoint({root,input:{nextAction:'dispatch',verifiedOutcomes:[],blockers:[],artifactRefs:[],contractRefs:[],ledgerRefs:[ref],goalScopes:{dependencies:{},blockers:{},contracts:{}}}}), /dependency scope/);
@@ -1166,7 +1219,7 @@ test('archive-first interruption keeps both copies and retry preserves comments 
 
 test('scoped blockers respect dependency readiness and unknown contract scope stays fail closed', async (t) => {
     const {persistCheckpoint,restoreCheckpoint}=await import('./memory-maintenance.mjs');
-    const root=makeRoot(t),ref=writeReadyLedger(root),key=id=>`${ref}#${id}`;
+    const root=makeRoot(t),ref=await writeReadyLedger(root),key=id=>`${ref}#${id}`;
     fs.writeFileSync(path.join(root,'contract.md'),'approved');
     const input={nextAction:'dispatch',verifiedOutcomes:[],blockers:['needs access'],artifactRefs:[],contractRefs:['contract.md'],ledgerRefs:[ref],goalScopes:{dependencies:{[key('A')]:[],[key('B')]:[key('A')],[key('C')]:[key('D')],[key('D')]:[]},blockers:{'needs access':[key('A')]},contracts:{}}};
     await persistCheckpoint({root,input});

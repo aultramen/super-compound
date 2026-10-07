@@ -15,6 +15,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
 
 import {
   createReviewPackage,
@@ -34,12 +35,17 @@ test('stale proof blocks its consumers while independent dispatch and recovery p
   await writeFile(path.join(root,'issues','c.md'),'# GOAL-003\nBlocked by: a.md\n');
   await writeFile(path.join(root,'scope-a.json'),'["src/a"]');
   await writeFile(path.join(root,'scope-b.json'),'["src/b"]');
-  await writeFreshEvidence(root);
-  const first=await createWorkPackage(root,{runId:'run',goalId:'GOAL-001',briefPath:'issues/a.md',pathsFile:'scope-a.json',expectedEvidence:EXPECTED_EVIDENCE});
+  const proof=await writeCompletionEvidence(root,'GOAL-001');
+  const first=await createWorkPackage(root,{runId:'run',goalId:'GOAL-001',briefPath:'issues/a.md',pathsFile:'scope-a.json',expectedEvidence:EXPECTED_EVIDENCE,completionContract:proof.completionContract});
   let version=first.ledgerVersion;
   for (const status of ['in-progress','implemented','verified']) version=(await recordWorkPackageResult(root,{runId:'run',goalId:'GOAL-001',status,expectedVersion:version,verification:'mapped checks pass',...(['implemented','verified'].includes(status)?{evidence:freshEvidence()}: {})})).ledgerVersion;
   for (const [goalId,briefPath] of [['GOAL-002','issues/b.md'],['GOAL-003','issues/c.md']]) version=(await createWorkPackage(root,{runId:'run',goalId,briefPath,pathsFile:'scope-b.json',expectedEvidence:EXPECTED_EVIDENCE})).ledgerVersion;
   assert.equal((await readDispatchContext(root,{runId:'run',goalId:'GOAL-003'})).dispatchStatus,'ready');
+  const sourceBefore=await readFile(path.join(root,proof.sourcePath));
+  await writeFile(path.join(root,proof.sourcePath),'changed implementation source');
+  assert.equal((await readDispatchContext(root,{runId:'run',goalId:'GOAL-002'})).dispatchStatus,'ready');
+  await assert.rejects(readDispatchContext(root,{runId:'run',goalId:'GOAL-003'}),/completion|stale source/i);
+  await writeFile(path.join(root,proof.sourcePath),sourceBefore);
   await writeFreshEvidence(root,'changed proof');
   assert.equal((await readDispatchContext(root,{runId:'run',goalId:'GOAL-002'})).dispatchStatus,'ready');
   await assert.rejects(readDispatchContext(root,{runId:'run',goalId:'GOAL-003'}),/Evidence digest mismatch.*GOAL-001/);
@@ -59,6 +65,22 @@ const EXPECTED_EVIDENCE = {
 };
 const WORK_PACKAGE_CLI = fileURLToPath(new URL("./work-package.mjs", import.meta.url));
 
+test('failed or unassessed proof cannot promote a goal to verified', async (t) => {
+  const root = await mkdtemp(path.join(tmpdir(), 'work-package-no-false-completion-'));
+  t.after(() => rm(root, {recursive:true, force:true}));
+  await writeFile(path.join(root, 'goal.md'), '# GOAL-001\n');
+  await writeFile(path.join(root, 'scope.json'), '["src"]');
+  await writeFreshEvidence(root, '{"pass":false,"error":"acceptance failed"}');
+  const options = {runId:'run', goalId:'GOAL-001'};
+  const created = await createWorkPackage(root, {...options, briefPath:'goal.md', pathsFile:'scope.json', expectedEvidence:EXPECTED_EVIDENCE});
+  await recordWorkPackageResult(root, {...options, status:'in-progress', expectedVersion:created.ledgerVersion});
+  await recordWorkPackageResult(root, {...options, status:'implemented', expectedVersion:2, verification:'implementation produced', evidence:freshEvidence()});
+  const before = await readFile(created.ledgerPath);
+  await assert.rejects(recordWorkPackageResult(root, {...options, status:'verified', expectedVersion:3, verification:'claimed success', evidence:freshEvidence()}), /completion|criteria|outcome/i);
+  assert.deepEqual(await readFile(created.ledgerPath), before, 'a denied completion must leave the ledger unchanged');
+  assert.equal((await readLedger(root, created.ledgerPath, 'run', {checkEvidence:false})).goals['GOAL-001'].status, 'implemented');
+});
+
 function freshEvidence(overrides = {}) {
   return {
     ...EXPECTED_EVIDENCE,
@@ -72,6 +94,11 @@ async function writeFreshEvidence(root, content = '{"pass":true}\n') {
   await mkdir(path.dirname(evidencePath), { recursive: true });
   await writeFile(evidencePath, content);
   return evidencePath;
+}
+
+async function writeCompletionEvidence(root,taskId) {
+ const proof=await provisionCompletionFixture(root,{taskId,evidencePath:'.scratch/evidence/result.json'});
+ return {...proof,completionContract:{path:proof.contractPath,digest:proof.contractDigest}};
 }
 
 function runWorkPackageCli(root, args) {
@@ -220,7 +247,7 @@ test("createWorkPackage retry preserves a verified goal byte-for-byte", async ()
     await mkdir(path.dirname(evidencePath), { recursive: true });
     await writeFile(brief, "# Goal\n");
     await writeFile(pathsFile, '["src"]\n');
-    await writeFile(evidencePath, '{"pass":true}\n');
+    const proof=await writeCompletionEvidence(root,'goal-001');
 
     const created = await createWorkPackage(root, {
       runId: "idempotent-run",
@@ -228,6 +255,7 @@ test("createWorkPackage retry preserves a verified goal byte-for-byte", async ()
       briefPath: brief,
       pathsFile,
       expectedEvidence: EXPECTED_EVIDENCE,
+      completionContract:proof.completionContract,
     });
     await recordWorkPackageResult(root, {
       runId: "idempotent-run",
@@ -253,7 +281,7 @@ test("createWorkPackage retry preserves a verified goal byte-for-byte", async ()
     });
 
     const {persistCheckpoint, restoreCheckpoint} = await import('./memory-maintenance.mjs');
-    await persistCheckpoint({root,input:{nextAction:'retry capture', verifiedOutcomes:['goal-001 verified'], blockers:[], artifactRefs:['goal.md'], contractRefs:['goal.md'], ledgerRefs:['.scratch/work-packages/idempotent-run/ledger.json']}});
+    await persistCheckpoint({root,input:{nextAction:'retry capture', verifiedOutcomes:['goal-001 verified'], completionEvidence:{'goal-001 verified':{ledgerRef:'.scratch/work-packages/idempotent-run/ledger.json',goalId:'goal-001'}},blockers:[], artifactRefs:['goal.md'], contractRefs:['goal.md'], ledgerRefs:['.scratch/work-packages/idempotent-run/ledger.json']}});
     const resumed = await restoreCheckpoint({root});
     assert.deepEqual(resumed.dispatchable, []);
     assert.deepEqual(resumed.skippedVerified.map(g => g.id), ['goal-001']);
@@ -495,13 +523,14 @@ test("recordWorkPackageResult enforces ordered transitions, CAS, and fresh evide
     const pathsFile = path.join(root, "scope.json");
     await writeFile(brief, "# Goal\n");
     await writeFile(pathsFile, '["src"]\n');
-    await writeFreshEvidence(root);
+    const proof=await writeCompletionEvidence(root,'goal-001');
     await createWorkPackage(root, {
       runId: "result-run",
       goalId: "goal-001",
       briefPath: brief,
       pathsFile,
       expectedEvidence: EXPECTED_EVIDENCE,
+      completionContract:proof.completionContract,
     });
 
     await assert.rejects(
@@ -744,6 +773,39 @@ test("recordWorkPackageResult rechecks evidence after the durable ledger commit"
   }
 });
 
+test('proof drift during verified commit is quarantined before completion is returned', async (t) => {
+  const root=await mkdtemp(path.join(tmpdir(),'work-package-verified-commit-drift-'));
+  t.after(()=>rm(root,{recursive:true,force:true}));
+  await writeFile(path.join(root,'goal.md'),'# Goal\n');
+  await writeFile(path.join(root,'scope.json'),'["src"]');
+  const proof=await writeCompletionEvidence(root,'goal-001');
+  const common={runId:'run',goalId:'goal-001'};
+  const created=await createWorkPackage(root,{...common,briefPath:'goal.md',pathsFile:'scope.json',expectedEvidence:EXPECTED_EVIDENCE,completionContract:proof.completionContract});
+  await recordWorkPackageResult(root,{...common,status:'in-progress',expectedVersion:1});
+  await recordWorkPackageResult(root,{...common,status:'implemented',expectedVersion:2,verification:'actual outcome asserted',evidence:freshEvidence()});
+  let watcher,timeout;
+  try {
+    const mutated=new Promise((resolve,reject)=>{
+      timeout=setTimeout(()=>reject(new Error('verified commit not observed')),5000);
+      watcher=watch(path.dirname(created.ledgerPath),(_event,name)=>{
+        if (String(name)!==path.basename(created.ledgerPath)) return;
+        watcher.close(); watcher=undefined; clearTimeout(timeout);
+        writeFileSync(path.join(root,proof.evidencePath),'{"pass":false,"error":"changed during commit"}');
+        resolve();
+      });
+    });
+    const transition=recordWorkPackageResult(root,{...common,status:'verified',expectedVersion:3,verification:'actual verification',evidence:freshEvidence()});
+    await assert.rejects(transition,/evidence.*digest mismatch/i);
+    await mutated;
+    const ledger=await readLedger(root,created.ledgerPath,'run',{checkEvidence:false});
+    assert.equal(ledger.goals['goal-001'].status,'blocked');
+    assert.equal(ledger.goals['goal-001'].statusReason.code,'COMPLETION_DRIFT');
+    assert.ok(ledger.goals['goal-001'].quarantinedEvidence);
+    assert.equal(ledger.goals['goal-001'].evidence,undefined);
+    assert.equal(ledger.ledgerVersion,5);
+  } finally {clearTimeout(timeout);watcher?.close();}
+});
+
 test("ledger version overflow is rejected before any bytes change", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "work-package-version-overflow-"));
   try {
@@ -783,16 +845,18 @@ test("terminal evidence is digest-bound and rehashed before reuse", async () => 
   try {
     const brief = path.join(root, "goal.md");
     const pathsFile = path.join(root, "scope.json");
-    const originalEvidence = '{"pass":true}\n';
     await writeFile(brief, "# Goal\n");
     await writeFile(pathsFile, '["src"]\n');
-    const evidencePath = await writeFreshEvidence(root, originalEvidence);
+    const proof=await writeCompletionEvidence(root,'goal-001');
+    const evidencePath=path.join(root,proof.evidencePath);
+    const originalEvidence=await readFile(evidencePath);
     const created = await createWorkPackage(root, {
       runId: "digest-bound-run",
       goalId: "goal-001",
       briefPath: brief,
       pathsFile,
       expectedEvidence: EXPECTED_EVIDENCE,
+      completionContract:proof.completionContract,
     });
     await recordWorkPackageResult(root, {
       runId: "digest-bound-run",
@@ -928,9 +992,9 @@ test("CLI JSON inputs drive the complete recovery and verification lifecycle", a
   try {
     await writeFile(path.join(root, "goal.md"), "# Goal\n");
     await writeFile(path.join(root, "scope.json"), '["src"]\n');
-    await writeFreshEvidence(root);
+    const proof=await writeCompletionEvidence(root,'goal-001');
     const inputs = {
-      create: { expectedEvidence: EXPECTED_EVIDENCE },
+      create: { expectedEvidence: EXPECTED_EVIDENCE,completionContract:proof.completionContract },
       blocked: {
         expectedVersion: 1,
         reason: { code: "DEPENDENCY", detail: "upstream evidence missing" },

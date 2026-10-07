@@ -29,7 +29,9 @@ export function assertPrivacySafeRuntimeValue(value, label = 'runtime value') {
     }
     if (typeof candidate === 'string') {
       const opaqueHash = /^(?:sha256:[a-f0-9]{64}|[a-f0-9]{40}|[a-f0-9]{64})$/u.test(candidate);
-      if (!opaqueHash && SENSITIVE_TEXT_PATTERNS.some(pattern => candidate.replace(pattern, '') !== candidate)) {
+      // Exclude only the receipt hash; still inspect its ledger path and goal ID.
+      const inspected = candidate.replace(/^(\.scratch\/work-packages\/[A-Za-z0-9][A-Za-z0-9_-]{0,79}\/ledger\.json#[A-Za-z0-9][A-Za-z0-9_-]{0,79}#)[a-f0-9]{64}$/u, '$1');
+      if (!opaqueHash && SENSITIVE_TEXT_PATTERNS.some(pattern => inspected.replace(pattern, '') !== inspected)) {
         throw new TypeError(`PRIVACY_STOP: ${label} contains forbidden sensitive content.`);
       }
       return;

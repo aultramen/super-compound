@@ -11,6 +11,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import {validateConstraints, contextDigest, constraintBlock, relevantConstraints} from './instruction-context.mjs';
+import {verifyCompletionEvidence} from './verification-recipe.mjs';
 
 export async function amendWorkPackageConstraints(root, options) {
   const runId = validateId('runId', options.runId), goalId = validateId('goalId', options.goalId);
@@ -61,6 +62,15 @@ async function mutateCompletion(root, options, operation) {
     if (result.action !== 'unchanged') {
       incrementLedgerVersion(ledger);
       await writeJsonAtomic(root,ledgerPath,ledger,lock);
+      if (options.status === 'verified' && result.classification?.disposition === 'verified') {
+        try {
+          await assertEvidenceArtifactsFresh(root,goalId,goal.evidence);
+          await assertGoalCompletion(root,goal,goalId);
+        } catch (error) {
+          await quarantineCommittedCompletion(root,ledger,goalId,ledgerPath,lock,error);
+          throw error;
+        }
+      }
     }
     return {...result,ledgerVersion:ledger.ledgerVersion};
   });
@@ -107,6 +117,8 @@ export async function classifyCompletionReceipt(root, options) {
       } catch (error) { reason=`stale_evidence: ${error.message}`; }
     }
     if (!['implemented','verified'].includes(options.status)) throw new Error('classification requires implemented or verified');
+    // Outcome failures cannot be committed as a verified receipt or goal.
+    if (!reason && options.status === 'verified') await assertGoalCompletion(root,goal,goalId,receipt.evidence);
     if (reason) {
       // A previously verified goal is never rerun solely for inbox maintenance.
       if (goal.status !== 'verified') {
@@ -126,7 +138,7 @@ export async function classifyCompletionReceipt(root, options) {
         goal.evidence=receipt.evidence;
         goal.verification=`completion receipt ${options.receiptId}`;
       }
-      receipt.classification={disposition:goal.status,reason:'fresh scheduler-reviewed evidence'};
+      receipt.classification={disposition:goal.status,reason:goal.status === 'verified' ? 'complete outcome evidence independently reviewed' : 'implementation evidence received; verification pending'};
     }
     receipt.state='classified';
     return {action:'classified',receiptId:options.receiptId,classification:receipt.classification};
@@ -263,6 +275,10 @@ export async function createWorkPackage(root, options) {
     "expectedEvidence",
     false,
   );
+  const completionContract = options.completionContract === undefined ? undefined
+    : await pinCompletionContract(safeRoot,options.completionContract,goalId);
+  const runCompletionContract = options.runCompletionContract === undefined ? undefined
+    : await pinCompletionContract(safeRoot,options.runCompletionContract,runId);
 
   const packageDir = await resolveRepositoryPath(
     safeRoot,
@@ -300,6 +316,8 @@ export async function createWorkPackage(root, options) {
   let dispatchStatus = 'ready';
   await withLedgerLock(ledgerPath, async (lock) => {
     const ledger = await readLedger(safeRoot, ledgerPath, runId, {checkEvidence:false});
+    if (runCompletionContract && ledger.completionContract
+      && JSON.stringify(runCompletionContract) !== JSON.stringify(ledger.completionContract)) throw new Error('run completionContract already pinned');
     const existing = ledger.goals[goalId];
     if (existing) {
       if (existing.scopeDigest !== scopeDigest) {
@@ -310,6 +328,12 @@ export async function createWorkPackage(root, options) {
         JSON.stringify(existing.expectedEvidence) !== JSON.stringify(expectedEvidence)
       ) {
         throw new Error(`expectedEvidence already pinned for goalId: ${goalId}`);
+      }
+      if (completionContract && JSON.stringify(existing.completionContract) !== JSON.stringify(completionContract)) throw new Error('completionContract already pinned; attach missing proof through a nonterminal result');
+      if (runCompletionContract && !ledger.completionContract) {
+        ledger.completionContract = runCompletionContract;
+        incrementLedgerVersion(ledger);
+        await writeJsonAtomic(safeRoot,ledgerPath,ledger,lock);
       }
       ledgerVersion = ledger.ledgerVersion;
       dispatchStatus = existing.status === 'ready' ? 'ready' : 'not_ready';
@@ -326,9 +350,11 @@ export async function createWorkPackage(root, options) {
       baselineDirty,
       verification: "pending",
       ...(expectedEvidence ? { expectedEvidence } : {}),
+      ...(completionContract ? { completionContract } : {}),
       ...(options.constraints ? {constraints, constraintDigest: contextDigest(constraints)} : {}),
       ...(assignment ? {assignment} : {}),
     };
+    if (runCompletionContract) ledger.completionContract = runCompletionContract;
     incrementLedgerVersion(ledger);
     await writeJsonAtomic(safeRoot, ledgerPath, ledger, lock);
     ledgerVersion = ledger.ledgerVersion;
@@ -673,6 +699,12 @@ export async function recordWorkPackageResult(root, options) {
         options.evidence,
       );
     }
+    const completionContract = options.completionContract === undefined ? goal.completionContract
+      : await pinCompletionContract(safeRoot,options.completionContract,goalId);
+    if (goal.completionContract && completionContract
+      && JSON.stringify(goal.completionContract) !== JSON.stringify(completionContract)) throw new Error('completionContract already pinned');
+    if (evidence) await assertEvidenceArtifactsFresh(safeRoot,goalId,evidence);
+    if (options.status === 'verified') await assertGoalCompletion(safeRoot,{...goal,completionContract},goalId,evidence);
     const statusReason = ["blocked", "failed"].includes(options.status)
       ? validateStatusReason(options.reason)
       : undefined;
@@ -688,12 +720,19 @@ export async function recordWorkPackageResult(root, options) {
     }
     goal.verification = verification || `transitioned to ${options.status}`;
     if (evidence) goal.evidence = evidence;
+    if (completionContract) goal.completionContract = completionContract;
     if (statusReason) goal.statusReason = statusReason;
     if (recovery) goal.recovery = recovery;
     incrementLedgerVersion(ledger);
     await writeJsonAtomic(safeRoot, ledgerPath, ledger, lock);
     if (evidence) {
-      await assertEvidenceArtifactsFresh(safeRoot, goalId, evidence);
+      try {
+        await assertEvidenceArtifactsFresh(safeRoot,goalId,evidence);
+        if (options.status === 'verified') await assertGoalCompletion(safeRoot,goal,goalId);
+      } catch (error) {
+        if (options.status === 'verified') await quarantineCommittedCompletion(safeRoot,ledger,goalId,ledgerPath,lock,error);
+        throw error;
+      }
     }
     ledgerVersion = ledger.ledgerVersion;
   });
@@ -718,6 +757,42 @@ function validateDigestBundle(value, label, required = true) {
     result[key] = value[key];
   }
   return result;
+}
+
+function validateCompletionContractPin(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+    || Object.keys(value).some(key=>!['path','digest'].includes(key))
+    || !DIGEST_PATTERN.test(String(value.digest ?? ''))) throw new Error('completionContract must contain path and SHA-256 digest');
+  return {path:validateStoredPath(value.path,'completionContract.path'),digest:value.digest};
+}
+
+async function pinCompletionContract(root,value,taskId) {
+  const pin = validateCompletionContractPin(value);
+  const bytes = await readBoundedFile(root,pin.path,{maxBytes:MAX_EVIDENCE_BYTES});
+  if (createHash('sha256').update(bytes).digest('hex') !== pin.digest) throw new Error('completion contract digest mismatch');
+  const contract = JSON.parse(bytes.toString('utf8'));
+  if (contract.schema !== 'completion_contract_v1' || contract.taskId !== taskId) throw new Error('completion contract task identity mismatch');
+  return pin;
+}
+
+export async function assertGoalCompletion(root,goal,goalId,evidence=goal.evidence) {
+  if (!goal.completionContract) throw new Error(`Completion Needs Validation: ${goalId} has no pinned completion contract`);
+  const pin = await pinCompletionContract(root,goal.completionContract,goalId);
+  const verdict = await verifyCompletionEvidence(root,{contractPath:pin.path,contractDigest:pin.digest,evidenceRefs:evidence?.evidenceArtifacts});
+  if (!verdict.allowed) throw new Error(`Completion ${verdict.status}: ${goalId}: ${verdict.issues.join('; ')}`);
+  return verdict;
+}
+
+async function quarantineCommittedCompletion(root,ledger,goalId,ledgerPath,lock,error) {
+  const goal=ledger.goals[goalId],reason=String(error.message).slice(0,500);
+  goal.status='blocked';
+  goal.statusReason={code:'COMPLETION_DRIFT',detail:reason};
+  goal.verification=reason;
+  goal.quarantinedEvidence=goal.evidence;
+  delete goal.evidence;
+  for (const receipt of Object.values(goal.receipts??{})) if (receipt.classification?.disposition==='verified') receipt.classification={disposition:'blocked',reason};
+  incrementLedgerVersion(ledger);
+  await writeJsonAtomic(root,ledgerPath,ledger,lock);
 }
 
 function validateResultEvidence(expected, value, options = {}) {
@@ -1056,7 +1131,10 @@ export async function inspectLedgerEvidence(root, ledger, goalIds=Object.keys(le
     const goal=ledger.goals[goalId];
     if (!goal) throw new Error(`Unknown evidence goal: ${goalId}`);
     if (!goal.evidence) continue;
-    try { await assertEvidenceArtifactsFresh(root,goalId,goal.evidence); }
+    try {
+      await assertEvidenceArtifactsFresh(root,goalId,goal.evidence);
+      if (goal.status === 'verified') await assertGoalCompletion(root,goal,goalId);
+    }
     catch (error) { issues.push({goalId,reason:error.message}); }
   }
   return issues;
@@ -1108,7 +1186,7 @@ async function assertEvidenceArtifactsFresh(root, goalId, evidence) {
 }
 
 function validateLedger(ledger, runId) {
-  const topKeys = new Set(["schema", "runId", "ledgerVersion", "goals"]);
+  const topKeys = new Set(["schema", "runId", "ledgerVersion", "goals", "completionContract"]);
   const extraTop = Object.keys(ledger).find((key) => !topKeys.has(key));
   if (extraTop) throw new Error(`Unsupported ledger field: ${extraTop}`);
   if (
@@ -1122,6 +1200,7 @@ function validateLedger(ledger, runId) {
     throw new Error("Invalid work-package ledger header");
   }
   const goalEntries = Object.entries(ledger.goals);
+  if (ledger.completionContract !== undefined) validateCompletionContractPin(ledger.completionContract);
   if (goalEntries.length > 5000) {
     throw new Error("Invalid work-package ledger: too many goals");
   }
@@ -1165,6 +1244,7 @@ function validateLedgerGoal(goalId, goal) {
     "receipts",
     "assignment",
     "sourceBriefPath",
+    "completionContract",
   ]);
   const unknown = Object.keys(goal).find((key) => !allowed.has(key));
   if (unknown) throw new Error(`Unsupported ledger goal field: ${unknown}`);
@@ -1175,6 +1255,7 @@ function validateLedgerGoal(goalId, goal) {
   } else if (goal.constraintDigest !== undefined) throw new Error('constraints missing');
   if (goal.assignment !== undefined) validateAssignment(goal.assignment);
   if (goal.sourceBriefPath !== undefined) validateStoredPath(goal.sourceBriefPath,'sourceBriefPath');
+  if (goal.completionContract !== undefined) validateCompletionContractPin(goal.completionContract);
   if (goal.receipts !== undefined) {
     if (!goal.receipts || Array.isArray(goal.receipts) || typeof goal.receipts !== 'object' || Object.keys(goal.receipts).length > 20) throw new Error('invalid completion inbox');
     for (const [id,receipt] of Object.entries(goal.receipts)) {
@@ -1297,7 +1378,7 @@ export async function withLedgerLock(ledgerPath, operation) {
 }
 
 function reportSkeleton(goalId) {
-  return `# ${goalId} Report\n\n## Summary\n\nTracks implementation, evidence, and remaining work for ${goalId}. Verification is pending.\n\nStatus: in-progress\n\n<!-- Update summary on completion. Append Outcome, Changed Files, Verification, and Blockers; omit empty sections. -->\n`;
+  return `# ${goalId} Report\n\n## Summary\n\nTracks implementation, evidence, and remaining work for ${goalId}. Verification is pending.\n\nStatus: in-progress\n\n<!-- Update summary on completion. Append Outcome, Changed Files, Verification, and Blockers; omit empty sections. -->\n\n## Evidence of Completion\n\nPending verification. Map every authoritative requirement/AC to its actual check, result and evidence locator before declaring completion.\n`;
 }
 
 function parseArgs(argv) {
@@ -1372,7 +1453,7 @@ async function main() {
     ]);
     const input = await readCliInput(root, options["input-file"], {
       label: "create",
-      allowedFields: ["expectedEvidence", "composition", "constraints", "assignment"],
+      allowedFields: ["expectedEvidence", "composition", "constraints", "assignment", "completionContract", "runCompletionContract"],
       requiredFields: ["expectedEvidence"],
     });
     result = await createWorkPackage(root, {
@@ -1384,6 +1465,8 @@ async function main() {
       composition: input.composition,
       constraints: input.constraints,
       assignment: input.assignment,
+      completionContract: input.completionContract,
+      runCompletionContract: input.runCompletionContract,
     });
   } else if (['dispatch','constraints','submit','classify','ack'].includes(command)) {
     assertCliOptions(command,options,['run','goal','input-file']);
@@ -1408,7 +1491,7 @@ async function main() {
     ]);
     const input = await readCliInput(root, options["input-file"], {
       label: "record",
-      allowedFields: ["expectedVersion", "evidence", "reason", "recovery"],
+      allowedFields: ["expectedVersion", "evidence", "reason", "recovery", "completionContract"],
       requiredFields: ["expectedVersion"],
     });
     result = await recordWorkPackageResult(root, {
@@ -1420,6 +1503,7 @@ async function main() {
       evidence: input.evidence,
       reason: input.reason,
       recovery: input.recovery,
+      completionContract: input.completionContract,
     });
   } else {
     throw new Error(

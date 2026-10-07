@@ -6,6 +6,7 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {isActiveAsset, selectActiveAssets, retiredPaths,copyActiveDistribution} from './active-assets.mjs';
+import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
 
 test('retired archive preserves exact source bytes and excludes both locators', () => {
  const manifest=JSON.parse(fs.readFileSync('docs/archive/retired-assets-20261007/manifest.json','utf8'));
@@ -29,7 +30,7 @@ test('distribution rejects a missing local runtime import before copying', t => 
  assert.equal(fs.existsSync(destination),false);
 });
 
-test('real offline distribution runs memory commands and installation without repository-only assets', t => {
+test('real offline distribution runs memory commands, completion proof and installation without repository-only assets', async t => {
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'sc-offline-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
  const destination=path.join(root,'bundle'),project=path.join(root,'project');
  copyActiveDistribution(process.cwd(),destination);
@@ -43,6 +44,12 @@ test('real offline distribution runs memory commands and installation without re
  for(const command of ['install','doctor']) {
    const result=spawnSync(process.execPath,[path.join(destination,'.agent/tools/setup.mjs'),command,...options],{encoding:'utf8'});
    assert.equal(result.status,0,result.stdout+result.stderr);
+ }
+ for(const status of ['fail','pass']) {
+   const proof=await provisionCompletionFixture(destination,{taskId:`offline-${status}`,status});
+   const result=spawnSync(process.execPath,[path.join(destination,'.agent/tools/verified-promise.mjs'),'--root',destination,'--contract',proof.contractPath],{encoding:'utf8'});
+   assert.equal(result.status,status==='pass'?0:1,result.stdout+result.stderr);
+   assert.match(result.stdout,status==='pass'?/COMPLETE_ALLOWED[\s\S]*Evidence of Completion/:/COMPLETE_DENIED/);
  }
 });
 

@@ -43,6 +43,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 import { readLedger, inspectLedgerEvidence } from './work-package.mjs';
+import {verifyCompletionEvidence} from './verification-recipe.mjs';
 import { parseFrontmatter, splitEntries } from './knowledge-search.mjs';
 
 const ISO_DATE_RE = /(\d{4}-\d{2}-\d{2})/;
@@ -1015,6 +1016,48 @@ async function checkpointGoals(root, ledgerRefs) {
     return goals;
 }
 
+async function checkpointCompletionEvidence(root, outcomes, mapping, {stored = false, goals = new Map()} = {}) {
+    if (mapping === undefined) {
+        if (outcomes.length && !stored) throw new Error('verifiedOutcomes require completionEvidence for every claim');
+        return {mapping:undefined,issues:outcomes.map(outcome=>({outcome,status:'Needs Validation',reason:'legacy completion claim has no outcome evidence'}))};
+    }
+    if (!mapping || typeof mapping !== 'object' || Array.isArray(mapping) || Object.keys(mapping).length > 20
+        || Object.keys(mapping).some(outcome=>!outcomes.includes(outcome))) throw new Error('invalid completionEvidence mapping');
+    const validated=Object.create(null),issues=[];
+    for (const outcome of outcomes) {
+        const value=Object.hasOwn(mapping,outcome) ? mapping[outcome] : undefined;
+        if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('completionEvidence must cover every verified outcome');
+        let pin,reason;
+        if (Object.hasOwn(value,'ledgerRef')) {
+            if (Object.keys(value).some(key=>!['ledgerRef','goalId'].includes(key))) throw new Error('invalid completionEvidence ledger fields');
+            const ledgerRef=canonicalLocator(singleLine(value.ledgerRef,'completion ledgerRef',300));
+            const goalId=singleLine(value.goalId,'completion goalId',200);
+            const goal=goals.get(`${ledgerRef}#${goalId}`) || (await checkpointGoals(root,[ledgerRef])).get(`${ledgerRef}#${goalId}`);
+            pin={ledgerRef,goalId};
+            if (!goal || goal.status!=='verified') reason='completionEvidence requires a verified ledger goal';
+            else if (goal.evidenceIssue) reason=goal.evidenceIssue.detail || String(goal.evidenceIssue);
+        } else {
+            if (Object.keys(value).some(key=>!['contractPath','contractDigest','evidenceRefs'].includes(key))) throw new Error('invalid completionEvidence contract fields');
+            const contractPath=canonicalLocator(singleLine(value.contractPath,'completion contractPath',300));
+            if (!/^[a-f0-9]{64}$/.test(value.contractDigest || '')) throw new Error('invalid completionEvidence contract digest');
+            pin={contractPath,contractDigest:value.contractDigest};
+            if (value.evidenceRefs!==undefined) {
+                if (!Array.isArray(value.evidenceRefs) || !value.evidenceRefs.length || value.evidenceRefs.length>100) throw new Error('completionEvidence evidenceRefs must be bounded');
+                pin.evidenceRefs=value.evidenceRefs.map(ref=>canonicalLocator(singleLine(ref,'completion evidenceRef',300)));
+            }
+            const verdict=await verifyCompletionEvidence(root,pin);
+            if (!verdict.allowed) reason=verdict.issues.join('; ');
+        }
+        assertPrivacySafeRuntimeValue(pin,'completionEvidence');
+        validated[outcome]=pin;
+        if (reason) {
+            if (!stored) throw new Error(`completionEvidence Needs Validation: ${reason}`);
+            issues.push({outcome,status:'Needs Validation',reason});
+        }
+    }
+    return {mapping:validated,issues};
+}
+
 function validateGoalScopes(scopes, goals) {
     if (scopes === undefined) return;
     if (!scopes || typeof scopes !== 'object' || Array.isArray(scopes) || Object.keys(scopes).some(k=>!['dependencies','blockers','contracts'].includes(k))) throw new Error('invalid goalScopes');
@@ -1052,7 +1095,8 @@ export async function persistCheckpoint({root, input, dryRun = false, writeOptio
         const contracts = input.contractRefs.length ? await evidenceFor(root, input.contractRefs, 20) : [];
         const goals = input.goalScopes === undefined && input.learningCloseouts === undefined ? null : await checkpointGoals(root,input.ledgerRefs);
         if (goals) validateGoalScopes(input.goalScopes,goals);
-        const checkpoint = {...(constraints ? {constraints, constraintDigest:contextDigest(constraints)} : {}), ...(input.goalScopes === undefined ? {} : {goalScopes:input.goalScopes}), nextAction, verifiedOutcomes: input.verifiedOutcomes, blockers: input.blockers, artifactRefs: input.artifactRefs, contracts, ledgerRefs: input.ledgerRefs};
+        const completion=await checkpointCompletionEvidence(root,input.verifiedOutcomes,input.completionEvidence,{goals:goals || new Map()});
+        const checkpoint = {...(constraints ? {constraints, constraintDigest:contextDigest(constraints)} : {}), ...(input.goalScopes === undefined ? {} : {goalScopes:input.goalScopes}), ...(completion.mapping===undefined?{}:{completionEvidence:completion.mapping}), nextAction, verifiedOutcomes: input.verifiedOutcomes, blockers: input.blockers, artifactRefs: input.artifactRefs, contracts, ledgerRefs: input.ledgerRefs};
         const raw = await readMemory(root, '.continue-here.md');
         const previous = parseCheckpoint(raw);
         const priorGoals=goals || await checkpointGoals(root,previous?.ledgerRefs || []);
@@ -1107,6 +1151,7 @@ export async function restoreCheckpoint({root}) {
         } catch { drift.push(contract.ref); }
     }
     const goals=await checkpointGoals(root,checkpoint.ledgerRefs);
+    const completion=await checkpointCompletionEvidence(root,checkpoint.verifiedOutcomes,checkpoint.completionEvidence,{stored:true,goals});
     if (checkpoint.pendingLearningQueue!==undefined && checkpoint.pendingLearningQueue!==PENDING_LEARNING_QUEUE) throw new Error('invalid pending learning queue');
     const queued=await queuedLearningCloseouts(root,goals);
     const hot=checkpoint.learningCloseouts === undefined ? [] : await validateLearningCloseouts(root,checkpoint.learningCloseouts,{stored:true,goals});
@@ -1152,7 +1197,7 @@ export async function restoreCheckpoint({root}) {
         for(const [receiptId,receipt] of Object.entries(goal.receipts))if(receipt.state!=='acknowledged')pendingCompletions.push({ledger:goal.ledger,goalId:goal.id,receiptId,state:receipt.state,classification:receipt.classification||null});
     }
     validateConstraints([...activeConstraints.values()]);
-    return {checkpoint,activeConstraints:[...activeConstraints.values()],pendingCompletions,pendingKnowledgeMaintenance,pendingLearningQueueIssues:queued.issues,learningCoverage:checkpoint.learningCloseouts===undefined && !queued.records.length?'legacy-unknown':'recorded',drift,staleEvidence,dispatchable,skippedVerified,blocked,unknownScope,status:drift.length?'contract_drift':staleEvidence.length?'evidence_drift':'restored'};
+    return {checkpoint,completionIssues:completion.issues,activeConstraints:[...activeConstraints.values()],pendingCompletions,pendingKnowledgeMaintenance,pendingLearningQueueIssues:queued.issues,learningCoverage:checkpoint.learningCloseouts===undefined && !queued.records.length?'legacy-unknown':'recorded',drift,staleEvidence,dispatchable,skippedVerified,blocked,unknownScope,status:drift.length?'contract_drift':staleEvidence.length?'evidence_drift':completion.issues.length?'needs_validation':'restored'};
 }
 
 export async function flushPendingMaintenance({root}) {
