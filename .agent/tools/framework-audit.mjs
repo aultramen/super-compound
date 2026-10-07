@@ -86,6 +86,7 @@ export function checkExecutableReferences(file, text, fileSet) {
   for (const missing of missingLocalModules(file,text,fileSet)) {
     findings.push(finding('P1','MISSING_LOCAL_MODULE',file,`Local runtime dependency is not shipped: ${missing}`));
   }
+  if (!file.endsWith('.md')) return findings;
   const commands = /\b(?:node|python3?|pwsh)\s+(?:--?[a-z-]+\s+)*["']?(\.(?:agent|codex|claude)\/[A-Za-z0-9_./-]+\.(?:mjs|js|py|ps1))\b/g;
   for (const match of text.matchAll(commands)) {
     if (!fileSet.has(match[1])) findings.push(finding('P1', 'MISSING_EXECUTABLE_REFERENCE', file, `Executable reference is not shipped: ${match[1]}`));
@@ -238,8 +239,8 @@ export async function auditRepository(root, options = {}) {
         paragraphs,
       );
       await validateMarkdownLinks(root, file, text, fileSet, findings);
-      findings.push(...checkExecutableReferences(file, text, fileSet));
     }
+    findings.push(...checkExecutableReferences(file, text, fileSet));
   }
 
   validateExactDuplicates(contentHashes, findings);
