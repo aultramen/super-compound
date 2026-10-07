@@ -45,10 +45,15 @@ test('live reduction gates on current sources and stays outside historical total
   assert.equal((await evaluateScenarios(root, [historical, scenario], baseline)).scenarios[1].pass, false);
 });
 
-test('hints is registered with the shared runtime read-only rule', async () => {
-  const source = await readFile(new URL('./workflow-admission.mjs', import.meta.url), 'utf8');
-  assert.match(source, /"sc-hints": READ_ONLY_ROUTE_RULE/);
-  assert.match(source, /READ_ONLY_ROUTE_RULE = Object.freeze\(\{\s*authority: false,\s*gated: \[\],\s*operations: \[\]/);
+test('hints is registered in the active manifest as read-only consultation', async () => {
+  const manifest = JSON.parse(await readFile(new URL('../context/workflow-invariants.json', import.meta.url), 'utf8'));
+  const hints = manifest.routes['sc-hints'];
+  assert.equal(hints.authority, 'advisory-guidance-only');
+  assert.equal(hints.mutation, 'read-only');
+  assert.equal(hints.evidenceSink, 'chat only');
+  assert.deepEqual(hints.nextOwners, ['dynamic-public-route']);
+  const workflow = await readFile(new URL('../workflows/sc-hints.md', import.meta.url), 'utf8');
+  for (const marker of [/read-only/i, /accepts advice only/, /explicit execution request/]) assert.match(workflow, marker);
 });
 
 test('contract-first hints retains consultation boundaries and owner gates', async () => {

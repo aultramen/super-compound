@@ -6,7 +6,7 @@ description: "Use when the knowledge store may have drifted from the codebase, a
 # Knowledge Refresh
 
 Audit `docs/solutions/**` against the current repository so stored knowledge
-stays true. Announce use before changing any record.
+stays true.
 
 ## When to Use
 

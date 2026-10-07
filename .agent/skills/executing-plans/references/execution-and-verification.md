@@ -7,7 +7,7 @@ needed to resolve an uncovered execution detail.
 
 1. Mark the issue, ledger, or conversation checklist in progress.
 2. Read referenced sources and nearby patterns.
-3. Confirm FSD ownership, dependency direction, API/data contracts, UI conventions, `TDEC-*`, and accepted ADRs.
+3. Confirm applicable authority: FSD/GOAL for full-tier work, concrete request/issue acceptance for light-tier work; inspect affected dependencies/contracts and existing UI conventions. Use `TDEC-*`/accepted ADRs only when applicable.
 4. Invoke `architecture-enforcement` when placement or direction is uncertain.
 5. Use `test-driven-development` for every new behavior or regression.
 6. Make the smallest cohesive edit satisfying the goal.

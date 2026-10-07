@@ -55,7 +55,7 @@ node .agent/tools/setup.mjs doctor --scope project --host codex --target "PATH T
 
 For global activation, invoke `/sc-init setup` inside the project. Read the cached `SETUP.md` and run its engine with `--scope project --source "PATH TO HOME/.super-compound/framework" --target "PATH TO PROJECT"`. Plain `/sc-init` and `/sc-init reload` remain read-only. A cached installation supports offline project activation.
 
-New project configuration sets `conventions.approval_mode: stage`: approve BRD, approve PRD, approve FSD with goals and verification, then authorize execution separately. Existing project configuration and authorization remain intact. Internal corrections, derived boards, and evidence do not create new approval gates. Documentation uses [Documentation Output Standard](.agent/context/output-style.md).
+New project configuration sets `conventions.approval_mode: exception`. A concrete implementation request authorizes bounded low/medium-risk work and its necessary artifacts; preserve scoped user-intent provenance and ask only for unresolved material decisions, critical missing information, or risky actions outside that authority. Explicit `stage` mode retains separate BRD, PRD, FSD and execution approvals. Existing project configuration and authorization remain intact. Internal corrections, derived boards, and unchanged contract promotions run without administrative approval gates. Documentation uses [Documentation Output Standard](.agent/context/output-style.md).
 
 ## Native Adapters
 

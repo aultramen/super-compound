@@ -17,7 +17,7 @@ export async function amendWorkPackageConstraints(root, options) {
   const ledgerPath = await resolveRepositoryPath(root, `.scratch/work-packages/${runId}/ledger.json`);
   const constraints = validateConstraints(options.constraints);
   return withLedgerLock(ledgerPath, async lock => {
-    const ledger = await readLedger(root, ledgerPath, runId);
+    const ledger = await readLedger(root, ledgerPath, runId, {checkEvidence:false});
     const goal = ledger.goals[goalId];
     if (!goal) throw new Error('Unknown goal');
     if (goal.constraintDigest === contextDigest(constraints)) return {action:'unchanged',ledgerVersion:ledger.ledgerVersion};
@@ -34,9 +34,11 @@ export async function amendWorkPackageConstraints(root, options) {
 
 export async function readDispatchContext(root, options) {
   const runId = validateId('runId',options.runId), goalId = validateId('goalId',options.goalId);
-  const ledger = await readLedger(root,`.scratch/work-packages/${runId}/ledger.json`,runId);
+  const ledger = await readLedger(root,`.scratch/work-packages/${runId}/ledger.json`,runId,{checkEvidence:false});
   const goal = ledger.goals[goalId];
   if (!goal) throw new Error('Unknown goal');
+  await assertPackageDependenciesFresh(root,ledger,goalId);
+  await assertLedgerEvidenceFresh(root,ledger,[goalId]);
   const raw = await readBoundedFile(root,goal.briefPath,{encoding:'utf8',maxBytes:MAX_BRIEF_BYTES});
   const text = raw.replace(/\n\n<!-- sc-constraints:start -->[\s\S]*?<!-- sc-constraints:end -->/g,'') + constraintBlock(goal.constraints || [],goalId);
   const composition = composePayload({mandatory:text,maxTokens:options.maxTokens,targetTokens:options.targetTokens});
@@ -96,6 +98,8 @@ export async function classifyCompletionReceipt(root, options) {
     else if (receipt.constraintDigest !== (goal.constraintDigest || contextDigest([]))) reason='constraint_drift';
     else {
       try {
+        await assertPackageDependenciesFresh(root,ledger,goalId);
+        await assertLedgerEvidenceFresh(root,ledger,[goalId]);
         const report=await readBoundedFile(root,receipt.reportPath,{maxBytes:MAX_BRIEF_BYTES});
         if (createHash('sha256').update(report).digest('hex') !== receipt.reportDigest) throw new Error('report digest mismatch');
         validateResultEvidence(goal.expectedEvidence,receipt.evidence,{stored:true});
@@ -295,7 +299,7 @@ export async function createWorkPackage(root, options) {
   let ledgerVersion;
   let dispatchStatus = 'ready';
   await withLedgerLock(ledgerPath, async (lock) => {
-    const ledger = await readLedger(safeRoot, ledgerPath, runId);
+    const ledger = await readLedger(safeRoot, ledgerPath, runId, {checkEvidence:false});
     const existing = ledger.goals[goalId];
     if (existing) {
       if (existing.scopeDigest !== scopeDigest) {
@@ -313,6 +317,7 @@ export async function createWorkPackage(root, options) {
     }
     ledger.goals[goalId] = {
       status: "ready",
+      sourceBriefPath: repositoryRelative(safeRoot,await resolveRepositoryPath(safeRoot,options.briefPath)),
       briefPath: repositoryRelative(safeRoot, briefPath),
       reportPath: repositoryRelative(safeRoot, reportPath),
       pathsPath: repositoryRelative(safeRoot, pathsPath),
@@ -363,7 +368,7 @@ export async function createReviewPackage(root, options) {
     path.join(".scratch", "work-packages", runId, "ledger.json"),
     { label: "ledgerPath" },
   );
-  const ledger = await readLedger(safeRoot, ledgerPath, runId);
+  const ledger = await readLedger(safeRoot, ledgerPath, runId, {checkEvidence:false});
   const goal = ledger.goals[goalId];
   if (!goal?.scopeDigest || goal.scopeDigest !== digestPaths(paths)) {
     throw new Error("Scheduler-owned review scope is missing or was modified");
@@ -631,7 +636,7 @@ export async function recordWorkPackageResult(root, options) {
   );
   let ledgerVersion;
   await withLedgerLock(ledgerPath, async (lock) => {
-    const ledger = await readLedger(safeRoot, ledgerPath, runId);
+    const ledger = await readLedger(safeRoot, ledgerPath, runId, {checkEvidence:false});
     assertExpectedVersion(
       ledger.ledgerVersion,
       options.expectedVersion,
@@ -651,6 +656,10 @@ export async function recordWorkPackageResult(root, options) {
       throw new Error(
         "FRESH_VERIFICATION_REPLAN_REQUIRED: migrated legacy verification must be replanned as a new v2 work package",
       );
+    }
+    if (["in-progress", "implemented", "verified"].includes(options.status)) {
+      await assertPackageDependenciesFresh(safeRoot,ledger,goalId);
+      await assertLedgerEvidenceFresh(safeRoot,ledger,[goalId]);
     }
 
     let evidence;
@@ -673,6 +682,10 @@ export async function recordWorkPackageResult(root, options) {
         : undefined;
 
     goal.status = options.status;
+    if (statusReason && goal.evidence && (await inspectLedgerEvidence(safeRoot,ledger,[goalId])).length) {
+      goal.quarantinedEvidence=goal.evidence;
+      delete goal.evidence;
+    }
     goal.verification = verification || `transitioned to ${options.status}`;
     if (evidence) goal.evidence = evidence;
     if (statusReason) goal.statusReason = statusReason;
@@ -1003,7 +1016,7 @@ async function writeIfMissing(root, target, content, maxBytes) {
   }
 }
 
-export async function readLedger(root, ledgerPath, runId, {checkEvidence=true}={}) {
+export async function readLedger(root, ledgerPath, runId, {checkEvidence=true,evidenceGoalIds}={}) {
   const content = await readBoundedFile(root, ledgerPath, {
     encoding: "utf8",
     label: "Work-package ledger",
@@ -1032,15 +1045,51 @@ export async function readLedger(root, ledgerPath, runId, {checkEvidence=true}={
     );
   }
   validateLedger(ledger, runId);
-  if (checkEvidence) await assertLedgerEvidenceFresh(root, ledger);
+  if (checkEvidence) await assertLedgerEvidenceFresh(root, ledger, evidenceGoalIds);
   return ledger;
 }
 
-async function assertLedgerEvidenceFresh(root, ledger) {
-  for (const [goalId, goal] of Object.entries(ledger.goals)) {
+export async function inspectLedgerEvidence(root, ledger, goalIds=Object.keys(ledger.goals)) {
+  if (!Array.isArray(goalIds) || goalIds.length>5000 || new Set(goalIds).size!==goalIds.length) throw new Error('Invalid evidence goal selection');
+  const issues=[];
+  for (const goalId of goalIds) {
+    const goal=ledger.goals[goalId];
+    if (!goal) throw new Error(`Unknown evidence goal: ${goalId}`);
     if (!goal.evidence) continue;
-    await assertEvidenceArtifactsFresh(root, goalId, goal.evidence);
+    try { await assertEvidenceArtifactsFresh(root,goalId,goal.evidence); }
+    catch (error) { issues.push({goalId,reason:error.message}); }
   }
+  return issues;
+}
+
+async function assertLedgerEvidenceFresh(root, ledger, goalIds) {
+  const issues=await inspectLedgerEvidence(root,ledger,goalIds);
+  if (issues.length) throw new Error(issues[0].reason);
+}
+
+async function assertPackageDependenciesFresh(root, ledger, goalId, visiting=new Set(), checked=new Set()) {
+  if (visiting.has(goalId)) throw new Error('Cyclic work-package dependency');
+  if (checked.has(goalId)) return;
+  visiting.add(goalId);
+  const goal=ledger.goals[goalId];
+  const brief=await readBoundedFile(root,goal.briefPath,{encoding:'utf8',maxBytes:MAX_BRIEF_BYTES});
+  const declaration=brief.match(/^Blocked by:\s*(.+)$/m)?.[1]?.trim();
+  const refs=!declaration || /^none$/i.test(declaration) ? [] : declaration.split(/[,\s]+/).filter(Boolean);
+  for (const ref of refs) {
+    let dependencyId=Object.hasOwn(ledger.goals,ref) ? ref : null;
+    if (!dependencyId) {
+      const source=goal.sourceBriefPath ? normalizeRelativePath(path.posix.join(path.posix.dirname(goal.sourceBriefPath),ref.replaceAll('\\','/'))) : null;
+      const matches=Object.entries(ledger.goals).filter(([,candidate])=>candidate.sourceBriefPath && source
+        && (process.platform==='win32' ? candidate.sourceBriefPath.toLowerCase()===source.toLowerCase() : candidate.sourceBriefPath===source));
+      if (matches.length===1) dependencyId=matches[0][0];
+    }
+    if (!dependencyId) throw new Error(`Unresolved work-package dependency: ${ref}`);
+    if (ledger.goals[dependencyId].status!=='verified') throw new Error(`Work-package dependency is not verified: ${dependencyId}`);
+    await assertLedgerEvidenceFresh(root,ledger,[dependencyId]);
+    await assertPackageDependenciesFresh(root,ledger,dependencyId,visiting,checked);
+  }
+  visiting.delete(goalId);
+  checked.add(goalId);
 }
 
 async function assertEvidenceArtifactsFresh(root, goalId, evidence) {
@@ -1115,6 +1164,7 @@ function validateLedgerGoal(goalId, goal) {
     "constraintDigest",
     "receipts",
     "assignment",
+    "sourceBriefPath",
   ]);
   const unknown = Object.keys(goal).find((key) => !allowed.has(key));
   if (unknown) throw new Error(`Unsupported ledger goal field: ${unknown}`);
@@ -1124,6 +1174,7 @@ function validateLedgerGoal(goalId, goal) {
     if (goal.constraintDigest !== contextDigest(goal.constraints)) throw new Error('constraint digest mismatch');
   } else if (goal.constraintDigest !== undefined) throw new Error('constraints missing');
   if (goal.assignment !== undefined) validateAssignment(goal.assignment);
+  if (goal.sourceBriefPath !== undefined) validateStoredPath(goal.sourceBriefPath,'sourceBriefPath');
   if (goal.receipts !== undefined) {
     if (!goal.receipts || Array.isArray(goal.receipts) || typeof goal.receipts !== 'object' || Object.keys(goal.receipts).length > 20) throw new Error('invalid completion inbox');
     for (const [id,receipt] of Object.entries(goal.receipts)) {

@@ -9,8 +9,6 @@ description: "Use when a plan or issue board has 2+ independent execution stream
 
 Execute independent tasks simultaneously in isolated Git worktrees when the saved time justifies coordination overhead.
 
-**Announce:** "I'm using the parallel-execution skill to run independent tasks in parallel."
-
 **Core principle:** Parallel only works when tasks are truly independent. One shared file = sequential.
 
 ## Reference Router

@@ -11,13 +11,13 @@ Apply this procedure within its authorized scope and use `.agent/context/output-
 
 ## Purpose
 
-Keep delivery artifact-driven, traceable, and light on context. The canonical path is:
+Keep delivery traceable and light on context. A concrete light-tier request uses
+its acceptance and verification without requiring new BRD/PRD/FSD artifacts.
+The canonical full-tier path is:
 
 ```text
 BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION
 ```
-
-Announce: "I'm using the agentic-delivery skill to follow the BRD -> PRD -> FSD -> GOAL delivery path."
 
 ## Reference Router
 
@@ -40,8 +40,8 @@ Do not preload templates or downstream procedures before their artifact or stage
 - **Reference gate:** Use qualified cross-artifact IDs. Bare IDs are allowed only when ambiguity is impossible within one artifact.
 - **Issue-pointer gate:** Goal issues are pointers, not specifications. Use the canonical `.agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md`; never restate it or copy BRD, PRD, FSD, or ADR prose. During `/sc-work`, load only referenced sections and relevant repository files.
 - **OPEN-* gate:** Stop and report `OPEN-xxx` instead of inventing when authority conflicts or is missing, an ADR is invalid, required behavior is unspecified, architecture contradicts the FSD, access is unavailable, or mandatory risk obligations cannot be met. Include the missing decision, impacted qualified refs, reason, owner/gate, approved fallback, and `Status: OPEN`.
-- **Verification gate:** Execute only an approved goal and its referenced tests; retain implementation and verification evidence before advancing status.
-- **UI delivery gate:** For UI-bearing scope, apply the routed experience and contract readiness gates. Scale-out requires a `VALIDATED` baseline and a verified real first slice; mock-only evidence is not integration proof.
+- **Verification gate:** Execute within authorized scope: full-tier work uses its FSD goal and referenced tests; light-tier work uses the concrete request/issue acceptance and verification. Retain evidence before advancing status.
+- **UI delivery gate:** For full-tier networked UI, apply routed experience and contract readiness gates. Scale-out requires a `VALIDATED` baseline and a verified real first slice; mock-only evidence is not integration proof. LOCAL_ONLY verifies local behavior and accessibility without synthetic provider stages.
 
 ## Related Skills
 

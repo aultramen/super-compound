@@ -2,11 +2,44 @@
 
 ## Summary
 
-Use [prompt-driven setup](SETUP.md) to install project/global scope and native adapters, then follow separate BRD, PRD, FSD approvals and execution authorization. Documentation follows the shared output standard; existing configuration is preserved.
+Use [prompt-driven setup](SETUP.md), describe the goal, and let the framework understand context, execute authorized work, validate, and deliver. New installations use exception-based approval; explicit stage preferences and existing configuration remain intact.
 
-This walkthrough shows the current Super Compound flow after the 2026-06-20 cleanup. It uses the small public workflow surface and avoids legacy aliases.
+This walkthrough shows the current goal-oriented Super Compound flow. It uses the 19 public workflows and keeps internal routing out of the user's task.
 
 Every command starts with `/sc-*` so it stays separate from native Claude Code slash commands.
+
+## Verified knowledge and safe resume
+
+After a non-trivial verified result, the owning work/debug route captures useful
+reasoning or records a skip reason. Routine feature size alone does not justify
+duplicating final code/tests/docs into a solution. Guarded persistence rejects
+sensitive content before saving either knowledge or pending input.
+
+Search first with `knowledge-search.mjs "<topic>" --require-complete --json`;
+include only known project/stack/version flags. A partial scan names access
+diagnostics and cannot establish absence. Active archived ERR/LRN entries remain
+searchable with the same status filters and bounded result output. A retrieved
+lesson is advice, not permission to skip checks or change approved requirements.
+
+For interruption or non-trivial closeout, keep captured/skip/pending dispositions
+in the optional managed checkpoint `learningCloseouts`. A pending record points
+to validated capture input and verified evidence. `/sc-status` reads it;
+the owning route retries capture without redispatching verified implementation.
+Tiny changes need no checkpoint or ledger merely to record a skip. Existing
+checkpoints without this metadata remain readable and advisory.
+
+When applying a lesson, record feedback against its actual revision/digest.
+Later successes retain earlier failed observations; status/evolve reports their
+bounded proof pointers for owner review. Carry existing review finding IDs across
+revisions, and reuse proof only while relevant inputs stay unchanged. Research
+notes distinguish binding intent from factual premises that need current evidence.
+
+The [framework gap report](docs/audits/2026-10-06-framework-gap-analysis.md) maps
+the website checklist's six items into existing PRD/FSD/design/GOAL contracts;
+it does not require six separate documents or data storage for every website.
+[Delivery evidence](docs/eval-results/framework-enhancement-20261006.md) separates
+local verification from runtime measurement. Same-source controls describe noise;
+they cannot be reported as an enhancement win.
 
 ## Practical guidance
 
@@ -35,6 +68,34 @@ to the artifact owner. Context recovery reuses context-engineering and `/sc-stat
 See the [command comparison and flow](README.md#practical-guidance-with-sc-hints)
 and [examples](.agent/skills/hints/references/examples.md).
 
+## Reviewing one artifact
+
+You can say "Buat PRD saja", "Lanjutkan pekerjaan yang authorized", or "Apa
+langkah berikutnya?". The [three conceptual intents](README.md#quick-start)
+route to existing owners. Requested authoring stops at its artifact/validation;
+status and consultation alone remain read-only. Skills are agent routing detail.
+
+Start from the Summary in the artifact being reviewed. It names the outcome,
+scope, material risks and current decision. Detail expands inside that same
+artifact under [shared applicability](.agent/skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion),
+with qualified upstream refs and existing metadata/approval provenance. Optional
+empty support is omitted; required N/A remains factual and traceable. A grouped
+N/A names every covered decision/state ID. Approval never supplies missing proof.
+
+The excerpts below illustrate authoring, not approved project requirements or
+drop-in templates. They omit metadata/sections for explanation only; actual
+authoring preserves the canonical skeleton and parser interfaces.
+
+| Artifact | Before: generic coverage prompt | After: reviewer-oriented excerpt |
+|---|---|---|
+| BRD | Objectives, stakeholders, reporting, cost/benefit and readiness. | Summary: help Operations find failed tasks. BREQ-001: find tasks by status. Scope: existing list; non-scope: retry and access changes. BAC-001: find failures without inspecting every row. Measure: search time; baseline is unmeasured, not invented ROI. |
+| PRD | Alternate compact headings and a broad feature checklist. | FR-001: selecting a status filters the list; source BRD-TASK#BREQ-001. AC-001: results match that status. AC-002: empty results explain the condition and offer clearing the filter. Existing permission limits apply; UAT names steps/results and remains untested until evidence exists. |
+| FSD | Universal technical areas, with local topology after AI. | Reuse existing data/permissions. TDEC-001 proposes local state filtering. Section 8 maps local states to TEST refs with topology LOCAL_ONLY and network_actions empty. GOAL-001 uses the existing packet grammar and qualified PRD/FSD refs; proving checks and rollback cover the changed list behavior. |
+| ADR | Alternatives and N/A tables filled without a material decision. | Filter: adr_applicability NOT_REQUIRED, local TDEC suffices. A separate material cross-service schema decision would record one choice, viable options, consequences, FSD/GOAL/TEST obligations and a review trigger; PROPOSED never governs execution. |
+
+This local-only example does not remove the networked real-provider first-slice
+barrier. Security/privacy/accessibility and material risks retain their own gates.
+
 ## Delivery tier checkpoint
 
 For your first task, use the [five Quick Start scenarios](README.md#quick-start):
@@ -49,33 +110,32 @@ Active authorized work takes priority over administrative freshness.
 
 Human input follows [one checkpoint package](.agent/context/checkpoint.contract.md).
 It names the remaining need and owner, direct review material, recommendation,
-all ready questions/approvals for active work with stable IDs and automatic resumption. Technical evidence stays
+a short prioritized set of ready questions/approvals with stable IDs and automatic resumption. Keep the complete unresolved register available by link or on request. Technical evidence stays
 separate from approval. Same-owner/scope inputs are coordinated; independent
 authorized work continues. See the [PromptShield before/after example](docs/eval-results/hitl-checkpoints-20261004.md).
 
-Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or a one-module change is `light`: `/sc-debug` or `/sc-work` starts immediately, tests and verification still apply, and a single trivial change is simply done. A new capability, a material contract/access/data change, a new screen, or coordinated work that changes outcomes or risk is `full` and takes the lifecycle below. The scenario that follows is `full`.
+Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or bounded reversible feature/page using existing contracts, access and patterns is `light`: `/sc-debug` or `/sc-work` starts immediately with relevant validation. A trivial change is simply done. Material new capability/flow, contract/access/data changes, consequential coordination, or an explicit artifact request uses `full`. Novelty alone does not raise the tier. The analytics scenario below assumes material new product behavior and is `full`.
 
 ## Answering a checkpoint
 
-The agent shows every ready item for active work together, grouped by owner and
-stage. Each numbered item names the concrete need, why your input is necessary,
-a recommendation, its rationale/consequences, full clickable absolute paths,
-the relevant section and what to inspect, and what resumes after your answer.
+The agent investigates repository facts first and displays at most three highest-priority
+answerable needs by default, grouped by owner/scope. Each numbered item names
+the concrete need, why your input is necessary, a recommendation, brief reason,
+review material when needed, and what resumes after your answer.
 Paths come from your current workspace; saved document references stay portable.
 Dependent questions appear as pending with their prerequisite and next action.
-The full list remains in conversation text when a host dialog shows fewer items.
+The complete unresolved list remains in authorized state or expandable detail,
+with stable IDs and a summary of every material block. A smaller display never
+settles hidden or unanswered items.
 
-For example, a framework-format review could ask Q1 whether to show all ready
-items (recommendation: yes, for active work; consequence: longer output), and Q2
-whether to use numbered explanations (recommendation: yes; consequence: more
-space than a table). Review the actual workspace's
-`.agent/context/checkpoint.contract.md`, section **Answerable package**, for Q1,
-and `.agent/skills/brainstorming/references/questions-and-options.md`, section
-**Whole frontier per round**, for Q2. These portable documentation refs illustrate
-the sources; the live request expands them to existing full absolute clickable paths.
-After your answer, the owner records decisions and continues authorized work.
+For example, an analytics request with no settled retention policy may need Q1:
+the permitted retention period. The agent first inspects existing policy, links
+the relevant source, recommends a period with its consequence, and asks only if
+that decision remains unresolved. Component choice and file placement follow
+existing repository patterns internally. After an actual answer, the owner
+records the decision and continues authorized work.
 
-Every request includes both answer examples in your language:
+When useful, grouped decisions include reply examples in your language:
 
 ```text
 Saya setuju semua rekomendasi pada daftar di atas.
@@ -93,18 +153,21 @@ clarification of the ambiguous part. Independent clear answers remain valid.
 Corrections reopen affected dependent decisions, preserving unrelated answers.
 Approval of an information/test/access action still requires the requested
 information, result report or access-readiness evidence. Prototype acceptance,
-provider qualification, release/UAT and execution authorization remain separate.
+provider qualification, required release/UAT and execution authorization remain separate needs. Existing authority is reused; silence and elapsed time never grant new permission.
 
 ## High-Level Design
 
 ```mermaid
 flowchart LR
  Setup[Choose scope and install] --> Doctor[Doctor]
- Doctor --> BRD[BRD approval]
- BRD --> PRD[PRD approval]
- PRD --> FSD[FSD and goals approval]
- FSD --> Auth[Execution authorization]
- Auth --> Work[Implement → Verify → Review]
+ Doctor --> Goal[User goal]
+ Goal --> Context[Understand context]
+ Context --> Plan[Plan internally]
+ Plan --> Work[Auto execute]
+ Work --> Verify[Validate]
+ Verify --> Result[Deliver and finish]
+ Plan -->|Material decision or missing authority| Human[Exception checkpoint]
+ Human --> Plan
 ```
 
 Use `/sc-init setup` for installation. Ordinary init/reload only inspect context.
@@ -171,17 +234,17 @@ Run manually when you want proactive improvement ideas:
 /sc-geniusloop analytics dashboard
 ```
 
-`/sc-status` can also recommend `/sc-geniusloop` when `.scratch/*/issues/` has no ready goal issues and there is no active handoff, blocker, or failing verification.
+An empty queue with a verified goal ends in `GOAL_SATISFIED`. `/sc-status` recommends `/sc-geniusloop` only when the user explicitly asks for improvement ideas.
 
 The agent should:
 
 - Benchmark the current system against the user's stated intent
-- Generate at least 10 numbered `GL-*` improvement ideas
-- Dispatch read-only Brain evaluation through Beta, Alpha, Theta, and Delta filters
-- Keep only 1-2 Delta ideas
-- Route selected ideas back through `/sc-explore`, `/sc-prd`, `/sc-plan`, `/sc-ui`, `/sc-research`, or `/sc-audit`
+- Generate up to three numbered `GL-*` candidates by default; include valuable incremental improvements
+- Use read-only Brain evaluation when its benefit exceeds coordination overhead
+- Expand to a broad inventory or Beta/Alpha/Theta/Delta filters only when requested
+- Route selected ideas to their owner, including `/sc-work` or `/sc-debug` for bounded changes
 
-`/sc-geniusloop` does not implement code or bypass `BRD -> PRD -> FSD -> GOAL`.
+`/sc-geniusloop` remains advisory. An explicit execution request transfers to the appropriate owner and tier without restarting settled decisions.
 
 ## 3. Explore
 
@@ -191,7 +254,7 @@ Run:
 /sc-explore analytics dashboard for account admins
 ```
 
-Use `/sc-explore` when the idea is still fuzzy, strategic, domain-heavy, or needs a lightweight prototype decision. Its durable output is a BRD under `docs/brd/`.
+Use `/sc-explore` when the idea is still fuzzy, strategic, domain-heavy, or needs a lightweight prototype decision. Its durable output is a BRD under `docs/brd/`. Promote prototype decisions and evidence; prototype code is discarded by default. Production reuse requires explicit user/project policy, production ownership, and applicable validation.
 
 The agent should:
 
@@ -336,12 +399,16 @@ keyboard/focus, realtime, or offline behavior is the material risk.
 
 The reviewer checks the critical journey and each named state: loading, empty,
 success, validation, error, forbidden, stale/conflict, partial/degraded,
-offline, and async/in-progress. Every state is `COVERED` or has an approved N/A
-reason. `/sc-ui` returns exactly one of `EVIDENCE`, `PRD_CHANGE_REQUIRED`,
+offline, and async/in-progress. Every applicable state is `COVERED`; factual N/A
+records its reason and evidence without a separate administrative approval.
+`/sc-ui` returns exactly one of `EVIDENCE`, `PRD_CHANGE_REQUIRED`,
 `FSD_CHANGE_REQUIRED`, or `VERIFICATION_FINDING`; it never edits authority.
 
-Accepted evidence is referenced by the PRD. The Business Owner sets
-`experience_baseline_status: VALIDATED`, then `/sc-plan` may begin. A prototype
+Accepted evidence is referenced by the PRD. Record
+`experience_baseline_status: VALIDATED` when applicable checks prove already
+accepted behavior. Ask the Business Owner only for unresolved material experience
+judgment or configured stage approval; automated evidence never fabricates UAT.
+Then `/sc-plan` may begin. A prototype
 is discarded after its decision is absorbed; it is not reused as production
 code.
 

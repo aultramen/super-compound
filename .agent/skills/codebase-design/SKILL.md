@@ -9,8 +9,6 @@ description: "Use when designing or improving module interfaces, test seams, dee
 
 Design deep modules: a lot of behavior behind a small interface, placed at a clean seam, testable through that interface.
 
-Announce: "I'm using the codebase-design skill to design the module seam."
-
 ## Vocabulary
 
 Use these terms consistently:

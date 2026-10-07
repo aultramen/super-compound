@@ -2,9 +2,9 @@
 /**
  * verified-promise - machine-checked completion predicate.
  *
- * A run may be declared COMPLETE only when every goal in its work-package
- * ledger has status "verified". The agent cannot talk its way out of the
- * loop: prose claims are ignored; only this predicate's PASS counts.
+ * A run may be declared COMPLETE only when its ledger validates, every goal is
+ * verified, and every recorded evidence artifact is fresh. Prose claims are
+ * ignored; only this CLI's PASS counts.
  *
  * Usage: node .agent/tools/verified-promise.mjs --run <run-id> [--root <path>]
  * Exit 0 = COMPLETE_ALLOWED; exit 1 = goals unverified; exit 2 = usage/corrupt.
@@ -14,7 +14,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import {readLedger} from './work-package.mjs';
 
+// Pure status predicate; completion callers must first load with readLedger's full validation.
 export function evaluatePromise(ledger) {
     if (
         ledger === null ||
@@ -34,7 +36,7 @@ export function evaluatePromise(ledger) {
     return { allowed: unverified.length === 0, corrupt: false, unverified };
 }
 
-function main(argv) {
+async function main(argv) {
     const args = argv.slice(2);
     let runId = null;
     let root = process.cwd();
@@ -50,7 +52,8 @@ function main(argv) {
     const ledgerPath = path.join(root, '.scratch', 'work-packages', runId, 'ledger.json');
     let ledger;
     try {
-        ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+        if (!fs.existsSync(ledgerPath)) throw new Error('missing ledger');
+        ledger = await readLedger(root,ledgerPath,runId);
     } catch {
         process.stderr.write(`verified-promise: cannot read ledger ${ledgerPath}\n`);
         return 2;
@@ -78,5 +81,5 @@ function main(argv) {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
-    process.exit(main(process.argv));
+    process.exitCode = await main(process.argv);
 }

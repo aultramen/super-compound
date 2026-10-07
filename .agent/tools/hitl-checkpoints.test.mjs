@@ -47,7 +47,8 @@ function grade(record) {
   switch (record.id) {
     case "H01":
       includesAll(record.preserved, ["prd", "fsd"]); noRequest();
-      ordered(record.actions, ["inspect_authority", "inspect_evidence_identity", "handoff_prd", "handoff_plan", "refresh_pointer"]);
+      ordered(record.actions, ["inspect_authority", "inspect_evidence_identity", "handoff_prd", "promote_derived_pointers", "refresh_pointer"]);
+      assert.ok(!record.actions.includes("handoff_plan"), "metadata promotion re-enters full planning");
       break;
     case "H02":
       includesAll(record.preserved, ["prd", "fsd", "execution_goal_002"]); noRequest();
@@ -120,7 +121,7 @@ function grade(record) {
       unresolved(["qualification_assets", "real_provider_integration"]);
       break;
     case "H11":
-      ordered(record.actions, ["check_ui_authority", "ui_read_only", "check_prd_authority", "prd_evidence_write", "check_plan_authority", "plan_pointer_write", "return_to_authorized_work"]);
+      ordered(record.actions, ["check_ui_authority", "ui_read_only", "check_prd_authority", "prd_evidence_write", "check_planning_owned_promotion", "plan_pointer_write", "return_to_authorized_work"]);
       assert.ok(!record.actions.includes("ui_product_write"));
       assert.deepEqual(record.standalone_actions, ["ui_read_only", "return_findings"]);
       break;

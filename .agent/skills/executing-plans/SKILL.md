@@ -7,8 +7,6 @@ description: "Use when an approved FSD goal or lightweight issue pointer is read
 
 ## Overview
 
-Announce: "I'm using the executing-plans skill to implement this FSD goal."
-
 Execute approved scope through focused edits, durable progress, and evidence. Sequential execution is the default.
 
 ## When to Use

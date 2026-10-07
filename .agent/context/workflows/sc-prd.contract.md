@@ -1,5 +1,7 @@
 # /sc-prd Runtime Contract
 
+## Summary
+
 Purpose: convert an approved BRD into observable product requirements.
 
 For human input/blockers/handoffs load `.agent/context/checkpoint.contract.md`.
@@ -11,6 +13,9 @@ Load approved BRD refs, exploration notes, advisory research notes, and PRD skel
 Requirements may remain a chat draft while shaping, but before approval and
 `/sc-plan` they must be saved at `docs/prd/prd-<feature>.md`. Domain modeling is
 advisory read-only unless a separate glossary mutation has an explicit owner.
+PRD-only scope ends with this artifact and applicable validation. Missing BRD
+authority is a prerequisite to report, not permission to author the full lifecycle.
+An approved PRD alone grants neither FSD authoring nor product implementation.
 
 Set `ui_delivery_profile` as `NOT_APPLICABLE | STANDARD | HIGH_INTERACTION` and
 `experience_baseline_status` as `DRAFT | VALIDATED | EXCEPTION_APPROVED` (or

@@ -9,8 +9,6 @@ description: "Use when file placement, dependency direction, framework conventio
 
 Enforce clean architecture aligned with each framework's best practices. Detect the project branch, load only its detailed reference, then verify placement and dependencies before writing code.
 
-**Announce:** "I'm using the architecture-enforcement skill to verify code placement and dependencies."
-
 **Scope:** This skill checks placement, dependency direction, and framework conventions. Use `/sc-explore` or `/sc-plan` when the deeper question is whether a module, interface, seam, or adapter is shaped well enough to build.
 
 ## When to Use

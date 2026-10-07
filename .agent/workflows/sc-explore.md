@@ -16,7 +16,7 @@ Use this when the work is not ready for product requirements or technical planni
 
 Input: `/sc-explore Dashboard penggunaan untuk admin akun`.
 Prerequisite: User problem and desired outcome; unresolved business choices are allowed.
-Result and next action: BRD with scope, non-goals and acceptance; obtain BRD approval before /sc-prd.
+Result and next action: BRD with scope, non-goals and acceptance; preserve inherited user authority in exception mode, or obtain BRD approval before /sc-prd in stage mode.
 
 ## Modes
 
@@ -27,11 +27,14 @@ Result and next action: BRD with scope, non-goals and acceptance; obtain BRD app
 - Prototype exploration: build throwaway evidence only when a runnable answer is cheaper than debate.
 
 Prototypes stay isolated, non-production, and disposable; they do not become
-implementation without approved PRD/FSD authority and a fresh implementation.
+implementation without production authority through the owning goal. By default
+only decisions are promoted; prototype code stays disposable. Code reuse requires
+an explicit scoped user/project-policy exception and required tests/security/
+accessibility checks under the production owner.
 Each prototype answers one decision question, records an evidence ref, and ends
 with disposition `discard`, `revise`, or `promote decision`. A promoted decision
-must be absorbed into its BRD, PRD, or FSD authority; prototype code is never a
-production seed. For brownfield scope, current behavior is evidence rather than
+must be absorbed into its BRD, PRD, or FSD authority; prototype evidence alone
+never grants production code reuse. For brownfield scope, current behavior is evidence rather than
 product authority.
 
 The supporting evidence ref is an external URL plus revision, or a
@@ -52,11 +55,19 @@ not a new authority artifact.
    runtime responsive, keyboard/focus, realtime, or offline behavior is the risk.
    Return the evidence to `/sc-ui` or `/sc-prd`.
 7. If a named factual or current-doc gap blocks the BRD, record `OPEN-RESEARCH-*`, route that question through `sc-research.md`, then return here. Do not use research to decide a user preference, policy, or business trade-off.
-8. Use `brainstorming/references/questions-and-options.md`: show all consequential ready decisions for active work with stable numbered IDs, recommendation, reason, trade-off and the shared checkpoint review/reply guidance; show dependent decisions as pending with prerequisites and next action. Investigate discoverable facts before asking; pending facts defer only dependent decisions. Wait for actual answers, keep partially unanswered IDs open, and reopen affected descendants after corrections. Skip grilling already concrete scope; use the existing artifact approval gate.
+8. Use `brainstorming/references/questions-and-options.md`: prioritize a concise
+   batch of at most three consequential ready human decisions with stable IDs and a recommendation.
+   Summarize all material blockers; retain the complete ready/pending registry
+   with prerequisites and review detail expandable on demand. Discover facts first.
+   Wait for actual answers, retain unanswered IDs, and reopen only affected
+   descendants after corrections. Concrete authorized scope skips interviewing
+   and new approval ceremonies; configured stage gates still apply.
 9. Capture objectives, scope, non-goals, business rules, policies, constraints, acceptance gates, and `OPEN-*` blockers.
 10. Capture Git workflow constraints only when they affect delivery scope; do not mutate Git state.
 11. A chat draft is allowed during exploration. Before approval and `/sc-prd`, save the BRD to `docs/brd/brd-<feature>.md` using `.agent/templates/agentic-delivery/skeletons/BRD-Skeleton.md` first and the full template only as a reference.
-12. Route to `sc-prd.md` only after the durable BRD is approved or the user explicitly accepts its recorded assumptions.
+12. Route to `sc-prd.md` only after the durable BRD records valid acceptance and
+    authorization provenance. Exception mode retains explicit user scope/decisions;
+    unresolved material assumptions require answers. Stage mode requires BRD approval.
 13. Checkpoint automatically and continue authorized work; use `/sc-pause` only when actually stopping.
 
 ## Output

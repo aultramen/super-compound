@@ -7,7 +7,13 @@
 5. Linked `ACCEPTED` ADRs only for delegated architecture decisions.
 6. Repository conventions for ordinary choices not specified by the FSD.
 
-A coding agent must not invent schema, APIs, authorization, state transitions, workflows, product behavior, roles, or architecture outside the approved FSD and linked accepted ADRs.
+For full-tier work, a coding agent must not invent schema, APIs, authorization,
+state transitions, workflows, product behavior, roles, or architecture outside
+the authorized FSD and linked accepted ADRs. For light-tier work, a concrete
+user request or issue with acceptance and verification is sufficient authority;
+reuse repository conventions for reversible internal choices without requiring
+new BRD/PRD/FSD documents. Escalate only affected scope when a full-tier trigger
+or material risk/authority change appears; see `workflow-integration.md`.
 
 ## ADR Policy
 

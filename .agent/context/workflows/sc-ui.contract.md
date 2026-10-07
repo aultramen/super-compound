@@ -3,7 +3,8 @@
 Purpose: review/design UI read-only or provide interface guidance to an approved goal without loading raw data into model context.
 
 For human input/blockers/handoffs load `.agent/context/checkpoint.contract.md`.
-Present experience/examples/walkthrough and specific acceptance, then return
+Only unresolved material human judgment or explicit acceptance needs a concise
+experience/examples/walkthrough question; otherwise return evidence without a new approval. Then return
 internally to the authorized owner. Prototype acceptance is not provider proof/UAT.
 
 Authority: design/review mode is read-only. Existing-screen fixes with no full-tier trigger stay light: /sc-work or /sc-debug. For full implementation intent, fuzzy UI

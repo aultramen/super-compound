@@ -7,8 +7,6 @@ description: "Use when verification, review, or manual testing identifies concre
 
 ## Overview
 
-Announce: "I'm using the gap-closure skill to create targeted fixes for the identified gaps."
-
 Close only evidenced gaps; do not restart planning or turn repair into enhancement work.
 
 ## When to Use

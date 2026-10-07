@@ -5,7 +5,8 @@ Keep gates lightweight and evidence-based. Detailed procedures belong in the ref
 ## Before Work
 
 - Classify the delivery tier first (`light` or `full`, `skills/agentic-delivery/references/workflow-integration.md`) and state it in one line; a trigger found mid-work escalates, it never blocks at intake.
-- Read the relevant workflow and skill before editing.
+- Apply the relevant compact contract before editing; load full workflow/skill
+  detail only for uncovered checks, material risk, conflicts, or editing that procedure.
 - Check `.agent/rules/project-config.md` and existing project conventions.
 - For UI work, use `interface-design` before implementation.
 - `EXCEPTION_APPROVED` may release only a first vertical slice; a `VALIDATED`

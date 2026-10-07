@@ -51,7 +51,7 @@ commands:
   container_up: ""
 
 conventions:
-  approval_mode: "stage"      # See workflow-integration.md
+  approval_mode: "exception"  # exception | stage (opt-in); preserve existing preferences
   architecture: ""            # clean | mvc | hexagonal | layered | modular
   branch_prefix: "feature"
   default_branch: "main"

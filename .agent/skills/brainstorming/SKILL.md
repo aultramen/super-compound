@@ -13,8 +13,6 @@ Apply this procedure within its authorized scope and use `.agent/context/output-
 
 Turn a rough idea into a clear business direction before writing a BRD, PRD, FSD, or code.
 
-Announce: "I'm using the brainstorming skill to explore and refine this idea."
-
 ## When To Use
 
 Use when acceptance criteria, product direction, users, constraints, tradeoffs, UI/workflow shape, or the choice among plausible approaches is unclear. Skip when the user already supplied a concrete specification, exact files, and acceptance criteria; route that work to `/sc-plan`.

@@ -84,3 +84,25 @@ test('stale implemented proof is quarantined without blocking independent goals'
  assert.equal(ledger.goals['GOAL-002'].status,'ready');
  assert.ok(ledger.goals['GOAL-001'].quarantinedEvidence);
 });
+
+test('dependency proof drift after dispatch blocks receipt promotion while acknowledgement remains available',async t=>{
+ const {root,pkg,opts,input}=await fixture(t);
+ await recordWorkPackageResult(root,{...opts,status:'implemented',expectedVersion:2,evidence:input.evidence,verification:'implementation proof'});
+ await recordWorkPackageResult(root,{...opts,status:'verified',expectedVersion:3,evidence:input.evidence,verification:'review passed'});
+ await writeFile(path.join(root,'dependent.md'),'# GOAL-002\nBlocked by: brief.md\n');
+ await writeFile(path.join(root,'dependent-evidence.json'),'{"pass":true}');
+ const dependent={runId:'run',goalId:'GOAL-002'};
+ const created=await createWorkPackage(root,{...dependent,briefPath:'dependent.md',pathsFile:'scope.json',expectedEvidence,assignment:{workerId:'dependent-worker',attempt:1}});
+ await recordWorkPackageResult(root,{...dependent,status:'in-progress',expectedVersion:created.ledgerVersion});
+ await writeFile(created.reportPath,'Implementation with independent proof passed.');
+ const submitted=await submitCompletionReceipt(root,{...dependent,workerId:'dependent-worker',attempt:1,reportPath:path.relative(root,created.reportPath).replaceAll('\\','/'),evidence:{...expectedEvidence,evidenceRefs:['dependent-evidence.json']}});
+ await writeFile(path.join(root,'evidence.json'),'{"pass":false}');
+ const classified=await classifyCompletionReceipt(root,{...dependent,receiptId:submitted.receiptId,expectedVersion:submitted.ledgerVersion,status:'implemented'});
+ assert.equal(classified.classification.disposition,'blocked');
+ assert.match(classified.classification.reason,/Evidence digest mismatch for GOAL-001/);
+ const ledger=await readLedger(root,pkg.ledgerPath,'run',{checkEvidence:false});
+ assert.equal(ledger.goals['GOAL-002'].status,'blocked');
+ assert.equal(ledger.goals['GOAL-001'].status,'verified');
+ await acknowledgeCompletionReceipt(root,{...dependent,receiptId:submitted.receiptId,expectedVersion:classified.ledgerVersion});
+ await assert.rejects(readLedger(root,pkg.ledgerPath,'run'),/Evidence digest mismatch/);
+});

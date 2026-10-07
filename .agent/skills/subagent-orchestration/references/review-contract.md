@@ -23,6 +23,11 @@ reviewer when behavior, security, contracts, complexity, or failure risk warrant
 it. Review `briefPath`, `reportPath`, and `reviewPackagePath`. Write separate
 verdicts so spec and quality remain independently actionable.
 
+Reuse resident checks; no nested reviewer fanout. Apply reviewer economics and
+stable finding/adjudication rules from
+[findings and self-review](../../code-review/references/findings-and-self-review.md)
+within the existing review report.
+
 ### SPEC Verdict
 
 - All acceptance and verification refs are satisfied.

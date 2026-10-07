@@ -23,6 +23,9 @@ const expected = {
 
 function gradeDisplay(response) {
   assert.match(response, /Siap dijawab: 5/);
+  assert.match(response, /Prioritas saat ini: Q1, Q2, Q3/);
+  assert.match(response, /Ringkasan blocker lain: Q4.*Q5/);
+  assert.match(response, /<details>[\s\S]*<summary>Daftar lengkap Q1-Q5/);
   const chunks = [...response.matchAll(/^Q([1-5]) — (.+)\n([\s\S]*?)(?=^Q\d — |^Tertunda:)/gm)];
   assert.deepEqual(chunks.map(c => `Q${c[1]}`), ['Q1', 'Q2', 'Q3', 'Q4', 'Q5']);
   for (const [, id, question, body] of chunks) {
@@ -62,15 +65,16 @@ function gradeResolution(record) {
   assert.equal(record.manufacturedEvidence, false);
 }
 
-test('whole ready frontier response has five actionable questions and existing absolute review links', () => {
+test('prioritized checkpoint retains five ready IDs with expandable review detail', () => {
   gradeDisplay(attempt.after.display);
   for (const mutate of [
     s => s.replace(/^Q5 — [\s\S]*?(?=^Tertunda:)/m, ''),
-    s => s.replace('Rekomendasi:', 'Saran hilang:'),
+    s => s.replaceAll('Rekomendasi:', 'Saran hilang:'),
     s => s.replaceAll(`${attempt.workspace}/`, ''),
     s => s.replace('Bagian: Answerable package', 'Bagian: Imaginary section'),
     s => s.replace('Tertunda: Q6', 'Siap: Q6'),
     s => s.replace('Saya setuju semua rekomendasi kecuali Q2:', 'Jawab sendiri:'),
+    s => s.replace('Prioritas saat ini: Q1, Q2, Q3', 'Semua kebutuhan sudah selesai'),
   ]) assert.throws(() => gradeDisplay(mutate(attempt.after.display)));
   assert.throws(() => gradeDisplay(attempt.before.display), 'old capped/relative response must fail');
 });
@@ -100,13 +104,15 @@ test('instruction digests are pinned only after response-content review', () => 
   }
 });
 
-test('brainstorming callers use the central complete package rather than capped batches', () => {
+test('brainstorming callers retain complete needs with prioritized progressive display', () => {
   for (const file of ['.agent/skills/brainstorming/SKILL.md', '.agent/skills/brainstorming/references/questions-and-options.md', '.agent/context/workflows/sc-explore.contract.md', '.agent/workflows/sc-explore.md']) {
     const text = read(file);
     assert.doesNotMatch(text, /1[-–]3 high-impact|small (?:numbered )?batches/i);
   }
   const contract = read('.agent/context/checkpoint.contract.md');
   for (const pattern of [/all ready/i, /full absolute/i, /verify files\/sections/i, /host dialog/i, /both reply examples/i]) assert.match(contract, pattern);
+  assert.match(contract, /at most three actionable/);
+  assert.match(contract, /unresolved IDs/);
   for (const name of ['prd-generator', 'writing-plans', 'triage-workflow', 'codebase-design']) {
     assert.match(read(`.agent/skills/${name}/SKILL.md`), /brainstorming.*questions-and-options/);
   }

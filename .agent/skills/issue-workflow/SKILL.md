@@ -13,8 +13,6 @@ Apply this procedure within its authorized scope and use `.agent/context/output-
 
 Turn approved FSD `GOAL-*` packets into local Markdown issue pointers that agents can execute independently without copying upstream prose.
 
-Announce: "I'm using the issue-workflow skill to create lightweight goal issue pointers."
-
 The default board is `.scratch/<feature-slug>/issues/*.md`; an optional `.scratch/<feature-slug>/FSD.md` is only a short pointer to the approved FSD. Use this from `/sc-plan`, not a separate public workflow.
 
 ## Reference Router
@@ -33,7 +31,9 @@ Load the process while creating or revising a board. Load status details only wh
   `Contract refs`, and `Contract gate`. A scale-out pointer remains blocked by
   the first-slice pointer until it reaches `verified` and proves
   `FIRST_VERTICAL_SLICE_VERIFIED`; its PRD baseline must also be `VALIDATED`.
-  One `HARDENING` pointer depends on all applicable UI delivery slices.
+  For networked scope, one applicable merged `HARDENING` pointer depends on its
+  UI delivery slices; LOCAL_ONLY checks stay in the goal unless outstanding
+  cross-slice verification needs a separate pointer.
 - **Sizing gate:** One issue produces one coherent, independently verifiable outcome. Foundational goals are allowed only when independently testable and necessary.
 - **DAG gate:** Every blocker path must exist or be created earlier; blockers precede dependents; cycles are forbidden; parallel candidates must not share unmerged files without an FSD integration strategy. Every ADR ref must be linked and `ACCEPTED`.
 - **Review gate:** Derive and write the board automatically from approved goals after coverage/DAG validation; notify the result. Ask only for a material scope, acceptance, or dependency decision absent from authority.

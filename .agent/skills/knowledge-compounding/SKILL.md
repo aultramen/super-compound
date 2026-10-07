@@ -9,7 +9,7 @@ description: "Use when a non-trivial problem is solved or substantial work shoul
 
 Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
 
-Turn proven solutions and reusable session learnings into searchable project memory. Announce use before writing documentation.
+Turn proven solutions and reusable session learnings into searchable project memory.
 
 ## When to Use
 

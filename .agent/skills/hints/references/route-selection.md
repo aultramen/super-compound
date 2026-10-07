@@ -30,8 +30,9 @@ next, by whom, and what result would change the recommendation.
 Apply `agentic-delivery/references/workflow-integration.md` from the skills root,
 not a new tier rubric. A light change needs a proportional step, not compulsory
 BRD/PRD/FSD creation. Full scope follows approved BRD -> PRD -> FSD -> GOAL:
-route to the first missing authoritative stage, preserve configured approvals,
-and keep artifact approval distinct from execution authorization. A blocking
+route to the first missing authoritative stage and preserve configured authority
+under the exception or opted-in stage policy. Hints remains advisory: accepting
+advice is distinct from an execution request. A blocking
 technical proof stays unresolved after a business approval.
 
 If advice conflicts with approved FSD, identify the conflicting section and

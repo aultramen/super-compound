@@ -24,16 +24,19 @@ Result and next action: Read-only findings with evidence and owners; remediation
 ## Steps
 
 1. Load `skills/code-review/SKILL.md`.
-2. Identify review scope: current diff, branch, files, or user-specified target.
+2. Identify review scope: current diff, branch, files, or user-specified target. Apply reviewer economics from `.agent/skills/code-review/references/findings-and-self-review.md`.
 3. Identify the spec source: user request, BRD, PRD, FSD, goal issue pointer, linked accepted ADR, or acceptance criteria.
 4. Review the spec axis first: missing behavior, incorrect behavior, or scope creep.
-5. Review the standards axis: security, architecture, tests, maintainability, performance, and docs. Load only the applicable sections of `docs/engineering-standards.md`, or the project's `CODING_STANDARDS.md` when one exists; standards are enforced here, not during implementation, so implementation context stays small.
+5. Review the standards axis: security, architecture, tests, maintainability,
+   performance, and docs. Reuse resident standards or load only the applicable
+   sections of `docs/engineering-standards.md` or project `CODING_STANDARDS.md`;
+   implementation preflight applies the same constraints, review verifies them independently.
 6. For PR readiness, load `skills/git-workflow-operation/SKILL.md` and review the PR checklist/template, but do not commit or push unless routed through `/sc-go`.
 7. Verify each claim against the diff or a command result; name the claims that could not be verified and why.
    Check tier consistency: sensitive paths signal inspection of the actual diff, compatibility, access, data, and side effects. Report `ESCALATE: T2` only for material semantic/risk changes outside authority; contract-preserving maintenance stays light.
-8. If complete evidence exceeds the chat envelope, save it to
-   `docs/reviews/YYYY-MM-DD-<scope>.md` and return the path; never omit a
-   finding to satisfy an output cap. Then run
+8. Persist opened findings or complete evidence exceeding the chat envelope in
+   `docs/reviews/YYYY-MM-DD-<scope>.md`, using the finding/adjudication rules from
+   that reference. Return the path; never omit a finding to satisfy an output cap. Then run
    `node .agent/tools/doc-lint.mjs <artifact> --advisory` and adjudicate its findings
    (advisory).
 9. Assign each remediation owner:

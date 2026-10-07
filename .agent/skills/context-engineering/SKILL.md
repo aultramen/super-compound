@@ -9,8 +9,6 @@ description: "Use when managing AI context budget, selective file loading, histo
 
 Load minimum useful context, keep durable state on disk, and recover context at natural boundaries before quality degrades.
 
-Announce: "I'm applying context engineering to keep the working context focused."
-
 ## Core Rules
 
 - Load by relevance to the current task, not by directory size.

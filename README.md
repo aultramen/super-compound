@@ -2,7 +2,7 @@
 
 ## Summary
 
-Use [prompt-driven setup](SETUP.md) to install project/global scope and native adapters, then follow separate BRD, PRD, FSD approvals and execution authorization. Documentation follows the shared output standard; existing configuration is preserved.
+Use [prompt-driven setup](SETUP.md), describe the goal, and let the framework understand context, execute authorized work, validate, and deliver. New installations ask for approval only when an exception requires human judgment or additional authority. Existing configuration, including explicit stage approvals, is preserved.
 
 Super Compound is a compact AI-assisted development framework for Antigravity IDE, Claude Code, and compatible coding agents.
 
@@ -10,13 +10,13 @@ It keeps the public command surface small, pushes detailed procedures into skill
 
 Human input uses one [answerable checkpoint](.agent/context/checkpoint.contract.md):
 what remains approved, the blocked result, owner, recommendation, direct review
-material and all ready active-work questions/approvals with stable IDs and automatic continuation. Agent research/tests proceed
+material and a short prioritized set of ready questions/approvals with stable IDs and automatic continuation. Agent research/tests proceed
 first; evidence refresh does not repeat approval. Authorized owner handoffs run
 internally while configured stage checkpoints and read-only boundaries remain.
-Every item includes a concrete recommendation, rationale/consequences and a
-clickable full absolute review path with the section to inspect. Dependent items
-are pending with prerequisites and next action. Both bulk agreement and
-exception reply examples are always shown; partial replies keep unanswered IDs open.
+Every displayed item includes a recommendation, brief reason, and review link
+when material is needed. The complete unresolved register, dependent items,
+and supporting detail stay available by link or on request. Reply examples
+appear when useful; partial replies keep unanswered IDs open, and silence grants no approval.
 Approval does not supply missing information, test evidence or access readiness.
 See [how to answer](WALKTHROUGH.md#answering-a-checkpoint) and the
 [question/answer eval](docs/eval-results/questions-and-hints-20261005.md).
@@ -26,6 +26,17 @@ See the [PromptShield example and regression evidence](docs/eval-results/hitl-ch
 
 Start with [setup](SETUP.md), then try one small task. Node 22+ is required;
 Python is needed only for interface search and Python checks.
+
+Describe the result you need in ordinary language; commands remain available:
+
+| Intent | Example | Expected boundary |
+|---|---|---|
+| Start/change work | "Ubah label ini" or "Buat PRD saja dari BRD approved" | The agent selects the existing owner/tier; document-only scope ends at that artifact and applicable validation. |
+| Continue/check status | "Lanjutkan pekerjaan yang authorized" or "Lihat status saja" | Resume valid authority/evidence through the work owner; status-only stays read-only. |
+| Consult | "Apa langkah berikutnya?" | Read-only advice; accepting a recommendation does not start implementation. |
+
+These are conceptual labels, not new commands or runtime modes. The
+[dispatcher](.agent/context/workflow-dispatch.md) retains all existing gates.
 
 ```text
 /sc-init
@@ -48,7 +59,7 @@ The numbers above illustrate the format; the agent reports actual check results.
 | Setup | [SETUP.md](SETUP.md), then `/sc-init` | Project path, host and project/global scope | Doctor result and detected verification commands; try a small task |
 | Bug | `/sc-debug Email kosong lolos validasi login` | Symptom, reproduction and expected behavior | Root cause, tested fix and evidence; review the change |
 | Small change | `/sc-work Ubah teks tombol Simpan menjadi Simpan perubahan` | Exact change and expected result in the existing screen | Scoped edit and relevant checks; review |
-| New feature | `/sc-launch Tambahkan dashboard penggunaan untuk admin akun` | Users, outcome and known constraints | BRD -> PRD -> FSD -> verified goals within stage approvals and execution authorization |
+| New feature | `/sc-launch Tambahkan dashboard penggunaan untuk admin akun` | Users, outcome and known constraints | Bounded changes reuse existing contracts; material full-tier work preserves BRD -> PRD -> FSD -> verified goals with exception checkpoints |
 | Resume | `/sc-status` | Existing workspace and handoff, plus any changed intent | Current evidence/blockers and one exact next action; continue authorized ready work |
 | Advice | `/sc-hints <question or condition>` | A question, or active work context | Recommendation, owner command, prerequisites and expected result; consultation writes no files |
 
@@ -56,6 +67,13 @@ All 19 commands use `/sc-*`; Claude Code exposes native slash commands after
 installation. Other hosts use their adapters. In Codex, plain language such as
 “fix this bug” or “resume the task” routes to the same compact contracts.
 See [Public Workflows](#public-workflows) for input/output examples.
+
+For document review, start with the Summary in the same BRD/PRD/FSD/ADR artifact.
+It exposes scope, outcome, material risks and the current decision; technical
+metadata, contracts and evidence remain available in their existing sections.
+The [shared authoring rule](.agent/skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion)
+distinguishes required, triggered and optional content without page targets.
+See [worked document examples](WALKTHROUGH.md#reviewing-one-artifact).
 
 ### Practical guidance with `/sc-hints`
 
@@ -99,7 +117,7 @@ names the expected FSD/GOAL result. See [worked examples](.agent/skills/hints/re
 
 ## Delivery Tiers
 
-The framework decides how much process a request needs. Intake states one line, `Tier: light|full; trigger: T<n>|none`. `light` (bug fixes, refactors, config, one-module features) goes straight to `/sc-work` or `/sc-debug` with tests and verification; a single trivial change is done directly. `full` (new capability without approved PRD/FSD, material contract/access/data/side-effect change, new screen or flow, coordination that changes outcomes or risk, or an explicit BRD/PRD/FSD request) takes `BRD -> PRD -> FSD -> GOAL`. A trigger found mid-work escalates; it never blocks at intake. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
+The framework decides how much process a request needs. Intake states one line, `Tier: light|full; trigger: T<n>|none`. `light` includes bounded reversible features and pages that reuse existing contracts, access and patterns with clear acceptance and proving checks; it goes to `/sc-work` or `/sc-debug`. A single trivial change is done directly. `full` covers material new capability/flow, contract/access/data/side-effect changes, coordination that changes outcomes or risk, or an explicit BRD/PRD/FSD request. It takes `BRD -> PRD -> FSD -> GOAL` with durable authority, without repeating permission already granted. A material trigger found mid-work escalates only affected work. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
 
 Session handoff, a derived issue board, and parallelism alone do not raise a
 clear bugfix above `light`. Sensitive paths trigger semantic inspection.
@@ -117,10 +135,14 @@ Setup requires Node 22+ on Windows, macOS, and Linux. Python is needed only for 
 flowchart LR
  Setup[Prompt setup] --> Core[Canonical .agent core]
  Core --> Hosts[Six native adapters]
- Hosts --> Stages[BRD approval → PRD approval → FSD approval]
- Stages --> Execute[Separate execution authorization]
- Execute --> Verify[Implementation and verification]
- Verify --> Knowledge[Evidence and reusable lessons]
+ Hosts --> Goal[User goal and context]
+ Goal --> Plan[Internal plan and scoped authority]
+ Plan --> Execute[Auto execute]
+ Execute --> Verify[Validate]
+ Verify --> Result[Deliver and finish]
+ Plan -->|Material unresolved decision or risky action| Human[Exception checkpoint]
+ Human --> Plan
+ Verify -->|Reusable learning| Knowledge[Capture within current scope]
 ```
 
 ## What It Provides
@@ -161,6 +183,12 @@ distribution for offline transfer:
 ```bash
 node .agent/tools/active-assets.mjs copy <new-bundle-directory>
 ```
+
+The export is an install-only bundle with [OFFLINE-SETUP.md](OFFLINE-SETUP.md)
+as its README. Use its Node installer commands; repository `npm` development
+commands and historical reports belong to the full checkout. Installation
+preserves the application's package metadata. Export and doctor check static
+local imports, and automated bundle smoke tests run memory and install commands.
 
 Selecting Claude installs `.claude/commands/` pointers for all 19 routes,
 so `/sc-*` works as native Claude Code slash commands. Each pointer is a thin
@@ -289,7 +317,7 @@ Only these workflow files are public:
 | [/sc-init](.agent/workflows/sc-init.md) | Set up or reload framework context |
 | [/sc-hints](.agent/workflows/sc-hints.md) | Practical evidence-backed guidance; read-only until an owner execution request |
 | [/sc-status](.agent/workflows/sc-status.md) | Inspect current state and route the next action |
-| [/sc-geniusloop](.agent/workflows/sc-geniusloop.md) | Generate and filter proactive improvement ideas when goal queues are empty |
+| [/sc-geniusloop](.agent/workflows/sc-geniusloop.md) | Generate a bounded improvement shortlist when explicitly requested |
 | [/sc-explore](.agent/workflows/sc-explore.md) | Shape fuzzy ideas into a BRD with business objectives, constraints, policies, and acceptance |
 | [/sc-research](.agent/workflows/sc-research.md) | Resolve a named factual or technical gap with an advisory research note, then return to the decision owner |
 | [/sc-prd](.agent/workflows/sc-prd.md) | Write PRD product requirements from an approved BRD |
@@ -398,9 +426,9 @@ Supporting skills:
 Captured knowledge runs a closed loop: capture -> read-back -> maintenance -> evolve.
 
 - `/sc-compound` routes outcomes to four sinks: `docs/solutions/` (solved problems), `ERR-*` entries in `docs/ERROR_LOG.md` (agent mistakes plus an IF-THEN prevention rule), `LRN-*` entries in `docs/LEARNED_KNOWLEDGE.md` (user corrections and confirmed conventions), and `docs/progress.md` (chronology). Entry formats and the capture guide live in `.agent/skills/knowledge-compounding/references/memory-capture.md`; `.agent/skills/state-management/references/file-contracts.md` only selects the file.
-- `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; matching `ERR-*`/`LRN-*` lessons are evidence to validate against the current code and context. Decisions bind only through their authoritative source and approval provenance. The corpus is entry-granular over `docs/solutions/`, `docs/learnings/`, `docs/ERROR_LOG.md`, `docs/LEARNED_KNOWLEDGE.md`, and the Codebase Patterns head of `docs/progress.md`, still top-3 bounded.
-- `/sc-status` counts memory entries via `node .agent/tools/memory-maintenance.mjs report` and recommends `/sc-evolve` at 3+ independent observed/confirmed origins with evidence; `/sc-evolve` consumes the report's promotion candidates but still writes drafts only for human approval. `memory-maintenance.mjs` supports `check` (format and cap validation), `report`, JSON `capture`/`refresh`/`feedback`/`checkpoint`, read-only `resume`, and `archive --dry-run`; applying archives stays human-approved.
-- The `stop-check` hook emits one advisory `/sc-compound` suggestion when a session edited source but captured no knowledge.
+- `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; work/debug require `--require-complete` and known scope flags. Matching `ERR-*`/`LRN-*` lessons are evidence to validate against the current code and context. Decisions bind only through their authoritative source and approval provenance. The entry-granular corpus includes `docs/solutions/`, `docs/learnings/`, active and archived ERR/LRN records, and the Codebase Patterns head of `docs/progress.md`, still top-3 bounded.
+- `/sc-status` counts memory entries via `node .agent/tools/memory-maintenance.mjs report` and recommends `/sc-evolve` at 3+ independent observed/confirmed origins with evidence; `/sc-evolve` consumes the report's promotion candidates but still writes drafts only for human approval. `memory-maintenance.mjs` supports `check` (format and cap validation), `report`, JSON `capture`/`refresh`/`feedback`/`checkpoint`, read-only `resume`, and `archive --dry-run`. Structured capture automatically applies lossless cap retention; the standalone archive command only proposes moves.
+- Stop/SessionEnd hints inspect actual pending capture/closeout state, remain advisory and do not capture knowledge or replay implementation.
 - The compact contracts carry the loop's spine, not just the full workflows: `sc-work`, `sc-debug`, and `sc-plan` read back first, `sc-work` and `sc-debug` close through `/sc-compound`, `sc-status` runs the maintenance report, `sc-pause` captures unlogged entries, and `sc-compound` names the four sinks. A spine test in `.agent/tools/workflow-contracts.test.mjs` keeps it that way, because the contract-first path never loads the full workflow body.
 - `memory-maintenance.mjs report` also prints a `freshness` block comparing `docs/STATE.md` and `docs/progress.md` dates with the newest commit. `STALE_STATE` or `STALE_PROGRESS` is reconciled through the authorized owning route; active intent and dependency-ready work take priority. `/sc-status` remains read-only and `/sc-pause` is for actual stopping.
 - Optional global store: set `SC_GLOBAL_KNOWLEDGE_DIR` and `knowledge-search.mjs` adds `<dir>/LEARNED_KNOWLEDGE.md` to the corpus (hits show as `global:`); `Applies to: global` entries are captured there too. Unset, the corpus stays repository-local.
@@ -450,7 +478,7 @@ repeat candidates until new evidence appears. `/sc-status` remains read-only.
 node .agent/tools/memory-maintenance.mjs capture --input-file .scratch/capture.json --json
 node .agent/tools/memory-maintenance.mjs checkpoint --input-file .scratch/checkpoint.json
 node .agent/tools/memory-maintenance.mjs resume --json
-node .agent/tools/knowledge-search.mjs "retry timeout" --project my-project --json
+node .agent/tools/knowledge-search.mjs "retry timeout" --project my-project --require-complete --json
 ```
 
 Schemas, worth gate, reviewed refresh, feedback, and writer ownership are in
@@ -462,10 +490,34 @@ contract digests and fresh ledger evidence before offering ready goals.
 Stale/superseded knowledge is hidden by default; `--diagnostic` includes it.
 Unknown legacy origins/versions remain unknown.
 
+Recall includes active entries from both ERR/LRN archives without loading the
+archive into model context. JSON `coverage` distinguishes complete-empty from
+partial scans; `--require-complete` exits 2 on partial coverage. Optional default
+stores may be absent in a fresh project. Supply scope flags only when known;
+global scope never waives explicit stack/version restrictions.
+
+New persisted knowledge, reviewed replacement content and pending capture input
+pass the existing privacy guard. Non-trivial closeouts use optional checkpoint
+`learningCloseouts` with captured/skip/pending dispositions and evidence identity.
+Pending retries preserve verified work; tiny skips need no ledger/checkpoint.
+Legacy checkpoints remain advisory and readable.
+
+Feedback binds to the knowledge revision and record digest. Changed observations
+append; overflow is archived losslessly, including failed/rejected evidence.
+Maintenance reports bounded negative-first pointers for owner review, without
+treating usage as truth or independent recurrence. Review reuses unchanged proof
+and stable finding IDs; research verifies factual premises against current
+observations or primary sources. These changes strengthen existing owners.
+
 Optimization comparisons use task/host/model/grader/measurement parity and
 KEEP/REJECT/INCONCLUSIVE. Tool fixtures and static context estimates do not
 prove actual host behavior or runtime token savings. See the
 [dated gap analysis](docs/audits/2026-10-03-knowledge-loop-gap-analysis.md).
+The [swarm comparison](docs/audits/2026-10-06-framework-gap-analysis.md) covers
+eleven frameworks and the website checklist; [delivery evidence](docs/eval-results/framework-enhancement-20261006.md)
+separates implemented checks from unproven runtime benefit. Same-source A/A
+controls describe noise and cannot certify an enhancement; eligible candidates
+must beat the registered control floor and existing quality/variation gates.
 
 ## Interface Design
 
@@ -591,9 +643,11 @@ completion receipts survive interruption. See [learning/check guide](.agent/skil
 [recovery protocol](.agent/skills/context-engineering/references/active-context.md),
 and [verification recipes](.agent/skills/verification-before-completion/references/verification-recipes.md).
 
-The [exact retirement registry](.agent/context/retired-assets.json) keeps local
-retired files intact while excluding them from the active runner, Codex bundle,
-operational knowledge, active benchmark and pilot fixtures. New paths are active
+The [exact retirement registry](.agent/context/retired-assets.json) excludes retired
+files from the active runner, Codex bundle, operational knowledge, active benchmark
+and pilot fixtures. The [historical archive](docs/archive/retired-assets-20261007/)
+preserves 87 retired files byte-for-byte with original/archive locator mappings,
+SHA-256 checksums and provenance. Both exact locators are retired. New paths are active
 by default. Use `npm run test:tools`; direct wildcard runners include retired
 tests. Distribution should use the selector rather than an unfiltered copy.
 Audit records physical retired bytes and digests separately. Historical token

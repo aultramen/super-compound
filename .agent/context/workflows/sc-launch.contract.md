@@ -6,13 +6,15 @@ Stage mode: BRD approval → PRD approval → FSD/goals/verification approval �
 
 Run one active stage at a time: status, explore, conditional research, PRD draft,
 `/sc-ui` validation, approved PRD, plan with optional contract enabler, eval,
-`/sc-go` preview, contract enabler execution, `/sc-plan` mechanical re-index/promotion,
-real first vertical slice, `/sc-plan` dependent promotion, controlled scale-out, hardening
+`/sc-go` preview, contract enabler execution, internal planning-owned deterministic
+promotion, real first vertical slice, eligible dependent promotion, controlled scale-out, applicable hardening
 applicable verification plus conditional Business Owner UAT, review, audit,
 `/sc-go` finish preview, compound. At each non-trivial boundary update
 `docs/STATE.md` with only artifact paths, decisions, blockers, qualified gate
 refs/version and a non-authoritative snapshot, verification refs, and next route; `.continue-here.md`
 remains a short pointer. Release prior stage detail.
+The active controller performs derived metadata promotion without planning re-entry;
+material deltas return to `/sc-plan`/owner and preserve required proof gates.
 Route each implementation handoff to `/sc-work`; launch itself writes only
 `docs/STATE.md` and never writes implementation.
 Return research to its decision owner. Skip only with evidence. Launch grants no

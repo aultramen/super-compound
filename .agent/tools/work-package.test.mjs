@@ -20,8 +20,37 @@ import {
   createReviewPackage,
   createWorkPackage,
   recordWorkPackageResult,
+  readDispatchContext,
+  readLedger,
   withLedgerLock,
 } from "./work-package.mjs";
+
+test('stale proof blocks its consumers while independent dispatch and recovery proceed', async (t) => {
+  const root=await mkdtemp(path.join(tmpdir(),'work-package-scoped-proof-'));
+  t.after(()=>rm(root,{recursive:true,force:true}));
+  await mkdir(path.join(root,'issues'));
+  await writeFile(path.join(root,'issues','a.md'),'# GOAL-001\nBlocked by: None\n');
+  await writeFile(path.join(root,'issues','b.md'),'# GOAL-002\nBlocked by: None\n');
+  await writeFile(path.join(root,'issues','c.md'),'# GOAL-003\nBlocked by: a.md\n');
+  await writeFile(path.join(root,'scope-a.json'),'["src/a"]');
+  await writeFile(path.join(root,'scope-b.json'),'["src/b"]');
+  await writeFreshEvidence(root);
+  const first=await createWorkPackage(root,{runId:'run',goalId:'GOAL-001',briefPath:'issues/a.md',pathsFile:'scope-a.json',expectedEvidence:EXPECTED_EVIDENCE});
+  let version=first.ledgerVersion;
+  for (const status of ['in-progress','implemented','verified']) version=(await recordWorkPackageResult(root,{runId:'run',goalId:'GOAL-001',status,expectedVersion:version,verification:'mapped checks pass',...(['implemented','verified'].includes(status)?{evidence:freshEvidence()}: {})})).ledgerVersion;
+  for (const [goalId,briefPath] of [['GOAL-002','issues/b.md'],['GOAL-003','issues/c.md']]) version=(await createWorkPackage(root,{runId:'run',goalId,briefPath,pathsFile:'scope-b.json',expectedEvidence:EXPECTED_EVIDENCE})).ledgerVersion;
+  assert.equal((await readDispatchContext(root,{runId:'run',goalId:'GOAL-003'})).dispatchStatus,'ready');
+  await writeFreshEvidence(root,'changed proof');
+  assert.equal((await readDispatchContext(root,{runId:'run',goalId:'GOAL-002'})).dispatchStatus,'ready');
+  await assert.rejects(readDispatchContext(root,{runId:'run',goalId:'GOAL-003'}),/Evidence digest mismatch.*GOAL-001/);
+  await assert.rejects(recordWorkPackageResult(root,{runId:'run',goalId:'GOAL-003',status:'in-progress',expectedVersion:version}),/Evidence digest mismatch.*GOAL-001/);
+  const blocked=await recordWorkPackageResult(root,{runId:'run',goalId:'GOAL-002',status:'blocked',expectedVersion:version,reason:{code:'ACCESS',detail:'waiting for target access'}});
+  assert.equal(blocked.status,'blocked');
+  await assert.rejects(readLedger(root,first.ledgerPath,'run'),/Evidence digest mismatch/);
+  const raw=JSON.parse(await readFile(first.ledgerPath,'utf8')); raw.goals['GOAL-001'].scopeDigest='invalid';
+  await writeFile(first.ledgerPath,JSON.stringify(raw));
+  await assert.rejects(readDispatchContext(root,{runId:'run',goalId:'GOAL-002'}),/scopeDigest/);
+});
 
 const EXPECTED_EVIDENCE = {
   authorityDigest: "a".repeat(64),
@@ -816,14 +845,14 @@ test("terminal evidence is digest-bound and rehashed before reuse", async () => 
       evidence: freshEvidence(),
     });
     await writeFile(evidencePath, '{"pass":"changed-after-verification"}\n');
+    const verifiedBytes=await readFile(created.ledgerPath);
+    await createWorkPackage(root, {
+      runId: "digest-bound-run", goalId: "goal-001", briefPath: brief,
+      pathsFile, expectedEvidence: EXPECTED_EVIDENCE,
+    });
+    assert.deepEqual(await readFile(created.ledgerPath),verifiedBytes);
     await assert.rejects(
-      createWorkPackage(root, {
-        runId: "digest-bound-run",
-        goalId: "goal-001",
-        briefPath: brief,
-        pathsFile,
-        expectedEvidence: EXPECTED_EVIDENCE,
-      }),
+      readDispatchContext(root, {runId:"digest-bound-run",goalId:"goal-001"}),
       /evidence.*digest mismatch/i,
     );
   } finally {

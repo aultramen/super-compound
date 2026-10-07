@@ -9,8 +9,6 @@ description: "Use when you need up-to-date library/API documentation, code examp
 
 Use Context7 for current, version-specific library and framework documentation rather than relying on stale API memory.
 
-**Announce:** "I'm using the context7-docs skill to fetch up-to-date documentation."
-
 Logical capabilities (the host may expose them under a namespaced tool name):
 
 - `resolve-library-id` finds the Context7 library ID.

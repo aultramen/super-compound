@@ -8,9 +8,12 @@
 - `git-workflow-operation` preview confirms a known base, branch availability,
   isolated target state, and preserved user edits; a remote is not inherently
   required for local-only execution
-- UI scale-out starts only after the first vertical slice is verified against the real provider,
+- Networked UI scale-out starts only after the first vertical slice is verified against the real provider,
   one pinned contract version, no contract blocker, and a `VALIDATED` experience baseline
 - Shared schemas, generated clients, fixtures, migrations, lockfiles, and registries have a single writer
+
+LOCAL_ONLY streams require mapped local verification and settled dependencies;
+they do not fabricate provider roles or a full-tier FSD for a concrete light request.
 
 ## When to Use vs When NOT
 

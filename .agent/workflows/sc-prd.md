@@ -11,7 +11,8 @@ Use this when approved business requirements need to become product behavior bef
 
 Apply `.agent/context/checkpoint.contract.md` for input, blockers and handoffs.
 Preserve evidence-only approval; perform authorized UI validation/owner return
-internally, without merging configured stage checkpoints.
+internally. Separate checkpoints apply only to configured stage mode; exception
+mode retains existing user scope/acceptance and execution authorization.
 
 
 ## Example

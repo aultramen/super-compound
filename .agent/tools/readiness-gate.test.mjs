@@ -195,6 +195,41 @@ test("green fixture is READY_FOR_SLICE with no failures", async () => {
   );
 });
 
+test("resolved, closed and historical OPEN records do not reopen readiness", async () => {
+  for (const record of [
+    '- OPEN-007: RESOLVED; no longer blocking.',
+    '- OPEN-007: CLOSED; formerly blocking.',
+    '- OPEN-007: ARCHIVED; blocking in the prior revision.',
+    '| OPEN-007 | RESOLVED | Previously blocking |',
+    '## Resolved History\n\n- OPEN-007: blocking in the prior revision.',
+    '- OPEN-007: OPEN; Blocking: false; deferred nonblocking preference.',
+    '| ID | Type | Description | Owner | Status |\n|---|---|---|---|---|\n| OPEN-007 | Blocker | Former role gap | Product | RESOLVED |',
+    '### OPEN-007\nStatus: CLOSED\nBlocking: true\nReason: Resolved role policy.',
+    '| Prefix | Meaning | Example |\n|---|---|---|\n| OPEN | Open decision | OPEN-007 |',
+    '| ID | Class | Status |\n|---|---|---|\n| OPEN-007 | NON_BLOCKER | OPEN |',
+  ]) {
+    const result = await evaluate({'docs/fsd.md': `${FSD}\n${record}\n`});
+    assert.equal(result.verdict, 'READY_FOR_SLICE', record);
+  }
+});
+
+test("active and unknown OPEN blockers fail closed, including inconsistent refs", async () => {
+  for (const record of [
+    '- OPEN-007: OPEN; Blocking: true.',
+    '- OPEN-007: UNKNOWN; blocking decision.',
+    '- OPEN-007: blocking decision with no status.',
+    '- OPEN-007: RESOLVED; no longer blocking.\n- OPEN-008: OPEN; blocking decision.',
+    '| ID | Type | Description | Owner | Status |\n|---|---|---|---|---|\n| OPEN-007 | Blocker | Missing role policy | Product | OPEN |',
+    '| OPEN-007 | Blocker | Missing role policy | Product | UNKNOWN |',
+    '| ID | Class | Status |\n|---|---|---|\n| OPEN-007 | UNKNOWN | UNKNOWN |',
+    '### OPEN-007\nStatus: UNKNOWN\nClass: UNKNOWN',
+    '### OPEN-007\nStatus: OPEN\nBlocking: true',
+    'OPEN-007\nStatus: UNKNOWN\nBlocking: true',
+    '### OPEN-007\nStatus: RESOLVED\nBlocking: true\n### OPEN-008\nStatus: OPEN\nBlocking: true',
+  ]) assertBlocked(await evaluate({'docs/fsd.md': `${FSD}\n${record}\n`}), 'open-blockers');
+  assertBlocked(await evaluate({'docs/fsd.md': `${FSD.replace('blocking_open_refs: []', 'blocking_open_refs: ["OPEN-007"]')}\n- OPEN-007: RESOLVED; no longer blocking.\n`}), 'open-blockers');
+});
+
 test("CLI exits 0 with readiness_gate_v1 json and text verdict", () => {
   const root = fixture();
   const json = runCli([...ARGS, "--root", root, "--json"]);

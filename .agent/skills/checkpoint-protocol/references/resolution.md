@@ -29,7 +29,7 @@ For denied confirmation, failed manual testing, rejected review, or incomplete d
 
 ## Bulk, exceptions and partial answers
 
-Use the latest displayed ready list for the active work, with stable `Q<n>` IDs
+Use the latest displayed question batch for the active work, with stable `Q<n>` IDs
 mapped to existing `OPEN-*` needs or named approval targets. Preserve the list's
 target, revision, stage and recommendation in its owning artifact/STATE refs;
 do not create a separate decision ledger. Resolve explicit intent in the user's
@@ -37,9 +37,9 @@ language, not a magic phrase parser. These Indonesian replies illustrate it:
 
 | Reply | Resolution |
 | --- | --- |
-| `Setuju semua rekomendasi` | Accept recommendations for all ready items on the latest list, within each displayed scope; pending items are excluded. |
-| `Setuju semua kecuali Q2: gunakan tabel` | Accept other ready recommendations and apply the supplied answer to Q2. |
-| `Setuju semua kecuali Q2` | Accept other ready recommendations; leave Q2 open without inferring an alternative. |
+| `Setuju semua rekomendasi` | Accept recommendations for the displayed batch only, within each displayed scope; undisplayed and pending items are excluded. |
+| `Setuju semua kecuali Q2: gunakan tabel` | Accept other displayed recommendations and apply the supplied answer to Q2. |
+| `Setuju semua kecuali Q2` | Accept other displayed recommendations; leave Q2 open without inferring an alternative. |
 | `Q1: ya; Q3: opsi B` | Resolve only Q1 and Q3; keep every unanswered ID open. |
 | Unknown ID or conflicting answers | Clarify only the ambiguous portion; retain clear independent answers. Do not guess the intended ID or select between contradictory answers. |
 
@@ -58,5 +58,7 @@ authorization remains separate by displayed target, revision and stage.
 
 When an answer is corrected, reopen only affected descendants and invalidated
 approval scope. Explain the dependency and next action, keep independent answers
-settled, and recompute the ready/pending list without renumbering unresolved IDs.
+settled, and recompute the prioritized batch and complete ready/pending registry
+without renumbering unresolved IDs. Surface all material blocked scope; retain
+undisplayed needs and continue independent authorized work.
 Route changed material decisions through their owning artifact's existing gate.

@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {isActiveAsset} from './active-assets.mjs';
+import {isActiveAsset,assertLocalModuleClosure} from './active-assets.mjs';
 import {loadModels, render} from './agent-projection.mjs';
 
 const here = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -77,7 +77,7 @@ function adapterAssets(source, selected, global, modelRoot=source) {
       if (host === 'windsurf') add(`${global?'.codeium/windsurf/global_workflows':'.windsurf/workflows'}/${route}.md`,`---\ndescription: Super Compound ${route}\n---\n\n${body}`);
       if (host === 'gemini') add(`.gemini/commands/${route}.toml`,`description = ${JSON.stringify(`Super Compound ${route}`)}\nprompt = ${JSON.stringify(routing(route)+'\nRequest: {{args}}')}\n`);
     }
-    const overview = `## Super Compound\n\nUse project .agent core before ${fallback}. Route /sc-* through context/workflows/sc-X.contract.md, then full workflow as needed. Follow context/output-style.md. Full-tier checkpoints: BRD approval, PRD approval, FSD approval, then separate execution authorization. Existing project authorization persists. Without subagents, run sequentially in-thread.`;
+    const overview = `## Super Compound\n\nUse project .agent core before ${fallback}. Route /sc-* through context/workflows/sc-X.contract.md, then full workflow as needed. Follow context/output-style.md and the project's conventions.approval_mode: exception is the new-install default; stage is explicit opt-in. Existing project authorization and approval preferences persist. Infer context, execute authorized bounded work, validate, and finish when the goal is met; ask only for unresolved material decisions, critical missing information, or risky actions outside existing authority. Without subagents, run sequentially in-thread.`;
     if (host==='codex') add(`${global?'.codex':'.agents'}/skills/super-compound/SKILL.md`,`---\nname: super-compound\ndescription: Use when handling Super Compound /sc-* commands or plain-language requests to set up, fix a bug, make a small change, deliver a feature, review, resume work, or ask for guidance.\n---\n\n# Super Compound\n\n## Summary\n\nRoute intent: setup -> sc-init setup; bug -> sc-debug; small change -> sc-work; full feature delivery -> sc-launch; resume -> sc-status; review -> sc-review; consultation -> sc-hints. Clear implementation, debugging, review and resume requests select their owner directly; hints is guidance only. Explicit /sc-* commands select their named route. Preserve read-only scope and existing authorization; routing adds no approval or write authority.\n\n${routing('sc-X')}\n`);
     if (host==='codex') add(global?'.codex/AGENTS.md':'AGENTS.md',overview,'block');
     if (host==='claude') {
@@ -200,6 +200,7 @@ export function setup(options={}) {
   if(!selected.length)throw new Error('No host detected; choose --host codex|claude|antigravity|cursor|windsurf|gemini');
   if(selected.some(h=>!hosts.includes(h)))throw new Error('Unknown host');
   const core=coreAssets(source);
+  assertLocalModuleClosure(core);
   if(!core.has('.agent/context/retired-assets.json'))throw new Error('Source is not an active framework checkout/cache');
   const sourceDigest=digest([...core].map(([p,a])=>p+':'+digest(a.bytes)).join('\n'));
   const plans=[];
@@ -211,7 +212,7 @@ export function setup(options={}) {
   }
   const changes=plans.flatMap(p=>p.changes),conflicts=plans.flatMap(p=>p.conflicts),checks=plans.flatMap(p=>p.checks);
   const healthy=!conflicts.length && !checks.some(c=>c.status==='missing-or-outdated');
-  const report={summary:command==='doctor'?'Installation structure and source drift checked; live host execution is not tested.':'Setup planned with ownership checks and rollback.',command,scope,os:process.platform,sourceDigest,changed:changes.length,conflicts,checks,capabilities:selected.map(host=>({host,detected:detected.includes(host),filesValid:healthy,liveTested:false})),status:conflicts.length?'conflict':command==='doctor'?(healthy?'healthy':'drift'):dryRun?'dry-run':changes.length?'applied':'unchanged'};
+  const report={summary:command==='doctor'?'Installation structure, static local imports and source drift checked; live host execution is not tested.':'Setup planned with dependency closure, ownership checks and rollback.',command,scope,os:process.platform,sourceDigest,changed:changes.length,conflicts,checks,capabilities:selected.map(host=>({host,detected:detected.includes(host),filesValid:healthy,liveTested:false})),status:conflicts.length?'conflict':command==='doctor'?(healthy?'healthy':'drift'):dryRun?'dry-run':changes.length?'applied':'unchanged'};
   if(command!=='doctor' && !dryRun && !conflicts.length) {
     applyTransaction(changes);
     report.capabilities.forEach(c=>c.filesValid=true);
@@ -239,6 +240,7 @@ export function installCodexBundle(options) {
   const root=path.resolve(options['codex-home'] || process.env.CODEX_HOME || path.join(os.homedir(),'.codex'),'skills/super-compound');
   const desired=new Map([['SKILL.md',fs.readFileSync(safePath(source,'.codex/SKILL.md'))]]);
   for(const dir of coreDirs)for(const rel of files(source,`.agent/${dir}`))desired.set(rel.replace(/^\.agent\//,'references/'),fs.readFileSync(safePath(source,rel)));
+  assertLocalModuleClosure(desired);
   const mp=safePath(root,'manifest.json');
   const previous=exists(mp)?JSON.parse(fs.readFileSync(mp,'utf8')):{files:[]};
   if(!Array.isArray(previous.files))throw new Error('Invalid legacy manifest');

@@ -9,8 +9,6 @@ description: "Use when building, redesigning, or reviewing frontend UI: pages, c
 
 Ground UI work in targeted retrieval from the curated interface database, then implement with the project's existing design system and verify the complete interaction surface.
 
-**Announce:** "I'm using the interface-design skill to ground this UI work in the design guidance database."
-
 ## Reference Router
 
 - Generate/persist a design system and run targeted domain or stack queries: [retrieval workflow](references/retrieval-workflow.md)

@@ -9,7 +9,7 @@ description: "Use when non-trivial work needs durable, bounded project memory ac
 
 Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
 
-Keep continuation state concise enough to load quickly and precise enough that `/sc-status` can resume without guessing. Announce use before changing durable memory.
+Keep continuation state concise enough to load quickly and precise enough that `/sc-status` can resume without guessing.
 
 ## Quick Reference
 

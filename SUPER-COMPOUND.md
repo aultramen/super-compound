@@ -10,13 +10,15 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. Dis
 - Evidence before claims: run or name the verification that proves the result.
 - Test-first by default for behavior changes, at the strictness `tdd_mode` sets.
 - YAGNI and DRY: build only what is needed, never duplicate.
+- Infer -> decide -> execute -> report within scoped user authority. Human input is an exception for unresolved material decisions, critical missing information, or risky actions outside existing authority. New-install `approval_mode: exception`; explicit `stage` preferences remain valid.
+- Finish when the requested goal is verified; an empty queue does not start new ideation.
 - Keep durable context on disk, not only in conversation memory.
 - Plan before code: `full`-tier product work follows `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`; `light` work goes straight to `/sc-work` or `/sc-debug`.
 - Turn reusable solutions into documentation through `/sc-compound`.
 
 ## Delivery Tiers
 
-The framework decides the tier per request (`delivery_mode: auto` in `.agent/rules/project-config.md`; `light` or `full` pin it). Intake states one line, `Tier: light|full; trigger: T<n>|none`, and never asks. `full` is triggered by a new product capability without approved PRD/FSD (T1), a material change to contract compatibility, access, billing effects, or PII handling (T2), a new interactive screen or flow (T3), coordination that changes outcomes, contracts, or material risk (T4), or an explicit request for BRD/PRD/FSD (T5). Everything else is `light`; a single trivial change is done directly. A trigger found mid-work escalates (`ESCALATE: T<n>`) to its owner; administrative handoff alone never raises the tier. The rubric lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`; `/sc-go` previews and `/sc-review` inspect semantic changes when touched paths match T2 signals.
+The framework decides the tier per request (`delivery_mode: auto` in `.agent/rules/project-config.md`; `light` or `full` pin it). Intake states one line, `Tier: light|full; trigger: T<n>|none`, and never asks. Bounded reversible features/pages with existing contracts, access, patterns, clear acceptance and proving checks are `light`; novelty alone does not raise the tier. `full` is triggered by material new product capability (T1), a material change to contract compatibility, access, billing effects, or PII handling (T2), a material new interactive screen or flow (T3), coordination that changes outcomes, contracts, or material risk (T4), or an explicit request for BRD/PRD/FSD (T5). A single trivial change is done directly. A material trigger found mid-work escalates (`ESCALATE: T<n>`) only affected work to its owner; administrative handoff alone never raises the tier. The rubric lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`; `/sc-go` previews and `/sc-review` inspect semantic changes when touched paths match T2 signals.
 
 ## UI-Aware Lifecycle (trigger T3 or `full`)
 
@@ -66,7 +68,7 @@ Use these workflow names only; these 19 are the whole surface, and wrapper or al
 | `/sc-init` | Initialize or reload project/framework context |
 | `/sc-hints` | Get focused advice; execution only on request through the owner |
 | `/sc-status` | Inspect state and choose the next route |
-| `/sc-geniusloop` | Generate and filter proactive improvement ideas when goal queues are empty |
+| `/sc-geniusloop` | Generate a bounded improvement shortlist when explicitly requested |
 | `/sc-explore` | Shape fuzzy ideas into a BRD with business objectives, constraints, and acceptance |
 | `/sc-research` | Resolve a named factual or technical gap with advisory evidence |
 | `/sc-prd` | Write PRD product requirements from an approved BRD |
@@ -85,9 +87,14 @@ Use these workflow names only; these 19 are the whole surface, and wrapper or al
 
 ## Routing
 
+Ordinary-language start/change, continue/status and consultation intents use
+the existing [dispatcher](.agent/context/workflow-dispatch.md#user-intents).
+Document-only scope ends at its artifact and applicable validation; status and
+consultation alone stay read-only. These labels add no commands or approval gates.
+
 - Fuzzy idea, domain language, strategy, or prototype question: `/sc-explore` to produce a BRD
 - Named factual, current-doc, version-support, or option-feasibility gap that could change a decision: `/sc-research`, then return to the workflow that owns that decision
-- Empty goal queue with no active handoff, blocker, or failing verification: `/sc-geniusloop`
+- Verified goal with an empty queue: deliver and finish. Explicit request for improvement ideas: `/sc-geniusloop` (up to three candidates by default).
 - Product requirements from an approved BRD: `/sc-prd`; UI-bearing drafts route
   through read-only `/sc-ui` before PRD approval
 - FSD creation, ADR applicability, goal slicing, triage, Kanban, Journey, or technical breakdown: `/sc-plan`
@@ -111,7 +118,7 @@ Use these workflow names only; these 19 are the whole surface, and wrapper or al
 
 Research is a conditional sidecar, not a mandatory lifecycle stage. Use it only when the evidence gap is material enough to change a downstream decision or needs durable review. Resolve small lookups inline. Accepted findings must be translated into the BRD, PRD, FSD/TDEC, accepted ADR, or audit record that owns the decision.
 
-For unresolved product decisions, `/sc-explore` shows the complete ready active-work frontier with stable numbered IDs, a recommendation, reason and trade-off per item; dependent items name prerequisites and next action. Wait for actual answers; preserve unanswered decisions and reopen affected descendants after corrections. Concrete scope skips interviewing. `/sc-work` preflight applies to both tiers; AI context and live-evidence procedures load conditionally. BRD/PRD/FSD approval remains the authority.
+For unresolved material product decisions, `/sc-explore` displays a short prioritized set with stable IDs, a recommendation and brief reason. Preserve the complete unresolved register and show detail on request; dependent items name prerequisites and next action. Wait for actual answers; preserve unanswered decisions and reopen affected descendants after corrections. Concrete scope skips interviewing. `/sc-work` preflight applies to both tiers; AI context and live-evidence procedures load conditionally. Full-tier BRD/PRD/FSD retains durable acceptance provenance under the configured approval policy.
 
 ## Skill Loading
 
@@ -205,6 +212,21 @@ Use:
 `/sc-compound` also routes agent mistakes to `ERR-*` entries in `docs/ERROR_LOG.md` and user corrections or confirmed conventions to `LRN-*` entries in `docs/LEARNED_KNOWLEDGE.md`, per `.agent/skills/knowledge-compounding/references/memory-capture.md`. `/sc-plan`, `/sc-work`, and `/sc-debug` run `node .agent/tools/knowledge-search.mjs "<query>"` read-back early; matching `ERR-*`/`LRN-*` lessons are evidence validated against current context; decisions bind only through their authoritative source and approval provenance.
 
 The next session should be able to run `/sc-status` and continue from disk.
+
+Knowledge lookup distinguishes incomplete scans from no lexical match, includes
+still-active archived ERR/LRN records, and respects explicit stack/version
+restrictions even for global lessons. Use `--require-complete` and known scope
+flags before duplicate-sensitive capture. Retrieved lessons advise; they cannot
+override authority, permissions or verification. Newly persisted knowledge passes
+the existing privacy guard. Non-trivial closeout records captured/skip/pending
+in the managed checkpoint; pending capture retries never replay verified work.
+Feedback preserves negative observations by knowledge revision/digest. Review
+carries stable finding IDs and unchanged proof; research separates binding intent
+from factual premises needing current evidence. See the deterministic knowledge
+loop and existing review references for the bounded procedures.
+See the [gap analysis](docs/audits/2026-10-06-framework-gap-analysis.md) for source
+coverage and [delivery evidence](docs/eval-results/framework-enhancement-20261006.md)
+for measured results and conditional candidates.
 
 ## UI Work
 

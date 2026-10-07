@@ -9,15 +9,13 @@ Delegate when independence justifies overhead. Keep evidence on disk; messages c
 
 If the host has no subagent capability, execute goals and the same review checks sequentially in-thread. Preserve scope, authority, and evidence; disclose that review lacked independent worker isolation. Host limitations alone do not create an approval checkpoint.
 
-Announce: "I'm using subagent-orchestration for file-backed goal dispatch."
-
 ## Preconditions
 
-- Goal has approved FSD authority, exact acceptance/test refs, and no unresolved
+- Full-tier goal has authorized FSD authority, exact acceptance/test refs, and no unresolved
   `OPEN-*` blocker.
-- UI pointers carry `ui_delivery_role`, `required_gate`, pinned contract refs;
+- Networked UI pointers carry `ui_delivery_role`, `required_gate`, pinned contract refs;
   gates `READY_FOR_SLICE`, `FIRST_VERTICAL_SLICE_VERIFIED`, `HARDENING` (every
-  UI slice `verified`, Business Owner UAT): [ui gates](references/ui-gates.md).
+  applicable UI slice `verified`, conditional Business Owner UAT): [ui gates](references/ui-gates.md).
 - Parallel goals do not share unmerged files or mutable validation resources.
 - Search existing code/tests before assuming anything is absent.
 

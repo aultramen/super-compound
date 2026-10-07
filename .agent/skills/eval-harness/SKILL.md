@@ -5,7 +5,7 @@ description: "Use when non-trivial or AI-assisted behavior needs measurable succ
 
 # Eval Harness
 
-Apply Eval-Driven Development (EDD): define measurable success before implementation, then evaluate and report after implementation. Announce use before defining criteria.
+Apply Eval-Driven Development (EDD): define measurable success before implementation, then evaluate and report after implementation.
 
 ## When to Use
 

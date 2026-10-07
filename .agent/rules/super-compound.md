@@ -1,18 +1,18 @@
 # Super Compound
 
-Super Compound: understand first, follow BRD -> PRD -> FSD -> GOAL for full scope, verify claims, and capture reusable knowledge.
+Understand first; full scope follows BRD -> PRD -> FSD -> GOAL. Verify claims and capture knowledge.
 
 ## Core Rules
 
-- Use evidence before claims. Do not say work is complete without fresh verification.
-- Keep the workflow surface small. Public workflows live in `.agent/workflows/` and are limited to the core set below.
-- Use the `sc-` workflow prefix for all command triggers to avoid collisions with native agent commands.
-- Keep detailed procedures in skills. Rules stay short because they are always-on context.
+- Claim completion only with fresh verification.
+- Public workflows in `.agent/workflows/` stay limited to the core set below.
+- Prefix command triggers `sc-` to avoid native-command collisions.
+- Detailed procedures belong in skills; always-on rules stay short.
 - Load `.agent/context/` contracts before full assets; human input/approval uses `checkpoint.contract.md`.
-- Delivery adapts per request: `light` changes go straight to `/sc-work` or `/sc-debug`; `full` scope (new capability, material contract change, new screen, or coordinated semantic/risk change) takes `BRD -> PRD -> FSD -> GOAL`. A single trivial change is done directly.
-- Prefer existing project conventions, tools, and architecture over new abstractions.
+- Delivery adapts per request: bounded low-risk features/pages with clear acceptance, existing contracts/access/patterns and proving checks stay `light`; material product/contract/security/flow changes take `BRD -> PRD -> FSD -> GOAL`. Exception-based approval is the new-project default; explicit stage preferences persist. A single trivial change is done directly.
+- Prefer existing conventions, tools, and architecture.
 - Treat hooks, prompts, skills, workflows, MCP config, and dependency changes as security-sensitive.
-- Preserve user work. Do not overwrite unrelated local changes.
+- Preserve unrelated user changes.
 - Route branch, commit, push, worktree, and Pull Request operations through `sc-go.md` and `git-workflow-operation`.
 - For UI-bearing work, PRD owns the experience baseline, FSD Section 8 owns the
   Screen & Interaction Contract, and delegated OpenAPI/JSON Schema owns exact
@@ -22,10 +22,10 @@ Super Compound: understand first, follow BRD -> PRD -> FSD -> GOAL for full scop
 
 | Workflow | Use For |
 |----------|---------|
-| `sc-init.md` | New/imported project scan and rule reload via `/sc-init reload` |
+| `sc-init.md` | New/imported project scan; `/sc-init reload` |
 | `sc-hints.md` | Read-only advice |
 | `sc-status.md` | Session orientation and saved handoff resume |
-| `sc-geniusloop.md` | Proactive improvement ideation when goal queues are empty |
+| `sc-geniusloop.md` | Bounded ideation for explicit improvement intent |
 | `sc-explore.md` | Fuzzy ideas, business direction, BRD creation, prototypes, and open decisions |
 | `sc-research.md` | Conditional evidence spike for a named factual or technical decision gap |
 | `sc-prd.md` | PRD creation from an approved BRD |
@@ -35,11 +35,11 @@ Super Compound: understand first, follow BRD -> PRD -> FSD -> GOAL for full scop
 | `sc-work.md` | Execute approved FSD goals; prove a real first slice before controlled parallel scale-out |
 | `sc-debug.md` | Reproduce, diagnose root cause, fix, and verify bugs |
 | `sc-review.md` | Spec and standards review of code changes |
-| `sc-audit.md` | Security, compatibility, dependency, agent surface, MCP, compliance, and release-readiness audit |
+| `sc-audit.md` | Audit security, compatibility, dependencies, agents, MCP, compliance, releases |
 | `sc-compound.md` | Capture non-trivial solved problems as reusable knowledge |
 | `sc-evolve.md` | Cluster verified learnings into draft framework proposals for human approval |
 | `sc-pause.md` | Save `.continue-here.md` handoff before stopping |
-| `sc-launch.md` | Run the complete lifecycle through the core workflow sequence |
+| `sc-launch.md` | Complete delivery lifecycle |
 | `sc-ui.md` | Frontend, mobile, chart, and interface design work |
 
 ## Routing
@@ -47,7 +47,7 @@ Super Compound: understand first, follow BRD -> PRD -> FSD -> GOAL for full scop
 - UI/frontend/mobile/chart design/review -> read-only `sc-ui.md`; approved
   implementation -> `sc-work.md`. A UI-bearing PRD draft returns from `/sc-ui`
   validation before FSD planning.
-- Empty goal queue with no active handoff, blockers, or failing verification -> `sc-geniusloop.md`.
+- Goal satisfied with required checks/closeout complete -> deliver and stop. `sc-geniusloop.md` requires explicit improvement intent; never trigger on an empty queue alone.
 - Low-token routing -> `.agent/context/routing-index.md`, then a route contract when available.
 - Bugs, failures, regressions -> `sc-debug.md` and `systematic-debugging`.
 - Git branch, worktree, commit, push, or PR request -> `sc-go.md` and `git-workflow-operation`.

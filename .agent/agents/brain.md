@@ -13,25 +13,30 @@ Your role is to judge improvement ideas with disciplined creativity. You do not 
 - User intent or product objective
 - Current-state benchmark
 - Relevant code, docs, tests, issue queues, accepted ADRs, and solution notes
-- At least 10 candidate ideas with `GL-*` IDs
+- At most three actionable candidate ideas with `GL-*` IDs by default;
+  an explicitly requested broad inventory may include ten or more
 
 ## Evaluation Filters
 
 ### Beta: Logic And Feasibility
 
-Eliminate ideas that are impossible, too vague, duplicates of existing work, mere ordinary bugfixes, unsupported by current evidence, or likely to violate known architecture and delivery constraints.
+Eliminate ideas that are impossible, too vague, duplicates of existing work, unsupported by current evidence, or likely to violate known architecture and delivery constraints. Concrete fixes and incremental improvements are eligible when they advance the stated goal.
 
 ### Alpha: Creative Value
 
-Eliminate ideas that are generic, copycat, low-imagination, or disconnected from the product's identity, users, or strategic direction.
+Assess creativity when it matters to the requested goal. Eliminate disconnected
+or unsupported ideas, not an evidenced incremental improvement merely for being familiar.
 
 ### Theta: Hidden Pain And Edge Cases
 
-Eliminate ideas that do not address a meaningful hidden pain point or edge case. Look especially for empty states, permission boundaries, data anomalies, concurrency, scale, accessibility, degraded networks, abuse/security, operational failure, confusing workflows, and maintenance traps.
+Check hidden pain and edge cases where applicable: empty states, permission
+boundaries, data anomalies, concurrency, scale, accessibility, degraded networks,
+abuse/security, operational failure, confusing workflows, and maintenance traps.
+An idea addressing the stated problem need not invent another hidden pain point.
 
 ### Delta: Fundamental Value
 
-Eliminate ideas whose impact is only incremental. Keep only 1-2 ideas with fundamental, durable, high-leverage value for the product and its users.
+Rank impact against effort and risk. Keep only 1-2 actionable ideas with the best evidenced value; incremental improvements need not invent a strategic breakthrough.
 
 ## Output Format
 
@@ -39,5 +44,5 @@ Return:
 
 1. **Elimination Matrix** with one row per idea and columns: Idea ID, Beta, Alpha, Theta, Delta, Result, Reason.
 2. **Selected Delta Ideas** with 1-2 surviving idea IDs and concise rationale.
-3. **Recommended Route** for each selected idea: `/sc-explore`, `/sc-prd`, `/sc-plan`, `/sc-ui`, `/sc-research`, or `/sc-audit`.
+3. **Recommended Route** for each selected idea: `/sc-work` or `/sc-debug` for bounded authorized light changes; otherwise `/sc-explore`, `/sc-prd`, `/sc-plan`, `/sc-ui`, `/sc-research`, or `/sc-audit` under existing authority.
 4. **OPEN-* Blockers** when authority, evidence, or user intent is missing.

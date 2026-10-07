@@ -1,5 +1,65 @@
 # Changelog
 
+## Summary
+
+Dated framework changes, compatibility notes and verification evidence; newest delivery first.
+
+## 2026-10-07 - Exception-based human input and autonomous goal closure
+
+- Default new installations to exception-based approvals; preserve explicit stage
+  configuration and scoped authorization. Bounded reversible features/pages can
+  use light delivery with existing contracts, acceptance and proving checks.
+- Prioritize concise human-only questions with a durable unresolved inventory;
+  auto-promote unchanged planning metadata, reuse context, and finish when the
+  goal is verified. Ideation requires explicit improvement intent.
+- Scope stale-proof blocks to selected goals and transitive dependencies; validate
+  completion evidence and preserve pending learning across checkpoint overflow,
+  retries and interruption. Keep privacy, structural integrity and applicable
+  UI/provider/security/accessibility gates.
+- Remove unconditional session-end reminders and repeated skill announcements.
+  Reuse adequate RED evidence and make N/A, UAT and hardening applicability explicit.
+- Check local import closure before export/install, smoke-test offline runtime,
+  and ship install-only export guidance without changing application package metadata.
+- Archive 87 already-retired files after reference/dependency closure and the
+  active suite; preserve original bytes, hashes, locators and commit provenance.
+- See [implementation and validation](docs/eval-results/hitl-autonomy-20261007.md)
+  for F01-F26 closure, cross-review, preservation and measurement limits.
+
+## 2026-10-06 - Evidence-backed framework enhancements
+
+- Add bounded retrieval coverage and strict completeness checks, archived
+  ERR/LRN recall, stable-ID deduplication and explicit stack/version scope.
+- Guard new knowledge, refresh, feedback and retry payloads with the existing
+  privacy boundary. Preserve optional learning closeouts across checkpoints;
+  hooks advise retrying pending capture without replaying verified goals.
+- Require distinct A/B source identity and support six A/A noise-control pairs
+  in the existing evaluator. Add selected-fixture Codex preflight before any
+  counted experiment; preserve blocked attempts and existing policy rules.
+- Close the observed read/test-only preflight gap with a bounded write proof;
+  stop after the first invalid A/A control or session execution failure. The
+  October 7 live write probes remain blocked; runtime benefit is unproven.
+- After local acceptance and successful RTK-compliant live preflights, add
+  lossless revision-bound feedback with negative-first proof pointers, stable
+  review finding adjudication, and research premise/evidence separation. The
+  poisoned-lesson grader control proves local sensitivity, not model resistance.
+- Adapt existing tools and skills without adding public workflows or dependencies.
+  See [gap analysis](docs/audits/2026-10-06-framework-gap-analysis.md) and
+  [delivery evidence](docs/eval-results/framework-enhancement-20261006.md) for
+  verified results, runtime limitations and conditional follow-up.
+
+## 2026-10-06 - Reviewer-oriented artifact authoring
+
+- Add three conceptual user intents to existing dispatch; preserve all 19
+  commands, light/full triggers, stage approvals and read-only boundaries.
+- Make shared authoring applicability explicit, align four skeletons/reference
+  usage notes, and replace the alternate PRD compact shape with its canonical
+  skeleton. Preserve parser fields/headings and conditional ADR policy.
+- Move LOCAL_ONLY guidance into the FSD screen contract; retain networked
+  first-real-slice proof and all mandatory risk/security/accessibility checks.
+- Add concrete checkpoint/document examples, response negative controls and
+  local compatibility evidence. Usability and runtime savings remain unmeasured;
+  see `docs/eval-results/blueprint-document-20261006.md` for actual verification.
+
 ## 2026-10-05 - Canonical audit finding closure
 
 - Generate canonical evidence from LF source bytes per `.gitattributes` so

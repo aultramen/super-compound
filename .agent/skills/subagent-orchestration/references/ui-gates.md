@@ -10,5 +10,7 @@
 - Recheck `ui_delivery_role`, `required_gate`, and the pinned contract revision
   immediately before recording any UI result.
 
-LOCAL_ONLY topology skips provider roles/assets. Apply mechanical promotion and
+LOCAL_ONLY topology skips provider roles/assets and verifies mapped local
+behavior/accessibility within the goal; separate hardening is only for
+outstanding merged/cross-slice verification. Apply internal mechanical promotion and
 affected proof invalidation from `agentic-delivery/references/ui-contract-readiness.md`.

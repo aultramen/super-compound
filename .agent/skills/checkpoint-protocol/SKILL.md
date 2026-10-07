@@ -9,7 +9,7 @@ description: "Use when human information, judgment, approval, testing, credentia
 
 Use the [human input runtime contract](../../context/checkpoint.contract.md)
 before interrupting or reporting blockers. It owns the single answerable format;
-this skill routes need types and resolution. Announce the affected scope, and
+this skill routes need types and resolution. Name the affected scope, and
 continue independent authorized work.
 
 ## When to Use
@@ -26,12 +26,13 @@ Choose exactly one type: `needs_info`, `needs_decision`, `needs_confirmation`, `
 
 ## Invariants
 
-- Show every ready input/approval for active work together, grouped by the same owner and scope; keep authority gates separate and show dependent items as pending. Use stable IDs, per-item recommendations, complete review paths and both reply examples from the runtime contract. Continue independent safe work while waiting.
+- Prioritize at most three current actionable human/external questions by default, grouped by the same owner and scope; keep every material block and stable unresolved ID visible in a concise summary, with the complete ready/pending inventory in existing authorized state or expandable detail. Preserve authority boundaries, recommendations, review paths, partial answers and automatic continuation from the runtime contract. Continue independent safe work while waiting.
 - Provide context, the exact blocker, what was tried, the impact of the response, and a concrete resumption path.
 - For choices, present meaningful options and lead with a reasoned recommendation.
-- Record each unresolved need under `STATE.md` Blockers through the existing
-  state writer; retain partially resolved evidence. Decisions remain in their
-  authoritative document with STATE refs. Resume from the exact prior position.
+- Retain each unresolved need and partial evidence in existing authorized STATE
+  or its owning artifact through the state writer; a light task may use its
+  conversation/issue instead. Read-only scope keeps expandable chat detail.
+  Decisions remain with their authority; resume from the exact prior position.
 - Never ask the user to paste secrets in chat. Direct credentials to an approved local secret store such as `.env` and name only the variable or location.
 - Do not use a checkpoint to transfer routine implementation judgment back to the user.
 

@@ -133,7 +133,7 @@ const specs = {
     references: {
       "inspection-surface.md": "5b0da19c6090488af88fc81a6d7005f433d7e9102ce6f1614ac236ec009c22d1",
       "preflight.md": "f7e9115fd5b0c4b064035ba40fbca2541a32e7e3c3f4cce6f7dc5a088f597ed8",
-      "audit.md": "e3304579bd43dc4b63cd72361e0150005a24a39c7da78018e799d093b63832d1",
+      "audit.md": "ab840249d2967411447233cd0afde8763b93db5c75dfde9e64ecf18cade111e3",
       "commands.md": "ffb4081d25994084826c5b93274b8dae5d54145e18c5e3387cf77897a01a3f24",
       "reporting.md": "5ab4f5ca1746fb16b871c728f34e3284d4be5990b02137a8fab406cd0689130a",
       "red-flags.md": "89052331f598b5ecb63ef678f93f45e8ee9a996a81188b2df02af5b9fa375d81",

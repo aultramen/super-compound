@@ -48,7 +48,9 @@ test('dry run is read-only; six adapters install and reinstall is a no-op', t =>
   assert.match(codex, /feature.*sc-launch/);
   assert.match(codex, /consultation.*sc-hints/);
   for (const rel of ['.claude/commands/sc-hints.md', '.agents/skills/sc-hints/SKILL.md', '.cursor/skills/sc-hints/SKILL.md', '.windsurf/workflows/sc-hints.md', '.gemini/commands/sc-hints.toml', '.agent/skills/hints/references/LICENSE']) assert.ok(fs.existsSync(path.join(f.target, rel)), rel);
-  assert.match(fs.readFileSync(path.join(f.target,'.agent/rules/project-config.md'),'utf8'),/approval_mode:.*stage/);
+  assert.match(fs.readFileSync(path.join(f.target,'.agent/rules/project-config.md'),'utf8'),/approval_mode:.*exception/);
+  assert.match(fs.readFileSync(path.join(f.target,'AGENTS.md'),'utf8'), /exception.*default/i);
+  assert.doesNotMatch(fs.readFileSync(path.join(f.target,'AGENTS.md'),'utf8'), /Full-tier checkpoints: BRD approval/);
   assert.equal(fs.existsSync(path.join(f.target,'.agent/tools/budget-wizard.mjs')),false);
   assert.equal(run(f,'doctor').status,0);
 });
@@ -107,6 +109,25 @@ test('existing instructions and config survive; user-owned collisions are batche
   const result=run(f,'update');
   assert.notEqual(result.status,0);
   assert.equal(result.report.conflicts.length,2);
+});
+
+test('explicit stage preference survives update while generated adapters defer to project config', t => {
+  const f=fixture(t);
+  assert.equal(run(f,'install').status,0);
+  const config=path.join(f.target,'.agent/rules/project-config.md');
+  const stage=fs.readFileSync(config,'utf8').replace(/approval_mode:.*exception/, 'approval_mode: "stage"');
+  fs.writeFileSync(config,stage);
+  assert.equal(run(f,'update').status,0);
+  assert.equal(fs.readFileSync(config,'utf8'),stage);
+  assert.match(fs.readFileSync(path.join(f.target,'AGENTS.md'),'utf8'), /project.*approval_mode/);
+});
+
+test('installer and doctor reject unshipped local imports without writing', t => {
+  const f=fixture(t),checkout=path.join(f.root,'checkout');
+  fs.cpSync(path.join(source,'.agent'),path.join(checkout,'.agent'),{recursive:true});
+  fs.writeFileSync(path.join(checkout,'.agent/tools/broken.mjs'), "import './loop-telemetry-model.mjs';\n");
+  for(const command of ['install','doctor']) assert.throws(()=>setup({source:checkout,target:f.target,home:f.home,scope:'project',host:'codex',command}),/missing local runtime dependency/i);
+  assert.equal(fs.existsSync(f.target),false);
 });
 test('update applies unchanged owned assets, retires only owned bytes, and rolls back existing files',t=>{
   const f=fixture(t),checkout=path.join(f.root,'checkout');

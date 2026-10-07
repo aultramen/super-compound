@@ -33,8 +33,10 @@ Result and next action: BRD -> PRD -> FSD -> verified goals; retain configured s
 8. `sc-eval.md` - define measurable pass/fail checks when useful.
 9. `sc-go.md` - preview branch or optional worktree setup when configured or requested.
 10. `sc-work.md` - materialize and verify the bounded contract enabler when needed.
-11. `/sc-plan` - after an enabler, re-index the exact revisions, rerun readiness, and auto-promote unchanged semantics after deterministic gates; request Technical Manager approval only for material deltas before releasing the first slice.
-12. `sc-work.md` - for networked UI, verify the first vertical slice against the real provider, then return to `/sc-plan` to promote only eligible dependents. LOCAL_ONLY uses mapped local checks without provider barriers.
+11. Internal planning-owned promotion - after an enabler, the active controller
+    re-indexes exact revisions, reruns readiness and releases the first slice
+    without planning re-entry solely for metadata; material deltas return to `/sc-plan`/owner.
+12. `sc-work.md` - for networked UI, verify the first vertical slice against the real provider, then internally promote only eligible dependents through the same planning-owned checks. LOCAL_ONLY uses mapped local checks without provider barriers.
 13. `sc-work.md` - perform controlled scale-out only after the first-slice issue is verified and the PRD baseline is `VALIDATED`.
 14. `sc-work.md` - execute the bounded hardening/verification goal for integration, responsive, accessibility, E2E, and visual-regression evidence; obtain Business Owner UAT approval only when required by acceptance or material human judgment.
 15. `sc-review.md` - audit implementation and recorded verification/UAT evidence against authority; it does not manufacture missing evidence.

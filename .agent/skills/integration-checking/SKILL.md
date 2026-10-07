@@ -9,11 +9,11 @@ description: "Use when multi-component work needs cross-component verification o
 
 Existence is not integration. A route, component, service, or config file can exist and still be disconnected from the user-visible workflow.
 
-**Announce:** "I'm using the integration-checking skill to verify cross-component wiring."
-
 ## Wiring Map
 
-For the changed feature, trace:
+For the changed feature, trace the applicable topology. LOCAL_ONLY traces
+screen -> local action/state -> local data -> observable result; omit synthetic
+provider/wire/schema/fixture stages. For networked scope, trace:
 
 ```text
 User action / external event
@@ -39,8 +39,8 @@ User action / external event
 | UI | Component is reachable, state updates, loading/error/empty states work |
 | Recovery | Preserve safe draft/selection; errors explain problem, known cause, recovery and retained state |
 | Retry | Assert no duplicate side effects, including uncertain outcomes and reconciliation |
-| UI state mapping | Success, validation, forbidden, conflict, degraded, offline, and async outcomes map to named states or approved N/A |
-| Fixtures | Synthetic deterministic fixtures validate against the pinned schema and cover representative failure |
+| UI state mapping | Success, validation, forbidden, conflict, degraded, offline, and async outcomes map to named states or `N/A - factual reason`; routine factual N/A needs no approver |
+| Fixtures | When a wire contract exists, deterministic fixtures validate against its pinned schema and cover representative failure |
 | Responsive/a11y | Reflow, overflow, keyboard, focus, semantics, announcements, errors, contrast, zoom, and motion are verified |
 | Environment | Record `MOCK` or `REAL`; mock evidence is not real provider integration proof |
 | Contract tests | Provider and consumer tests exercise the same operation/schema revision |
@@ -79,7 +79,7 @@ User action / external event
 ## Integration
 
 - Called by `executing-plans`, `verification-before-completion`, and `gap-closure`.
-- Required after the first integrated vertical slice and after merged parallel streams.
+- Required after the first integrated vertical slice and after merged parallel streams; local checks may complete within the existing goal. UAT is required only by acceptance/policy or unresolved material human judgment.
 - For browser/live-service evidence, use [live verification](../verification-before-completion/references/live-verification.md) with the repository harness and session.
 
 - Maintain the mapped harness with [verification recipes](../verification-before-completion/references/verification-recipes.md); retain evidence before cleanup.

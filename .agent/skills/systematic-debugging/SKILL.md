@@ -7,8 +7,6 @@ description: "Use when encountering a bug, test failure, unexpected behavior, in
 
 ## Overview
 
-Announce: "I'm using the systematic-debugging skill to diagnose this issue."
-
 Find the root cause before changing production behavior. A fast, deterministic, red-capable reproduction is the primary debugging tool.
 
 ## When to Use

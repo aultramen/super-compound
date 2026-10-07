@@ -9,7 +9,7 @@ description: "Use when creating, editing, or verifying a skill before deployment
 
 Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
 
-Treat process documentation as code: create pressure tests, observe failure, teach the minimum behavior, then close demonstrated loopholes. Announce use before authoring.
+Treat process documentation as code: create pressure tests, observe failure, teach the minimum behavior, then close demonstrated loopholes.
 
 ## When to Use
 

@@ -9,8 +9,6 @@ description: "Use when work needs shared domain language, CONTEXT.md updates, co
 
 Keep domain language precise and durable so agents use the same words as the project.
 
-Announce: "I'm using the domain-modeling skill to align domain language."
-
 ## Files
 
 Use the simplest layout that fits the project:

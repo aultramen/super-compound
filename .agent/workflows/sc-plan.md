@@ -24,7 +24,7 @@ UI readiness reference; never start a blocked product goal to evade its gate.
 
 Input: `/sc-plan docs/prd/prd-analytics.md`.
 Prerequisite: Approved PRD and required experience evidence.
-Result and next action: FSD, goals and mapped verification; require FSD approval and execution authorization before /sc-work.
+Result and next action: FSD, goals and mapped verification; reuse valid scope/acceptance and execution authority, with separate FSD approval/execution checkpoints only in configured stage mode.
 
 ## Steps
 
@@ -57,15 +57,21 @@ Result and next action: FSD, goals and mapped verification; require FSD approval
 17. If machine assets are missing, create a `CONTRACT_ENABLER`. Then create
     exactly one blocked `FIRST_VERTICAL_SLICE` pointer for the critical/highest-risk
     flow. The FSD may be approved with `DRAFT/BLOCKED` readiness only to release
-    the bounded enabler. After it is verified, return to `/sc-plan`, update the
-    FSD index, rerun the readiness gate, and auto-promote unchanged semantics after deterministic gates; request Technical Manager approval only for material deltas;
+    the bounded enabler. After it is verified, the active controller updates the
+    FSD index through planning-owned deterministic promotion, reruns the gate,
+    and auto-promotes unchanged semantics without planning re-entry solely for
+    metadata. Material deltas return to `/sc-plan` and their decision owner;
     `READY_FOR_SLICE` then releases the first slice.
     Every `SCALE_OUT_SLICE` records `required_gate =
     FIRST_VERTICAL_SLICE_VERIFIED` and depends on the first-slice issue. These
     truths live only in the FSD or issue pointer, not a new authority.
-18. Create exactly one `HARDENING` goal for UI-bearing scope. It depends on all
+18. For networked UI requiring merged/cross-slice verification, create exactly one
+    `HARDENING` goal. It depends on all
     applicable UI delivery slices and owns merged integration, responsive,
-    accessibility, E2E, visual-regression, and Business Owner UAT evidence.
+    accessibility, E2E, visual-regression, and conditional Business Owner UAT
+    evidence. LOCAL_ONLY verification remains in its bounded goal; no synthetic
+    separate hardening goal. UAT applies only to explicit acceptance or unresolved
+    material human judgment.
 19. Use `skills/plan-verification/SKILL.md` and its ten dimensions before execution.
 20. Checkpoint automatically and continue authorized work; use `/sc-pause` only when actually stopping.
 

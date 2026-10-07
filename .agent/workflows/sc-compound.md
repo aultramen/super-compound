@@ -37,7 +37,9 @@ Result and next action: Searchable capture in applicable knowledge sinks; return
 ## Guardrails
 
 - `/sc-compound` must not self-modify prompts, model weights, goals, policy, budgets, verifier definitions, framework source, operating rules, or the public workflow inventory.
-- A captured pattern never grants implementation, Git, or release authority; applying it happens through the owning route with human approval.
+- A captured pattern never grants implementation, Git, or release authority.
+  Its scoped use within an already-authorized goal needs no new approval;
+  material decisions or framework policy changes use their owning approval boundary.
 
 Use capture/upsert JSON and evidence locators from the deterministic loop; do not manually create duplicate Quick Reference rows.
 
