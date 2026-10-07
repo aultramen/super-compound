@@ -21,11 +21,16 @@
 - **Scope:** <included evidence surface>
 - **Non-goals:** <decisions this note will not make>
 
+## Premises And Authority
+
+- **Binding intent/constraints:** <user or approved authority refs; preserve unless their owner changes them>
+- **Claims to verify:** <factual premises from project artifacts, memory, or summaries; link current evidence or mark unknown>
+
 ## Evidence Register
 
 | ID | Finding | Source or local reference | Applies to / version | Retrieved or observed | Quality | Confidence |
 |---|---|---|---|---|---|---|
-| EVID-001 | <fact> | <path, command, or primary URL> | <version/scope> | YYYY-MM-DD | primary/local | high/medium/low |
+| EVID-001 | <fact> | <current observed result or primary source; a premise is not its own proof> | <version/scope> | YYYY-MM-DD | primary/local | high/medium/low |
 
 ## Synthesis
 

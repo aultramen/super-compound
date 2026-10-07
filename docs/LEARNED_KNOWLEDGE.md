@@ -1,5 +1,9 @@
 # Learned Knowledge
 
+## Summary
+
+Records reusable observations, evidence, and corrective actions for this project. Lessons remain advisory until adopted by an authoritative decision.
+
 Confirmed reusable preferences, conventions, and patterns.
 Contract: `.agent/skills/state-management/references/file-contracts.md`.
 Read the Quick Reference table before starting a task; open a full entry only
@@ -18,15 +22,14 @@ framework proposal (human-approved).
 
 ## Quick Reference
 
-| ID | Scope | Confidence | Action rule (IF-THEN) |
-| --- | --- | --- | --- |
-<!-- newest first; one row per entry below -->
-| LRN-2026-09-20-001 | framework | confirmed | IF a rule is enforced only by prose the model reads THEN back it with a test, CI check, or tool, or delete it; prose-only gates cost tokens and block compliant models without protecting anything |
-| LRN-2026-09-03-001 | framework | confirmed (SUPERSEDED by LRN-2026-09-20-001) | IF a route contract needs tokens THEN add them and re-adopt that route's absolute budget in `token-benchmark.mjs` (measured after + 40); the 90% ratio is reported, not a gate |
-| LRN-2026-09-02-002 | framework | confirmed (SUPERSEDED by LRN-2026-09-03-001) | IF a route contract needs tokens THEN trim `.codex/SKILL.md` or rewrite token-neutral |
-| LRN-2026-09-02-001 | framework | confirmed | IF wiring a behavior into an sc-* workflow THEN add its spine to the paired contract in the same change and extend the spine test |
+| ID | Topic | Action rule |
+| --- | --- | --- |
+| LRN-2026-09-02-001 | contract shadowing | IF wiring a behavior into an sc-* workflow THEN add its spine to the paired contract in the same change and extend the spine test. |
+| LRN-2026-09-02-002 | shared contract headroom | IF a route contract needs tokens THEN trim `.codex/SKILL.md` or rewrite token-neutral; never raise the 90% gate. |
+| LRN-2026-09-03-001 | absolute route budgets | IF a route contract needs tokens THEN add them and re-adopt that route's absolute budget in `token-benchmark.mjs` (measured after + 40); the 90% ratio is reported, not a gate. |
+| LRN-2026-09-20-001 | prose-only gates | IF a rule is enforced only by prose the model reads THEN back it with a test, CI check, or tool, or delete it. |
+| LRN-2026-10-06-001 | pilot write capability preflight | IF a pilot will measure implementation or resume THEN require the selected-build test and bounded write probe without bypassing effective policy; stop after the first invalid A/A control or execution failure, retain evidence, and mark runtime benefit unproven. |
 
----
 
 ## LRN-2026-09-02-001 - contract shadowing
 - Learning: the contract-first route (`.claude/commands/` then `.agent/context/workflows/`) never loads the full workflow body, so behavior wired only into a workflow never fires.
@@ -67,3 +70,16 @@ framework proposal (human-approved).
 - Action rule: IF <condition> THEN <action>
 - Source: <user statement | repeated observation | verified experiment>
 -->
+
+## LRN-2026-10-06-001 - pilot write capability preflight
+- Learning: Successful reads, real test execution, requested workspace-write and model exit zero do not establish effective implementation capability. Live workers declined writes; this does not prove an OS-level rejection. Require actual bounded write evidence before counted trials and preserve failed controls.
+- Applies to: framework
+- Action rule: IF a pilot will measure implementation or resume THEN require the selected-build test and bounded write probe without bypassing effective policy; stop after the first invalid A/A control or execution failure, retain evidence, and mark runtime benefit unproven.
+- Source: Repeated live observations and verified local protocol-v3/control-stop regressions; no runtime savings claim
+- Confidence: observed
+- Origin: framework-enhancement-20261006:pilot-capability
+- Revision: v3-write-probe-and-control-stop
+- Status: active
+- Evidence: .agent/tools/codex-pilot.mjs@5a0738cc1eec8faf11140ee63a1b2f7104c9f83beb17b4cd185fc7e5b05a0009, .agent/tools/codex-pilot.test.mjs@d1c76f31ce0eaed7d139af0259ad2917b00e4f7b9a2a8c10260b7ecc00f81b0d, .agent/skills/eval-harness/references/paired-experiments.md@e7b3a7e1042601dcadf666e1322603f2000d28d66ed86df6c7cba646ac6b6345
+- Outcome: verified
+

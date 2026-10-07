@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import {selectActiveAssets, isActiveAsset} from './active-assets.mjs';
+import {selectActiveAssets, isActiveAsset,missingLocalModules} from './active-assets.mjs';
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { lstat, mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
@@ -83,6 +83,9 @@ export function parseCsvRows(text) {
 export function checkExecutableReferences(file, text, fileSet) {
   if (/^docs\/(archive|audits|eval-results)\//.test(file) || file === 'CHANGELOG.md') return [];
   const findings = [];
+  for (const missing of missingLocalModules(file,text,fileSet)) {
+    findings.push(finding('P1','MISSING_LOCAL_MODULE',file,`Local runtime dependency is not shipped: ${missing}`));
+  }
   const commands = /\b(?:node|python3?|pwsh)\s+(?:--?[a-z-]+\s+)*["']?(\.(?:agent|codex|claude)\/[A-Za-z0-9_./-]+\.(?:mjs|js|py|ps1))\b/g;
   for (const match of text.matchAll(commands)) {
     if (!fileSet.has(match[1])) findings.push(finding('P1', 'MISSING_EXECUTABLE_REFERENCE', file, `Executable reference is not shipped: ${match[1]}`));

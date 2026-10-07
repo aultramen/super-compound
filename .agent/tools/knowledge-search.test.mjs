@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import {
     buildIndex,
@@ -10,9 +12,107 @@ import {
     parseFrontmatter,
     scoreQuery,
     search,
+    searchWithCoverage,
     splitEntries,
     tokenize,
 } from './knowledge-search.mjs';
+
+test('CLI coverage treats absent optional default stores as a complete empty scan', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ks-coverage-'));
+    t.after(() => fs.rmSync(root, {recursive: true, force: true}));
+    const run = spawnSync(process.execPath, [fileURLToPath(new URL('./knowledge-search.mjs', import.meta.url)), 'missing topic', '--root', root, '--json', '--require-complete'], {encoding: 'utf8', env: {...process.env, SC_GLOBAL_KNOWLEDGE_DIR: ''}});
+    assert.equal(run.status, 0, run.stderr);
+    const output = JSON.parse(run.stdout);
+    assert.deepEqual(output.results, []);
+    assert.deepEqual(output.coverage, {complete: true, scannedFiles: 0, failedReads: [], diagnosticsTruncated: false});
+});
+
+test('explicit missing scopes report incomplete coverage with opt-in exit 2 and no write-safety claim', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ks-partial-'));
+    t.after(() => fs.rmSync(root, {recursive: true, force: true}));
+    const args = [fileURLToPath(new URL('./knowledge-search.mjs', import.meta.url)), 'missing topic', '--root', root, '--dir', 'docs/missing', '--file', 'docs/missing.md'];
+    const defaultRun = spawnSync(process.execPath, [...args, '--json'], {encoding: 'utf8'});
+    assert.equal(defaultRun.status, 0, defaultRun.stderr);
+    assert.deepEqual(JSON.parse(defaultRun.stdout).coverage, {
+        complete: false, scannedFiles: 0,
+        failedReads: [{locator: 'docs/missing', code: 'ENOENT'}, {locator: 'docs/missing.md', code: 'ENOENT'}],
+        diagnosticsTruncated: false,
+    });
+    const strictRun = spawnSync(process.execPath, [...args, '--require-complete'], {encoding: 'utf8'});
+    assert.equal(strictRun.status, 2, strictRun.stderr);
+    assert.doesNotMatch(strictRun.stdout, /safe to write/i);
+    assert.match(strictRun.stdout, /incomplete/i);
+});
+
+test('coverage counts unique successful reads and bounds unreadable-file diagnostics', () => {
+    const root = path.resolve('coverage-fixture');
+    const files = ['good.md', 'good.md', ...Array.from({length: 12}, (_, i) => `blocked-${i}.md`)];
+    const readFile = file => {
+        if (path.basename(file) === 'good.md') return '# Retrieval\nRead the useful evidence.';
+        throw Object.assign(new Error('sensitive content must not be reported'), {code: 'EACCES'});
+    };
+    const output = searchWithCoverage({root, files, query: 'useful evidence', readFile});
+    assert.equal(output.coverage.scannedFiles, 1);
+    assert.equal(output.results.length, 1);
+    assert.equal(output.coverage.complete, false);
+    assert.equal(output.coverage.failedReads.length, 10);
+    assert.deepEqual(output.coverage.failedReads[0], {locator: 'blocked-0.md', code: 'EACCES'});
+    assert.equal(output.coverage.diagnosticsTruncated, true);
+    assert.doesNotMatch(JSON.stringify(output.coverage), /sensitive content/);
+});
+
+test('default CLI recalls active overflow topics from both bounded-memory archives', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ks-archive-'));
+    t.after(() => fs.rmSync(root, {recursive: true, force: true}));
+    fs.mkdirSync(path.join(root, 'docs/archive'), {recursive: true});
+    const learning = (n, topic, status = 'active') => `## LRN-2026-10-06-${String(n).padStart(3, '0')} - ${topic}\n- Learning: ${topic} retrieval\n- Status: ${status}\n`;
+    fs.writeFileSync(path.join(root, 'docs/LEARNED_KNOWLEDGE.md'), '# Knowledge\n\n' + Array.from({length: 30}, (_, i) => learning(i + 4, 'routine memory')).join('\n'));
+    fs.writeFileSync(path.join(root, 'docs/archive/KNOWLEDGE_ARCHIVE.md'), '# Archive\n\n' + learning(1, 'heliumretention') + '\n' + learning(2, 'heliumretention', 'stale') + '\n' + learning(3, 'routine memory'));
+    fs.writeFileSync(path.join(root, 'docs/archive/ERROR_ARCHIVE.md'), '# Archive\n\n## ERR-2026-10-06-001 - heliumretention\n- Symptom: heliumretention error\n- Status: active\n');
+    const args = [fileURLToPath(new URL('./knowledge-search.mjs', import.meta.url)), 'heliumretention', '--root', root, '--json', '--require-complete'];
+    const run = spawnSync(process.execPath, args, {encoding: 'utf8', env: {...process.env, SC_GLOBAL_KNOWLEDGE_DIR: ''}});
+    assert.equal(run.status, 0, run.stderr);
+    const output = JSON.parse(run.stdout);
+    assert.deepEqual(output.results.map(hit => hit.id).sort(), ['ERR-2026-10-06-001', 'LRN-2026-10-06-001']);
+    assert.ok(output.results.every(hit => hit.path.startsWith('docs/archive/') && hit.snippet.length <= 240));
+    assert.equal(output.coverage.complete, true);
+    assert.equal(search({root, files: ['docs/LEARNED_KNOWLEDGE.md', 'docs/archive/KNOWLEDGE_ARCHIVE.md'], query: 'memory retrieval'}).length, 3);
+});
+
+test('active entries win archive duplicates before ranking and status filtering', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ks-duplicate-'));
+    t.after(() => fs.rmSync(root, {recursive: true, force: true}));
+    fs.mkdirSync(path.join(root, 'docs/archive'), {recursive: true});
+    const id = 'LRN-2026-10-06-001';
+    const active = 'docs/LEARNED_KNOWLEDGE.md';
+    const archive = 'docs/archive/KNOWLEDGE_ARCHIVE.md';
+    fs.writeFileSync(path.join(root, active), `# Memory\n\n## ${id} - retry\n- Learning: bounded retry\n- Revision: 2\n- Status: active\n`);
+    fs.writeFileSync(path.join(root, archive), `# Archive\n\n## ${id} - retry\n- Learning: retry retry retry retry obsoletey\n- Revision: 1\n- Status: active\n`);
+    const options = {root, files: [archive, active], query: 'retry'};
+    const hits = search(options);
+    assert.equal(hits.length, 1);
+    assert.equal(hits[0].id, id);
+    assert.equal(hits[0].path, active);
+    assert.equal(hits[0].revision, '2');
+    assert.deepEqual(search({...options, query: 'obsoletey'}), []);
+    fs.writeFileSync(path.join(root, active), fs.readFileSync(path.join(root, active), 'utf8').replace('Status: active', 'Status: stale'));
+    assert.deepEqual(search(options), []);
+});
+
+test('general and global rules cross project boundaries but retain explicit stack and version constraints', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ks-applicability-'));
+    t.after(() => fs.rmSync(root, {recursive: true, force: true}));
+    fs.mkdirSync(path.join(root, 'docs'), {recursive: true});
+    const file = 'docs/LEARNED_KNOWLEDGE.md';
+    for (const scope of ['general', 'global', 'all']) {
+        fs.writeFileSync(path.join(root, file), `# Memory\n\n## LRN-2026-10-06-001 - hydration\n- Learning: deterministic hydration\n- Applies to: ${scope}\n- Project: other\n- Stack: react\n- Version: 19\n`);
+        const options = {root, files: [file], query: 'hydration', project: 'current'};
+        assert.deepEqual(search({...options, stack: 'vue', version: '19'}), [], `${scope}: conflicting stack`);
+        assert.deepEqual(search({...options, stack: 'react', version: '18'}), [], `${scope}: conflicting version`);
+        assert.equal(search({...options, stack: 'react', version: '19'}).length, 1, `${scope}: compatible cross-project lesson`);
+        assert.equal(search(options).length, 1, `${scope}: unknown caller constraints remain advisory`);
+    }
+});
 
 function makeStore(t) {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ks-test-'));
@@ -46,6 +146,7 @@ test('global store joins the corpus only when SC_GLOBAL_KNOWLEDGE_DIR points at 
     t.after(() => fs.rmSync(globalDir, { recursive: true, force: true }));
     assert.deepEqual(globalKnowledgeFiles({}), []);
     assert.deepEqual(globalKnowledgeFiles({ SC_GLOBAL_KNOWLEDGE_DIR: globalDir }), []);
+    assert.deepEqual(globalKnowledgeFiles({ SC_GLOBAL_KNOWLEDGE_DIR: globalDir }, {includeMissing: true}), [{file: path.join(globalDir, 'LEARNED_KNOWLEDGE.md'), global: true, optional: true}]);
     fs.writeFileSync(
         path.join(globalDir, 'LEARNED_KNOWLEDGE.md'),
         [
@@ -309,7 +410,10 @@ test('quoted stale metadata and feedback logs do not pollute default retrieval',
     t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
     fs.mkdirSync(path.join(root,'docs/solutions'),{recursive:true});
     fs.mkdirSync(path.join(root,'docs/learnings'),{recursive:true});
+    fs.mkdirSync(path.join(root,'docs/archive'),{recursive:true});
     fs.writeFileSync(path.join(root,'docs/solutions/old.md'),'---\nstatus: "stale"\n---\n# Timeout\nTimeout retry.\n');
     fs.writeFileSync(path.join(root,'docs/learnings/knowledge-feedback.md'),'# Feedback\nTimeout timeout retry retry.\n');
+    fs.writeFileSync(path.join(root,'docs/archive/KNOWLEDGE_FEEDBACK_ARCHIVE.md'),'# Feedback archive\nTimeout timeout retry retry.\n');
     assert.deepEqual(search({root,dirs:['docs/solutions','docs/learnings'],query:'timeout retry'}), []);
+    assert.deepEqual(search({root,dirs:['docs/archive'],query:'timeout retry'}), []);
 });

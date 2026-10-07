@@ -19,7 +19,7 @@ Include failed investigations, environment versions, and file/line locations whe
 Search mechanically before creating a file:
 
 ```bash
-node .agent/tools/knowledge-search.mjs "<symptom or root cause>" --dir docs/solutions
+node .agent/tools/knowledge-search.mjs "<symptom or root cause>" --dir docs/solutions --require-complete
 ```
 
 Score overlap with each hit on five dimensions: problem, root cause, solution,
@@ -27,6 +27,9 @@ files touched, prevention. High overlap (4-5 dimensions) means update the
 existing record and set `last_updated:`; moderate overlap (2-3) means create a
 new record and add a consolidation note in `Related`; otherwise create freely.
 Two records describing the same problem will drift apart - prefer update.
+Incomplete coverage is not evidence of absence. A full record must preserve
+reasoning unavailable from the final code/tests/docs and prevent material
+recurrence or rediscovery; otherwise record a skip reason at closeout.
 
 Choose the closest category:
 

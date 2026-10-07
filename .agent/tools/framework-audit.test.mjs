@@ -471,4 +471,7 @@ test('active executable references must exist; historical reports remain evidenc
   assert.equal(checkExecutableReferences('.agent/skills/eval-harness/SKILL.md', 'node .agent/tools/absent.mjs', new Set()).length, 1);
   assert.equal(checkExecutableReferences('docs/archive/history.md', 'node .agent/tools/absent.mjs', new Set()).length, 0);
   assert.equal(checkExecutableReferences('README.md', 'node .agent/tools/current.mjs', new Set(['.agent/tools/current.mjs'])).length, 0);
+  assert.equal(checkExecutableReferences('.agent/tools/current.mjs', "import './retired.mjs';", new Set()).at(0).code,'MISSING_LOCAL_MODULE');
+  assert.equal(checkExecutableReferences('.agent/hooks/current.js', "const helpers = require('./lib/helpers');", new Set(['.agent/hooks/lib/helpers.js'])).length,0);
+  assert.equal(checkExecutableReferences('.agent/tools/pilot.mjs', "const prompt = `prove require('./generated.json')`;", new Set()).length,0);
 });

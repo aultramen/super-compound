@@ -30,18 +30,20 @@
  */
 
 import { createHash } from 'node:crypto';
+import {isDeepStrictEqual} from 'node:util';
 import { readBoundedFile, resolveRepositoryPath, writeFileAtomic } from './file-state.mjs';
 import { execFileSync } from 'node:child_process';
 import {canonicalLocator, isActiveAsset} from './active-assets.mjs';
 import {validateConstraints, contextDigest} from './instruction-context.mjs';
+import {assertPrivacySafeRuntimeValue} from './privacy-guard.mjs';
 import {preventionReport} from './prevention-checks.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-import { readLedger } from './work-package.mjs';
-import { parseFrontmatter } from './knowledge-search.mjs';
+import { readLedger, inspectLedgerEvidence } from './work-package.mjs';
+import { parseFrontmatter, splitEntries } from './knowledge-search.mjs';
 
 const ISO_DATE_RE = /(\d{4}-\d{2}-\d{2})/;
 
@@ -50,6 +52,8 @@ const MAX_CANDIDATES = 10;
 const MAX_EVIDENCE = 5;
 const COUNTED_CONFIDENCE = new Set(['observed', 'confirmed']);
 const CONFIDENCE_LADDER = { inferred: 0, observed: 1, confirmed: 2 };
+const FEEDBACK_PATH = 'docs/learnings/knowledge-feedback.md';
+const FEEDBACK_ARCHIVE = 'docs/archive/KNOWLEDGE_FEEDBACK_ARCHIVE.md';
 
 export const FILE_SPECS = [
     {
@@ -180,7 +184,7 @@ function readIfPresent(root, relPath) {
         return fs.readFileSync(path.resolve(root, relPath), 'utf8').replace(/\r\n?/g, '\n');
     } catch (error) {
         if (error.code === 'ENOENT') return null;
-        throw error;
+        throw catalogFailure(root, path.resolve(root, relPath), error);
     }
 }
 
@@ -194,7 +198,20 @@ export function runCheck({ root }) {
     return { ok: findings.length === 0, findings };
 }
 
-function listMarkdownFiles(dir) {
+function catalogFailure(root, file, error) {
+    let locator = canonicalLocator(path.relative(root, file)).slice(0, 300);
+    try { assertPrivacySafeRuntimeValue(locator, 'catalog locator'); }
+    catch { locator = '[redacted locator]'; }
+    const code = /^[A-Z0-9_]{1,40}$/.test(error.code || '') ? error.code : 'READ_FAILED';
+    return new Error(`incomplete catalog: ${locator} (${code})`);
+}
+
+function readCatalogFile(root, file) {
+    try { return fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n'); }
+    catch (error) { throw catalogFailure(root, file, error); }
+}
+
+function listMarkdownFiles(dir, root) {
     const out = [];
     const stack = [dir];
     while (stack.length > 0) {
@@ -202,8 +219,9 @@ function listMarkdownFiles(dir) {
         let dirEntries;
         try {
             dirEntries = fs.readdirSync(current, { withFileTypes: true });
-        } catch {
-            continue;
+        } catch (error) {
+            if (current === dir && error.code === 'ENOENT') continue;
+            throw catalogFailure(root, current, error);
         }
         for (const entry of dirEntries) {
             const full = path.join(current, entry.name);
@@ -237,13 +255,8 @@ export function collectObservations({ root }) {
         }
     }
     const solutionsDir = path.resolve(root, 'docs/solutions');
-    for (const file of listMarkdownFiles(solutionsDir).filter(file=>isActiveAsset(path.relative(root,file)))) {
-        let raw;
-        try {
-            raw = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
-        } catch {
-            continue;
-        }
+    for (const file of listMarkdownFiles(solutionsDir, root).filter(file=>isActiveAsset(path.relative(root,file)))) {
+        const raw = readCatalogFile(root, file);
         const { meta } = parseFrontmatter(raw);
         totals.solutions += 1;
         if (!meta.category) continue;
@@ -349,9 +362,9 @@ export function computeFreshness({ root, commitDate = latestCommitDate(root) }) 
 
 export function runReport({ root }) {
     const report = buildReport(collectObservations({root}));
-    const proposals = listMarkdownFiles(path.resolve(root, 'docs/proposals')).map(file => parseFrontmatter(fs.readFileSync(file, 'utf8')).meta);
+    const proposals = listMarkdownFiles(path.resolve(root, 'docs/proposals'), root).map(file => parseFrontmatter(readCatalogFile(root, file)).meta);
     report.candidates = report.candidates.filter(candidate => !proposals.some(p => ['DRAFT', 'APPLIED', 'DISMISSED', 'DEFERRED'].includes(p.status) && p.candidate_key === candidate.candidateKey && p.evidence_digest === candidate.evidenceDigest));
-    return {...report, prevention: preventionReport(root), freshness: computeFreshness({root})};
+    return {...report,feedback:feedbackReport(root),prevention:preventionReport(root),freshness:computeFreshness({root})};
 }
 
 function entryBytes(entry) {
@@ -498,7 +511,30 @@ function sameEntry(a, b) {
 
 async function clearPendingCapture(root, input) {
     const target = `.scratch/pending-captures/${digest(`${input.kind}\n${input.origin}`)}.json`;
+    const existing = await readMemory(root, target);
+    if (existing && !isDeepStrictEqual(pendingInput(existing),input)) return;
+    const checkpoint=parseCheckpoint(await readMemory(root,'.continue-here.md'));
+    if (existing && (JSON.parse(existing).learningCloseout || checkpoint?.learningCloseouts?.some(record=>record.disposition==='pending' && record.captureInputRef===target))) return;
     await fs.promises.rm(await resolveRepositoryPath(root,target),{force:true});
+}
+
+function pendingInput(raw) {
+    try { return JSON.parse(raw).input; }
+    catch { throw new Error('invalid saved pending capture JSON'); }
+}
+
+async function savePendingCapture(root, input, error) {
+    const pendingPath = `.scratch/pending-captures/${digest(`${input.kind}\n${input.origin}`)}.json`;
+    try {
+        assertPrivacySafeRuntimeValue(input, 'pending capture');
+        const prior = await readMemory(root, pendingPath);
+        if (prior && !isDeepStrictEqual(pendingInput(prior),input)) throw new Error('pending capture conflict; retain both original inputs for owner review');
+        const saved={...(prior?JSON.parse(prior):{}),input,error:'capture write failed',nextAction:'retry capture'};
+        assertPrivacySafeRuntimeValue(saved,'pending capture');
+        await writeFileAtomic(root,pendingPath,`${JSON.stringify(saved,null,2)}\n`,{fallbackOnBusy:false});
+    } catch (pendingError) {
+        throw new AggregateError([error,pendingError],'capture and pending persistence failed; retain the original input and retry capture');
+    }
 }
 
 function stripArchiveAnchors(text) {
@@ -519,7 +555,6 @@ function validateArchive(spec, raw) {
 // Archive bytes before replacing active memory: interruption can duplicate records,
 // but cannot lose them. Redirect anchors retain the original file#entry locators.
 async function retainMemory({root, spec, content, protectedId, input, dryRun, writeOptions}) {
-    const pendingPath = `.scratch/pending-captures/${digest(`${input.kind}\n${input.origin}`)}.json`;
     try {
         const findings = checkFile(spec, content);
         if (findings.some(f => !/^(entry|size) cap exceeded:/.test(f.message))) throw new Error('capture violates memory format');
@@ -560,15 +595,14 @@ async function retainMemory({root, spec, content, protectedId, input, dryRun, wr
         return moved;
     } catch (error) {
         if (!dryRun) {
-            try { await writeFileAtomic(root,pendingPath,`${JSON.stringify({input,error:error.message,nextAction:'retry capture'},null,2)}\n`,{fallbackOnBusy:false}); }
-            catch (pendingError) { throw new AggregateError([error,pendingError],'capture and pending persistence failed; retain the original input and retry capture'); }
+            await savePendingCapture(root, input, error);
         }
         throw error;
     }
 }
 
-export async function captureMemory({root, input, dryRun = false, writeOptions = {}}) {
-    return withMemoryWriter(root, async () => {
+async function validateCaptureInput(root, input) {
+        assertPrivacySafeRuntimeValue(input, 'knowledge capture');
         const kind = input.kind;
         if (!['LRN', 'ERR', 'solution'].includes(kind)) throw new Error('kind must be LRN, ERR, or solution');
         const origin = singleLine(input.origin, 'origin', 200);
@@ -576,20 +610,31 @@ export async function captureMemory({root, input, dryRun = false, writeOptions =
         const topic = singleLine(input.topic, 'topic', 200);
         if (!COUNTED_CONFIDENCE.has(input.confidence) || input.outcome !== 'verified') throw new Error('capture requires observed/confirmed confidence and verified outcome');
         const evidence = await evidenceFor(root, input.evidence);
-        const evidenceText = evidence.map(e => `${e.ref}@${e.digest}`).join(', ');
         const fields = input.fields;
         if (!fields || typeof fields !== 'object' || Array.isArray(fields)) throw new Error('fields must be an object');
         for (const [key, value] of Object.entries(fields)) {
             if (!/^[A-Za-z][A-Za-z ]*$/.test(key) || ['Origin', 'Revision', 'Evidence', 'Confidence', 'Outcome'].includes(key)) throw new Error('unsupported field');
             singleLine(value, key);
         }
+        const spec = FILE_SPECS.find(s => s.idPrefix === kind);
+        if (spec) for (const field of spec.requiredFields.filter(f => f !== 'Confidence')) singleLine(fields[field], field);
         if (kind === 'solution') {
             if (!['non-obvious-root-cause', 'recurring-workaround', 'significant-feature'].includes(input.worth)) throw new Error('full solution requires a worth reason');
             for (const field of ['Problem', 'Symptoms', 'Root cause', 'Solution', 'Prevention']) singleLine(fields[field], field);
             const category = singleLine(input.category, 'category', 80);
             if (!/^[a-z0-9-]+$/.test(category)) throw new Error('category must be a slug');
-            const sources = listMarkdownFiles(path.resolve(root, 'docs/solutions')).filter(file => parseFrontmatter(fs.readFileSync(file, 'utf8')).meta.origin === origin);
-            const prior = sources.find(file => !/^(stale|superseded|contradicted)\b/i.test(parseFrontmatter(fs.readFileSync(file, 'utf8')).meta.status || ''));
+        }
+        return {kind, origin, revision, topic, evidence, fields};
+}
+
+export async function captureMemory({root, input, dryRun = false, writeOptions = {}}) {
+    return withMemoryWriter(root, async () => {
+        const {kind, origin, revision, topic, evidence, fields} = await validateCaptureInput(root, input);
+        const evidenceText = evidence.map(e => `${e.ref}@${e.digest}`).join(', ');
+        if (kind === 'solution') {
+            const category = input.category.trim();
+            const sources = listMarkdownFiles(path.resolve(root, 'docs/solutions'), root).filter(file => parseFrontmatter(readCatalogFile(root, file)).meta.origin === origin);
+            const prior = sources.find(file => !/^(stale|superseded|contradicted)\b/i.test(parseFrontmatter(readCatalogFile(root, file)).meta.status || ''));
             const target = prior ? canonicalLocator(path.relative(root, prior)) : `docs/solutions/${category}/${digest(origin).slice(0, 20)}.md`;
             const raw = await readMemory(root, target);
             const applicability = ['Project', 'Stack', 'Version', 'Applies to'].filter(key => fields[key]).map(key => `${key.toLowerCase().replace(/ /g, '_')}: ${fields[key]}\n`).join('');
@@ -603,15 +648,19 @@ export async function captureMemory({root, input, dryRun = false, writeOptions =
                     if (!dryRun) await writeFileAtomic(root, relative, replacement, {...writeOptions, fallbackOnBusy: false});
                     copies.push(relative);
                 }
+                if (!dryRun) await clearPendingCapture(root,input);
                 return {action: copies.length ? 'deduplicated' : 'unchanged', path: target, copies, dryRun};
             }
             if (raw && !input.expectedDigest) return {action: 'review_required', path: target, digest: digest(raw)};
             if (raw && input.expectedDigest !== digest(raw)) throw new Error('capture conflict: expectedDigest mismatch');
-            if (!dryRun) await writeFileAtomic(root, target, content, { ...writeOptions, fallbackOnBusy: false });
+            if (!dryRun) {
+                try { await writeFileAtomic(root, target, content, { ...writeOptions, fallbackOnBusy: false }); }
+                catch (error) { await savePendingCapture(root,input,error); throw error; }
+                await clearPendingCapture(root,input);
+            }
             return {action: raw ? 'updated' : 'created', path: target, dryRun};
         }
         const spec = FILE_SPECS.find(s => s.idPrefix === kind);
-        for (const field of spec.requiredFields.filter(f => f !== 'Confidence')) singleLine(fields[field], field);
         const raw = await readMemory(root, spec.relPath);
         if (raw && checkFile(spec, raw).some(f => !/^(entry|size) cap exceeded:/.test(f.message))) throw new Error('repair existing memory findings before capture');
         const entries = parseEntries(raw, kind);
@@ -655,7 +704,11 @@ export async function captureMemory({root, input, dryRun = false, writeOptions =
         if (existing && input.expectedDigest !== digest(existingRaw)) throw new Error('capture conflict: expectedDigest mismatch');
         if (archivedExisting === existing && existing) {
             const content = renderMemory(spec,archivedRaw,archivedEntries.map(e=>e===existing?entry:e));
-            if (!dryRun) await writeFileAtomic(root,spec.archivePath,archiveWithAnchors(content),{...writeOptions,maxBytes:2*1024*1024,fallbackOnBusy:false});
+            if (!dryRun) {
+                try { await writeFileAtomic(root,spec.archivePath,archiveWithAnchors(content),{...writeOptions,maxBytes:2*1024*1024,fallbackOnBusy:false}); }
+                catch (error) { await savePendingCapture(root,input,error); throw error; }
+                await clearPendingCapture(root,input);
+            }
             return {action:'updated',path:spec.archivePath,id,dryRun};
         }
         const content = renderMemory(spec, raw, existing ? entries.map(e => e === existing ? entry : e) : [...entries, entry]);
@@ -681,6 +734,7 @@ function updateScalarMetadata(raw, updates) {
 
 export async function refreshMemory({root, input, dryRun = false}) {
     return withMemoryWriter(root, async () => {
+        assertPrivacySafeRuntimeValue(input, 'knowledge refresh');
         const target = canonicalLocator(singleLine(input.path, 'path', 300));
         if (!/^docs\/(solutions|learnings)\/.+\.md$/.test(target)) throw new Error('refresh targets solution/learning Markdown only');
         const raw = await readMemory(root, target);
@@ -704,27 +758,68 @@ export async function refreshMemory({root, input, dryRun = false}) {
     });
 }
 
-export async function recordFeedback({root, input, dryRun = false}) {
+export async function recordFeedback({root, input, dryRun = false, writeOptions = {}}) {
     return withMemoryWriter(root, async () => {
+        assertPrivacySafeRuntimeValue(input, 'knowledge feedback');
         const origin = singleLine(input.origin, 'origin', 200);
         const knowledgeRef = canonicalLocator(singleLine(input.knowledgeRef, 'knowledgeRef', 300));
         const [file, anchor] = knowledgeRef.split('#');
-        const knowledge = await readBoundedFile(root, file, {encoding: 'utf8'});
-        if (anchor && !knowledge.includes(anchor)) throw new Error('knowledge anchor missing');
+        const knowledge = await readBoundedFile(root, file, {encoding: 'utf8',maxBytes:2*1024*1024});
+        let snapshot=knowledge, knowledgeRevision=parseFrontmatter(knowledge).meta.revision || 'unknown';
+        if (anchor) {
+            let record=parseEntries(knowledge,anchor.split('-')[0]).find(entry=>entry.id===anchor);
+            const spec=FILE_SPECS.find(value=>value.relPath===file);
+            if (!record && spec && knowledge.includes(`<a id="${anchor}"></a>`)) record=parseEntries(await readMemory(root,spec.archivePath),spec.idPrefix).find(entry=>entry.id===anchor);
+            if (record) {
+                snapshot=JSON.stringify({id:record.id,topic:record.topic,fields:Object.entries(record.fields).sort()});
+                knowledgeRevision=record.fields.Revision || 'unknown';
+            } else {
+                const section=splitEntries(knowledge).find(entry=>entry.heading===anchor || normalizeKey(entry.heading).replace(/ /g,'-')===anchor);
+                if (!section) throw new Error('knowledge anchor missing');
+                snapshot=section.text;
+            }
+        }
+        const knowledgeDigest=digest(snapshot);
+        singleLine(knowledgeRevision,'knowledge revision',200);
+        assertPrivacySafeRuntimeValue(knowledgeRevision,'knowledge revision');
         if (!['used', 'rejected', 'irrelevant'].includes(input.disposition)) throw new Error('invalid feedback disposition');
         if (!['verified', 'failed', 'unknown'].includes(input.outcome)) throw new Error('invalid feedback outcome');
         const evidence = await evidenceFor(root, input.evidence);
-        const target = 'docs/learnings/knowledge-feedback.md';
+        const target = FEEDBACK_PATH;
         const raw = await readMemory(root, target) || '# Knowledge Feedback\n\nUsage is not truth or independent recurrence evidence.\n';
-        const id = digest(`${origin}\n${knowledgeRef}`).slice(0, 24);
-        const block = `## feedback-${id}\n- Origin: ${origin}\n- Knowledge: ${knowledgeRef}\n- Disposition: ${input.disposition}\n- Outcome: ${input.outcome}\n- Evidence: ${evidence.map(e => `${e.ref}@${e.digest}`).join(', ')}\n`;
+        const evidenceText=evidence.map(e=>`${e.ref}@${e.digest}`).sort().join(', ');
+        const id = digest(JSON.stringify([origin,knowledgeRef,knowledgeRevision,knowledgeDigest,input.disposition,input.outcome,evidenceText])).slice(0, 24);
+        const block = `## feedback-${id}\n- Origin: ${origin}\n- Knowledge: ${knowledgeRef}\n- Knowledge revision: ${knowledgeRevision}\n- Knowledge digest: ${knowledgeDigest}\n- Disposition: ${input.disposition}\n- Outcome: ${input.outcome}\n- Evidence: ${evidenceText}\n`;
         const entries = splitFeedback(raw);
+        const archiveRaw=await readMemory(root,FEEDBACK_ARCHIVE) || '# Archived Knowledge Feedback\n\n## Summary\n\nPreserves older usage observations without treating them as truth or independent recurrence evidence.\n';
+        const archivedEntries=splitFeedback(archiveRaw);
         const existing = entries.find(e => e.startsWith(`## feedback-${id}\n`));
-        if (existing?.trim() === block.trim()) return {action: 'unchanged', path: target};
-        const kept = entries.filter(e => !e.startsWith(`## feedback-${id}\n`));
-        const content = withSummary(`${raw.split(/^## feedback-/m)[0].trimEnd()}\n\n${[...kept, block].slice(-100).map(e => e.trim()).join('\n\n')}\n`, 'Tracks application of project knowledge and its observed outcomes; usage does not establish truth or independent recurrence.');
-        if (!dryRun) await writeFileAtomic(root, target, content, {maxBytes: 256 * 1024, fallbackOnBusy: false});
-        return {action: existing ? 'updated' : 'created', path: target, dryRun};
+        const archived=archivedEntries.find(e=>e.startsWith(`## feedback-${id}\n`));
+        if (existing || archived) {
+            if ([existing,archived].filter(Boolean).some(value=>value.trim()!==block.trim())) return {action:'review_required',path:existing?target:FEEDBACK_ARCHIVE};
+            return {action:'unchanged',path:existing?target:FEEDBACK_ARCHIVE};
+        }
+        const kept=[...entries,block], moved=[];
+        let content=renderFeedback(raw,kept);
+        while(kept.length>100 || Buffer.byteLength(content,'utf8')>256*1024) {
+            if(kept.length===1)throw new Error('feedback record cannot fit active cap');
+            moved.push(kept.shift());
+            content=renderFeedback(raw,kept);
+        }
+        for(const value of moved) {
+            const key=value.match(/^## feedback-([^\n]+)/)?.[1];
+            const copy=archivedEntries.find(entry=>entry.startsWith(`## feedback-${key}\n`));
+            if(copy && copy.trim()!==value.trim())throw new Error('feedback archive entry conflict');
+            if(!copy)archivedEntries.push(value);
+        }
+        const archiveContent=renderFeedback(archiveRaw,archivedEntries);
+        // ponytail: one 2 MiB archive; owner-managed rollover if capacity is reached.
+        if(Buffer.byteLength(archiveContent,'utf8')>2*1024*1024)throw new Error('feedback archive cap exceeded; preserve input and arrange owner-managed rollover');
+        if (!dryRun) {
+            if(moved.length && archiveContent!==archiveRaw)await writeFileAtomic(root,FEEDBACK_ARCHIVE,archiveContent,{...writeOptions,maxBytes:2*1024*1024,fallbackOnBusy:false});
+            await writeFileAtomic(root, target, content, {...writeOptions,maxBytes:256*1024,fallbackOnBusy:false});
+        }
+        return {action:'created',path:target,archived:moved.length,dryRun};
     });
 }
 
@@ -732,7 +827,180 @@ function splitFeedback(raw) {
     return raw.match(/^## feedback-[\s\S]*?(?=^## feedback-|$(?![\s\S]))/gm) || [];
 }
 
+function renderFeedback(raw, entries) {
+    return withSummary(`${raw.split(/^## feedback-/m)[0].trimEnd()}\n\n${entries.map(entry=>entry.trim()).join('\n\n')}\n`, 'Tracks application of project knowledge and its observed outcomes; usage does not establish truth or independent recurrence.');
+}
+
+function feedbackReport(root) {
+    const rows=new Map(),groups=new Map();
+    const outcomes={verified:0,failed:0,unknown:0},dispositions={used:0,rejected:0,irrelevant:0,unknown:0};
+    let legacyUnbound=0,knowledgeRevisionUnknown=0;
+    const legacyFeedbackRefs=[];
+    for(const file of [FEEDBACK_PATH,FEEDBACK_ARCHIVE]) {
+        const raw=readIfPresent(root,file);
+        if(raw===null)continue;
+        if(Buffer.byteLength(raw,'utf8')>2*1024*1024)throw new Error('feedback report file cap exceeded; inspect through owning maintenance');
+        for(const block of splitFeedback(raw)) {
+            const id=block.match(/^## (feedback-[^\n]+)/)?.[1];
+            if(rows.has(id)) {
+                if(rows.get(id)!==block.trim())throw new Error('feedback duplicate conflict; owner review required');
+                continue;
+            }
+            rows.set(id,block.trim());
+            const fields=Object.fromEntries([...block.matchAll(/^- ([A-Za-z][A-Za-z ]*):\s*(.*)$/gm)].map(match=>[match[1],match[2].trim()]));
+            const outcome=['verified','failed','unknown'].includes(fields.Outcome)?fields.Outcome:'unknown';
+            const disposition=['used','rejected','irrelevant'].includes(fields.Disposition)?fields.Disposition:'unknown';
+            outcomes[outcome]++; dispositions[disposition]++;
+            const revision=fields['Knowledge revision'];
+            const recordDigest=fields['Knowledge digest'];
+            const feedbackRef=`${file}#${id}`;
+            if(!fields.Knowledge || !revision || !/^[a-f0-9]{64}$/.test(recordDigest || '')) {
+                legacyUnbound++;
+                if(outcome==='failed' || disposition==='rejected') {
+                    legacyFeedbackRefs.unshift(feedbackRef);
+                    if(legacyFeedbackRefs.length>5)legacyFeedbackRefs.pop();
+                } else if(legacyFeedbackRefs.length<5)legacyFeedbackRefs.push(feedbackRef);
+                continue;
+            }
+            if(revision==='unknown')knowledgeRevisionUnknown++;
+            const key=JSON.stringify([fields.Knowledge,revision,recordDigest]);
+            if(!groups.has(key))groups.set(key,{knowledgeRef:fields.Knowledge,knowledgeRevision:revision,knowledgeDigest:recordDigest,revisionUnknown:revision==='unknown',records:0,outcomes:{verified:0,failed:0,unknown:0},dispositions:{used:0,rejected:0,irrelevant:0,unknown:0},reviewRequired:false,feedbackRefs:[]});
+            const group=groups.get(key);
+            group.records++; group.outcomes[outcome]++; group.dispositions[disposition]++;
+            group.reviewRequired ||= outcome==='failed' || disposition==='rejected';
+            if(outcome==='failed' || disposition==='rejected') {
+                group.feedbackRefs.unshift(feedbackRef);
+                if(group.feedbackRefs.length>5)group.feedbackRefs.pop();
+            } else if(group.feedbackRefs.length<5)group.feedbackRefs.push(feedbackRef);
+        }
+    }
+    const ranked=[...groups.values()].sort((a,b)=>Number(b.reviewRequired)-Number(a.reviewRequired) || (b.outcomes.failed+b.dispositions.rejected)-(a.outcomes.failed+a.dispositions.rejected) || a.knowledgeRef.localeCompare(b.knowledgeRef) || a.knowledgeRevision.localeCompare(b.knowledgeRevision) || a.knowledgeDigest.localeCompare(b.knowledgeDigest));
+    const report={records:rows.size,outcomes,dispositions,legacyUnbound,knowledgeRevisionUnknown,legacyFeedbackRefs,groups:ranked.slice(0,10),groupsTotal:ranked.length,truncated:ranked.length>10};
+    assertPrivacySafeRuntimeValue(report,'feedback report');
+    return report;
+}
+
 const CHECKPOINT_RE = /<!-- sc-checkpoint:start -->[\s\S]*?<!-- sc-checkpoint:end -->/;
+
+function parseCheckpoint(raw) {
+    const match = raw.match(CHECKPOINT_RE);
+    if (!match) return null;
+    try { return JSON.parse(match[0].match(/\`\`\`json\n([\s\S]*?)\n\`\`\`/)[1]); }
+    catch { throw new Error('invalid managed checkpoint JSON'); }
+}
+
+function checkpointContent(raw, checkpoint) {
+    const marker = `<!-- sc-checkpoint:start -->\n\`\`\`json\n${JSON.stringify(checkpoint, null, 2)}\n\`\`\`\n<!-- sc-checkpoint:end -->`;
+    const updated = CHECKPOINT_RE.test(raw) ? raw.replace(CHECKPOINT_RE, () => marker) : `${raw.trimEnd()}\n\n${marker}\n`;
+    return withSummary(updated, 'Preserves verified progress, blockers, authoritative references, and the next action for safe continuation.');
+}
+
+const closeoutKey = (record) => JSON.stringify([record.origin, record.revision, record.evidenceDigest]);
+const PENDING_LEARNING_QUEUE='.scratch/pending-captures';
+const MAX_QUEUED_CLOSEOUTS=100;
+
+function mergeLearningCloseouts(hot, queued) {
+    const records=new Map(hot.map(record=>[closeoutKey(record),record]));
+    for (const record of queued) if (!records.has(closeoutKey(record))) records.set(closeoutKey(record),record);
+    return [...records.values()];
+}
+
+async function queuedLearningCloseouts(root, goals) {
+    const directory=await resolveRepositoryPath(root,PENDING_LEARNING_QUEUE);
+    const records=[],issues=[];
+    if (!fs.existsSync(directory)) return {records,issues};
+    const files=fs.readdirSync(directory,{withFileTypes:true}).filter(entry=>entry.isFile() && entry.name.endsWith('.json'));
+    if (files.length>MAX_QUEUED_CLOSEOUTS) issues.push({ref:PENDING_LEARNING_QUEUE,error:'pending learning queue exceeds inspection bound; remaining jobs retained'});
+    for (const entry of files.sort((a,b)=>a.name.localeCompare(b.name)).slice(0,MAX_QUEUED_CLOSEOUTS)) {
+        const ref=`${PENDING_LEARNING_QUEUE}/${entry.name}`;
+        try {
+            const saved=JSON.parse(await readBoundedFile(root,ref,{encoding:'utf8',maxBytes:64*1024}));
+            if (!saved.learningCloseout) continue;
+            const [record]=await validateLearningCloseouts(root,[saved.learningCloseout],{stored:true,goals});
+            if (record.disposition!=='pending' || record.captureInputRef!==ref) throw new Error('invalid queued learning identity');
+            records.push(record);
+        } catch { issues.push({ref,error:'pending learning metadata requires reconciliation'}); }
+    }
+    return {records,issues};
+}
+
+async function queueLearningCloseout(root, record, dryRun, remove=false) {
+    const ref=record.captureInputRef;
+    const raw=await readMemory(root,ref);
+    if (!raw && remove) return;
+    let saved;
+    try { saved=JSON.parse(raw); } catch { throw new Error('pending learning job is invalid'); }
+    assertPrivacySafeRuntimeValue(saved,'pending learning job');
+    if (!saved.input || saved.input.origin!==record.origin || saved.input.revision!==record.revision) throw new Error('pending learning job identity mismatch');
+    if (saved.learningCloseout && closeoutKey(saved.learningCloseout)!==closeoutKey(record)) throw new Error('pending learning metadata identity conflict');
+    if (remove) delete saved.learningCloseout;
+    else saved.learningCloseout=record;
+    const content=`${JSON.stringify(saved,null,2)}\n`;
+    if (!dryRun && content!==raw) await writeFileAtomic(root,ref,content,{maxBytes:64*1024,fallbackOnBusy:false});
+}
+
+async function validateKnowledgeRef(root, record) {
+    const ref = canonicalLocator(singleLine(record.knowledgeRef, 'knowledgeRef', 300));
+    const [file, anchor, extra] = ref.split('#');
+    if (extra || !/^docs\/(?:solutions\/.+\.md|learnings\/.+\.md|(?:archive\/)?(?:ERROR_LOG|LEARNED_KNOWLEDGE|ERROR_ARCHIVE|KNOWLEDGE_ARCHIVE)\.md)$/.test(file)) throw new Error('invalid knowledge locator');
+    const raw = await readBoundedFile(root, file, {encoding:'utf8',maxBytes:2*1024*1024});
+    const knowledge = anchor ? parseEntries(raw, anchor.split('-')[0]).find(entry=>entry.id===anchor)?.fields : parseFrontmatter(raw).meta;
+    if (!knowledge || (knowledge.Origin || knowledge.origin) !== record.origin || (knowledge.Revision || knowledge.revision) !== record.revision) throw new Error('knowledge identity mismatch');
+    if (/^(stale|superseded|contradicted)\b/i.test(knowledge.Status || knowledge.status || '')) throw new Error('knowledge is inactive');
+    const evidence = await evidenceFor(root, record.evidenceRefs);
+    const expected = evidence.map(item=>`${item.ref}@${item.digest}`).sort();
+    const actual = String(knowledge.Evidence || knowledge.evidence || '').split(', ').sort();
+    if (JSON.stringify(expected) !== JSON.stringify(actual)) throw new Error('knowledge evidence mismatch');
+    return ref;
+}
+
+export async function validateLearningCloseouts(root, records, {stored = false, goals = new Map()} = {}) {
+    if (!Array.isArray(records) || records.length > 20) throw new Error('learningCloseouts must be a bounded array (maximum 20)');
+    const out = [], seen = new Set();
+    for (const value of records) {
+        const record = {origin:singleLine(value.origin,'learning origin',200),revision:singleLine(value.revision,'learning revision',200),disposition:value.disposition,reason:singleLine(value.reason,'learning reason',500)};
+        if (!['captured','skipped-trivial','pending','legacy-unknown'].includes(record.disposition)) throw new Error('invalid learning disposition');
+        if (!Array.isArray(value.evidenceRefs) || value.evidenceRefs.length > 10 || (!value.evidenceRefs.length && !['skipped-trivial','legacy-unknown'].includes(record.disposition))) throw new Error('learning evidenceRefs must be bounded');
+        record.evidenceRefs = value.evidenceRefs.map(ref=>canonicalLocator(singleLine(ref,'learning evidence locator',300)));
+        assertPrivacySafeRuntimeValue(record, 'learning closeout');
+        if (stored) {
+            if (value.evidenceDigest !== null && !/^[a-f0-9]{64}$/.test(value.evidenceDigest || '')) throw new Error('invalid learning evidence digest');
+            if (!!record.evidenceRefs.length !== (value.evidenceDigest !== null)) throw new Error('learning evidence digest inconsistent');
+            record.evidenceDigest = value.evidenceDigest;
+        } else {
+            const evidence = record.evidenceRefs.length ? await evidenceFor(root, record.evidenceRefs) : [];
+            record.evidenceDigest = evidence.length ? digest(JSON.stringify(evidence.sort((a,b)=>a.ref.localeCompare(b.ref)))) : null;
+        }
+        const key = closeoutKey(record);
+        if (seen.has(key)) throw new Error('duplicate learning closeout identity');
+        seen.add(key);
+        if (value.knowledgeRef !== undefined) record.knowledgeRef = canonicalLocator(singleLine(value.knowledgeRef,'knowledgeRef',300));
+        if (value.captureInputRef !== undefined) record.captureInputRef = canonicalLocator(singleLine(value.captureInputRef,'captureInputRef',300));
+        if (value.completionRef !== undefined) {
+            record.completionRef = singleLine(value.completionRef,'completionRef',500);
+            const [ledger, goalId, receiptId, extra] = record.completionRef.split('#');
+            assertPrivacySafeRuntimeValue(record.completionRef, 'completion locator');
+            const goal = goals.get(`${ledger}#${goalId}`) || (await checkpointGoals(root,[ledger])).get(`${ledger}#${goalId}`);
+            if (extra || !goal?.receipts[receiptId]) throw new Error('completionRef must identify an existing work-package receipt');
+        }
+        assertPrivacySafeRuntimeValue(record, 'learning closeout');
+        if (!stored && record.disposition === 'captured') record.knowledgeRef = await validateKnowledgeRef(root, record);
+        if (record.disposition === 'captured' && !record.knowledgeRef) throw new Error('captured learning requires knowledgeRef');
+        if (record.disposition === 'pending') {
+            if (!record.captureInputRef || !/^\.scratch\/pending-captures\/[A-Za-z0-9_-]+\.json$/.test(record.captureInputRef)) throw new Error('pending learning requires captureInputRef');
+            if (!stored) {
+                let pending;
+                try { pending = JSON.parse(await readBoundedFile(root, record.captureInputRef, {encoding:'utf8',maxBytes:64*1024})); }
+                catch { throw new Error('pending capture input unreadable or invalid'); }
+                const validated = await validateCaptureInput(root, pending.input);
+                const evidenceDigest = digest(JSON.stringify(validated.evidence.sort((a,b)=>a.ref.localeCompare(b.ref))));
+                if (validated.origin !== record.origin || validated.revision !== record.revision || evidenceDigest !== record.evidenceDigest) throw new Error('pending capture identity or evidence mismatch');
+            }
+        }
+        out.push(record);
+    }
+    return out;
+}
 
 async function checkpointGoals(root, ledgerRefs) {
     const goals = new Map();
@@ -740,8 +1008,9 @@ async function checkpointGoals(root, ledgerRefs) {
         const match = ref.match(/^\.scratch\/work-packages\/([A-Za-z0-9_-]+)\/ledger\.json$/);
         if (!match) throw new Error('Invalid work-package ledger locator');
         await readBoundedFile(root,ref,{maxBytes:2*1024*1024});
-        const ledger = await readLedger(root,ref,match[1]);
-        for (const [id,goal] of Object.entries(ledger.goals)) goals.set(`${ref}#${id}`,{ledger:ref,id,status:goal.status,constraints:goal.constraints||[],receipts:goal.receipts||{}});
+        const ledger = await readLedger(root,ref,match[1],{checkEvidence:false});
+        const issues=new Map((await inspectLedgerEvidence(root,ledger)).map(issue=>[issue.goalId,issue.reason]));
+        for (const [id,goal] of Object.entries(ledger.goals)) goals.set(`${ref}#${id}`,{ledger:ref,id,status:goal.status,constraints:goal.constraints||[],receipts:goal.receipts||{},evidenceIssue:issues.get(id)});
     }
     return goals;
 }
@@ -770,7 +1039,7 @@ function validateGoalScopes(scopes, goals) {
     for(const key of goals.keys()) visit(key);
 }
 
-export async function persistCheckpoint({root, input, dryRun = false}) {
+export async function persistCheckpoint({root, input, dryRun = false, writeOptions = {}}) {
     return withMemoryWriter(root, async () => {
         const constraints = input.constraints === undefined ? undefined : validateConstraints(input.constraints);
         const nextAction = singleLine(input.nextAction, 'nextAction');
@@ -781,14 +1050,32 @@ export async function persistCheckpoint({root, input, dryRun = false}) {
         for (const ref of input.artifactRefs) await readBoundedFile(root, ref);
         for (const ref of input.ledgerRefs) await readBoundedFile(root, ref, {maxBytes: 2 * 1024 * 1024});
         const contracts = input.contractRefs.length ? await evidenceFor(root, input.contractRefs, 20) : [];
-        const goals = input.goalScopes === undefined ? null : await checkpointGoals(root,input.ledgerRefs);
+        const goals = input.goalScopes === undefined && input.learningCloseouts === undefined ? null : await checkpointGoals(root,input.ledgerRefs);
         if (goals) validateGoalScopes(input.goalScopes,goals);
         const checkpoint = {...(constraints ? {constraints, constraintDigest:contextDigest(constraints)} : {}), ...(input.goalScopes === undefined ? {} : {goalScopes:input.goalScopes}), nextAction, verifiedOutcomes: input.verifiedOutcomes, blockers: input.blockers, artifactRefs: input.artifactRefs, contracts, ledgerRefs: input.ledgerRefs};
-        const marker = `<!-- sc-checkpoint:start -->\n\`\`\`json\n${JSON.stringify(checkpoint, null, 2)}\n\`\`\`\n<!-- sc-checkpoint:end -->`;
         const raw = await readMemory(root, '.continue-here.md');
-        const updated = CHECKPOINT_RE.test(raw) ? raw.replace(CHECKPOINT_RE, () => marker) : `${raw.trimEnd()}\n\n${marker}\n`;
-        const content = withSummary(updated, 'Preserves verified progress, blockers, authoritative references, and the next action for safe continuation.');
-        if (!dryRun && content !== raw) await writeFileAtomic(root, '.continue-here.md', content, {fallbackOnBusy: false});
+        const previous = parseCheckpoint(raw);
+        const priorGoals=goals || await checkpointGoals(root,previous?.ledgerRefs || []);
+        const queued=await queuedLearningCloseouts(root,priorGoals);
+        const hot=previous?.learningCloseouts === undefined ? [] : await validateLearningCloseouts(root,previous.learningCloseouts,{stored:true,goals:priorGoals});
+        // A durable captured checkpoint wins over leftover queue metadata after interruption.
+        for (const record of queued.records) if (hot.some(value=>closeoutKey(value)===closeoutKey(record) && value.disposition==='captured')) await queueLearningCloseout(root,record,dryRun,true);
+        const prior=mergeLearningCloseouts(hot,queued.records);
+        const incoming = input.learningCloseouts === undefined ? [] : await validateLearningCloseouts(root,input.learningCloseouts,{goals:goals || new Map()});
+        const identities = new Set(incoming.map(closeoutKey));
+        const preserved = prior.filter(record=>record.disposition==='pending' && !identities.has(closeoutKey(record)));
+        for (const record of prior.filter(record=>record.disposition==='pending')) {
+            const replacement=incoming.find(value=>closeoutKey(value)===closeoutKey(record));
+            if (replacement && !['pending','captured'].includes(replacement.disposition)) throw new Error('pending learning must be captured before closing');
+        }
+        const closeouts=[...incoming,...preserved],overflow=closeouts.slice(20);
+        for (const record of overflow) await queueLearningCloseout(root,record,dryRun);
+        if (input.learningCloseouts !== undefined || preserved.length) checkpoint.learningCloseouts=closeouts.slice(0,20);
+        if (overflow.length || queued.issues.length) checkpoint.pendingLearningQueue=PENDING_LEARNING_QUEUE;
+        const content = checkpointContent(raw,checkpoint);
+        if (!dryRun && content !== raw) await writeFileAtomic(root, '.continue-here.md', content, {...writeOptions,fallbackOnBusy: false});
+        // Keep queued recovery metadata until the captured closeout is durable.
+        for (const record of queued.records) if (incoming.some(next=>closeoutKey(next)===closeoutKey(record) && next.disposition==='captured')) await queueLearningCloseout(root,record,dryRun,true);
         return {action: content === raw ? 'unchanged' : 'checkpointed', path: '.continue-here.md', dryRun};
     });
 }
@@ -797,7 +1084,7 @@ export async function restoreCheckpoint({root}) {
     const raw = await readMemory(root, '.continue-here.md');
     const match = raw.match(CHECKPOINT_RE);
     if (!match) return {checkpoint: null, drift: [], dispatchable: [], skippedVerified: [], status: 'missing_checkpoint'};
-    const checkpoint = JSON.parse(match[0].match(/\`\`\`json\n([\s\S]*?)\n\`\`\`/)[1]);
+    const checkpoint = parseCheckpoint(raw);
     if (checkpoint.constraints !== undefined) {
         validateConstraints(checkpoint.constraints);
         if (checkpoint.constraintDigest !== contextDigest(checkpoint.constraints)) throw new Error('checkpoint constraint digest mismatch');
@@ -820,10 +1107,16 @@ export async function restoreCheckpoint({root}) {
         } catch { drift.push(contract.ref); }
     }
     const goals=await checkpointGoals(root,checkpoint.ledgerRefs);
+    if (checkpoint.pendingLearningQueue!==undefined && checkpoint.pendingLearningQueue!==PENDING_LEARNING_QUEUE) throw new Error('invalid pending learning queue');
+    const queued=await queuedLearningCloseouts(root,goals);
+    const hot=checkpoint.learningCloseouts === undefined ? [] : await validateLearningCloseouts(root,checkpoint.learningCloseouts,{stored:true,goals});
+    const learningCloseouts=mergeLearningCloseouts(hot,queued.records);
+    const pendingKnowledgeMaintenance = learningCloseouts.filter(record=>record.disposition==='pending');
     validateGoalScopes(checkpoint.goalScopes,goals);
     const scopes=checkpoint.goalScopes;
-    const blockedKeys=new Set();
-    let unknownScope=false;
+    const staleEvidence=[...goals.values()].filter(goal=>goal.evidenceIssue).map(goal=>({ledger:goal.ledger,goalId:goal.id,reason:goal.evidenceIssue}));
+    const blockedKeys=new Set([...goals.entries()].filter(([,goal])=>goal.evidenceIssue).map(([key])=>key));
+    let unknownScope=!scopes && staleEvidence.length>0;
     for (const [issues,field] of [[checkpoint.blockers,'blockers'],[drift,'contracts']]) {
         for(const issue of issues) {
             const affected=scopes && Object.hasOwn(scopes[field],issue) ? scopes[field][issue] : undefined;
@@ -845,8 +1138,8 @@ export async function restoreCheckpoint({root}) {
     const dispatchable=[],skippedVerified=[],blocked=[];
     for(const [key,goal] of goals) {
         const item={ledger:goal.ledger,id:goal.id};
-        if(goal.status==='verified') skippedVerified.push(item);
-        else if(blockedKeys.has(key)) blocked.push(item);
+        if(blockedKeys.has(key)) blocked.push(item);
+        else if(goal.status==='verified') skippedVerified.push(item);
         else if(goal.status==='ready' && (!scopes || scopes.dependencies[key].every(dep=>goals.get(dep).status==='verified'))) dispatchable.push(item);
     }
     const activeConstraints=new Map((checkpoint.constraints||[]).map(c=>[c.id,c]));
@@ -859,7 +1152,7 @@ export async function restoreCheckpoint({root}) {
         for(const [receiptId,receipt] of Object.entries(goal.receipts))if(receipt.state!=='acknowledged')pendingCompletions.push({ledger:goal.ledger,goalId:goal.id,receiptId,state:receipt.state,classification:receipt.classification||null});
     }
     validateConstraints([...activeConstraints.values()]);
-    return {checkpoint,activeConstraints:[...activeConstraints.values()],pendingCompletions,drift,dispatchable,skippedVerified,blocked,unknownScope,status:drift.length?'contract_drift':'restored'};
+    return {checkpoint,activeConstraints:[...activeConstraints.values()],pendingCompletions,pendingKnowledgeMaintenance,pendingLearningQueueIssues:queued.issues,learningCoverage:checkpoint.learningCloseouts===undefined && !queued.records.length?'legacy-unknown':'recorded',drift,staleEvidence,dispatchable,skippedVerified,blocked,unknownScope,status:drift.length?'contract_drift':staleEvidence.length?'evidence_drift':'restored'};
 }
 
 export async function flushPendingMaintenance({root}) {
@@ -871,19 +1164,61 @@ export async function flushPendingMaintenance({root}) {
             if(entry.isFile()&&entry.name.endsWith('.json'))jobs.push({ref:`${directory}/${entry.name}`,kind});
         }
     }
+    for (const job of jobs) {
+        try { job.mtime=(await fs.promises.stat(await resolveRepositoryPath(root,job.ref))).mtimeMs; }
+        catch { job.mtime=0; }
+    }
+    jobs.sort((a,b)=>a.mtime-b.mtime || a.ref.localeCompare(b.ref));
+    const deferredUntil=new Date(jobs.reduce((latest,job)=>Math.max(latest,job.mtime),Date.now())+1000);
     const results=[];
     for(const job of jobs.slice(0,3)) {
         try {
             const pending=JSON.parse(await readBoundedFile(root,job.ref,{encoding:'utf8',maxBytes:64*1024}));
+            if (job.kind==='capture') {
+                const restored=await restoreCheckpoint({root});
+                const record=restored.pendingKnowledgeMaintenance?.find(value=>value.captureInputRef===job.ref) || pending.learningCloseout;
+                if (record) {
+                    const validated=await validateCaptureInput(root,pending.input);
+                    const evidenceDigest=digest(JSON.stringify(validated.evidence.sort((a,b)=>a.ref.localeCompare(b.ref))));
+                    if (validated.origin!==record.origin || validated.revision!==record.revision || evidenceDigest!==record.evidenceDigest) throw new Error('pending learning identity changed');
+                }
+            }
             const result=job.kind==='capture'?await captureMemory({root,input:pending.input}):await (await import('./prevention-checks.mjs')).recordPreventionCheck({root,input:pending.input});
             if(['review_required','validation_failed'].includes(result.action))throw new Error(result.action);
+            if (job.kind==='capture') await completePendingLearning(root,job.ref,pending,result);
             const absolute=await resolveRepositoryPath(root,job.ref);
             await fs.promises.rm(absolute,{force:true});
             results.push({ref:job.ref,status:'completed',action:result.action});
-        } catch(error) {results.push({ref:job.ref,status:'pending',error:error.message});}
+        } catch {
+            let retryDeferred=true;
+            try {
+                const absolute=await resolveRepositoryPath(root,job.ref),metadata=await fs.promises.stat(absolute);
+                await fs.promises.utimes(absolute,metadata.atime,deferredUntil);
+            } catch { retryDeferred=false; }
+            results.push({ref:job.ref,status:'pending',error:'maintenance retry failed; inspect validated input and catalog',retryDeferred});
+        }
     }
     const processed=results.filter(r=>r.status==='completed').length;
     return {processed,remaining:jobs.length-processed,results};
+}
+
+async function completePendingLearning(root, ref, saved, result) {
+    return withMemoryWriter(root,async()=>{
+        const restored=await restoreCheckpoint({root});
+        const record=restored.pendingKnowledgeMaintenance?.find(value=>value.captureInputRef===ref) || saved.learningCloseout;
+        if (!record) return;
+        if (!restored.checkpoint) throw new Error('pending learning checkpoint unavailable');
+        const [captured]=await validateLearningCloseouts(root,[{...record,disposition:'captured',knowledgeRef:`${result.path}${result.id?`#${result.id}`:''}`,captureInputRef:undefined}]);
+        if (closeoutKey(captured)!==closeoutKey(record)) throw new Error('pending learning identity changed');
+        const closeouts=[captured,...restored.pendingKnowledgeMaintenance.filter(value=>closeoutKey(value)!==closeoutKey(record))];
+        for (const pending of closeouts.slice(20)) await queueLearningCloseout(root,pending,false);
+        const checkpoint={...restored.checkpoint,learningCloseouts:closeouts.slice(0,20)};
+        if (closeouts.length>20 || restored.pendingLearningQueueIssues?.length) checkpoint.pendingLearningQueue=PENDING_LEARNING_QUEUE;
+        else delete checkpoint.pendingLearningQueue;
+        const raw=await readMemory(root,'.continue-here.md'),content=checkpointContent(raw,checkpoint);
+        if (content!==raw) await writeFileAtomic(root,'.continue-here.md',content,{fallbackOnBusy:false});
+        if (saved.learningCloseout) await queueLearningCloseout(root,record,false,true);
+    });
 }
 
 function printCheck(result, json, io) {
@@ -910,6 +1245,12 @@ function printReport(report, json, io) {
     io.out.write(
         `totals: errors=${totals.errors} learnings=${totals.learnings} solutions=${totals.solutions} candidates=${report.candidates.length}\n`
     );
+    const feedback=report.feedback;
+    if(feedback?.records) {
+        io.out.write(`feedback: records=${feedback.records} verified=${feedback.outcomes.verified} failed=${feedback.outcomes.failed} unknown=${feedback.outcomes.unknown} legacy-unbound=${feedback.legacyUnbound} revision-unknown=${feedback.knowledgeRevisionUnknown}\n`);
+        for(const group of feedback.groups.filter(value=>value.reviewRequired))io.out.write(`REVIEW feedback ${group.knowledgeRef} revision=${group.knowledgeRevision} digest=${group.knowledgeDigest} failed=${group.outcomes.failed} rejected=${group.dispositions.rejected}; inspect observation evidence before adopting guidance\n`);
+        if(feedback.truncated)io.out.write('(feedback groups truncated to 10; aggregate counts include all records)\n');
+    }
     if (report.freshness) {
         const f = report.freshness;
         io.out.write(
@@ -976,7 +1317,10 @@ async function main(argv, io = { out: process.stdout, err: process.stderr }) {
         else throw new Error(`unsupported option: ${a}`);
     }
     if (['capture', 'refresh', 'checkpoint', 'feedback'].includes(command)) {
-        const input = JSON.parse(await readBoundedFile(root, inputFile, {encoding: 'utf8', maxBytes: 64 * 1024}));
+        const raw = await readBoundedFile(root, inputFile, {encoding: 'utf8', maxBytes: 64 * 1024});
+        let input;
+        try { input = JSON.parse(raw); }
+        catch { throw new Error('invalid maintenance input JSON'); }
         const result = await ({capture: captureMemory, refresh: refreshMemory, checkpoint: persistCheckpoint, feedback: recordFeedback}[command])({root, input, dryRun});
         io.out.write(`${JSON.stringify(result)}\n`);
         return result.action === 'review_required' ? 1 : 0;

@@ -34,6 +34,13 @@ Only then run at least five independent pairs per fixture/model, balanced AB/BA
 pin model, effort, host version, environment/config and task prompt. Do not
 change session model automatically. Record cache conditions separately.
 
+The October 6 rollout starts with debugging and multi-goal-resume only. Require
+the Codex selected-build/access/actual-check/write-probe preflight before counted sessions;
+retain failed attempts and stop expansion if either fixture is blocked. Token
+optimization uses the separate six-pair A/A noise floor and five-pair A/B gate
+in `.agent/skills/eval-harness/references/paired-experiments.md`; the payload gate below keeps
+its own coverage and 50 percent requirement.
+
 | Fixture | Acceptance |
 | --- | --- |
 | consultation | Correct next route and prerequisites; no mutation |
