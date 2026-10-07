@@ -5,13 +5,16 @@ description: "Use when about to claim work complete, fixed, passing, or ready, i
 
 # Verification Before Completion
 
-## Overview
+## Summary
 
-Evidence precedes every success claim. Confidence, a changed diff, and another agent's report are not evidence.
+**No Evidence = Not Done.** Evidence precedes every success claim for every task,
+including trivial and light-tier work. Confidence, a changed diff, and another
+agent's report are not evidence.
 
 ## When to Use
 
-Apply this gate before any completion or satisfaction wording, task transition, commit, push, PR claim, or delegation that assumes preceding work succeeded.
+Apply before completion wording, task transition, commit/push/PR claims, or
+delegation assuming previous success.
 
 - For a test, build, lint, bug-fix, or delegated-work claim, read [Claim Evidence](references/claim-evidence.md).
 - For a completed feature, workflow, plan, or gap-closure outcome, also read [Goal-Backward Verification](references/goal-backward.md).
@@ -25,14 +28,26 @@ Apply this gate before any completion or satisfaction wording, task transition, 
 NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 ```
 
-1. Identify the command or inspection that proves the exact claim.
-2. Run it against current state, or inspect reusable evidence with identical source/contract/environment/command fingerprints and complete provenance.
-3. Read all relevant output, the exit code, and failure counts.
-4. Compare the evidence with the claim and requirements.
-5. If it fails or is incomplete, report actual status and gaps. Otherwise cite the evidence with the claim.
-6. Park nothing silently: an accepted-but-deferred finding lands in `docs/todos/YYYY-MM-DD-<slug>.md` (`todo-management`) or `docs/STATE.md` Deferred Ideas before the completion claim.
+1. Read the authoritative goal, requirements and every acceptance criterion;
+   establish the full checklist before producing results.
+2. Identify the command or inspection that proves each required outcome.
+3. Run it against current state, or inspect reusable deterministic evidence with
+   identical source/contract/environment/command fingerprints and provenance.
+   Recheck live outcomes when external state can change.
+4. Read all relevant output, the exit code, and fail/skip counts; compare actual
+   results with expected outcomes. Verify artifacts by opening and inspecting them.
+5. Only all required outcomes verified permits `Done`, `Completed`, `Resolved`,
+   `Success`, or equivalent claims. Otherwise use the incomplete status and gaps
+   from [Claim Evidence](references/claim-evidence.md).
+6. Include **Evidence of Completion**: what, how, actual result/artifact locator,
+   and requirement/AC mapping. A small task may use one concise paragraph.
+7. Park nothing silently: an accepted-but-deferred finding lands in `docs/todos/YYYY-MM-DD-<slug>.md` (`todo-management`) or `docs/STATE.md` Deferred Ideas before the completion claim.
 
-No executable proof available? Use an explicit requirement checklist and direct artifact inspection; disclose residual uncertainty. Never convert missing evidence into success wording.
+No executable proof available? Perform repeatable direct artifact inspection
+against the full checklist. Missing required evidence or unresolved uncertainty
+about an acceptance criterion prevents completion. Verification may be performed
+by the implementing agent through a separate actual check; the coordinator
+independently inspects delegated evidence before accepting it.
 
 ## Red Flags
 
@@ -53,4 +68,4 @@ No executable proof available? Use an explicit requirement checklist and direct 
 - `gap-closure` re-runs the original verification.
 - `state-management` records verified status only after this gate.
 
-- For repeatable harness launch/drive/cleanup, load [verification recipes](references/verification-recipes.md).
+- For harness launch/drive/cleanup, load [verification recipes](references/verification-recipes.md).

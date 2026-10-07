@@ -19,7 +19,8 @@ const specs = {
       "templates-and-outputs.md": "f025dfe20fd036fcfe1402ed3627bcbf32715cf3edfe224a0fe56ec0a24fd5b9",
       "authority-and-adr.md": "9aef59e4f9c21fe16aaba0537464a578e12b214c56a29e5e53833c45d644c9ff",
       "qualified-references.md": "bc5f8b87bb0333347f291087ae7a28858b5326ebfd12c09094e5532f21c110eb",
-      "context-and-issue-pointers.md": "8ec6f36832ff0aaac147fbc46af3575944d6464d3f4d069381d34b9521d6fca0",
+      // Completion locators remain pointers; all-AC proof adds no authority or status enum.
+      "context-and-issue-pointers.md": "58b6fc8affb70d297c65cff5b8114ee47cdeccd55e5973cb21c168c1ec85c1ab",
       "open-stop-conditions.md": "8f172287ee50e5619dac9c40700e2cf85b10d403ed9778f52dbcc9df347d089a",
       "workflow-integration.md": "8f3e2ed1b91440a45c41f5b4b55095ecf0e3031cf777b138f30272dbbe3ccefc",
       "ui-contract-readiness.md": "48d64c07c120731d522049075eff511f149be4deac6101d04e75fe8fd1700dc0",
@@ -38,7 +39,8 @@ const specs = {
     references: {
       "zero-context.md": "60efe561a41dcf40ffe1f9fe88f94b64aebad51fb2ac7dd5b50d6b54a15007e7",
       "process.md": "68221c113365764007bc7f143f3e9ae989ee6a04d8e42c5e61777ff9e25cbfa9",
-      "status-and-done.md": "6a13d0ab2b0bf3e6fcacadbab6c622eedea4809002c27e93116d49ffbac8c4a4",
+      // Existing issue grammar retained; actual outcome proof now gates done/verified.
+      "status-and-done.md": "12f981a5f8cf89dbb46ed7372c6166fdeb960d9b2ad10d06100f5cabb002a01b",
     },
     invariants: [
       /Issue files are references, not specifications/,

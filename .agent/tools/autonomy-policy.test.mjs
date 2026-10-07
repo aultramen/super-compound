@@ -10,8 +10,12 @@ test("session handoff and sensitive paths cannot independently escalate a light 
   const rubric = await read(delivery);
   assert.match(rubric, /session handoff alone only require state management/);
   assert.match(rubric, /Contract-preserving maintenance stays light/);
-  for (const file of [".agent/context/workflows/sc-review.contract.md", ".agent/workflows/sc-review.md"])
-    assert.match(await read(file), /semantic.*diff|diff.*semantic/is);
+  for (const file of [".agent/context/workflows/sc-review.contract.md", ".agent/workflows/sc-review.md"]) {
+    const text=await read(file);
+    assert.match(text, /semantic.*diff|diff.*semantic|material sensitive semantics outside authority/is);
+    assert.match(text, /verification-before-completion/);
+    assert.match(text, /Evidence of Completion/);
+  }
 });
 
 test("explicit Git authorization persists through preview; implementation grants no publishing authority", async () => {

@@ -32,7 +32,13 @@ Result and next action: Proven root cause, regression-tested fix and evidence; c
 5. Test the most likely hypothesis with the smallest feedback loop.
 6. If `gitWorkflow.enabled` is true and edits are needed, load `skills/git-workflow-operation/SKILL.md` and preview `/sc-go start fix/<slug>` or `/sc-go start hotfix/<slug>` after reproduction and before fixing.
 7. Fix the root cause, preferably with a regression test.
-8. Run verification and report evidence.
+8. Apply `skills/verification-before-completion/SKILL.md`: verify the original
+   symptom, regression, goal, and all acceptance criteria against current state.
+   Preserve reproduce-before and verify-after or RED/GREEN evidence. A changed
+   configuration or passing unrelated check is insufficient. Use the single/light
+   completion contract gate, or the run gate for delegated goals; incomplete proof
+   means an incomplete status. Every completion report includes
+   `Evidence of Completion` with what/how, actual results/locators, and acceptance mapping.
 9. If a non-trivial investigation would exceed the chat envelope, save the complete investigation to `docs/debug/YYYY-MM-DD-<slug>.md` and return its path. Shape it as: reproduction as exact commands; every hypothesis, including failed ones, with sufficient explanation (`H1: cause -> test -> disproving evidence`); root cause as one paragraph; fix as the changed-path list; verification as command plus result. Never drop failed hypotheses or evidence. Then run `node .agent/tools/doc-lint.mjs <artifact> --advisory` and adjudicate its findings (advisory).
 10. After a verified non-trivial root cause, route to `/sc-compound`. When the bug originated from an agent mistake, appending the `ERR-*` entry is mandatory.
 11. Write the `docs/STATE.md` Next action and continue authorized ready work.

@@ -77,7 +77,8 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 
 ## Testing And Verification
 
-- Use evidence-based completion: identify the command or inspection that proves the change, run it when available, and report the result.
+- `No Evidence = Not Done`: verify the requested goal, requirements, and every acceptance criterion through actual execution or inspection before any Done/Completed/Resolved/Success claim or equivalent status. Follow `.agent/skills/verification-before-completion/SKILL.md`; trivial work still needs proportionate evidence.
+- Every completion report includes `Evidence of Completion`: what was verified, how, actual results and evidence locators, and the acceptance criteria proved. Missing or failed proof means an accurate incomplete status, never completion.
 - For docs-only changes, verify file contents, links/paths, line counts, and consistency across referenced docs.
 - For hook or script changes, run the smallest safe command that exercises the script.
 - For skill/workflow changes, check the affected file plus any README or rule references that mention it.

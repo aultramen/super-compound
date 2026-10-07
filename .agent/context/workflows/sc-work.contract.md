@@ -40,3 +40,11 @@ Close: docs/STATE.md Next action when non-trivial; /sc-pause only for actual sto
 Resume: memory-maintenance.mjs resume; reconcile constraints/inbox and affected drift; skip verified goals.
 
 Stage: FSD approval + execution authorization persist.
+
+`No Evidence = Not Done`: canonical gate `verification-before-completion`.
+Pin all-AC completion contract before results; actual assertions prove the goal.
+Light/single: `.scratch/completion/<task-id>/`, `verified-promise.mjs --contract <path>`;
+multi-goal: `--run <id>` also proves final combined outcome. Required incomplete,
+failed/skipped/stale proof cannot promote verified/done or release dependencies.
+Completion report: `Evidence of Completion` with what/how, actual result/locator,
+and all-AC mapping; otherwise accurate incomplete status.

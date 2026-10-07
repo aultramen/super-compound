@@ -45,8 +45,11 @@ Load the full process only after the selection gate passes. Every parallel strea
 - **Conflict gate:** Investigate ownership and intent. Auto-resolve only proven identical changes or deterministic regeneration preserving both edits; record proof and verify integration. Quarantine only affected workers. Semantic ambiguity requires the authority owner.
 - **Integration gate:** Inspect every branch, integrate using the FSD strategy,
   then run applicable integration tests and contract/fixture/provider/consumer checks, and
-  `verification-before-completion`. Do not claim completion without
-  merged-system integration verification.
+  `verification-before-completion`. The coordinator inspects each worker's actual
+  goal/all-AC evidence and proves the final combined outcome; reports/status
+  labels alone cannot promote verified or release dependencies. Require the run
+  completion gate and `Evidence of Completion` with what/how, actual
+  results/locators, and acceptance mapping. Partial/failed/stale proof stays incomplete.
 
 ## Integration
 

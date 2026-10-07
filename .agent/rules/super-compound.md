@@ -1,15 +1,18 @@
 # Super Compound
 
+## Summary
+
 Understand first; full scope follows BRD -> PRD -> FSD -> GOAL. Verify claims and capture knowledge.
 
 ## Core Rules
 
-- Claim completion only with fresh verification.
+- No Evidence = Not Done: verification-before-completion; verify all outcomes;
+  include Evidence of Completion.
 - Public workflows in `.agent/workflows/` stay limited to the core set below.
 - Prefix command triggers `sc-` to avoid native-command collisions.
 - Detailed procedures belong in skills; always-on rules stay short.
 - Load `.agent/context/` contracts before full assets; human input/approval uses `checkpoint.contract.md`.
-- Delivery adapts per request: bounded low-risk features/pages with clear acceptance, existing contracts/access/patterns and proving checks stay `light`; material product/contract/security/flow changes take `BRD -> PRD -> FSD -> GOAL`. Exception-based approval is the new-project default; explicit stage preferences persist. A single trivial change is done directly.
+- Delivery adapts per request: bounded low-risk features/pages with clear acceptance, existing contracts/access/patterns and proving checks stay `light`; material product/contract/security/flow changes take `BRD -> PRD -> FSD -> GOAL`. Exception-based approval is the new-project default; explicit stage preferences persist. Trivial changes: direct implementation with real verification.
 - Prefer existing conventions, tools, and architecture.
 - Treat hooks, prompts, skills, workflows, MCP config, and dependency changes as security-sensitive.
 - Preserve unrelated user changes.
@@ -69,6 +72,6 @@ Understand first; full scope follows BRD -> PRD -> FSD -> GOAL. Verify claims an
 
 ## Completion Bar
 
-Apply the "Before Completion" gates in `quality-gates.md`: prove the claim with a fresh command or inspection and fix the specific gap before expanding scope.
+quality-gates.md Before Completion: fresh command/inspection; fix gaps before scope expansion.
 
 Documentation: `.agent/context/output-style.md`. Installation: `SETUP.md`, via `/sc-init setup`. Init/reload remain read-only.

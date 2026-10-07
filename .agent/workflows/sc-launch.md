@@ -39,7 +39,7 @@ Result and next action: BRD -> PRD -> FSD -> verified goals; retain configured s
 12. `sc-work.md` - for networked UI, verify the first vertical slice against the real provider, then internally promote only eligible dependents through the same planning-owned checks. LOCAL_ONLY uses mapped local checks without provider barriers.
 13. `sc-work.md` - perform controlled scale-out only after the first-slice issue is verified and the PRD baseline is `VALIDATED`.
 14. `sc-work.md` - execute the bounded hardening/verification goal for integration, responsive, accessibility, E2E, and visual-regression evidence; obtain Business Owner UAT approval only when required by acceptance or material human judgment.
-15. `sc-review.md` - audit implementation and recorded verification/UAT evidence against authority; it does not manufacture missing evidence.
+15. `sc-review.md` - audit implementation and recorded verification/UAT evidence against authority; it does not manufacture missing evidence. All individual goals and the final combined outcome must pass the canonical completion gate before delivery is Done/Completed; include `Evidence of Completion` with actual results/locators and every acceptance criterion mapped.
 16. `sc-audit.md` - run risk checks when the change affects users, data, dependencies, auth, release, or agent surfaces.
 17. `sc-go.md` - preview the finish flow and PR template after verification; commit, push, and PR run through `/sc-go` on explicit confirmation.
 18. `sc-compound.md` - document reusable lessons.

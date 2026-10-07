@@ -6,6 +6,7 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {setup,installCodexBundle} from './setup.mjs';
 import {createHash} from 'node:crypto';
+import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
 const engine = path.resolve('.agent/tools/setup.mjs');
 const source = process.cwd();
 function fixture(t) {
@@ -53,6 +54,54 @@ test('dry run is read-only; six adapters install and reinstall is a no-op', t =>
   assert.doesNotMatch(fs.readFileSync(path.join(f.target,'AGENTS.md'),'utf8'), /Full-tier checkpoints: BRD approval/);
   assert.equal(fs.existsSync(path.join(f.target,'.agent/tools/budget-wizard.mjs')),false);
   assert.equal(run(f,'doctor').status,0);
+});
+
+test('all six generated host adapters carry the canonical evidence completion gate', t => {
+  const f=fixture(t),selected='codex,claude,antigravity,cursor,windsurf,gemini';
+  const options={source,target:f.target,home:f.home,scope:'both',host:selected};
+  assert.equal(setup(options).status,'applied');
+  const routes=fs.readdirSync(path.join(source,'.agent/workflows')).filter(p=>/^sc-.*\.md$/.test(p)).map(p=>p.slice(0,-3));
+  const missing=[];
+  for(const global of [false,true]) {
+    const root=global?f.home:f.target;
+    const entries=[
+      ['codex',`${global?'.codex':'.agents'}/skills/super-compound/SKILL.md`],
+      ...routes.flatMap(route=>[
+        ['claude',`.claude/commands/${route}.md`],
+        ['antigravity',`${global?'.gemini/antigravity':'.agents'}/skills/${route}/SKILL.md`],
+        ['cursor',`.cursor/skills/${route}/SKILL.md`],
+        ['windsurf',`${global?'.codeium/windsurf/global_workflows':'.windsurf/workflows'}/${route}.md`],
+        ['gemini',`.gemini/commands/${route}.toml`],
+      ]),
+      ['codex',global?'.codex/AGENTS.md':'AGENTS.md'],
+      ['claude',global?'.claude/CLAUDE.md':'CLAUDE.md'],
+      ['windsurf',global?'.codeium/windsurf/memories/global_rules.md':'.windsurf/rules/super-compound.md'],
+      ['gemini',global?'.gemini/GEMINI.md':'GEMINI.md'],
+      ...(!global?[['cursor','.cursor/rules/super-compound.mdc']]:[]),
+    ];
+    for(const [host,relative] of entries) {
+      const text=fs.readFileSync(path.join(root,relative),'utf8');
+      if(!text.includes('No Evidence = Not Done') || !text.includes('skills/verification-before-completion/SKILL.md') || !text.includes('Evidence of Completion')) missing.push(`${global?'global':'project'} ${host}: ${relative}`);
+    }
+  }
+  assert.deepEqual(missing,[], 'all generated entrypoints must retain the completion policy');
+  const report=setup({...options,command:'doctor'});
+  assert.equal(report.status,'healthy');
+  assert.ok(report.capabilities.every(c=>c.liveTested===false),'static adapter proof is not live host testing');
+});
+
+test('installed Codex fallback executes stored completion proof and rejects failed outcome', async t => {
+  const f=fixture(t);
+  assert.equal(installCodexBundle({command:'install',source,'codex-home':f.home}).status,'applied');
+  fs.mkdirSync(f.target,{recursive:true});
+  const gate=path.join(f.home,'skills/super-compound/references/tools/verified-promise.mjs');
+  for(const status of ['fail','pass']) {
+    const proof=await provisionCompletionFixture(f.target,{taskId:`fallback-${status}`,status});
+    const result=spawnSync(process.execPath,[gate,'--root',f.target,'--contract',proof.contractPath],{encoding:'utf8'});
+    assert.equal(result.status,status==='pass'?0:1,result.stdout+result.stderr);
+    assert.match(result.stdout,status==='pass'?/COMPLETE_ALLOWED[\s\S]*Evidence of Completion/:/COMPLETE_DENIED/);
+    assert.equal(fs.existsSync(path.join(f.target,'.scratch/work-packages')),false,'light proof needs no ledger');
+  }
 });
 test('global cache activates a project offline and both scopes roll back partial application', t=>{
   const f=fixture(t);

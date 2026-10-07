@@ -1,6 +1,8 @@
 # Quality Gates
 
-Keep gates lightweight and evidence-based. Detailed procedures belong in the referenced skills.
+## Summary
+
+Lightweight gates; procedures: skills.
 
 ## Before Work
 
@@ -36,7 +38,8 @@ Keep gates lightweight and evidence-based. Detailed procedures belong in the ref
 
 ## Before Completion
 
-Use `verification-before-completion` for non-trivial work.
+Every task: verification-before-completion (No Evidence = Not Done;
+goal/requirements/all AC; Evidence of Completion). Small tasks: real inspection.
 
 - Run the smallest meaningful verification first.
 - Run broader checks when shared behavior, security, data, or UI workflows changed.

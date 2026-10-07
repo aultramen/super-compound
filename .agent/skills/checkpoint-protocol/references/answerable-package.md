@@ -125,7 +125,7 @@ Q1 — Apakah ringkasan menampilkan pengguna, scope, hasil, risiko dan keputusan
 Mengapa perlu Anda: Penerimaan penyajian untuk reviewer produk belum diberikan.
 Rekomendasi: Ya; metadata dan bukti tetap di bagian existing pada dokumen yang sama.
 Alasan dan konsekuensi: Reviewer menemukan keputusan lebih cepat; semua detail wajib tetap tersedia. Kecepatan review belum diukur.
-Bahan review: [D:/BATI/Development/framework/super-compound/.agent/skills/agentic-delivery/references/templates-and-outputs.md](D:/BATI/Development/framework/super-compound/.agent/skills/agentic-delivery/references/templates-and-outputs.md)
+Bahan review: [../../agentic-delivery/references/templates-and-outputs.md](../../agentic-delivery/references/templates-and-outputs.md)
 Bagian: Applicability and Expansion; periksa isi wajib dan risiko yang tidak boleh disembunyikan.
 Target: proposal penyajian PRD dalam contoh ini, revisi r1, stage authoring; bukan FSD atau execution.
 Setelah jawaban Anda: Owner melanjutkan authoring PRD yang authorized; approval tidak menciptakan hasil tes atau izin tahap berikutnya.

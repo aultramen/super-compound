@@ -28,6 +28,9 @@ Gates:
 - ADRs are optional; linked ADRs must be `ACCEPTED`.
 - Stop with `OPEN-*` if PRD authority, security/privacy obligation, data/API/auth/workflow/state detail, or verification authority is missing.
 - Issue pointers must use paths and qualified IDs, not copied artifact prose.
+- Pin a derived all-AC completion contract before results, with actual outcome
+  checks; coordinated goals also map final combined outcome. Never replace
+  source authority or let the report choose a subset; `verification-before-completion`.
 - Suggest Git branch names and optional worktree candidates for independent parallel goals; do not mutate Git state.
 - Resolve narrow doc lookups inline; use `/sc-research` only for a named evidence gap that could materially change the FSD, then return to planning.
 - For UI-bearing scope, load the UI readiness reference, make FSD Section 8 the

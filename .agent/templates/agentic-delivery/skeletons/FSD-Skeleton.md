@@ -74,6 +74,12 @@ scope, dependencies, stop conditions, and verification refs.
 Use the existing goal-packet grammar: entry prerequisites are not completion
 proof; done conditions describe the outcome this goal produces. Record actual
 pass/fail/skip and evidence identity after checks run, never from approval alone.
+Before results, derive and pin a `completion_contract_v1` covering every linked
+requirement and AC; reference maintained recipe/observation checks and expected
+outcomes. Completion requires full actual outcome evidence and **Evidence of
+Completion** under `verification-before-completion`; the final multi-goal outcome
+also needs combined integration proof where required. Issue/STATE files carry
+contract/digest and evidence locators rather than copying this authority.
 Graph/traceability views cite these same qualified goals and verification refs; they do not create a second authority.
 
 ## AI Context and Output (conditional)

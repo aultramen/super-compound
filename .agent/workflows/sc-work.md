@@ -11,8 +11,8 @@ Use this to implement a bounded change. Classify the delivery tier at intake per
 `skills/agentic-delivery/references/workflow-integration.md` and state it in one
 line: `Tier: light|full; trigger: T<n>|none`. A `light` request is a plain
 instruction or a `.scratch/<feature>/issues/` pointer; a `full` goal is an
-approved FSD goal or its issue pointer. A single trivial change: just do it
-directly, with tests and verification.
+approved FSD goal or its issue pointer. A single trivial change executes
+directly with proportionate verification; it has no completion exemption.
 
 Before edits in either tier, identify current flow, reusable pattern, affected boundaries and callers/consumers, and proving checks for acceptance/regression. Full scope cites its FSD; light scope uses a brief existing note. Compare material alternatives through `executing-plans/references/authority-and-workspace.md`; changed requirements/acceptance/contracts return to their owner, while reversible details within authority proceed.
 
@@ -79,11 +79,19 @@ Result and next action: Scoped implementation, changed files and actual checks; 
     executes and records mapped integration, responsive, accessibility, E2E, and
     visual-regression checks where applicable; Business Owner UAT is required only
     for explicit acceptance or unresolved material human judgment.
-14. Run final verification with `skills/verification-before-completion/SKILL.md`.
-    For multi-goal runs, completion additionally requires the machine-checked
-    predicate `node .agent/tools/verified-promise.mjs --run <run-id>` to print
-    `COMPLETE_ALLOWED`; a prose completion claim without it is void.
-15. Summarize changed files, mapped requirement IDs, deviations, and verification evidence.
+14. Apply `skills/verification-before-completion/SKILL.md` to the requested goal,
+    requirements, and every acceptance criterion. Pin the derived completion
+    contract before recording results; actual task-appropriate checks must prove
+    outcomes, not merely edits or command success. Single/light tasks may store
+    proof in `.scratch/completion/<task-id>/` without FSD or swarm ledger and use
+    `node .agent/tools/verified-promise.mjs --contract <path>`. Multi-goal runs use
+    `--run <run-id>` for all goal criteria and the final combined outcome. Require
+    `COMPLETE_ALLOWED`; failed, skipped, partial, stale, or missing required proof
+    never authorizes completion, issue `done`, `verified`, or dependency release.
+15. Summarize changed files, mapped requirement IDs, deviations, actual status, and verification evidence.
+    Every completion report includes `Evidence of Completion`: what was verified,
+    how, actual results/evidence locators, and the acceptance criteria proved.
+    Otherwise use the canonical incomplete display status and state remaining gaps.
     If the goal surfaced a non-obvious fix, a costly mistake, or a new convention,
     route to `/sc-compound` before closing.
 16. Write the `docs/STATE.md` Next action and continue authorized ready work.

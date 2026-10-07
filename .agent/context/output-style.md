@@ -15,13 +15,19 @@ verification and one next action. Link supporting detail; expand only what the
 reader needs to review. A small completed task can return:
 
 ```text
-Hasil: [concrete outcome]
-Verifikasi: [actual command/check result]
+Hasil: [concrete outcome and accurate verification status]
+## Evidence of Completion
+[what was verified; actual command/inspection and result; evidence locator; AC met]
 Berikutnya: [one action, or complete within the requested scope]
 Detail: [artifact link when useful]
 ```
 
 Announce relevant skills together once per work phase, then route internally. Repeat a skill notice only for a consequential scope/risk change, fallback, or required user action. Human checkpoints show a short prioritized set of answerable needs; keep the complete unresolved decision register available by link or on request. Preserve stable IDs, partial answers, and actual approval boundaries. When the authorized goal is satisfied, report completion without creating an improvement backlog or another permission gate.
+
+Use **Evidence of Completion** in every completion report, including short tasks;
+apply `.agent/skills/verification-before-completion/SKILL.md` before success wording.
+Omit completion claims when required proof is incomplete and report the actual
+unverified/partial/failed/blocked state and next action.
 
 Keep skeleton-first authoring, authority IDs, acceptance criteria and required
 evidence. Do not add another template layer or universal word limit. When adding

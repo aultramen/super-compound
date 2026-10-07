@@ -4,3 +4,8 @@ State, Next action, Artifacts lines only. A managed checkpoint block follows the
 Keep evidence refs, the pause reason, and the exact next route. Do not mutate Git state.
 
 Human input/approval: .agent/context/checkpoint.contract.md
+
+Inspect stored proof via `verification-before-completion` before carrying verified
+outcomes; no silent rerun/promotion. Preserve incomplete statuses and gaps; legacy
+history is unchanged. Completion report: `Evidence of Completion`, what/how,
+actual result/locator and all-AC mapping.

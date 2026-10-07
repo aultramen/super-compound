@@ -32,7 +32,13 @@ Result and next action: Read-only findings with evidence and owners; remediation
    sections of `docs/engineering-standards.md` or project `CODING_STANDARDS.md`;
    implementation preflight applies the same constraints, review verifies them independently.
 6. For PR readiness, load `skills/git-workflow-operation/SKILL.md` and review the PR checklist/template, but do not commit or push unless routed through `/sc-go`.
-7. Verify each claim against the diff or a command result; name the claims that could not be verified and why.
+7. Apply `verification-before-completion` to each claim: inspect actual evidence,
+   current identity/provenance, and coverage of the goal, requirements, and every
+   acceptance criterion. A diff proves edits, not working behavior; a successful
+   build/deployment command alone cannot prove the requested outcome. Open manual
+   artifacts and inspect recorded observations rather than trusting file existence
+   or a worker's report. Name unsupported claims and validation owners. This
+   read-only route does not silently rerun the owner's recipe or grant completion.
    Check tier consistency: sensitive paths signal inspection of the actual diff, compatibility, access, data, and side effects. Report `ESCALATE: T2` only for material semantic/risk changes outside authority; contract-preserving maintenance stays light.
 8. Persist opened findings or complete evidence exceeding the chat envelope in
    `docs/reviews/YYYY-MM-DD-<scope>.md`, using the finding/adjudication rules from
@@ -55,3 +61,5 @@ Result and next action: Read-only findings with evidence and owners; remediation
 - Exact next owner for every actionable finding.
 - Deferred findings with their owner and durable sink (`docs/todos/YYYY-MM-DD-<slug>.md` or `docs/STATE.md` Deferred Ideas); nothing is parked silently.
 - The durable review report follows `.agent/context/output-style.md`.
+- A completion claim includes `Evidence of Completion` with what/how, actual
+  results/evidence locators, and acceptance mapping; missing proof stays incomplete.

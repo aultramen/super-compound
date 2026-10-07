@@ -48,7 +48,12 @@ Result and next action: FSD, goals and mapped verification; reuse valid scope/ac
 12. Load `skills/triage-workflow/SKILL.md` when shaping incoming, stale, or raw issues into agent-ready work.
 13. Shape FSD `GOAL-*` packets into vertical, independently verifiable issue pointers without copying BRD/PRD/FSD/ADR prose.
 14. Include suggested branch names per GOAL and identify optional worktree candidates for independent parallel goals; do not checkout or mutate Git state during planning.
-15. Include blocker relationships, qualified refs, verification refs, and stop conditions.
+15. Include blocker relationships, qualified refs, verification refs, and stop
+    conditions. Derive the completion contract from authoritative requirements
+    and all acceptance criteria before results are recorded; map each expected
+    outcome to task-appropriate actual checks. Include a final combined-outcome
+    contract when coordinating multiple goals. The contract is a pinned snapshot,
+    not an alternate requirement authority or a report-selected subset.
 16. For UI-bearing scope, run `node .agent/tools/readiness-gate.mjs --fsd <fsd> --prd <prd> --issues-dir <dir>` and enforce every hard gate.
     `ui_contract_readiness = READY_FOR_SLICE` is required before a UI-integrated
     goal can be ready, except for the bounded `CONTRACT_ENABLER` described next.

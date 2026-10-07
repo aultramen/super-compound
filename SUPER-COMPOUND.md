@@ -7,7 +7,7 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. Dis
 ## Core Principles
 
 - Discipline compounds: rigorous process today saves time tomorrow.
-- Evidence before claims: run or name the verification that proves the result.
+- `No Evidence = Not Done`: actual verification must prove the goal, requirements, and every acceptance criterion before a completion or success claim.
 - Test-first by default for behavior changes, at the strictness `tdd_mode` sets.
 - YAGNI and DRY: build only what is needed, never duplicate.
 - Infer -> decide -> execute -> report within scoped user authority. Human input is an exception for unresolved material decisions, critical missing information, or risky actions outside existing authority. New-install `approval_mode: exception`; explicit `stage` preferences remain valid.
@@ -18,7 +18,7 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. Dis
 
 ## Delivery Tiers
 
-The framework decides the tier per request (`delivery_mode: auto` in `.agent/rules/project-config.md`; `light` or `full` pin it). Intake states one line, `Tier: light|full; trigger: T<n>|none`, and never asks. Bounded reversible features/pages with existing contracts, access, patterns, clear acceptance and proving checks are `light`; novelty alone does not raise the tier. `full` is triggered by material new product capability (T1), a material change to contract compatibility, access, billing effects, or PII handling (T2), a material new interactive screen or flow (T3), coordination that changes outcomes, contracts, or material risk (T4), or an explicit request for BRD/PRD/FSD (T5). A single trivial change is done directly. A material trigger found mid-work escalates (`ESCALATE: T<n>`) only affected work to its owner; administrative handoff alone never raises the tier. The rubric lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`; `/sc-go` previews and `/sc-review` inspect semantic changes when touched paths match T2 signals.
+The framework decides the tier per request (`delivery_mode: auto` in `.agent/rules/project-config.md`; `light` or `full` pin it). Intake states one line, `Tier: light|full; trigger: T<n>|none`, and never asks. Bounded reversible features/pages with existing contracts, access, patterns, clear acceptance and proving checks are `light`; novelty alone does not raise the tier. `full` is triggered by material new product capability (T1), a material change to contract compatibility, access, billing effects, or PII handling (T2), a material new interactive screen or flow (T3), coordination that changes outcomes, contracts, or material risk (T4), or an explicit request for BRD/PRD/FSD (T5). A single trivial change executes directly with proportionate outcome verification. A material trigger found mid-work escalates (`ESCALATE: T<n>`) only affected work to its owner; administrative handoff alone never raises the tier. The rubric lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`; `/sc-go` previews and `/sc-review` inspect semantic changes when touched paths match T2 signals.
 
 ## UI-Aware Lifecycle (trigger T3 or `full`)
 
@@ -193,7 +193,7 @@ Before completion:
 
 - Run targeted verification first, then broader checks when risk warrants.
 - Before commit, push, or PR creation, review `git status`, `git diff`, and sensitive-file warnings.
-- Report verification results and limitations.
+- Apply `.agent/skills/verification-before-completion/SKILL.md`; report actual outcome evidence mapped to all acceptance criteria under `Evidence of Completion`. A changed configuration, written code, successful command, or subagent report alone does not prove the goal.
 - Keep the response inside the route's output envelope; write full evidence to disk and return paths plus decisive findings.
 - Update docs when setup, workflow, behavior, architecture, or commands changed.
 - Review for stale references to removed workflows/skills.
@@ -250,13 +250,21 @@ Interface-design data must be retrieved through `scripts/search.py`; do not prel
 
 ## Quality Bar
 
-The work is done when:
+The work is done only when:
 
-- The requested change is implemented or the blocker is explicit.
-- The smallest meaningful verification has been run.
+- Actual verification proves the requested goal, requirements, and every acceptance criterion; checks match the task and current relevant state.
+- Missing, stale, partial, skipped, or failed required proof remains incomplete. Use `Implemented — Pending Verification`, `Partially Verified`, `Needs Validation`, `Verification Failed`, or `Blocked` as appropriate.
 - User-facing docs and rules agree with the current public interface.
 - No secrets, cache files, or malformed data were introduced.
-- The final response names the changed areas and verification evidence.
+- The final response includes `Evidence of Completion`: what was verified, how, actual results/locators, and acceptance-criteria mapping, plus changed areas.
+
+The canonical gate is `.agent/skills/verification-before-completion/SKILL.md`.
+Light/single-task proof may live at `.scratch/completion/<task-id>/` without
+BRD/PRD/FSD or a swarm ledger. `verified-promise.mjs --contract <path>` checks
+its pinned completion contract; `--run <run-id>` additionally requires every
+goal and the final combined outcome. Both inspect stored proof, never silently
+rerun commands. Historical statuses remain history; metadata alone cannot
+authorize a new completion claim or dependency release. Hooks remain advisory.
 
 Verified reusable outcomes are captured automatically by their owning writer via
 memory-maintenance JSON operations; framework changes remain reviewed proposals.

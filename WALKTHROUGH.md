@@ -114,7 +114,7 @@ a short prioritized set of ready questions/approvals with stable IDs and automat
 separate from approval. Same-owner/scope inputs are coordinated; independent
 authorized work continues. See the [PromptShield before/after example](docs/eval-results/hitl-checkpoints-20261004.md).
 
-Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or bounded reversible feature/page using existing contracts, access and patterns is `light`: `/sc-debug` or `/sc-work` starts immediately with relevant validation. A trivial change is simply done. Material new capability/flow, contract/access/data changes, consequential coordination, or an explicit artifact request uses `full`. Novelty alone does not raise the tier. The analytics scenario below assumes material new product behavior and is `full`.
+Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or bounded reversible feature/page using existing contracts, access and patterns is `light`: `/sc-debug` or `/sc-work` starts immediately with relevant validation. A trivial change executes directly and still requires proportionate outcome evidence. Material new capability/flow, contract/access/data changes, consequential coordination, or an explicit artifact request uses `full`. Novelty alone does not raise the tier. The analytics scenario below assumes material new product behavior and is `full`.
 
 ## Answering a checkpoint
 
@@ -571,7 +571,7 @@ stream has an isolated worktree. For multi-agent runs, create file-backed
 handoffs instead of pasting briefs and diffs through chat:
 
 ```bash
-node .agent/tools/work-package.mjs create --run analytics --goal GOAL-003 --brief .scratch/analytics-dashboard/issues/03-comparison-export-slices.md --paths-file .scratch/analytics-dashboard/issues/GOAL-003-scope.json
+node .agent/tools/work-package.mjs create --run analytics --goal GOAL-003 --brief .scratch/analytics-dashboard/issues/03-comparison-export-slices.md --paths-file .scratch/analytics-dashboard/issues/GOAL-003-scope.json --input-file .scratch/analytics-dashboard/issues/GOAL-003-create.json
 ```
 
 Before dispatch, the scheduler writes the scope JSON, for example
@@ -580,12 +580,18 @@ Before dispatch, the scheduler writes the scope JSON, for example
 isolated worktrees/workspaces, and review rejects scope changes or new edits
 outside the scheduler-owned allowlist.
 
+The illustrative create input carries scheduler authority plus pinned
+`completionContract: {path, digest}` and `runCompletionContract: {path, digest}`.
+Set the goal contract before results; the run contract proves the final combined
+outcome. Follow the [scheduler input contract](.agent/skills/subagent-orchestration/references/review-contract.md#scheduler-input-and-transition-contract)
+for required metadata, transitions, and current `expectedVersion`.
+
 ```bash
 node .agent/tools/work-package.mjs review --run analytics --goal GOAL-003 --base HEAD
-node .agent/tools/work-package.mjs record --run analytics --goal GOAL-003 --status verified --verification "mapped slice and contract tests pass"
+node .agent/tools/work-package.mjs record --run analytics --goal GOAL-003 --status verified --verification "mapped slice and contract tests pass" --input-file .scratch/analytics-dashboard/issues/GOAL-003-transition.json
 ```
 
-Implementers return the package/report paths. A reviewer reads the package once and writes separate spec-compliance and code-quality verdicts; full evidence remains on disk.
+Implementers return the package/report paths. A reviewer reads the package once and writes separate spec-compliance and code-quality verdicts; full evidence remains on disk. The verification string is a summary, never proof. The coordinator inspects actual all-AC evidence before the shared gate permits `verified`, then checks `verified-promise.mjs --run analytics` before claiming the combined delivery complete.
 
 ## 8. Debug
 
@@ -799,15 +805,85 @@ within the 10% contract-to-full-context ratio gate; startup caps remain absolute
 This does not measure hidden reasoning, generated response
 tokens, latency, or billing; those remain unknown without paired host traces.
 
-Before finishing any meaningful work:
+Before claiming any work complete:
 
-- The requested outcome is implemented or the blocker is named.
-- Tests or equivalent verification ran.
+- Actual checks prove the goal, requirements, and every acceptance criterion
+  against current relevant state; a blocker or changed configuration is not completion.
+- Required missing, failed, skipped, stale, or partial proof remains an accurate
+  incomplete status under `verification-before-completion`.
 - Branch, commit, push, and PR operations used `/sc-go` when requested.
 - Docs changed when user behavior, commands, setup, or architecture changed.
 - Stale workflow/skill names were not reintroduced.
 - No secrets, cache files, or malformed data were introduced.
-- The final response reports changed areas and verification.
+- The final response includes `Evidence of Completion` with what/how, actual
+  results/evidence locators, and acceptance mapping, plus changed areas.
+
+### Prove the outcome before closing
+
+Derive a `completion_contract_v1` before results from the authoritative request
+or FSD. Each criterion has its ID, requirement refs, expected outcome, evidence
+method, and `recipeRef` or `observationRef`; it never replaces source authority.
+The verifier checks full coverage and opens manual artifacts. A screenshot's
+existence alone is insufficient. Do not cap the acceptance checklist at the
+number of summary observations.
+
+For a light login-validation fix, keep the request, contract, recipe, and evidence
+under `.scratch/completion/login-validation/`; no FSD or swarm ledger is required.
+Illustrative contract, with local files supplied by the owning project:
+
+```json
+{
+  "schema": "completion_contract_v1",
+  "taskId": "login-validation",
+  "goal": "Reject empty email without blocking valid login",
+  "authorityRefs": [".scratch/completion/login-validation/request.md"],
+  "sourceRefs": ["src/login.js", "tests/login.test.js"],
+  "criteria": [
+    {
+      "id": "AC-1",
+      "requirementRefs": [".scratch/completion/login-validation/request.md#AC-1"],
+      "expected": "Empty email is rejected and valid email can log in",
+      "method": "regression",
+      "recipeRef": ".scratch/completion/login-validation/recipe.json"
+    }
+  ]
+}
+```
+
+The recipe's `contractPath`, `recipeRef`, and `outcomesPath` connect the
+project's actual drive assertions to a `verification_outcomes_v1` result with
+`criterionId`, expected/observed outcome, status, and evidence refs. Preserve RED
+proof before the fix and GREEN proof afterward. A successful launch/build or a
+result object's `pass` value alone cannot prove login behavior.
+
+```bash
+node .agent/tools/verification-recipe.mjs .scratch/completion/login-validation/recipe.json
+node .agent/tools/verified-promise.mjs --contract .scratch/completion/login-validation/contract.json
+```
+
+Require `COMPLETE_ALLOWED` and inspect the actual artifacts before completion.
+For a multi-goal run use `--run <run-id>`: successful slices still need the final
+combined outcome. Scheduler create input pins `completionContract: {path, digest}`
+and, for the run, `runCompletionContract: {path, digest}`. The coordinator checks
+worker proof; submission/classification/acknowledgement alone is not promotion.
+Failed validation must leave the ledger unpromoted. See
+[verification recipes](.agent/skills/verification-before-completion/references/verification-recipes.md)
+for the maintained record and command details.
+
+An illustrative completed report uses the mandatory heading and actual evidence:
+
+```markdown
+## Evidence of Completion
+
+| Requirement / AC | What was verified | How | Actual result and locator |
+|---|---|---|---|
+| Request#AC-1 | Empty email rejected; valid login works | Regression RED/GREEN | Actual failure before fix and pass afterward; <evidence path> |
+```
+
+If proof is incomplete, report `Implemented — Pending Verification`, `Partially
+Verified`, `Needs Validation`, `Verification Failed`, or `Blocked` and name the
+gap. Status/pause only inspect saved evidence; the owner performs needed checks.
+Legacy history stays intact and cannot supply new proof. Hooks remain advisory.
 
 ## Verified outcome to next session
 

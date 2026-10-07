@@ -1,5 +1,7 @@
 # Execution Verification Skill Contract
 
+## Summary
+
 Apply covered checks; authority is under `.agent/skills/`. Load source detail
 only for an uncovered requirement, material risk, conflict or editing the source.
 
@@ -11,7 +13,13 @@ only for an uncovered requirement, material risk, conflict or editing the source
   missing fact before expanding; retrieve the answering section/symbol.
 - Write failing behavior tests before code when behavior changes.
 - Verify after each meaningful change.
-- Run final mapped verification before any completion claim.
+- No Evidence = Not Done for every tier/task. Pin the complete authoritative
+  goal/requirement/AC checklist before results; verify each outcome, not merely
+  command success or changed files. Failed/skipped required checks prevent completion.
+- Run final mapped verification before any completion claim. Include exact
+  **Evidence of Completion**: what, how, actual result/locator and AC mapping.
+  Missing/partial/failed proof uses the human statuses in
+  `verification-before-completion/references/claim-evidence.md`; preserve ledger enums.
 - Sources: `test-driven-development/SKILL.md` and
   `verification-before-completion/SKILL.md`. Select checks by acceptance/impact;
   reuse only matching fingerprinted evidence. Full suite when CI/acceptance or

@@ -1,3 +1,10 @@
+# Issue Status and Done Conditions
+
+## Summary
+
+Use the existing issue statuses while requiring actual outcome evidence before
+completion or dependency release. Keep authority and evidence as pointers.
+
 ## Status Roles
 
 Use these statuses in issue files:
@@ -8,11 +15,19 @@ Use these statuses in issue files:
 - `ready-for-human`: needs human judgment, access, or approval
 - `blocked`: blocked by unresolved `OPEN-*`, missing FSD authority, or unavailable required access
 - `in-progress`: active work
-- `done`: completed and verified by task-level checks
+- `done`: every requested goal, requirement and acceptance criterion is verified with actual outcome evidence
 - `verified`: completion evidence reviewed against the FSD; real integration is proven where applicable
 - `wontfix`: will not be actioned
 
 ## Done Conditions
+
+Apply [verification-before-completion](../../verification-before-completion/SKILL.md)
+to the issue-shaping output and every delivered goal. `done` and `verified` both
+require complete evidence; `verified` also includes coordinator/review acceptance
+where applicable. Preserve issue/ledger enums. Incomplete human report labels
+and the mandatory **Evidence of Completion** section come from that skill.
+Record completion contract/evidence locators in the pointer; do not copy authority
+prose. A previous status value alone does not release dependencies on resume.
 
 The output is complete when:
 
@@ -24,3 +39,5 @@ The output is complete when:
 - At least one issue has `Blocked by: None` unless the whole board is intentionally blocked.
 - Issue files do not duplicate BRD, PRD, FSD, or ADR prose.
 - The user can pass one issue file to `/sc-work`.
+- Actual pointer/graph validation or direct inspection verifies all the above;
+  generated files alone are not completion evidence.

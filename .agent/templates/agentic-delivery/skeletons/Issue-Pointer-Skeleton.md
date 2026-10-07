@@ -15,6 +15,8 @@ Upstream refs: BRD-{{PROJECT}}#{{IDS}}, PRD-{{PROJECT}}#{{IDS}}
 Technical refs: FSD-{{PROJECT}}#{{IDS}}  
 ADR refs: None / ADR-{{NNNN}}#{{IDS}}  
 Verification refs: FSD-{{PROJECT}}#TEST-{{NNN}}
+Completion contract: {{CONTRACT_PATH}} / {{SHA256_DIGEST}}
+Completion evidence: None / {{EVIDENCE_LOCATORS}}
 UI delivery role: NOT_APPLICABLE / CONTRACT_ENABLER / FIRST_VERTICAL_SLICE / SCALE_OUT_SLICE / HARDENING
 Contract refs: None / FSD-{{PROJECT}}@{{VERSION}}#CONTRACT-{{NNN}}, FSD-{{PROJECT}}@{{VERSION}}#UIMAP-{{NNN}}
 Contract gate: NOT_APPLICABLE / READY_FOR_SLICE / FIRST_VERTICAL_SLICE_VERIFIED
@@ -24,3 +26,7 @@ Contract gate: NOT_APPLICABLE / READY_FOR_SLICE / FIRST_VERTICAL_SLICE_VERIFIED
 Omit this section when the default contract applies: implement the referenced
 FSD goal only and report `OPEN-*` per
 `.agent/skills/agentic-delivery/references/open-stop-conditions.md`.
+
+<!-- `done`/`verified` requires complete actual outcome evidence under
+.agent/skills/verification-before-completion/SKILL.md. Keep these fields as
+locators; never copy authoritative criteria or report prose into the issue. -->

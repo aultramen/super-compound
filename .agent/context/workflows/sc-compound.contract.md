@@ -1,13 +1,13 @@
-Verified non-trivial solution and root cause: docs/solutions/;
-agent mistake: docs/ERROR_LOG.md ERR-*; user correction or convention:
-docs/LEARNED_KNOWLEDGE.md LRN-*; session history: docs/progress.md.
-Search first: knowledge-search.mjs "<topic>" --require-complete; apply known scope flags. Partial scan cannot prove absence; extend a match, never duplicate.
-Keep each ERR/LRN Quick Reference row.
-
-Capture automatically; scoped lessons use existing authorization without
-reapproval. Patterns advise, never grant authority or self-modify prompts, policy,
-budgets, verifier, framework, goals or routes. Material changes use their owner.
-
-memory-maintenance JSON capture/upsert: stable origin/revision/verification refs; full-solution worth gate. Preserve pending closeout; retry capture without replaying verified work.
-
-Human input/approval: .agent/context/checkpoint.contract.md
+Verified non-trivial solution/root cause: docs/solutions/;
+agent mistake: docs/ERROR_LOG.md ERR-*; user correction/convention:
+docs/LEARNED_KNOWLEDGE.md LRN-*; history: docs/progress.md.
+knowledge-search.mjs "<topic>" --require-complete first; scope flags
+Partial scan cannot prove absence; extend matches, never duplicate.
+Keep ERR/LRN Quick Reference.
+Automatic scoped capture uses existing authorization.
+Patterns advise; no authority/self-modification of prompts/policy/budgets/verifier/framework/goals/routes.
+Material changes: owner.
+memory-maintenance JSON capture/upsert: stable origin/revision/verification refs; full-solution worth gate.
+Preserve pending closeout; retry capture, never verified work.
+Human input/approval: .agent/context/checkpoint.contract.md.
+verification-before-completion (goal/all AC; Evidence of Completion).

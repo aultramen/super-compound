@@ -23,3 +23,8 @@ deploy, publish, commit, push, or PR permission.
 UI topology, affected proof, and conditional UAT follow the canonical UI readiness reference.
 
 Human input/approval: .agent/context/checkpoint.contract.md
+
+`verification-before-completion`: all goal ACs plus final combined outcome must
+have actual proof; `verified-promise.mjs --run <id>` must allow completion.
+Report `Evidence of Completion` with what/how, actual result/locator and AC mapping.
+Configuration, command success, worker reports or metadata alone are insufficient.

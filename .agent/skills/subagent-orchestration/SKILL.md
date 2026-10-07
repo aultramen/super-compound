@@ -18,6 +18,8 @@ If the host has no subagent capability, execute goals and the same review checks
   applicable UI slice `verified`, conditional Business Owner UAT): [ui gates](references/ui-gates.md).
 - Parallel goals do not share unmerged files or mutable validation resources.
 - Search existing code/tests before assuming anything is absent.
+- Pin a derived completion contract covering the goal and every requirement/AC
+  before worker results; multi-goal runs also pin the final combined outcome.
 
 ## File-Backed Process
 
@@ -60,7 +62,11 @@ If the host has no subagent capability, execute goals and the same review checks
    and re-review affected evidence. Failed attempts trigger reassessment and
    escalation; mandatory failures stay open until fixed or truthfully blocked:
    [orchestration loop](references/orchestration-loop.md).
-7. Record the result:
+7. Inspect the worker's actual evidence and current identity/provenance against
+   the pinned goal and all criteria under `verification-before-completion`.
+   A worker submission is not completion authority. The coordinator may execute
+   checks itself; isolation of a second verifier is not universally required.
+   Missing/failed/skipped/stale/partial proof stays incomplete. Record the result:
 
    Networked `FIRST_VERTICAL_SLICE` requires real provider auth/permission,
    success, and failure proof through `integration-checking`; mock-only proof
@@ -72,6 +78,11 @@ If the host has no subagent capability, execute goals and the same review checks
      --verification "<short command result>" \
      --input-file <transition-input.json>
    ```
+
+   `verified` is written only after the shared evidence validator allows it.
+   `verified-promise.mjs --run <run-id>` must additionally allow the final
+   combined outcome before run completion. Every completion report includes
+   `Evidence of Completion`: what/how, actual results/locators and AC mapping.
 
 ## Ledger, Recovery, Model Tiers
 

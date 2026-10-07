@@ -47,7 +47,9 @@ Expected result: a focused fix with regression evidence and one next action:
 
 ```text
 Hasil: Validasi form sudah diperbaiki.
-Verifikasi: 6 pengujian terkait lulus.
+Evidence of Completion:
+AC-1 email kosong ditolak: reproduksi gagal sebelum fix; regression test lulus setelah fix.
+Cara/hasil: command aktual, jumlah lulus/gagal, dan tautan evidence laporan.
 Berikutnya: Review perubahan melalui /sc-review.
 Detail: [tautan laporan]
 ```
@@ -117,7 +119,7 @@ names the expected FSD/GOAL result. See [worked examples](.agent/skills/hints/re
 
 ## Delivery Tiers
 
-The framework decides how much process a request needs. Intake states one line, `Tier: light|full; trigger: T<n>|none`. `light` includes bounded reversible features and pages that reuse existing contracts, access and patterns with clear acceptance and proving checks; it goes to `/sc-work` or `/sc-debug`. A single trivial change is done directly. `full` covers material new capability/flow, contract/access/data/side-effect changes, coordination that changes outcomes or risk, or an explicit BRD/PRD/FSD request. It takes `BRD -> PRD -> FSD -> GOAL` with durable authority, without repeating permission already granted. A material trigger found mid-work escalates only affected work. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
+The framework decides how much process a request needs. Intake states one line, `Tier: light|full; trigger: T<n>|none`. `light` includes bounded reversible features and pages that reuse existing contracts, access and patterns with clear acceptance and proving checks; it goes to `/sc-work` or `/sc-debug`. A single trivial change executes directly with proportionate outcome verification. `full` covers material new capability/flow, contract/access/data/side-effect changes, coordination that changes outcomes or risk, or an explicit BRD/PRD/FSD request. It takes `BRD -> PRD -> FSD -> GOAL` with durable authority, without repeating permission already granted. A material trigger found mid-work escalates only affected work. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
 
 Session handoff, a derived issue board, and parallelism alone do not raise a
 clear bugfix above `light`. Sensitive paths trigger semantic inspection.
@@ -164,6 +166,46 @@ flowchart LR
 An approved BRD or PRD is always a durable artifact under `docs/brd/` or
 `docs/prd/`; chat drafts cannot authorize the next delivery stage. Eval evidence
 must likewise be stored under `.agent/evals/` whenever another gate consumes it.
+
+## Evidence-Based Definition of Done
+
+**No Evidence = Not Done.** `Done`, `Completed`, `Resolved`, `Success`, and
+equivalent claims require actual verification of the requested goal, requirements,
+and every acceptance criterion. Configuration changed, code written, command exit
+0, or a worker report alone cannot prove the outcome. Match proof to the task:
+functional tests for code, inspected screenshots for UI, request/status/body for
+API, health/access checks after deployment, end-to-end execution for automation,
+validated/opened files for artifacts, and reproduce-before/verify-after for bugs.
+See the [canonical completion gate](.agent/skills/verification-before-completion/SKILL.md).
+
+Pin a `completion_contract_v1` from the request or FSD before recording results.
+Its criteria map requirement refs and expected outcomes to recipe or observation
+proof; results cannot choose a smaller checklist. Single/light tasks may use
+`.scratch/completion/<task-id>/` without BRD/PRD/FSD or a swarm ledger. A local
+recipe runs actual assertions and saves evidence; the gate only inspects it:
+
+```bash
+# Illustrative paths: create the request-derived contract and project recipe first.
+node .agent/tools/verification-recipe.mjs .scratch/completion/login-validation/recipe.json
+node .agent/tools/verified-promise.mjs --contract .scratch/completion/login-validation/contract.json
+# Multi-goal delivery checks every pinned goal plus the final combined outcome.
+node .agent/tools/verified-promise.mjs --run analytics
+```
+
+The gate must return `COMPLETE_ALLOWED`. Inspect actual outputs and artifacts;
+JSON `status: pass` is not independent authentication of execution. Required
+missing, stale, skipped, partial, or failed proof cannot promote completion or
+release dependencies. Use **Implemented — Pending Verification**, **Partially
+Verified**, **Needs Validation**, **Verification Failed**, or **Blocked** as
+appropriate; these are human display statuses, not new ledger enums.
+
+Every completion report includes **Evidence of Completion**: what was verified,
+how, actual results with evidence locators, and the acceptance criteria proved.
+The same agent may perform actual checks separately from implementation; the
+coordinator inspects delegated proof. Deterministic proof may be reused only with
+matching fingerprints/provenance; changed external state requires live checks.
+Status/pause inspect stored proof without silent reruns. Historical metadata is
+preserved and supplies no new completion authority; hooks remain advisory.
 
 ## Install
 

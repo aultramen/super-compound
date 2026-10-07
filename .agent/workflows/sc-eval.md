@@ -36,7 +36,11 @@ Result and next action: Actual pass/fail/unknown results and evidence; route fai
 3. Choose code, human, or model-graded evals based on the behavior.
 4. Run evals after implementation using the same criteria.
 5. Record whether evals are required before `/sc-go commit`, push, PR, or another workflow gate.
-6. Report pass/fail, flaky cases, and next fixes.
+6. Report actual pass/fail/unknown, skipped/flaky cases, and next fixes. An eval
+   proves only the criteria it exercises; task completion requires the goal and
+   every acceptance criterion under `verification-before-completion`. Include
+   `Evidence of Completion` with what/how, actual results/locators, and acceptance
+   mapping for any completion claim; absent runtime evidence remains incomplete.
 7. A non-gating exploratory check may remain in chat. If another workflow or a
    commit/push/PR gate consumes the criteria or result, it must be saved to
    `.agent/evals/<feature>.md`; never make an approval depend on a chat-only eval.

@@ -4,6 +4,22 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## 2026-10-07 - Evidence-Based Definition of Done
+
+- Require actual goal, requirement, and all-acceptance-criteria proof before
+  Done/Completed/Resolved/Success or equivalent claims: `No Evidence = Not Done`.
+  Completion reports include `Evidence of Completion` with verification method,
+  actual result/locator, and acceptance mapping; incomplete proof stays incomplete.
+- Pin request/FSD-derived completion contracts; single/light tasks use local
+  `.scratch/completion/<task-id>/` proof and `verified-promise.mjs --contract`.
+  Run completion verifies pinned goals and the final combined outcome; shared
+  validation precedes verified promotion and dependency release.
+- Preserve 19 public workflows, light/full tiers, history, same-agent actual
+  verification, and advisory hooks. Coordinator checks delegated evidence;
+  status/pause inspect saved proof without silent re-execution.
+- [Evidence report](docs/eval-results/evidence-dod-20261007.md) records executed
+  checks, acceptance coverage, source identity, and remaining verification gaps.
+
 ## 2026-10-07 - Exception-based human input and autonomous goal closure
 
 - Default new installations to exception-based approvals; preserve explicit stage

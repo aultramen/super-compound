@@ -862,6 +862,12 @@ consumer/component, provider, and E2E setup.
 
 ### 5.1.21 Feature Definition of Done
 
+Apply `.agent/skills/verification-before-completion/SKILL.md`: **No Evidence = Not
+Done**. Every linked goal, requirement and AC needs real outcome evidence, not
+only completed implementation steps. Pin the full derived completion checklist
+before producing results; incomplete/failed/skipped required checks prevent
+`DONE`/`VERIFIED` or equivalent claims. Retain report/evidence locators in pointers.
+
 - [ ] All linked FR/SEC/NFR requirements are implemented.
 - [ ] Happy, negative, boundary, permission, duplicate, concurrency, and dependency-failure tests pass where applicable.
 - [ ] Database constraints and migrations are verified forward and backward or rollback limitations are documented.
@@ -1831,6 +1837,9 @@ Derived view - generate from goal packets / issue pointers; do not hand-maintain
 | FR-001 | UI-001 / UI-ACT-001 / UI-STATE-001 / UIMAP-001 | CONTRACT-001 / SCHEMA-001 | TEST-001 | Integration | FIX-001 | {{ASSERTION}} | Yes | GOAL-001 |
 
 Every MUST requirement needs at least one deterministic verification. Security and negative requirements should not rely only on UAT.
+Cover every acceptance criterion, including required combined feature outcome;
+command success alone does not prove its expected behavior. Store actual
+assertions/results and evidence provenance per the verification skill.
 
 ## 14.3 Test Scenario Template
 
@@ -2194,6 +2203,9 @@ The executing agent must return:
 4. Any deviation from the FSD, with reason; unapproved deviations remain failures.
 5. Security, data, and operational impact.
 6. Residual risks or follow-up goals, without silently implementing them.
+7. **Evidence of Completion**: what was verified, how it was executed/inspected,
+   actual results/artifact locators, and every requirement/AC met. Use the accurate
+   incomplete status when any required proof is missing; do not claim completion.
 
 #### Stop Conditions
 

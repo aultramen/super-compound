@@ -1,5 +1,7 @@
 # Maintained Verification Recipes
 
+## Summary
+
 Reuse the project's actual harness. Maintain one scoped recipe for launch ->
 doctor -> drive -> evidence -> cleanup. Do not invent a second test framework.
 Launch only when the existing harness needs a process; doctor checks actual
@@ -26,3 +28,38 @@ its own launch child. Reuse live sessions when that is the project's harness.
 `knowledge-refresh` verifies old recipes against the current harness and evidence
 before updating guidance. A changed command/contract invalidates old proof.
 Retain negative outcomes and artifact locators so cleanup never erases history.
+
+Bind every required criterion from the pinned completion contract to a real
+outcome assertion in the maintained recipe. A successful launch/build/deployment
+or exit code alone does not establish feature, health or acceptance success.
+Capture assertion outcomes and actual fail/skip/counts; preserve failed evidence.
+The shared completion validator checks full coverage and freshness before any
+`verified` mutation. It reads saved recipe/observation evidence rather than
+implicitly executing commands. See [Claim Evidence](claim-evidence.md) for the
+contract, manual inspection requirements and mandatory completion report.
+
+The existing harness writes an outcome artifact referenced by the recipe's
+`outcomesPath`; the runner captures it with provenance. Pin `recipeRef` and
+`contractPath`; the drive command produces outcomes from actual assertions.
+Minimal outcome shape:
+
+```json
+{
+  "schema": "verification_outcomes_v1",
+  "taskId": "GOAL-001",
+  "criteria": [{
+    "criterionId": "AC-001",
+    "expected": "Application health is ready",
+    "observed": "GET /health returned 200 with ready=true",
+    "status": "pass",
+    "evidenceRefs": [".scratch/completion/GOAL-001/health-response.json"]
+  }]
+}
+```
+
+Retain optional real test `counts: {total, passed, failed, skipped}`; manual
+criteria also require `inspection: {inspected: true, observer, timestamp, steps}`
+and opening/comparing the artifact. Regression criteria bind `regression:
+{beforeRef, afterRef}` to actual failing and passing evidence. Observation proof
+also pins `contractDigest`. Do not manufacture result JSON from confidence;
+the maintained harness/assertion or actual recorded inspection produces it.

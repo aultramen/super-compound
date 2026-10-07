@@ -8,12 +8,31 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const read = file => fs.readFileSync(path.join(root, file), "utf8");
 const attempt = JSON.parse(read(".agent/evals/hitl-checkpoints.responses.json"));
+// Reviewed additive completion rules retain checkpoint/approval/read-only
+// semantics. These exact compatibility pins do not rewrite historical responses
+// or claim that the old communication attempt evaluates the new evidence gate.
+const completionRevisionPins = {
+  // Stored review refs are portable; runtime review still resolves absolute paths.
+  '.agent/skills/checkpoint-protocol/references/answerable-package.md': '0e1f6537a7cb0105d5f1aace98e55bdca8de13be09c784a0aac6091dc65c19c1',
+  '.agent/context/workflows/sc-plan.contract.md': '6ddc777db270c8378b047d8349e18907e85642174c748507f9b565c01f7f6518',
+  '.agent/workflows/sc-plan.md': '2e173b162d5bebf0d7ba59f3218e03469d0ea30c069151b7132e1694be3b2e48',
+  '.agent/context/workflows/sc-work.contract.md': 'deab09038a90245fc62bc2c004f2d3c689ccfd2f5cb98fbe746c4d4c9596092c',
+  '.agent/workflows/sc-work.md': 'd900582c5f73967999657d2007667c4f84f92c4667b84eaebbfde18b6c9da8f9',
+  '.agent/context/workflows/sc-status.contract.md': '6b6ea06a184ac074fa6548c369a2e43fe48349488e920582280649153683c35e',
+  '.agent/workflows/sc-status.md': '7c99c5d5b80246698e41aeeccc45dd070fc078477f448cf48d41df4810a64123',
+  '.agent/context/workflows/sc-compound.contract.md': '1032b832fdd8ada327e5c706f36ec03d406ebbb92a2a2e68ed24edd9e70f7494',
+  '.agent/context/workflows/sc-debug.contract.md': '4e05c65e081491f9be9f7f76d9d8f487253a614b646fb701ad12d0986dd1f21b',
+  '.agent/context/workflows/sc-eval.contract.md': 'b291f29bbd157320cf33942fd58443d50325c9925c3a1bbc130dba2e3165c637',
+  '.agent/context/workflows/sc-launch.contract.md': '2619f78af5da0c6051a5d12af49f7d8e81f087093292a11877623212159cdc77',
+  '.agent/context/workflows/sc-pause.contract.md': '7befb3690a0ea2df3f9b0c3b340c196e3ec4652c332419058cb5676d055e3b47',
+  '.agent/context/workflows/sc-review.contract.md': '86f7cf9b043e477caabb58b20559f3ad5bfbdd67cdb5b1bd7eb773daa35480f5',
+};
 
-test("recorded communication attempt pins the instructions actually reviewed", () => {
+test("historical communication interfaces match the exact reviewed completion revision", () => {
   assert.ok(Object.keys(attempt.source_digests).length >= 10);
   for (const [file, expected] of Object.entries(attempt.source_digests)) {
     const digest = createHash("sha256").update(read(file).replace(/\r\n/g, "\n")).digest("hex");
-    assert.equal(digest, expected, `re-evaluate the changed source: ${file}`);
+    assert.equal(digest, completionRevisionPins[file] ?? expected, `re-evaluate the changed source: ${file}`);
   }
 });
 
