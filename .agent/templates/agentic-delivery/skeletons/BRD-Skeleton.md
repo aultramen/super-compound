@@ -2,12 +2,12 @@
 
 ## Summary
 
-<State purpose, scope, key information, and decision/outcome for this document.>
+<Explain the business problem, impact, proposed scope and outcome; name material risks and the business decision requested at this revision.>
 
 <!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
 
 Use the full BRD template only for sections that need detailed expansion.
-State each fact once; omit sections with no content; expand only risk-relevant full-template sections.
+Apply [authoring applicability](../../../skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion).
 
 ## Profile Gate
 
@@ -31,17 +31,21 @@ flowchart LR
 
 ID: BRD-{{PROJECT}}  
 Status: DRAFT / APPROVED  
+Version: {{BRD_VERSION}}
+Business owner / approver: {{NAME_OR_ROLE}}
 Sources: {{REQUESTS_EVIDENCE_LINKS}}
 
 ## Business Contract
 
-- Objectives and measurable outcomes.
-- Scope, non-goals, constraints, assumptions, dependencies.
-- Stakeholders, decision rights, policies, business rules, glossary.
-- Business process, information, reporting, records, and controls.
-- Business acceptance gates and rollback/pause criteria.
-- Evidence/baseline/root cause; cost/benefit range and risk register; change and
-  operational readiness.
+- Problem and business impact with sources; distinguish facts from hypotheses.
+- `BREQ-*`: outcomes and success measures, baseline/source or honestly unmeasured,
+  proposed target and measurement owner; never invent root cause or ROI.
+- Scope, non-goals, constraints and current-to-target business flow.
+- Stakeholders, decision rights and business rules/policies with their owner.
+- Business acceptance (`BAC-*`), acceptance owner, applicable pause/rollback
+  criteria and material risks/OPEN decisions.
+- Assess information/reporting/records/controls, assumptions and dependencies;
+  expand cost/benefit and operational readiness only for applicable business risk.
 
 ## Traceability
 
@@ -50,3 +54,5 @@ List `BREQ-*`, business acceptance IDs, risks, assumptions, dependencies, and `O
 ## Handoff
 
 State the PRD inputs required and decisions PRD/FSD must not invent.
+Approval is recorded only after the business owner grants it; PRD consumes the
+qualified BREQ/BAC/rule refs without copying the business case.

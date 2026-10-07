@@ -1,5 +1,7 @@
 # FSD Authoring Reference
 
+## Summary
+
 Load this reference when creating or reviewing the FSD contract. Do not load it merely to route a task.
 
 ## Evidence Inputs
@@ -40,6 +42,11 @@ For unresolved scope or acceptance decisions use `brainstorming/references/quest
 ## FSD Contract
 
 Save to `docs/fsd/fsd-<feature>.md`. Use the full agentic FSD template section-by-section when the compact shape is insufficient.
+Start with the canonical FSD skeleton and apply
+[shared applicability and expansion](../../agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion).
+The reviewer Summary and engineering detail remain in the same artifact. Keep
+semantic contracts in FSD, exact delegated wire shape in its linked machine
+contract, and all protected Section 8 fields/anchors and goal-packet grammar.
 
 Every FSD includes or marks not applicable:
 
@@ -50,9 +57,12 @@ Every FSD includes or marks not applicable:
 - Atomic `GOAL-*` packets and their affected paths.
 - Only genuine blocking `OPEN-*` records.
 - Deterministic verification commands, expected evidence, and release gates.
-- For UI-bearing work: versioned `UI-STATE-*`/`UIMAP-*`/`SCHEMA-*`/`CONTRACT-*`
+- For networked UI-bearing work: versioned `UI-STATE-*`/`UIMAP-*`/`SCHEMA-*`/`CONTRACT-*`
   mappings, deterministic fixtures, derived consumer refs, contract tests, goal
   roles, and the first-real-slice barrier.
+- LOCAL_ONLY follows the existing UI readiness reference: local state/data-to-test
+  mappings without fabricated provider/wire assets; applicability never waives
+  required security, accessibility or integrity checks.
 
 An optional `docs/plans/` note may summarize context, resolved decisions, risks, design-system evidence, goal/issue links, verification, rollback, and docs. It never replaces or overrides the FSD.
 
@@ -70,6 +80,10 @@ Author every goal/ID fact exactly once:
 
 Confirm user-visible behavior, edge/failure cases, and tests at the highest practical public seam. UI includes accessibility/responsiveness; security/privacy includes negative cases; data changes include compatibility, migration, and rollback.
 
-Then offer: review the FSD, execute sequentially with `/sc-work`, create/review an issue board, safely parallelize independent slices, or stop with the approved artifact saved. Use only current `/sc-*` workflow names.
+Report the active stage's result, remaining decisions and one next action.
+FSD-only scope ends with the requested artifact/pointers and applicable validation;
+execution still needs its separate authorization. Within active authorized
+delivery, transfer to the next existing owner internally rather than requiring
+the user to orchestrate commands. Use only current `/sc-*` workflow names.
 
 For product AI runtime, load [AI context and output](../../prd-generator/references/ai-context-and-output.md) and carry approved policy into the existing versioned prompt/tool/schema contract.

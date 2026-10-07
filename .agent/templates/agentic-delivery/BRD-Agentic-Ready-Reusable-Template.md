@@ -49,7 +49,7 @@ downstream_artifacts:
 > **How to use this template**
 >
 > 1. Replace every `{{PLACEHOLDER}}` with verifiable facts, decisions, or references.
-> 2. Sections that are not relevant must be written as `N/A — {{REASON}}`; do not delete them silently.
+> 2. Apply [shared authoring applicability](../../skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion): preserve mandatory decisions and protected structures, record factual N/A when required, and omit empty optional supporting sections. This library is not a checklist of tables to copy.
 > 3. Do not use `TBD`, “later”, “as needed”, “optimal”, “efficient”, “easy”, “real-time”, or ambiguous terms without an `OPEN-ID`, owner, deadline, and approved fallback.
 > 4. Distinguish strictly between **facts**, **evidence**, **assumptions**, **hypotheses**, **decisions**, and **solution preferences**.
 > 5. The BRD establishes **why the change is needed, the business outcomes, scope, capabilities, processes, policies, decision rights, economic value, risks, and business acceptance**. The PRD establishes product behavior; the FSD establishes the technical implementation.

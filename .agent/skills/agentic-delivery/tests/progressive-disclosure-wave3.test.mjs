@@ -15,13 +15,14 @@ const specs = {
     frontmatter:
       '---\nname: agentic-delivery\ndescription: "Use when following the Super Compound BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION delivery path, artifact traceability, FSD authority, optional ADR handling, zero context bloat issue slicing, or OPEN-* stop conditions."\n---',
     references: {
-      "templates-and-outputs.md": "cec84629151a691f394f780c32997795bedb04a8650073a4ca3230d37a9e9a73",
-      "authority-and-adr.md": "2bca7520c4b11237fe99f8e53f3083f97c4bef88692876d147a4b4c103e22943",
+      // Reviewed authoring revision; prior hash is retained in blueprint-document.responses.json baseline.
+      "templates-and-outputs.md": "f025dfe20fd036fcfe1402ed3627bcbf32715cf3edfe224a0fe56ec0a24fd5b9",
+      "authority-and-adr.md": "9aef59e4f9c21fe16aaba0537464a578e12b214c56a29e5e53833c45d644c9ff",
       "qualified-references.md": "bc5f8b87bb0333347f291087ae7a28858b5326ebfd12c09094e5532f21c110eb",
-      "context-and-issue-pointers.md": "68c0d02211cd46b95845c2555e0d680075e61e72d3793eae3678a07d69cf8b1d",
-      "open-stop-conditions.md": "09dd7d956a1372ea50668f57554110a3f3811d6948a287580aa933c0d1a378eb",
-      "workflow-integration.md": "98265685ebf7da7f813a73b7ce013c75e47534ec6cc9c10362d4521d9629ad5c",
-      "ui-contract-readiness.md": "b83a255b28dd994bbe6a690fb634152090eea6b08267884694fd2c659ec5c868",
+      "context-and-issue-pointers.md": "8ec6f36832ff0aaac147fbc46af3575944d6464d3f4d069381d34b9521d6fca0",
+      "open-stop-conditions.md": "8f172287ee50e5619dac9c40700e2cf85b10d403ed9778f52dbcc9df347d089a",
+      "workflow-integration.md": "8f3e2ed1b91440a45c41f5b4b55095ecf0e3031cf777b138f30272dbbe3ccefc",
+      "ui-contract-readiness.md": "48d64c07c120731d522049075eff511f149be4deac6101d04e75fe8fd1700dc0",
     },
     invariants: [
       /BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION/,
@@ -36,7 +37,7 @@ const specs = {
       '---\nname: issue-workflow\ndescription: "Use when /sc-plan needs FSD GOAL-* packets turned into lightweight issue pointers, local Markdown Kanban boards, blocker DAGs, or multi-agent task contracts."\n---',
     references: {
       "zero-context.md": "60efe561a41dcf40ffe1f9fe88f94b64aebad51fb2ac7dd5b50d6b54a15007e7",
-      "process.md": "8d17a3a7fe0b47e9e98b38eb5d3783888d02327c040d6dee82cf7ef8d81eb617",
+      "process.md": "68221c113365764007bc7f143f3e9ae989ee6a04d8e42c5e61777ff9e25cbfa9",
       "status-and-done.md": "6a13d0ab2b0bf3e6fcacadbab6c622eedea4809002c27e93116d49ffbac8c4a4",
     },
     invariants: [
@@ -53,8 +54,8 @@ const specs = {
       "coverage-and-dependencies.md": "e0c77f317c0b4915d8185b64c5c1da50b9fd64c536708ddf7da05cd391a568fa",
       "links-scope-and-must-haves.md": "d73c1b53afe2bab7a3b5bd8221b3ef62f1705490eb18abba300d6f1218157b7d",
       "sizing.md": "449d2058678489910fbd8d56e839bcd132db1025927ad267f94c2b52d559edb0",
-      "tests-and-decisions.md": "67d42a7fe47a0ce7627c095591efb18fba30d1cf29ea9763df95319d19c30149",
-      "verification-process.md": "317e90c15c0fc29310ea86ec13425cc098c60eab6cda7a970913a02421362019",
+      "tests-and-decisions.md": "cae52add5bb14a16a3937acc9c397992c60fbdca85029fe0fec494fd11240e83",
+      "verification-process.md": "6593bf3baf3db739e7ca5c745543b2c07c0fc75f3b3c80e23c98c703674caeec",
       "revision-rules.md": "541a5a8061f13aeeb69156486bd4f63d7b48766c30a69c1f99824f7ece66c97a",
     },
     invariants: [
@@ -68,7 +69,7 @@ const specs = {
     frontmatter:
       '---\nname: parallel-execution\ndescription: "Use when a plan or issue board has 2+ independent execution streams whose time saving exceeds coordination overhead. Dispatches agents in isolated git worktrees only after required delivery gates pass."\n---',
     references: {
-      "prerequisites-and-selection.md": "8a7e33dff083bebe087052ff3db563c7b005ac3aa9aa9ef01abc2581eaa585a9",
+      "prerequisites-and-selection.md": "4a1b420c619a6d3430833508305e46b677d5fe95619e0dccf726af55f01cea93",
       "process.md": "d357242fd34d22eeb5a2f61ad5db751b8c0ea691597599dc8e431e76b64ad2bc",
       "red-flags.md": "ecad3bab78490c5196d0f4b58eb8f789eabd6873e95de08938dd3c2fcecce7af",
     },
@@ -134,7 +135,7 @@ const specs = {
       '---\nname: brainstorming\ndescription: "Use when creative product, feature, UI, or behavior work needs intent, requirements, constraints, or design explored before implementation."\n---',
     references: {
       "local-context.md": "4f4e589b57040e890219e10f0fb79121d84fefd8d5d4798ea08e4e7de63af545",
-      "questions-and-options.md": "ed3062daef7141ec3cd9f298e4ce2ebaf354f7112ddb182a2eb0f767a08caf10",
+      "questions-and-options.md": "55deecb66d543dadf0f684ca36fa3194395461153105978b843e71db5af295e3",
       "capture.md": "c716169a240bb4b1eddb153e38956398b3a4c4813c899a5163e4f19a9a6c033e",
       "ui-and-visual.md": "5ec57d9d3ffd0a22f7a9e0bd4c7bbaee7a1fd07e65a11bcd760b4f2ba0a68531",
       "red-flags-and-next.md": "23d7b575d662f5daaddc493460bfa52449d0c29cb8608eafec339de53ad9222a",

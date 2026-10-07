@@ -21,6 +21,8 @@ Berikutnya: [one action, or complete within the requested scope]
 Detail: [artifact link when useful]
 ```
 
+Announce relevant skills together once per work phase, then route internally. Repeat a skill notice only for a consequential scope/risk change, fallback, or required user action. Human checkpoints show a short prioritized set of answerable needs; keep the complete unresolved decision register available by link or on request. Preserve stable IDs, partial answers, and actual approval boundaries. When the authorized goal is satisfied, report completion without creating an improvement backlog or another permission gate.
+
 Keep skeleton-first authoring, authority IDs, acceptance criteria and required
 evidence. Do not add another template layer or universal word limit. When adding
 a human summary to a machine CLI, use additive `--text`; preserve existing JSON,
@@ -34,7 +36,7 @@ flowchart LR
     B --> C[Diagram when explaining design or flow]
     C --> D[Structural lint and content review]
     D --> E[Repair within the authorized stage]
-    E --> F[Stage approval or verified result]
+    E --> F[Verified result or required exception checkpoint]
 ```
 
 ## Authoring and Review

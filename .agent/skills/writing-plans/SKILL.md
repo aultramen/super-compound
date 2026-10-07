@@ -9,11 +9,15 @@ description: "Use when an approved PRD needs an implementation-authoritative FSD
 
 Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
 
-Turn an approved PRD into the FSD authority consumed by `/sc-work`. Announce: "I'm using writing-plans to create the FSD and goal slices."
+Turn an approved PRD into the FSD authority consumed by `/sc-work`.
 
 ## When to Use
 
-Use after BRD/PRD approval and before implementation. Do not plan from memory, invent missing product policy, or proceed while an `OPEN-*` blocker prevents a safe technical contract.
+Use for full-tier scope after required business/product authority exists and
+before implementation; concrete light requests do not require a new FSD.
+Do not plan from memory, invent missing product policy, or proceed while an
+`OPEN-*` blocker prevents a safe technical contract. Apply the configured
+exception or opted-in stage policy, not extra approvals from this skill.
 
 Bounded draft packages: [approval policy](../agentic-delivery/references/workflow-integration.md).
 

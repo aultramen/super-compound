@@ -18,8 +18,10 @@ For UI-integrated goals, `Contract refs` points to qualified versioned
 is `NOT_APPLICABLE`, `READY_FOR_SLICE`, or
 `FIRST_VERTICAL_SLICE_VERIFIED`. Never copy schema, mapping tables, or behavior
 prose into the pointer. Promote an issue to `ready-for-agent` only after its
-required gate is proven. Scale-out additionally requires a `VALIDATED` PRD
-baseline; the final `HARDENING` pointer depends on all applicable UI slices.
+required gate is proven. Networked scale-out additionally requires a `VALIDATED`
+PRD baseline; its applicable final `HARDENING` pointer depends on the UI slices.
+LOCAL_ONLY records local behavior/accessibility proof within the existing goal;
+use a separate hardening pointer only for outstanding merged/cross-slice checks.
 
 During `/sc-work`, use `context-engineering` to load only the issue, parent FSD sections, referenced PRD/BRD IDs, linked accepted ADRs, and directly relevant repository files.
 

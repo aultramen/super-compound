@@ -2,11 +2,12 @@
 
 ## Summary
 
-<State purpose, scope, key information, and decision/outcome for this document.>
+<Explain the feature, users, expected result, increment scope and material risks; name the product decision requested at this revision. Refer to the BRD for business rationale.>
 
 <!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
 
 Use the full PRD template only for sections that need detailed expansion.
+Apply [authoring applicability](../../../skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion).
 
 ## Minimum Completeness Gate
 
@@ -31,16 +32,25 @@ flowchart LR
 ID: PRD-{{PROJECT}}  
 Artifact contract version: `2.0.0`
 Status: DRAFT / APPROVED  
+Version: {{PRD_VERSION}}
+Product owner / approver: {{NAME_OR_ROLE}}
 Upstream: BRD-{{PROJECT}}#{{IDS}}
 ui_delivery_profile: NOT_APPLICABLE / STANDARD / HIGH_INTERACTION
 experience_baseline_status: NOT_APPLICABLE / DRAFT / VALIDATED / EXCEPTION_APPROVED
 
 ## Product Contract
 
-- Users, roles, jobs, journeys, feature scope, and non-goals.
-- Functional requirements, acceptance criteria, edge/negative/recovery behavior.
-- Product rules, states, permissions, notifications, reporting, analytics.
-- Product-level security, privacy, compliance, accessibility, and NFR intent.
+- Users/roles, allowed and forbidden actions, scope and non-goals.
+- Main flow: trigger -> user action -> observable result -> next step.
+- `FR-*` -> `AC-*` -> qualified BRD refs: expected behavior and testable acceptance.
+- Relevant validation, empty, error, permission, conflict and degraded behavior:
+  message, recovery and acceptance refs, without fictitious providers/states.
+- Product rules/state and observable permission intent; reference business rules
+  rather than redefining them. FSD must enforce permissions beyond hidden buttons.
+- Product-level security, privacy, compliance, accessibility and observable NFRs;
+  expand notifications/reporting/analytics when required by the product scope.
+- UAT/release gate: user steps, expected result, owner and actual evidence only
+  after testing; an approved PRD is not integration proof.
 
 ## UI Experience Gate
 
@@ -59,6 +69,8 @@ Map `FR-*`, `AC-*`, risks, assumptions, dependencies, and `OPEN-*` blockers to B
 ## Handoff
 
 State the FSD inputs required and product decisions FSD must not invent.
+Include the existing versioned handoff manifest and experience evidence/approver
+refs when required. PRD-only scope ends here; it does not authorize FSD or code.
 
 ## AI Context and Output (conditional)
 

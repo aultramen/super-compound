@@ -53,7 +53,7 @@ tags:
 
 <!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
 
-> **Usage note:** The ADR is an **optional and conditional** artifact. Do not create an ADR just to complete the BRD/PRD/FSD chain. Use this template when a durable architecture rationale is genuinely valuable or project policy explicitly mandates it. One ADR file may only establish **one coherent architecture decision**. Replace every `{{PLACEHOLDER}}`; sections that are not relevant are written as `N/A — {{REASON}}`. `TBD`, `later`, `best practice`, `as needed`, or unmeasured adjectives are not allowed in an ADR with `ACCEPTED` status.
+> **Usage note:** The ADR is an **optional and conditional** artifact. Do not create an ADR just to complete the BRD/PRD/FSD chain. Use this template when a durable architecture rationale is genuinely valuable or project policy explicitly mandates it. One ADR file may only establish **one coherent architecture decision**. Replace every `{{PLACEHOLDER}}` and apply [shared authoring applicability](../../skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion): keep required decisions/protected structures, factual N/A and dissent obligations; omit empty optional support. `TBD`, `later`, `best practice`, `as needed`, or unmeasured adjectives are not allowed in an ADR with `ACCEPTED` status.
 
 ---
 

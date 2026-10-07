@@ -44,7 +44,7 @@ downstream_artifacts:
 >
 > 1. Replace every `{{PLACEHOLDER}}` with real decisions or data.
 > 2. Do not leave `TBD`, `later`, `as needed`, `fast`, `secure`, `optimal`, `user-friendly`, or other ambiguous terms without a measure and a decision owner.
-> 3. Sections that are not relevant must be written as `N/A — {{REASON}}`; do not delete them silently.
+> 3. Apply [shared authoring applicability](../../skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion): retain mandatory decisions and protected structures, record factual N/A when required, and omit empty optional supporting sections rather than copying every table.
 > 4. Every approved requirement must have a stable ID. Do not change IDs just because the document order changes.
 > 5. The PRD establishes **why**, **what**, **for whom**, **the boundaries**, and **the results that must be observable**. Implementation details such as physical schema, endpoints, libraries, queues, locking, and deployment are established in the FSD.
 > 6. The ADR is an **optional** sidecar for material architecture decisions; the PRD must not depend on the existence of an ADR to be handed off to the FSD.
@@ -237,12 +237,13 @@ The PRD may only have `APPROVED` status when:
 - [ ] Business rules, canonical states, enums, date/unit semantics, and precedence do not conflict.
 - [ ] Acceptance criteria cover the relevant happy, negative, authorization, empty, duplicate, stale, and failure paths.
 - [ ] `ui_delivery_profile` and `experience_baseline_status` have been set; every UI state is `COVERED` or `N/A - factual reason`.
-- [ ] UI-bearing scope has responsive/accessibility intent, risk-appropriate evidence, and a Business Owner approver; `HIGH_INTERACTION` has interactive evidence, with runnable evidence for timing, runtime responsive, keyboard/focus, realtime, or offline risk, or an explicit exception.
+- [ ] UI-bearing scope has responsive/accessibility intent and risk-appropriate evidence; a Business Owner approver is required only by acceptance/project policy or unresolved material human judgment. `HIGH_INTERACTION` has interactive evidence, with runnable evidence for timing, runtime responsive, keyboard/focus, realtime, or offline risk, or an explicit exception.
 - [ ] Security, privacy, compliance, audit, classification, retention, and AI authority boundaries have been assessed.
 - [ ] NFRs have measurable targets and load/usage context.
 - [ ] Dependencies, constraints, assumptions, risks, and degraded behavior are recorded.
 - [ ] No `BLOCKER` needed by the release remains `OPEN`.
-- [ ] UAT and release acceptance are traceable to requirements.
+- [ ] Applicable UAT and release acceptance are traceable to requirements;
+      otherwise record factual N/A without inventing a human test stage.
 - [ ] The handoff manifest to the FSD is complete and contains no conflicts.
 - [ ] All placeholders have been replaced or marked `N/A — reason`.
 
@@ -951,26 +952,28 @@ production seed.
 | Critical journey/feature/AC refs | `{{JOURNEY/FEAT/AC IDS}}` |
 | Responsive/accessibility intent refs | `{{NFR/AC IDS}}` |
 | Validation evidence refs | `{{SRC/DESIGN/PROTOTYPE REFS}}` |
-| Approver | `{{BUSINESS_OWNER + DECISION REF}}` |
+| Approver | `{{OWNER + DECISION REF when required; otherwise NOT_REQUIRED + authority/evidence ref}}` |
 | Blocking `OPEN-*` refs | `{{IDS_OR_NONE}}` |
 
 ##### State Applicability Matrix
 
-Every row is `COVERED` or `N/A - factual reason`. Material edge cases are
-named scenarios, not a generic `Edge` state.
+Every row is `COVERED` or `N/A - factual reason`. Routine factual N/A does not
+require a separate approver; changing material accepted behavior or risk still
+uses its owner's applicable gate. Material edge cases are named scenarios,
+not a generic `Edge` state.
 
 | State | Applicability | Observable behavior / recovery | AC refs | N/A factual reason |
 |---|---|---|---|---|
-| Loading | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
-| Empty | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
-| Success | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
-| Validation | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
-| Error | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
-| Permission denied | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
-| Stale/conflict | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
-| Partial/degraded | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
-| Offline | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
-| Async/in-progress | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{REASON/APPROVER}} |
+| Loading | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
+| Empty | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
+| Success | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
+| Validation | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
+| Error | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
+| Permission denied | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
+| Stale/conflict | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
+| Partial/degraded | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
+| Offline | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
+| Async/in-progress | COVERED / N/A | {{BEHAVIOR}} | {{AC IDS}} | {{FACTUAL_REASON}} |
 
 ### 9.1.20 Feature Metrics
 
@@ -992,7 +995,9 @@ named scenarios, not a generic `Edge` state.
 - [ ] Main, alternative, negative, and recovery flows are available.
 - [ ] State transitions and role authority are unambiguous.
 - [ ] Acceptance criteria have observable oracles.
-- [ ] UI Experience Gate profile, state applicability, evidence, and approver are complete or `NOT_APPLICABLE` with approved reason.
+- [ ] UI Experience Gate profile, state applicability and evidence are complete;
+      human acceptance/approver applies only when required by the configured gate,
+      acceptance or material judgment. `NOT_APPLICABLE` records a factual reason.
 - [ ] `HIGH_INTERACTION` evidence covers the material runtime interaction risk or records an explicit exception.
 - [ ] Input/output product semantics and classification are clear.
 - [ ] The AI/human authority boundary is stated or N/A.
@@ -1230,6 +1235,11 @@ Technical rollback is detailed in the FSD. The PRD establishes the business trig
 
 ## 14.1 UAT Strategy
 
+Human UAT applies only when acceptance/project policy or unresolved material
+human judgment requires it. Otherwise record factual N/A and retain mapped
+agent-runnable behavior, accessibility and regression checks. A UI alone does
+not create a UAT or sign-off obligation.
+
 `{{DESCRIBE WHO PERFORMS UAT, THE ENVIRONMENT/DATA USED, THE SCOPE, AND THE EVIDENCE THAT MUST BE KEPT.}}`
 
 ## 14.2 UAT Scenario Matrix
@@ -1243,7 +1253,7 @@ Technical rollback is detailed in the FSD. The PRD establishes the business trig
 | Gate | Criteria | Evidence | Owner | Status |
 |---|---|---|---|---|
 | Product scope | All MUST features complete; no non-goal leakage | Traceability matrix | Product Owner | PENDING |
-| Functional | All MUST ACs and UAT pass | Test/UAT evidence | QA Lead | PENDING |
+| Functional | All MUST ACs and applicable UAT pass | Test/applicable UAT evidence | QA Lead | PENDING |
 | Security/privacy | All MUST controls and reviews complete | Review report | Security/Privacy | PENDING |
 | Data/migration | Reconciliation and sample validation pass | Validation report | Data/Engineering | PENDING |
 | Operations | Monitoring, support, and rollback ready | Runbook evidence | Operations | PENDING |
@@ -1251,6 +1261,9 @@ Technical rollback is detailed in the FSD. The PRD establishes the business trig
 | Blocker | No open release blockers | Open-item register | Product Owner | PENDING |
 
 ## 14.4 Acceptance Sign-Off
+
+Use sign-off only for the configured stage policy, required release acceptance
+or risk exception; do not create new signatures for already authorized routine work.
 
 | Role | Name | Decision | Date | Conditions / Exceptions |
 |---|---|---|---|---|
@@ -1690,4 +1703,5 @@ For small features, the following sections remain mandatory and must not be remo
 11. UAT/release gate.
 12. Traceability and FSD handoff manifest.
 
-Other sections may be marked `N/A — reason`, not deleted without a trace.
+Apply shared authoring applicability to other sections: mandatory or protected
+content retains coverage or factual N/A; empty optional support may be omitted.

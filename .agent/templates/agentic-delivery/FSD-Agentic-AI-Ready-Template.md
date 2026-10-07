@@ -36,7 +36,7 @@ last_updated: "{{YYYY-MM-DD}}"
 
 <!-- Apply .agent/context/output-style.md. For systems, workflows, integrations or architecture, add a relevant Mermaid HLD without renumbering protected sections. Status-only records need no decorative diagram. -->
 
-> **Template usage:** replace every `{{PLACEHOLDER}}`, mark non-applicable sections as `N/A — reason`, and never leave an unqualified `TBD`. Any unresolved item must use an `OPEN-xxx` record with owner, impact, fallback, and blocker classification. This FSD must remain complete and executable **without an ADR**; ADRs are optional sidecars and may be referenced only when `adr_applicability = LINKED` and their status is `ACCEPTED`.
+> **Template usage:** replace every `{{PLACEHOLDER}}` and apply [shared authoring applicability](../../skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion): preserve mandatory decisions/protected structures, record factual N/A when required, and omit empty optional support. Never leave an unqualified `TBD`. Any unresolved item must use an `OPEN-xxx` record with owner, impact, fallback, and blocker classification. This FSD must remain complete and executable **without an ADR**; ADRs are optional sidecars and may be referenced only when `adr_applicability = LINKED` and their status is `ACCEPTED`.
 
 ---
 
@@ -158,7 +158,9 @@ A coding agent MUST NOT:
 
 For LOCAL_ONLY topology, apply the canonical UI readiness applicability rules:
 map local screen/state/data to tests; omit artificial wire/schema/mock/provider
-assets and provider-role goals. Networked gates below apply only when a provider
+assets and provider-role goals. Verify local behavior/accessibility within the
+goal; a separate HARDENING goal is only for outstanding merged/cross-slice checks.
+Networked gates below apply only when a provider
 or wire contract exists. Mechanical derived revisions auto-promote after checks;
 material semantic/risk changes retain owner approval.
 
@@ -187,12 +189,14 @@ Before this FSD becomes `APPROVED`, all items below must be true:
       gate, and UI states/data/actions map to pinned operation/schema/result/error
       refs, deterministic fixtures, matching mock/typed-consumer revisions, and
       provider/consumer/responsive/accessibility/QA verification.
-- [ ] After `CONTRACT_ENABLER` verification, return to `/sc-plan`, update the FSD
-      index, rerun readiness, auto-promote unchanged approved semantics after deterministic gates, and reach `READY_FOR_SLICE` before
+- [ ] After `CONTRACT_ENABLER` verification, the active controller applies the
+      planning-owned FSD index/readiness promotion internally, without full
+      planning re-entry for unchanged semantics, and reaches `READY_FOR_SLICE` before
       `FIRST_VERTICAL_SLICE` may become READY.
 - [ ] Goal roles enforce exactly one real first vertical slice and its verified
       issue before scale-out.
-- [ ] Exactly one `HARDENING` goal depends on every applicable UI delivery slice
+- [ ] For networked scope with merged verification obligations, one `HARDENING`
+      goal depends on every applicable UI delivery slice
       and owns merged integration, responsive, accessibility, E2E,
       visual-regression, and Business Owner UAT evidence when acceptance or material judgment requires it.
 - [ ] Date/time, units, locale, ordering, pagination, and rounding semantics are explicit.
@@ -2238,7 +2242,7 @@ automatic readiness promotion before `FIRST_VERTICAL_SLICE` becomes ready; mater
 
 | Order | UI Delivery Role | Release condition |
 |---:|---|---|
-| 1 | `CONTRACT_ENABLER` | Bounded contract assets verified; return to `/sc-plan` |
+| 1 | `CONTRACT_ENABLER` | Bounded contract assets verified; internal planning-owned deterministic promotion |
 | 2 | `FIRST_VERTICAL_SLICE` | Approved semantics pass deterministic `READY_FOR_SLICE` gates |
 | 3 | `SCALE_OUT_SLICE` | First-slice issue is `verified` and PRD baseline is `VALIDATED` |
 | 4 | `HARDENING` | Integrated slices satisfy their required gates |
