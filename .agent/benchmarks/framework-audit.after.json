@@ -1,27 +1,27 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-10-05T08:32:07.759Z",
-  "repositoryHead": "3983f0b0ba5f7f1283365071ce317a3d32463393",
+  "generatedAt": "2026-10-07T04:02:09.334Z",
+  "repositoryHead": "67bb7c32f995e9b0ce7b3e85f2c8d10f8b35c635",
   "pass": true,
   "summary": {
     "manifestSource": "git-active-manifest",
-    "manifestFiles": 540,
-    "auditedFiles": 539,
+    "manifestFiles": 588,
+    "auditedFiles": 587,
     "excludedFiles": [
       {
         "path": ".agent/benchmarks/framework-audit.after.json",
         "reason": "requested output path"
       }
     ],
-    "filesRead": 539,
-    "textFiles": 539,
-    "binaryFiles": 0,
-    "bytesRead": 4817199,
-    "linesRead": 69822,
-    "contentDigest": "96576ed683aecc5ed276d84a43dec301e559ce77dbc8bcef3e74f0361d2db700",
+    "filesRead": 587,
+    "textFiles": 586,
+    "binaryFiles": 1,
+    "bytesRead": 5832061,
+    "linesRead": 86652,
+    "contentDigest": "f69e33421811d78588abacac524efdc160d9865a2e0dc9beeb845f975a119009",
     "skillEntrypoints": 37,
-    "skillEntrypointWords": 16104,
-    "maxSkillEntrypointWords": 564,
+    "skillEntrypointWords": 16375,
+    "maxSkillEntrypointWords": 634,
     "skillEntrypointWordLimit": null,
     "findings": 0,
     "severityCounts": {
@@ -32,14 +32,14 @@
     }
   },
   "coverage": {
-    "activeManifestEntries": 540,
-    "byteContentAuditedEntries": 539,
+    "activeManifestEntries": 588,
+    "byteContentAuditedEntries": 587,
     "specialVerificationEntries": 1,
-    "accountedEntries": 540,
+    "accountedEntries": 588,
     "unaccountedEntries": 0,
     "accountedPercent": 100,
-    "byteContentAuditPercent": 99.8148,
-    "classifiedEntries": 540,
+    "byteContentAuditPercent": 99.8299,
+    "classifiedEntries": 588,
     "unclassifiedEntries": 0,
     "classCoveragePercent": 100,
     "auditClassCounts": {
@@ -47,12 +47,12 @@
       "benchmark-evidence": 12,
       "benchmark-self-evidence": 1,
       "data": 36,
-      "documentation": 84,
-      "eval-evidence": 21,
+      "documentation": 123,
+      "eval-evidence": 23,
       "hook": 10,
       "host-adapter": 4,
       "host-rule": 28,
-      "project": 1,
+      "project": 2,
       "repository-config": 5,
       "rule": 3,
       "runtime-context": 16,
@@ -62,12 +62,12 @@
       "skill-support": 2,
       "startup-contract": 3,
       "template": 15,
-      "test": 50,
-      "tool": 30,
+      "test": 54,
+      "tool": 32,
       "workflow": 19,
       "workflow-contract": 19
     },
-    "auditClassDigest": "4de2684e5a27dc18077aa7447031359182a708ab3e5d1e72d4ce5569a03758ed",
+    "auditClassDigest": "e5e455766df7dd32670cc1aac9384a8bd3aa9637fc028339b968896b4b5265f6",
     "contentDigestScope": "byte-content-audited",
     "specialVerificationRequired": true,
     "specialEntries": [
@@ -79,362 +79,362 @@
   },
   "physicalInventory": {
     "scope": "physical-authority-worktree-excluding-runtime-roots",
-    "files": 641,
-    "filesRead": 641,
+    "files": 689,
+    "filesRead": 689,
     "symlinks": 0,
-    "activeManifestEntries": 540,
+    "activeManifestEntries": 588,
     "outsideActiveManifestEntries": 101,
     "retiredAssets": [
       {
-        "path": "docs/loop-runtime-v2.md",
+        "path": "docs/archive/retired-assets-20261007/docs/loop-runtime-v2.md",
         "digest": "f9231decd41d94b5dc01e9c3bed05b4877ee8c151b554bdd5e5c4feccb77155d"
       },
       {
-        "path": "docs/solutions/adr-0001-loop-run-controller-v2.md",
+        "path": "docs/archive/retired-assets-20261007/docs/solutions/adr-0001-loop-run-controller-v2.md",
         "digest": "3396979cc0ea2916218239906625050428fa300d0029852b05a1f6b33b349aec"
       },
       {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-002-gap-01-review.md",
+        "path": "docs/archive/retired-assets-20261007/docs/reviews/2026-07-17-loop-runtime-v2-goal-002-gap-01-review.md",
         "digest": "7495c45b6cce3d51557754468c3f62951d6c65a03423c4943b68ec0d4afe5b01"
       },
       {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-002-review.md",
+        "path": "docs/archive/retired-assets-20261007/docs/reviews/2026-07-17-loop-runtime-v2-goal-002-review.md",
         "digest": "efaec58e57622c359a4b30f3364c5ec8a852d898856f4e456aab6d3ae7e0c8ea"
       },
       {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-003-final-review.md",
+        "path": "docs/archive/retired-assets-20261007/docs/reviews/2026-07-17-loop-runtime-v2-goal-003-final-review.md",
         "digest": "6a007ad1d8f52129c9e1c7e022ef51d46ff6003825d42ba128f030ad17c8013f"
       },
       {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-003-gap-01-retry-review.md",
+        "path": "docs/archive/retired-assets-20261007/docs/reviews/2026-07-17-loop-runtime-v2-goal-003-gap-01-retry-review.md",
         "digest": "34db50791cd7bc59d3208cabae9c4979ece01192559c73606560d18ad05e22d4"
       },
       {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-goal-003-review.md",
+        "path": "docs/archive/retired-assets-20261007/docs/reviews/2026-07-17-loop-runtime-v2-goal-003-review.md",
         "digest": "6ef810f6186620ad8e7c7cc3982b441a5e7add1282ef456730c3439316696a06"
       },
       {
-        "path": "docs/reviews/2026-07-17-loop-runtime-v2-plan-verification.md",
+        "path": "docs/archive/retired-assets-20261007/docs/reviews/2026-07-17-loop-runtime-v2-plan-verification.md",
         "digest": "4d9ca0eb47967c79dc6eea3568aad3aede3788599803681b08da30448f2f7de8"
       },
       {
-        "path": "docs/prd/prd-loop-runtime-v2.md",
+        "path": "docs/archive/retired-assets-20261007/docs/prd/prd-loop-runtime-v2.md",
         "digest": "53b9980c1264abbb5dde6d6933660cbb8d1b6275200aa1d142d65d1b4c5d74cd"
       },
       {
-        "path": "docs/fsd/fsd-loop-runtime-v2.md",
+        "path": "docs/archive/retired-assets-20261007/docs/fsd/fsd-loop-runtime-v2.md",
         "digest": "73cbf5021d720138f5880ccba5ca548b36fb1fcd6e4081b9ae90c66fa17791b2"
       },
       {
-        "path": "docs/brd/brd-loop-runtime-v2.md",
+        "path": "docs/archive/retired-assets-20261007/docs/brd/brd-loop-runtime-v2.md",
         "digest": "37b8607a0babdbad925686b6cc775da1c26c12ba6fc7abd9198c9524c0d611d6"
       },
       {
-        "path": ".agent/tools/action-adapter.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/action-adapter.mjs",
         "digest": "c66e4337d5d3d0ad00430a2e992d5706173431becabac47c7aa615ed00f99331"
       },
       {
-        "path": ".agent/tools/action-adapter.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/action-adapter.test.mjs",
         "digest": "ac2220d8bb8a1ca233ddd7aca4de4262f667148f8d34ad2dd50ef0638e0b060c"
       },
       {
-        "path": ".agent/tools/action-capability-model.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/action-capability-model.mjs",
         "digest": "e0e92f576714c23a88deb63765be64d3db7ee1b33a46e1b8c30327f0fa95db2b"
       },
       {
-        "path": ".agent/tools/action-capability-model.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/action-capability-model.test.mjs",
         "digest": "68aaf157b0babc5f73d4b614388b941ae6cf3ee2a43e85582093717033abe7cb"
       },
       {
-        "path": ".agent/tools/background-execution-model.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/background-execution-model.mjs",
         "digest": "67c3d088f4e28cbb52da8da8a9d9912761636c4e3cd4b7e24aef0eb4b5ad37d5"
       },
       {
-        "path": ".agent/tools/background-execution-model.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/background-execution-model.test.mjs",
         "digest": "038379cf80fc279e5b27632e4f605131a7578c6ef00c6716371aed60caaa8b9b"
       },
       {
-        "path": ".agent/tools/background-execution.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/background-execution.mjs",
         "digest": "48f5a50517af67af6b5bc2a38d7608a947a2770451f92fb7d2ef099ad4f2bb66"
       },
       {
-        "path": ".agent/tools/background-execution.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/background-execution.test.mjs",
         "digest": "a38f2cbd0a03c03f857a73be650834c77b7f00fa93527f9f1fbce30e17882ba7"
       },
       {
-        "path": ".agent/tools/background-handoff.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/background-handoff.test.mjs",
         "digest": "eb7cd0c44cc8020a5b80167c6ecdef81ae96d9bb6f3dffe91beb3163bba642a9"
       },
       {
-        "path": ".agent/tools/background-pilot-harness.test-support.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/background-pilot-harness.test-support.mjs",
         "digest": "981dc50a97e1cb3445910893a7ed2d53f5c65dd4a91196c9ae344c95f59d88ec"
       },
       {
-        "path": ".agent/tools/background-policy.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/background-policy.mjs",
         "digest": "83005e8ca788384db1a1aeccbdb21f7c3b70e1ff0cbf818ccba229e80ba8c7b3"
       },
       {
-        "path": ".agent/tools/background-policy.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/background-policy.test.mjs",
         "digest": "8a5523e374e308159ac446cb99ce7712eb0430d65473847ffeb99f79e414f86e"
       },
       {
-        "path": ".agent/tools/budget-wizard.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/budget-wizard.mjs",
         "digest": "f8df66d0ef6057fafdf78d6106cc5b97e1527af32dfd681cf26f3adfb3d95f8f"
       },
       {
-        "path": ".agent/tools/budget-wizard.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/budget-wizard.test.mjs",
         "digest": "8a2069d3aba862d1d5a71f9b6e65855371b8b8a2427c245244d8fcbd3edde512"
       },
       {
-        "path": ".agent/tools/canonical-workflow-capability.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/canonical-workflow-capability.test.mjs",
         "digest": "a201100f452f17d1c69c646f2c624e285de4f40594e69963683445492573ab18"
       },
       {
-        "path": ".agent/tools/eval-gate-model.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/eval-gate-model.mjs",
         "digest": "1ca566f5a896d24989e18282f95e21411a397d9aa959b5165c123b32d0df5222"
       },
       {
-        "path": ".agent/tools/eval-gate-model.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/eval-gate-model.test.mjs",
         "digest": "05cc731cfa84cf54a4df9a8895ce2d3061e37ca8a313d7b5844d2f0298409b8d"
       },
       {
-        "path": ".agent/tools/external-action-store.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/external-action-store.mjs",
         "digest": "61810de400a967833631cafedc6acf0568ebbe503ae279d0067a0965992bd40f"
       },
       {
-        "path": ".agent/tools/external-action-store.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/external-action-store.test.mjs",
         "digest": "57dafa7b8b9ed3c1f1e7c27f365e61ea1c843aef15c29774b1262969cdad585b"
       },
       {
-        "path": ".agent/tools/loop-cancellation-coordinator.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-cancellation-coordinator.mjs",
         "digest": "760a4307e65b3ef863204e24fe329fafe33a45271d0e0cc962b88ee8f28a7331"
       },
       {
-        "path": ".agent/tools/loop-cancellation-coordinator.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-cancellation-coordinator.test.mjs",
         "digest": "afb0d2574325adcbe7bd359370ed10c7fcaac9066c8faeaec07fa277ef767e97"
       },
       {
-        "path": ".agent/tools/loop-learning-model.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-learning-model.mjs",
         "digest": "b30bc5ee57ca4566435d6bb04653bf4dd149997d4ffd31665587df23a5fc8bc9"
       },
       {
-        "path": ".agent/tools/loop-learning-model.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-learning-model.test.mjs",
         "digest": "6479573f3b2e00179c2fa23ae27de90347f2ae7fd5e7ed87963428af11bd5c47"
       },
       {
-        "path": ".agent/tools/loop-learning-store.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-learning-store.mjs",
         "digest": "6f363bd972d7bc18c0b198dc24ca17fda07775ece9cdc4a6a48847461aa71f17"
       },
       {
-        "path": ".agent/tools/loop-learning-store.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-learning-store.test.mjs",
         "digest": "60a91a5984877956f3410a639ac6fa4e97e02c709f58bd079f2454edc9ca0901"
       },
       {
-        "path": ".agent/tools/loop-queue-model.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-queue-model.mjs",
         "digest": "5578a1bb0c937a3d7a33e6570d835a657d2e38eb449ddc8636a07c5dd09a7de0"
       },
       {
-        "path": ".agent/tools/loop-queue-model.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-queue-model.test.mjs",
         "digest": "bc4d9e21e92a23181feb2b1764bdc1341b0070a102544928487d06c83b28ef74"
       },
       {
-        "path": ".agent/tools/loop-queue.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-queue.mjs",
         "digest": "be596baa25491e4566fcc0e7937ccf988a629da30be326f8e09cc7f1222cba7e"
       },
       {
-        "path": ".agent/tools/loop-queue.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-queue.test.mjs",
         "digest": "6af1d59f0a9e93c63ad9da65b22819b93463aa9786fc76f44c59150677450732"
       },
       {
-        "path": ".agent/tools/loop-run-model.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-run-model.mjs",
         "digest": "d464bba91ceaa336f3081a8ed67f3b19f9e323e2d872fb6ab3c63366cecb96f5"
       },
       {
-        "path": ".agent/tools/loop-run-model.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-run-model.test.mjs",
         "digest": "a59d6fb32359b342a38b792a66bc6d6277a590429344dbedba2fa94415eb321d"
       },
       {
-        "path": ".agent/tools/loop-run.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-run.mjs",
         "digest": "5a33c23c64de4752304be577231d54d61868192a311fda0383a48970fd4d76d7"
       },
       {
-        "path": ".agent/tools/loop-run.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-run.test.mjs",
         "digest": "15c1fc2a2affe90d30319b4939b994c0e0cfc6c1541d91d12d26765592d4d202"
       },
       {
-        "path": ".agent/tools/loop-telemetry-model.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-telemetry-model.mjs",
         "digest": "3604f56fbc01f90fca54c341a0ae5969d9f25155d68b0938f4413793dc509092"
       },
       {
-        "path": ".agent/tools/loop-telemetry-model.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-telemetry-model.test.mjs",
         "digest": "34d2152803b65f4ca9ba228d1fe8c77cb9bc9287eb05721b4c4dd43f2d517c7e"
       },
       {
-        "path": ".agent/tools/loop-telemetry-store.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-telemetry-store.mjs",
         "digest": "e42a2fcc94d17fca787e4064d111d0d5a7977c8b0ce4bb1249f08a0c3e3fddfd"
       },
       {
-        "path": ".agent/tools/loop-telemetry-store.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/loop-telemetry-store.test.mjs",
         "digest": "d1342778160c6b4da1ab366d77133e4ec46997e5c839fc2867b6df2c70c18b3d"
       },
       {
-        "path": ".agent/tools/migrate-loop-v2.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/migrate-loop-v2.mjs",
         "digest": "30aa359ec321ae792ff903bf794f0e12e78c5645a899e3151cca59190c0b7d21"
       },
       {
-        "path": ".agent/tools/migrate-loop-v2.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/migrate-loop-v2.test.mjs",
         "digest": "9a00c0f45352ecf5e666a73971f0b339063cb0f8c991e9998a0d1ca0aeb242e8"
       },
       {
-        "path": ".agent/tools/project-config.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/project-config.mjs",
         "digest": "ea5f52b3356c93c86d79528c560ef6a3c60a30ccd0a51748f20d310f604d7e7b"
       },
       {
-        "path": ".agent/tools/project-config.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/project-config.test.mjs",
         "digest": "bb424f37cbc57016bad6d19c763811cee20fd9e02f83d59354d34566b266014e"
       },
       {
-        "path": ".agent/tools/project-safety-state.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/project-safety-state.mjs",
         "digest": "d3a26923576097976f31c41e210da0013459d0a442d15284fc638b81b29aa594"
       },
       {
-        "path": ".agent/tools/project-safety-state.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/project-safety-state.test.mjs",
         "digest": "3e1c4781dac9bd5db5bb8ff40614f87ba98c1e03071c26cb30f59cff73bb78dd"
       },
       {
-        "path": ".agent/tools/public-docs-loop-runtime.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/public-docs-loop-runtime.test.mjs",
         "digest": "20d564024aa2a8ecc9cc1fff8ff9d166b7c065b79b8a4ae3e7b6307720099ad0"
       },
       {
-        "path": ".agent/tools/release-cutover.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/release-cutover.mjs",
         "digest": "6eb3a21258b3f2bd9894fa15196e3cc7ecb379e28798c78ddd7cbd6d89cfb3e5"
       },
       {
-        "path": ".agent/tools/release-cutover.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/release-cutover.test.mjs",
         "digest": "6637a1142633b8e59a2b366e006688ec2adb099dbf5f2e18f608f9e3817563bf"
       },
       {
-        "path": ".agent/tools/runtime-contracts.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/runtime-contracts.test.mjs",
         "digest": "23886e3c61e704b9722f2f39fd9836c53b9e5f7a95f9ccc76accf99728894533"
       },
       {
-        "path": ".agent/tools/schema-validator.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/schema-validator.mjs",
         "digest": "f96a99fdfe461f093d1e72fcd4c4aa80ec15b247d90aa1beaf6fa648c0a50dc0"
       },
       {
-        "path": ".agent/tools/schema-validator.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/schema-validator.test.mjs",
         "digest": "06990dee70c8685852b7f323fffd8a0b753feb5a35d573512a948ab0abbe983c"
       },
       {
-        "path": ".agent/tools/workflow-admission.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/workflow-admission.mjs",
         "digest": "113e116e52cda89ed6627923ae8c540513d8a8b7238d4dc0c1859d9387a87083"
       },
       {
-        "path": ".agent/tools/workflow-admission.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/workflow-admission.test.mjs",
         "digest": "d51225709f8dafac54aa0f4a1e464f4647d0620b9212cc2a1c44d53b83e317a0"
       },
       {
-        "path": ".agent/tools/workflow-capability-bridge.test.mjs",
+        "path": "docs/archive/retired-assets-20261007/.agent/tools/workflow-capability-bridge.test.mjs",
         "digest": "8c4d63c26e46c5bd11f6b9b6316b5070ad5d596eddeceb46394ccb733830508f"
       },
       {
-        "path": ".agent/evals/loop-runtime-v2.md",
+        "path": "docs/archive/retired-assets-20261007/.agent/evals/loop-runtime-v2.md",
         "digest": "b48eb5cc80b484ba9cf4d5ca5392e95ca2ff1de390f4a32fc25bdc6f79c938e2"
       },
       {
-        "path": ".agent/evals/fixtures/background-pilots-v2.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/evals/fixtures/background-pilots-v2.json",
         "digest": "aff7ace33ba0fcd29ea8691ed81ac50ba1f78518592eb9b5b5ad4900b39fc035"
       },
       {
-        "path": ".agent/context/doc-budgets.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/doc-budgets.json",
         "digest": "e164bfff9165a8d65c095a606d90b77b2ea6577dd37a10eaf7504400deece248"
       },
       {
-        "path": ".agent/context/operation-inventory.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/operation-inventory.json",
         "digest": "fe48c6e77d3b674f71bf4cc136badd7efd65fa585ba070e18626c7091357d15f"
       },
       {
-        "path": ".agent/context/project-config.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/project-config.json",
         "digest": "2a5aa08453753550bb8fc187a141e9e985d47f6fc186ac3968a5ac5ab4453f8a"
       },
       {
-        "path": ".agent/context/schemas/authority-artifact-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/authority-artifact-v2.schema.json",
         "digest": "4b89b4657a5ed93ce2b941225a98e03909bb54d8d022a326f986c6b2b03ec436"
       },
       {
-        "path": ".agent/context/schemas/automation-trigger-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/automation-trigger-v2.schema.json",
         "digest": "250e2ed14298d747d09c26621e032317d499dd26a95f50d9684dda38d9834224"
       },
       {
-        "path": ".agent/context/schemas/background-dispatch-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/background-dispatch-v2.schema.json",
         "digest": "e30ff75d8df2a6e6510d50b012d664cf8e83c62aca54090a8c71ac65d3e5b4c3"
       },
       {
-        "path": ".agent/context/schemas/budget-confirmation-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/budget-confirmation-v2.schema.json",
         "digest": "025722d79acd616bb6a856578a7c21ade4423d73644a499cd7b65f7c295d1094"
       },
       {
-        "path": ".agent/context/schemas/budget-proposal-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/budget-proposal-v2.schema.json",
         "digest": "423b836958b38939d04735dc845d221bf04bc2db17d8e28f401f26b01425e9dd"
       },
       {
-        "path": ".agent/context/schemas/eval-result-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/eval-result-v2.schema.json",
         "digest": "f5f1c0dac41e1f05744360efa390b7e8340f3f2c78367674557777b3345ce8e6"
       },
       {
-        "path": ".agent/context/schemas/geniusloop-outcome-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/geniusloop-outcome-v2.schema.json",
         "digest": "a48131ff1fa03ce89921c6d834280001aac48aaf33dc4409cb9686ec50ab43df"
       },
       {
-        "path": ".agent/context/schemas/host-capability-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/host-capability-v2.schema.json",
         "digest": "c6be0fdbc9ad312d0d1feb66e961f5559e1bf5fa582fe8ee9e8b52c040c011d1"
       },
       {
-        "path": ".agent/context/schemas/iteration-learning-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/iteration-learning-v2.schema.json",
         "digest": "760ac77271ed77aa74e9bea4fc182cab437fa2ead40e568c1c679ad2da2375ee"
       },
       {
-        "path": ".agent/context/schemas/loop-run-contract-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/loop-run-contract-v2.schema.json",
         "digest": "4fe4b337d357290c6c75e370706845302ea04b6bc56e8f5e21e6378ac5bd1a61"
       },
       {
-        "path": ".agent/context/schemas/loop-run-event-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/loop-run-event-v2.schema.json",
         "digest": "6f822d6bcb342feb5ec8dea2c98dd61428fb66d3ea212c72bd32234cd58103a5"
       },
       {
-        "path": ".agent/context/schemas/loop-run-state-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/loop-run-state-v2.schema.json",
         "digest": "f92f265415cf277a31fd0dec8afea7dd141360d1eedd3dc90192445216533b6b"
       },
       {
-        "path": ".agent/context/schemas/operation-inventory-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/operation-inventory-v2.schema.json",
         "digest": "f43c4e7b41e265172ef41906852321a304c9e241056c92eb691076377b526745"
       },
       {
-        "path": ".agent/context/schemas/project-config-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/project-config-v2.schema.json",
         "digest": "f7ae864ad17eefb3a53e3dc022c16729944d4b8eae3c743d3490a9de5842ed63"
       },
       {
-        "path": ".agent/context/schemas/project-mode-capability-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/project-mode-capability-v2.schema.json",
         "digest": "2cc8327a8a18f38de6640481ab811de503461b0ded1a5ad1a3d66f0cb0cc0648"
       },
       {
-        "path": ".agent/context/schemas/runtime-common-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/runtime-common-v2.schema.json",
         "digest": "973b00946ee1f77dfa3ccdaed87333148ad6489af1485ba08af21012be80381c"
       },
       {
-        "path": ".agent/context/schemas/usage-receipt-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/usage-receipt-v2.schema.json",
         "digest": "9fe7c6c02b5ad06ebd6f9cccf871c778ec12811c590b4c1942ae685cf448955e"
       },
       {
-        "path": ".agent/context/schemas/verified-pattern-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/verified-pattern-v2.schema.json",
         "digest": "6532283e7bdcaab234bce58682cac329ad8e6faf9318a8502860493db541a26b"
       },
       {
-        "path": ".agent/context/schemas/work-package-ledger-v2.schema.json",
+        "path": "docs/archive/retired-assets-20261007/.agent/context/schemas/work-package-ledger-v2.schema.json",
         "digest": "a09eab76991d18e298ac2a2975427bc4f5450cd99299b0cab659572f69f92590"
       }
     ]
   },
   "findings": [],
-  "evidenceDigest": "f2f062e46cae57a797604d2f52dbdfd305fa3fd36d57aea239b41a265a0babcd"
+  "evidenceDigest": "08b9a6788b7646ca96fd84d9bfe8aa1cd03bce02931d37fca68f40d46dc98bad"
 }
