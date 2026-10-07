@@ -1,0 +1,332 @@
+{
+  "schema": "completion_observation_v1",
+  "taskId": "evidence-dod-20261007",
+  "criterionId": "AC-03",
+  "contractDigest": "1aef223423737e8114a490f5c1ee1cde4dee8ef45b6c389940f4b769d434c3f5",
+  "steps": [
+    "Read executed work-package and receipt assertion results in final tool suite.",
+    "Inspected failed-proof unchanged-ledger, retained verified receipt, dependency drift and postcommit quarantine regression results."
+  ],
+  "expected": "Goal and receipt verification and dependency release require adequate outcome evidence; drift cannot return completion.",
+  "observed": "Actual failed acceptance cannot promote or alter ledger bytes; reviewed receipt with full outcome proof promotes work; dependency drift blocks receipt promotion; commit-time drift quarantines completion before return.",
+  "status": "pass",
+  "observer": "root coordinator",
+  "timestamp": "2026-10-07T02:57:53.685Z",
+  "inspected": true,
+  "sources": [
+    {
+      "ref": ".scratch/completion/evidence-dod-20261007/request.md",
+      "digest": "1f9cb75fdd7940d16af644a0f30da697f5d56f632a56796d31abe39f64d75f53"
+    },
+    {
+      "ref": ".agent/context/output-style.md",
+      "digest": "9394581e28d406f8824aefee41ba57090f5e2e6f1cb64b7a02ad4801d18416f6"
+    },
+    {
+      "ref": ".agent/context/skills/execution-verification.contract.md",
+      "digest": "8375bb9a6587ea235deaf9768416dd45c58b5d894b97c58db9b2b54d68c87c40"
+    },
+    {
+      "ref": ".agent/context/workflows/sc-compound.contract.md",
+      "digest": "1032b832fdd8ada327e5c706f36ec03d406ebbb92a2a2e68ed24edd9e70f7494"
+    },
+    {
+      "ref": ".agent/context/workflows/sc-debug.contract.md",
+      "digest": "4e05c65e081491f9be9f7f76d9d8f487253a614b646fb701ad12d0986dd1f21b"
+    },
+    {
+      "ref": ".agent/context/workflows/sc-eval.contract.md",
+      "digest": "b291f29bbd157320cf33942fd58443d50325c9925c3a1bbc130dba2e3165c637"
+    },
+    {
+      "ref": ".agent/context/workflows/sc-launch.contract.md",
+      "digest": "2619f78af5da0c6051a5d12af49f7d8e81f087093292a11877623212159cdc77"
+    },
+    {
+      "ref": ".agent/context/workflows/sc-pause.contract.md",
+      "digest": "7befb3690a0ea2df3f9b0c3b340c196e3ec4652c332419058cb5676d055e3b47"
+    },
+    {
+      "ref": ".agent/context/workflows/sc-plan.contract.md",
+      "digest": "6ddc777db270c8378b047d8349e18907e85642174c748507f9b565c01f7f6518"
+    },
+    {
+      "ref": ".agent/context/workflows/sc-review.contract.md",
+      "digest": "86f7cf9b043e477caabb58b20559f3ad5bfbdd67cdb5b1bd7eb773daa35480f5"
+    },
+    {
+      "ref": ".agent/context/workflows/sc-status.contract.md",
+      "digest": "6b6ea06a184ac074fa6548c369a2e43fe48349488e920582280649153683c35e"
+    },
+    {
+      "ref": ".agent/context/workflows/sc-work.contract.md",
+      "digest": "deab09038a90245fc62bc2c004f2d3c689ccfd2f5cb98fbe746c4d4c9596092c"
+    },
+    {
+      "ref": ".agent/rules/quality-gates.md",
+      "digest": "a0af093743ea0f6f84eb04d0aa3d1ff66090ba2acfd53a337bb543ed2cfb104a"
+    },
+    {
+      "ref": ".agent/rules/super-compound.md",
+      "digest": "658bfa7d1e5dcc12ea37408aa6fc030d64284b64aeeff517958350d0ca3cb0b4"
+    },
+    {
+      "ref": ".agent/skills/agentic-delivery/references/context-and-issue-pointers.md",
+      "digest": "58b6fc8affb70d297c65cff5b8114ee47cdeccd55e5973cb21c168c1ec85c1ab"
+    },
+    {
+      "ref": ".agent/skills/agentic-delivery/tests/progressive-disclosure-wave3.test.mjs",
+      "digest": "9c6f0680021c41e8e0f2cb81eff09bed04f67107cef27a86962d06a8ed189ad0"
+    },
+    {
+      "ref": ".agent/skills/checkpoint-protocol/references/answerable-package.md",
+      "digest": "0e1f6537a7cb0105d5f1aace98e55bdca8de13be09c784a0aac6091dc65c19c1"
+    },
+    {
+      "ref": ".agent/skills/executing-plans/references/execution-and-verification.md",
+      "digest": "d25b60e1f2e80a010a5a6e5cf378ca3332e8ab0f1c5cbe5b2eb7f6d47e10cd61"
+    },
+    {
+      "ref": ".agent/skills/issue-workflow/references/status-and-done.md",
+      "digest": "12f981a5f8cf89dbb46ed7372c6166fdeb960d9b2ad10d06100f5cabb002a01b"
+    },
+    {
+      "ref": ".agent/skills/parallel-execution/SKILL.md",
+      "digest": "f33223657cce9b0a707c07c42cb9157dc2201b34621635eb2cdd072ca4dba679"
+    },
+    {
+      "ref": ".agent/skills/state-management/references/file-contracts.md",
+      "digest": "e681072b2d4a313e95622ea5e5f64b4bae06b09e58eda6c9960520a8b54fc412"
+    },
+    {
+      "ref": ".agent/skills/subagent-orchestration/SKILL.md",
+      "digest": "48a5e8cab811590bdb0076c26796244489225d9486cf8c32df45d8fb9378eda8"
+    },
+    {
+      "ref": ".agent/skills/subagent-orchestration/references/completion-inbox.md",
+      "digest": "ee814aba19a1de0e12193baeabaef2190e77ce1ef946e2e11c45486bfad9b5cb"
+    },
+    {
+      "ref": ".agent/skills/subagent-orchestration/references/review-contract.md",
+      "digest": "593d377c797cffba42431335774987d0290fd34494e0cb15cf2b5b4dc65c2509"
+    },
+    {
+      "ref": ".agent/skills/verification-before-completion/SKILL.md",
+      "digest": "49b518a01dea881513ed51fc02c31090595d03a56b3c8d4cd6ece730de67bbac"
+    },
+    {
+      "ref": ".agent/skills/verification-before-completion/references/claim-evidence.md",
+      "digest": "9bd2398e29b729ac65052883bdf909bf95002b61b9a29d0dc261dc39d76a9f9a"
+    },
+    {
+      "ref": ".agent/skills/verification-before-completion/references/goal-backward.md",
+      "digest": "f5b765dc4e231f43ca5ee5c9b02b1cabbf4931dfdc563f9ace52b5936ebb7fe7"
+    },
+    {
+      "ref": ".agent/skills/verification-before-completion/references/live-verification.md",
+      "digest": "e48b065d7e6c4c15ac58e4eaf9f22d81fcd9f9b1e63266c45f92aa92b068e95c"
+    },
+    {
+      "ref": ".agent/skills/verification-before-completion/references/verification-recipes.md",
+      "digest": "2cb81d68bff7a1a08f93968de25cc1ed6fa5db395963077430391d247162f426"
+    },
+    {
+      "ref": ".agent/skills/verification-before-completion/tests/test_skill_router_contract.py",
+      "digest": "022df80f7fa92ab24a3cab6c1044f64795f91d85b888f12b2efd6f14a6579063"
+    },
+    {
+      "ref": ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+      "digest": "93816a75613f3e9f3b22589c23fbfbfc60e4e6e0d8c178e93042029db9632589"
+    },
+    {
+      "ref": ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+      "digest": "d251ef453fe0796f04b814d40ecdea4baf03b58cb733160b6bdcf706e71406c7"
+    },
+    {
+      "ref": ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md",
+      "digest": "46a91068072829636c8d1d11c464177d759d83544e32398c8a5ac6dbc18f86bd"
+    },
+    {
+      "ref": ".agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md",
+      "digest": "1f2149b1f5a5dab8d7db46621b6ea103f5a315ea4f108f71c1ff365f476cc526"
+    },
+    {
+      "ref": ".agent/templates/orchestration/Implementer-Brief-Skeleton.md",
+      "digest": "ed05199fc70ff8822525a23054bcde9577d33c18812e73a342f28a8b40adf8aa"
+    },
+    {
+      "ref": ".agent/templates/state/STATE-Template.md",
+      "digest": "6e9275b139fb9a28be716384b2249c64d3e907cb58bc3aeef08c907b2e2a0268"
+    },
+    {
+      "ref": ".agent/tools/active-assets.test.mjs",
+      "digest": "1b25567dd1ccd904d2dc07d546d6cc1dbe0b34f6ea83e56dc77804cfd591a361"
+    },
+    {
+      "ref": ".agent/tools/autonomy-policy.test.mjs",
+      "digest": "a7a737e0d18b50050c03eb003c69a10064aa3beb1b0ac9ceeb25d2d9ba6a0a30"
+    },
+    {
+      "ref": ".agent/tools/blueprint-document.test.mjs",
+      "digest": "3bbc66336c7884f943b9dcff95f7205e4eb36642f65ecd116b0407993c70a793"
+    },
+    {
+      "ref": ".agent/tools/codex-pilot.mjs",
+      "digest": "89af531a4b022a66717e2f8ee3296becccdebfa65aee1411471be844cd434b6f"
+    },
+    {
+      "ref": ".agent/tools/codex-pilot.test.mjs",
+      "digest": "a49e538ac9e84fefcab7c906992629965c697984c425e2c9c855f7bfc3ec6d5a"
+    },
+    {
+      "ref": ".agent/tools/completion-evidence.test.mjs",
+      "digest": "5a61da6205700fe45a7970210bf0aed1a76dbf94044695220b7cbe0d5280da19"
+    },
+    {
+      "ref": ".agent/tools/completion-fixture.test-support.mjs",
+      "digest": "e4cf6a503f06ca06e187c17bbcaa4bf352e979c6a54059a65ac6e91027346e4c"
+    },
+    {
+      "ref": ".agent/tools/completion-receipts.test.mjs",
+      "digest": "0739a0980fba3abb4d739c2d4060b65011d5d0180deb320cb5f10d78d4d11f5f"
+    },
+    {
+      "ref": ".agent/tools/hitl-checkpoints.test.mjs",
+      "digest": "6c14ab57692d2255844daf280763ad0fc15a32754c1d80eb282e400bda85c604"
+    },
+    {
+      "ref": ".agent/tools/memory-maintenance.mjs",
+      "digest": "8ca5c58c40f2dd0f96f714bdf8adce30feb2d7fe1d36816569cc41e233c69ff0"
+    },
+    {
+      "ref": ".agent/tools/memory-maintenance.test.mjs",
+      "digest": "4acd8170198506d22d72ab130feb10340cb538973d1cd06d4112a024f58657b2"
+    },
+    {
+      "ref": ".agent/tools/privacy-guard.mjs",
+      "digest": "a315bea8560d002c4e23df9a229d59e87de91733c8ce51a754e6e3a4513e24e1"
+    },
+    {
+      "ref": ".agent/tools/privacy-guard.test.mjs",
+      "digest": "994fa8d0455a8c3bda6f5a0180a1e9b77756e0c8fc99927a5af3d06209db671b"
+    },
+    {
+      "ref": ".agent/tools/questions-and-hints.test.mjs",
+      "digest": "6dca9ce79c56cd71fbb8ea81640ca7f5188a43138999b87f7a0e2be092eeda12"
+    },
+    {
+      "ref": ".agent/tools/readiness-gate.mjs",
+      "digest": "2b2fc69255909ce6d4b8e5489f7016b29ce243c5d5738f99a775d86d5f2ef3f0"
+    },
+    {
+      "ref": ".agent/tools/readiness-gate.test.mjs",
+      "digest": "b7d9e7cdcba53a3d0e33a96cce16798b1eb25cf19b223096765ce1da2e597bd3"
+    },
+    {
+      "ref": ".agent/tools/setup.mjs",
+      "digest": "ae95e80fc3b57c897610e75f95e6f343d63052c0632c8dc27adfa9b84990a976"
+    },
+    {
+      "ref": ".agent/tools/setup.test.mjs",
+      "digest": "c5ddde09d52e5b1b2b2ba07e22b900d0785ccfa4349b66d7740504ab6c17d9ba"
+    },
+    {
+      "ref": ".agent/tools/verification-recipe.mjs",
+      "digest": "ad5be6eca7d54c24f11c5c18d1c47671f36a97726cd309d1c36b33a592ce4742"
+    },
+    {
+      "ref": ".agent/tools/verified-promise.mjs",
+      "digest": "234fd3c85b051619de3f7b5a0e647b8b32bd3d258a190b0909bd076bab9a0373"
+    },
+    {
+      "ref": ".agent/tools/verified-promise.test.mjs",
+      "digest": "558ba85ef9427d15c37881a506278ff3d091b645a63c37017331157b3f1bd994"
+    },
+    {
+      "ref": ".agent/tools/work-package.mjs",
+      "digest": "31554d03377f36c950adb38e3978ff82f2058b7b253207f29d31f643774abfc4"
+    },
+    {
+      "ref": ".agent/tools/work-package.test.mjs",
+      "digest": "ddcc995eef18568231d4b1c3577154ded7537414d2d177d7fd436ed9c23d2051"
+    },
+    {
+      "ref": ".agent/workflows/sc-compound.md",
+      "digest": "4da149d37837ef6ee0c2bd0bd3e3ec7686b271992d45dd47c1119bd9f9301a22"
+    },
+    {
+      "ref": ".agent/workflows/sc-debug.md",
+      "digest": "da0fba2d5bfd867214cd268c983a0dcf960d9550914dc169eecf87bba5f01d52"
+    },
+    {
+      "ref": ".agent/workflows/sc-eval.md",
+      "digest": "122e356eba974a1441a487dbeeb352a61211cd17b61c025fae50c6453ef34cfa"
+    },
+    {
+      "ref": ".agent/workflows/sc-launch.md",
+      "digest": "987f63afbba8ee8c02b8d0b88a9f6655f77925224356039a26e6ad09d976225a"
+    },
+    {
+      "ref": ".agent/workflows/sc-pause.md",
+      "digest": "f70cbd7ca62d5fb640cdf4a0dca8bd32debb04350f356aa09f30f951b4082e19"
+    },
+    {
+      "ref": ".agent/workflows/sc-plan.md",
+      "digest": "2e173b162d5bebf0d7ba59f3218e03469d0ea30c069151b7132e1694be3b2e48"
+    },
+    {
+      "ref": ".agent/workflows/sc-review.md",
+      "digest": "5974aba3b73a2ec3df388d87b96b88b4468ebc4ac8e7432c137ea4213f50b941"
+    },
+    {
+      "ref": ".agent/workflows/sc-status.md",
+      "digest": "7c99c5d5b80246698e41aeeccc45dd070fc078477f448cf48d41df4810a64123"
+    },
+    {
+      "ref": ".agent/workflows/sc-work.md",
+      "digest": "d900582c5f73967999657d2007667c4f84f92c4667b84eaebbfde18b6c9da8f9"
+    },
+    {
+      "ref": ".codex/SKILL.md",
+      "digest": "d029a0d66a0a90a431858f0c975a158eb53ff8f587b8acd1ab2a2e3a411793bd"
+    },
+    {
+      "ref": "AGENTS.md",
+      "digest": "9fe55bf6a506aafdc43eaa038cb8638deda047bfbaa05278d1d37a145478d1fa"
+    },
+    {
+      "ref": "CHANGELOG.md",
+      "digest": "8c74d4e1bed844ce43d0e2b93ab901d8c69f4fdc7505401bb7e52720ae0c2fa9"
+    },
+    {
+      "ref": "README.md",
+      "digest": "55c24e7e40258fb6eccb1ed5361f1f07189bacc57fa24c45dbb83fe422f35147"
+    },
+    {
+      "ref": "SUPER-COMPOUND.md",
+      "digest": "0950e53ab73cd67998edb105a8829f1aa004cb8bd1eb9359371d1d365f07e81a"
+    },
+    {
+      "ref": "WALKTHROUGH.md",
+      "digest": "be6ac0f4a7db939a6d7de0651da6e45ba3a6ecb0e4ccb0fea71c207f86af4ff1"
+    },
+    {
+      "ref": "package.json",
+      "digest": "91b786afcb0b2fc403a3227faab0914fe7569c7a67c95621e502672dac60f47e"
+    }
+  ],
+  "artifacts": [
+    {
+      "ref": ".scratch/completion/evidence-dod-20261007/npm-test-final.log",
+      "digest": "24180cba9200eb9f285a4db56bed25b4f62c1160d665b3d2a4c3779f8228cc2f"
+    },
+    {
+      "ref": ".scratch/completion/evidence-dod-20261007/test-local-final-4.log",
+      "digest": "9e04b005be908d821b9e923099a46ffd8ad4a06c84686a9d2f9c4a8cbdd80637"
+    },
+    {
+      "ref": ".scratch/completion/evidence-dod-20261007/verification-summary.json",
+      "digest": "063e52d291e825439417068d1d6b439ae8071266c3b5deff2bdde4795a587d54"
+    }
+  ]
+}

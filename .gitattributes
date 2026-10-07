@@ -12,3 +12,4 @@
 
 # Preserve original historical bytes and manifest checksums.
 docs/archive/retired-assets-20261007/** -text
+docs/eval-results/evidence-dod-20261007/** -text

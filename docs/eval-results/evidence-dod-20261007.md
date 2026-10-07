@@ -1,0 +1,84 @@
+# Evidence-Based Definition of Done - Verification
+
+## Summary
+
+Status: Completed - AC-01 through AC-08 verified
+
+Historical verification snapshot: October 7, 2026. Permanent archive links were
+added after that verification; the [original verified report](evidence-dod-20261007/report-as-verified.txt)
+preserves its exact bytes and original evidence locators.
+
+The implementation applies `No Evidence = Not Done` through the existing
+completion policy and deterministic local tools. It preserves the 19 workflows,
+light/full delivery, existing status enums, receipt administration, and advisory
+hooks. A completion contract derives its checklist from the request/FSD; it does
+not replace that authority. Same-agent verification requires a separate actual
+check; the coordinator inspects delegated proof before accepting it.
+
+## Executed checks
+
+| Command / verification | Actual result | Evidence |
+|---|---|---|
+| `npm test` | Exit 0; 476 tools + 28 skill tests passed; hooks passed | [Full log](evidence-dod-20261007/npm-test-final.log), [execution record](evidence-dod-20261007/npm-test-final.result.json) |
+| `npm run test:local` | Exit 0; 470 tools + 28 skill + 36 Python tests passed; hooks and verification router passed | [Full log](evidence-dod-20261007/test-local-final-4.log), [execution record](evidence-dod-20261007/test-local-final-4.result.json) |
+| Actual baseline/current completion CLI | Same failed proof: baseline allowed (exit 0), current denied (exit 1) | [Before/after commands and responses](evidence-dod-20261007/baseline-red-green.json) |
+| Actual light-task completion CLI | Failed health denied (exit 1); healthy outcome allowed (exit 0); neither created a ledger | [Commands, responses and executed proof](evidence-dod-20261007/cli-e2e.json) |
+| Static token benchmark (`--repeat 3`) in isolated copy | All 38 static scenarios passed in 3 identical consecutive runs | [Execution log](evidence-dod-20261007/benchmark-final-2.log), [generated report](evidence-dod-20261007/benchmark-current.json) |
+| Post-run inventory and SHA256 comparison | All 658 source files identical at original and tested locations; no missing/extra files; 11 historical eval JSON files and original benchmark preserved | [Source manifest](evidence-dod-20261007/source-equivalence.json), [inspected summary](evidence-dod-20261007/verification-summary.json) |
+
+Both final suites reported zero failures, cancellations, skipped tests or TODOs.
+The final runs used Node 24.15.0 on Windows; execution records include exact argv,
+working directory, timestamps and log hashes. The test process inherited a four-CPU
+affinity mask to bound Windows disk contention; test selection was unchanged.
+
+The existing user-edited `.agent/benchmarks/token-benchmark.after.json` is preserved.
+Full suites ran at `C:\Users\aul\AppData\Local\Temp\sc-evidence-dod-final-Ynwygm`
+with a regenerated derived benchmark. Their source digest is
+`6b08e4e595f75399b854d14597cf87d59a605057d4c11a8e6ead8dcc96f32cb7`.
+The generated benchmark and this report are excluded from source identity;
+the manifest records runtime-directory exclusions. This proves the current source
+with fresh derived evidence, not a passing original-root audit against the stale
+historical benchmark. Diagnostic failing logs are retained in the same evidence
+directory, including the original-workspace run (453 passing / 8 failing tools).
+
+## Evidence of Completion
+
+The [request](evidence-dod-20261007/request.md),
+[8-criterion contract](evidence-dod-20261007/contract.json)
+and [SHA256 pin](evidence-dod-20261007/contract-pin.json)
+were fixed before the final suite executions. The coordinator read actual command
+outputs, expected/observed results and source provenance; independent review also
+rehashed all 658 sources and inspected the installation-inclusive result.
+
+| AC | What was verified | How | Actual result and evidence |
+|---|---|---|---|
+| AC-01 | Every task requires goal, requirement and all-AC evidence, appropriate proof and the completion report | Opened canonical policy; checked all 8 task types, status aliases, separate verification and coordinator inspection; executed policy/router/template tests | Required policy and routing checks passed in both [final suites](evidence-dod-20261007/verification-summary.json); [canonical policy](../../.agent/skills/verification-before-completion/references/claim-evidence.md) inspected |
+| AC-02 | Shared gate validates actual assertions, complete coverage and current provenance | Executed missing/partial/failed/skipped/wrong-scope/drift, regression and observation-count controls | All validator checks passed, including rejection of contradictory counts and hidden failed/skipped assertions; actual failed proof is [denied after the fix](evidence-dod-20261007/baseline-red-green.json) |
+| AC-03 | Goal/receipt promotion and dependency release require sufficient outcome proof | Executed work-package/receipt negative controls and commit-time drift regression | Failed proof did not change ledger bytes; reviewed passing proof promoted work; drift quarantined completion before return; [tool results](evidence-dod-20261007/npm-test-final.log) |
+| AC-04 | Resume and first-slice scale-out cannot trust historical status alone | Executed memory/readiness proof mapping, legacy-claim, failed-health and wrong-task checks | Invalid claims could not persist or release dependencies/scale-out; unaffected proof remained usable; [tool results](evidence-dod-20261007/test-local-final-4.log) |
+| AC-05 | Light tasks and adapters support proof without formal artifacts or a swarm ledger | Ran actual `--contract` CLI and six generated adapter plus installed Codex fallback checks | Failed outcome denied, passing outcome allowed, no ledger created; all six adapter and fallback checks passed; [CLI proof](evidence-dod-20261007/cli-e2e.json) and [installation suite](evidence-dod-20261007/npm-test-final.log) |
+| AC-06 | Aggregate completion proves the combined goal | Executed passing children with failed aggregate health, passing aggregate, missing contract and unrelated-task controls | Passing children could not hide aggregate failure; actual combined proof admitted completion; [aggregate checks](evidence-dod-20261007/npm-test-final.log) |
+| AC-07 | Existing workflows, packaging, hooks and delivery remain compatible | Ran complete local and installation-inclusive suites, 3 benchmark repetitions and post-run source comparison | 504 Node tests in `npm test`; 498 Node + 36 Python tests in `test:local`; hooks/router passed; 38 static scenarios passed; [summary and hashes](evidence-dod-20261007/verification-summary.json) |
+| AC-08 | The final report maps actual executed/inspected evidence to every criterion | Opened this generated report, validated 8 AC rows and evidence links, and matched its claims to retained execution records | All 8 criteria mapped to actual results; [execution/source summary](evidence-dod-20261007/verification-summary.json) and per-criterion observations retained beside the pinned contract |
+
+Local gate: `node .agent/tools/verified-promise.mjs --contract .scratch/completion/evidence-dod-20261007/contract.json`.
+It returned `COMPLETE_ALLOWED`, exit 0, with all 8 criteria and the required
+Evidence of Completion table: [actual transcript](evidence-dod-20261007/initial-gate.log).
+The [curated permanent archive](evidence-dod-20261007/README.md) retains these
+historical logs and observation records with a [SHA256 manifest](evidence-dod-20261007/manifest.json).
+Original live records remain under `.scratch`. Archived records describe the
+pinned historical run; changed sources require fresh, appropriately bound proof.
+
+## Verification limits
+
+- Local gates validate declared coverage and evidence provenance. They cannot infer
+  missing requirements from arbitrary prose or authenticate manually authored
+  evidence. The agent/reviewer checks the contract against the full authority.
+- Visual/manual correctness requires actual artifact inspection. A structural
+  check cannot establish what a screenshot looks like.
+- Volatile external outcomes require a fresh live check when their state changes.
+- Generated adapters and offline/installed fallback checks do not establish live
+  end-to-end behavior across every host. Hooks remain advisory.
+- No runtime-v2 subsystem, host-wide blocker, new dependency, or public workflow
+  was introduced. Verification covers the recorded local implementation; this
+  report does not certify subsequent Git publication, merge, or deployment.
