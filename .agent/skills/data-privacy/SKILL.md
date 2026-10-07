@@ -9,8 +9,6 @@ description: "Use when processing personal data (PII), implementing consent mech
 
 Ensure applications comply with data privacy regulations when processing personal data. Apply privacy by design across jurisdictions including GDPR, UU PDP Indonesia, CCPA, LGPD, and PDPA, and load only the reference branch needed for the active decision.
 
-**Announce:** "I'm using the data-privacy skill to verify privacy compliance for personal data handling."
-
 ## Modes
 
 | Mode | Trigger | Scope | Output |

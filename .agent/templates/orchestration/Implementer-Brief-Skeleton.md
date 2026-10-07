@@ -11,6 +11,7 @@ Issue pointer: {{ISSUE_PATH}}
 Contract refs: None / FSD-{{PROJECT}}@{{VERSION}}#CONTRACT-{{NNN}}
 Model tier: extraction / generation
 Report path: {{REPORT_PATH}}
+Completion contract: {{COMPLETION_CONTRACT_PATH}} / {{SHA256_DIGEST}}
 Scope allowlist (read-only): {{PATHS_PATH}}
 Base SHA: {{BASE_SHA}}
 Exploration notes: None / {{EXPLORATION_PATH}}
@@ -27,17 +28,27 @@ Exploration notes: None / {{EXPLORATION_PATH}}
 
 ## Verification
 
-Run the goal's mapped commands before claiming done:
+Read the pinned full goal/requirement/AC checklist before results. Run mapped
+checks and compare actual outcomes with every criterion before claiming done:
 
 ```bash
 {{VERIFICATION_COMMANDS}}
 ```
 
+Apply `.agent/skills/verification-before-completion/SKILL.md`; command exit 0,
+changed files and a screenshot's existence do not by themselves prove the goal.
+Store real results/artifact locators with provenance; coordinator reviews them.
+
 ## Handoff
 
 Write full evidence to {{REPORT_PATH}}; return only:
 
-- Outcome: complete / blocked
+- Outcome: Done only after all criteria proven; otherwise Implemented — Pending
+  Verification / Partially Verified / Verification Failed / Needs Validation / Blocked
 - Report path and changed paths
 - Verification status: command + pass/fail
 - Blockers: None / OPEN-{{ID}}
+
+The full report contains **Evidence of Completion** with requirement/AC refs,
+what was verified, actual command/inspection, result and evidence locator.
+Missing or failed evidence stays explicit; a handoff is not completion authority.

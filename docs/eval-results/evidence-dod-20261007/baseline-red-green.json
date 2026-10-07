@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-10-07T02:24:25.966Z",
+  "root": "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-no-evidence-red-green-r7Btui",
+  "proof": {
+    "pass": false,
+    "error": "actual acceptance check failed"
+  },
+  "results": [
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:/Users/aul/AppData/Local/Temp/sc-evidence-dod-baseline-17o738nk/.agent/tools/verified-promise.mjs",
+        "--run",
+        "demo",
+        "--root",
+        "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-no-evidence-red-green-r7Btui"
+      ],
+      "exitCode": 0,
+      "stdout": "COMPLETE_ALLOWED run=demo\n",
+      "stderr": ""
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "D:\\BATI\\Development\\framework\\super-compound\\.agent\\tools\\verified-promise.mjs",
+        "--run",
+        "demo",
+        "--root",
+        "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-no-evidence-red-green-r7Btui"
+      ],
+      "exitCode": 1,
+      "stdout": "COMPLETE_DENIED run=demo Completion Needs Validation: GOAL-001 has no pinned completion contract\n",
+      "stderr": ""
+    }
+  ]
+}

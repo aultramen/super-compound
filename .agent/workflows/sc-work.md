@@ -11,8 +11,8 @@ Use this to implement a bounded change. Classify the delivery tier at intake per
 `skills/agentic-delivery/references/workflow-integration.md` and state it in one
 line: `Tier: light|full; trigger: T<n>|none`. A `light` request is a plain
 instruction or a `.scratch/<feature>/issues/` pointer; a `full` goal is an
-approved FSD goal or its issue pointer. A single trivial change: just do it
-directly, with tests and verification.
+approved FSD goal or its issue pointer. A single trivial change executes
+directly with proportionate verification; it has no completion exemption.
 
 Before edits in either tier, identify current flow, reusable pattern, affected boundaries and callers/consumers, and proving checks for acceptance/regression. Full scope cites its FSD; light scope uses a brief existing note. Compare material alternatives through `executing-plans/references/authority-and-workspace.md`; changed requirements/acceptance/contracts return to their owner, while reversible details within authority proceed.
 
@@ -25,7 +25,11 @@ Result and next action: Scoped implementation, changed files and actual checks; 
 
 ## Steps
 
-1. Load `skills/agentic-delivery/SKILL.md`, `skills/context-engineering/SKILL.md`, and `skills/executing-plans/SKILL.md` when following the full execution procedure. Do not load `docs/engineering-standards.md` or a project `CODING_STANDARDS.md` here; `/sc-review` enforces standards so implementation context stays small.
+1. Apply the compact execution checks; load `skills/agentic-delivery/SKILL.md`,
+   `skills/context-engineering/SKILL.md`, and `skills/executing-plans/SKILL.md`
+   only for uncovered procedure detail. Before editing, reuse resident standards
+   or load only the applicable sections of `docs/engineering-standards.md` or
+   project `CODING_STANDARDS.md`; independent review checks conformance afterward.
 2. Start from active user intent; reconcile the `docs/STATE.md` Next action when resuming. Read the `.scratch/<feature>/issues/<NN>-<slug>.md` issue or direct FSD goal when one exists, then dynamically load only the referenced FSD sections, upstream BRD/PRD IDs, linked accepted ADRs, blockers, verification refs, and relevant code/tests. In `full`, an issue pointer must be `ready-for-agent` before any edit or execution.
    Search durable knowledge first with `node .agent/tools/knowledge-search.mjs "<goal area>"`; validate matching lessons against current evidence; accepted decisions bind only through their authoritative source.
 3. In `full`, before any edit or execution, confirm every `Blocked by` dependency is
@@ -42,9 +46,10 @@ Result and next action: Scoped implementation, changed files and actual checks; 
    ready authorized goals, and perform authorized handoffs internally. Route scope to
    `/sc-explore`, observable behavior/AC to `/sc-prd`, and data/API/technical
    contract changes to `/sc-plan`. Do not repair authority drift silently in
-   implementation. In `light`, a trigger discovered mid-work (new capability,
-   material contract/access/data/side-effect change, new screen) is written as `ESCALATE: T<n>`
-   and routed the same way; never widen a light change silently.
+   implementation. In `light`, a material scope/product/contract/access/data/
+   side-effect/flow change discovered mid-work is written as `ESCALATE: T<n>`
+   and routed using the canonical T1-T5 precedence; bounded feature/page novelty
+   alone does not escalate. Never widen authorized scope silently.
 7. If `gitWorkflow.enabled` is true, load `skills/git-workflow-operation/SKILL.md`, block direct work on protected base branches, and preview `/sc-go start <branch>` commands before edits when the task is feature, refactor, docs, or chore work.
 8. Execute one goal at a time by default. A `CONTRACT_ENABLER` materializes
    the pinned schema, deterministic/edge fixtures, mock, typed consumer, and
@@ -54,8 +59,10 @@ Result and next action: Scoped implementation, changed files and actual checks; 
    `integration-checking` after the integrated slice. Mock-only evidence does not
    permit scale-out or `FIRST_VERTICAL_SLICE_VERIFIED`.
    A first slice may use a `VALIDATED` or `EXCEPTION_APPROVED` baseline. Once its
-   issue is `verified`, return to `/sc-plan`; issue planning owns recomputing the
-   dependency graph and can promote eligible `SCALE_OUT_SLICE` pointers.
+   issue is `verified`, the active controller applies planning-owned deterministic
+   promotion to the dependency graph and eligible `SCALE_OUT_SLICE` pointers,
+   without planning re-entry solely for metadata. Material semantics/risk changes
+   return to `/sc-plan` or the relevant decision owner.
 10. Use `skills/parallel-execution/SKILL.md` only for 2+ independent execution
    streams whose time saving exceeds coordination overhead, after the first vertical slice is verified, with the same contract version, no unresolved
    dependency/shared files, a single writer for contract/schema/generated
@@ -72,11 +79,19 @@ Result and next action: Scoped implementation, changed files and actual checks; 
     executes and records mapped integration, responsive, accessibility, E2E, and
     visual-regression checks where applicable; Business Owner UAT is required only
     for explicit acceptance or unresolved material human judgment.
-14. Run final verification with `skills/verification-before-completion/SKILL.md`.
-    For multi-goal runs, completion additionally requires the machine-checked
-    predicate `node .agent/tools/verified-promise.mjs --run <run-id>` to print
-    `COMPLETE_ALLOWED`; a prose completion claim without it is void.
-15. Summarize changed files, mapped requirement IDs, deviations, and verification evidence.
+14. Apply `skills/verification-before-completion/SKILL.md` to the requested goal,
+    requirements, and every acceptance criterion. Pin the derived completion
+    contract before recording results; actual task-appropriate checks must prove
+    outcomes, not merely edits or command success. Single/light tasks may store
+    proof in `.scratch/completion/<task-id>/` without FSD or swarm ledger and use
+    `node .agent/tools/verified-promise.mjs --contract <path>`. Multi-goal runs use
+    `--run <run-id>` for all goal criteria and the final combined outcome. Require
+    `COMPLETE_ALLOWED`; failed, skipped, partial, stale, or missing required proof
+    never authorizes completion, issue `done`, `verified`, or dependency release.
+15. Summarize changed files, mapped requirement IDs, deviations, actual status, and verification evidence.
+    Every completion report includes `Evidence of Completion`: what was verified,
+    how, actual results/evidence locators, and the acceptance criteria proved.
+    Otherwise use the canonical incomplete display status and state remaining gaps.
     If the goal surfaced a non-obvious fix, a costly mistake, or a new convention,
     route to `/sc-compound` before closing.
 16. Write the `docs/STATE.md` Next action and continue authorized ready work.
@@ -87,8 +102,8 @@ Result and next action: Scoped implementation, changed files and actual checks; 
 - Implemented goal or change, with its tier line.
 - Updated issue status when work came from `.scratch/`.
 - Verification results.
-- After a verified first slice, deterministic handoff to `/sc-plan` to promote
-  only eligible dependent scale-out pointers; do not mutate unrelated pointers.
+- After a verified first slice, internal deterministic promotion of only eligible
+  dependent scale-out pointers; do not mutate unrelated pointers or semantics.
 - `OPEN-*` blockers, `ESCALATE: T<n>` notes, residual risks, or follow-up goals.
 
 ## Automatic knowledge closeout
@@ -102,7 +117,8 @@ affected contract drift, and ledger; never re-run verified goals merely for hygi
 
 LOCAL_ONLY UI follows the canonical topology applicability: mapped local behavior
 checks, no artificial provider assets/roles. Unchanged enabler semantics
-auto-promote through `/sc-plan`; compatible proof reuse follows affected mappings.
+auto-promote through planning-owned checks in the active controller; compatible
+proof reuse follows affected mappings.
 Independent authorized goals continue while an affected stream is blocked.
 
 ## Prevention and Recovery

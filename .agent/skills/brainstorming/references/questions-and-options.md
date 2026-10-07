@@ -2,8 +2,8 @@
 
 ## Summary
 
-Show every ready decision for active work using the shared checkpoint format;
-keep dependent decisions pending and preserve actual answers through their owner.
+Prioritize decisions that unlock the current goal using the shared checkpoint
+format; retain the complete unresolved inventory and actual answers through their owner.
 
 Load when material user decisions remain; skip interviewing a concrete specification with settled scope and acceptance. Do not make a small request undergo full delivery merely to use this protocol.
 
@@ -13,13 +13,20 @@ Inspect repository evidence and learned context first. Separate discoverable fac
 
 Investigate facts with relevant existing tools; a pending investigation is an unsettled prerequisite. Continue independent questions while investigating. Do not ask users to rediscover repository facts.
 
-## Whole frontier per round
+## Prioritized frontier per round
 
-The frontier contains consequential unresolved decisions whose prerequisites are settled. Use repository facts and delegated defaults for reversible preferences. Show the whole ready frontier for active work in one interaction, grouped by owner/scope and stage; do not defer ready items by count or cognitive load. A dependent question appears as pending with prerequisite IDs, owner and next action. A concrete specification needs no interview.
+The frontier contains consequential unresolved human/external decisions whose
+prerequisites are settled. Resolve repository facts and authorized reversible
+preferences internally. Show at most three highest-priority actionable questions
+by default, grouped by owner/scope; expand when requested or coupled decisions
+must be assessed together. Summarize every material block and unresolved ID;
+retain the complete ready/pending inventory in existing authorized state or
+expandable detail. A dependent question remains pending with prerequisite IDs,
+owner and next action. A concrete specification needs no interview.
 
 Before asking, load the [answerable package](../../../context/checkpoint.contract.md#answerable-package).
-It owns stable IDs, complete review paths, per-item recommendations, all ready
-items, host-dialog fallback and both bulk/exception reply examples. The decision
+It owns stable IDs, review paths, per-item recommendations, prioritized display,
+complete inventory, host-dialog fallback and scoped reply examples. The decision
 portion below supplements that format; it does not replace its required fields:
 
 ```text
@@ -41,7 +48,10 @@ If an answer changes, reopen only affected descendants and explain which earlier
 
 Finish when all material decisions in scope are settled, not when an arbitrary number of rounds ends. Name assumptions and non-goals. Record blocking unresolved decisions as OPEN-* with owner/next action; use existing prototyping for questions requiring direct experience. A deliberately deferred blocker does not count as a settled prerequisite.
 
-Return decisions to their BRD/PRD/FSD owner. Exploration never authorizes implementation; existing artifact approvals remain the gate, with no additional shared-understanding confirmation. Advisory/read-only callers return proposals without writing a sidecar or glossary.
+Return decisions to their BRD/PRD/FSD owner. Exploration never authorizes
+implementation; preserve existing authorization and the configured exception or
+stage policy, with no additional shared-understanding confirmation.
+Advisory/read-only callers return proposals without writing a sidecar or glossary.
 
 ## Provenance
 

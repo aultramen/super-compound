@@ -13,6 +13,9 @@ SKILLS = {
         "goal-backward",
         "integration-checking",
         "exit code",
+        "No Evidence = Not Done",
+        "every acceptance criterion",
+        "Evidence of Completion",
     ],
     "systematic-debugging": [
         "Do not attempt a fix until",
@@ -116,6 +119,23 @@ def main() -> int:
             failures.append(
                 "verification-before-completion: duplicated integration detail " + duplicate_detail
             )
+
+    verification_dir = SKILLS_ROOT / "verification-before-completion"
+    claim = (verification_dir / "references" / "claim-evidence.md").read_text(encoding="utf-8")
+    goal = (verification_dir / "references" / "goal-backward.md").read_text(encoding="utf-8")
+    for marker in (
+        "UI task", "API task", "Code task", "Deployment task",
+        "Infrastructure task", "Automation/workflow task", "File/artifact generation",
+        "Bug fix", "Implemented — Pending Verification", "Partially Verified",
+        "Verification Failed", "Needs Validation", "Blocked", "## Evidence of Completion",
+        "completion_contract_v1", ".scratch/completion/<task-id>/",
+    ):
+        if marker not in claim:
+            failures.append(f"claim-evidence: missing evidence contract marker {marker!r}")
+    if "Derive 3-7 observable truths" in goal:
+        failures.append("goal-backward: observable truth count must not cap acceptance coverage")
+    if "every acceptance criterion" not in goal:
+        failures.append("goal-backward: must verify every acceptance criterion")
 
     if failures:
         print("skill router contract: FAIL", file=sys.stderr)

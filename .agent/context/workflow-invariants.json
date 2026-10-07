@@ -70,7 +70,9 @@
         "sc-plan",
         "sc-ui",
         "sc-research",
-        "sc-audit"
+        "sc-audit",
+        "sc-work",
+        "sc-debug"
       ],
       "workflowMarkers": [
         "Do not implement code",

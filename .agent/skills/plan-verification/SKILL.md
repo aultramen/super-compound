@@ -9,8 +9,6 @@ description: "Use when an FSD and goal issue board need requirement coverage, go
 
 Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
 
-Announce: "I'm using the plan-verification skill to validate this plan before execution."
-
 ## Reference Router
 
 Load only the dimensions involved in the current check or failed re-check:
@@ -41,14 +39,18 @@ Run ten verification dimensions initially; after revision recheck affected dimen
   checks without provider barriers. Networked scope requires
   `node .agent/tools/readiness-gate.mjs` exit 0 (every canonical hard gate),
   contract version and refs on each UI issue, exactly one first vertical slice,
-  and scale-out dependencies on its verified issue. Require exactly one
-  `HARDENING` goal that depends on every UI delivery slice. An exception or
+  and scale-out dependencies on its verified issue. When networked merged
+  verification obligations remain, require one `HARDENING` goal that depends
+  on the applicable UI delivery slices. LOCAL_ONLY completes mapped checks
+  within the goal; separate hardening is only for outstanding cross-slice checks. An exception or
   mock-only result cannot hide a failed hard gate. Non-UI work records
   `NOT_APPLICABLE` with factual reason.
 - **Enabler-only gate:** A `CONTRACT_ENABLER` is the sole exception while
   readiness is `DRAFT` or `BLOCKED`. Report `PASS WITH NOTES - ENABLER_ONLY` only
   when the enabler is independently bounded/testable and every
-  first vertical slice and scale-out issue remains blocked. After verification, return to
-  `/sc-plan` and rerun all UI/API hard gates.
+  first vertical slice and scale-out issue remains blocked. After verification,
+  the active controller applies the planning-owned deterministic index/readiness
+  operation internally before releasing a slice; no full planning re-entry is
+  needed for unchanged semantics. Rerun applicable UI/API hard gates.
 - **Verdict gate:** Report `PASS`, `PASS WITH NOTES`, or `NEEDS REVISION`, with impact-based findings. Apply targeted fixes within scope.
 - **Recovery gate:** Repeated failure triggers reassessment/escalation per shared recovery policy; only missing authority/access, hard limits, or proven stagnation stop the affected goal.

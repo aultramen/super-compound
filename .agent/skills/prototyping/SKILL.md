@@ -7,9 +7,8 @@ description: "Use when /sc-explore needs throwaway runnable evidence for uncerta
 
 ## Purpose
 
-Build throwaway code to answer one question, then capture the answer and delete or absorb the prototype.
-
-Announce: "I'm using the prototyping skill to answer this question with throwaway evidence."
+Build throwaway code to answer one question. Promote validated decisions and
+behavior requirements into their owning authority, then discard prototype code.
 
 ## Choose The Prototype Type
 
@@ -27,14 +26,18 @@ If the question is ambiguous, choose the type closest to the code area and state
 - Avoid persistence unless persistence is the question.
 - Skip production polish, broad error handling, and abstractions.
 - Surface the relevant state after every action or variant change.
-- Do not let prototypes become production by accident.
+- Prototype code is not a production seed. Reuse code only under an explicit
+  scoped exception authorized by the user or existing project policy, with
+  production authority, required tests, security and accessibility checks;
+  prototype acceptance alone does not authorize promotion.
 
 ## Process
 
 1. State the question the prototype answers.
 2. Let the user or verification evidence pick the answer.
 3. Capture the answer in a PRD, ADR, issue, plan, or notes.
-4. Delete the prototype or explicitly absorb the validated behavior into planned work.
+4. Promote validated decisions, not code, into planned work. Delete the throwaway
+   code; any explicit reuse exception must name its scope and production checks.
 
 ## UI Variant Guidance
 

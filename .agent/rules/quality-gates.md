@@ -1,11 +1,14 @@
 # Quality Gates
 
-Keep gates lightweight and evidence-based. Detailed procedures belong in the referenced skills.
+## Summary
+
+Lightweight gates; procedures: skills.
 
 ## Before Work
 
 - Classify the delivery tier first (`light` or `full`, `skills/agentic-delivery/references/workflow-integration.md`) and state it in one line; a trigger found mid-work escalates, it never blocks at intake.
-- Read the relevant workflow and skill before editing.
+- Apply the relevant compact contract before editing; load full workflow/skill
+  detail only for uncovered checks, material risk, conflicts, or editing that procedure.
 - Check `.agent/rules/project-config.md` and existing project conventions.
 - For UI work, use `interface-design` before implementation.
 - `EXCEPTION_APPROVED` may release only a first vertical slice; a `VALIDATED`
@@ -35,7 +38,8 @@ Keep gates lightweight and evidence-based. Detailed procedures belong in the ref
 
 ## Before Completion
 
-Use `verification-before-completion` for non-trivial work.
+Every task: verification-before-completion (No Evidence = Not Done;
+goal/requirements/all AC; Evidence of Completion). Small tasks: real inspection.
 
 - Run the smallest meaningful verification first.
 - Run broader checks when shared behavior, security, data, or UI workflows changed.

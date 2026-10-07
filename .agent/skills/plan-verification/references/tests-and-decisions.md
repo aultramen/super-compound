@@ -26,7 +26,7 @@ For UI-bearing scope, load the canonical
 
 - The PRD experience baseline and FSD Screen & Interaction Contract are current.
 - `node .agent/tools/readiness-gate.mjs` exits 0: every hard gate passes; `N/A` has factual reason.
-- Every visible/editable datum and network action maps through `UIMAP-*` to an
+- For networked scope, every visible/editable datum and network action maps through `UIMAP-*` to an
   operation, schema, outcome/error, named state, deterministic fixture, and test.
 - Schema, fixture, mock, and typed-consumer revisions are pinned and consistent.
 - Provider/consumer, responsive, accessibility, QA, and real-integration refs exist.
@@ -34,8 +34,10 @@ For UI-bearing scope, load the canonical
   `SCALE_OUT_SLICE` depends on `FIRST_VERTICAL_SLICE_VERIFIED`.
 - Parallel scale-out also requires the PRD baseline to be `VALIDATED`; an
   `EXCEPTION_APPROVED` baseline releases only the first slice.
-- Exactly one `HARDENING` goal depends on all applicable UI delivery slices and
-  owns merged integration, responsive, accessibility, E2E, visual, and UAT refs.
+- When networked merged verification obligations remain, one `HARDENING` goal
+  depends on all applicable UI delivery slices and owns integration, responsive,
+  accessibility, E2E and visual refs. UAT applies only when acceptance/policy or
+  unresolved material human judgment requires it.
 - Brownfield scope has current-state/compatibility evidence.
 
 Any missing hard-gate evidence is Critical. Mock-only evidence is not real
@@ -44,9 +46,13 @@ integration and cannot make scale-out ready.
 The only pre-readiness execution verdict is `PASS WITH NOTES - ENABLER_ONLY` for
 one bounded `CONTRACT_ENABLER` while readiness is `DRAFT/BLOCKED`. It requires
 complete semantic authority and deterministic verification; all first-slice and
-scale-out pointers stay blocked. Re-enter `/sc-plan` after the enabler is
-verified and rerun dimension 10 before releasing the first slice.
+scale-out pointers stay blocked. After the enabler is verified, the active
+controller invokes the planning-owned deterministic promotion internally and
+reruns dimension 10 before releasing the first slice, without full planning re-entry.
 The refreshed index and pointer auto-promote when semantics remain approved
 and deterministic gates pass; material changes return to the Technical Manager.
 
-LOCAL_ONLY applicability and affected proof follow the canonical UI readiness reference.
+LOCAL_ONLY maps local screen/state/data to behavior and accessibility tests
+within its goal; omit synthetic provider/schema/fixture prerequisites and use a
+separate hardening goal only for outstanding merged/cross-slice checks.
+Applicability and affected proof follow the canonical UI readiness reference.

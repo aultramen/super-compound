@@ -4,7 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { DEFAULT_SCENARIOS } from "./token-benchmark.mjs";
+import { DEFAULT_SCENARIOS, estimateTokens } from "./token-benchmark.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -33,6 +33,59 @@ const PUBLIC_ROUTES = [
   "sc-launch",
   "sc-ui",
 ];
+
+test("autonomy policy keeps exception defaults and material authority", async () => {
+  const policy = await readRepositoryFile(".agent/skills/agentic-delivery/references/workflow-integration.md");
+  const config = await readRepositoryFile(".agent/rules/project-config.md");
+  assert.match(config, /approval_mode:\s*"exception"/);
+  assert.match(policy, /missing.*approval_mode.*exception/i);
+  assert.match(policy, /stage.*opt-in/i);
+  assert.match(policy, /bounded.*feature.*page[\s\S]*light/i);
+  assert.match(policy, /material.*(?:T2|security)[\s\S]*precedence/i);
+  assert.match(policy, /destructive or production mutations/);
+  assert.match(policy, /Preserve existing project configuration/);
+  const work = await readRepositoryFile(".agent/workflows/sc-work.md");
+  assert.match(work, /material scope\/product\/contract\/access\/data/);
+  assert.match(work, /bounded feature\/page novelty[\s\S]*alone does not escalate/);
+});
+
+test("autonomy policy finishes goals and bounds explicit improvement work", async () => {
+  for (const file of [".agent/workflows/sc-status.md", ".agent/context/workflows/sc-status.contract.md"]) {
+    const text = await readRepositoryFile(file);
+    assert.match(text, /goal.*satisfied[\s\S]*(?:stop|finish)/i);
+    assert.match(text, /explicit.*improvement/i);
+    assert.doesNotMatch(text, /no ready goal[^\n]*recommend \/sc-geniusloop/i);
+  }
+  for (const file of [".agent/workflows/sc-geniusloop.md", ".agent/context/workflows/sc-geniusloop.contract.md", ".agent/agents/brain.md"]) {
+    const text = await readRepositoryFile(file);
+    assert.match(text, /at most (?:three|3)/i);
+    assert.match(text, /(?:explicit|requested).*broad[\s\S]*(?:10|ten)/i);
+    assert.match(text, /incremental/i);
+    assert.match(text, /\/sc-work/);
+    assert.match(text, /read-only/i);
+  }
+});
+
+test("autonomy policy promotes derived pointers without planning re-entry", async () => {
+  for (const file of [".agent/workflows/sc-work.md", ".agent/context/workflows/sc-work.contract.md", ".agent/workflows/sc-plan.md", ".agent/context/workflows/sc-plan.contract.md"]) {
+    const text = await readRepositoryFile(file);
+    assert.match(text, /active controller/i);
+    assert.match(text, /(?:no|without|do not require)[\s\S]*planning re-entry/i);
+    assert.match(text, /material[\s\S]*(?:owner|\/sc-plan)/i);
+    assert.match(text, /FIRST_VERTICAL_SLICE_VERIFIED/);
+  }
+});
+
+test("autonomy policy checkpoints are concise and retain unresolved authority", async () => {
+  const checkpoint = await readRepositoryFile(".agent/context/checkpoint.contract.md");
+  assert.match(checkpoint, /prioritiz/i);
+  assert.match(checkpoint, /concise/i);
+  assert.match(checkpoint, /(?:expand|on demand)/i);
+  assert.match(checkpoint, /stable Q/);
+  assert.match(checkpoint, /unresolved.*IDs|unanswered IDs/i);
+  assert.match(checkpoint, /Silence.*never grants approval/i);
+  assert.match(checkpoint, /mandatory security, accessibility, contract and integrity/);
+});
 
 test("route contracts carry the knowledge-loop spine (read-back, capture, evolve)", async () => {
   // Contract-first routing never loads the full workflow body, so the loop must
@@ -345,7 +398,7 @@ test("pause and launch persist one canonical durable state with a pointer-only h
     assert.match(text, /update|persist/i);
     assert.match(text, /docs\/STATE\.md/);
   }
-  assert.match(hookIndex, /session-end` \| (?:emit|print).*checklist/i);
+  assert.match(hookIndex, /session-end` \| report pending\/incomplete learning closeouts only/i);
   assert.doesNotMatch(hookIndex, /session-end` \| persist session state/i);
   assert.match(sessionEnd, /does not mutate project files/i);
   for (const text of [walkthrough, operatingContract]) {
@@ -465,7 +518,7 @@ test("UI-bearing PRDs validate an experience baseline before approval", async ()
   for (const text of [launch, launchContract]) {
     assert.match(
       text,
-      /contract enabler[\s\S]*\/sc-plan[\s\S]*(?:approved|unchanged semantics|promotion)[\s\S]*first vertical slice/i,
+      /contract enabler[\s\S]*(?:planning-owned|active controller)[\s\S]*(?:readiness|promotion)[\s\S]*first (?:vertical )?slice/i,
     );
   }
 });
@@ -552,7 +605,7 @@ test("UI delivery uses a contract enabler and a real first vertical slice before
     assert.match(text, /scale-out[\s\S]*baseline[\s\S]*VALIDATED|VALIDATED[\s\S]*scale-out/i);
     assert.match(
       text,
-      /FIRST_VERTICAL_SLICE[\s\S]*verified[\s\S]*\/sc-plan[\s\S]*(?:promote|ready)[\s\S]*SCALE_OUT/i,
+      /FIRST_VERTICAL_SLICE[\s\S]*verified[\s\S]*(?:active controller|planning-owned)[\s\S]*promot[\s\S]*SCALE_OUT/i,
     );
   }
 
@@ -563,8 +616,9 @@ test("UI delivery uses a contract enabler and a real first vertical slice before
   );
   assert.match(
     planVerification,
-    /exactly one[\s\S]*HARDENING[\s\S]*depends on[\s\S]*(?:all|every)[\s\S]*(?:UI|delivery) slice/i,
+    /networked merged[\s\S]*one[\s\S]*HARDENING[\s\S]*depends\s+on[\s\S]*applicable UI delivery slices/i,
   );
+  assert.match(planVerification, /LOCAL_ONLY[\s\S]*within the goal/);
 });
 
 test("parallel UI scale-out starts with two independent streams only after the first slice", async () => {
@@ -765,13 +819,41 @@ test("review and audit stay read-only and hand remediation to an owning workflow
   assert.match(operatingContract, /select only the matching submode branch/i);
   assert.match(operatingContract, /never preload every audit skill/i);
   for (const skill of [securitySkill, compatibilitySkill]) {
-    assert.match(skill, /caller boundary|inside `?\/sc-audit/i);
+    assert.match(skill, /Audit mode is read-only/i);
+    assert.match(skill, /caller boundary|standalone audit requires an explicit remediation request/i);
     assert.match(skill, /transition|route/i);
   }
 
   const routes = JSON.parse(invariants).routes;
   assert.equal(routes["sc-review"].mutation, "read-only");
   assert.equal(routes["sc-audit"].mutation, "read-only");
+});
+
+test("review economics preserves gates and durable finding adjudication", async () => {
+  const authority = ".agent/skills/code-review/references/findings-and-self-review.md";
+  const [review, compact, findings, workPackage] = await Promise.all([
+    readRepositoryFile(".agent/workflows/sc-review.md"),
+    readRepositoryFile(".agent/context/workflows/sc-review.contract.md"),
+    readRepositoryFile(authority),
+    readRepositoryFile(".agent/skills/subagent-orchestration/references/review-contract.md"),
+  ]);
+
+  assert.ok(estimateTokens(compact) <= 194, "keep the existing >90% compact review reduction");
+  for (const text of [review, compact]) assert.ok(text.includes(authority));
+  assert.match(workPackage, /findings-and-self-review\.md/);
+  assert.match(review, /opened findings.*docs\/reviews/is);
+  assert.match(findings, /low.*mechanical.*medium.*behavior.*high.*complex|mechanical.*low.*behavior.*medium.*complex.*high/is);
+  assert.match(findings, /explicit.*model.*effort.*preserv|preserv.*explicit.*model.*effort/is);
+  assert.match(findings, /SPEC.*QUALITY.*UI.*security.*gate/is);
+  assert.match(findings, /reuse.*resident.*evidence/is);
+  assert.match(findings, /no nested.*fanout/i);
+  assert.match(findings, /stable.*ID.*origin.*(?:file|symbol).*cause/is);
+  assert.match(findings, /never renumber/i);
+  assert.match(findings, /severity.*rationale.*owner.*disposition.*current revision.*evidence/is);
+  assert.match(findings, /carry forward.*unchanged.*source.*authority.*evidence/is);
+  assert.match(findings, /changed.*reassess.*same ID/is);
+  assert.match(findings, /final.*acceptance.*integration.*checks/is);
+  for (const gate of ["SPEC Verdict", "QUALITY Verdict"]) assert.ok(workPackage.includes(gate));
 });
 
 test("debug preserves non-trivial investigation evidence behind the chat budget", async () => {

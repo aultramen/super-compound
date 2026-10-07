@@ -1,0 +1,133 @@
+{
+  "schema": "completion_verification_summary_v1",
+  "taskId": "evidence-dod-20261007",
+  "inspectedAt": "2026-10-07T02:56:03.988Z",
+  "observer": "root coordinator",
+  "sourceDigest": "6b08e4e595f75399b854d14597cf87d59a605057d4c11a8e6ead8dcc96f32cb7",
+  "sourceFileCount": 658,
+  "contractDigest": "1aef223423737e8114a490f5c1ee1cde4dee8ef45b6c389940f4b769d434c3f5",
+  "suites": [
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+        "test"
+      ],
+      "displayCommand": "npm test",
+      "cwd": "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-evidence-dod-final-Ynwygm",
+      "startedAt": "2026-10-07T02:50:59.636Z",
+      "finishedAt": "2026-10-07T02:53:09.053Z",
+      "exitCode": 0,
+      "logPath": ".scratch/completion/evidence-dod-20261007/npm-test-final.log",
+      "node": "v24.15.0",
+      "platform": "win32",
+      "availableParallelism": 4,
+      "processAffinityMask": 15,
+      "nodeSuites": [
+        {
+          "tests": 476,
+          "pass": 476,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        {
+          "tests": 28,
+          "pass": 28,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      ],
+      "pythonTests": null,
+      "hookSecurity": "pass",
+      "skillRouter": "not-in-this-command",
+      "logDigest": "24180cba9200eb9f285a4db56bed25b4f62c1160d665b3d2a4c3779f8228cc2f"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+        "run",
+        "test:local"
+      ],
+      "displayCommand": "npm run test:local",
+      "cwd": "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-evidence-dod-final-Ynwygm",
+      "startedAt": "2026-10-07T02:53:09.054Z",
+      "finishedAt": "2026-10-07T02:55:10.332Z",
+      "exitCode": 0,
+      "logPath": ".scratch/completion/evidence-dod-20261007/test-local-final-4.log",
+      "node": "v24.15.0",
+      "platform": "win32",
+      "availableParallelism": 4,
+      "processAffinityMask": 15,
+      "nodeSuites": [
+        {
+          "tests": 470,
+          "pass": 470,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        {
+          "tests": 28,
+          "pass": 28,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      ],
+      "pythonTests": 36,
+      "hookSecurity": "pass",
+      "skillRouter": "pass",
+      "logDigest": "9e04b005be908d821b9e923099a46ffd8ad4a06c84686a9d2f9c4a8cbdd80637"
+    }
+  ],
+  "benchmark": {
+    "repeat": 3,
+    "deterministic": true,
+    "scenarios": 38,
+    "failures": 0,
+    "claimScope": {
+      "evidenceClass": "repository-owned-static",
+      "repositoryOwnedStatic": true,
+      "runtimeEndToEnd": "not-claimed",
+      "hostTelemetry": "unknown",
+      "generatedOutputTokens": "unknown"
+    }
+  },
+  "sourceEquivalence": {
+    "comparisons": [
+      {
+        "root": "D:\\BATI\\Development\\framework\\super-compound",
+        "fileCount": 658,
+        "missing": 0,
+        "extra": 0,
+        "mismatched": 0
+      },
+      {
+        "root": "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-evidence-dod-final-Ynwygm",
+        "fileCount": 658,
+        "missing": 0,
+        "extra": 0,
+        "mismatched": 0
+      }
+    ],
+    "originalBenchmarkPreserved": true,
+    "historicalJsonPreserved": 11
+  },
+  "regression": {
+    "baselineExit": 0,
+    "currentExit": 1,
+    "actualFailedProofRejected": true
+  },
+  "lightCli": {
+    "failedExit": 1,
+    "passingExit": 0,
+    "ledgerRequired": false
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "schema": "completion_contract_v1",
+  "taskId": "evidence-dod-20261007",
+  "goal": "Super Compound refuses completion without actual evidence covering the requested outcome and supports proportionate proof across light and delegated delivery.",
+  "authorityRefs": [
+    ".scratch/completion/evidence-dod-20261007/request.md"
+  ],
+  "sourceRefs": [
+    ".agent/context/output-style.md",
+    ".agent/context/skills/execution-verification.contract.md",
+    ".agent/context/workflows/sc-compound.contract.md",
+    ".agent/context/workflows/sc-debug.contract.md",
+    ".agent/context/workflows/sc-eval.contract.md",
+    ".agent/context/workflows/sc-launch.contract.md",
+    ".agent/context/workflows/sc-pause.contract.md",
+    ".agent/context/workflows/sc-plan.contract.md",
+    ".agent/context/workflows/sc-review.contract.md",
+    ".agent/context/workflows/sc-status.contract.md",
+    ".agent/context/workflows/sc-work.contract.md",
+    ".agent/rules/quality-gates.md",
+    ".agent/rules/super-compound.md",
+    ".agent/skills/agentic-delivery/references/context-and-issue-pointers.md",
+    ".agent/skills/agentic-delivery/tests/progressive-disclosure-wave3.test.mjs",
+    ".agent/skills/checkpoint-protocol/references/answerable-package.md",
+    ".agent/skills/executing-plans/references/execution-and-verification.md",
+    ".agent/skills/issue-workflow/references/status-and-done.md",
+    ".agent/skills/parallel-execution/SKILL.md",
+    ".agent/skills/state-management/references/file-contracts.md",
+    ".agent/skills/subagent-orchestration/SKILL.md",
+    ".agent/skills/subagent-orchestration/references/completion-inbox.md",
+    ".agent/skills/subagent-orchestration/references/review-contract.md",
+    ".agent/skills/verification-before-completion/SKILL.md",
+    ".agent/skills/verification-before-completion/references/claim-evidence.md",
+    ".agent/skills/verification-before-completion/references/goal-backward.md",
+    ".agent/skills/verification-before-completion/references/live-verification.md",
+    ".agent/skills/verification-before-completion/references/verification-recipes.md",
+    ".agent/skills/verification-before-completion/tests/test_skill_router_contract.py",
+    ".agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md",
+    ".agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md",
+    ".agent/templates/agentic-delivery/skeletons/Issue-Pointer-Skeleton.md",
+    ".agent/templates/git-workflow/PULL_REQUEST_TEMPLATE.md",
+    ".agent/templates/orchestration/Implementer-Brief-Skeleton.md",
+    ".agent/templates/state/STATE-Template.md",
+    ".agent/tools/active-assets.test.mjs",
+    ".agent/tools/autonomy-policy.test.mjs",
+    ".agent/tools/blueprint-document.test.mjs",
+    ".agent/tools/codex-pilot.mjs",
+    ".agent/tools/codex-pilot.test.mjs",
+    ".agent/tools/completion-evidence.test.mjs",
+    ".agent/tools/completion-fixture.test-support.mjs",
+    ".agent/tools/completion-receipts.test.mjs",
+    ".agent/tools/hitl-checkpoints.test.mjs",
+    ".agent/tools/memory-maintenance.mjs",
+    ".agent/tools/memory-maintenance.test.mjs",
+    ".agent/tools/privacy-guard.mjs",
+    ".agent/tools/privacy-guard.test.mjs",
+    ".agent/tools/questions-and-hints.test.mjs",
+    ".agent/tools/readiness-gate.mjs",
+    ".agent/tools/readiness-gate.test.mjs",
+    ".agent/tools/setup.mjs",
+    ".agent/tools/setup.test.mjs",
+    ".agent/tools/verification-recipe.mjs",
+    ".agent/tools/verified-promise.mjs",
+    ".agent/tools/verified-promise.test.mjs",
+    ".agent/tools/work-package.mjs",
+    ".agent/tools/work-package.test.mjs",
+    ".agent/workflows/sc-compound.md",
+    ".agent/workflows/sc-debug.md",
+    ".agent/workflows/sc-eval.md",
+    ".agent/workflows/sc-launch.md",
+    ".agent/workflows/sc-pause.md",
+    ".agent/workflows/sc-plan.md",
+    ".agent/workflows/sc-review.md",
+    ".agent/workflows/sc-status.md",
+    ".agent/workflows/sc-work.md",
+    ".codex/SKILL.md",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "README.md",
+    "SUPER-COMPOUND.md",
+    "WALKTHROUGH.md",
+    "package.json"
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "requirementRefs": [
+        ".scratch/completion/evidence-dod-20261007/request.md#AC-01"
+      ],
+      "expected": "All tasks require real goal, requirement and complete acceptance evidence plus Evidence of Completion.",
+      "method": "artifact",
+      "observationRef": ".scratch/completion/evidence-dod-20261007/AC-01.json"
+    },
+    {
+      "id": "AC-02",
+      "requirementRefs": [
+        ".scratch/completion/evidence-dod-20261007/request.md#AC-02"
+      ],
+      "expected": "The shared completion gate rejects missing, partial, failed, skipped, wrong-scope and stale proof and admits actual passing outcomes.",
+      "method": "functional",
+      "observationRef": ".scratch/completion/evidence-dod-20261007/AC-02.json"
+    },
+    {
+      "id": "AC-03",
+      "requirementRefs": [
+        ".scratch/completion/evidence-dod-20261007/request.md#AC-03"
+      ],
+      "expected": "Goal and receipt verification and dependency release require adequate outcome evidence; drift cannot return completion.",
+      "method": "functional",
+      "observationRef": ".scratch/completion/evidence-dod-20261007/AC-03.json"
+    },
+    {
+      "id": "AC-04",
+      "requirementRefs": [
+        ".scratch/completion/evidence-dod-20261007/request.md#AC-04"
+      ],
+      "expected": "Checkpoint/resume and first-slice scale-out require current outcome proof rather than historical status.",
+      "method": "functional",
+      "observationRef": ".scratch/completion/evidence-dod-20261007/AC-04.json"
+    },
+    {
+      "id": "AC-05",
+      "requirementRefs": [
+        ".scratch/completion/evidence-dod-20261007/request.md#AC-05"
+      ],
+      "expected": "Light tasks and generated/installed adapters can evaluate actual proof without formal delivery artifacts or a swarm ledger.",
+      "method": "functional",
+      "observationRef": ".scratch/completion/evidence-dod-20261007/AC-05.json"
+    },
+    {
+      "id": "AC-06",
+      "requirementRefs": [
+        ".scratch/completion/evidence-dod-20261007/request.md#AC-06"
+      ],
+      "expected": "A completed run proves its combined goal and rejects failed, absent or unrelated aggregate proof.",
+      "method": "functional",
+      "observationRef": ".scratch/completion/evidence-dod-20261007/AC-06.json"
+    },
+    {
+      "id": "AC-07",
+      "requirementRefs": [
+        ".scratch/completion/evidence-dod-20261007/request.md#AC-07"
+      ],
+      "expected": "Current framework sources pass the local and installation-inclusive suites, preserving existing workflows, hooks and delivery compatibility.",
+      "method": "functional",
+      "observationRef": ".scratch/completion/evidence-dod-20261007/AC-07.json"
+    },
+    {
+      "id": "AC-08",
+      "requirementRefs": [
+        ".scratch/completion/evidence-dod-20261007/request.md#AC-08"
+      ],
+      "expected": "The final Evidence of Completion report maps actual executed and inspected evidence to every acceptance criterion.",
+      "method": "artifact",
+      "observationRef": ".scratch/completion/evidence-dod-20261007/AC-08.json"
+    }
+  ]
+}

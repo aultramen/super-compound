@@ -2,11 +2,44 @@
 
 ## Summary
 
-Use [prompt-driven setup](SETUP.md) to install project/global scope and native adapters, then follow separate BRD, PRD, FSD approvals and execution authorization. Documentation follows the shared output standard; existing configuration is preserved.
+Use [prompt-driven setup](SETUP.md), describe the goal, and let the framework understand context, execute authorized work, validate, and deliver. New installations use exception-based approval; explicit stage preferences and existing configuration remain intact.
 
-This walkthrough shows the current Super Compound flow after the 2026-06-20 cleanup. It uses the small public workflow surface and avoids legacy aliases.
+This walkthrough shows the current goal-oriented Super Compound flow. It uses the 19 public workflows and keeps internal routing out of the user's task.
 
 Every command starts with `/sc-*` so it stays separate from native Claude Code slash commands.
+
+## Verified knowledge and safe resume
+
+After a non-trivial verified result, the owning work/debug route captures useful
+reasoning or records a skip reason. Routine feature size alone does not justify
+duplicating final code/tests/docs into a solution. Guarded persistence rejects
+sensitive content before saving either knowledge or pending input.
+
+Search first with `knowledge-search.mjs "<topic>" --require-complete --json`;
+include only known project/stack/version flags. A partial scan names access
+diagnostics and cannot establish absence. Active archived ERR/LRN entries remain
+searchable with the same status filters and bounded result output. A retrieved
+lesson is advice, not permission to skip checks or change approved requirements.
+
+For interruption or non-trivial closeout, keep captured/skip/pending dispositions
+in the optional managed checkpoint `learningCloseouts`. A pending record points
+to validated capture input and verified evidence. `/sc-status` reads it;
+the owning route retries capture without redispatching verified implementation.
+Tiny changes need no checkpoint or ledger merely to record a skip. Existing
+checkpoints without this metadata remain readable and advisory.
+
+When applying a lesson, record feedback against its actual revision/digest.
+Later successes retain earlier failed observations; status/evolve reports their
+bounded proof pointers for owner review. Carry existing review finding IDs across
+revisions, and reuse proof only while relevant inputs stay unchanged. Research
+notes distinguish binding intent from factual premises that need current evidence.
+
+The [framework gap report](docs/audits/2026-10-06-framework-gap-analysis.md) maps
+the website checklist's six items into existing PRD/FSD/design/GOAL contracts;
+it does not require six separate documents or data storage for every website.
+[Delivery evidence](docs/eval-results/framework-enhancement-20261006.md) separates
+local verification from runtime measurement. Same-source controls describe noise;
+they cannot be reported as an enhancement win.
 
 ## Practical guidance
 
@@ -35,6 +68,34 @@ to the artifact owner. Context recovery reuses context-engineering and `/sc-stat
 See the [command comparison and flow](README.md#practical-guidance-with-sc-hints)
 and [examples](.agent/skills/hints/references/examples.md).
 
+## Reviewing one artifact
+
+You can say "Buat PRD saja", "Lanjutkan pekerjaan yang authorized", or "Apa
+langkah berikutnya?". The [three conceptual intents](README.md#quick-start)
+route to existing owners. Requested authoring stops at its artifact/validation;
+status and consultation alone remain read-only. Skills are agent routing detail.
+
+Start from the Summary in the artifact being reviewed. It names the outcome,
+scope, material risks and current decision. Detail expands inside that same
+artifact under [shared applicability](.agent/skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion),
+with qualified upstream refs and existing metadata/approval provenance. Optional
+empty support is omitted; required N/A remains factual and traceable. A grouped
+N/A names every covered decision/state ID. Approval never supplies missing proof.
+
+The excerpts below illustrate authoring, not approved project requirements or
+drop-in templates. They omit metadata/sections for explanation only; actual
+authoring preserves the canonical skeleton and parser interfaces.
+
+| Artifact | Before: generic coverage prompt | After: reviewer-oriented excerpt |
+|---|---|---|
+| BRD | Objectives, stakeholders, reporting, cost/benefit and readiness. | Summary: help Operations find failed tasks. BREQ-001: find tasks by status. Scope: existing list; non-scope: retry and access changes. BAC-001: find failures without inspecting every row. Measure: search time; baseline is unmeasured, not invented ROI. |
+| PRD | Alternate compact headings and a broad feature checklist. | FR-001: selecting a status filters the list; source BRD-TASK#BREQ-001. AC-001: results match that status. AC-002: empty results explain the condition and offer clearing the filter. Existing permission limits apply; UAT names steps/results and remains untested until evidence exists. |
+| FSD | Universal technical areas, with local topology after AI. | Reuse existing data/permissions. TDEC-001 proposes local state filtering. Section 8 maps local states to TEST refs with topology LOCAL_ONLY and network_actions empty. GOAL-001 uses the existing packet grammar and qualified PRD/FSD refs; proving checks and rollback cover the changed list behavior. |
+| ADR | Alternatives and N/A tables filled without a material decision. | Filter: adr_applicability NOT_REQUIRED, local TDEC suffices. A separate material cross-service schema decision would record one choice, viable options, consequences, FSD/GOAL/TEST obligations and a review trigger; PROPOSED never governs execution. |
+
+This local-only example does not remove the networked real-provider first-slice
+barrier. Security/privacy/accessibility and material risks retain their own gates.
+
 ## Delivery tier checkpoint
 
 For your first task, use the [five Quick Start scenarios](README.md#quick-start):
@@ -49,33 +110,32 @@ Active authorized work takes priority over administrative freshness.
 
 Human input follows [one checkpoint package](.agent/context/checkpoint.contract.md).
 It names the remaining need and owner, direct review material, recommendation,
-all ready questions/approvals for active work with stable IDs and automatic resumption. Technical evidence stays
+a short prioritized set of ready questions/approvals with stable IDs and automatic resumption. Keep the complete unresolved register available by link or on request. Technical evidence stays
 separate from approval. Same-owner/scope inputs are coordinated; independent
 authorized work continues. See the [PromptShield before/after example](docs/eval-results/hitl-checkpoints-20261004.md).
 
-Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or a one-module change is `light`: `/sc-debug` or `/sc-work` starts immediately, tests and verification still apply, and a single trivial change is simply done. A new capability, a material contract/access/data change, a new screen, or coordinated work that changes outcomes or risk is `full` and takes the lifecycle below. The scenario that follows is `full`.
+Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or bounded reversible feature/page using existing contracts, access and patterns is `light`: `/sc-debug` or `/sc-work` starts immediately with relevant validation. A trivial change executes directly and still requires proportionate outcome evidence. Material new capability/flow, contract/access/data changes, consequential coordination, or an explicit artifact request uses `full`. Novelty alone does not raise the tier. The analytics scenario below assumes material new product behavior and is `full`.
 
 ## Answering a checkpoint
 
-The agent shows every ready item for active work together, grouped by owner and
-stage. Each numbered item names the concrete need, why your input is necessary,
-a recommendation, its rationale/consequences, full clickable absolute paths,
-the relevant section and what to inspect, and what resumes after your answer.
+The agent investigates repository facts first and displays at most three highest-priority
+answerable needs by default, grouped by owner/scope. Each numbered item names
+the concrete need, why your input is necessary, a recommendation, brief reason,
+review material when needed, and what resumes after your answer.
 Paths come from your current workspace; saved document references stay portable.
 Dependent questions appear as pending with their prerequisite and next action.
-The full list remains in conversation text when a host dialog shows fewer items.
+The complete unresolved list remains in authorized state or expandable detail,
+with stable IDs and a summary of every material block. A smaller display never
+settles hidden or unanswered items.
 
-For example, a framework-format review could ask Q1 whether to show all ready
-items (recommendation: yes, for active work; consequence: longer output), and Q2
-whether to use numbered explanations (recommendation: yes; consequence: more
-space than a table). Review the actual workspace's
-`.agent/context/checkpoint.contract.md`, section **Answerable package**, for Q1,
-and `.agent/skills/brainstorming/references/questions-and-options.md`, section
-**Whole frontier per round**, for Q2. These portable documentation refs illustrate
-the sources; the live request expands them to existing full absolute clickable paths.
-After your answer, the owner records decisions and continues authorized work.
+For example, an analytics request with no settled retention policy may need Q1:
+the permitted retention period. The agent first inspects existing policy, links
+the relevant source, recommends a period with its consequence, and asks only if
+that decision remains unresolved. Component choice and file placement follow
+existing repository patterns internally. After an actual answer, the owner
+records the decision and continues authorized work.
 
-Every request includes both answer examples in your language:
+When useful, grouped decisions include reply examples in your language:
 
 ```text
 Saya setuju semua rekomendasi pada daftar di atas.
@@ -93,18 +153,21 @@ clarification of the ambiguous part. Independent clear answers remain valid.
 Corrections reopen affected dependent decisions, preserving unrelated answers.
 Approval of an information/test/access action still requires the requested
 information, result report or access-readiness evidence. Prototype acceptance,
-provider qualification, release/UAT and execution authorization remain separate.
+provider qualification, required release/UAT and execution authorization remain separate needs. Existing authority is reused; silence and elapsed time never grant new permission.
 
 ## High-Level Design
 
 ```mermaid
 flowchart LR
  Setup[Choose scope and install] --> Doctor[Doctor]
- Doctor --> BRD[BRD approval]
- BRD --> PRD[PRD approval]
- PRD --> FSD[FSD and goals approval]
- FSD --> Auth[Execution authorization]
- Auth --> Work[Implement → Verify → Review]
+ Doctor --> Goal[User goal]
+ Goal --> Context[Understand context]
+ Context --> Plan[Plan internally]
+ Plan --> Work[Auto execute]
+ Work --> Verify[Validate]
+ Verify --> Result[Deliver and finish]
+ Plan -->|Material decision or missing authority| Human[Exception checkpoint]
+ Human --> Plan
 ```
 
 Use `/sc-init setup` for installation. Ordinary init/reload only inspect context.
@@ -171,17 +234,17 @@ Run manually when you want proactive improvement ideas:
 /sc-geniusloop analytics dashboard
 ```
 
-`/sc-status` can also recommend `/sc-geniusloop` when `.scratch/*/issues/` has no ready goal issues and there is no active handoff, blocker, or failing verification.
+An empty queue with a verified goal ends in `GOAL_SATISFIED`. `/sc-status` recommends `/sc-geniusloop` only when the user explicitly asks for improvement ideas.
 
 The agent should:
 
 - Benchmark the current system against the user's stated intent
-- Generate at least 10 numbered `GL-*` improvement ideas
-- Dispatch read-only Brain evaluation through Beta, Alpha, Theta, and Delta filters
-- Keep only 1-2 Delta ideas
-- Route selected ideas back through `/sc-explore`, `/sc-prd`, `/sc-plan`, `/sc-ui`, `/sc-research`, or `/sc-audit`
+- Generate up to three numbered `GL-*` candidates by default; include valuable incremental improvements
+- Use read-only Brain evaluation when its benefit exceeds coordination overhead
+- Expand to a broad inventory or Beta/Alpha/Theta/Delta filters only when requested
+- Route selected ideas to their owner, including `/sc-work` or `/sc-debug` for bounded changes
 
-`/sc-geniusloop` does not implement code or bypass `BRD -> PRD -> FSD -> GOAL`.
+`/sc-geniusloop` remains advisory. An explicit execution request transfers to the appropriate owner and tier without restarting settled decisions.
 
 ## 3. Explore
 
@@ -191,7 +254,7 @@ Run:
 /sc-explore analytics dashboard for account admins
 ```
 
-Use `/sc-explore` when the idea is still fuzzy, strategic, domain-heavy, or needs a lightweight prototype decision. Its durable output is a BRD under `docs/brd/`.
+Use `/sc-explore` when the idea is still fuzzy, strategic, domain-heavy, or needs a lightweight prototype decision. Its durable output is a BRD under `docs/brd/`. Promote prototype decisions and evidence; prototype code is discarded by default. Production reuse requires explicit user/project policy, production ownership, and applicable validation.
 
 The agent should:
 
@@ -336,12 +399,16 @@ keyboard/focus, realtime, or offline behavior is the material risk.
 
 The reviewer checks the critical journey and each named state: loading, empty,
 success, validation, error, forbidden, stale/conflict, partial/degraded,
-offline, and async/in-progress. Every state is `COVERED` or has an approved N/A
-reason. `/sc-ui` returns exactly one of `EVIDENCE`, `PRD_CHANGE_REQUIRED`,
+offline, and async/in-progress. Every applicable state is `COVERED`; factual N/A
+records its reason and evidence without a separate administrative approval.
+`/sc-ui` returns exactly one of `EVIDENCE`, `PRD_CHANGE_REQUIRED`,
 `FSD_CHANGE_REQUIRED`, or `VERIFICATION_FINDING`; it never edits authority.
 
-Accepted evidence is referenced by the PRD. The Business Owner sets
-`experience_baseline_status: VALIDATED`, then `/sc-plan` may begin. A prototype
+Accepted evidence is referenced by the PRD. Record
+`experience_baseline_status: VALIDATED` when applicable checks prove already
+accepted behavior. Ask the Business Owner only for unresolved material experience
+judgment or configured stage approval; automated evidence never fabricates UAT.
+Then `/sc-plan` may begin. A prototype
 is discarded after its decision is absorbed; it is not reused as production
 code.
 
@@ -504,7 +571,7 @@ stream has an isolated worktree. For multi-agent runs, create file-backed
 handoffs instead of pasting briefs and diffs through chat:
 
 ```bash
-node .agent/tools/work-package.mjs create --run analytics --goal GOAL-003 --brief .scratch/analytics-dashboard/issues/03-comparison-export-slices.md --paths-file .scratch/analytics-dashboard/issues/GOAL-003-scope.json
+node .agent/tools/work-package.mjs create --run analytics --goal GOAL-003 --brief .scratch/analytics-dashboard/issues/03-comparison-export-slices.md --paths-file .scratch/analytics-dashboard/issues/GOAL-003-scope.json --input-file .scratch/analytics-dashboard/issues/GOAL-003-create.json
 ```
 
 Before dispatch, the scheduler writes the scope JSON, for example
@@ -513,12 +580,18 @@ Before dispatch, the scheduler writes the scope JSON, for example
 isolated worktrees/workspaces, and review rejects scope changes or new edits
 outside the scheduler-owned allowlist.
 
+The illustrative create input carries scheduler authority plus pinned
+`completionContract: {path, digest}` and `runCompletionContract: {path, digest}`.
+Set the goal contract before results; the run contract proves the final combined
+outcome. Follow the [scheduler input contract](.agent/skills/subagent-orchestration/references/review-contract.md#scheduler-input-and-transition-contract)
+for required metadata, transitions, and current `expectedVersion`.
+
 ```bash
 node .agent/tools/work-package.mjs review --run analytics --goal GOAL-003 --base HEAD
-node .agent/tools/work-package.mjs record --run analytics --goal GOAL-003 --status verified --verification "mapped slice and contract tests pass"
+node .agent/tools/work-package.mjs record --run analytics --goal GOAL-003 --status verified --verification "mapped slice and contract tests pass" --input-file .scratch/analytics-dashboard/issues/GOAL-003-transition.json
 ```
 
-Implementers return the package/report paths. A reviewer reads the package once and writes separate spec-compliance and code-quality verdicts; full evidence remains on disk.
+Implementers return the package/report paths. A reviewer reads the package once and writes separate spec-compliance and code-quality verdicts; full evidence remains on disk. The verification string is a summary, never proof. The coordinator inspects actual all-AC evidence before the shared gate permits `verified`, then checks `verified-promise.mjs --run analytics` before claiming the combined delivery complete.
 
 ## 8. Debug
 
@@ -732,15 +805,85 @@ within the 10% contract-to-full-context ratio gate; startup caps remain absolute
 This does not measure hidden reasoning, generated response
 tokens, latency, or billing; those remain unknown without paired host traces.
 
-Before finishing any meaningful work:
+Before claiming any work complete:
 
-- The requested outcome is implemented or the blocker is named.
-- Tests or equivalent verification ran.
+- Actual checks prove the goal, requirements, and every acceptance criterion
+  against current relevant state; a blocker or changed configuration is not completion.
+- Required missing, failed, skipped, stale, or partial proof remains an accurate
+  incomplete status under `verification-before-completion`.
 - Branch, commit, push, and PR operations used `/sc-go` when requested.
 - Docs changed when user behavior, commands, setup, or architecture changed.
 - Stale workflow/skill names were not reintroduced.
 - No secrets, cache files, or malformed data were introduced.
-- The final response reports changed areas and verification.
+- The final response includes `Evidence of Completion` with what/how, actual
+  results/evidence locators, and acceptance mapping, plus changed areas.
+
+### Prove the outcome before closing
+
+Derive a `completion_contract_v1` before results from the authoritative request
+or FSD. Each criterion has its ID, requirement refs, expected outcome, evidence
+method, and `recipeRef` or `observationRef`; it never replaces source authority.
+The verifier checks full coverage and opens manual artifacts. A screenshot's
+existence alone is insufficient. Do not cap the acceptance checklist at the
+number of summary observations.
+
+For a light login-validation fix, keep the request, contract, recipe, and evidence
+under `.scratch/completion/login-validation/`; no FSD or swarm ledger is required.
+Illustrative contract, with local files supplied by the owning project:
+
+```json
+{
+  "schema": "completion_contract_v1",
+  "taskId": "login-validation",
+  "goal": "Reject empty email without blocking valid login",
+  "authorityRefs": [".scratch/completion/login-validation/request.md"],
+  "sourceRefs": ["src/login.js", "tests/login.test.js"],
+  "criteria": [
+    {
+      "id": "AC-1",
+      "requirementRefs": [".scratch/completion/login-validation/request.md#AC-1"],
+      "expected": "Empty email is rejected and valid email can log in",
+      "method": "regression",
+      "recipeRef": ".scratch/completion/login-validation/recipe.json"
+    }
+  ]
+}
+```
+
+The recipe's `contractPath`, `recipeRef`, and `outcomesPath` connect the
+project's actual drive assertions to a `verification_outcomes_v1` result with
+`criterionId`, expected/observed outcome, status, and evidence refs. Preserve RED
+proof before the fix and GREEN proof afterward. A successful launch/build or a
+result object's `pass` value alone cannot prove login behavior.
+
+```bash
+node .agent/tools/verification-recipe.mjs .scratch/completion/login-validation/recipe.json
+node .agent/tools/verified-promise.mjs --contract .scratch/completion/login-validation/contract.json
+```
+
+Require `COMPLETE_ALLOWED` and inspect the actual artifacts before completion.
+For a multi-goal run use `--run <run-id>`: successful slices still need the final
+combined outcome. Scheduler create input pins `completionContract: {path, digest}`
+and, for the run, `runCompletionContract: {path, digest}`. The coordinator checks
+worker proof; submission/classification/acknowledgement alone is not promotion.
+Failed validation must leave the ledger unpromoted. See
+[verification recipes](.agent/skills/verification-before-completion/references/verification-recipes.md)
+for the maintained record and command details.
+
+An illustrative completed report uses the mandatory heading and actual evidence:
+
+```markdown
+## Evidence of Completion
+
+| Requirement / AC | What was verified | How | Actual result and locator |
+|---|---|---|---|
+| Request#AC-1 | Empty email rejected; valid login works | Regression RED/GREEN | Actual failure before fix and pass afterward; <evidence path> |
+```
+
+If proof is incomplete, report `Implemented — Pending Verification`, `Partially
+Verified`, `Needs Validation`, `Verification Failed`, or `Blocked` and name the
+gap. Status/pause only inspect saved evidence; the owner performs needed checks.
+Legacy history stays intact and cannot supply new proof. Hooks remain advisory.
 
 ## Verified outcome to next session
 

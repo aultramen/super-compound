@@ -9,8 +9,6 @@ description: "Use when implementing input validation, cryptography, data encrypt
 
 Implement secure input, output, cryptography, and data-handling controls at the trust boundary that owns them. Load only the implementation branch needed for the current code.
 
-**Announce:** "I'm using the secure-code-patterns skill for secure implementation guidance."
-
 **Core principles:** Validate input and encode output; use established cryptographic libraries; apply defense in depth.
 
 ## Reference Router

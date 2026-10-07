@@ -11,7 +11,8 @@ Risk and stage authority: `skills/agentic-delivery/references/workflow-integrati
 Research discoverable facts and run available checks first. Check existing
 authorization against operation, target, scope, revision, material risk and
 provenance; unchanged semantic approval persists through evidence-only updates.
-Preserve BRD, PRD, FSD and execution gates separately. Reapproval names only the
+Preserve separately configured stage gates; exception mode adds no artifact
+approval ceremony. Reapproval names only the
 concrete delta and retained approvals. OPEN/DRAFT/HIGH_INTERACTION alone adds no gate.
 Split mixed blockers into human decision/acceptance, action authorization,
 agent research/test, environment-only testing and external access/action under
@@ -21,17 +22,22 @@ Preserve mandatory security, accessibility, contract and integrity checks.
 
 ## Answerable package
 
-For a simple need use a short item: stable Q<n> ID mapped to the existing need,
-concrete question and why human input is required, recommendation with evidence
-and consequence, review material, explicit approval target/revision/stage when
-applicable, and the automatic resume step with remaining blockers. No empty fields.
-Show all ready active-work items together, grouped by owner/scope/stage; show
-dependent items as pending with prerequisite ID, owner and next action. No arbitrary cap.
-Use full absolute clickable review paths; verify files/sections exist. Keep stored
-refs repository-relative. A host dialog is an input aid; present the complete
-ready list and pending dependencies first when its limits cannot fit that list.
+Prioritize human/external needs blocking the current goal. Use stable Q<n> IDs,
+a concise question, why input is necessary, recommendation/consequence, and
+automatic resume. Default to at most three actionable questions per batch;
+summarize all material blocked scopes and remaining unresolved IDs without
+discarding them. Agent-researchable facts and authorized reversible choices
+remain agent work. Retain unanswered IDs; partial replies never reset the list.
 
-Include both reply examples, localized and using an actual listed ID:
+Show all ready items and pending dependencies in an expandable complete list or
+on demand, grouped by owner/scope/stage. Include each pending prerequisite and
+next action; never hide a material blocker or imply it is approved. Details use
+full absolute clickable review paths and explicit approval target/revision when
+applicable; verify files/sections exist. Keep stored refs repository-relative.
+A host dialog is an input aid, not a cap on the retained needs registry.
+
+For a multi-item approval package, include both reply examples with actual IDs;
+for a single simple question, show only the necessary reply guidance:
 
 ```text
 Saya setuju semua rekomendasi pada daftar di atas.
@@ -54,7 +60,8 @@ Retain resolved evidence and approvals; persist through the existing STATE write
 Resume at the last position, skip verified goals and reuse valid fingerprinted
 evidence. Continue independent authorized work while waiting.
 
-Within active authorized work, announce receiving route/scope, load its contract,
+Within active authorized work, load a receiving contract only for a real owner change;
+announce a material phase change once, not each routine internal handoff,
 check authority and hand off internally. UI/review/research/status stay read-only;
 artifact writes use their owner and product code uses authorized sc-work.
 A standalone read-only request returns findings without remediation authority.

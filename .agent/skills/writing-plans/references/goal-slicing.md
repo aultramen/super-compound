@@ -16,16 +16,24 @@ Examples:
 
 Split when domains are unrelated, the outcome needs more than a focused session, verification depends on later goals, or parallel agents would edit the same files.
 
-For UI-integrated scope, create an optional `CONTRACT_ENABLER`, then exactly one
+For full-tier networked UI scope, create an optional `CONTRACT_ENABLER`, then exactly one
 active `FIRST_VERTICAL_SLICE` per pinned contract revision for the highest-risk
-critical flow. After an enabler, `/sc-plan` refreshes the FSD index and obtains
-deterministic readiness promotion before releasing that slice; approval is needed only for material semantic/risk changes. It must prove the real
+critical flow. After an enabler, the active controller applies the planning-owned
+deterministic index/readiness promotion internally before releasing that slice;
+no full planning re-entry or user command is needed for unchanged semantics.
+Material semantic/risk changes return to the decision owner. The slice proves the real
 provider, auth/permission, success, and representative failure. Every
 `SCALE_OUT_SLICE` depends on its verified issue, pins the same contract version,
 and requires a `VALIDATED` PRD baseline; mock-only evidence cannot release the
-dependency. Create one final `HARDENING` goal blocked by all applicable UI
+dependency. Create one final `HARDENING` goal for applicable merged verification, blocked by all applicable UI
 delivery slices for merged integration, responsive, accessibility, E2E, visual,
-and Business Owner UAT evidence.
+and visual evidence. Require Business Owner UAT only when acceptance/project
+policy or unresolved material human judgment requires it.
+
+LOCAL_ONLY performs mapped local behavior, responsive/accessibility and
+regression checks within the existing goal. A separate `HARDENING` goal exists
+only when merged/cross-slice verification cannot be completed in those goals;
+do not invent a provider slice, wire schema or external UAT stage.
 
 ## Measured Wide-Refactor Exception
 

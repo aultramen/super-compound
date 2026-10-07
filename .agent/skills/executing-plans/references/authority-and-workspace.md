@@ -4,7 +4,9 @@ Load before the first edit for a goal.
 
 ## Context to Gather
 
-Read the goal issue or FSD goal completely, then only context needed for the next goal:
+Read the concrete request/issue for light-tier work or FSD goal for full-tier
+work completely, then only context needed for the next goal. Artifact-chain
+sources below are conditional on that authority already existing:
 
 - referenced parent FSD sections and upstream BRD/PRD IDs;
 - linked accepted ADRs under `docs/solutions/adr-####-<slug>.md`;

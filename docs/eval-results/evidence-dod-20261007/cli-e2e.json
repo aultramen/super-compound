@@ -1,0 +1,315 @@
+{
+  "timestamp": "2026-10-07T02:23:31.139Z",
+  "results": [
+    {
+      "inputHealth": "unhealthy",
+      "root": "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-completion-cli-fail-hqCTGI",
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "D:\\BATI\\Development\\framework\\super-compound\\.agent\\tools\\verified-promise.mjs",
+        "--root",
+        "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-completion-cli-fail-hqCTGI",
+        "--contract",
+        ".scratch/completion/demo/contract.json"
+      ],
+      "exitCode": 1,
+      "stdout": "COMPLETE_DENIED contract=.scratch/completion/demo/contract.json status=Verification Failed\nUNVERIFIED AC-1: required recipe assertions fail: AC-1\nUNVERIFIED AC-1: acceptance outcome fail\n",
+      "stderr": "",
+      "ledgerExistsAfter": false,
+      "contract": {
+        "schema": "completion_contract_v1",
+        "taskId": "CLI-DEMO",
+        "goal": "service is healthy",
+        "authorityRefs": [
+          ".scratch/completion/demo/request.md"
+        ],
+        "sourceRefs": [
+          ".scratch/completion/demo/source.txt",
+          ".scratch/completion/demo/health.json"
+        ],
+        "criteria": [
+          {
+            "id": "AC-1",
+            "requirementRefs": [
+              ".scratch/completion/demo/request.md#AC-1"
+            ],
+            "expected": "healthy",
+            "method": "functional",
+            "recipeRef": ".scratch/completion/demo/recipe.json"
+          }
+        ]
+      },
+      "recipe": {
+        "id": "check-CLI-DEMO",
+        "environment": "LOCAL",
+        "sourceRefs": [
+          ".scratch/completion/demo/source.txt",
+          ".scratch/completion/demo/health.json"
+        ],
+        "contractPath": ".scratch/completion/demo/contract.json",
+        "recipeRef": ".scratch/completion/demo/recipe.json",
+        "outcomesPath": ".scratch/completion/demo/outcomes.json",
+        "evidencePath": ".scratch/completion/demo/evidence.json",
+        "doctor": [
+          {
+            "command": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "-e",
+              "console.log(\"ready\")"
+            ]
+          }
+        ],
+        "drive": [
+          {
+            "command": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "-e",
+              "const fs=require('fs'),assert=require('assert/strict');const actual=JSON.parse(fs.readFileSync(\".scratch/completion/demo/health.json\",'utf8'));let failed=false;try{assert.equal(actual.healthy,true)}catch(error){failed=true;console.log(error.message)}const outcomes={\"schema\":\"verification_outcomes_v1\",\"taskId\":\"CLI-DEMO\",\"criteria\":[{\"criterionId\":\"AC-1\",\"expected\":\"healthy\",\"observed\":\"unhealthy\",\"status\":\"fail\",\"evidenceRefs\":[\".scratch/completion/demo/result.json\"]}]};for(const result of outcomes.criteria){if(failed){result.status='fail';result.observed='unhealthy'}}fs.writeFileSync(\".scratch/completion/demo/result.json\",JSON.stringify(actual));fs.writeFileSync(\".scratch/completion/demo/outcomes.json\",JSON.stringify(outcomes));console.log('actual health assertion',failed?'FAIL':'PASS');"
+            ]
+          }
+        ],
+        "cleanup": []
+      },
+      "executionEvidence": {
+        "schema": "verification_recipe_v1",
+        "id": "check-CLI-DEMO",
+        "environment": "LOCAL",
+        "timestamp": "2026-10-07T02:23:30.340Z",
+        "recipeDigest": "57bb2b48db816ff6b58cfbf57b9ce4be7a2dcf7e34106c2ff69a11c825107b6f",
+        "sources": [
+          {
+            "ref": ".scratch/completion/demo/source.txt",
+            "digest": "c80361d3757974f0b7c36dd99e019f41ed8ddc6c288ff52faeaa8e62402422cc"
+          },
+          {
+            "ref": ".scratch/completion/demo/health.json",
+            "digest": "ec47e461eb654f97180adaefe2bcf66d7fd05a85221493cc8f09719d51342b5d"
+          },
+          {
+            "ref": ".scratch/completion/demo/request.md",
+            "digest": "e7169c8327851ddcfd3b5e75764216899c3cb8a44234f32b6c9491ef2fdd13ad"
+          }
+        ],
+        "steps": [
+          {
+            "phase": "doctor",
+            "command": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "-e",
+              "console.log(\"ready\")"
+            ],
+            "exitCode": 0,
+            "stdout": "ready\n",
+            "stderr": "",
+            "error": null
+          },
+          {
+            "phase": "drive",
+            "command": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "-e",
+              "const fs=require('fs'),assert=require('assert/strict');const actual=JSON.parse(fs.readFileSync(\".scratch/completion/demo/health.json\",'utf8'));let failed=false;try{assert.equal(actual.healthy,true)}catch(error){failed=true;console.log(error.message)}const outcomes={\"schema\":\"verification_outcomes_v1\",\"taskId\":\"CLI-DEMO\",\"criteria\":[{\"criterionId\":\"AC-1\",\"expected\":\"healthy\",\"observed\":\"unhealthy\",\"status\":\"fail\",\"evidenceRefs\":[\".scratch/completion/demo/result.json\"]}]};for(const result of outcomes.criteria){if(failed){result.status='fail';result.observed='unhealthy'}}fs.writeFileSync(\".scratch/completion/demo/result.json\",JSON.stringify(actual));fs.writeFileSync(\".scratch/completion/demo/outcomes.json\",JSON.stringify(outcomes));console.log('actual health assertion',failed?'FAIL':'PASS');"
+            ],
+            "exitCode": 0,
+            "stdout": "Expected values to be strictly equal:\n\nfalse !== true\n\nactual health assertion FAIL\n",
+            "stderr": "",
+            "error": null
+          }
+        ],
+        "pass": false,
+        "taskId": "CLI-DEMO",
+        "contractPath": ".scratch/completion/demo/contract.json",
+        "contractDigest": "7676a7cbd36c2e7d05f6e89094ec76cc5a3bae6982a959c3c989d837caaedfb7",
+        "recipeRef": ".scratch/completion/demo/recipe.json",
+        "recipeFileDigest": "264101d1cd88621bc482f65a991ed63af87c6ab66ad9424b9faa48c7ab733c1b",
+        "outcomesPath": ".scratch/completion/demo/outcomes.json",
+        "environmentFingerprint": {
+          "platform": "win32",
+          "nodeVersion": "v24.15.0",
+          "inputs": []
+        },
+        "outcomes": {
+          "schema": "verification_outcomes_v1",
+          "taskId": "CLI-DEMO",
+          "criteria": [
+            {
+              "criterionId": "AC-1",
+              "expected": "healthy",
+              "observed": "unhealthy",
+              "status": "fail",
+              "evidenceRefs": [
+                ".scratch/completion/demo/result.json"
+              ]
+            }
+          ]
+        },
+        "outcomesDigest": "0ec11a7f4bdad902ccf2d4f40aea7c05eba2fec71a8b5918bc43b5ec4e38d54c",
+        "artifacts": [
+          {
+            "ref": ".scratch/completion/demo/result.json",
+            "digest": "ec47e461eb654f97180adaefe2bcf66d7fd05a85221493cc8f09719d51342b5d"
+          }
+        ],
+        "cleanup": {
+          "steps": [],
+          "pass": true
+        }
+      }
+    },
+    {
+      "inputHealth": "healthy",
+      "root": "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-completion-cli-pass-a46Cbv",
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "D:\\BATI\\Development\\framework\\super-compound\\.agent\\tools\\verified-promise.mjs",
+        "--root",
+        "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-completion-cli-pass-a46Cbv",
+        "--contract",
+        ".scratch/completion/demo/contract.json"
+      ],
+      "exitCode": 0,
+      "stdout": "COMPLETE_ALLOWED contract=.scratch/completion/demo/contract.json status=Done\n\n## Evidence of Completion\n\n| Requirement / AC | Verification | Actual result | Evidence |\n|---|---|---|---|\n| AC-1 | functional | healthy | .scratch/completion/demo/evidence.json, .scratch/completion/demo/result.json |\n",
+      "stderr": "",
+      "ledgerExistsAfter": false,
+      "contract": {
+        "schema": "completion_contract_v1",
+        "taskId": "CLI-DEMO",
+        "goal": "service is healthy",
+        "authorityRefs": [
+          ".scratch/completion/demo/request.md"
+        ],
+        "sourceRefs": [
+          ".scratch/completion/demo/source.txt",
+          ".scratch/completion/demo/health.json"
+        ],
+        "criteria": [
+          {
+            "id": "AC-1",
+            "requirementRefs": [
+              ".scratch/completion/demo/request.md#AC-1"
+            ],
+            "expected": "healthy",
+            "method": "functional",
+            "recipeRef": ".scratch/completion/demo/recipe.json"
+          }
+        ]
+      },
+      "recipe": {
+        "id": "check-CLI-DEMO",
+        "environment": "LOCAL",
+        "sourceRefs": [
+          ".scratch/completion/demo/source.txt",
+          ".scratch/completion/demo/health.json"
+        ],
+        "contractPath": ".scratch/completion/demo/contract.json",
+        "recipeRef": ".scratch/completion/demo/recipe.json",
+        "outcomesPath": ".scratch/completion/demo/outcomes.json",
+        "evidencePath": ".scratch/completion/demo/evidence.json",
+        "doctor": [
+          {
+            "command": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "-e",
+              "console.log(\"ready\")"
+            ]
+          }
+        ],
+        "drive": [
+          {
+            "command": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "-e",
+              "const fs=require('fs'),assert=require('assert/strict');const actual=JSON.parse(fs.readFileSync(\".scratch/completion/demo/health.json\",'utf8'));let failed=false;try{assert.equal(actual.healthy,true)}catch(error){failed=true;console.log(error.message)}const outcomes={\"schema\":\"verification_outcomes_v1\",\"taskId\":\"CLI-DEMO\",\"criteria\":[{\"criterionId\":\"AC-1\",\"expected\":\"healthy\",\"observed\":\"healthy\",\"status\":\"pass\",\"evidenceRefs\":[\".scratch/completion/demo/result.json\"]}]};for(const result of outcomes.criteria){if(failed){result.status='fail';result.observed='unhealthy'}}fs.writeFileSync(\".scratch/completion/demo/result.json\",JSON.stringify(actual));fs.writeFileSync(\".scratch/completion/demo/outcomes.json\",JSON.stringify(outcomes));console.log('actual health assertion',failed?'FAIL':'PASS');"
+            ]
+          }
+        ],
+        "cleanup": []
+      },
+      "executionEvidence": {
+        "schema": "verification_recipe_v1",
+        "id": "check-CLI-DEMO",
+        "environment": "LOCAL",
+        "timestamp": "2026-10-07T02:23:30.741Z",
+        "recipeDigest": "19a2c608ab5ddac84372ae4edcb1cff56c9f670a6f2a4dd90c4e3197c14b1e4e",
+        "sources": [
+          {
+            "ref": ".scratch/completion/demo/source.txt",
+            "digest": "c80361d3757974f0b7c36dd99e019f41ed8ddc6c288ff52faeaa8e62402422cc"
+          },
+          {
+            "ref": ".scratch/completion/demo/health.json",
+            "digest": "e8c5c4ebde822d11daf0a40051dde9c30aa8b6f2d6306b664722306d68f68ea0"
+          },
+          {
+            "ref": ".scratch/completion/demo/request.md",
+            "digest": "e7169c8327851ddcfd3b5e75764216899c3cb8a44234f32b6c9491ef2fdd13ad"
+          }
+        ],
+        "steps": [
+          {
+            "phase": "doctor",
+            "command": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "-e",
+              "console.log(\"ready\")"
+            ],
+            "exitCode": 0,
+            "stdout": "ready\n",
+            "stderr": "",
+            "error": null
+          },
+          {
+            "phase": "drive",
+            "command": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "-e",
+              "const fs=require('fs'),assert=require('assert/strict');const actual=JSON.parse(fs.readFileSync(\".scratch/completion/demo/health.json\",'utf8'));let failed=false;try{assert.equal(actual.healthy,true)}catch(error){failed=true;console.log(error.message)}const outcomes={\"schema\":\"verification_outcomes_v1\",\"taskId\":\"CLI-DEMO\",\"criteria\":[{\"criterionId\":\"AC-1\",\"expected\":\"healthy\",\"observed\":\"healthy\",\"status\":\"pass\",\"evidenceRefs\":[\".scratch/completion/demo/result.json\"]}]};for(const result of outcomes.criteria){if(failed){result.status='fail';result.observed='unhealthy'}}fs.writeFileSync(\".scratch/completion/demo/result.json\",JSON.stringify(actual));fs.writeFileSync(\".scratch/completion/demo/outcomes.json\",JSON.stringify(outcomes));console.log('actual health assertion',failed?'FAIL':'PASS');"
+            ],
+            "exitCode": 0,
+            "stdout": "actual health assertion PASS\n",
+            "stderr": "",
+            "error": null
+          }
+        ],
+        "pass": true,
+        "taskId": "CLI-DEMO",
+        "contractPath": ".scratch/completion/demo/contract.json",
+        "contractDigest": "7676a7cbd36c2e7d05f6e89094ec76cc5a3bae6982a959c3c989d837caaedfb7",
+        "recipeRef": ".scratch/completion/demo/recipe.json",
+        "recipeFileDigest": "c8dda521a06a782a91c07b0c7c73e31f00632c51a93be8e67f245f913e0ee322",
+        "outcomesPath": ".scratch/completion/demo/outcomes.json",
+        "environmentFingerprint": {
+          "platform": "win32",
+          "nodeVersion": "v24.15.0",
+          "inputs": []
+        },
+        "outcomes": {
+          "schema": "verification_outcomes_v1",
+          "taskId": "CLI-DEMO",
+          "criteria": [
+            {
+              "criterionId": "AC-1",
+              "expected": "healthy",
+              "observed": "healthy",
+              "status": "pass",
+              "evidenceRefs": [
+                ".scratch/completion/demo/result.json"
+              ]
+            }
+          ]
+        },
+        "outcomesDigest": "d2430f370db2a208a5b458134dc79e22e5c24c4a7e14cf444e58056513697172",
+        "artifacts": [
+          {
+            "ref": ".scratch/completion/demo/result.json",
+            "digest": "e8c5c4ebde822d11daf0a40051dde9c30aa8b6f2d6306b664722306d68f68ea0"
+          }
+        ],
+        "cleanup": {
+          "steps": [],
+          "pass": true
+        }
+      }
+    }
+  ]
+}

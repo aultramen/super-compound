@@ -32,6 +32,14 @@ compaction or handoff and continues authorized work. Read-only routes return
 evidence to that writer. `/sc-pause` is for actual stopping. The next session
 verifies STATE against the tree with `/sc-status` before acting on it.
 
+Before writing a new completed/verified outcome, apply
+`verification-before-completion/SKILL.md` and the local evidence gate. Record
+qualified goal/requirement/AC refs, pinned completion contract/digest and evidence
+locators; link the **Evidence of Completion** report instead of copying output.
+Missing/partial/failed proof stays in Current Position with an accurate human
+status and next action. Historical Completed Work remains history and cannot
+establish fresh completion or release a new dependency without valid proof.
+
 ## `.continue-here.md`
 
 Keep these pointer lines; a tool-managed sc-checkpoint block may follow:
@@ -44,6 +52,7 @@ Continue the recorded work from its authoritative state and next action.
 - State: docs/STATE.md
 - Next action: <one executable step or /sc-status>
 - Authoritative artifacts: <paths>
+- Completion evidence: <contract/digest and evidence locators, or unavailable>
 ```
 
 ## Error and learning records

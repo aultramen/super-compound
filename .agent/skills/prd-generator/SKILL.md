@@ -9,11 +9,16 @@ description: "Use when an approved BRD must be translated into observable produc
 
 Apply this procedure within its authorized scope and use `.agent/context/output-style.md` for every documentation file created or updated: summary first, relevant HLD, preserved evidence and parser fields.
 
-Define users, observable product behavior, rules, acceptance criteria, and outcomes between BRD exploration and technical FSD planning. Announce use before authoring.
+Define users, observable product behavior, rules, acceptance criteria, and outcomes between BRD exploration and technical FSD planning.
 
 ## When to Use
 
-Use after an approved BRD exists and before `/sc-plan`. If no BRD is approved, return upstream. If a PRD already covers the topic, ask whether to revise it or create a separately scoped document.
+Use for full-tier scope after business authority exists and before `/sc-plan`.
+If required business authority is missing, return upstream. When an existing
+PRD covers the same clear scope, revise the canonical PRD and preserve its IDs
+and provenance without asking a revise-or-create question. Create a separate
+document only for a distinct requested scope; ask only when that boundary is
+materially ambiguous and context cannot resolve it.
 
 Bounded draft packages: [approval policy](../agentic-delivery/references/workflow-integration.md).
 
@@ -32,8 +37,8 @@ Bounded draft packages: [approval policy](../agentic-delivery/references/workflo
 - Trace requirements with qualified references such as `BRD-CCC#BREQ-001`; do not duplicate source prose when an ID is sufficient.
 - Preserve BRD business policy, scope, acceptance decisions, and domain language. The PRD must not invent technical implementation, schemas, databases, or internal architecture beyond known repository constraints.
 - Every goal maps to at least one story or requirement; every story has specific, verifiable acceptance criteria and negative cases where risk warrants them.
-- UI-bearing PRDs set `ui_delivery_profile`, cover every named state or approved
-  N/A, record responsive/accessibility intent, and route the draft through
+- UI-bearing PRDs set `ui_delivery_profile`, cover every named state or
+  `N/A - factual reason`, record responsive/accessibility intent, and route the draft through
   read-only `/sc-ui` before approval. `HIGH_INTERACTION` needs evidence matching
   its runtime risk.
 - Prefer vertical user-value stories that fit one focused implementation session.
@@ -51,4 +56,4 @@ For unresolved product choices, use [brainstorming rounds](../brainstorming/refe
 
 ## Integration
 
-Upstream: `/sc-explore`, `brainstorming`, `agentic-delivery`, `domain-modeling`, `codebase-design`, and `interface-design`. Downstream: `writing-plans`, `issue-workflow`, and `plan-verification`. The pipeline is BRD → PRD → FSD/GOAL → execution. A PRD-only request ends with the PRD; active authorized delivery continues internally to its next owner, preserving separate stage approvals and execution authorization per `workflow-integration.md`.
+Upstream: `/sc-explore`, `brainstorming`, `agentic-delivery`, `domain-modeling`, `codebase-design`, and `interface-design`. Downstream: `writing-plans`, `issue-workflow`, and `plan-verification`. The full-tier pipeline is BRD → PRD → FSD/GOAL → execution. A PRD-only request ends with the PRD; active authorized delivery continues internally to its next owner under persistent authorization and the configured exception or stage policy in `workflow-integration.md`.

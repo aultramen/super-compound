@@ -9,8 +9,6 @@ description: "Use when designing features that handle sensitive data, authentica
 
 Identify threats before they become vulnerabilities. Model assets, actors, data flows, and trust boundaries before writing sensitive, authentication, or integration code.
 
-**Announce:** "I'm using the threat-modeling skill to identify security threats in this design."
-
 **Core principle:** Model first, code second.
 
 ## Modes

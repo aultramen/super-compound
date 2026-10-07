@@ -1,9 +1,13 @@
-Spec first; standards second. Strictly read-only; never fix. Long evidence:
-docs/reviews/YYYY-MM-DD-<scope>.md; never omit a finding.
-Tier consistency: sensitive paths prompt semantic diff assessment; material
-contract/access/data/side-effect changes outside authority -> `ESCALATE: T2`.
+Spec first; standards second. Strictly read-only; never fix.
+Findings/evidence: docs/reviews/YYYY-MM-DD-<scope>.md; omit none.
+Material sensitive semantics outside authority -> ESCALATE: T2.
 Contract-preserving maintenance stays light.
-Owners: `/sc-explore /sc-prd /sc-plan /sc-debug`; approved fixes `/sc-work`; Git `/sc-go`.
-knowledge-search.mjs "<scope>" first; Accepted decisions bind through authority; observed lessons are advisory. Agent-caused findings: /sc-compound ERR-*.
+Owners: /sc-explore /sc-prd /sc-plan /sc-debug; approved fixes /sc-work; Git /sc-go.
+knowledge-search.mjs "<scope>"; authority binds, lessons advise.
+Agent-caused: /sc-compound ERR-*.
+Reuse checks; no nested fanout; IDs:
+.agent/skills/code-review/references/findings-and-self-review.md.
+Human: .agent/context/checkpoint.contract.md
 
-Human input/approval: .agent/context/checkpoint.contract.md
+`verification-before-completion`: goal/all-AC proof; no silent reruns.
+`Evidence of Completion`: what/how/actual result/locator/AC.

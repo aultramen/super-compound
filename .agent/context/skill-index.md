@@ -52,4 +52,6 @@ any full skill:
 
 ## Contract Rule
 
+Announce the relevant skill group once per work phase. Individual skill routing is internal; name a specific skill again only when its use changes scope, risk, a fallback, or a required user action. Reuse instructions already loaded in the current context.
+
 Compact contracts carry mandatory checks with links to their authority; they do not change that authority. Implementation, audit, or verification alone does not trigger full-load. Use covered checks directly; load the relevant procedure only for an uncovered detail, material risk, a conflict, or editing that skill. If a contract lacks a required check or authority reference, consult the source and repair the omission rather than silently skipping it. Host/user instructions requiring a skill still take precedence.

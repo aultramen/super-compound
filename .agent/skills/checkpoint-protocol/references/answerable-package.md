@@ -22,40 +22,38 @@ Risk and stage policy remain in `../../agentic-delivery/references/workflow-inte
 - Research facts and run available checks first. `OPEN`, `DRAFT`, `human baseline`
   or `HIGH_INTERACTION` alone never creates a human gate. Preserve mandatory
   security, accessibility, contract and integrity checks; preference cannot waive them.
-- Batch independent inputs with the same owner/scope into one coordinated
-  checkpoint; keep stage/authority boundaries separate. Show all ready questions
-  and approvals for the active work together, grouped by owner/stage. Do not
+- Collect independent needs with the same owner/scope in one coordinated
+  checkpoint; preserve opted-in stage/authority boundaries. Resolve agent-owned
+  checks and authorized reversible choices without asking. Prioritize the
+  highest-priority human/external needs that unlock the current goal; do not
   collect unrelated backlog needs or ask a chain depending on unseen answers.
 
 ## Answerable package
 
 Render in the user's language; these Indonesian labels illustrate the format.
-Lead with the concrete need. Number every ready item with a stable `Q<n>` ID,
-mapped to its existing `OPEN-*` need or approval target; do not renumber unresolved
-items on partial replies. Show dependent items as pending with their prerequisite
-ID, owner and next action, not as answerable questions. No arbitrary question cap.
-Keep digests and raw gate output in supporting detail. No empty placeholders.
+Lead with the blocked result and, by default, at most three highest-priority
+actionable human/external questions. This is a progressive display, not an
+approval limit: expand when the user requests the full list or a decision must
+be assessed together. Keep the complete ready/pending unresolved inventory in
+the existing owning artifact or STATE when writes are authorized; for read-only
+scope keep it in expandable conversation detail without creating a sidecar.
+Assign every item a stable `Q<n>` ID mapped to its existing `OPEN-*` need or
+approval target; do not renumber unresolved items on partial replies. Always
+summarize every material block and retained unresolved ID, with an openable
+inventory link or expandable detail. Show dependent items as pending with their
+prerequisite ID, owner and next action, not as answerable questions. Keep digests
+and raw gate output in supporting detail. No empty placeholders.
 
 Use this per-item format for decisions, information, tests, access and approvals:
 
 ```text
-PERLU INPUT ANDA — [concrete title]
-Siap dijawab: [count; grouped by owner/stage when needed]
+PERLU INPUT ANDA — [blocked result; affected owner/scope]
 Q1 — [self-contained question and explicit acceptance/action boundary]
-Yang masih diperlukan:
-[specific unresolved need, affected deliverable, owner and existing need/target]
-Mengapa perlu Anda:
-[why agent research/automation cannot resolve it; exact policy link/quote if required]
-Rekomendasi:
-[concrete suggested choice or action and required answer/report format]
-Alasan dan konsekuensi:
-[evidence supporting recommendation; consequences of it and meaningful alternatives]
-Bahan review:
-[clickable full absolute file path, relevant section and what to inspect; example]
-Setelah jawaban Anda:
-[concrete automatic resumption and blockers that remain]
-Ulangi format untuk semua item siap dijawab.
-Tertunda: [ID, prerequisite ID/need, owner and next action; omit when none]
+Rekomendasi: [choice/action and required answer/report format]
+Mengapa perlu Anda; alasan dan konsekuensi: [why automation cannot resolve it; key trade-off]
+Bahan review: [verified clickable absolute path and relevant section]
+Setelah jawaban Anda: [automatic resumption; remaining blockers]
+Belum selesai: [all unresolved IDs/material blocks; ready or pending; inventory link/detail]
 ```
 
 Resolve review paths against the current workspace and verify files/sections
@@ -81,13 +79,14 @@ fields/example to supply; tests recommend setup, steps and result format; access
 requests recommend the approved local destination and readiness report. Agreement
 with that action is not the missing information, test result or access readiness.
 
-If a host dialog limits the number of questions, show the complete ready list,
-pending dependencies and answer examples in conversation text first; use dialogs
-only as an input aid with the same IDs. Do not silently hide or defer ready items.
+If a host dialog limits questions, use it for the current prioritized batch
+with the same IDs. Keep the complete ready/pending registry accessible in
+conversation detail or its authorized existing artifact; never silently drop
+items or count undisplayed recommendations as accepted.
 
-Always include both reply examples, localized to the user's language, after the
-list whenever asking for an answer or approval (substitute an actual listed ID
-for Q2; for a single item use Q1):
+For multiple independent displayed recommendations, provide compact bulk and
+exception reply examples when they help (substitute an actual displayed ID
+for Q2). A single question needs only its specific answer format:
 
 ```text
 Saya setuju semua rekomendasi pada daftar di atas.
@@ -96,7 +95,8 @@ Saya setuju semua rekomendasi kecuali Q2: [jawaban khusus untuk Q2].
 
 Explain that an exception without a replacement answer stays open; partial
 answers are welcome. Approval covers only each displayed target, revision and
-stage, not pending items or future stages. Render those boundaries per approval.
+stage, not undisplayed or pending items or future stages. Render those boundaries
+per approval; stored inventory is not blanket approval.
 
 Add completed evidence, retained approvals, 2–3 answer choices, and work
 while waiting only when they help assess this need. Complex packages retain all
@@ -111,6 +111,27 @@ Manual testing supplies setup, short steps, expected result, and reporting forma
 automation cannot exercise that environment. Agent-runnable checks stay with agent.
 Access requests name an approved local secret destination; never paste secrets in chat.
 
+### Concrete short example
+
+Illustrative authoring review only, not an active approval. This example has one
+ready item and no dependent item; a real package prioritizes current questions
+and retains the complete ready/pending inventory under the existing contract. The source
+below exists in this repository; resolve paths from the actual workspace at runtime.
+
+```text
+PERLU INPUT ANDA — Isi ringkasan PRD
+Siap dijawab: 1, owner reviewer produk, stage authoring PRD.
+Q1 — Apakah ringkasan menampilkan pengguna, scope, hasil, risiko dan keputusan yang diminta?
+Mengapa perlu Anda: Penerimaan penyajian untuk reviewer produk belum diberikan.
+Rekomendasi: Ya; metadata dan bukti tetap di bagian existing pada dokumen yang sama.
+Alasan dan konsekuensi: Reviewer menemukan keputusan lebih cepat; semua detail wajib tetap tersedia. Kecepatan review belum diukur.
+Bahan review: [../../agentic-delivery/references/templates-and-outputs.md](../../agentic-delivery/references/templates-and-outputs.md)
+Bagian: Applicability and Expansion; periksa isi wajib dan risiko yang tidak boleh disembunyikan.
+Target: proposal penyajian PRD dalam contoh ini, revisi r1, stage authoring; bukan FSD atau execution.
+Setelah jawaban Anda: Owner melanjutkan authoring PRD yang authorized; approval tidak menciptakan hasil tes atau izin tahap berikutnya.
+Jawab Q1: ya, atau sebutkan bagian yang perlu diperbaiki.
+```
+
 ## Response and continuation
 
 Silence, timeout, preselection and ambiguous "oke" are not blanket approval.
@@ -124,7 +145,7 @@ Resume at the last position; reuse valid evidence and do not repeat completed re
 or approval without an invalidating delta.
 
 Within active authorized work, perform owner handoffs internally and return to
-the caller after evidence reconciliation. Announce receiving route and scope;
+the caller after evidence reconciliation. Name receiving scope only when it changes;
 load its contract and check its authority before acting. `/sc-ui`, review, research
 and status stay read-only; PRD/FSD/pointer writes use their owning routes, product
 code uses authorized `/sc-work`. Standalone read-only requests return findings;

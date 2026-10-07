@@ -10,6 +10,8 @@ Last updated: YYYY-MM-DD HH:mm
 ## Current Position
 - Workflow: <route>
 - Active task: <task or none>
+- Verification status: <accurate status; completion only with all required evidence>
+- Completion evidence: <contract/digest and evidence locators, or unavailable>
 - Next action: <specific executable step>
 - Branch/workspace: <branch or n/a>
 
@@ -20,7 +22,7 @@ Last updated: YYYY-MM-DD HH:mm
 - <blocker, owner, and needed input>
 
 ## Completed Work
-- YYYY-MM-DD: <outcome and important artifact links>
+- YYYY-MM-DD: <verified outcome, qualified requirement/AC refs and evidence links>
 
 ## Deferred Ideas
 - <idea and reason out of scope>
@@ -32,4 +34,7 @@ Archive older entries when hot context needs reduction; retain linked evidence. 
 Update on every interruption, including rate-limit or quota cutoffs, so a fresh
 session can resume from Next Action without asking.
 Never copy artifact prose or tool output into STATE; link to it.
+Completed Work requires .agent/skills/verification-before-completion/SKILL.md;
+historical status alone is not fresh evidence. Keep incomplete work in Current
+Position with its real verification status and executable next action.
 -->

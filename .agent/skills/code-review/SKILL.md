@@ -11,8 +11,6 @@ Apply this procedure within its authorized scope and use `.agent/context/output-
 
 ## Overview
 
-Announce: "I'm using the code-review skill to review these changes."
-
 Review in two distinct stages: first the contract, then implementation quality. Standards compliance cannot rescue the wrong behavior.
 
 ## When to Use

@@ -22,7 +22,7 @@ Result and next action: STATE plus short handoff pointer; later /sc-status recon
 ## Steps
 
 1. Load `skills/state-management/SKILL.md` for non-trivial work.
-2. Read `docs/STATE.md` and current task context, recent decisions, blockers, and verification status.
+2. Read `docs/STATE.md` and current task context, recent decisions, blockers, and verification status. Inspect stored proof under `verification-before-completion` before carrying forward any verified outcome; metadata alone is insufficient. Preserve incomplete statuses and evidence gaps. Pause does not silently rerun checks or promote completion; legacy history is not rewritten.
 3. Check `git status --short`, active branch, and worktree path when inside a Git repo; do not mutate Git state.
 4. Before writing the handoff, capture any unlogged agent mistake (`ERR-*` in
    `docs/ERROR_LOG.md`) or confirmed convention (`LRN-*` in
@@ -37,7 +37,8 @@ Result and next action: STATE plus short handoff pointer; later /sc-status recon
 
 - Updated `docs/STATE.md` canonical state.
 - `.continue-here.md` short pointer to that state.
-- Clear next action.
+- Clear next action. Any task claimed complete includes `Evidence of Completion`
+  with what/how, actual results/locators, and all acceptance criteria mapped.
 
 Checkpoint optional active `constraints` with source, scope, supersession and
 digest; preserve pending receipts via ledgerRefs. Follow

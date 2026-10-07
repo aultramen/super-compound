@@ -21,7 +21,10 @@ Result and next action: Searchable capture in applicable knowledge sinks; return
 ## Steps
 
 1. Load `skills/knowledge-compounding/SKILL.md`.
-2. Confirm the problem was actually solved with evidence.
+2. Confirm the problem was actually solved with evidence under
+   `verification-before-completion`: actual outcomes map to the goal and all
+   acceptance criteria. A changed file, completion label, or worker report is not
+   proof. Capture failure/correction lessons as such; never relabel them solved.
 3. Treat every prior pattern as advisory input to human-owned documentation. Capture symptoms, root cause, fix, failed attempts, prevention, and related files from the actual evidence; never copy a pattern as authority.
 4. Mention branch or PR references only as context; do not mutate Git state.
 5. Search first with `node .agent/tools/knowledge-search.mjs "<symptom or topic>"` and update the matching record instead of duplicating it. Route each captured outcome to every sink that applies; one outcome may hit several. Entry formats and Quick Reference tables are authoritative in `.agent/skills/knowledge-compounding/references/memory-capture.md`; file selection stays in `.agent/skills/state-management/references/file-contracts.md`. Every durable artifact follows `.agent/context/output-style.md`. Ground each new record with `node .agent/tools/validate-doc-claims.mjs <file>`; a record the current tree contradicts routes to `knowledge-refresh`.
@@ -37,7 +40,9 @@ Result and next action: Searchable capture in applicable knowledge sinks; return
 ## Guardrails
 
 - `/sc-compound` must not self-modify prompts, model weights, goals, policy, budgets, verifier definitions, framework source, operating rules, or the public workflow inventory.
-- A captured pattern never grants implementation, Git, or release authority; applying it happens through the owning route with human approval.
+- A captured pattern never grants implementation, Git, or release authority.
+  Its scoped use within an already-authorized goal needs no new approval;
+  material decisions or framework policy changes use their owning approval boundary.
 
 Use capture/upsert JSON and evidence locators from the deterministic loop; do not manually create duplicate Quick Reference rows.
 

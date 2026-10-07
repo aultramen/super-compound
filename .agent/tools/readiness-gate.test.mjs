@@ -7,6 +7,7 @@ import test, { after } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import { evaluateReadiness, parseIssuePointer, readManifest } from "./readiness-gate.mjs";
+import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
 
 const TOOL = fileURLToPath(new URL("./readiness-gate.mjs", import.meta.url));
 const FENCE = "```";
@@ -144,6 +145,15 @@ function fixture(patches = {}) {
 const evaluate = (patches) =>
   evaluateReadiness({ root: fixture(patches), fsdPath: "docs/fsd.md", prdPath: "docs/prd.md", issuesDir: "issues" });
 
+async function attachFirstSliceProof(root, options={}) {
+  const taskId='GOAL-FIRST';
+  const proof=await provisionCompletionFixture(root,{taskId,...options});
+  fs.appendFileSync(path.join(root,'issues/issue-002-first-slice.md'),`Goal ID: FSD-X#${taskId}\nCompletion contract: ${proof.contractPath} / ${proof.contractDigest}\nCompletion evidence: ${proof.evidencePath}\n`);
+  return proof;
+}
+
+const evaluateRoot=root=>evaluateReadiness({root,fsdPath:'docs/fsd.md',prdPath:'docs/prd.md',issuesDir:'issues'});
+
 function runCli(args) {
   try {
     return { code: 0, stdout: execFileSync(process.execPath, [TOOL, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }), stderr: "" };
@@ -193,6 +203,41 @@ test("green fixture is READY_FOR_SLICE with no failures", async () => {
     result.gates.filter((gate) => gate.status === "skip").map((gate) => gate.id),
     ["not-applicable", "high-interaction-evidence"],
   );
+});
+
+test("resolved, closed and historical OPEN records do not reopen readiness", async () => {
+  for (const record of [
+    '- OPEN-007: RESOLVED; no longer blocking.',
+    '- OPEN-007: CLOSED; formerly blocking.',
+    '- OPEN-007: ARCHIVED; blocking in the prior revision.',
+    '| OPEN-007 | RESOLVED | Previously blocking |',
+    '## Resolved History\n\n- OPEN-007: blocking in the prior revision.',
+    '- OPEN-007: OPEN; Blocking: false; deferred nonblocking preference.',
+    '| ID | Type | Description | Owner | Status |\n|---|---|---|---|---|\n| OPEN-007 | Blocker | Former role gap | Product | RESOLVED |',
+    '### OPEN-007\nStatus: CLOSED\nBlocking: true\nReason: Resolved role policy.',
+    '| Prefix | Meaning | Example |\n|---|---|---|\n| OPEN | Open decision | OPEN-007 |',
+    '| ID | Class | Status |\n|---|---|---|\n| OPEN-007 | NON_BLOCKER | OPEN |',
+  ]) {
+    const result = await evaluate({'docs/fsd.md': `${FSD}\n${record}\n`});
+    assert.equal(result.verdict, 'READY_FOR_SLICE', record);
+  }
+});
+
+test("active and unknown OPEN blockers fail closed, including inconsistent refs", async () => {
+  for (const record of [
+    '- OPEN-007: OPEN; Blocking: true.',
+    '- OPEN-007: UNKNOWN; blocking decision.',
+    '- OPEN-007: blocking decision with no status.',
+    '- OPEN-007: RESOLVED; no longer blocking.\n- OPEN-008: OPEN; blocking decision.',
+    '| ID | Type | Description | Owner | Status |\n|---|---|---|---|---|\n| OPEN-007 | Blocker | Missing role policy | Product | OPEN |',
+    '| OPEN-007 | Blocker | Missing role policy | Product | UNKNOWN |',
+    '| ID | Class | Status |\n|---|---|---|\n| OPEN-007 | UNKNOWN | UNKNOWN |',
+    '### OPEN-007\nStatus: UNKNOWN\nClass: UNKNOWN',
+    '### OPEN-007\nStatus: OPEN\nBlocking: true',
+    'OPEN-007\nStatus: UNKNOWN\nBlocking: true',
+    '### OPEN-007\nStatus: RESOLVED\nBlocking: true\n### OPEN-008\nStatus: OPEN\nBlocking: true',
+  ]) assertBlocked(await evaluate({'docs/fsd.md': `${FSD}\n${record}\n`}), 'open-blockers');
+  assertBlocked(await evaluate({'docs/fsd.md': `${FSD.replace('blocking_open_refs: []', 'blocking_open_refs: ["OPEN-007"]')}\n- OPEN-007: RESOLVED; no longer blocking.\n`}), 'open-blockers');
 });
 
 test("CLI exits 0 with readiness_gate_v1 json and text verdict", () => {
@@ -273,6 +318,13 @@ test("EXCEPTION_APPROVED baseline forbids active scale-out issues", async () => 
     "docs/prd.md": ["VALIDATED", "EXCEPTION_APPROVED"],
     "issues/issue-003-scale-out.md": ["Status: blocked", "Status: ready-for-agent"],
   }), "scale-out");
+});
+
+test('verified first-slice status cannot release active scale-out without outcome evidence', async () => {
+  assertBlocked(await evaluate({
+    'issues/issue-002-first-slice.md':['Status: ready-for-agent','Status: verified'],
+    'issues/issue-003-scale-out.md':['Status: blocked','Status: ready-for-agent'],
+  }), 'scale-out');
 });
 
 test("dependency cycle fails the enablers gate", async () => {
@@ -367,9 +419,37 @@ ${extra}  readiness:`),
   };
 }
 test("additive compatible revision preserves verified unaffected real-slice proof", async () => {
-  const result = await evaluate(compatibleProofPatch());
+  const root=fixture(compatibleProofPatch());
+  await attachFirstSliceProof(root);
+  const result = await evaluateRoot(root);
   assert.equal(result.verdict, "READY_FOR_SLICE");
   assert.match(result.gates.find(g => g.id === "first-slice").detail, /compatible proof/);
+});
+
+test('active scale-out requires current complete first-slice outcome proof', async () => {
+  const patches={
+    'issues/issue-002-first-slice.md':['Status: ready-for-agent','Status: verified'],
+    'issues/issue-003-scale-out.md':['Status: blocked','Status: ready-for-agent'],
+  };
+  const root=fixture(patches),proof=await attachFirstSliceProof(root);
+  assert.equal((await evaluateRoot(root)).verdict,'READY_FOR_SLICE');
+  fs.writeFileSync(path.join(root,proof.sourcePath),'changed implementation');
+  const result=await evaluateRoot(root);
+  assertBlocked(result,'first-slice');
+  assertBlocked(result,'scale-out');
+});
+
+test('exit-zero failed health proof and wrong task identity cannot release scale-out', async () => {
+  const patches={
+    'issues/issue-002-first-slice.md':['Status: ready-for-agent','Status: verified'],
+    'issues/issue-003-scale-out.md':['Status: blocked','Status: ready-for-agent'],
+  };
+  const failed=fixture(patches);
+  await attachFirstSliceProof(failed,{status:'fail'});
+  assertBlocked(await evaluateRoot(failed),'scale-out');
+  const wrong=fixture(patches);
+  await attachFirstSliceProof(wrong,{taskId:'OTHER-GOAL'});
+  assertBlocked(await evaluateRoot(wrong),'first-slice');
 });
 test("affected flow, material change, and missing compatibility evidence require real-slice reproof", async () => {
   for (const [from,to] of [

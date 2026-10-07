@@ -1,0 +1,18 @@
+{
+  "command": "C:\\Program Files\\nodejs\\node.exe",
+  "args": [
+    "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+    "run",
+    "test:local"
+  ],
+  "displayCommand": "npm run test:local",
+  "cwd": "C:\\Users\\aul\\AppData\\Local\\Temp\\sc-evidence-dod-final-Ynwygm",
+  "startedAt": "2026-10-07T02:53:09.054Z",
+  "finishedAt": "2026-10-07T02:55:10.332Z",
+  "exitCode": 0,
+  "logPath": ".scratch/completion/evidence-dod-20261007/test-local-final-4.log",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "availableParallelism": 4,
+  "processAffinityMask": 15
+}

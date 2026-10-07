@@ -6,6 +6,8 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {setup,installCodexBundle} from './setup.mjs';
 import {createHash} from 'node:crypto';
+import {pathToFileURL} from 'node:url';
+import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
 const engine = path.resolve('.agent/tools/setup.mjs');
 const source = process.cwd();
 function fixture(t) {
@@ -48,9 +50,68 @@ test('dry run is read-only; six adapters install and reinstall is a no-op', t =>
   assert.match(codex, /feature.*sc-launch/);
   assert.match(codex, /consultation.*sc-hints/);
   for (const rel of ['.claude/commands/sc-hints.md', '.agents/skills/sc-hints/SKILL.md', '.cursor/skills/sc-hints/SKILL.md', '.windsurf/workflows/sc-hints.md', '.gemini/commands/sc-hints.toml', '.agent/skills/hints/references/LICENSE']) assert.ok(fs.existsSync(path.join(f.target, rel)), rel);
-  assert.match(fs.readFileSync(path.join(f.target,'.agent/rules/project-config.md'),'utf8'),/approval_mode:.*stage/);
+  assert.match(fs.readFileSync(path.join(f.target,'.agent/rules/project-config.md'),'utf8'),/approval_mode:.*exception/);
+  assert.match(fs.readFileSync(path.join(f.target,'AGENTS.md'),'utf8'), /exception.*default/i);
+  assert.doesNotMatch(fs.readFileSync(path.join(f.target,'AGENTS.md'),'utf8'), /Full-tier checkpoints: BRD approval/);
   assert.equal(fs.existsSync(path.join(f.target,'.agent/tools/budget-wizard.mjs')),false);
   assert.equal(run(f,'doctor').status,0);
+});
+
+test('all six generated host adapters carry the canonical evidence completion gate', t => {
+  const f=fixture(t),selected='codex,claude,antigravity,cursor,windsurf,gemini';
+  const options={source,target:f.target,home:f.home,scope:'both',host:selected};
+  assert.equal(setup(options).status,'applied');
+  const routes=fs.readdirSync(path.join(source,'.agent/workflows')).filter(p=>/^sc-.*\.md$/.test(p)).map(p=>p.slice(0,-3));
+  const missing=[];
+  for(const global of [false,true]) {
+    const root=global?f.home:f.target;
+    const entries=[
+      ['codex',`${global?'.codex':'.agents'}/skills/super-compound/SKILL.md`],
+      ...routes.flatMap(route=>[
+        ['claude',`.claude/commands/${route}.md`],
+        ['antigravity',`${global?'.gemini/antigravity':'.agents'}/skills/${route}/SKILL.md`],
+        ['cursor',`.cursor/skills/${route}/SKILL.md`],
+        ['windsurf',`${global?'.codeium/windsurf/global_workflows':'.windsurf/workflows'}/${route}.md`],
+        ['gemini',`.gemini/commands/${route}.toml`],
+      ]),
+      ['codex',global?'.codex/AGENTS.md':'AGENTS.md'],
+      ['claude',global?'.claude/CLAUDE.md':'CLAUDE.md'],
+      ['windsurf',global?'.codeium/windsurf/memories/global_rules.md':'.windsurf/rules/super-compound.md'],
+      ['gemini',global?'.gemini/GEMINI.md':'GEMINI.md'],
+      ...(!global?[['cursor','.cursor/rules/super-compound.mdc']]:[]),
+    ];
+    for(const [host,relative] of entries) {
+      const text=fs.readFileSync(path.join(root,relative),'utf8');
+      if(!text.includes('No Evidence = Not Done') || !text.includes('skills/verification-before-completion/SKILL.md') || !text.includes('Evidence of Completion')) missing.push(`${global?'global':'project'} ${host}: ${relative}`);
+    }
+  }
+  assert.deepEqual(missing,[], 'all generated entrypoints must retain the completion policy');
+  const report=setup({...options,command:'doctor'});
+  assert.equal(report.status,'healthy');
+  assert.ok(report.capabilities.every(c=>c.liveTested===false),'static adapter proof is not live host testing');
+});
+
+test('installed Codex fallback executes stored completion proof and rejects failed outcome', async t => {
+  const f=fixture(t);
+  assert.equal(installCodexBundle({command:'install',source,'codex-home':f.home}).status,'applied');
+  fs.mkdirSync(f.target,{recursive:true});
+  const alias=path.join(f.root,'home-alias');
+  fs.symlinkSync(f.home,alias,process.platform==='win32'?'junction':'dir');
+  const gates=[f.home,alias].map(home=>path.join(home,'skills/super-compound/references/tools/verified-promise.mjs'));
+  for(const gate of gates) {
+    const imported=spawnSync(process.execPath,['--input-type=module','-e',`const {evaluatePromise}=await import(${JSON.stringify(pathToFileURL(gate).href)});process.stdout.write(typeof evaluatePromise);`,engine],{encoding:'utf8'});
+    assert.equal(imported.status,0,imported.stdout+imported.stderr);
+    assert.equal(imported.stdout,'function','import must not execute the completion CLI');
+  }
+  for(const status of ['fail','pass']) {
+    const proof=await provisionCompletionFixture(f.target,{taskId:`fallback-${status}`,status});
+    for(const gate of gates) {
+      const result=spawnSync(process.execPath,[gate,'--root',f.target,'--contract',proof.contractPath],{encoding:'utf8'});
+      assert.equal(result.status,status==='pass'?0:1,gate+'\n'+result.stdout+result.stderr);
+      assert.match(result.stdout,status==='pass'?/COMPLETE_ALLOWED[\s\S]*Evidence of Completion/:/COMPLETE_DENIED/);
+      assert.equal(fs.existsSync(path.join(f.target,'.scratch/work-packages')),false,'light proof needs no ledger');
+    }
+  }
 });
 test('global cache activates a project offline and both scopes roll back partial application', t=>{
   const f=fixture(t);
@@ -107,6 +168,25 @@ test('existing instructions and config survive; user-owned collisions are batche
   const result=run(f,'update');
   assert.notEqual(result.status,0);
   assert.equal(result.report.conflicts.length,2);
+});
+
+test('explicit stage preference survives update while generated adapters defer to project config', t => {
+  const f=fixture(t);
+  assert.equal(run(f,'install').status,0);
+  const config=path.join(f.target,'.agent/rules/project-config.md');
+  const stage=fs.readFileSync(config,'utf8').replace(/approval_mode:.*exception/, 'approval_mode: "stage"');
+  fs.writeFileSync(config,stage);
+  assert.equal(run(f,'update').status,0);
+  assert.equal(fs.readFileSync(config,'utf8'),stage);
+  assert.match(fs.readFileSync(path.join(f.target,'AGENTS.md'),'utf8'), /project.*approval_mode/);
+});
+
+test('installer and doctor reject unshipped local imports without writing', t => {
+  const f=fixture(t),checkout=path.join(f.root,'checkout');
+  fs.cpSync(path.join(source,'.agent'),path.join(checkout,'.agent'),{recursive:true});
+  fs.writeFileSync(path.join(checkout,'.agent/tools/broken.mjs'), "import './loop-telemetry-model.mjs';\n");
+  for(const command of ['install','doctor']) assert.throws(()=>setup({source:checkout,target:f.target,home:f.home,scope:'project',host:'codex',command}),/missing local runtime dependency/i);
+  assert.equal(fs.existsSync(f.target),false);
 });
 test('update applies unchanged owned assets, retires only owned bytes, and rolls back existing files',t=>{
   const f=fixture(t),checkout=path.join(f.root,'checkout');

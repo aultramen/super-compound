@@ -15,12 +15,43 @@ export function activeCopyFilter(root) {
   return source => isActiveAsset(path.relative(root, source));
 }
 
+export function missingLocalModules(file, text, fileSet) {
+  if (!/\.(?:mjs|cjs|js)$/.test(file) || /(?:^|\/)(?:test-[^/]+|[^/]+\.test)\.(?:mjs|cjs|js)$/.test(file)) return [];
+  // ponytail: static literal imports only; the bundle smoke test covers executable entry points.
+  const imports = /^\s*(?:(?:import|export)\s+(?:[^;'"`]*?\bfrom\s*)?|(?:(?:const|let|var)\s+[^;=]+?=\s*(?:await\s+)?|(?:await\s+)?)(?:import|require)\s*\()\s*['"](\.[^'"\n]+)['"]/gm;
+  return [...text.matchAll(imports)].flatMap(match => {
+    const resolved = path.posix.normalize(path.posix.join(path.posix.dirname(file),match[1]));
+    return [resolved,`${resolved}.js`,`${resolved}.json`,`${resolved}/index.js`].some(p=>fileSet.has(p)) ? [] : [resolved];
+  });
+}
+
+export function assertLocalModuleClosure(assets) {
+  const fileSet = new Set(assets.keys());
+  for (const [file, value] of assets) {
+    for (const missing of missingLocalModules(file, (value.bytes ?? value).toString('utf8'),fileSet)) {
+      throw new Error(`Missing local runtime dependency: ${file} -> ${missing}`);
+    }
+  }
+}
+
 export function copyActiveDistribution(root, destination) {
   const sourceRoot=path.resolve(root),target=path.resolve(destination);
   if(fs.existsSync(target)||target===sourceRoot||target.startsWith(sourceRoot+path.sep))throw new Error('distribution requires a new destination outside source');
-  const names=['.agent','.codex','.claude','AGENTS.md','CLAUDE.md','SETUP.md','SUPER-COMPOUND.md','README.md','WALKTHROUGH.md','CHANGELOG.md'];
+  const names=['.agent','.codex','.claude','AGENTS.md','CLAUDE.md','SETUP.md','SUPER-COMPOUND.md','README.md','OFFLINE-SETUP.md','WALKTHROUGH.md','CHANGELOG.md'];
+  const runtime = new Map();
+  function inspect(directory) {
+    for (const entry of fs.readdirSync(directory,{withFileTypes:true})) {
+      const full=path.join(directory,entry.name),relative=canonicalLocator(path.relative(sourceRoot,full));
+      if(fs.lstatSync(full).isSymbolicLink())throw new Error('distribution rejects symlinks');
+      if(!isActiveAsset(relative)||['__pycache__','.compact-state'].includes(entry.name))continue;
+      if(entry.isDirectory())inspect(full);
+      else if(entry.isFile())runtime.set(relative,fs.readFileSync(full));
+    }
+  }
+  if(fs.existsSync(path.join(sourceRoot,'.agent')))inspect(path.join(sourceRoot,'.agent'));
+  assertLocalModuleClosure(runtime);
   for(const name of names) {
-    const source=path.join(sourceRoot,name);
+    const source=path.join(sourceRoot,name==='README.md'&&fs.existsSync(path.join(sourceRoot,'OFFLINE-SETUP.md'))?'OFFLINE-SETUP.md':name);
     if(!fs.existsSync(source))continue;
     fs.cpSync(source,path.join(target,name),{recursive:true,force:false,errorOnExist:true,filter:file=>{
       if(fs.lstatSync(file).isSymbolicLink())throw new Error('distribution rejects symlinks');

@@ -32,7 +32,9 @@
 `PASS WITH NOTES - ENABLER_ONLY` is allowed only for the canonical UI contract
 enabler exception. It does not mean UI/API readiness passed and cannot release a
 first-slice or scale-out issue.
-After enabler verification, `/sc-plan` must refresh the index, rerun dimension
-10, and auto-promote unchanged semantics after deterministic gates; request Technical Manager approval only for material deltas before returning a normal `PASS`.
+After enabler verification, the active controller performs the planning-owned
+index refresh, dimension 10 checks and deterministic promotion internally;
+unchanged semantics do not re-enter full planning. Material deltas return to the
+Technical Manager under the configured policy before a normal `PASS`.
 
 LOCAL_ONLY applicability and affected proof follow the canonical UI readiness reference.

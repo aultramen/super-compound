@@ -24,6 +24,32 @@ function read(relativePath) {
   return readFile(path.join(ROOT, relativePath), "utf8");
 }
 
+test("artifact applicability has one owner and preserves mandatory decisions", async () => {
+  const owner = await read(".agent/skills/agentic-delivery/references/templates-and-outputs.md");
+  assert.match(owner, /## Applicability and Expansion/);
+  for (const kind of ["Always required", "Required when triggered", "Optional"]) assert.ok(owner.includes(kind));
+  for (const name of ["BRD-Skeleton.md", "PRD-Skeleton.md", "FSD-Skeleton.md", "ADR-Skeleton-OPTIONAL.md"]) {
+    const text = await read(`${TEMPLATE_ROOT}/skeletons/${name}`);
+    assert.match(text, /templates-and-outputs\.md#applicability-and-expansion/);
+    assert.doesNotMatch(text, /omit sections with no content/);
+  }
+});
+
+test("PRD authoring uses the canonical skeleton rather than an alternate compact shape", async () => {
+  const authoring = await read(".agent/skills/prd-generator/references/prd-authoring.md");
+  assert.ok(authoring.includes("skeletons/PRD-Skeleton.md"));
+  assert.doesNotMatch(authoring, /## Actors and User Stories/);
+});
+
+test("LOCAL_ONLY topology guidance belongs to the screen contract, outside AI guidance", async () => {
+  const fsd = await read(`${TEMPLATE_ROOT}/skeletons/FSD-Skeleton.md`);
+  const screen = fsd.split("## Screen & Interaction Contract")[1].split("\n## ")[0];
+  const ai = fsd.split("## AI Context and Output (conditional)")[1];
+  assert.ok(screen.includes("topology: LOCAL_ONLY"));
+  assert.ok(screen.includes("network_actions: []"));
+  assert.ok(!ai.includes("Topology: LOCAL_ONLY"));
+});
+
 test("artifact authoring is skeleton-first and section-on-demand", async () => {
   const [routes, prdSkill, architect, ...templates] = await Promise.all([
     read(".agent/skills/agentic-delivery/references/templates-and-outputs.md"),
@@ -161,7 +187,7 @@ test("FSD approval permits only the contract enabler before UI readiness", async
   );
   assert.match(
     fsd,
-    /CONTRACT_ENABLER[\s\S]*\/sc-plan[\s\S]*READY_FOR_SLICE[\s\S]*FIRST_VERTICAL_SLICE/i,
+    /CONTRACT_ENABLER[\s\S]*planning-owned[\s\S]*without full\s+planning re-entry[\s\S]*READY_FOR_SLICE[\s\S]*FIRST_VERTICAL_SLICE/i,
   );
   assert.match(
     fsd,

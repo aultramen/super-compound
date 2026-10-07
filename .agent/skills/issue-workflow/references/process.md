@@ -21,7 +21,7 @@ Each issue must point to one `FSD-<PROJECT>#GOAL-xxx` packet that:
 - bounds allowed and prohibited scope in the FSD
 - states data/API/UI/job/security impact in the FSD
 - includes verification references or exact commands
-- for UI-integrated work, pins UI delivery role, `CONTRACT-*`, `UIMAP-*`,
+- for full-tier networked UI, pins UI delivery role, `CONTRACT-*`, `UIMAP-*`,
   `SCHEMA-*`, fixture/test refs, contract version, and required gate
 - has no unresolved blocker
 
@@ -47,10 +47,13 @@ Validate before publishing:
 - Blockers come before dependents.
 - No circular dependencies exist.
 - Parallel candidates do not require the same unmerged files unless the FSD states an integration strategy.
-- UI DAG order is optional `CONTRACT_ENABLER` -> `/sc-plan` mechanical readiness promotion -> exactly
+- Networked UI DAG order is optional `CONTRACT_ENABLER` -> internal planning-owned mechanical readiness promotion -> exactly
   one active real `FIRST_VERTICAL_SLICE` per pinned revision -> dependent
   `SCALE_OUT_SLICE` issues -> one `HARDENING` issue blocked by all applicable UI
-  delivery slices. Scale-out also requires a `VALIDATED` PRD baseline.
+  delivery slices. Scale-out also requires a `VALIDATED` PRD baseline. Unchanged
+  derived evidence/index revisions do not re-enter full planning. LOCAL_ONLY
+  maps local state/data/behavior and accessibility tests in its goal; add a
+  separate hardening pointer only for outstanding merged/cross-slice checks.
 - Shared schemas, generated clients, fixtures, migrations, lockfiles, and
   registries are an explicit dependency or single-writer stream.
 - Every ADR ref points to an accepted linked ADR.

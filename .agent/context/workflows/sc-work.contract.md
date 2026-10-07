@@ -9,7 +9,7 @@ Load:
 
 - Issue/FSD `GOAL-*`, authority refs, target files/tests.
 - `.agent/context/skills/sc-work.contract.md`.
-- `node .agent/tools/knowledge-search.mjs "<goal>"`; ERR-*/LRN-* lessons advise; accepted decisions bind.
+- `node .agent/tools/knowledge-search.mjs "<goal>" --require-complete`; known scope flags; ERR-*/LRN-* advise, accepted decisions bind.
 - `.agent/context/skills/git-workflow-operation.contract.md` only when needed.
 
 In `full`, before edit/execution require `ready-for-agent` and every `Blocked by`
@@ -19,7 +19,10 @@ Invalid evidence blocks affected goals with `OPEN-*`.
 
 Networked `FIRST_VERTICAL_SLICE`: real provider, auth/permission, success and
 representative failure via `integration-checking`; mock-only proof cannot release
-scale-out. Once verified, `/sc-plan` promotes eligible `SCALE_OUT_SLICE` pointers. Parallel scale-out: independent goals,
+scale-out. Once verified, the active controller uses planning-owned deterministic
+promotion for eligible `SCALE_OUT_SLICE` pointers without planning re-entry solely
+for metadata; `FIRST_VERTICAL_SLICE_VERIFIED` remains mandatory. Material changes
+return to `/sc-plan`/owner. Parallel scale-out: independent goals,
 baseline VALIDATED, applicable pinned contract, one shared writer, isolation.
 LOCAL_ONLY uses mapped local checks without provider barriers.
 
@@ -31,9 +34,17 @@ Live proof: verification-before-completion/references/live-verification.md.
 Block protected-base edits. Test-first per `tdd_mode`; run mapped verification
 before completion; bounded `HARDENING` covers required integration/UI evidence
 and applicable human judgment/UAT per approved acceptance.
-Verified reusable outcomes: `/sc-compound` before close; checkpoint evidence before retry.
-Close: docs/STATE.md Next action, else /sc-pause.
+Verified outcomes: `/sc-compound`; checkpoint captured/skip/pending closeout; retry capture, never verified work. Tiny skips need no checkpoint.
+Close: docs/STATE.md Next action when non-trivial; /sc-pause only for actual stops.
 
 Resume: memory-maintenance.mjs resume; reconcile constraints/inbox and affected drift; skip verified goals.
 
 Stage: FSD approval + execution authorization persist.
+
+`No Evidence = Not Done`: canonical gate `verification-before-completion`.
+Pin all-AC completion contract before results; actual assertions prove the goal.
+Light/single: `.scratch/completion/<task-id>/`, `verified-promise.mjs --contract <path>`;
+multi-goal: `--run <id>` also proves final combined outcome. Required incomplete,
+failed/skipped/stale proof cannot promote verified/done or release dependencies.
+Completion report: `Evidence of Completion` with what/how, actual result/locator,
+and all-AC mapping; otherwise accurate incomplete status.

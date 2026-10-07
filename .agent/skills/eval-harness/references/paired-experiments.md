@@ -22,13 +22,38 @@ preserved. Quality regressions REJECT; absent/incomparable proof is INCONCLUSIVE
 Store every run, median/range/variation and the verdict; source variants may
 differ, but tasks/config/grader and fixture must match.
 
-Codex Windows pilot: `node .agent/tools/codex-pilot.mjs run --baseline
-<frozen-root> --out <new-directory> --model <fixed-model> --executable <codex.exe>`.
-The existing session-baseline seed supplies the fixture. Ten cold sessions have
-a five-minute limit, alternating AB/BA by pair and no hidden retries. Each uses
-its local adapter. JSONL, stderr, actual artifact grade and usage remain on disk.
+A/B variants must have distinct effective source digests. A same-source pair
+can describe noise; it cannot support KEEP. Optional `gates.controlTrials` supplies
+at least six compatible A/A pairs. Their floor is the maximum absolute paired
+reduction, `max(abs(1 - B/A))`; candidate median gain must exceed that floor
+and the existing thresholds. Missing or incompatible required controls are
+INCONCLUSIVE, never an efficiency win (`gates.noiseAware: true` requires controls).
+
+Codex Windows pilot first runs `node .agent/tools/codex-pilot.mjs preflight
+--baseline <frozen-root> --enhanced <candidate-root> --out <new-directory>
+--fixture debugging --model <fixed-model> --effort low --executable <codex.exe>`;
+repeat in a fresh directory with `--fixture multi-goal-resume`. Preflight proves
+the selected build marker, actual initial test result, and a bounded write probe
+at `.scratch/pilot-write-proof.json` without changing source or acceptance tests.
+Debugging deliberately starts RED; resume starts GREEN. A blocked preflight stops
+counted sessions and retains its evidence. Read/test success alone does not prove
+the worker can implement. Honor a read-only policy; do not bypass it.
+
+Counted runs use the same selected fixture, configuration and proving grader.
+Run `node .agent/tools/codex-pilot.mjs run --baseline <frozen-root> --enhanced
+<candidate-root> --out <new-directory> --fixture <selected-fixture>
+--noise-aware true --model <fixed-model> --effort low --executable <codex.exe>`.
+Six A/A pairs precede five A/B pairs. Cold sessions alternate AB/BA and have a
+five-minute limit, with no hidden retries. Keep the existing execpolicy rules;
+never bypass policy to obtain a measurement. JSONL, stderr, actual artifact
+grade and usage remain on disk. Justified trivial closeout can replace learning
+capture only when verification and the durable disposition are actually proved.
+Stop after the first failed control workflow; preserve its trace and verdict.
+An ineligible control cannot establish a noise floor for candidate trials.
 Cached input is a subset of input: total = input + output, never + cache again.
-Missing fields stay unknown. A failed attempt remains in the dataset.
+Reasoning output is a subset of output; report it separately without adding it
+again. Cache-write input is a reported counter, not an extra total. Missing or
+inconsistent reasoning fields stay unknown. A failed attempt remains in the dataset.
 
 CLI event fields and flags are checked against the installed CLI and
 [official non-interactive documentation](https://learn.chatgpt.com/docs/non-interactive-mode).

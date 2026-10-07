@@ -1,0 +1,25 @@
+{
+  "taskId": "evidence-dod-20261007",
+  "inspectedAt": "2026-10-07T02:57:53.692Z",
+  "observer": "root coordinator",
+  "contractDigest": "1aef223423737e8114a490f5c1ee1cde4dee8ef45b6c389940f4b769d434c3f5",
+  "reportPath": "docs/eval-results/evidence-dod-20261007.md",
+  "reportDigest": "00858becfab1eb2e188146420c84b2f70e65fe504ecb6fc1f5b8864e3bef902b",
+  "acceptanceRows": 8,
+  "openedReportLinks": 24,
+  "taskSpecificEvidenceRows": 8,
+  "authorityCompared": true,
+  "sourceRefs": 75,
+  "observationRefs": [
+    ".scratch/completion/evidence-dod-20261007/AC-01.json",
+    ".scratch/completion/evidence-dod-20261007/AC-02.json",
+    ".scratch/completion/evidence-dod-20261007/AC-03.json",
+    ".scratch/completion/evidence-dod-20261007/AC-04.json",
+    ".scratch/completion/evidence-dod-20261007/AC-05.json",
+    ".scratch/completion/evidence-dod-20261007/AC-06.json",
+    ".scratch/completion/evidence-dod-20261007/AC-07.json",
+    ".scratch/completion/evidence-dod-20261007/AC-08.json"
+  ],
+  "finalReportInspectedAt": "2026-10-07T02:59:02.939Z",
+  "initialGateExit": 0
+}

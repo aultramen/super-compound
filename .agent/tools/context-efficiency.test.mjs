@@ -26,6 +26,8 @@ test('large windows preserve summary-first and session models inherit',()=>{
 test('simple checkpoint retains boundaries while complex details load conditionally',()=>{
   const checkpoint=read('.agent/context/checkpoint.contract.md');
   for(const marker of ['stable Q<n>','all ready','revision','evidence','resume','Silence','resolution','detailed package']) assert.ok(checkpoint.includes(marker),marker);
-  assert.match(checkpoint,/For a simple need use a short item/);
+  assert.match(checkpoint,/at most three actionable questions/);
+  assert.match(checkpoint,/expandable complete list|on demand/);
+  assert.match(checkpoint,/Retain unanswered IDs/);
   assert.match(read('.agent/skills/checkpoint-protocol/references/answerable-package.md'),/Bahan review:/);
 });

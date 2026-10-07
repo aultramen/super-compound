@@ -7,7 +7,7 @@
   "scripts": {
     "check": "node --check .agent/hooks/pre-compact.js && node --check .agent/hooks/session-end.js && node --check .agent/hooks/suggest-compact.js && node --check .agent/hooks/stop-check.js && node --check .agent/hooks/context-monitor.js && node --check .agent/tools/git-workflow.mjs",
     "test:tools": "node .agent/tools/run-local-tests.mjs --include-install",
-    "test:skills": "node --test .agent/skills/agentic-delivery/tests/progressive-disclosure-wave3.test.mjs .agent/skills/architecture-enforcement/tests/architecture-enforcement.test.mjs .agent/skills/security-audit/tests/risk-skills-progressive-disclosure.test.mjs .agent/skills/skill-authoring/test-progressive-routers.mjs",
+    "test:skills": "node --test .agent/skills/agentic-delivery/tests/progressive-disclosure-wave3.test.mjs .agent/skills/architecture-enforcement/tests/architecture-enforcement.test.mjs .agent/skills/security-audit/tests/risk-skills-progressive-disclosure.test.mjs .agent/skills/skill-authoring/test-progressive-routers.mjs .agent/skills/checkpoint-protocol/tests/autonomy-policy.test.mjs",
     "test:hooks": "node .agent/hooks/test-hooks-security.js",
     "test:python": "python3 -m unittest discover -s .agent/skills/interface-design/scripts -p \"test_*.py\" && python3 .agent/skills/verification-before-completion/tests/test_skill_router_contract.py",
     "test": "npm run check && npm run test:tools && npm run test:skills && npm run test:hooks",

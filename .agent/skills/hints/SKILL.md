@@ -30,10 +30,10 @@ select their owning workflow directly.
    [context-engineering](../context-engineering/SKILL.md) and only its relevant
    reference. Do not replicate thresholds or handoff procedures here.
 6. Before human input or owner handoff use
-   `../../context/checkpoint.contract.md`: all ready items, stable IDs, pending
-   dependencies, recommendations/consequences, full absolute verified review
-   links/sections and both reply examples. A limited host dialog does not limit
-   the complete conversation list. Keep standalone needs in chat.
+   `../../context/checkpoint.contract.md`: prioritized actionable questions,
+   stable IDs, all material blocks and complete ready/pending inventory,
+   recommendations/consequences and verified review links/sections. Bulk replies
+   resolve displayed items only. Keep standalone needs in expandable chat detail.
 
 ## Invariants
 

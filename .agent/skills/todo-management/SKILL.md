@@ -13,8 +13,6 @@ Apply this procedure within its authorized scope and use `.agent/context/output-
 
 Capture out-of-scope ideas immediately, then return to the active task. Review and route them later without turning capture into an unauthorized context switch.
 
-**Announce:** "I'm using the todo-management skill to capture this for later."
-
 ## Reference Router
 
 - Choose when to capture, infer area, and create the full todo file: [capture](references/capture.md)

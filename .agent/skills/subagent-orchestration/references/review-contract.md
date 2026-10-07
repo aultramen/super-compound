@@ -1,5 +1,7 @@
 # Work-Package Review Contract
 
+## Summary
+
 Load this reference only when dispatching or reviewing a file-backed goal.
 
 ## Implementer Contract
@@ -11,8 +13,13 @@ Load this reference only when dispatching or reviewing a file-backed goal.
   or security authority; ordinary implementation judgment remains delegated.
 - Write a failing test first for behavior/regression changes.
 - Implement only the named goal and run its mapped verification.
+- Read the pinned completion contract against authoritative refs before results;
+  verify every required outcome and preserve actual assertions/artifact provenance.
 - Write the full report to `reportPath` with outcome, changed files,
   verification, deviations, and blockers.
+- Completed reports include **Evidence of Completion** with what/how/actual
+  result/locator and full requirement/AC coverage; otherwise report the accurate
+  incomplete status from `verification-before-completion`.
 - Return only: outcome, report path, verification status, and blockers. Do not
   return the diff or report body.
 
@@ -23,12 +30,20 @@ reviewer when behavior, security, contracts, complexity, or failure risk warrant
 it. Review `briefPath`, `reportPath`, and `reviewPackagePath`. Write separate
 verdicts so spec and quality remain independently actionable.
 
+Reuse resident checks; no nested reviewer fanout. Apply reviewer economics and
+stable finding/adjudication rules from
+[findings and self-review](../../code-review/references/findings-and-self-review.md)
+within the existing review report.
+
 ### SPEC Verdict
 
-- All acceptance and verification refs are satisfied.
+- All goal/requirement/acceptance and verification refs are satisfied by actual
+  outcome evidence; compare the pinned checklist with the authoritative source.
 - Required files/behavior exist; no required functionality is missing.
 - No extra scope, unapproved deviation, or invented contract exists.
 - Tests cover new behavior and reported verification is supported by evidence.
+- Open and compare visual/manual artifacts; existence or worker prose is not
+  evidence of correctness. The coordinator independently inspects delegated proof.
 
 ### QUALITY Verdict
 
@@ -83,10 +98,17 @@ reconcile and retry, never overwrite another mutation.
 
 - `ready -> in-progress`: `{"expectedVersion": <current version>}`.
 - `in-progress -> implemented` and `implemented -> verified`: include `evidence`
-  containing the same three digest fields and `evidenceRefs`, an array of 1-100
+containing the same three digest fields and `evidenceRefs`, an array of 1-100
   unique repository-relative paths to actual bounded evidence files. Store
   evidence separately from mutable work-package control files. The tool hashes
   each evidence file; preserve its contents for later freshness checks.
+- Creation also pins `completionContract: {path, digest}` per goal; add
+  `runCompletionContract: {path, digest}` for required combined outcome proof.
+  The shared completion validator gates `implemented -> verified` through both
+  direct `record` and receipt `classify` before mutation. Incomplete or invalid
+  evidence cannot promote the ledger or release dependencies. Run completion
+  also validates required combined integration outcomes; all goal statuses alone
+  cannot establish the feature works.
 - `ready|in-progress|implemented -> blocked` and
   `in-progress|implemented -> failed`: include `reason: {code, detail}` with an
   uppercase reason code and a nonempty detail of at most 500 characters.

@@ -3,7 +3,7 @@
  * knowledge-search - BM25 retrieval over the durable knowledge store.
  *
  * Ranks docs/solutions/** (and optionally docs/learnings/**) plus the
- * memory files docs/ERROR_LOG.md, docs/LEARNED_KNOWLEDGE.md, and the
+ * memory files docs/ERROR_LOG.md, docs/LEARNED_KNOWLEDGE.md, their archives, and the
  * "## Codebase Patterns" head section of docs/progress.md against a query
  * and emits at most MAX_RESULTS compact hits: id, path, title, score,
  * snippet. Multi-entry memory files are split on /^## /m so BM25 ranks at
@@ -20,6 +20,7 @@
  * Usage:
  *   node .agent/tools/knowledge-search.mjs "<query>" [--dir docs/solutions]
  *        [--file docs/ERROR_LOG.md] [--limit 3] [--json] [--root <repo-root>]
+ *        [--require-complete]
  */
 
 import {canonicalLocator, isActiveAsset} from './active-assets.mjs';
@@ -34,18 +35,30 @@ const BM25_K1 = 1.5;
 const BM25_B = 0.75;
 const ENTRY_ID_RE = /^((?:ERR|LRN)-\d{4}-\d{2}-\d{2}-\d+)\b/;
 
-const DEFAULT_DIRS = ['docs/solutions', 'docs/learnings'];
+const DEFAULT_DIRS = ['docs/solutions', 'docs/learnings'].map(dir => ({dir, optional: true}));
 const DEFAULT_FILES = [
-    { file: 'docs/ERROR_LOG.md' },
-    { file: 'docs/LEARNED_KNOWLEDGE.md' },
-    { file: 'docs/progress.md', section: 'Codebase Patterns' },
+    { file: 'docs/ERROR_LOG.md', optional: true },
+    { file: 'docs/LEARNED_KNOWLEDGE.md', optional: true },
+    { file: 'docs/progress.md', section: 'Codebase Patterns', optional: true },
+    { file: 'docs/archive/ERROR_ARCHIVE.md', entriesOnly: true, optional: true },
+    { file: 'docs/archive/KNOWLEDGE_ARCHIVE.md', entriesOnly: true, optional: true },
 ];
 
-export function globalKnowledgeFiles(env = process.env) {
+function scanCoverage() {
+    return {complete: true, scannedFiles: 0, failedReads: [], diagnosticsTruncated: false};
+}
+
+function failedRead(coverage, locator, error) {
+    coverage.complete = false;
+    if (coverage.failedReads.length < 10) coverage.failedReads.push({locator, code: error.code || 'READ_FAILED'});
+    else coverage.diagnosticsTruncated = true;
+}
+
+export function globalKnowledgeFiles(env = process.env, {includeMissing = false} = {}) {
     const dir = env.SC_GLOBAL_KNOWLEDGE_DIR;
     if (typeof dir !== 'string' || !dir.trim()) return [];
     const file = path.resolve(dir, 'LEARNED_KNOWLEDGE.md');
-    return fs.existsSync(file) ? [{ file, global: true }] : [];
+    return includeMissing || fs.existsSync(file) ? [{ file, global: true, ...(includeMissing ? {optional: true} : {}) }] : [];
 }
 
 export function tokenize(text) {
@@ -71,7 +84,7 @@ export function parseFrontmatter(raw) {
     return { meta, body: raw.slice(end + 4) };
 }
 
-function listMarkdownFiles(dir) {
+function listMarkdownFiles(dir, coverage, root, optional = false) {
     const out = [];
     const stack = [dir];
     while (stack.length > 0) {
@@ -79,7 +92,8 @@ function listMarkdownFiles(dir) {
         let entries;
         try {
             entries = fs.readdirSync(current, { withFileTypes: true });
-        } catch {
+        } catch (error) {
+            if (!(optional && current === dir && error.code === 'ENOENT')) failedRead(coverage, canonicalLocator(path.relative(root, current)), error);
             continue;
         }
         for (const entry of entries) {
@@ -107,9 +121,16 @@ export function splitEntries(body) {
     }));
 }
 
-export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8').replace(/\r\n?/g, '\n')) {
+export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8').replace(/\r\n?/g, '\n'), coverage = scanCoverage()) {
     const docs = [];
+    const seenFiles = new Set();
+    const seenEntries = new Set();
     const addDoc = (file, title, meta, body, extra = {}) => {
+        if (extra.entryId) {
+            const key = `${extra.global ? 'global' : 'local'}:${extra.entryId}`;
+            if (seenEntries.has(key)) return;
+            seenEntries.add(key);
+        }
         const fields = {...meta};
         for (const match of body.matchAll(/^- (Status|Origin|Revision|Project|Stack|Version|Applies to|Evidence|Outcome):\s*(.*)$/gm)) {
             const key = match[1].toLowerCase().replace(/ /g, '_');
@@ -123,20 +144,26 @@ export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8').r
         ].join('\n');
         docs.push({ file, title, meta, body, tokens: tokenize(searchable), ...extra });
     };
-    for (const spec of files) {
+    const isArchive = spec => /(?:^|\/)docs\/archive\/(?:ERROR|KNOWLEDGE)_ARCHIVE\.md$/.test(canonicalLocator(typeof spec === 'string' ? spec : spec.file));
+    for (const spec of [...files].sort((a, b) => Number(isArchive(a)) - Number(isArchive(b)))) {
         const file = typeof spec === 'string' ? spec : spec.file;
+        if (seenFiles.has(file)) continue;
+        seenFiles.add(file);
         let raw;
         try {
             raw = readFile(file);
-        } catch {
+        } catch (error) {
+            if (!(spec.optional && error.code === 'ENOENT')) failedRead(coverage, spec.locator || file, error);
             continue;
         }
+        coverage.scannedFiles += 1;
         const { meta, body } = parseFrontmatter(raw);
         const global = typeof spec === 'object' && spec.global === true;
         if (typeof spec === 'object' && spec.split) {
             let entries = splitEntries(body);
             if (spec.section) entries = entries.filter((e) => e.heading === spec.section);
-            if (entries.length > 0 || spec.section) {
+            if (spec.entriesOnly) entries = entries.filter((e) => ENTRY_ID_RE.test(e.heading));
+            if (entries.length > 0 || spec.section || spec.entriesOnly) {
                 for (const entry of entries) {
                     if (entry.heading === 'Quick Reference') continue;
                     const idMatch = entry.heading.match(ENTRY_ID_RE);
@@ -161,7 +188,7 @@ export function buildIndex(files, readFile = (f) => fs.readFileSync(f, 'utf8').r
     }
     const avgLen =
         docs.reduce((sum, d) => sum + d.tokens.length, 0) / (docs.length || 1);
-    return { docs, df, avgLen };
+    return { docs, df, avgLen, coverage };
 }
 
 export function scoreQuery(index, query) {
@@ -202,19 +229,24 @@ export function snippetFor(doc, query) {
         .trim();
 }
 
-export function search({ root, dirs = [], files = [], query, limit = MAX_RESULTS, diagnostic = false, project, stack, version }) {
-    const fromDirs = dirs.flatMap((d) => listMarkdownFiles(path.resolve(root, d)))
-        .filter(file => (diagnostic || isActiveAsset(path.relative(root, file))) && (diagnostic || !file.endsWith(`${path.sep}knowledge-feedback.md`)));
+export function searchWithCoverage({ root, dirs = [], files = [], query, limit = MAX_RESULTS, diagnostic = false, project, stack, version, readFile }) {
+    const coverage = scanCoverage();
+    const fromDirs = dirs.flatMap((spec) => {
+        const d = typeof spec === 'string' ? {dir: spec} : spec;
+        return listMarkdownFiles(path.resolve(root, d.dir), coverage, root, d.optional);
+    }).filter(file => (diagnostic || isActiveAsset(path.relative(root, file))) && (diagnostic || !['knowledge-feedback.md', 'KNOWLEDGE_FEEDBACK_ARCHIVE.md'].includes(path.basename(file))))
+        .map(file => ({file, locator: canonicalLocator(path.relative(root, file))}));
     const fromFiles = files.map((spec) => {
         const f = typeof spec === 'string' ? { file: spec } : spec;
-        return { ...f, file: path.resolve(root, canonicalLocator(f.file)), split: true };
+        const file = path.resolve(root, canonicalLocator(f.file));
+        return { ...f, file, locator: f.global ? `global:${path.basename(file)}` : canonicalLocator(path.relative(root, file)), split: true };
     }).filter(spec=>diagnostic||isActiveAsset(path.relative(root,spec.file)));
-    const index = buildIndex([...fromDirs, ...fromFiles]);
-    return scoreQuery(index, query)
+    const index = buildIndex([...fromDirs, ...fromFiles], readFile, coverage);
+    const results = scoreQuery(index, query)
         .filter(({doc}) => {
             if (!diagnostic && /^(stale|superseded|contradicted)\b/i.test(doc.meta.status || '')) return false;
-            if (/^(general|global|all)$/i.test(doc.meta.applies_to || '')) return true;
-            return [['project', project], ['stack', stack], ['version', version]].every(([key, requested]) => !requested || !doc.meta[key] || doc.meta[key] === requested);
+            const general = /^(general|global|all)$/i.test(doc.meta.applies_to || '');
+            return [['project', general ? undefined : project], ['stack', stack], ['version', version]].every(([key, requested]) => !requested || !doc.meta[key] || doc.meta[key] === requested);
         })
         .slice(0, limit)
         .map(({ doc, score }) => {
@@ -236,6 +268,11 @@ export function search({ root, dirs = [], files = [], query, limit = MAX_RESULTS
                 snippet: snippetFor(doc, query),
             };
         });
+    return {results, coverage};
+}
+
+export function search(options) {
+    return searchWithCoverage(options).results;
 }
 
 function main(argv) {
@@ -245,6 +282,7 @@ function main(argv) {
     let query = null;
     let limit = MAX_RESULTS;
     let json = false;
+    let requireComplete = false;
     let root = process.cwd();
     const context = {};
     for (let i = 0; i < args.length; i += 1) {
@@ -253,6 +291,7 @@ function main(argv) {
         else if (a === '--file') files.push(args[++i]);
         else if (a === '--limit') limit = Math.max(1, Number(args[++i]) || MAX_RESULTS);
         else if (a === '--json') json = true;
+        else if (a === '--require-complete') requireComplete = true;
         else if (a === '--diagnostic') context.diagnostic = true;
         else if (['--project', '--stack', '--version'].includes(a)) context[a.slice(2)] = args[++i];
         else if (a === '--root') root = args[++i];
@@ -260,19 +299,19 @@ function main(argv) {
     }
     if (!query) {
         process.stderr.write(
-            'usage: knowledge-search.mjs "<query>" [--dir <dir>]... [--file <file>]... [--limit N] [--json] [--root <path>]\n'
+            'usage: knowledge-search.mjs "<query>" [--dir <dir>]... [--file <file>]... [--limit N] [--json] [--root <path>] [--require-complete]\n'
         );
         return 2;
     }
     if (dirs.length === 0 && files.length === 0) {
         dirs.push(...DEFAULT_DIRS);
-        files.push(...DEFAULT_FILES, ...globalKnowledgeFiles());
+        files.push(...DEFAULT_FILES, ...globalKnowledgeFiles(process.env, {includeMissing: true}));
     }
-    const hits = search({ root, dirs, files, query, limit, ...context });
+    const {results: hits, coverage} = searchWithCoverage({ root, dirs, files, query, limit, ...context });
     if (json) {
-        process.stdout.write(`${JSON.stringify({ query, results: hits }, null, 2)}\n`);
+        process.stdout.write(`${JSON.stringify({ query, results: hits, coverage }, null, 2)}\n`);
     } else if (hits.length === 0) {
-        process.stdout.write('No knowledge-store match. Safe to write a new record.\n');
+        process.stdout.write('No knowledge-store match.\n');
     } else {
         for (const hit of hits) {
             const where = hit.id.startsWith(hit.path) ? hit.id : `${hit.path}#${hit.id}`;
@@ -281,7 +320,8 @@ function main(argv) {
             );
         }
     }
-    return 0;
+    if (!json && !coverage.complete) process.stdout.write('Knowledge-store scan incomplete; inspect coverage with --json.\n');
+    return requireComplete && !coverage.complete ? 2 : 0;
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {

@@ -2,7 +2,7 @@
 
 ## Summary
 
-Use [prompt-driven setup](../SETUP.md) to install project/global scope and native adapters, then follow separate BRD, PRD, FSD approvals and execution authorization. Documentation follows the shared output standard; existing configuration is preserved.
+Use [prompt-driven setup](../SETUP.md) to install project/global scope and native adapters. New installations use exception-based approval: understand context, execute authorized work, validate, and deliver. Explicit stage preferences and existing configuration remain intact.
 
 This adapter installs Super Compound as a Codex skill while keeping `.agent/` canonical. The installed `SKILL.md` prefers a live project's compact `.agent/context/` routing and loads full instructions only on demand; bundled references are the fallback when a project has no `.agent/` directory.
 

@@ -2,15 +2,18 @@
 
 Purpose: resolve fuzzy intent into BRD-ready business context. The BRD is the
 only durable output; prototype code stays throwaway under `.scratch/prototypes/`
-and is never a production seed.
+and is not a production seed by default; explicit scoped user/project-policy reuse
+needs production-owner authority plus required tests/security/accessibility checks.
 
 knowledge-search.mjs "<scope>" first; Accepted decisions bind through authority; observed lessons are advisory.
 For unresolved decisions, use brainstorming/references/questions-and-options.md:
-show all consequential decisions with settled prerequisites for active work plus
-recommendation/reason/trade-off. Discover facts first; investigate pending facts
+prioritize at most three consequential human decisions with recommendation/reason/trade-off;
+summarize material blockers and retain all stable IDs/complete registry expandable.
+Discover facts first; investigate pending facts
 while asking independent decisions. Wait for answers; partial answers stay open,
 recommendations are not approval, corrections reopen affected descendants.
-Skip grilling concrete scope; capture in the owning BRD/PRD/FSD, no extra gate.
+Skip grilling concrete authorized scope; capture in the owning BRD/PRD/FSD with
+inherited acceptance provenance, no extra gate in exception mode.
 Load user request, nearby context, prior brainstorms, and accepted ADRs only if
 relevant. Use the BRD skeleton; record objectives, scope, non-goals, rules,
 acceptance, and `OPEN-*`. A prototype is throwaway/non-production and must stay

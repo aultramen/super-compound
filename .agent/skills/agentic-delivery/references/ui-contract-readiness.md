@@ -50,7 +50,10 @@ Evidence remains supporting evidence. Its locator is an external URL plus
 revision or a repository-relative throwaway path plus digest, accompanied by
 the decision question, reviewer, review date, and `discard | revise | promote
 decision` disposition. The accepted decision moves into PRD or FSD authority;
-prototype code is never a production seed.
+prototype code is not a production seed by default. Reuse requires an explicit
+scoped user/project-policy exception, production authority through the owning
+goal, and required tests, security and accessibility checks; evidence alone
+never authorizes reuse.
 
 ## Statuses And Transition Rules
 
@@ -136,14 +139,15 @@ UI delivery roles and gates are:
 `/sc-plan` writes only the FSD and issue pointers. If machine assets are absent,
 it creates a `CONTRACT_ENABLER` goal. An FSD with readiness `DRAFT` or `BLOCKED`
 may be approved only to make that bounded enabler ready; first-slice and
-scale-out issues remain blocked. After the enabler is verified, the owning
-`/sc-plan` route updates derived revisions/index, reruns deterministic readiness,
-and releases the first-slice pointer automatically when approved semantics are
+scale-out issues remain blocked. After the enabler is verified, the
+planning-owned deterministic operation runs in the active controller, updates
+derived revisions/index, reruns readiness, and releases the first-slice pointer
+without planning re-entry solely for metadata when approved semantics are
 unchanged. Record the diff/evidence and notify; Technical Manager re-approval is
 required only for a material semantic change or risk exception. Only
 `READY_FOR_SLICE` releases exactly one active `FIRST_VERTICAL_SLICE` for the
 critical/highest-risk flow. Every `SCALE_OUT_SLICE` depends on the verified
-first-slice issue. `/sc-plan` also creates exactly one `HARDENING` goal that
+first-slice issue. For networked merged/cross-slice verification, `/sc-plan` creates exactly one `HARDENING` goal that
 depends on all applicable UI delivery slices and owns final merged-system
 integration and the responsive, accessibility, E2E, visual-regression, or UAT
 evidence required by changed behavior and approved acceptance.
@@ -200,7 +204,8 @@ auth/permission and scoped responsive/accessibility behavior are proven, and
 `integration-checking` evidence is recorded. The issue must have no blocking
 `OPEN-*`; mock-only evidence cannot release dependents.
 
-Feature/release verification is complete only when the `HARDENING` goal records
+Feature/release verification is complete only when its applicable `HARDENING` goal
+or bounded LOCAL_ONLY goal records
 merged-system integration and all applicable mapped verification for changed
 behavior. Business Owner UAT is required for unresolved material human judgment
 or explicit acceptance, not as an administrative default for every UI change.

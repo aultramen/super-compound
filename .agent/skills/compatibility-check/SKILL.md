@@ -9,8 +9,6 @@ description: "Use when introducing dependencies or auditing runtime support, pee
 
 Prevent dependency and runtime surprises before they become build failures, production bugs, or security risks.
 
-Announce: "I'm using the compatibility-check skill to validate tech stack compatibility."
-
 ## Modes
 
 | Mode | Trigger | Scope | Output |
@@ -34,7 +32,7 @@ Use `context7-docs` or current primary documentation for version-specific suppor
 
 ## Mandatory Gates
 
-- **Mutation gate:** Audit mode is read-only. Caller boundary: inside `/sc-audit`, approval selects `/sc-plan`, `/sc-debug`, `/sc-work`, or `/sc-go`; transition to that owner before installing, upgrading, pinning, replacing, or editing configuration.
+- **Mutation gate:** Audit mode is read-only. Return already-authorized remediation internally to `/sc-plan`, `/sc-debug`, `/sc-work`, or `/sc-go`; a standalone audit requires an explicit remediation request. Transition to that owner before installing, upgrading, pinning, replacing, or editing configuration and retain applicable risk gates.
 - **Inventory gate:** Read both manifests and lockfiles plus runtime, CI, container, and deployment declarations. Check direct and critical transitive dependencies, peer and optional-peer requirements, native extensions, platform limits, provenance, licenses, and install scripts as applicable.
 - **Evidence gate:** Record current and proposed versions, exact manifest or lockfile evidence, supported runtime range, primary documentation, command output, vulnerability posture, and rollback path. Never infer support from “latest.”
 - **Tool gate:** If a required tool is missing, report that limitation instead of inventing a result. Separate unverified areas from verified no-findings.

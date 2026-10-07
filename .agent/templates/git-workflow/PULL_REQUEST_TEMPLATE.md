@@ -15,6 +15,16 @@ Jelaskan perubahan yang dibuat.
 ## Cara Test
 1.
 
+## Evidence of Completion
+
+| Requirement / AC | Yang diverifikasi | Cara verifikasi | Hasil aktual dan evidence |
+|---|---|---|---|
+| <ref> | <outcome> | <command/inspection yang dijalankan> | <hasil + locator artifact> |
+
+<!-- Gunakan .agent/skills/verification-before-completion/SKILL.md. Klaim selesai
+hanya bila seluruh outcome dan AC terbukti. Evidence belum lengkap: laporkan
+status aktual dan gap; PR/diff dibuat atau command exit 0 saja tidak cukup. -->
+
 ## Checklist
 Laporkan hanya item yang belum terpenuhi.
 - [ ] Branch dibuat dari base branch terbaru

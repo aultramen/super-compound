@@ -249,6 +249,8 @@ withTempProject((root) => {
         fs.utimesSync(path.join(root, 'docs', name), past, past);
     }
     fs.writeFileSync(path.join(stateDir, 'nudge-session.json'), JSON.stringify({ count: 3 }), 'utf8');
+    const checkpoint = (disposition) => `<!-- sc-checkpoint:start -->\n\`\`\`json\n${JSON.stringify({learningCloseouts:[{origin:'work',revision:'1',disposition,reason:'retry',evidenceRefs:['proof.txt'],evidenceDigest:'a'.repeat(64),captureInputRef:'.scratch/pending-captures/work.json'}]})}\n\`\`\`\n<!-- sc-checkpoint:end -->`;
+    fs.writeFileSync(path.join(root,'.continue-here.md'),checkpoint('pending'));
     const env = { ...process.env, SUPER_COMPOUND_PROJECT_ROOT: root };
 
     const nudged = spawnSync(process.execPath, [path.join(__dirname, 'stop-check.js')], {
@@ -267,7 +269,7 @@ withTempProject((root) => {
         env,
     });
     assert.strictEqual(captured.status, 0);
-    assert.strictEqual(captured.stdout.trim(), '{}');
+    assert.match(JSON.parse(captured.stdout).systemMessage,/pending.*learning/);
 
     const untouched = spawnSync(process.execPath, [path.join(__dirname, 'stop-check.js')], {
         input: JSON.stringify({ session_id: 'other-session', last_assistant_message: 'done' }),
@@ -275,7 +277,20 @@ withTempProject((root) => {
         env,
     });
     assert.strictEqual(untouched.status, 0);
-    assert.strictEqual(untouched.stdout.trim(), '{}');
+    assert.match(JSON.parse(untouched.stdout).systemMessage,/pending.*learning/);
+    const before=fs.readFileSync(path.join(root,'.continue-here.md'),'utf8');
+    const ended=spawnSync(process.execPath,[path.join(__dirname,'session-end.js')],{input:'{}',encoding:'utf8',env});
+    assert.match(ended.stderr,/pending.*learning/);
+    assert.strictEqual(fs.readFileSync(path.join(root,'.continue-here.md'),'utf8'),before);
+    fs.writeFileSync(path.join(root,'.continue-here.md'),checkpoint('skipped-trivial'));
+    const closed=spawnSync(process.execPath,[path.join(__dirname,'stop-check.js')],{input:'{}',encoding:'utf8',env});
+    assert.strictEqual(closed.stdout.trim(),'{}');
+    for (const disposition of ['skipped-trivial', 'captured']) {
+        fs.writeFileSync(path.join(root,'.continue-here.md'),checkpoint(disposition));
+        const ended=spawnSync(process.execPath,[path.join(__dirname,'session-end.js')],{input:'{}',encoding:'utf8',env});
+        assert.strictEqual(ended.status,0);
+        assert.strictEqual(ended.stderr,'', `${disposition} closeout must not repeat pause/compound reminders`);
+    }
 });
 
 withTempProject((root) => {
@@ -303,6 +318,8 @@ withTempProject((root) => {
     });
     assert.strictEqual(result.status, 0);
     assert.strictEqual(result.stdout, '');
+
+    assert.strictEqual(result.stderr, '', 'a fresh project has no known pending closeout');
 
     const logFile = path.join(root, '.agent', '.compact-state', 'usage-log.jsonl');
     const entries = fs.readFileSync(logFile, 'utf8').trim().split('\n').map((line) => JSON.parse(line));

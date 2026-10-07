@@ -36,5 +36,7 @@ do not re-request an unchanged authorized action.
 - Access/external action: bounded instructions, approved local destination and
   what resumes. Never ask for secrets in chat.
 
-Batch same-owner/scope independent needs; separate required stage approvals.
+Batch same-owner/scope independent needs; preserve opted-in stage approvals and
+risk exceptions. Prioritize human/external questions; routine checks and
+authorized reversible choices remain agent work.
 Keep technical IDs/gate diagnostics below the self-contained human summary.

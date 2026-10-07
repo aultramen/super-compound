@@ -471,4 +471,32 @@ test('active executable references must exist; historical reports remain evidenc
   assert.equal(checkExecutableReferences('.agent/skills/eval-harness/SKILL.md', 'node .agent/tools/absent.mjs', new Set()).length, 1);
   assert.equal(checkExecutableReferences('docs/archive/history.md', 'node .agent/tools/absent.mjs', new Set()).length, 0);
   assert.equal(checkExecutableReferences('README.md', 'node .agent/tools/current.mjs', new Set(['.agent/tools/current.mjs'])).length, 0);
+  assert.equal(checkExecutableReferences('.agent/tools/current.mjs', "import './retired.mjs';", new Set()).at(0).code,'MISSING_LOCAL_MODULE');
+  assert.equal(checkExecutableReferences('.agent/hooks/current.js', "const helpers = require('./lib/helpers');", new Set(['.agent/hooks/lib/helpers.js'])).length,0);
+  assert.equal(checkExecutableReferences('.agent/tools/pilot.mjs', "const prompt = `prove require('./generated.json')`;", new Set()).length,0);
+});
+
+test('auditRepository checks active runtime module dependencies', async () => {
+  const root = await mkdtemp(path.join(tmpdir(), 'framework-audit-runtime-'));
+  try {
+    await mkdir(path.join(root, '.agent/tools'), {recursive:true});
+    await mkdir(path.join(root, '.agent/hooks/lib'), {recursive:true});
+    await writeFile(path.join(root, '.agent/tools/entry.mjs'), "import './present.mjs';\nimport './project-config.mjs';\n");
+    await writeFile(path.join(root, '.agent/tools/present.mjs'), 'export const present = true;\n');
+    await writeFile(path.join(root, '.agent/tools/project-config.mjs'), 'export const retired = true;\n');
+    await writeFile(path.join(root, '.agent/hooks/runtime.js'), "const present = require('./lib/present');\nconst absent = require('./lib/absent');\n");
+    await writeFile(path.join(root, '.agent/hooks/lib/present.js'), 'module.exports = true;\n');
+    await writeFile(path.join(root, '.agent/tools/example.test.mjs'), "const example = 'node .agent/tools/__fixture_missing__.mjs';\n");
+
+    const report = await auditRepository(root);
+    const missing = report.findings.filter(finding => finding.code === 'MISSING_LOCAL_MODULE');
+    assert.deepEqual(missing.map(finding => [finding.file, finding.message]), [
+      ['.agent/hooks/runtime.js', 'Local runtime dependency is not shipped: .agent/hooks/lib/absent'],
+      ['.agent/tools/entry.mjs', 'Local runtime dependency is not shipped: .agent/tools/project-config.mjs'],
+    ]);
+    assert.deepEqual(report.findings.filter(finding => finding.code === 'MISSING_EXECUTABLE_REFERENCE'), []);
+    assert.equal(report.pass, false);
+  } finally {
+    await rm(root, {recursive:true,force:true});
+  }
 });

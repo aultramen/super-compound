@@ -10,8 +10,12 @@ test("session handoff and sensitive paths cannot independently escalate a light 
   const rubric = await read(delivery);
   assert.match(rubric, /session handoff alone only require state management/);
   assert.match(rubric, /Contract-preserving maintenance stays light/);
-  for (const file of [".agent/context/workflows/sc-review.contract.md", ".agent/workflows/sc-review.md"])
-    assert.match(await read(file), /semantic.*diff|diff.*semantic/is);
+  for (const file of [".agent/context/workflows/sc-review.contract.md", ".agent/workflows/sc-review.md"]) {
+    const text=await read(file);
+    assert.match(text, /semantic.*diff|diff.*semantic|material sensitive semantics outside authority/is);
+    assert.match(text, /verification-before-completion/);
+    assert.match(text, /Evidence of Completion/);
+  }
 });
 
 test("explicit Git authorization persists through preview; implementation grants no publishing authority", async () => {
@@ -24,7 +28,7 @@ test("explicit Git authorization persists through preview; implementation grants
 test("board derivation and contract materialization do not duplicate approved decisions", async () => {
   assert.match(await read(".agent/skills/issue-workflow/SKILL.md"), /write the board automatically/);
   const ui = await read(".agent/skills/agentic-delivery/references/ui-contract-readiness.md");
-  assert.match(ui, /releases the first-slice pointer automatically when approved semantics are\nunchanged/);
+  assert.match(ui, /planning-owned deterministic operation[\s\S]*reruns readiness[\s\S]*releases the first-slice pointer[\s\S]*without planning re-entry[\s\S]*approved semantics are\s+unchanged/);
   assert.match(ui, /re-approval is\nrequired only for a material semantic change/);
   assert.match(await read(delivery), /four checkpoints/);
   assert.match(await read(delivery), /separate\s+execution authorization/);

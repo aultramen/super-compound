@@ -13,16 +13,24 @@ pins `light` or `full`. Under `auto`, classify every request before any read
 fan-out and state one line: `Tier: light|full; trigger: T<n>|none`. Intake decides from changed semantics and material risk, never from session count.
 Reassess when scope changes; administrative coordination alone cannot raise the tier.
 
+Precedence: a pinned `full` mode or explicit BRD/PRD/FSD request keeps its
+artifact scope; material T2/security or T4 changes take precedence over light
+examples. Otherwise a bounded reversible feature or page is `light` when its
+outcome/acceptance are clear, existing contracts/access/patterns cover it, and
+mapped checks can prove it. Newness or missing PRD/FSD alone does not force full.
+If those conditions do not hold, apply the remaining material T1/T3 triggers.
+Document-only requests stop at their requested artifact and validation.
+
 | Trigger | `full` when | Owner |
 |---|---|---|
-| T1 | New product capability or user-visible behavior with no approved PRD/FSD covering it (check `docs/prd/`, `docs/fsd/`, `knowledge-search`) | `/sc-explore` without a BRD, else `/sc-prd` -> `/sc-plan` |
+| T1 | New product capability needing unresolved material business/product decisions or broader acceptance authority; exclude bounded low-risk features/pages above | `/sc-explore` without a BRD, else `/sc-prd` -> `/sc-plan` |
 | T2 | Material changes to data invariants, public API/wire compatibility, access policy, billing/payment effects, PII handling, or external integration behavior | `/sc-plan` (data/API) or `/sc-prd` (behavior) |
-| T3 | New interactive surface: a new screen, page, or user flow, not a change inside an existing screen | `/sc-ui` validation, then `/sc-plan`; the UI contract readiness lifecycle applies |
+| T3 | New interactive surface with material journey/state/data/provider contracts that existing patterns cannot cover; a bounded low-risk page stays light | `/sc-ui` validation, then `/sc-plan`; the UI contract readiness lifecycle applies |
 | T4 | Coordinated work changes product outcomes, cross-stream contracts, or material risk; issue boards, parallelism, and session handoff alone only require state management | `/sc-plan` goal pointers |
 | T5 | The user asks for BRD/PRD/FSD, or the project pins `delivery_mode: full` | full path |
 
 Everything else is `light`: bug fixes, refactors, config, copy or style inside an
-existing screen, one-module features with existing tests. A single trivial
+existing screen, and bounded low-risk features/pages with proving checks. A single trivial
 change is done directly, with `tdd_mode` and verification still applying. When a
 material trigger appears mid-work, write `ESCALATE: T<n>`, return the affected
 decision to its owner, and continue independent authorized work. Sensitive paths
@@ -50,10 +58,19 @@ or destruction. Reversible internal details following repository patterns are
 delegated by default; ambiguity about acceptance, public contracts, policy, or
 security still uses OPEN-*.
 
-For new setup, `conventions.approval_mode: stage` selects four checkpoints:
+For new setup or missing `approval_mode`, default to `exception`: within the
+user's authorized goal, infer facts, decide reversible details, execute, validate,
+and report. Record inherited scope/acceptance and authorization provenance in
+the owning artifacts; drafting an artifact never self-approves an unresolved
+material decision. BRD/PRD/FSD remain authority, not automatic human checkpoints.
+Ask only for missing critical information, material product/architecture/security
+decisions outside authority, or high-risk actions. A concrete scoped approval
+may include its execution authorization when explicitly presented.
+
+`conventions.approval_mode: stage` is opt-in and selects four checkpoints:
 BRD approval → PRD approval → FSD + goals + verification approval → separate
 execution authorization. Each stage consumes the separately approved upstream.
-Do not bundle these approvals by default. Preserve existing project configuration
+Do not bundle these checkpoints in stage mode. Preserve existing project configuration
 and previously granted authorization on update. Reapproval is needed only when
 scope, decisions, material risk, or the authorized action changes.
 
@@ -82,12 +99,22 @@ Checkpoint only human/external needs after concrete review material exists.
 
 Under active implementation/delivery intent, invoke the next owner internally
 when scope and authority suffice: PRD -> read-only UI review -> owning PRD
-reconciliation -> FSD planning; verified enabler/first slice -> owning planning
-promotion -> authorized work. Load each receiving contract, announce the scope,
-and preserve its read-only/write boundary. Stage approval and separate execution
-authorization remain required when not already granted. A read-only invocation
+reconciliation -> FSD planning. After verified enabler/first-slice proof, the
+active controller performs planning-owned deterministic index/pointer promotion
+internally, verifies the same gates, and continues authorized work without
+planning re-entry solely for metadata. It never changes authority semantics;
+material deltas return to the decision owner. Load receiving contracts only for
+real owner changes and preserve their read-only/write boundary. Stage approval
+and separate execution authorization apply only in configured stage mode when
+not already granted. A read-only invocation
 alone authorizes findings, not remediation or a write handoff. Do not require the
 user to type the next /sc-* command merely to transfer already-authorized work.
+
+When the requested goal is satisfied and required checks/closeout are complete,
+deliver the result and stop. An empty queue alone never authorizes new ideation;
+`/sc-geniusloop` requires explicit improvement intent. Lessons may guide scoped
+authorized work without another approval; framework policy changes remain
+reviewed proposals through their owner.
 
 ## Recovery And Progress
 

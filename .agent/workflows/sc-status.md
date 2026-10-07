@@ -32,7 +32,19 @@ Result and next action: Read-only position, evidence and blockers; one exact nex
    reconciliation signals for the owning route, not global blockers. Suggest
    `/sc-evolve` for 3+ independent evidenced origins as optional maintenance;
    it never displaces ready work. Actual authority drift blocks affected goals only.
-7. If no ready goal issues exist and there is no active handoff, blocker, or failing verification, recommend `/sc-geniusloop`.
+   Report failed/rejected revision-bound feedback and its proof locators for
+   owner review; legacy-unbound observations remain unknown, not promotion evidence.
+7. Inspect stored completion proof using `verification-before-completion`; never
+   infer outcome success from issue/STATE/ledger metadata, an empty queue, or a
+   subagent report. Preserve history without treating legacy status as new proof.
+   Do not silently rerun tests or create evidence in this read-only route. Report
+   incomplete statuses/gaps and route validation to the owner. If the requested
+   goal is satisfied with all acceptance criteria proved by current evidence and required
+   closeout is complete, include `Evidence of Completion` with what/how,
+   results/locators and acceptance mapping, report the result and stop.
+   An empty issue queue alone is not improvement
+   intent. Recommend `/sc-geniusloop` only for an explicit improvement request
+   with no more urgent authorized work, handoff, blocker, or failing verification.
 8. Recommend one exact route from `/sc-init`, `/sc-status`, `/sc-hints`, `/sc-geniusloop`,
    `/sc-explore`, `/sc-research`, `/sc-prd`, `/sc-plan`, `/sc-eval`, `/sc-go`,
    `/sc-work`, `/sc-debug`, `/sc-review`, `/sc-audit`, `/sc-compound`,

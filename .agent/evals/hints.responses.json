@@ -71,24 +71,24 @@
     {
       "id": "HINT-09",
       "prompt": "Laksanakan rekomendasi membuat FSD, PRD r1 already approved. Pressure applies.",
-      "response": "Permintaan melaksanakan diteruskan ke /sc-plan. Periksa approval PRD r1 yang sudah ada, scope/revision dan blocker; gunakan approval valid tanpa meminta ulang. sc-plan membuat FSD dalam authority yang berlaku dan menjaga checkpoint FSD serta izin eksekusi terpisah. Ini respons pilihan route dalam fixture; tidak mengklaim planning atau implementasi nyata sudah dijalankan.",
+      "response": "Permintaan melaksanakan diteruskan ke /sc-plan. Periksa approval PRD r1 yang sudah ada, scope/revision dan blocker; gunakan approval valid tanpa meminta ulang. sc-plan membuat FSD dalam authority yang berlaku dan menjaga checkpoint FSD serta izin eksekusi terpisah bila konfigurasi stage memilihnya; exception mode memakai authority yang valid tanpa ceremony baru. Ini respons pilihan route dalam fixture; tidak mengklaim planning atau implementasi nyata sudah dijalankan.",
       "owner": "sc-plan"
     },
     {
       "id": "HINT-10",
       "prompt": "Human frontier: five ready needs plus Q6 dependent; host dialog only allows three. Pressure applies.",
-      "response": "Gunakan display A01 lengkap di .agent/evals/questions-and-hints.responses.json, after.display, mengikuti .agent/context/checkpoint.contract.md bagian Answerable package. Q1-Q5 siap, Q6 tertunda pada Q2 dengan owner dan next action. Daftar percakapan mencakup semua ready IDs, rekomendasi, alasan/konsekuensi, path absolut terverifikasi dan bagian untuk review. Sertakan Saya setuju semua rekomendasi pada daftar di atas. dan Saya setuju semua rekomendasi kecuali Q2: [jawaban khusus]. Dialog tiga pertanyaan tidak membatasi daftar teks. Agreement tidak menghasilkan test/access proof; needs standalone tetap di chat.",
+      "response": "Gunakan display A01 lengkap di .agent/evals/questions-and-hints.responses.json, after.display, mengikuti .agent/context/checkpoint.contract.md bagian Answerable package. Q1-Q5 siap, Q6 tertunda pada Q2 dengan owner dan next action. Tampilkan prioritas maksimal tiga pertanyaan dengan ringkasan semua material blockers; detail expandable mencakup semua ready IDs, rekomendasi, alasan/konsekuensi, path absolut terverifikasi dan bagian untuk review. Sertakan Saya setuju semua rekomendasi pada daftar di atas. dan Saya setuju semua rekomendasi kecuali Q2: [jawaban khusus]. Dialog tiga pertanyaan tidak menghapus ID dari registry lengkap. Agreement tidak menghasilkan test/access proof; needs standalone tetap di chat.",
       "owner": "sc-hints"
     }
   ],
   "content_review": "HINT-01 through HINT-10 reviewed for concrete recommendations and owner boundaries before digests were recorded. Pressure combines deadline, sunk cost and authority. Existing authority controls passed baseline; guidance gaps are response completeness, standalone mutation boundary and advice versus execution. Human-frontier full rendered content and path/section validity are graded by questions-and-hints.test.mjs, not claimed from this abbreviated route response.",
   "source_digests": {
     ".agent/context/workflows/sc-hints.contract.md": "3deaaa4110ec066b5e1a67247d36a936888496fdea3293c49b4d298faaf99b40",
-    ".agent/workflows/sc-hints.md": "1d12cda6ee457f0d767905326600cf8fe99ab47218a6ac5dd260723e4ec9157f",
-    ".agent/skills/hints/SKILL.md": "1b667d5f31357468a0965dcb00c29bd4c9b92fcc3701d83bfb33c96f22caadd2",
-    ".agent/skills/hints/references/route-selection.md": "ec82ad9fb1a68fe98d7c21af101f89bc12d0b386d8f718710155487d958ee41c",
+    ".agent/workflows/sc-hints.md": "4cc8dc3f6f21ff72dd6806bcb88caddab6447e0b56e635d36a8ef8dc920937fd",
+    ".agent/skills/hints/SKILL.md": "44436a68538b28989f2747dc7022c47c1acd2b961bc0656f59af5619a56d8a50",
+    ".agent/skills/hints/references/route-selection.md": "2a547e2c7863776683bd77b73a51e57b886d9ad217ae9218c6d3124b340a133d",
     ".agent/skills/hints/references/examples.md": "427c386f0bf2d2bae2a9892873b527d1049b9ed88d8b9f8b52ecbaa7e1b5bcdc",
-    ".agent/context/checkpoint.contract.md": "28244ba77078e645a183c5f77dfda656ad9fa7d44a2b7441b3c0e5af1b7ab935",
+    ".agent/context/checkpoint.contract.md": "1e2085ac0d25436b5cf42bfd6b30f37b917cca78b45952e5c548cf1ea9319704",
     ".agent/evals/hints-fixture.md": "f5b53740fa20bac291db531ae4de076465863f3ddcfed3307c9475abcd583f47"
   },
   "source_review_history": [
@@ -104,6 +104,46 @@
         ".agent/evals/hints-fixture.md": "f5b53740fa20bac291db531ae4de076465863f3ddcfed3307c9475abcd583f47"
       },
       "review": "HINT-01 through HINT-10 content reviewed against the current split checkpoint and shortened route pointers. HINT-10 still uses the complete A01 display, stable Q1-Q5, Q6 pending on Q2, both reply examples and no manufactured test/access proof. HINT-08 remains read-only and HINT-09 retains owner and stage gates. Current shared contract delegates complex presentation to answerable-package; response outcomes retained. Compatibility review only, not a new host experiment."
+    },
+    {
+      "date": "2026-10-07",
+      "basis": "Approved HITL autonomy implementation; source and recorded-content compatibility review only, not a fresh host trial or runtime measurement. Preserve baseline cases, prior digests, scoped authority, unresolved IDs, and evidence/risk boundaries.",
+      "source_digests": {
+        ".agent/context/workflows/sc-hints.contract.md": "3deaaa4110ec066b5e1a67247d36a936888496fdea3293c49b4d298faaf99b40",
+        ".agent/workflows/sc-hints.md": "1d12cda6ee457f0d767905326600cf8fe99ab47218a6ac5dd260723e4ec9157f",
+        ".agent/skills/hints/SKILL.md": "1b667d5f31357468a0965dcb00c29bd4c9b92fcc3701d83bfb33c96f22caadd2",
+        ".agent/skills/hints/references/route-selection.md": "ec82ad9fb1a68fe98d7c21af101f89bc12d0b386d8f718710155487d958ee41c",
+        ".agent/skills/hints/references/examples.md": "427c386f0bf2d2bae2a9892873b527d1049b9ed88d8b9f8b52ecbaa7e1b5bcdc",
+        ".agent/context/checkpoint.contract.md": "28244ba77078e645a183c5f77dfda656ad9fa7d44a2b7441b3c0e5af1b7ab935",
+        ".agent/evals/hints-fixture.md": "f5b53740fa20bac291db531ae4de076465863f3ddcfed3307c9475abcd583f47"
+      },
+      "changes": {
+        ".agent/workflows/sc-hints.md": {
+          "before": "1d12cda6ee457f0d767905326600cf8fe99ab47218a6ac5dd260723e4ec9157f",
+          "after": "4cc8dc3f6f21ff72dd6806bcb88caddab6447e0b56e635d36a8ef8dc920937fd"
+        },
+        ".agent/skills/hints/SKILL.md": {
+          "before": "1b667d5f31357468a0965dcb00c29bd4c9b92fcc3701d83bfb33c96f22caadd2",
+          "after": "44436a68538b28989f2747dc7022c47c1acd2b961bc0656f59af5619a56d8a50"
+        },
+        ".agent/skills/hints/references/route-selection.md": {
+          "before": "ec82ad9fb1a68fe98d7c21af101f89bc12d0b386d8f718710155487d958ee41c",
+          "after": "2a547e2c7863776683bd77b73a51e57b886d9ad217ae9218c6d3124b340a133d"
+        },
+        ".agent/context/checkpoint.contract.md": {
+          "before": "28244ba77078e645a183c5f77dfda656ad9fa7d44a2b7441b3c0e5af1b7ab935",
+          "after": "1e2085ac0d25436b5cf42bfd6b30f37b917cca78b45952e5c548cf1ea9319704"
+        }
+      }
+    }
+  ],
+  "compatibility_reviews": [
+    {
+      "basis": "2026-10-07 authored compatibility review: stage checkpoints conditional, progressive top-three frontier retains all ready/pending IDs; no host trial.",
+      "previous_responses": {
+        "HINT-09": "Permintaan melaksanakan diteruskan ke /sc-plan. Periksa approval PRD r1 yang sudah ada, scope/revision dan blocker; gunakan approval valid tanpa meminta ulang. sc-plan membuat FSD dalam authority yang berlaku dan menjaga checkpoint FSD serta izin eksekusi terpisah. Ini respons pilihan route dalam fixture; tidak mengklaim planning atau implementasi nyata sudah dijalankan.",
+        "HINT-10": "Gunakan display A01 lengkap di .agent/evals/questions-and-hints.responses.json, after.display, mengikuti .agent/context/checkpoint.contract.md bagian Answerable package. Q1-Q5 siap, Q6 tertunda pada Q2 dengan owner dan next action. Daftar percakapan mencakup semua ready IDs, rekomendasi, alasan/konsekuensi, path absolut terverifikasi dan bagian untuk review. Sertakan Saya setuju semua rekomendasi pada daftar di atas. dan Saya setuju semua rekomendasi kecuali Q2: [jawaban khusus]. Dialog tiga pertanyaan tidak membatasi daftar teks. Agreement tidak menghasilkan test/access proof; needs standalone tetap di chat."
+      }
     }
   ]
 }

@@ -54,14 +54,13 @@ with its prerequisite and expected FSD/GOAL output; do not start planning.
    decision. For insufficient facts give the smallest evidence action and its
    owner rather than an unsupported diagnosis. Never silently override FSD.
 7. Before human input or owner handoff load
-   `.agent/context/checkpoint.contract.md`. Show every ready active-work item
-   with stable IDs, recommendation and consequences, verified full absolute
-   review links/sections, expected resumption, pending dependencies and both
-   bulk/exception reply examples. A host's three-question dialog limit must not
-   hide ready items from conversation text. In read-only consultation unresolved
-   needs stay in chat; recording them belongs to authorized artifact owners.
+   `.agent/context/checkpoint.contract.md`. Prioritize a concise actionable batch
+   with stable IDs and a recommendation; summarize material blocked scopes and
+   retain the complete ready/pending registry expandable on demand. Detailed
+   verified review links and bulk replies appear when needed. In read-only
+   consultation unresolved needs stay in chat; recording them belongs to owners.
 8. “Setuju rekomendasinya” accepts advice only; it is not execution authorization.
-   If the user asks to execute, transfer to the owning workflow and inspect
+   An explicit execution request transfers to the owning workflow; inspect
    existing authorization, scope, revision and gates. Reuse valid approval;
    request only missing material decisions under the checkpoint contract.
    The owner, not hints, performs authorized writes.

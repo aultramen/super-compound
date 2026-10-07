@@ -43,4 +43,8 @@ RED -> GREEN: behavior three
 REFACTOR while green
 ```
 
-For bugfixes, preserve the initial RED output, pass after the fix, safely remove/disable the fix to prove the regression test fails, then restore and pass again when practical.
+For bugfixes, preserve the initial RED output and pass after the fix. Adequate
+original RED/GREEN evidence proves sensitivity once; do not remove/disable the
+fix or repeat the cycle as a ritual. Use an isolated baseline or safe toggle
+only when original RED is missing or inadequate, then restore and verify;
+never disturb user work.

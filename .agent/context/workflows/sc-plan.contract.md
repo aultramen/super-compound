@@ -28,6 +28,9 @@ Gates:
 - ADRs are optional; linked ADRs must be `ACCEPTED`.
 - Stop with `OPEN-*` if PRD authority, security/privacy obligation, data/API/auth/workflow/state detail, or verification authority is missing.
 - Issue pointers must use paths and qualified IDs, not copied artifact prose.
+- Pin a derived all-AC completion contract before results, with actual outcome
+  checks; coordinated goals also map final combined outcome. Never replace
+  source authority or let the report choose a subset; `verification-before-completion`.
 - Suggest Git branch names and optional worktree candidates for independent parallel goals; do not mutate Git state.
 - Resolve narrow doc lookups inline; use `/sc-research` only for a named evidence gap that could materially change the FSD, then return to planning.
 - For UI-bearing scope, load the UI readiness reference, make FSD Section 8 the
@@ -36,12 +39,15 @@ Gates:
   `/sc-plan` writes only FSD and issue pointer outputs.
 - If executable assets are missing, define `CONTRACT_ENABLER`, then exactly one
   blocked `FIRST_VERTICAL_SLICE`. Only the enabler may be ready while readiness
-  is `DRAFT/BLOCKED`; after its verification, return to `/sc-plan`, refresh the
-  index, rerun the gate, and auto-promote unchanged semantics after deterministic gates; request Technical Manager approval only for material deltas at
+  is `DRAFT/BLOCKED`; after verification, the active controller refreshes the
+  index through planning-owned deterministic promotion and reruns the gate,
+  without planning re-entry solely for metadata. Material deltas return to `/sc-plan`/owner at
   `READY_FOR_SLICE`. Every `SCALE_OUT_SLICE` requires
   `FIRST_VERTICAL_SLICE_VERIFIED` and depends on its verified issue. Create
-  exactly one `HARDENING` goal that depends on all applicable UI delivery slices
-  and owns final merged-system verification and Business Owner UAT evidence.
+  exactly one `HARDENING` goal when networked merged/cross-slice verification
+  requires it; it depends on all applicable UI delivery slices and owns final
+  merged-system verification and conditional Business Owner UAT evidence.
+  LOCAL_ONLY checks stay in the bounded goal, without synthetic hardening.
 
 Escalate to full `sc-plan.md` or full skills when writing/reviewing the detailed FSD procedure.
 Checkpoint automatically and continue; /sc-pause is only for actual stops. Lessons: /sc-compound.

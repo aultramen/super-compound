@@ -22,6 +22,7 @@ import { fileURLToPath } from "node:url";
 
 import { readBoundedFile, resolveRepositoryPath } from "./file-state.mjs";
 import { computeWaves, parseIssueDependencies } from "./goal-waves.mjs";
+import {verifyCompletionEvidence} from './verification-recipe.mjs';
 
 const PROFILES = new Set(["NOT_APPLICABLE", "STANDARD", "HIGH_INTERACTION"]);
 const READINESS = new Set(["NOT_APPLICABLE", "DRAFT", "BLOCKED", "READY_FOR_SLICE"]);
@@ -47,6 +48,50 @@ const USAGE = "usage: readiness-gate.mjs --fsd <path> --prd <path> --issues-dir 
 const unquote = (value) => value.trim().replace(/^["']|["']$/g, "");
 const isPlaceholder = (value) => !value || value.includes("{{") || /^n\/a$/i.test(value);
 const lines = (text) => text.split(/\r?\n/);
+
+function activeOpenBlockers(text) {
+  let historyLevel = 0;
+  let headers = [];
+  const source = lines(text.replace(/```[\s\S]*?```/g, ''));
+  const blockers = [];
+  const normalized = value => String(value ?? '').replace(/`/g,'').trim().toUpperCase();
+  const closed = ['RESOLVED','CLOSED','ARCHIVED','NONBLOCKING','NON_BLOCKING','NON-BLOCKING'];
+  const activeStatuses = ['OPEN','PENDING','BLOCKED','UNRESOLVED'];
+  const cells = line => line.trim().replace(/^\||\|$/g,'').split('|').map(normalized);
+  for (const [index,line] of source.entries()) {
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      if (historyLevel && heading[1].length <= historyLevel) historyLevel = 0;
+      if (/\b(?:resolved|closed|history|historical|archive|archived)\b/i.test(heading[2])) historyLevel = heading[1].length;
+      headers = [];
+    }
+    const row = /^\s*\|/.test(line) ? cells(line) : [];
+    if (row.includes('STATUS')) { headers = row; continue; }
+    const id = line.match(/\bOPEN-\d+\b/);
+    if (!id) continue;
+    if (row.length && !/^OPEN-\d+$/.test(row[0])) continue;
+    let record = line;
+    if (!row.length) {
+      for (let next=index+1;next<source.length;next++) {
+        if (/^#{1,6}\s|\bOPEN-\d+\b|^\s*\|/.test(source[next])) break;
+        if (source[next].trim() && !/^\s*(?:-\s*)?(?:Status|Blocking|Class|Type|Owner|Reason|Description)\s*:/i.test(source[next])) break;
+        record += `\n${source[next]}`;
+      }
+    }
+    const statusColumn = headers.indexOf('STATUS');
+    const status = normalized((row.length && statusColumn >= 0 ? row[statusColumn] : undefined)
+      ?? record.match(/\bStatus\s*:\s*`?([A-Z_-]+)/i)?.[1]
+      ?? row.find(cell=>[...closed,...activeStatuses].includes(cell))
+      ?? line.slice(id.index + id[0].length).match(/^\s*:\s*`?([A-Z_-]+)\b/i)?.[1]);
+    const typeColumn = headers.findIndex(cell=>['CLASS','TYPE','BLOCKING'].includes(cell));
+    const classification = normalized(row.length && typeColumn >= 0 ? row[typeColumn] : record.match(/\b(?:Class|Type)\s*:\s*`?([A-Z_-]+)/i)?.[1]);
+    if (closed.includes(status) || ['NON_BLOCKER','NON-BLOCKER','NONBLOCKER','FALSE'].includes(classification)
+      || /\bBlocking\s*:\s*false\b/i.test(record)) continue;
+    const active = activeStatuses.includes(status);
+    if ((active || !historyLevel) && (active || row.length || /\bStatus\s*:|\b(?:blocking|blocker)\b/i.test(record))) blockers.push(line);
+  }
+  return blockers;
+}
 
 function leaf(text, key) {
   const match = text.match(new RegExp(`^\\s*${key}:\\s*(.+)$`, "m"));
@@ -84,10 +129,25 @@ export function parseIssuePointer(text) {
     role: leaf(text, "UI delivery role"),
     contractRefs: leaf(text, "Contract refs"),
     gate: leaf(text, "Contract gate"),
+    ...(leaf(text,'Goal ID') ? {goalId:leaf(text,'Goal ID')} : {}),
+    ...(leaf(text,'Completion contract') ? {completionContract:leaf(text,'Completion contract')} : {}),
+    ...(leaf(text,'Completion evidence') ? {completionEvidence:leaf(text,'Completion evidence')} : {}),
     blockedBy: /^none$/i.test(blocked)
       ? []
       : blocked.split(",").map((token) => path.basename(token.trim())).filter(Boolean),
   };
+}
+
+async function inspectFirstSliceCompletion(root, issue) {
+  const pin=(issue.completionContract || issue.completionEvidence || '').match(/^(.*?)\s*\/\s*([a-f0-9]{64})$/);
+  if (!pin || !issue.goalId) return {allowed:false,reason:'first-slice completion requires goal identity and pinned completion evidence'};
+  const contractPath=pin[1].trim(),contractDigest=pin[2];
+  try {
+    const contract=JSON.parse(await readBoundedFile(root,contractPath,{encoding:'utf8',label:'Completion contract'}));
+    if (contract.taskId!==issue.goalId.split('#').at(-1)) return {allowed:false,reason:'first-slice completion task identity mismatch'};
+    const verdict=await verifyCompletionEvidence(root,{contractPath,contractDigest});
+    return {allowed:verdict.allowed,reason:verdict.issues.join('; ')};
+  } catch(error) {return {allowed:false,reason:error.message};}
 }
 
 export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath, issuesDir }) {
@@ -217,8 +277,7 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
 
   // G8
   const openRefs = m("blocking_open_refs");
-  const blockerLines = [...prdLines, ...lines(fsdText)]
-    .filter((line) => /blocking/i.test(line) && /OPEN-\d/.test(line));
+  const blockerLines = [...activeOpenBlockers(prdText), ...activeOpenBlockers(fsdText)];
   gate("open-blockers",
     manifest.blocking_open_refs !== undefined && openRefs.length === 0 && blockerLines.length === 0,
     manifest.blocking_open_refs === undefined
@@ -272,9 +331,12 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
       && !affected.some(id => issue.contractRefs.split(",").some(ref => ref.trim().split("#").at(-1) === id)));
     if (proofs.length === 1) { first = proofs[0]; reused = true; }
   }
-  gate("first-slice", first !== null && first.gate === "READY_FOR_SLICE",
+  const firstClaimsCompletion=first && ['done','verified'].includes(first.status);
+  const firstProof=firstClaimsCompletion ? await inspectFirstSliceCompletion(root,first) : {allowed:false,reason:'first slice not verified'};
+  gate("first-slice", first !== null && first.gate === "READY_FOR_SLICE"
+    && (!firstClaimsCompletion || firstProof.allowed),
     first
-      ? `${first.file} gate=${first.gate} @${version}${reused ? " compatible proof retained after affected checks" : ""}`
+      ? `${first.file} gate=${first.gate} @${version}${reused ? " compatible proof retained after affected checks" : ""}${firstClaimsCompletion&&!firstProof.allowed?`; ${firstProof.reason}`:''}`
       : `${current.length} FIRST_VERTICAL_SLICE issues at @${version ?? "?"} (${firstSlices.length} total)`);
 
   // B2
@@ -283,7 +345,8 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
   const badScaleOuts = scaleOuts.filter((issue) =>
     issue.gate !== "FIRST_VERTICAL_SLICE_VERIFIED"
     || first === null || !issue.blockedBy.includes(first.file)
-    || (exception && ACTIVE_STATUSES.has(issue.status))).map((issue) => issue.file);
+    || ((ACTIVE_STATUSES.has(issue.status)||['done','verified'].includes(issue.status))
+      && (exception || first?.status!=='verified' || !firstProof.allowed))).map((issue) => issue.file);
   gate("scale-out", badScaleOuts.length === 0,
     badScaleOuts.length
       ? `violations: ${badScaleOuts.join(", ")}`

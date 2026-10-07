@@ -1,5 +1,6 @@
 .debug/
 .tmp/
+/.scratch/
 .continue-here.md
 .agent/.compact-state/
 .scratch/work-packages/

@@ -2,6 +2,12 @@
 
 Stop and report `OPEN-xxx` instead of inventing a solution when:
 
+Apply FSD/ADR and wire-mapping conditions below only when required by full-tier
+or networked scope. A concrete light-tier request/issue with acceptance and
+verification does not lack authority merely because no FSD exists. LOCAL_ONLY
+uses local state/data/behavior proof without synthetic provider mappings.
+Stop only affected dependent execution; continue independent authorized work.
+
 - approved BRD, PRD, FSD, or ADR requirements conflict without precedence
 - required FSD authority is missing
 - a required ADR is absent, not accepted, deprecated, superseded, or out of scope

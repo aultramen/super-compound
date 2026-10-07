@@ -1,5 +1,7 @@
 # Live Verification and Evidence
 
+## Summary
+
 Load only when browser-visible behavior or a real service/session must be proven. Use the project's mapped harness/configuration, fixtures, selectors, and authenticated session; do not invent a new E2E command or replace assertions with screenshots.
 
 ## Prepare
@@ -24,4 +26,10 @@ Use the existing verification/eval/issue artifact rather than a new authority do
 |---|---|---|---|---|---|---|
 | <ref> | <revision/digest> | <dev/UAT/testing; MOCK/REAL> | <exact command> | <UTC time> | <pass/fail/skip + counts> | <artifact locator> |
 
-The chat report stays concise: outcome, main changes, root cause for a bug, actual tests/results and regression coverage, evidence locator, and remaining risks/unverified checks. Keep detailed commands and evidence in the existing artifact. Missing credentials, malformed AI output, or stale screenshots never justify a successful flow claim.
+The chat report stays concise: outcome, main changes, root cause for a bug, actual
+tests/results and regression coverage, evidence locator, and remaining unverified
+checks. Include **Evidence of Completion** with what/how/result and AC mapping
+only when all criteria are proven. Open screenshots and compare the intended
+screen/visual AC; their existence alone is not proof. Keep detailed commands and
+evidence in the existing artifact. Missing credentials, malformed AI output, or
+stale screenshots never justify a successful flow claim.
