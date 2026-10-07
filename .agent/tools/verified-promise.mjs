@@ -137,7 +137,7 @@ function printEvidenceVerdict(verdict,identity) {
     else for (const issue of verdict.issues) process.stdout.write(`UNVERIFIED ${issue}\n`);
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
     try { process.exitCode = await main(process.argv); }
     catch (error) {
         process.stderr.write(`verified-promise: ${error.message}\n`);

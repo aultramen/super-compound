@@ -6,6 +6,7 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {setup,installCodexBundle} from './setup.mjs';
 import {createHash} from 'node:crypto';
+import {pathToFileURL} from 'node:url';
 import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
 const engine = path.resolve('.agent/tools/setup.mjs');
 const source = process.cwd();
@@ -94,13 +95,22 @@ test('installed Codex fallback executes stored completion proof and rejects fail
   const f=fixture(t);
   assert.equal(installCodexBundle({command:'install',source,'codex-home':f.home}).status,'applied');
   fs.mkdirSync(f.target,{recursive:true});
-  const gate=path.join(f.home,'skills/super-compound/references/tools/verified-promise.mjs');
+  const alias=path.join(f.root,'home-alias');
+  fs.symlinkSync(f.home,alias,process.platform==='win32'?'junction':'dir');
+  const gates=[f.home,alias].map(home=>path.join(home,'skills/super-compound/references/tools/verified-promise.mjs'));
+  for(const gate of gates) {
+    const imported=spawnSync(process.execPath,['--input-type=module','-e',`const {evaluatePromise}=await import(${JSON.stringify(pathToFileURL(gate).href)});process.stdout.write(typeof evaluatePromise);`,engine],{encoding:'utf8'});
+    assert.equal(imported.status,0,imported.stdout+imported.stderr);
+    assert.equal(imported.stdout,'function','import must not execute the completion CLI');
+  }
   for(const status of ['fail','pass']) {
     const proof=await provisionCompletionFixture(f.target,{taskId:`fallback-${status}`,status});
-    const result=spawnSync(process.execPath,[gate,'--root',f.target,'--contract',proof.contractPath],{encoding:'utf8'});
-    assert.equal(result.status,status==='pass'?0:1,result.stdout+result.stderr);
-    assert.match(result.stdout,status==='pass'?/COMPLETE_ALLOWED[\s\S]*Evidence of Completion/:/COMPLETE_DENIED/);
-    assert.equal(fs.existsSync(path.join(f.target,'.scratch/work-packages')),false,'light proof needs no ledger');
+    for(const gate of gates) {
+      const result=spawnSync(process.execPath,[gate,'--root',f.target,'--contract',proof.contractPath],{encoding:'utf8'});
+      assert.equal(result.status,status==='pass'?0:1,gate+'\n'+result.stdout+result.stderr);
+      assert.match(result.stdout,status==='pass'?/COMPLETE_ALLOWED[\s\S]*Evidence of Completion/:/COMPLETE_DENIED/);
+      assert.equal(fs.existsSync(path.join(f.target,'.scratch/work-packages')),false,'light proof needs no ledger');
+    }
   }
 });
 test('global cache activates a project offline and both scopes roll back partial application', t=>{
