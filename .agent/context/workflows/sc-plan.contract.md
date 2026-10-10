@@ -1,5 +1,8 @@
 # /sc-plan Runtime Contract
 
+Standards: `.agent/context/standards.contract.md`; pin scoped profile/version,
+snapshot/digest and checks in goal verification before results.
+
 Purpose: convert an approved PRD into an FSD plus lightweight goal issue pointers.
 
 For human input/blockers/handoffs load `.agent/context/checkpoint.contract.md`.

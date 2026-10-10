@@ -32,6 +32,28 @@ const completionRevisionPins = {
   '.agent/workflows/sc-status.md': '7c99c5d5b80246698e41aeeccc45dd070fc078477f448cf48d41df4810a64123',
   '.agent/workflows/sc-work.md': 'd900582c5f73967999657d2007667c4f84f92c4667b84eaebbfde18b6c9da8f9',
 };
+// Candidate-specific source inspection of additive scoped standards routing.
+// Historical completion pins, response bytes and negative controls remain exact.
+// Exact candidate bytes only; no human approval or live qualification asserted.
+const standardsCandidateRevisionPins = {
+  ".agent/context/workflows/sc-init.contract.md": "002c95897ef42acae94c991f0a3057960925faa046b369cf64162c80541e767c",
+  ".agent/workflows/sc-init.md": "dde20a59cad4c75b9c40f143ec9fa8b6e6dac277018e85c31eb02a56d6b8ddf7",
+  ".agent/context/workflows/sc-plan.contract.md": "37b1ceff3269c3adf3f1bd8da628c6cb71f791ebcb175c4edb270aa5e4d2219e",
+  ".agent/workflows/sc-plan.md": "11cc2a6e5ea770860c1eeca4fcd2a2329780e436ffa0c0460dcf5cb88e78567f",
+  ".agent/context/workflows/sc-work.contract.md": "5821f656597271a78239efe1dfc20489eedcb51cfddd91f552f2864d86f5503a",
+  ".agent/workflows/sc-work.md": "6972c4431704cf5406e68a040b86fa2b4e92710a1712ae1bd0507e09bf2024f8",
+  ".agent/context/workflows/sc-debug.contract.md": "4e5e415c3743ff4417911ba60606ee04f587db3e3fc6026dad2e827d8017851e",
+  ".agent/workflows/sc-debug.md": "b2a16041d814ca54a9f5e2d7c2e046ef3c1b22eee216935621330d871268c972",
+  ".agent/context/workflows/sc-review.contract.md": "92c3aa43ff64e1c8e6577e770ac8b293f97090675cb721c8d29c56f516ccdc31",
+  ".agent/workflows/sc-review.md": "d9c91223a5a811c84265ccf5a938196f348727e1bc5186dad71f959e92ec5aa9",
+  ".agent/context/workflows/sc-audit.contract.md": "e7919d41d6b519b9a75f4471b4c6c555a0830b66d1a5d78ebf164f24ae1d5259",
+  ".agent/workflows/sc-audit.md": "29e15ddd1c150d929f1757b06b9e278ce52b56160ec0d35437870ae4c6aa2cb5",
+  ".agent/context/workflows/sc-compound.contract.md": "82c55ea6265e4d35e84a6149ba668e042483aff4ccfcf6a6fe7a38fda68a9fbd",
+  ".agent/workflows/sc-compound.md": "1ffbf9625e4f1fc5349a1ac37fcb3346cb2c11120ae8aac4efcf6ff1fc46a26d",
+  ".agent/context/workflows/sc-evolve.contract.md": "57d529922cdb15d2939aa05f73104acc77fba6ca23d5155bc46bbc70a9f3899e",
+  ".agent/workflows/sc-evolve.md": "ddf2ae52a879646dc65a312d1903bdfb8d1caad4f9e1de24cd09a9a91130e0a2"
+};
+
 const expected = {
   A02: {resolved: ['Q1', 'Q2'], open: ['Q3', 'Q4', 'Q5', 'Q6'], acceptedActions: ['Q3', 'Q4', 'Q5']},
   A03: {resolved: ['Q1', 'Q2'], open: ['Q3', 'Q4', 'Q5', 'Q6'], acceptedActions: ['Q3', 'Q4', 'Q5'], custom: {Q2: 'tabel ringkas lalu penjelasan'}},
@@ -123,8 +145,11 @@ for (const record of attempt.after.cases) {
 
 test('historical response-content remains compatible with the exact reviewed completion addition', () => {
   assert.match(attempt.content_review, /A01.*A11/);
+  for (const [file, expected] of Object.entries(standardsCandidateRevisionPins)) {
+    assert.equal(createHash('sha256').update(read(file).replace(/\r\n/g, '\n')).digest('hex'), expected, 're-evaluate candidate scoped standards compatibility: '+file);
+  }
   for (const [file, digest] of Object.entries(attempt.source_digests)) {
-    const expected=completionRevisionPins[file] ?? digest;
+    const expected=standardsCandidateRevisionPins[file] ?? completionRevisionPins[file] ?? digest;
     assert.equal(createHash('sha256').update(read(file).replace(/\r\n/g, '\n')).digest('hex'), expected, file);
   }
 });

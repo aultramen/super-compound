@@ -38,6 +38,10 @@ Result and next action: Read-only findings by severity and evidence; route each 
 3. Load `skills/compatibility-check/SKILL.md` only for dependency/runtime compatibility.
 4. Load `skills/threat-modeling/SKILL.md`, `skills/data-privacy/SKILL.md`, or `skills/secure-code-patterns/SKILL.md` only when that submode needs the depth. A release audit selects relevant branches rather than loading every checklist.
 5. Inspect project manifests, env examples, lockfiles, CI/deploy config, hooks, MCP config, and relevant source files.
+   Use `.agent/context/standards.contract.md` to inspect scoped policy/profile
+   pins, check evidence, drift and approved exceptions. Findings distinguish
+   deterministic checks from human review and name rule IDs/owners. Missing
+   application required-status protection is administrator work, not workflow success.
 6. For release or PR readiness, inspect Git state read-only for direct-main risk, dirty tree, unpushed branch, and secret-looking files.
 7. Run available read-only checks: tests, lint, build, dependency audit, secret scan, or targeted grep.
 8. Report findings by severity with evidence, affected files, and recommended fixes.

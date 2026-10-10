@@ -19,6 +19,49 @@ function run(f, command, ...args) {
   const p = spawnSync(process.execPath, [engine, command, '--source',source,'--target',f.target,'--scope','project','--host','codex,claude,antigravity,cursor,windsurf,gemini','--json',...args], {encoding:'utf8',env:{...process.env, SUPER_COMPOUND_HOME:f.home}});
   return {status:p.status, report: (()=>{try{return JSON.parse(p.stdout)}catch{return p.stderr}})()};
 }
+test('project, global and standalone installs exclude generated reference outputs while preserving source and user files', t=>{
+  const f=fixture(t),input=path.join(f.root,'source'),prefix='.agent/standards/examples/reference/';
+  const write=(ref,bytes)=>{fs.mkdirSync(path.dirname(path.join(input,ref)),{recursive:true});fs.writeFileSync(path.join(input,ref),bytes);};
+  write('.agent/context/retired-assets.json','{"schema":"retired_assets_v1","paths":[]}\n');
+  write('.codex/SKILL.md','# Test adapter\n');
+  for(const name of fs.readdirSync(path.join(source,'.agent/workflows')).filter(name=>/^sc-.*\.md$/.test(name)))write('.agent/workflows/'+name,'# Workflow\n');
+  const generated=['node_modules/pkg/broken.mjs','.venv/lib/module.py','.next/result.json','.pytest_cache/result.json','.mypy_cache/result.json','.ruff_cache/result.json','coverage/report.json','dist/build.js','.vitest-results.json','.pytest-results.xml','.test-outcome.json','tsconfig.tsbuildinfo'];
+  const retained=['package-lock.json','uv.lock','src/service.ts'];
+  for(const ref of [...generated,...retained])write(prefix+ref,ref.endsWith('broken.mjs')?"import './missing.mjs';":'source '+ref);
+  const userCache=path.join(f.target,prefix,'node_modules/user-local.txt');fs.mkdirSync(path.dirname(userCache),{recursive:true});fs.writeFileSync(userCache,'user original');
+  const options={source:input,target:f.target,home:f.home,scope:'both',host:'codex'};
+  assert.equal(setup(options).status,'applied');
+  assert.equal(setup({...options,command:'update'}).status,'unchanged');
+  assert.equal(setup({...options,command:'doctor'}).status,'healthy');
+  assert.equal(installCodexBundle({command:'install',source:input,'codex-home':f.home}).status,'applied');
+  const bases=[f.target,path.join(f.home,'.super-compound/framework')];
+  for(const base of bases) {
+    for(const ref of generated)assert.equal(fs.existsSync(path.join(base,prefix+ref)),false,ref);
+    for(const ref of retained)assert.equal(fs.readFileSync(path.join(base,prefix+ref),'utf8'),'source '+ref);
+  }
+  const bundle=path.join(f.home,'skills/super-compound/references/standards/examples/reference');
+  for(const ref of generated)assert.equal(fs.existsSync(path.join(bundle,ref)),false,ref);
+  for(const ref of retained)assert.equal(fs.readFileSync(path.join(bundle,ref),'utf8'),'source '+ref);
+  for(const ref of generated)assert.equal(fs.existsSync(path.join(input,prefix+ref)),true,ref);
+  assert.equal(fs.readFileSync(userCache,'utf8'),'user original');
+  const manifestRef=path.join(f.target,'.super-compound/manifest.json'),manifest=JSON.parse(fs.readFileSync(manifestRef,'utf8'));
+  const ownedRef=prefix+'node_modules/previously-shipped.txt',ownedFile=path.join(f.target,ownedRef),ownedBytes='previous installer bytes';
+  fs.writeFileSync(ownedFile,ownedBytes);
+  manifest.files[ownedRef]={owner:'super-compound',mode:'owned',hash:createHash('sha256').update(ownedBytes).digest('hex')};
+  fs.writeFileSync(manifestRef,JSON.stringify(manifest,null,2)+'\n');
+  assert.equal(setup({...options,command:'update'}).status,'applied');
+  assert.equal(fs.existsSync(ownedFile),false,'only unchanged previously installer-owned generated output is removed');
+  assert.equal(fs.readFileSync(userCache,'utf8'),'user original');
+  const updated=JSON.parse(fs.readFileSync(manifestRef,'utf8'));
+  assert.equal(updated.files[ownedRef],undefined);
+  fs.writeFileSync(ownedFile,'user changed output');
+  updated.files[ownedRef]=manifest.files[ownedRef];
+  fs.writeFileSync(manifestRef,JSON.stringify(updated,null,2)+'\n');
+  const before=fs.readFileSync(manifestRef);
+  assert.equal(setup({...options,command:'update'}).status,'conflict');
+  assert.equal(fs.readFileSync(ownedFile,'utf8'),'user changed output');
+  assert.deepEqual(fs.readFileSync(manifestRef),before);
+});
 test('update retains explicit model overrides and projects them into host agents', t => {
   const f=fixture(t);
   assert.equal(run(f,'install').status,0);

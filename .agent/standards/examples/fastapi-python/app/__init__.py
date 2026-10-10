@@ -1,0 +1,1 @@
+"""FastAPI standards reference application."""

@@ -2,55 +2,57 @@
 
 ## Summary
 
-Lightweight gates; procedures: skills.
+Procedures: skills.
 
 ## Before Work
 
-- Classify the delivery tier first (`light` or `full`, `skills/agentic-delivery/references/workflow-integration.md`) and state it in one line; a trigger found mid-work escalates, it never blocks at intake.
-- Apply the relevant compact contract before editing; load full workflow/skill
-  detail only for uncovered checks, material risk, conflicts, or editing that procedure.
-- Check `.agent/rules/project-config.md` and existing project conventions.
-- For UI work, use `interface-design` before implementation.
+- Classify tier: light|full (`skills/agentic-delivery/references/workflow-integration.md`); state one line. Mid-work triggers escalate, never block intake.
+- Compact contract before editing; full detail for uncovered checks, material risk,
+  conflicts or procedure edits only.
+- `.agent/rules/project-config.md`: conventions/pins. Resolve affected standards
+  conflicts through `.agent/context/standards.contract.md`.
+- UI: `interface-design` before implementation.
 - `EXCEPTION_APPROVED` may release only a first vertical slice; a `VALIDATED`
   baseline may also release it when the FSD is `READY_FOR_SLICE`. Parallel
   scale-out requires the baseline to be `VALIDATED` plus verified real
   first-slice proof; `EXCEPTION_APPROVED` cannot release scale-out.
-- For dependency, security, release, MCP, compliance, or agent-surface risk, use `sc-audit.md` and the security skills.
-- For unclear intent, resolve uncertainty through `sc-explore.md` before planning.
-- For branch, commit, push, worktree, or Pull Request operations, use `sc-go.md` and preview commands before execution.
+- Dependency/security/release/MCP/compliance/agent-surface risk: `sc-audit.md`, security skills.
+- Unclear intent: `sc-explore.md` before planning.
+- Branch, commit, push, worktree or PR: `sc-go.md`; preview before execution.
 
 ## Before Executing A Plan
 
-- Every requirement has an implementation task.
-- Every task has an action, verification, and done condition.
-- Dependencies between tasks are explicit.
-- Tests or other verification cover the critical user-visible paths.
-- Scope is still the requested work, not opportunistic refactoring.
+- Every requirement maps to a task with action, verification and done condition.
+- Explicit dependencies.
+- Verification covers critical user-visible paths.
+- Requested scope; no opportunistic refactoring.
 
 ## During Work
 
-- Prefer small, reversible changes.
-- Keep business logic out of UI, transport, and persistence layers.
-- Validate inputs at boundaries and preserve dependency direction.
-- Capture deferred ideas instead of expanding scope mid-task.
-- Do not run destructive or publishing Git commands unless explicitly requested.
-- Do not work directly on a protected base branch. Use a configured Git workflow branch or optional worktree.
+- Small reversible changes.
+- Business logic outside UI/transport/persistence.
+- Validate inputs at boundaries; preserve dependency direction.
+- Capture deferred ideas; never expand scope mid-task.
+- Destructive or publishing Git commands require explicit authorization.
+- Never work on a protected base branch; use a configured branch or optional worktree.
 
 ## Before Completion
 
 Every task: verification-before-completion (No Evidence = Not Done;
 goal/requirements/all AC; Evidence of Completion). Small tasks: real inspection.
 
-- Run the smallest meaningful verification first.
-- Run broader checks when shared behavior, security, data, or UI workflows changed.
+- Smallest meaningful verification first.
+- Broaden checks for shared behavior, security, data or UI workflow changes.
 - Check integration, not just file existence.
-- Report commands run, important output, and any residual risk.
-- Before commit, push, or PR creation, run mapped verification and review `git status` plus `git diff`.
+- Report commands/results/residual risk.
+- Active standards: pinned snapshot/mandatory receipt in the completion contract.
+  Failed/skipped/missing/stale cannot pass; local/CI share entrypoint; human review needs evidence.
+- Before commit/push/PR: mapped verification; review `git status` and `git diff`.
 
 ## Red Flags
 
-- Claiming "done", "fixed", or "passing" without fresh evidence.
-- Trusting generated output or subagent reports without independent verification.
-- Adding dependencies without identity, compatibility, and security checks.
-- Shipping UI without responsive, accessibility, and text-overflow checks.
-- Leaving stale docs, broken paths, or renamed workflow references.
+- Completion claims without fresh evidence.
+- Trusting generated output/subagent reports without independent verification.
+- Dependencies without identity/compatibility/security checks.
+- UI without responsive/accessibility/text-overflow checks.
+- Stale docs, broken paths or renamed workflows.

@@ -10,6 +10,10 @@ Before requesting input or approval, load `.agent/context/checkpoint.contract.md
 
 Inspect project context, then route the first task; use setup mode only for installation.
 
+Standards: `.agent/context/standards.contract.md`. Inspect explicit directory
+profiles and supporting manifest/version evidence; suggest candidates and report
+conflicts/unknown coverage. Do not activate or rewrite standards from detection.
+
 
 
 ## Example

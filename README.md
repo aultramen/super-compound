@@ -167,6 +167,23 @@ An approved BRD or PRD is always a durable artifact under `docs/brd/` or
 `docs/prd/`; chat drafts cannot authorize the next delivery stage. Eval evidence
 must likewise be stored under `.agent/evals/` whenever another gate consumes it.
 
+## Scoped Engineering Standards
+
+Application projects can adopt a shared core policy, directory-scoped
+Next.js/TypeScript or FastAPI/Python profiles, explicit project configuration and
+automated checks. [Effective standards](.agent/context/standards.contract.md)
+pin source/profile/tool/config identities across developers, AI hosts, subagents
+and resumed sessions; adapters route to the same sources. Manifest detection
+suggests profiles and reports conflicts without replacing configured choices.
+
+Standards are opt-in; existing project settings remain advisory until reviewed
+activation. Unknown stacks retain core/repository conventions with stated limits.
+Local and application CI use the same check entrypoint; active completion also
+requires the scoped snapshot and check receipt. Application administrators must
+activate required merge checks separately. See [adoption, planned pilot,
+migration and rollback](docs/standards-adoption.md); no live pilot or application
+repository protection is implied by shipping these assets.
+
 ## Evidence-Based Definition of Done
 
 **No Evidence = Not Done.** `Done`, `Completed`, `Resolved`, `Success`, and

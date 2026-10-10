@@ -133,6 +133,15 @@ function printEvidenceOfCompletion(verdict) {
 
 function printEvidenceVerdict(verdict,identity) {
     process.stdout.write(`${verdict.allowed ? 'COMPLETE_ALLOWED' : 'COMPLETE_DENIED'} ${identity} status=${verdict.status}\n`);
+    if (verdict.standards?.status === 'legacy') process.stdout.write('STANDARDS_LEGACY organizational compliance not established\n');
+    if (verdict.standards?.status === 'ready') {
+        const standards=verdict.standards;
+        const line=value=>process.stdout.write(`${String(value).replace(/[\r\n]/g,' ')}\n`);
+        line(`STANDARDS digest=${standards.digest} snapshot=${standards.snapshotRef} receipt=${standards.receiptRef}`);
+        for (const scope of standards.scopes) line(`STANDARDS_SCOPE ${scope.path} profile=${scope.profile ? `${scope.profile.id}@${scope.profile.version}` : 'core and repository conventions'}`);
+        for (const limitation of standards.limitations) line(`STANDARDS_LIMITATION ${limitation}`);
+        for (const rule of standards.waivedRules) line(`STANDARDS_WAIVED ${rule.scope}:${rule.id} (approved exception; not a passing check)`);
+    }
     if (verdict.allowed) printEvidenceOfCompletion(verdict);
     else for (const issue of verdict.issues) process.stdout.write(`UNVERIFIED ${issue}\n`);
 }

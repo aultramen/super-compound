@@ -211,6 +211,19 @@ For UI-heavy work, start with read-only design/review:
 
 ## 1. Initialize
 
+For adopted standards, `/sc-init` reads explicit directory profiles and compares
+manifest/version evidence. It suggests candidates and names conflicts; it does
+not activate or replace configuration. [Adoption](docs/standards-adoption.md)
+describes reviewed pins and exceptions. Missing/disabled settings retain existing
+conventions without an organization-compliance claim.
+
+Planning records scoped profile/version and snapshot/check refs; work/debug load
+only relevant tested references and current patterns. Worker/reviewer briefs and
+resumed sessions retain locators/digests. Review/audit inspect the same mandatory
+check evidence, rule IDs and remaining human judgment. Compound/evolve collect
+candidates for owner review; they do not adopt global standards. Existing
+light/full, read-only and authorization boundaries remain in place.
+
 Run:
 
 ```text

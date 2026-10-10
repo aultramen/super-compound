@@ -15,6 +15,9 @@ approved `/sc-work` goal. `/sc-plan` is the entry of the `full` delivery tier
 (`skills/agentic-delivery/references/workflow-integration.md`, triggers T1-T5).
 
 Apply `.agent/context/checkpoint.contract.md` for input, blockers and handoffs.
+Resolve `.agent/context/standards.contract.md` for goal target scopes; record
+profile/version, snapshot locator/digest and applicable check refs in FSD/goal
+verification. Pin standards before results without copying rule bodies.
 Check evidence dependencies for self-produced entry requirements. Missing
 qualification assets/actions need a bounded approved enabler under the canonical
 UI readiness reference; never start a blocked product goal to evade its gate.

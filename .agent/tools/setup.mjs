@@ -4,12 +4,12 @@ import os from 'node:os';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {isActiveAsset,assertLocalModuleClosure} from './active-assets.mjs';
+import {isActiveAsset,isDistributionAsset,assertLocalModuleClosure} from './active-assets.mjs';
 import {loadModels, render} from './agent-projection.mjs';
 
 const here = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const hosts = ['codex','claude','antigravity','cursor','windsurf','gemini'];
-const coreDirs = ['context','workflows','skills','templates','rules','agents','evals','hooks','tools'];
+const coreDirs = ['context','workflows','skills','templates','rules','standards','agents','evals','hooks','tools'];
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const exists = p => fs.existsSync(p);
 const begin = '<!-- super-compound:begin -->', end = '<!-- super-compound:end -->';
@@ -44,7 +44,7 @@ function files(root, prefix) {
   if (!exists(dir)) return [];
   return fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
     const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
-    if (!isActiveAsset(rel) || ['__pycache__','.compact-state'].includes(entry.name) || /\.py[co]$/.test(entry.name)) return [];
+    if (!isDistributionAsset(rel) || ['__pycache__','.compact-state'].includes(entry.name) || /\.py[co]$/.test(entry.name)) return [];
     safePath(root,rel);
     return entry.isDirectory() ? files(root,rel) : entry.isFile() ? [rel] : [];
   });
@@ -64,7 +64,8 @@ function adapterAssets(source, selected, global, modelRoot=source) {
   const result = new Map();
   const fallback = global ? '~/.super-compound/framework/.agent' : '.agent';
   const completion = `No Evidence = Not Done. Before any completion claim, apply project .agent/skills/verification-before-completion/SKILL.md; if absent use ${fallback}/skills/verification-before-completion/SKILL.md. Require actual goal/requirement/all-AC proof and Evidence of Completion; gaps keep an accurate incomplete status.`;
-  const routing = route => `Use the project's .agent/context/workflows/${route}.contract.md first; otherwise use ${fallback}/context/workflows/${route}.contract.md. Load the full workflow only when needed. Preserve project authorization. Follow output-style.md in the same context directory. ${completion} If no subagent capability exists, execute sequentially in-thread. For /sc-init setup, read ${global ? '~/.super-compound/framework/' : ''}SETUP.md and activate project core from the local cache. Arguments are user input, never shell code.`;
+  const standards = `For scoped coding, review or resume, read project .agent/context/standards.contract.md; if absent use ${fallback}/context/standards.contract.md. Resolve effective standards for the change scope and retain their identity; load profile detail only when relevant.`;
+  const routing = route => `Use the project's .agent/context/workflows/${route}.contract.md first; otherwise use ${fallback}/context/workflows/${route}.contract.md. Load the full workflow only when needed. Preserve project authorization. Follow output-style.md in the same context directory. ${standards} ${completion} If no subagent capability exists, execute sequentially in-thread. For /sc-init setup, read ${global ? '~/.super-compound/framework/' : ''}SETUP.md and activate project core from the local cache. Arguments are user input, never shell code.`;
   const routes = files(source,'.agent/workflows').filter(p=>/\/sc-[^/]+\.md$/.test(p)).map(p=>path.basename(p,'.md'));
   if (routes.length !== 19) throw new Error('Expected exactly 19 public workflows');
   const add = (p,text, mode='owned') => result.set(p,{bytes:Buffer.from(text),mode});
@@ -78,7 +79,7 @@ function adapterAssets(source, selected, global, modelRoot=source) {
       if (host === 'windsurf') add(`${global?'.codeium/windsurf/global_workflows':'.windsurf/workflows'}/${route}.md`,`---\ndescription: Super Compound ${route}\n---\n\n${body}`);
       if (host === 'gemini') add(`.gemini/commands/${route}.toml`,`description = ${JSON.stringify(`Super Compound ${route}`)}\nprompt = ${JSON.stringify(routing(route)+'\nRequest: {{args}}')}\n`);
     }
-    const overview = `## Super Compound\n\nUse project .agent core before ${fallback}. Route /sc-* through context/workflows/sc-X.contract.md, then full workflow as needed. Follow context/output-style.md and the project's conventions.approval_mode: exception is the new-install default; stage is explicit opt-in. Existing project authorization and approval preferences persist. Infer context, execute authorized bounded work, validate, and finish when the goal is met; ask only for unresolved material decisions, critical missing information, or risky actions outside existing authority. ${completion} Without subagents, run sequentially in-thread.`;
+    const overview = `## Super Compound\n\nUse project .agent core before ${fallback}. Route /sc-* through context/workflows/sc-X.contract.md, then full workflow as needed. Follow context/output-style.md and the project's conventions.approval_mode: exception is the new-install default; stage is explicit opt-in. Existing project authorization and approval preferences persist. Infer context, execute authorized bounded work, validate, and finish when the goal is met; ask only for unresolved material decisions, critical missing information, or risky actions outside existing authority. ${standards} ${completion} Without subagents, run sequentially in-thread.`;
     if (host==='codex') add(`${global?'.codex':'.agents'}/skills/super-compound/SKILL.md`,`---\nname: super-compound\ndescription: Use when handling Super Compound /sc-* commands or plain-language requests to set up, fix a bug, make a small change, deliver a feature, review, resume work, or ask for guidance.\n---\n\n# Super Compound\n\n## Summary\n\nRoute intent: setup -> sc-init setup; bug -> sc-debug; small change -> sc-work; full feature delivery -> sc-launch; resume -> sc-status; review -> sc-review; consultation -> sc-hints. Clear implementation, debugging, review and resume requests select their owner directly; hints is guidance only. Explicit /sc-* commands select their named route. Preserve read-only scope and existing authorization; routing adds no approval or write authority.\n\n${routing('sc-X')}\n`);
     if (host==='codex') add(global?'.codex/AGENTS.md':'AGENTS.md',overview,'block');
     if (host==='claude') {
@@ -131,12 +132,12 @@ function planRoot(root, assets, sourceDigest, selected) {
     checks.push({path:rel,status:same?'valid':'missing-or-outdated'});
     if(!same) changes.push({root,rel,old,bytes});
   }
-  // Retire only files whose current content still matches this installer's ownership.
+  // Remove excluded assets only while their bytes still match installer ownership.
   for(const [rel,record] of Object.entries(previous.files)) {
     safePath(root,rel);
-    if(isActiveAsset(rel) || assets.has(rel)) continue;
+    if(isDistributionAsset(rel) || assets.has(rel)) continue;
     const full=safePath(root,rel), old=exists(full)?fs.readFileSync(full):null;
-    if(old && digest(old)!==record.hash) conflicts.push({path:rel,reason:'retired asset has user changes'});
+    if(old && digest(old)!==record.hash) conflicts.push({path:rel,reason:isActiveAsset(rel)?'excluded generated example asset has user changes':'retired asset has user changes'});
     else {if(old)changes.push({root,rel,old,bytes:null});delete owned[rel];}
   }
   const manifest=Buffer.from(JSON.stringify({schema:1,sourceDigest,hosts:[...new Set([...(previous.hosts??[]),...selected])].sort(),files:owned},null,2)+'\n');

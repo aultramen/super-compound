@@ -70,13 +70,60 @@ New project configuration sets `conventions.approval_mode: exception`. A concret
 
 Public workflows remain 19. Adapters load compact contracts first and full detail on demand. Hosts without subagents run the same checks sequentially in-thread. Host trust restrictions or enterprise policies may affect discovery; file validity cannot prove live invocation.
 
+For coding, review and resume, every adapter points to the shared
+[standards contract](.agent/context/standards.contract.md). It resolves the
+effective rules for the change scope and loads profile detail only when relevant;
+host adapters do not carry separate copies of framework coding rules.
+
 ## Ownership, Updates, and Recovery
 
 The `.super-compound/manifest.json` records owner, content hashes, selected hosts, and source digest. Existing project config is preserved. Shared instruction files receive delimited managed blocks; text outside those blocks is preserved. Edited managed files/blocks and unowned collisions appear in one conflict report before any application. Review the current and proposed versions, merge needed changes, and rerun; setup does not silently overwrite them. Unowned files remain untouched. Retired files are removed only if their contents still match recorded ownership.
 
+The installer ships `.agent/standards/` with the canonical core. Its source digest
+still identifies distributed framework bytes; effective standards have a separate
+digest covering the active project configuration, pinned policy/profiles, scope
+and validation inputs. Preserving a configuration does not certify compliance.
+Existing configurations stay intact and require an explicit reviewed migration
+to activate pinned standards. Updates do not select profiles, weaken mandatory
+controls, or reformat application code automatically.
+
 Updates stage all changes, verify their hashes, then apply and verify each write. Recoverable partial failures restore previous bytes and remove newly created files/directories. Abrupt process termination is not guaranteed to roll back; run doctor and inspect the manifest before retrying. Incomplete rollback reports its failures for manual recovery. `doctor` and `--dry-run` never write, including when the target is missing. Symlink/reparse-point paths are rejected.
 
 The legacy `.codex/install-super-compound.ps1` (`-CodexHome`, `-VerifyOnly`, `-DryRun`) and `.sh` (`--codex-home`, `--verify-only`, `--dry-run`) call the same engine and preserve the standalone `<codex-home>/skills/super-compound` bundle layout. User modifications are now reported as conflicts instead of being overwritten. The regular global command uses the standard home paths; use the legacy wrapper for a custom `CODEX_HOME`. Test isolation can override the engine home using `SUPER_COMPOUND_HOME`.
+
+## Application Standards and CI
+
+The framework's `.github/workflows/ci.yml` tests Super Compound itself. Application
+projects use their own validation commands and pinned tools through the shared
+standards resolver and check runner; installing the framework does not install
+an application workflow or enable merge protection.
+
+Review [the application CI template](.agent/templates/standards/application-ci.yml)
+before copying it into the application's `.github/workflows/`. Match its runtimes
+and dependency installation steps to the project's approved versions and lockfiles,
+using the same runtime pins and lockfile-based installs in both jobs. The aggregate
+uses a fresh checkout and re-probes the configured tools while verifying the receipt.
+The starter selects all explicitly declared directory scopes through the project
+configuration path. Local changed-path validation uses the same resolver and
+runner with the actual changed paths; undeclared changed code produces a conflict.
+The starter does not claim coverage outside declared scopes.
+
+The runner writes a snapshot and check receipt; the final `standards-aggregate`
+job always verifies both against the current checkout and requires successful
+upstream execution. Missing, failed, skipped or stale mandatory evidence cannot
+produce a passing aggregate. Configure every check `resultRef` and required human
+`observationRef` under ignored `.scratch/standards/`; the template uploads and restores
+that complete evidence tree. Keep secrets and raw logs elsewhere. Actual authorized
+human observations must be supplied before execution; the workflow does not generate
+approval. These artifacts do not replace source configuration or rule-owner review.
+
+A repository administrator must separately configure `standards-aggregate` as a
+required status check and control bypass permissions. Validate that protection
+with an intentionally failing application change before adopting enforcement.
+Start with audit/advisory evidence, preserve project configuration and formatting,
+then enable enforcement after the owner reviews pins, conflicts and exceptions.
+Rollback uses the previous approved framework/profile pins and source checkout
+through the same ownership-aware update; reconcile modified managed assets first.
 
 ## Doctor and Troubleshooting
 

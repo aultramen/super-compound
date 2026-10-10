@@ -1,0 +1,7 @@
+{
+  "name": "sc-isolated-official-next-rules-proposal",
+  "private": true,
+  "type": "commonjs",
+  "license": "MIT",
+  "description": "UNAPPROVED SANDBOX PROPOSAL: exact official 16.4.0 rule closure plus disclosed first-party Node24 root adapter"
+}

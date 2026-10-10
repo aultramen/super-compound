@@ -162,6 +162,11 @@ Common routes:
 
 ## Execution Rules
 
+Scoped coding/review standards use `.agent/context/standards.contract.md`:
+explicit core/profile/project pins, relevant references only, shared local/CI
+checks and completion evidence. Host adapters convey those sources; unknown
+frameworks disclose limits. Existing disabled/legacy projects remain advisory.
+
 Before editing:
 
 - Read the relevant workflow, skill, and nearby project instructions.

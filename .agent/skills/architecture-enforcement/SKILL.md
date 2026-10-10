@@ -5,27 +5,33 @@ description: "Use when file placement, dependency direction, framework conventio
 
 # Architecture Enforcement
 
-## Overview
+## Summary
 
-Enforce clean architecture aligned with each framework's best practices. Detect the project branch, load only its detailed reference, then verify placement and dependencies before writing code.
+Check placement, dependency direction and relevant framework conventions.
+Resolve `.agent/context/standards.contract.md` for the target scope first.
 
-**Scope:** This skill checks placement, dependency direction, and framework conventions. Use `/sc-explore` or `/sc-plan` when the deeper question is whether a module, interface, seam, or adapter is shaped well enough to build.
+**Scope:** Module/interface design decisions belong to `/sc-explore` or `/sc-plan`.
 
 ## When to Use
 
-- Before creating any new file — verify it goes in the correct directory
-- Before adding imports — verify dependency direction is allowed
-- During code review — check for architectural violations by demonstrated impact
-- When setting up a new project — load the matching preset
+- New files: verify placement.
+- New imports: verify dependency direction.
+- Review: demonstrate architectural impact.
+- Setup: inspect the selected preset.
 
 ## Process
 
-1. Inspect `.agent/rules/project-config.md`, manifests, framework config, and nearby folders. Match `architecture` plus `backend.framework` / `frontend.framework`.
-2. Load only the detected framework reference below. Load multiple guides only when the change crosses those branches. Do not preload unrelated references.
-3. For project setup only, copy the matching [preset](references/presets.md) into `.agent/rules/project-config.md`.
-4. Apply every gate before writing or approving the change.
+1. Read explicit scoped profiles in `.agent/rules/project-config.md`; compare
+   manifests/versions and nearby code as evidence. Report conflicts, never infer
+   configuration replacement.
+2. Load only selected rules and the relevant tested example/reference below.
+   Cross-scope changes need each applicable profile; unrelated guides stay unloaded.
+3. Presets are advisory. Copy a [preset](references/presets.md) only during
+   authorized setup, preserving user configuration.
+4. Apply applicable adopted gates before writing/review. Repository conventions
+   override reference defaults, not mandatory organization controls.
 
-If unmatched, follow repository conventions. If ambiguous, inspect candidate references.
+Unknown frameworks use core and repository conventions; disclose limited coverage.
 
 ### Preset Router
 
@@ -57,11 +63,14 @@ If unmatched, follow repository conventions. If ambiguous, inspect candidate ref
 
 ## Gates
 
-- **Placement gate:** The target belongs in the detected guide's folder and layer.
-- **Dependency gate:** Every new import follows that guide's arrows and `NEVER` rules.
-- **Security gate:** Every framework MUST implement the patterns in [HTTP/security](references/http-security.md). Load it for HTTP, middleware, auth, CORS, headers, rate limits, public endpoints, or architecture review; placement follows the detected guide.
+- **Placement gate:** Follow the adopted scope's layout; reference folders are defaults.
+- **Dependency gate:** Enforce adopted boundaries using configured checks and review.
+- **Security gate:** Core controls apply; [HTTP/security](references/http-security.md)
+  supplies on-demand HTTP/auth guidance, not universal layout or middleware policy.
 - **Review gate:** Severity follows demonstrated runtime/security/data/coupling impact. Placement drift alone is minor; P1 requires a material defect. Cite evidence and a proportional fix.
 
 ## Integration
 
-Pair with `writing-plans` and `code-review` when placement is valid but module shape, interface, adapter strategy, leverage, or locality needs review. `executing-plans` checks placement before writing code; `code-review` verifies compliance. Project-config rules use presets, quality-gates rules use framework specifics, and `context7-docs` supplies current conventions beyond these references.
+Pair with `writing-plans`, `executing-plans`, and `code-review`; version-sensitive
+documentation uses `context7-docs`. Effective standards and completion evidence
+remain shared across stacks and hosts.

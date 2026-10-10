@@ -28,6 +28,11 @@ Result and next action: DRAFT proposals with evidence and proposed diff; human a
    explicitly authorizes application, hand off internally to the owning workflow
    in the same session after checking scope and evidence. Otherwise deliver and stop.
 
+Standards proposals follow `.agent/context/standards.contract.md`: identify the
+rule/profile owner, affected versions/scopes, measured check evidence, migration
+and rollback. Mandatory standards changes require rule-owner review through the
+existing authorized owner; a DRAFT or captured lesson never changes global policy.
+
 ## Skip
 
 - Single observations, unverified hypotheses, or style preferences.
