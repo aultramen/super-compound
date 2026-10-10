@@ -1,4 +1,6 @@
 Start from active user intent; when resuming, reconcile docs/STATE.md Next action.
+Standards: `.agent/context/standards.contract.md`; scoped pins, tested examples,
+mandatory checks; locators/digests survive dispatch/resume.
 Checkpoint only for human input/blockers/replies: `.agent/context/checkpoint.contract.md`.
 Tier first (agentic-delivery/references/workflow-integration.md): `Tier:
 light|full; trigger: T<n>|none`. `light`: a request/pointer; trivial edits execute directly.

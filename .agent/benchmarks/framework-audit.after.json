@@ -1,26 +1,26 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-10-07T04:31:45.876Z",
-  "repositoryHead": "8308174e91defa0620746d050ceccabe0458e1e3",
+  "generatedAt": "2026-10-10T00:45:34.332Z",
+  "repositoryHead": "8c94283ae8e7095211bcc42f1f9e79eaebcd2222",
   "pass": true,
   "summary": {
     "manifestSource": "git-active-manifest",
-    "manifestFiles": 588,
-    "auditedFiles": 587,
+    "manifestFiles": 677,
+    "auditedFiles": 676,
     "excludedFiles": [
       {
         "path": ".agent/benchmarks/framework-audit.after.json",
         "reason": "requested output path"
       }
     ],
-    "filesRead": 587,
-    "textFiles": 586,
+    "filesRead": 676,
+    "textFiles": 675,
     "binaryFiles": 1,
-    "bytesRead": 5832782,
-    "linesRead": 86662,
-    "contentDigest": "5aad92b45eecee2c2cd297ea1c2cf583f15aa92b62635f7b58b35b2e810f71f2",
+    "bytesRead": 6518932,
+    "linesRead": 98842,
+    "contentDigest": "e4032f451ed696aee9aa4b59922276a77e23f3e9727a821dd1a29380908bcc23",
     "skillEntrypoints": 37,
-    "skillEntrypointWords": 16375,
+    "skillEntrypointWords": 16285,
     "maxSkillEntrypointWords": 634,
     "skillEntrypointWordLimit": null,
     "findings": 0,
@@ -32,14 +32,14 @@
     }
   },
   "coverage": {
-    "activeManifestEntries": 588,
-    "byteContentAuditedEntries": 587,
+    "activeManifestEntries": 677,
+    "byteContentAuditedEntries": 676,
     "specialVerificationEntries": 1,
-    "accountedEntries": 588,
+    "accountedEntries": 677,
     "unaccountedEntries": 0,
     "accountedPercent": 100,
-    "byteContentAuditPercent": 99.8299,
-    "classifiedEntries": 588,
+    "byteContentAuditPercent": 99.8523,
+    "classifiedEntries": 677,
     "unclassifiedEntries": 0,
     "classCoveragePercent": 100,
     "auditClassCounts": {
@@ -47,27 +47,27 @@
       "benchmark-evidence": 12,
       "benchmark-self-evidence": 1,
       "data": 36,
-      "documentation": 123,
+      "documentation": 126,
       "eval-evidence": 23,
       "hook": 10,
       "host-adapter": 4,
       "host-rule": 28,
-      "project": 2,
+      "project": 74,
       "repository-config": 5,
       "rule": 3,
-      "runtime-context": 16,
+      "runtime-context": 17,
       "skill-contract": 7,
       "skill-entrypoint": 37,
       "skill-reference": 131,
       "skill-support": 2,
       "startup-contract": 3,
-      "template": 15,
-      "test": 54,
-      "tool": 32,
+      "template": 16,
+      "test": 62,
+      "tool": 36,
       "workflow": 19,
       "workflow-contract": 19
     },
-    "auditClassDigest": "e5e455766df7dd32670cc1aac9384a8bd3aa9637fc028339b968896b4b5265f6",
+    "auditClassDigest": "5dcd1f5146b07ca828cbff2abebe704e3f5bf1f25b59dd947fc9b998e9cfac82",
     "contentDigestScope": "byte-content-audited",
     "specialVerificationRequired": true,
     "specialEntries": [
@@ -79,10 +79,10 @@
   },
   "physicalInventory": {
     "scope": "physical-authority-worktree-excluding-runtime-roots",
-    "files": 675,
-    "filesRead": 675,
+    "files": 764,
+    "filesRead": 764,
     "symlinks": 0,
-    "activeManifestEntries": 588,
+    "activeManifestEntries": 677,
     "outsideActiveManifestEntries": 87,
     "retiredAssets": [
       {
@@ -436,5 +436,5 @@
     ]
   },
   "findings": [],
-  "evidenceDigest": "d2423251f31974bafdd9501fa83d51e2516f2f0b0c23950ea44a7de1f284bdaf"
+  "evidenceDigest": "164bb6840028d542d3fab083bbce4f4d9dcfbc3c2db4540355c72b79f6f21a46"
 }

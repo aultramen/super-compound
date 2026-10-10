@@ -28,9 +28,11 @@ Result and next action: Read-only findings with evidence and owners; remediation
 3. Identify the spec source: user request, BRD, PRD, FSD, goal issue pointer, linked accepted ADR, or acceptance criteria.
 4. Review the spec axis first: missing behavior, incorrect behavior, or scope creep.
 5. Review the standards axis: security, architecture, tests, maintainability,
-   performance, and docs. Reuse resident standards or load only the applicable
-   sections of `docs/engineering-standards.md` or project `CODING_STANDARDS.md`;
-   implementation preflight applies the same constraints, review verifies them independently.
+   performance, and docs. Use `.agent/context/standards.contract.md` for the
+   changed scopes and independently inspect pinned mandatory-check/manual-review
+   evidence. Cite rule ID, profile/version and affected scope for findings;
+   legacy projects retain repository conventions. Implementation preflight
+   applies the same constraints, review verifies them independently.
 6. For PR readiness, load `skills/git-workflow-operation/SKILL.md` and review the PR checklist/template, but do not commit or push unless routed through `/sc-go`.
 7. Apply `verification-before-completion` to each claim: inspect actual evidence,
    current identity/provenance, and coverage of the goal, requirements, and every

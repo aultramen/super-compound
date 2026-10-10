@@ -1,0 +1,200 @@
+{
+  "schema": "next_reference_source_manifest_v1",
+  "owner": "Aulia Rahman",
+  "scope": "Bundled Next.js golden reference only; no application linter adoption",
+  "approval": {
+    "decision": "D03",
+    "userReply": "APPROVE ALL",
+    "recordedAt": "2026-10-09T18:33:40.8073221Z",
+    "approvedPatchSha256": "89018641ed77d7f71e0e4ba259b3e5216f1da0115baed1d03c128d8176ce2c8d"
+  },
+  "upstream": {
+    "name": "@next/eslint-plugin-next",
+    "version": "16.4.0",
+    "license": "MIT",
+    "repository": {
+      "url": "git+https://github.com/vercel/next.js.git",
+      "directory": "packages/eslint-plugin-next"
+    },
+    "gitTag": "v16.4.0",
+    "gitTagCommit": "e273d5b2e869d0be06c0e86f788e1594f9dd40cf",
+    "npmGitHead": null,
+    "gitTagIsNotTarballAttestation": true,
+    "tarball": "https://registry.npmjs.org/@next/eslint-plugin-next/-/eslint-plugin-next-16.4.0.tgz",
+    "integrity": "sha512-ffeflB/dL8RrvWejQximw01pOpKHN692Y3FjDB82DCd0YVvXvBD6vY7mcZp27yvSVFVM6wA73xVodEKF4spizA==",
+    "shasum": "93295ab9798746ec52515016498fa48af7bcc05d",
+    "licenseUrl": "https://raw.githubusercontent.com/vercel/next.js/v16.4.0/license.md",
+    "licensePath": "LICENSE.md",
+    "licenseSha256": "ee765244e2d59f5234d474f62e0766fa0c8b99af967fdd4c0cb8dcb0c76ea224",
+    "publishedSources": [
+      {
+        "path": "published/rules/google-font-display.js",
+        "upstreamPath": "dist/rules/google-font-display.js",
+        "sha256": "4fd8cd476fae6e37f75ae54e46feee561040a04b01d9c73cab37b778e586f6cd"
+      },
+      {
+        "path": "published/rules/google-font-preconnect.js",
+        "upstreamPath": "dist/rules/google-font-preconnect.js",
+        "sha256": "7097aedd951e8909265c716323ade6d0887f4b54152774d7cfe3059812ced4d2"
+      },
+      {
+        "path": "published/rules/inline-script-id.js",
+        "upstreamPath": "dist/rules/inline-script-id.js",
+        "sha256": "fe7cc4883e52ae135e44eb3d2788b6a54eca0a11b559ff0636b51fcae550b69a"
+      },
+      {
+        "path": "published/rules/next-script-for-ga.js",
+        "upstreamPath": "dist/rules/next-script-for-ga.js",
+        "sha256": "a1d40c2b48d252f43b4f739d628748a50e4902b8b2f667d7cedb726689055149"
+      },
+      {
+        "path": "published/rules/no-assign-module-variable.js",
+        "upstreamPath": "dist/rules/no-assign-module-variable.js",
+        "sha256": "131993a0f769199a4e1fbcc006a5e798ef5234d344b89146a347cf9ba9703c64"
+      },
+      {
+        "path": "published/rules/no-async-client-component.js",
+        "upstreamPath": "dist/rules/no-async-client-component.js",
+        "sha256": "eb8252488bd89335d79c45d53872918f70bb03a98b87f633317a2b13ae294a1f"
+      },
+      {
+        "path": "published/rules/no-before-interactive-script-outside-document.js",
+        "upstreamPath": "dist/rules/no-before-interactive-script-outside-document.js",
+        "sha256": "b4606784338583e745f50a32da212034be6599513180e6d77ce6295c92d38d3c"
+      },
+      {
+        "path": "published/rules/no-css-tags.js",
+        "upstreamPath": "dist/rules/no-css-tags.js",
+        "sha256": "3ecea24c00cf779b1ce80cdd1176e3a21a4369bac16e2f48c1ec0ccaa8200568"
+      },
+      {
+        "path": "published/rules/no-document-import-in-page.js",
+        "upstreamPath": "dist/rules/no-document-import-in-page.js",
+        "sha256": "aa6622bc04ccc1d7e0289b42cedb5b10b70800d4ad9caa1165a4ce0c9ee2fc00"
+      },
+      {
+        "path": "published/rules/no-duplicate-head.js",
+        "upstreamPath": "dist/rules/no-duplicate-head.js",
+        "sha256": "2f3fe9b461c45f144e606ab989b409117af0e163edd2c9858d84cbf29426254c"
+      },
+      {
+        "path": "published/rules/no-head-element.js",
+        "upstreamPath": "dist/rules/no-head-element.js",
+        "sha256": "ce985a88bb226e3688c90c47da71d2c0ce0797d27d1b112d5e8e4f02b3e25a67"
+      },
+      {
+        "path": "published/rules/no-head-import-in-document.js",
+        "upstreamPath": "dist/rules/no-head-import-in-document.js",
+        "sha256": "64c3f1ecbab2a468641f85a2c4b1d746c316c2ba390f6780cc8882c456dd0bd4"
+      },
+      {
+        "path": "published/rules/no-html-link-for-pages.js",
+        "upstreamPath": "dist/rules/no-html-link-for-pages.js",
+        "sha256": "3b184e28aa8997eb8e7f7b43c8da327fd3e2a2acf826e6e328632e7006687baa"
+      },
+      {
+        "path": "published/rules/no-img-element.js",
+        "upstreamPath": "dist/rules/no-img-element.js",
+        "sha256": "e2945047059e846e58d67090de882821a4c39129acb1d51bea80eb955964dc5f"
+      },
+      {
+        "path": "published/rules/no-location-assign-relative-destination.js",
+        "upstreamPath": "dist/rules/no-location-assign-relative-destination.js",
+        "sha256": "61f2e7f61e2e9d72860ca15881533f63b9b169fc7774a5b6241771e32c717010"
+      },
+      {
+        "path": "published/rules/no-page-custom-font.js",
+        "upstreamPath": "dist/rules/no-page-custom-font.js",
+        "sha256": "e7b6b5dc6834b9eef90e72f024bdf0b1795a2ecfdc3fb37a8a3954556457a346"
+      },
+      {
+        "path": "published/rules/no-script-component-in-head.js",
+        "upstreamPath": "dist/rules/no-script-component-in-head.js",
+        "sha256": "2569a771e8a932ef566bccb49f2f31bd22f22e12bf8b282eca04f35821f4471f"
+      },
+      {
+        "path": "published/rules/no-styled-jsx-in-document.js",
+        "upstreamPath": "dist/rules/no-styled-jsx-in-document.js",
+        "sha256": "dc5ce51b254c4d28a34e2b2b103fb54601e7836d88c5909b2874710e443a906d"
+      },
+      {
+        "path": "published/rules/no-sync-scripts.js",
+        "upstreamPath": "dist/rules/no-sync-scripts.js",
+        "sha256": "d4b0d7c74cce675107755e5ccf7f02f6c1493cd80296c7eb483ace5f6bab53b0"
+      },
+      {
+        "path": "published/rules/no-title-in-document-head.js",
+        "upstreamPath": "dist/rules/no-title-in-document-head.js",
+        "sha256": "32a809a59b6ea3cb86eb603ccfb36835f2396720ba1553de543271e7e4b2aeca"
+      },
+      {
+        "path": "published/rules/no-typos.js",
+        "upstreamPath": "dist/rules/no-typos.js",
+        "sha256": "8e3faf5e72a97234579adcbecf2773082ea38ecc21188d261c2e6db9cdd95d85"
+      },
+      {
+        "path": "published/rules/no-unwanted-polyfillio.js",
+        "upstreamPath": "dist/rules/no-unwanted-polyfillio.js",
+        "sha256": "84d1fe31dc0fba0fd1139b5adcaa9579dd31b33ab35f32faecc5a529edd773ab"
+      },
+      {
+        "path": "published/utils/define-rule.js",
+        "upstreamPath": "dist/utils/define-rule.js",
+        "sha256": "2d490d33f3a9db380fa01452091cb1daf81dbbf0e09fbc4eefdbc379f6aba633"
+      },
+      {
+        "path": "published/utils/node-attributes.js",
+        "upstreamPath": "dist/utils/node-attributes.js",
+        "sha256": "48fd96af82f72bd5ac5fd6e459a60768638d4f4fcd44b222f128c39e7336997a"
+      },
+      {
+        "path": "published/utils/url.js",
+        "upstreamPath": "dist/utils/url.js",
+        "sha256": "219194728597d02d8f7cecafd14d91e681c99f9fa169e5b7577bdf866993ef5a"
+      }
+    ]
+  },
+  "firstParty": {
+    "contract": "default-context-cwd-only",
+    "unsupported": "Defined settings.next.rootDir values are rejected; upstream glob semantics are not provided",
+    "sources": [
+      {
+        "path": "index.cjs",
+        "sha256": "dee39a0043f6770758f585a0c2e665ef68d41153c39a041bb23672e092bdb8f4"
+      },
+      {
+        "path": "package.json",
+        "sha256": "789e554447093144b2c4f1cab2a447c8ba7889827ed8bd4712cd5dbb7eb893fc"
+      },
+      {
+        "path": "published/utils/get-root-dirs.js",
+        "sha256": "631e2b0e60fff28c9fc5956eecc8eab64ad09b67916c754368442b846e7e63cf"
+      }
+    ],
+    "frozenProposalMetadata": "Approved source package/comment text retains its historical UNAPPROVED SANDBOX/PROPOSAL labels byte-for-byte; this manifest records the actual later D03 approval"
+  },
+  "recommendedRules": {
+    "@next/next/google-font-display": "warn",
+    "@next/next/google-font-preconnect": "warn",
+    "@next/next/next-script-for-ga": "warn",
+    "@next/next/no-async-client-component": "warn",
+    "@next/next/no-before-interactive-script-outside-document": "warn",
+    "@next/next/no-css-tags": "warn",
+    "@next/next/no-head-element": "warn",
+    "@next/next/no-html-link-for-pages": "warn",
+    "@next/next/no-img-element": "warn",
+    "@next/next/no-location-assign-relative-destination": "warn",
+    "@next/next/no-page-custom-font": "warn",
+    "@next/next/no-styled-jsx-in-document": "warn",
+    "@next/next/no-sync-scripts": "warn",
+    "@next/next/no-title-in-document-head": "warn",
+    "@next/next/no-typos": "warn",
+    "@next/next/no-unwanted-polyfillio": "warn",
+    "@next/next/inline-script-id": "error",
+    "@next/next/no-assign-module-variable": "error",
+    "@next/next/no-document-import-in-page": "error",
+    "@next/next/no-duplicate-head": "error",
+    "@next/next/no-head-import-in-document": "error",
+    "@next/next/no-script-component-in-head": "error"
+  }
+}

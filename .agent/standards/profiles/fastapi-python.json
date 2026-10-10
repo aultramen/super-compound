@@ -1,0 +1,15 @@
+{
+  "schema": "standards_bundle_v1",
+  "id": "fastapi-python",
+  "version": "1.0.0",
+  "adoption": "candidate",
+  "framework": { "name": "fastapi", "language": "python", "manifest": "pyproject.toml", "dependency": "fastapi" },
+  "defaultCommands": { "format": "ruff format --check .", "lint": "ruff check .", "type": "mypy .", "architecture": "python .agent/standards/tools/python-boundaries.py --root . --config standards-boundaries.json" },
+  "rules": [
+    { "id": "FASTAPI-FORMAT", "level": "mandatory", "owner": "organization-python-owner", "source": ".agent/standards/profiles/fastapi-python.md#format", "check": "format" },
+    { "id": "FASTAPI-LINT", "level": "mandatory", "owner": "organization-python-owner", "source": ".agent/standards/profiles/fastapi-python.md#lint", "check": "lint" },
+    { "id": "FASTAPI-TYPE", "level": "mandatory", "owner": "organization-python-owner", "source": ".agent/standards/profiles/fastapi-python.md#type", "check": "type" },
+    { "id": "FASTAPI-ARCH", "level": "mandatory", "owner": "organization-python-owner", "source": ".agent/standards/profiles/fastapi-python.md#architecture", "check": "architecture" },
+    { "id": "FASTAPI-CONVENTIONS", "level": "recommendation", "owner": "organization-python-owner", "source": ".agent/standards/profiles/fastapi-python.md#conventions", "check": null }
+  ]
+}

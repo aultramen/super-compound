@@ -26,6 +26,9 @@ Result and next action: Proven root cause, regression-tested fix and evidence; c
 ## Steps
 
 1. Load `skills/systematic-debugging/SKILL.md`.
+   Before fixes, resolve `.agent/context/standards.contract.md` for affected
+   targets, inspect relevant tested examples/current patterns, and pin standards
+   identity with regression evidence; diagnosis stays read-only.
 2. State expected behavior, actual behavior, and the smallest reproducible case.
 3. Capture the exact failing command, logs, stack trace, request, or UI path.
 4. Search durable knowledge first with `node .agent/tools/knowledge-search.mjs "<symptom or component>"`; validate matching lessons against current evidence; accepted decisions bind only through their authoritative source. Then form ranked hypotheses from evidence.

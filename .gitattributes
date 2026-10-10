@@ -13,3 +13,35 @@
 # Preserve original historical bytes and manifest checksums.
 docs/archive/retired-assets-20261007/** -text
 docs/eval-results/evidence-dod-20261007/** -text
+
+# Preserve exact frozen evidence bytes; keep source normalization unchanged.
+docs/eval-results/standards-qualification-d03-d05-20261010.md -text
+docs/eval-results/standards-qualification-d03-d05-20261010/package-index.json -text
+docs/eval-results/standards-qualification-phase2-20261009/package-index.json -text
+docs/eval-results/standards-qualification-phase2-closure-20261009/final-checks.json -text
+docs/eval-results/standards-qualification-phase2-closure-20261009/manifest.json -text
+docs/eval-results/standards-qualification-phase2-closure-20261009/payload-333f2e5b4c4fa0a305caa8d46d0bc24fa34f69a94fe3db777fa697120df32622.log -text
+docs/eval-results/standards-qualification-phase2-closure-20261009/payload-38ba5f5d4cc024d9f64433af73b5139c495f977242c4b42fc7196ff0b480b145.log -text
+docs/eval-results/standards-qualification-phase2-closure-20261009/payload-3e528ea7932928dfb47641b773b9cf43720fb682278470c4f20f438af98f5cd4.log -text
+docs/eval-results/standards-qualification-phase2-closure-20261009/payload-8187b0dfb03929426d15ac85e69ad560c16cbb3035c5604222766b368dfd2067.log -text
+docs/eval-results/standards-qualification-phase2-closure-20261009/payload-e19aefb844155e2a94fff80cb8864f2c6b4962ad045a5ef190957d2a68405016.log -text
+docs/eval-results/standards-wizard-20261009/archive-verification-attempt1.json -text
+docs/eval-results/standards-wizard-20261009/candidate-api-security-output.json -text
+docs/eval-results/standards-wizard-20261009/candidate-api-test-outcome.json -text
+docs/eval-results/standards-wizard-20261009/candidate-final-advisory-review.json -text
+docs/eval-results/standards-wizard-20261009/candidate-final-archive-verification.json -text
+docs/eval-results/standards-wizard-20261009/decisions-approved-initial.json -text
+docs/eval-results/standards-wizard-20261009/decisions.json -text
+docs/eval-results/standards-wizard-20261009/original-preservation-closure-attempt2.json -text
+docs/eval-results/standards-wizard-20261009/original-preservation-closure.json -text
+docs/eval-results/standards-wizard-20261009/original-preservation-final.json -text
+docs/eval-results/standards-wizard-20261009/original-records-verified.json -text
+docs/eval-results/standards-wizard-20261009/payload-04d7a63ea0b4752a6c10ae30e39f881100834f44123040e0c25756354dc38597.log -text
+docs/eval-results/standards-wizard-20261009/payload-19371005494587dc2a180d3a5734188bb20179c874cfb0cc80233f145375fca9.log -text
+docs/eval-results/standards-wizard-20261009/payload-4e4757ff226a44b5c448b1c4624619419c22d5272463dc19510b4754871a72f9.log -text
+docs/eval-results/standards-wizard-20261009/payload-5d392cf279405f3b8b7d8d131930f96930d7404de0ebae2cac5c7f7d7499af25.log -text
+docs/eval-results/standards-wizard-20261009/payload-679edb0f83c6747295784d13b3ba042b07173019df8dbff9ea4102dac85816e4.log -text
+docs/eval-results/standards-wizard-20261009/payload-95b3b9330f76fb51fa63cf2222419a7ea14c17057491e1a046f60f24520c4596.log -text
+docs/eval-results/standards-wizard-20261009/payload-a17cedfa3134999b2aeb6a83a9e663707ed7d030b9b021ce79ae975675fe30a6.log -text
+docs/eval-results/standards-wizard-20261009/payload-dbcc33fa08a83920f8a401e1262718922743e4dde1c12ce564758e1c9c630441.log -text
+docs/eval-results/standards-wizard-20261009/payload-e2702f9afc4c0f80ff1e8624f77af7a7d2689ca184512114aae5967a76229ba8.log -text

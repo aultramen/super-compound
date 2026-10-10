@@ -1,0 +1,7 @@
+{
+  "schema": "python_boundaries_v1",
+  "sourceRoots": ["app"],
+  "rules": [
+    { "from": "app.domain", "forbidden": ["fastapi", "app.api"] }
+  ]
+}

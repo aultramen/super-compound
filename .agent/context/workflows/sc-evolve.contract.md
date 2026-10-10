@@ -1,5 +1,7 @@
 # /sc-evolve Runtime Contract
 
+Standards: `.agent/context/standards.contract.md`; rule-owner review, migration/rollback; candidates only.
+
 Cluster 3+ independent evidenced Observed/Confirmed origins into DRAFT proposals: docs/proposals/.
 
 Search first: node .agent/tools/knowledge-search.mjs "<area>" --require-complete; ground every

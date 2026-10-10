@@ -4,6 +4,46 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## 2026-10-10 - Optional owner self-review contract, inactive
+
+- Add SOLO-OWNER/1.0.0 through existing adoption configuration, resolver, review
+  adapter, receipts and completion guards. Require protected-base appointment,
+  authenticated current GitHub COMMENTED inspection and fresh scoped identities.
+- Preserve default nonauthor APPROVED behavior, mandatory security controls,
+  organization qualification gates, nineteen workflows and six host adapters.
+  Local provenance remains structural; no appointment, approval or CI is activated.
+- Fix the native GitHub client's bounded pagination query to accept its existing
+  per_page parameter; retain fixed-host, response-size and traversal protections.
+- Deterministic regressions are implementation evidence. Live owner review,
+  platform CI, application qualification and enforcement remain separate gates.
+
+## 2026-10-10 - Reviewed reference tooling and optional solo evaluation
+
+- Adopt the reviewed Next.js reference-only licensed rule bridge with the existing
+  22 recommended rules and severities; reject defined settings.next.rootDir
+  instead of silently approximating unsupported glob behavior. Preserve publisher
+  source identities and disclose owned adapter maintenance and migration limits.
+- Add optional G2-SO/1.0.0 pilot preparation for one operator using both hosts.
+  Procedure approval does not qualify observations or replace independent G1/G2
+  decisions, required nonauthor checks, or administrator enforcement authority.
+- Preserve 19 public workflows, six adapters, opt-in project configuration and
+  historical qualification records; original application repositories remain unchanged.
+- Actual checks and residual blockers are recorded separately in the
+  "Approved D03-D05 qualification execution - 2026-10-10"
+  (private historical evidence, not included in this framework-only PR).
+
+## 2026-10-09 - Scoped engineering standards and shared quality checks
+
+- Add one core/profile/project standards contract and opt-in configuration;
+  preserve directory scope, explicit version pins, user settings and host routing.
+- Integrate standards into existing init/plan/work/debug/review/audit and knowledge
+  routes without new public commands, tier changes or approval bypasses.
+- Share local/application-CI checks with completion snapshot/receipt evidence;
+  distinguish deterministic checks, human review and administrator merge protection.
+- Document owner-reviewed exceptions, migration/rollback and a planned 40-observation
+  pilot. Live host adoption and application repository protection remain separate
+  validation work; see [adoption procedures](docs/standards-adoption.md).
+
 ## 2026-10-07 - Evidence-Based Definition of Done
 
 - Require actual goal, requirement, and all-acceptance-criteria proof before

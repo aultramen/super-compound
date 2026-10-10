@@ -1,5 +1,8 @@
 # /sc-init Runtime Contract
 
+Standards: `.agent/context/standards.contract.md`; suggest scoped profiles,
+report manifest/version conflicts, never infer activation.
+
 Purpose: initialize or refresh project context.
 
 Read-only by default: load project config, metadata, commands, and source layout;
