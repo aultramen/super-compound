@@ -4,6 +4,17 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## 2026-10-11 - Opt-in completion replay and D09 source-verification harness
+
+- Add opt-in replayRequired completion contracts and verified-promise --replay.
+  Bound recipes run again first and only that fresh evidence is accepted, so a
+  coherent forged receipt is denied. Contracts without the flag are unchanged.
+- Add the D09 CPython source-verification harness under .github/qualification/d09
+  and one pull-request CI job for feature/d09-* heads. It is qualification
+  tooling, not distributed framework content; the other CI jobs are unchanged.
+- Deterministic regressions are implementation evidence only. D09 runtime
+  qualification, platform CI, governance and G1 remain separate gates.
+
 ## 2026-10-10 - Optional owner self-review contract, inactive
 
 - Add SOLO-OWNER/1.0.0 through existing adoption configuration, resolver, review
