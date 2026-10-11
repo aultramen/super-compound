@@ -1,0 +1,1200 @@
+{
+ "schema": "d09_cases_v1",
+ "policy": "D09-VERIFIER-ADMISSION/1.0.0",
+ "frozen": "Expectations are pinned from the sigstore-python 4.5.0 wheel source and are never edited after an observation. A mismatch is status invalid (a STOP outside the S1-S7 admission codes), never a re-pin.",
+ "verifier": {
+  "wheel": "sigstore-4.5.0-py3-none-any.whl",
+  "sha256": "f045b207f2e12605cf775ec38e89c5eda625d71ffa7830477db65e47ec2bc8b2",
+  "citationMethod": "python -I zipfile in-memory read of the frozen D13 wheel; no import of its code (2026-10-11)"
+ },
+ "invocation": {
+  "argv": [
+   "verify",
+   "identity"
+  ],
+  "verboseAfterIdentity": true,
+  "why": "Each subparser has parents=[parent_parser] (-v default 0) and argparse copies subparser defaults over the parent namespace, so -v must follow \"identity\".",
+  "cite": [
+   "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:241-248",
+   "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:450-469",
+   "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:630-637"
+  ],
+  "env": {
+   "COLUMNS": "4096",
+   "NO_COLOR": "1",
+   "TERM": "dumb",
+   "LC_ALL": "C.UTF-8",
+   "TZ": "UTC"
+  },
+  "envWhy": "RichHandler renders to a stderr Console; a fixed wide COLUMNS prevents wrapping inside pinned substrings.",
+  "envCite": [
+   "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:62-71"
+  ]
+ },
+ "targets": {
+  "T1": {
+   "file": "Python-3.12.15.tar.xz",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "nearIdentity": "Thomas@python.org"
+  },
+  "T2": {
+   "file": "Python-3.14.8.tar.xz",
+   "identity": "hugo@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "nearIdentity": "hugo@python.org."
+  }
+ },
+ "counting": {
+  "positives": 4,
+  "requiredNegatives": 24,
+  "supplementary": 4,
+  "characterization": 1,
+  "negativeCountsOnlyIf": [
+   "exact exit",
+   "every pinned substring present",
+   "no \"OK: \"",
+   "same-target pristine positive passed in this run (same nonce)",
+   "probe shows no blocked module/object and every map admitted"
+  ]
+ },
+ "cases": [
+  {
+   "id": "a-T1-POS",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "positive",
+   "mutation": "none",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": true,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 0,
+    "stderrContains": [
+     "OK: "
+    ],
+    "stderrExcludes": [
+     "Unable to verify Timestamp with CA.",
+     "cert chain is incomplete",
+     "not in CA time range"
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1150",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:634-635",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:134",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:149",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:165"
+   ]
+  },
+  {
+   "id": "a-T1-N-ARTIFACT",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "artifact-last-byte-xor-01",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Bundle message digest mismatch"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:480-484",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T1-POS"
+  },
+  {
+   "id": "a-T1-N-IDENTITY",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "hugo@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's SANs do not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:461-462",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:476-480",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T1-POS"
+  },
+  {
+   "id": "a-T1-N-ISSUER",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "thomas@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's OIDCIssuer does not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:104-108",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:142-148",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:451-462",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T1-POS"
+  },
+  {
+   "id": "a-T1-N-CORRUPT",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "bundle-messageSignature.signature-last-byte-xor-01",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Signature is invalid for input"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:229-243",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:332-334",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:486-496",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T1-POS"
+  },
+  {
+   "id": "a-T1-N-MISSING",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "bundle-path-absent",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "none",
+   "state": "tmpfs",
+   "globalArgs": [],
+   "expect": {
+    "exit": 2,
+    "stderrContains": [
+     "Missing verification materials"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1040-1053",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:108-114",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1092"
+   ],
+   "requiresPositive": "a-T1-POS"
+  },
+  {
+   "id": "a-T1-N-NEARMATCH",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "Thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's SANs do not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:476-480",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T1-POS"
+  },
+  {
+   "id": "a-T2-POS",
+   "capsule": "a",
+   "target": "T2",
+   "kind": "positive",
+   "mutation": "none",
+   "identity": "hugo@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": true,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 0,
+    "stderrContains": [
+     "OK: "
+    ],
+    "stderrExcludes": [
+     "Unable to verify Timestamp with CA.",
+     "cert chain is incomplete",
+     "not in CA time range"
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1150",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:634-635",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:134",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:149",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:165"
+   ]
+  },
+  {
+   "id": "a-T2-N-ARTIFACT",
+   "capsule": "a",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "artifact-last-byte-xor-01",
+   "identity": "hugo@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Bundle message digest mismatch"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:480-484",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T2-POS"
+  },
+  {
+   "id": "a-T2-N-IDENTITY",
+   "capsule": "a",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "thomas@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's SANs do not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:461-462",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:476-480",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T2-POS"
+  },
+  {
+   "id": "a-T2-N-ISSUER",
+   "capsule": "a",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "hugo@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's OIDCIssuer does not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:104-108",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:142-148",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:451-462",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T2-POS"
+  },
+  {
+   "id": "a-T2-N-CORRUPT",
+   "capsule": "a",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "bundle-messageSignature.signature-last-byte-xor-01",
+   "identity": "hugo@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Signature is invalid for input"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:229-243",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:332-334",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:486-496",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T2-POS"
+  },
+  {
+   "id": "a-T2-N-MISSING",
+   "capsule": "a",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "bundle-path-absent",
+   "identity": "hugo@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "none",
+   "state": "tmpfs",
+   "globalArgs": [],
+   "expect": {
+    "exit": 2,
+    "stderrContains": [
+     "Missing verification materials"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1040-1053",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:108-114",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1092"
+   ],
+   "requiresPositive": "a-T2-POS"
+  },
+  {
+   "id": "a-T2-N-NEARMATCH",
+   "capsule": "a",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "hugo@python.org.",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's SANs do not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:476-480",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "a-T2-POS"
+  },
+  {
+   "id": "b-T1-POS",
+   "capsule": "b",
+   "target": "T1",
+   "kind": "positive",
+   "mutation": "none",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": true,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 0,
+    "stderrContains": [
+     "OK: "
+    ],
+    "stderrExcludes": [
+     "Unable to verify Timestamp with CA.",
+     "cert chain is incomplete",
+     "not in CA time range"
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1150",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:634-635",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:134",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:149",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:165"
+   ]
+  },
+  {
+   "id": "b-T1-N-ARTIFACT",
+   "capsule": "b",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "artifact-last-byte-xor-01",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Bundle message digest mismatch"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:480-484",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T1-POS"
+  },
+  {
+   "id": "b-T1-N-IDENTITY",
+   "capsule": "b",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "hugo@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's SANs do not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:461-462",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:476-480",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T1-POS"
+  },
+  {
+   "id": "b-T1-N-ISSUER",
+   "capsule": "b",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "thomas@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's OIDCIssuer does not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:104-108",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:142-148",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:451-462",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T1-POS"
+  },
+  {
+   "id": "b-T1-N-CORRUPT",
+   "capsule": "b",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "bundle-messageSignature.signature-last-byte-xor-01",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Signature is invalid for input"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:229-243",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:332-334",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:486-496",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T1-POS"
+  },
+  {
+   "id": "b-T1-N-MISSING",
+   "capsule": "b",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "bundle-path-absent",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "none",
+   "state": "tmpfs",
+   "globalArgs": [],
+   "expect": {
+    "exit": 2,
+    "stderrContains": [
+     "Missing verification materials"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1040-1053",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:108-114",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1092"
+   ],
+   "requiresPositive": "b-T1-POS"
+  },
+  {
+   "id": "b-T1-N-NEARMATCH",
+   "capsule": "b",
+   "target": "T1",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "Thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's SANs do not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:476-480",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T1-POS"
+  },
+  {
+   "id": "b-T2-POS",
+   "capsule": "b",
+   "target": "T2",
+   "kind": "positive",
+   "mutation": "none",
+   "identity": "hugo@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": true,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 0,
+    "stderrContains": [
+     "OK: "
+    ],
+    "stderrExcludes": [
+     "Unable to verify Timestamp with CA.",
+     "cert chain is incomplete",
+     "not in CA time range"
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1150",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:634-635",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:134",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:149",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:165"
+   ]
+  },
+  {
+   "id": "b-T2-N-ARTIFACT",
+   "capsule": "b",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "artifact-last-byte-xor-01",
+   "identity": "hugo@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Bundle message digest mismatch"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:480-484",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T2-POS"
+  },
+  {
+   "id": "b-T2-N-IDENTITY",
+   "capsule": "b",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "thomas@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's SANs do not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:461-462",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:476-480",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T2-POS"
+  },
+  {
+   "id": "b-T2-N-ISSUER",
+   "capsule": "b",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "hugo@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's OIDCIssuer does not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:104-108",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:142-148",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:451-462",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T2-POS"
+  },
+  {
+   "id": "b-T2-N-CORRUPT",
+   "capsule": "b",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "bundle-messageSignature.signature-last-byte-xor-01",
+   "identity": "hugo@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Signature is invalid for input"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:229-243",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:332-334",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:486-496",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T2-POS"
+  },
+  {
+   "id": "b-T2-N-MISSING",
+   "capsule": "b",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "bundle-path-absent",
+   "identity": "hugo@python.org",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "none",
+   "state": "tmpfs",
+   "globalArgs": [],
+   "expect": {
+    "exit": 2,
+    "stderrContains": [
+     "Missing verification materials"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1040-1053",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:108-114",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1092"
+   ],
+   "requiresPositive": "b-T2-POS"
+  },
+  {
+   "id": "b-T2-N-NEARMATCH",
+   "capsule": "b",
+   "target": "T2",
+   "kind": "negative",
+   "mutation": "none",
+   "identity": "hugo@python.org.",
+   "issuer": "https://github.com/login/oauth",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Certificate's SANs do not match"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/policy.py:476-480",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "requiresPositive": "b-T2-POS"
+  },
+  {
+   "id": "a-T1-T-NONET",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "supplementary",
+   "mutation": "none",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "none",
+   "state": "tmpfs",
+   "globalArgs": [],
+   "requiresPositive": "a-T1-POS",
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Failed to refresh TUF metadata"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_internal/tuf.py:108-129",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:78-103",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "note": "Spec said non-zero/TUF refresh error; source pins exit 1 and this exact substring."
+  },
+  {
+   "id": "a-T1-T-STAGING",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "supplementary",
+   "mutation": "none",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tufStaging",
+   "state": "tmpfs",
+   "globalArgs": [
+    "--staging"
+   ],
+   "requiresPositive": "a-T1-POS",
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "failed to build timestamp certificate chain"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:262-269",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1268-1269",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:246-278",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:339-342",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:131-136",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1154-1157",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "note": "Runtime-dependent on the TUF-refreshed staging trusted_root still listing a TSA (embedded copy lists 1); otherwise the observation is invalid (STOP), not re-pinned."
+  },
+  {
+   "id": "a-T1-L-SET",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "supplementary",
+   "mutation": "bundle-inclusionPromise.signedEntryTimestamp-last-byte-xor-01",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "requiresPositive": "a-T1-POS",
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "invalid log entry: SET: invalid inclusion promise"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:368-375",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/models.py:194-214",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/models.py:216-236",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_internal/trust.py:163-190",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49"
+   ],
+   "note": "Spec pinned \"invalid log entry\"; source gives the more specific prefix used here."
+  },
+  {
+   "id": "a-T1-MAL-TSA",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "supplementary",
+   "mutation": "bundle-signedTimestamp-truncate-1",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": false,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "requiresPositive": "a-T1-POS",
+   "expect": {
+    "exit": 1,
+    "stderrContains": [
+     "Invalid Timestamp Response"
+    ],
+    "stderrExcludes": [
+     "OK: "
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/models.py:254-269",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/models.py:294-304",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:213",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:666-667",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1159-1160",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:42",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/errors.py:49",
+    "rfc3161_client-1.0.9.tar.gz!rust/src/lib.rs:622-632"
+   ],
+   "note": "Spec said non-zero; source pins exit 1. Raised lazily during verification, not at bundle load (models.py:486-488 short-circuits)."
+  },
+  {
+   "id": "a-T1-CHAR-TSA",
+   "capsule": "a",
+   "target": "T1",
+   "kind": "characterization",
+   "mutation": "bundle-signedTimestamp-last-byte-xor-01",
+   "identity": "thomas@python.org",
+   "issuer": "https://accounts.google.com",
+   "verbose": true,
+   "network": "tuf",
+   "state": "capsule",
+   "globalArgs": [],
+   "requiresPositive": "a-T1-POS",
+   "expect": {
+    "exit": 0,
+    "stderrContains": [
+     "OK: ",
+     "Unable to verify Timestamp with CA."
+    ],
+    "stopIf": [
+     "Invalid Timestamp Response"
+    ]
+   },
+   "cite": [
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:146-150",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:193-199",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:229-243",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/verify/verifier.py:332-334",
+    "sigstore-4.5.0-py3-none-any.whl!sigstore/_cli.py:1150"
+   ],
+   "note": "Accepted-by-design characterization: integrated time from the inclusion promise remains a verified time source. Never counted as a rejection; never claim TSA tamper rejection."
+  }
+ ],
+ "groups": [
+  [
+   "a-T1-POS",
+   "a-T2-POS",
+   "b-T1-POS",
+   "b-T2-POS"
+  ],
+  [
+   "a-T1-N-ARTIFACT",
+   "a-T1-N-IDENTITY",
+   "a-T1-N-ISSUER",
+   "a-T1-N-CORRUPT"
+  ],
+  [
+   "a-T1-N-MISSING",
+   "a-T1-N-NEARMATCH",
+   "a-T2-N-ARTIFACT",
+   "a-T2-N-IDENTITY"
+  ],
+  [
+   "a-T2-N-ISSUER",
+   "a-T2-N-CORRUPT",
+   "a-T2-N-MISSING",
+   "a-T2-N-NEARMATCH"
+  ],
+  [
+   "b-T1-N-ARTIFACT",
+   "b-T1-N-IDENTITY",
+   "b-T1-N-ISSUER",
+   "b-T1-N-CORRUPT"
+  ],
+  [
+   "b-T1-N-MISSING",
+   "b-T1-N-NEARMATCH",
+   "b-T2-N-ARTIFACT",
+   "b-T2-N-IDENTITY"
+  ],
+  [
+   "b-T2-N-ISSUER",
+   "b-T2-N-CORRUPT",
+   "b-T2-N-MISSING",
+   "b-T2-N-NEARMATCH"
+  ],
+  [
+   "a-T1-T-NONET",
+   "a-T1-T-STAGING",
+   "a-T1-L-SET",
+   "a-T1-MAL-TSA"
+  ],
+  [
+   "a-T1-CHAR-TSA"
+  ]
+ ],
+ "challenges": {
+  "cite": ".agent/tools/verification-recipe.mjs (sha256 f9dd381c0f5c57e42134fa89762f0ac5680042489b98659569db3d2724a329f2) and .agent/tools/verified-promise.mjs (sha256 e22e85edb1a99b318e7cb9015df722530749b2686638df8cf3fdc9c9e79b7eca): 1ef9c70 plus the uncommitted replayRequired/--replay gate change, read 2026-10-11 in the scratchpad clone. X1 RED runs the base gate, whose verdict line is verified-promise.mjs:135 at 1ef9c70.",
+  "X1": {
+   "red": "COMPLETE_ALLOWED",
+   "green": [
+    "COMPLETE_DENIED",
+    "fresh replay required"
+   ]
+  },
+  "X2": [
+   "COMPLETE_DENIED",
+   "stale source: "
+  ],
+  "X3": [
+   "COMPLETE_DENIED",
+   "stale source: "
+  ],
+  "X4": {
+   "gate": "COMPLETE_DENIED",
+   "failedStep": "check-admission",
+   "stderr": [
+    "D09-STOP S6",
+    "securityEvidence stale"
+   ]
+  },
+  "X6": {
+   "failed-step": "incomplete or failed execution/cleanup",
+   "failed-outcome": "required recipe assertions fail",
+   "skipped-outcome": "required recipe assertions skip",
+   "missing-outcome": "required acceptance outcome missing",
+   "empty-outcomes": "structured verification outcomes required"
+  },
+  "X5": [
+   "RECONCILE_DENIED"
+  ],
+  "lines": {
+   "stale source": "verification-recipe.mjs:85",
+   "required recipe assertions": "verification-recipe.mjs:279",
+   "required acceptance outcome missing": "verification-recipe.mjs:275",
+   "structured verification outcomes required": "verification-recipe.mjs:94",
+   "incomplete or failed execution/cleanup": "verification-recipe.mjs:205",
+   "fresh replay required": "verification-recipe.mjs:294",
+   "verdict line": "verified-promise.mjs:152"
+  }
+ },
+ "admissionNegatives": {
+  "changed-byte": "sha256 not in lock hash set",
+  "missing-wheel": "no wheel for pin",
+  "extra-wheel": "unexpected wheel",
+  "record-mismatch": "didn't match RECORD",
+  "reinstall": "File already exists:",
+  "cite": [
+   "installer-1.0.1-py3-none-any.whl!installer/sources.py:302-310",
+   "installer-1.0.1-py3-none-any.whl!installer/destinations.py:180-182",
+   "installer-1.0.1-py3-none-any.whl!installer/__main__.py:99-111",
+   "d09.py admit"
+  ]
+ }
+}

@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {mkdtemp,rm} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
 import {provisionCompletionFixture,completionDigest} from './completion-fixture.test-support.mjs';
 import * as verification from './verification-recipe.mjs';
 import {readBoundedFile,writeFileAtomic} from './file-state.mjs';
@@ -201,4 +203,63 @@ test('cleanup input mutation invalidates the preserved verification proof',async
  assert.equal((await check(root,fixture)).allowed,false);
  const evidence=JSON.parse(await readBoundedFile(root,fixture.evidencePath,{encoding:'utf8'}));
  assert.match(evidence.integrityError,/stale source/);assert.equal(evidence.cleanup.pass,true);
+});
+
+const replayDenied=['AC-1: fresh replay required: evidence was not produced by this verification'];
+
+test('replay-required contract denies a genuine coherent receipt in verify-only mode (R1)',async t=>{
+ const root=await fixtureRoot(t),fixture=await provisionCompletionFixture(root,{contractExtras:{replayRequired:true}});
+ assert.equal(fixture.result.pass,true);
+ for(const extra of [{},{evidenceRefs:[fixture.evidenceRef]}]) {
+  const verdict=await check(root,fixture,extra);
+  assert.equal(verdict.allowed,false);assert.deepEqual(verdict.issues,replayDenied,'the only failing check is the missing fresh replay');
+ }
+});
+
+test('a forged pass receipt is re-executed by --replay and denied on the actual failing outcome (R2)',async t=>{
+ const root=await fixtureRoot(t),directory='.scratch/completion/forged',healthPath=`${directory}/health.json`;
+ const fixture=await provisionCompletionFixture(root,{directory,contractExtras:{replayRequired:true}});
+ await writeFileAtomic(root,healthPath,JSON.stringify({healthy:false}));
+ const healthDigest=completionDigest(await readBoundedFile(root,healthPath));
+ await mutateJson(root,fixture.evidencePath,proof=>{proof.sources.find(source=>source.ref===healthPath).digest=healthDigest;});
+ assert.deepEqual((await check(root,fixture)).issues,replayDenied,'the forged pass receipt is otherwise coherent');
+ const replay=spawnSync(process.execPath,[fileURLToPath(new URL('./verified-promise.mjs',import.meta.url)),'--contract',fixture.contractPath,'--replay','--root',root],{encoding:'utf8',windowsHide:true});
+ assert.equal(replay.status,1,replay.stderr);assert.match(replay.stdout,/^REPLAYED 1\nCOMPLETE_DENIED .*status=Verification Failed/);
+ assert.equal(JSON.parse(await readBoundedFile(root,fixture.evidencePath,{encoding:'utf8',maxBytes:4*1024*1024})).pass,false,'replay replaced the forged receipt with actual evidence');
+});
+
+test('a genuine replay is admitted only through the digest of the evidence it persisted (R3)',async t=>{
+ const root=await fixtureRoot(t),fixture=await provisionCompletionFixture(root,{contractExtras:{replayRequired:true}});
+ const result=await verification.runVerificationRecipe(root,fixture.recipe);
+ assert.equal(result.pass,true);assert.equal(result.evidencePath,fixture.evidencePath);
+ assert.equal(result.digest,completionDigest(await readBoundedFile(root,fixture.evidencePath,{maxBytes:4*1024*1024})));
+ const verdict=await check(root,fixture,{evidenceRefs:[{path:fixture.evidencePath,digest:result.digest}],replayed:new Map([[fixture.recipePath,result.digest]])});
+ assert.equal(verdict.allowed,true);assert.equal(verdict.status,'Done');
+ assert.notEqual(result.digest,fixture.result.digest);
+ for(const replayed of [new Map([[fixture.recipePath,fixture.result.digest]]),new Map([[fixture.evidencePath,result.digest]]),new Map()])assert.deepEqual((await check(root,fixture,{replayed})).issues,replayDenied);
+});
+
+test('evidence swapped after a replay is denied by the bound digest (R4)',async t=>{
+ const root=await fixtureRoot(t),fixture=await provisionCompletionFixture(root,{contractExtras:{replayRequired:true}});
+ const earlier=await readBoundedFile(root,fixture.evidencePath,{maxBytes:4*1024*1024});
+ const result=await verification.runVerificationRecipe(root,fixture.recipe),replayed=new Map([[fixture.recipePath,result.digest]]);
+ assert.equal((await check(root,fixture,{replayed})).allowed,true);
+ await writeFileAtomic(root,fixture.evidencePath,earlier,{maxBytes:4*1024*1024});
+ const verdict=await check(root,fixture,{replayed});
+ assert.equal(verdict.allowed,false);assert.deepEqual(verdict.issues,replayDenied,'the swapped receipt is otherwise genuine and coherent');
+});
+
+test('replayRequired must be exactly true and cannot route a criterion to an observation (R5)',async t=>{
+ const root=await fixtureRoot(t),directory='.scratch/completion/replay-observation';
+ await assert.rejects(provisionCompletionFixture(root,{contractExtras:{replayRequired:'yes'}}),/replayRequired must be true/);
+ await assert.rejects(provisionCompletionFixture(root,{directory,contractExtras:{replayRequired:true},criteria:[
+  {id:'AC-1',requirementRefs:[`${directory}/request.md#AC-1`],expected:'healthy',method:'functional',recipeRef:`${directory}/recipe.json`},
+  {id:'AC-2',requirementRefs:[`${directory}/request.md#AC-2`],expected:'readable screenshot',method:'visual',observationRef:`${directory}/observation.json`}
+ ]}),/replayRequired must be true/);
+ const fixture=await provisionCompletionFixture(root,{directory:'.scratch/completion/replay-flag'});
+ for(const replayRequired of ['yes',false,null,1]) {
+  await mutateJson(root,fixture.contractPath,contract=>{contract.replayRequired=replayRequired;});
+  const verdict=await check(root,{...fixture,contractDigest:completionDigest(await readBoundedFile(root,fixture.contractPath))});
+  assert.equal(verdict.allowed,false);assert.match(verdict.issues.join('\n'),/replayRequired must be true/);
+ }
 });

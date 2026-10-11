@@ -158,3 +158,29 @@ jobs:
           node-version: 22
       - name: Retrieval, persistence, dispatch and installer parity
         run: node --test .agent/tools/knowledge-search.test.mjs .agent/tools/memory-maintenance.test.mjs .agent/tools/file-state.test.mjs .agent/tools/work-package.test.mjs .agent/tools/instruction-context.test.mjs .agent/tools/completion-receipts.test.mjs .agent/tools/prevention-checks.test.mjs .agent/tools/maintenance-recovery.test.mjs .agent/tools/active-assets.test.mjs .agent/tools/codex-install.test.mjs
+
+  d09-source-verification:
+    if: ${{ github.event_name == 'pull_request' && startsWith(github.head_ref, 'feature/d09-') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24.15.0
+      - name: Prepare pinned inputs and reproducible rfc3161 rebuild
+        run: node .github/qualification/d09/d09.mjs prepare --ci
+      - name: D09 replay completion gate
+        run: node .agent/tools/verified-promise.mjs --contract .github/qualification/d09/contract-ci.json --replay
+      - name: Preserve D09 evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: d09-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .scratch/d09/evidence/
+            .scratch/d09/build/
+          include-hidden-files: true
+          if-no-files-found: error

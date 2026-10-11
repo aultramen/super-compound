@@ -16,7 +16,7 @@ function refs(value,label,{empty=false}={}) {
  if(!Array.isArray(value)||value.length>200||(!empty&&!value.length)||value.some(ref=>!text(ref))||new Set(value).size!==value.length)throw new Error(`${label} must be bounded unique references`);
  return value;
 }
-function validateContract(contract) {
+export function validateContract(contract) {
  if(contract?.schema!=='completion_contract_v1'||!text(contract.taskId)||!text(contract.goal))throw new Error('completion_contract_v1 task and goal required');
  refs(contract.authorityRefs,'authorityRefs');refs(contract.sourceRefs,'sourceRefs',{empty:true});
  if(contract.standards!==undefined) {
@@ -31,6 +31,7 @@ function validateContract(contract) {
   ids.add(criterion.id);refs(criterion.requirementRefs,'criterion requirementRefs');
   if(criterion.requirementRefs.some(ref=>!authorities.has(fileRef(ref))))throw new Error('criterion requirementRefs must point to authorityRefs');
  }
+ if(contract.replayRequired!==undefined&&(contract.replayRequired!==true||contract.criteria.some(criterion=>!text(criterion.recipeRef))))throw new Error('replayRequired must be true with a recipeRef for every criterion');
  return contract;
 }
 const contractRefs=contract=>[...new Set([...contract.authorityRefs.map(fileRef),...contract.sourceRefs,...(contract.standards?[contract.standards.snapshotRef,contract.standards.receiptRef]:[])])];
@@ -148,7 +149,7 @@ export async function runVerificationRecipe(root,recipe) {
   await new Promise(resolve=>setImmediate(resolve));
   evidence.launch={command:recipe.launch.command,args:recipe.launch.args,pid:child.pid??null};
  }
- let persisted=false;
+ let persisted=false,persistedEvidence;
  try {
   if(launchError)evidence.launch.error=launchError;
   for(const phase of launchError?[]:['doctor','drive']) {
@@ -190,10 +191,11 @@ export async function runVerificationRecipe(root,recipe) {
      if(contract.standards)await assertCompletionStandards(root,contract);
     } catch(error) {evidence.integrityError=error.message;evidence.pass=false;}
    }
-   await writeFileAtomic(root,recipe.evidencePath,`${JSON.stringify(evidence,null,2)}\n`,{maxBytes:4*1024*1024,fallbackOnBusy:false});
+   persistedEvidence=`${JSON.stringify(evidence,null,2)}\n`;
+   await writeFileAtomic(root,recipe.evidencePath,persistedEvidence,{maxBytes:4*1024*1024,fallbackOnBusy:false});
   }
  }
- return {pass:evidence.pass&&evidence.cleanup.pass,evidencePath:recipe.evidencePath};
+ return {pass:evidence.pass&&evidence.cleanup.pass,evidencePath:recipe.evidencePath,digest:digest(persistedEvidence)};
 }
 
 function assertExecution(evidence,recipe) {
@@ -221,7 +223,7 @@ async function assertRegression(root,outcome,evidence,contract,criterion) {
  }
 }
 
-export async function verifyCompletionEvidence(root,{contractPath,contractDigest,evidenceRefs}={}) {
+export async function verifyCompletionEvidence(root,{contractPath,contractDigest,evidenceRefs,replayed}={}) {
  const verdict={allowed:false,status:'Needs Validation',criteria:[],issues:[]};
  let contract,currentDigest;
  try {
@@ -289,6 +291,7 @@ export async function verifyCompletionEvidence(root,{contractPath,contractDigest
    if(outcome.expected!==criterion.expected||!text(outcome.observed)||!['pass','fail','skip'].includes(outcome.status))throw new Error('outcome does not match required acceptance criterion');
    if(recipe&&['visual','manual'].includes(criterion.method))assertInspection(outcome.inspection,criterion);
    if(criterion.method==='regression')await assertRegression(root,outcome,evidence,contract,criterion);
+   if(contract.replayRequired&&replayed?.get(criterion.recipeRef)!==digest(content))throw new Error('fresh replay required: evidence was not produced by this verification');
    result.observed=outcome.observed;
    result.status=recipeFailure??(outcomePassed(outcome)?'pass':outcome.status==='skip'?'skip':'fail');
    if(result.status!=='pass')result.issues.push(`acceptance outcome ${result.status}`);
