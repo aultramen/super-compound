@@ -269,3 +269,11 @@ test('Bash wrapper uses the same active hashed bundle as the Node engine',t=>{
   const verify=spawnSync(bash,[path.join(source,'.codex/install-super-compound.sh'),'--codex-home',wrapped,'--verify-only'],{encoding:'utf8'});
   assert.equal(verify.status,0,verify.stdout+verify.stderr);
 });
+test('CLI runs when reached through a symlink or junction path',t=>{
+  // Node reports the entry module by its real path (macOS temp dirs sit under /var -> /private/var).
+  const f=fixture(t),link=path.join(f.root,'tools link');
+  fs.symlinkSync(path.dirname(engine),link,process.platform==='win32'?'junction':'dir');
+  const p=spawnSync(process.execPath,[path.join(link,'setup.mjs'),'doctor','--source',source,'--target',f.target,'--scope','project','--host','codex','--json'],{encoding:'utf8',env:{...process.env,SUPER_COMPOUND_HOME:f.home}});
+  assert.notEqual(p.stdout.trim(),'',`silent no-op: ${p.stderr}`);
+  assert.equal(JSON.parse(p.stdout).command,'doctor');
+});

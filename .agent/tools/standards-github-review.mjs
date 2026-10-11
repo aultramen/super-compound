@@ -1,6 +1,7 @@
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
 import {readBoundedFile,writeFileAtomic} from './file-state.mjs';
 import {parseStandardsConfig,resolveOwnerReviewAuthority,standardsPath} from './standards.mjs';
 
@@ -224,4 +225,4 @@ async function main() {
   const context={repository:process.env.GITHUB_REPOSITORY,number:Number(process.env.STANDARDS_PR_NUMBER),testedSha:process.env.STANDARDS_TESTED_SHA,headSha:process.env.STANDARDS_HEAD_SHA,baseSha:process.env.STANDARDS_BASE_SHA};
   console.log(JSON.stringify(await writeGitHubReviews(root,snapshot,context,{verify:options.verify})));
 }
-if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url))main().catch(error=>{console.error(error.message);process.exitCode=1;});
+if(process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1]))main().catch(error=>{console.error(error.message);process.exitCode=1;});

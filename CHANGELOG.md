@@ -12,6 +12,11 @@ Dated framework changes, compatibility notes and verification evidence; newest d
   Windows and macOS in CI; the Windows recovery subset is folded into it.
 - Pin the FastAPI reference and CI to uv 0.12.24. uv 0.12.7 to 0.12.17 are
   affected by GHSA-2cv4-cqwr-gwf7 (Windows wheel path traversal).
+- Fix framework CLIs silently doing nothing when started through a symlinked or
+  junction path (for example macOS temp directories): entry checks now compare
+  real paths, as verified-promise already did. The Codex bundle dry run now says
+  nothing was written, and two post-commit evidence tests inject the change
+  deterministically instead of relying on file-watch timing.
 - Refresh the committed token benchmark and framework audit receipts for the
   released tree, and remove a local path from the D09 harness README.
 - Scoped standards stay opt-in and disabled by default; shipping them activates

@@ -1,7 +1,7 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-10-11T07:44:51.052Z",
-  "repositoryHead": "fe3db8fe0d477170baba0e3160231d2a46fbba5c",
+  "generatedAt": "2026-10-11T07:58:57.489Z",
+  "repositoryHead": "14cd054db7b3863ed0a44a2782212ea12e3aa6bc",
   "pass": true,
   "summary": {
     "manifestSource": "git-active-manifest",
@@ -16,9 +16,9 @@
     "filesRead": 691,
     "textFiles": 690,
     "binaryFiles": 1,
-    "bytesRead": 7196045,
-    "linesRead": 112099,
-    "contentDigest": "f80554ebdc6cdd4aefd90d15e1ad493bf70ee0d8000e5277afbf33efa9bfe8c4",
+    "bytesRead": 7198786,
+    "linesRead": 112116,
+    "contentDigest": "be2c844144f18edb8f73b207d89bcac0c9cd9ba6bebe8a68335fa02e5b753760",
     "skillEntrypoints": 37,
     "skillEntrypointWords": 16285,
     "maxSkillEntrypointWords": 634,
@@ -436,5 +436,5 @@
     ]
   },
   "findings": [],
-  "evidenceDigest": "775ffdafabe575e73970005e87e2f7661fb534475d580d2a59db7ec3e2ad6f6a"
+  "evidenceDigest": "aee40259ae0571e6b0188c23fb622698290124dd6ef713ada68ba6df7742301b"
 }

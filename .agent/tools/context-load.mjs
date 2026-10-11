@@ -2,6 +2,7 @@
 import {createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
 import {resolveRepositoryPath} from './file-state.mjs';
 import {estimateTokens, METRIC} from './token-benchmark.mjs';
 
@@ -74,7 +75,7 @@ export function evaluatePairs(pairs, models = [...new Set(pairs.map(p=>p.model))
     groups.length && groups.every(g=>g.status==='PASS') ? 'PASS':'UNPROVEN'};
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
   try {
     const [mode, file, root='.'] = process.argv.slice(2);
     if (!['loads','pairs'].includes(mode) || !file) throw new Error('Usage: context-load.mjs loads <manifest.json> [root] | pairs <pairs.json>');

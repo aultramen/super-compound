@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
-import { createReadStream } from "node:fs";
+import fs, { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import path from "node:path";
 import readline from "node:readline";
@@ -589,7 +589,7 @@ async function main() {
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }
 
-const isCli = process.argv[1] === fileURLToPath(import.meta.url);
+const isCli = process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1]);
 if (isCli) {
   main().catch((error) => {
     console.error(error.message);

@@ -268,9 +268,9 @@ export function installCodexBundle(options) {
   if(options.command==='doctor')return {status:drift.length?'drift':'healthy',summary:drift.join('\n')||'Verified',changed:changes.length,conflicts};
   if(conflicts.length)return {status:'conflict',summary:'User-owned conflicts; installation preserved',changed:0,conflicts};
   if(!options.dryRun)applyTransaction(changes);
-  return {status:options.dryRun?'dry-run':changes.length?'applied':'unchanged',summary:changes.length?'Codex bundle installed and verified':'Already current',changed:changes.length,conflicts};
+  return {status:options.dryRun?'dry-run':changes.length?'applied':'unchanged',summary:!changes.length?'Already current':options.dryRun?'Codex bundle install previewed; nothing written':'Codex bundle installed and verified',changed:changes.length,conflicts};
 }
-if(process.argv[1] && path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
+if(process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
   try {
     const options=parseArgs(process.argv.slice(2)),report=options['codex-home']?installCodexBundle(options):setup(options);
     console.log(options.json?JSON.stringify(report,null,2):`${report.summary}\nStatus: ${report.status}; changed: ${report.changed}; conflicts: ${report.conflicts.length}\n${report.conflicts.map(c=>`${c.root?c.root+'/':''}${c.path}: ${c.reason}`).join('\n')}`);

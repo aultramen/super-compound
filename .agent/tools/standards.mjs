@@ -3,6 +3,7 @@ import {readdir, readFile, lstat} from 'node:fs/promises';
 import {spawnSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
 import {readBoundedFile, resolveRepositoryPath, writeFileAtomic} from './file-state.mjs';
 
 export const standardsHash = value => createHash('sha256').update(value).digest('hex');
@@ -322,4 +323,4 @@ async function main(args) {
   } else process.stdout.write(JSON.stringify(snapshot, null, 2) + '\n');
   if (snapshot.status !== 'ready') process.exitCode = 1;
 }
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main(process.argv.slice(2)).catch(error => {process.stderr.write(`standards: ${error.message}\n`); process.exitCode = 2;});
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) main(process.argv.slice(2)).catch(error => {process.stderr.write(`standards: ${error.message}\n`); process.exitCode = 2;});

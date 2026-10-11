@@ -2,6 +2,7 @@ import {spawnSync} from 'node:child_process';
 import {rm} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
 import {readBoundedFile, resolveRepositoryPath, writeFileAtomic} from './file-state.mjs';
 import {assertFreshStandards, standardsHash, standardsPath} from './standards.mjs';
 
@@ -179,4 +180,4 @@ async function main(args) {
   process.stdout.write(JSON.stringify(values['--verify'] ? result : {pass: result.pass, issues: result.issues, limitations: result.limitations, receiptRef: values['--output']}) + '\n');
   if (!(result.allowed ?? result.pass)) process.exitCode = 1;
 }
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main(process.argv.slice(2)).catch(error => {process.stderr.write(`standards-checks: ${error.message}\n`); process.exitCode = 2;});
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) main(process.argv.slice(2)).catch(error => {process.stderr.write(`standards-checks: ${error.message}\n`); process.exitCode = 2;});

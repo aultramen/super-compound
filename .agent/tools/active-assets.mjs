@@ -72,7 +72,7 @@ export function copyActiveDistribution(root, destination) {
   return {destination:target,selection:'exact_retirement_registry'};
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
   if(process.argv[2]==='retired')process.stdout.write(JSON.stringify(retiredPaths));
   else if(process.argv[2]==='copy'&&process.argv[3])process.stdout.write(JSON.stringify(copyActiveDistribution(path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),process.argv[3])));
   else throw new Error('usage: active-assets.mjs retired | copy <new-target>');

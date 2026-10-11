@@ -1,5 +1,6 @@
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
 import {spawn,spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {rm} from 'node:fs/promises';
@@ -304,7 +305,7 @@ export async function verifyCompletionEvidence(root,{contractPath,contractDigest
  return verdict;
 }
 
-if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
+if(process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
  const recipe=JSON.parse(await readBoundedFile(process.cwd(),process.argv[2],{encoding:'utf8'}));
  const result=await runVerificationRecipe(process.cwd(),recipe);
  process.stdout.write(`${JSON.stringify(result)}\n`);if(!result.pass)process.exitCode=1;

@@ -43,7 +43,7 @@ function main(args) {
   console.log(json ? JSON.stringify({files:results, total}, null, 2) : results.flatMap(r => r.findings.map(f => `${r.doc}: ${f.kind}: ${f.value}`)).join('\n') || 'No structural findings; content review still required.');
   return advisory || total === 0 ? 0 : 1;
 }
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
   try { process.exitCode = main(process.argv.slice(2)); }
   catch (error) { console.error(error.message); process.exitCode = 2; }
 }

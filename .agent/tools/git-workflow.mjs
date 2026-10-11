@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import fs from "node:fs";
 
 export const DEFAULT_CONFIG = Object.freeze({
   enabled: true,
@@ -724,7 +725,7 @@ async function main() {
   }
 }
 
-const isCli = process.argv[1] === fileURLToPath(import.meta.url);
+const isCli = process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1]);
 
 if (isCli) {
   main().catch((error) => {
