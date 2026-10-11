@@ -62,6 +62,23 @@ Reports must show those gates separately as pending/blocked where unfulfilled.
 Owner inspection records are labeled owner self-review and are never submitted
 to the existing nonauthor helper as independent approval. AI review is advisory.
 
+**Solo qualification contract, version G1-SO/1.0.0.** An explicitly approved
+solo qualification may use one named human owner, Aulia Rahman. Its
+result is G1-SO, not G1, independent review or independent security approval.
+Every technical requirement of the G1 row applies unchanged to one exact tested
+identity, including Python 3.12 and the same supported-platform set G1 requires,
+with no narrowing; any support-scope change is a separate future decision. Owner
+inspection is labeled owner self-review and must be genuinely performed by the
+human owner. Native authentication cannot prove that no AI acted under the same
+account, so each G1-SO record carries the owner's explicit truthful attestation.
+Residual limits are labeled owner-accepted, which is not security-owner approval.
+The independent reviewer, security owner and independent verifier rows stay
+pending and are reported separately. Failed, skipped, missing, stale or forged
+evidence denies. No security waiver qualifies a positive result, and externally
+blocked platforms stay FAIL/BLOCKED. G1-SO grants no G1, G2, G3 or G4 authority
+and no adoption, nonauthor review, release, merge, protection or enforcement
+authority. AI review is advisory.
+
 Record candidate/reference versions, repository head/base/tested identity,
 runtime/platform coverage, every failed/unrun check, residual limitations with
 approving owner, and selected adoption scopes. Supported runtime means it was

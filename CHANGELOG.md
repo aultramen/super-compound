@@ -4,6 +4,16 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## 2026-10-11 - Solo qualification contract G1-SO, inactive
+
+- Add G1-SO/1.0.0 to the operations standard: one named owner may run an
+  explicitly approved solo qualification whose result is G1-SO, never G1,
+  independent review or independent security approval. Every G1 technical row
+  and platform applies.
+- Keep the G1 row and the G2-SO, SOLO-OWNER, G3 and G4 text unchanged; nothing
+  is activated. Owner inspection is owner self-review and independent rows stay
+  pending.
+
 ## 2026-10-11 - Opt-in completion replay and D09 source-verification harness
 
 - Add opt-in replayRequired completion contracts and verified-promise --replay.

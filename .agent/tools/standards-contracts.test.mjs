@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile, readdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
+import {execFileSync, spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 
 const root = new URL('../../', import.meta.url);
 const read = relative => readFile(new URL(relative, root), 'utf8');
@@ -86,6 +88,42 @@ test('optional solo evaluation preserves independent qualification and enforceme
     'at most 1.15 times p95 baseline', 'max(0.20 * p95(baseline), 120)',
     'forty valid\nobservations',
   ]) assert.ok(pilot.includes(threshold), threshold);
+});
+
+test('solo qualification contract keeps G1-SO distinct and preserves G1 and G2-SO bytes', async t => {
+  const operations = await read('.agent/standards/operations.md');
+  const g1so = operations.match(/^\*\*Solo qualification contract, version G1-SO\/1\.0\.0\.\*\*.*(?:\n.+)*/m)?.[0] ?? '';
+  const prose = g1so.replace(/\s+/g, ' ');
+  for (const marker of ['G1-SO/1.0.0', 'not G1', 'owner self-review', 'owner-accepted', 'no narrowing']) assert.ok(prose.includes(marker), marker);
+  for (const clause of [
+    /result is G1-SO, not G1, independent review or independent security approval/,
+    /Every technical requirement of the G1 row applies unchanged to one exact tested identity, including Python 3\.12 and the same supported-platform set G1 requires/,
+    /support-scope change is a separate future decision/,
+    /owner self-review and must be genuinely performed by the human owner/,
+    /cannot prove that no AI acted under the same account.*explicit truthful attestation/,
+    /owner-accepted, which is not security-owner approval/,
+    /independent reviewer, security owner and independent verifier rows stay pending and are reported separately/,
+    /Failed, skipped, missing, stale or forged evidence denies/,
+    /No security waiver qualifies a positive result/,
+    /externally blocked platforms stay FAIL\/BLOCKED/,
+    /grants no G1, G2, G3 or G4 authority and no adoption, nonauthor review, release, merge, protection or enforcement authority/,
+    /AI review is advisory/,
+  ]) assert.match(prose, clause);
+  const g1Row = /^\| G1 candidate qualified \|.*$/m;
+  const g2so = /^\*\*Solo evaluation contract, version G2-SO\/1\.0\.0\.\*\*[\s\S]*?AI review is advisory\.$/m;
+  const sha256 = text => createHash('sha256').update(text ?? '').digest('hex');
+  // Digests of the 1ef9c70 bytes keep the pin enforced in depth-1 CI checkouts that lack that commit.
+  assert.equal(sha256(operations.match(g1Row)?.[0]), '2f9ef2f0d834b148c316476962e623e4d5c107e1ee53b4090b0b21c2b274b31c');
+  assert.equal(sha256(operations.match(g2so)?.[0]), 'bb7ae5aa5b6cd02014f40b3de1d9afd926e83fe080cc50c24294ace90981ee98');
+  assert.ok(operations.includes(`${operations.match(g2so)[0]}\n\n${g1so}\n\nRecord candidate/reference versions`), 'one G1-SO paragraph directly follows G2-SO');
+  const cwd = fileURLToPath(root), base = '1ef9c70bce9c763621ff6e1181c773c294725926';
+  if (spawnSync('git', ['cat-file', '-e', `${base}^{commit}`], {cwd, windowsHide: true}).status !== 0) return t.diagnostic(`${base} absent (shallow checkout); pinned digests still enforce byte identity`);
+  const baseline = execFileSync('git', ['show', `${base}:.agent/standards/operations.md`], {cwd, encoding: 'utf8', windowsHide: true});
+  for (const pattern of [g1Row, g2so]) {
+    const before = baseline.match(pattern)?.[0];
+    assert.ok(before, pattern.source);
+    assert.equal(operations.match(pattern)?.[0], before);
+  }
 });
 
 test('dated solo preparation keeps forty genuine observations pending and preserves template assignments', async () => {
