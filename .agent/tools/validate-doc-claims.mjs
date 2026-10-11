@@ -144,6 +144,6 @@ function main(argv) {
     return flagged.length === 0 ? 0 : 1;
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
     process.exit(main(process.argv));
 }

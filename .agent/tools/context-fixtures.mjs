@@ -36,7 +36,7 @@ export async function seedContextFixtures(directory) {
   }
   return {schema:'context_fixture_seed_v1',fixtures:reports};
 }
-if(process.argv[1]===fileURLToPath(import.meta.url)) {
+if(process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
   if(!process.argv[2]) {console.error('Usage: context-fixtures.mjs <fresh-directory>');process.exitCode=1;}
   else seedContextFixtures(process.argv[2]).then(r=>console.log(JSON.stringify(r,null,2))).catch(e=>{console.error(e.message);process.exitCode=1;});
 }

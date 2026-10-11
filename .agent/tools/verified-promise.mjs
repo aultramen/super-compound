@@ -5,7 +5,8 @@
  * A run may be declared COMPLETE only when its ledger validates, every goal is
  * verified with complete outcome evidence, and every proof is fresh.
  *
- * Usage: node .agent/tools/verified-promise.mjs (--run <run-id> | --contract <path>) [--root <path>]
+ * Usage: node .agent/tools/verified-promise.mjs (--run <run-id> | --contract <path> [--replay]) [--root <path>]
+ * --replay re-executes each contract recipe first; replayRequired contracts accept only that fresh evidence.
  * Exit 0 = COMPLETE_ALLOWED; exit 1 = goals unverified; exit 2 = usage/corrupt.
  */
 
@@ -16,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 import {createHash} from 'node:crypto';
 import {readBoundedFile} from './file-state.mjs';
 import {readLedger} from './work-package.mjs';
-import {verifyCompletionEvidence} from './verification-recipe.mjs';
+import {runVerificationRecipe,validateContract,verifyCompletionEvidence} from './verification-recipe.mjs';
 
 // Pure status predicate; it grants no evidence authority on its own.
 export function evaluatePromise(ledger) {
@@ -42,12 +43,14 @@ async function main(argv) {
     const args = argv.slice(2);
     let runId = null;
     let contractPath = null;
+    let replay = false;
     let root = process.cwd();
     const seen = new Set();
     for (let i = 0; i < args.length; i += 1) {
         const a = args[i];
+        if (a === '--replay' && !replay) { replay = true; continue; }
         if (!['--run','--contract','--root'].includes(a) || seen.has(a) || !args[i+1] || args[i+1].startsWith('--')) {
-            process.stderr.write('usage: verified-promise.mjs (--run <run-id> | --contract <path>) [--root <path>]\n');
+            process.stderr.write('usage: verified-promise.mjs (--run <run-id> | --contract <path> [--replay]) [--root <path>]\n');
             return 2;
         }
         seen.add(a);
@@ -55,14 +58,28 @@ async function main(argv) {
         else if (a === '--contract') contractPath = args[++i];
         else if (a === '--root') root = args[++i];
     }
-    if (Boolean(runId) === Boolean(contractPath) || (runId && !/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/.test(runId))) {
-        process.stderr.write('usage: verified-promise.mjs (--run <run-id> | --contract <path>) [--root <path>]\n');
+    if (Boolean(runId) === Boolean(contractPath) || (replay && !contractPath) || (runId && !/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/.test(runId))) {
+        process.stderr.write('usage: verified-promise.mjs (--run <run-id> | --contract <path> [--replay]) [--root <path>]\n');
         return 2;
     }
     if (contractPath) {
         try {
-            const contractDigest = createHash('sha256').update(await readBoundedFile(root,contractPath)).digest('hex');
-            const verdict = await verifyCompletionEvidence(root,{contractPath,contractDigest});
+            const contractBytes = await readBoundedFile(root,contractPath);
+            const contractDigest = createHash('sha256').update(contractBytes).digest('hex');
+            let replayed;
+            if (replay) {
+                // Validate before executing anything; replay the pinned bytes' recipes in contract order.
+                const contract = validateContract(JSON.parse(contractBytes.toString('utf8')));
+                replayed = new Map();
+                for (const ref of new Set(contract.criteria.map(criterion => criterion.recipeRef).filter(Boolean))) {
+                    const recipe = JSON.parse(await readBoundedFile(root,ref,{encoding:'utf8'}));
+                    // Never execute a recipe the verifier would reject as unbound.
+                    if (recipe.contractPath !== contractPath || recipe.recipeRef !== ref) throw new Error('recipe does not bind the current contract');
+                    replayed.set(ref,(await runVerificationRecipe(root,recipe)).digest);
+                }
+                process.stdout.write(`REPLAYED ${replayed.size}\n`);
+            }
+            const verdict = await verifyCompletionEvidence(root,{contractPath,contractDigest,replayed});
             printEvidenceVerdict(verdict,`contract=${contractPath}`);
             return verdict.allowed ? 0 : 1;
         } catch (error) {
@@ -133,6 +150,15 @@ function printEvidenceOfCompletion(verdict) {
 
 function printEvidenceVerdict(verdict,identity) {
     process.stdout.write(`${verdict.allowed ? 'COMPLETE_ALLOWED' : 'COMPLETE_DENIED'} ${identity} status=${verdict.status}\n`);
+    if (verdict.standards?.status === 'legacy') process.stdout.write('STANDARDS_LEGACY organizational compliance not established\n');
+    if (verdict.standards?.status === 'ready') {
+        const standards=verdict.standards;
+        const line=value=>process.stdout.write(`${String(value).replace(/[\r\n]/g,' ')}\n`);
+        line(`STANDARDS digest=${standards.digest} snapshot=${standards.snapshotRef} receipt=${standards.receiptRef}`);
+        for (const scope of standards.scopes) line(`STANDARDS_SCOPE ${scope.path} profile=${scope.profile ? `${scope.profile.id}@${scope.profile.version}` : 'core and repository conventions'}`);
+        for (const limitation of standards.limitations) line(`STANDARDS_LIMITATION ${limitation}`);
+        for (const rule of standards.waivedRules) line(`STANDARDS_WAIVED ${rule.scope}:${rule.id} (approved exception; not a passing check)`);
+    }
     if (verdict.allowed) printEvidenceOfCompletion(verdict);
     else for (const issue of verdict.issues) process.stdout.write(`UNVERIFIED ${issue}\n`);
 }

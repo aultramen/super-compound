@@ -9,4 +9,5 @@ Compact startup rule:
 - Stop on `OPEN-*` blockers.
 - Keep issue files as pointers, not copied prose.
 - Verify before completion.
+- Scoped standards: `.agent/context/standards.contract.md`; explicit config, pinned evidence.
 - Route Git operations through `/sc-go` with preview-first safety.

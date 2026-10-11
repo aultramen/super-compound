@@ -11,6 +11,7 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import fs from "node:fs";
 
 import {
   buildWorkflowEvidenceMatrix,
@@ -1737,7 +1738,7 @@ async function main() {
   }
 }
 
-const isCli = process.argv[1] === fileURLToPath(import.meta.url);
+const isCli = process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1]);
 
 if (isCli) {
   main().catch((error) => {

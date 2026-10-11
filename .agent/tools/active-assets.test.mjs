@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {isActiveAsset, selectActiveAssets, retiredPaths,copyActiveDistribution} from './active-assets.mjs';
+import {isActiveAsset, selectActiveAssets, retiredPaths,copyActiveDistribution,activeCopyFilter} from './active-assets.mjs';
 import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
 
 test('retired archive preserves exact source bytes and excludes both locators', () => {
@@ -86,4 +86,29 @@ test('distribution retains new active neighbors while preserving physical retire
  assert.equal(fs.existsSync(path.join(destination,'.agent/tools/loop-run.mjs')),false);
  assert.equal(fs.readFileSync(path.join(destination,'.agent/tools/loop-run-new.mjs'),'utf8'),'active');
  assert.throws(()=>copyActiveDistribution(source,destination),/new destination/);
+});
+
+test('offline distribution excludes generated reference dependencies, caches and reports without deleting originals', t=>{
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'sc-reference-distribution-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+ const source=path.join(root,'source'),destination=path.join(root,'bundle');
+ const generated=['node_modules/pkg/broken.mjs','.venv/lib/runtime.py','.next/server/generated.json','.pytest_cache/cache.json','.mypy_cache/cache.json','.ruff_cache/cache.json','__pycache__/compiled.pyc','.cache/runtime.json','build/output.js','dist/output.js','coverage/report.json','.scratch/report.json','.vitest-results.json','.pytest-results.xml','.test-outcome.json','.pip-audit.json','tsconfig.tsbuildinfo'];
+ const keep=['package-lock.json','uv.lock','src/service.ts','tests/service.test.ts','README.md'];
+ const prefix='.agent/standards/examples/reference/';
+ for (const ref of [...generated,...keep]) {
+  fs.mkdirSync(path.dirname(path.join(source,prefix+ref)),{recursive:true});
+  fs.writeFileSync(path.join(source,prefix+ref),ref.endsWith('broken.mjs')?"import './missing.mjs';":'original '+ref);
+ }
+ fs.mkdirSync(path.join(source,'.agent/templates/build'),{recursive:true});
+ fs.writeFileSync(path.join(source,'.agent/templates/build/template.txt'),'legitimate template');
+ copyActiveDistribution(source,destination);
+ const pilot=path.join(root,'pilot');
+ fs.cpSync(path.join(source,'.agent'),path.join(pilot,'.agent'),{recursive:true,filter:activeCopyFilter(source)});
+ for(const ref of generated) {
+  assert.equal(fs.existsSync(path.join(destination,prefix+ref)),false,ref);
+  assert.equal(fs.existsSync(path.join(pilot,prefix+ref)),false,ref);
+  assert.equal(fs.existsSync(path.join(source,prefix+ref)),true,ref);
+  assert.equal(isActiveAsset(prefix+ref),true,'generated exclusions do not alter historical retirement policy');
+ }
+ for(const ref of keep)assert.equal(fs.readFileSync(path.join(destination,prefix+ref),'utf8'),'original '+ref);
+ assert.equal(fs.readFileSync(path.join(destination,'.agent/templates/build/template.txt'),'utf8'),'legitimate template');
 });

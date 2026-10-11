@@ -29,6 +29,49 @@ test('light completion evaluates actual outcomes without a ledger', async (t) =>
     assert.equal(fs.existsSync(path.join(root,'.scratch/work-packages')),false);
 });
 
+test('replay is a value-less flag valid only with a contract', (t) => {
+    const root=fs.mkdtempSync(path.join(os.tmpdir(),'verified-replay-usage-'));
+    t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+    const directory=path.join(root,'.scratch/work-packages/run');
+    fs.mkdirSync(directory,{recursive:true});
+    fs.writeFileSync(path.join(directory,'ledger.json'),JSON.stringify({schema:'work_package_ledger_v2',runId:'run',ledgerVersion:1,goals:{}}));
+    const run=(...args)=>spawnSync(process.execPath,[fileURLToPath(new URL('./verified-promise.mjs',import.meta.url)),...args,'--root',root],{encoding:'utf8',windowsHide:true});
+    assert.equal(run('--run','run').status,1,'the ledger path is readable without --replay');
+    for (const args of [['--replay'],['--run','run','--replay'],['--replay','--run','run'],['--contract','--replay'],['--contract','contract.json','--replay','--replay']]) {
+        const result=run(...args);
+        assert.equal(result.status,2,args.join(' '));
+        assert.match(result.stderr,/usage: .*--replay/);
+    }
+});
+
+test('contract replay re-executes recipes before admitting a replay-required contract', async (t) => {
+    const root=fs.mkdtempSync(path.join(os.tmpdir(),'verified-replay-'));
+    t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+    const fixture=await provisionCompletionFixture(root,{taskId:'TASK-001',contractExtras:{replayRequired:true}});
+    const run=(...args)=>spawnSync(process.execPath,[fileURLToPath(new URL('./verified-promise.mjs',import.meta.url)),'--contract',fixture.contractPath,...args,'--root',root],{encoding:'utf8',windowsHide:true});
+    const verifyOnly=run();
+    assert.equal(verifyOnly.status,1,verifyOnly.stderr);
+    assert.match(verifyOnly.stdout,/fresh replay required/);
+    const replayed=run('--replay');
+    assert.equal(replayed.status,0,replayed.stderr);
+    assert.match(replayed.stdout,/^REPLAYED 1\nCOMPLETE_ALLOWED contract=/);
+    assert.match(replayed.stdout,/Evidence of Completion/);
+});
+
+test('contract replay refuses to execute a recipe bound to another contract', async (t) => {
+    const root=fs.mkdtempSync(path.join(os.tmpdir(),'verified-replay-unbound-'));
+    t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+    const fixture=await provisionCompletionFixture(root,{taskId:'TASK-001',contractExtras:{replayRequired:true}});
+    const recipeFile=path.join(root,fixture.recipePath),outcomesFile=path.join(root,fixture.outcomesPath);
+    fs.writeFileSync(recipeFile,`${JSON.stringify({...fixture.recipe,contractPath:'.scratch/completion/other/contract.json'},null,2)}\n`);
+    fs.rmSync(outcomesFile);
+    const result=spawnSync(process.execPath,[fileURLToPath(new URL('./verified-promise.mjs',import.meta.url)),'--contract',fixture.contractPath,'--replay','--root',root],{encoding:'utf8',windowsHide:true});
+    assert.equal(result.status,2,result.stdout);
+    assert.match(result.stderr,/recipe does not bind the current contract/);
+    assert.doesNotMatch(result.stdout,/REPLAYED/);
+    assert.equal(fs.existsSync(outcomesFile),false,'the unbound recipe must not run');
+});
+
 test('all branch goals passing cannot hide a failed aggregate health outcome', async (t) => {
     const root=fs.mkdtempSync(path.join(os.tmpdir(),'verified-aggregate-'));
     t.after(()=>fs.rmSync(root,{recursive:true,force:true}));

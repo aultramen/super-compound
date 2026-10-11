@@ -14,7 +14,7 @@ export async function provisionCompletionFixture(root,options={}) {
  if(!options.sourcePath)await writeFileAtomic(root,sourcePath,'health implementation\n');
  await writeFileAtomic(root,healthPath,JSON.stringify({healthy:options.status!=='fail'}));
  const criteria=options.criteria??[{id:'AC-1',requirementRefs:[`${authorityPath}#AC-1`],expected:'healthy',method:'functional',recipeRef:recipePath}];
- const contract={schema:'completion_contract_v1',taskId,goal:'service is healthy',authorityRefs:[authorityPath],sourceRefs:[sourcePath,healthPath],criteria};
+ const contract={schema:'completion_contract_v1',taskId,goal:'service is healthy',authorityRefs:[authorityPath],sourceRefs:[sourcePath,healthPath],criteria,...(options.contractExtras??{})};
  const outcomes={schema:'verification_outcomes_v1',taskId,criteria:criteria.map(c=>({criterionId:c.id,expected:c.expected,observed:options.status==='fail'?'unhealthy':c.expected,status:options.status??'pass',evidenceRefs:[artifactPath,...(options.artifactRefs??[])],...(options.counts?{counts:options.counts}:{}),...(options.outcomeExtras??{})}))};
  const command=code=>({command:process.execPath,args:['-e',code]});
  const drive=`const fs=require('fs'),assert=require('assert/strict');const actual=JSON.parse(fs.readFileSync(${JSON.stringify(healthPath)},'utf8'));let failed=false;try{assert.equal(actual.healthy,true)}catch(error){failed=true;console.log(error.message)}const outcomes=${JSON.stringify(outcomes)};for(const result of outcomes.criteria){if(failed){result.status='fail';result.observed='unhealthy'}}fs.writeFileSync(${JSON.stringify(artifactPath)},JSON.stringify(actual));fs.writeFileSync(${JSON.stringify(outcomesPath)},JSON.stringify(outcomes));console.log('actual health assertion',failed?'FAIL':'PASS');`;

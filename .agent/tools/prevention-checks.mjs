@@ -133,7 +133,7 @@ export async function recordCheckEffectiveness({root,input}) {
  });
 }
 
-if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
+if(process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
  const [command,inputFile]=process.argv.slice(2);
  const root=process.cwd();
  const result=command==='report'?preventionReport(root):['record','feedback'].includes(command)?await ({record:recordPreventionCheck,feedback:recordCheckEffectiveness}[command])({root,input:JSON.parse(await readBoundedFile(root,inputFile,{encoding:'utf8'}))}):(()=>{throw new Error('usage: prevention-checks.mjs <record input.json|feedback input.json|report>')})();

@@ -16,4 +16,6 @@ coordinator inspects delegated evidence. Light proof needs no FSD/swarm ledger.
 
 .agent/context/workflows/sc-X.contract.md before
 references/context/workflows/sc-X.contract.md; full workflow only if needed, never preloaded
-Fallback: .agent/ and bare context workflows skills templates rules agents evals hooks tools under references/; workflow-relative sc-*.md under references/workflows/
+Scoped standards: .agent/context/standards.contract.md, otherwise
+references/context/standards.contract.md; load selected details only.
+Fallback: .agent/ and bare context workflows skills templates rules agents evals hooks tools standards under references/; workflow-relative sc-*.md under references/workflows/

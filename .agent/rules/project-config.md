@@ -2,10 +2,8 @@
 
 ## Summary
 
-Configure stack hints, commands and conventions here; Git prefix validation uses
-`gitWorkflow.branchPrefixes`. Keep `conventions.branch_prefix` within that list.
-
-Routes read this file directly. Empty discovery hints allow auto-detection.
+Stack hints, commands and conventions; Git uses `gitWorkflow.branchPrefixes`.
+Keep `conventions.branch_prefix` within it. Empty hints allow detection.
 
 ```yaml
 project_name: ""
@@ -83,11 +81,23 @@ design_system:
   page_overrides_path: "design-system/<project-slug>/pages/"
 ```
 
-Cross-project knowledge: export `SC_GLOBAL_KNOWLEDGE_DIR=<dir>` and `knowledge-search.mjs` also reads `<dir>/LEARNED_KNOWLEDGE.md`; unset, knowledge stays repository-local.
+`SC_GLOBAL_KNOWLEDGE_DIR=<dir>` lets `knowledge-search.mjs` read
+`<dir>/LEARNED_KNOWLEDGE.md`; unset: repository-local.
+
+## Adopted Standards
+
+Absent/disabled: legacy conventions, no organization compliance.
+
+```json super-compound-standards
+{"schema":"project_standards_v1","enabled":false}
+```
+
+Activation/owner review: `.agent/standards/adoption.md`.
+Resolution: `.agent/context/standards.contract.md`; preserve user settings.
 
 ## Presets
 
-Use presets as starting points, then adapt to the actual project.
+Adapt starting points to the project.
 
 | # | Preset | Stack | Architecture |
 |---|--------|-------|--------------|
@@ -102,4 +112,4 @@ Use presets as starting points, then adapt to the actual project.
 | 9 | React Native | Expo + SQLite | Modular |
 | 10 | General Blank | Empty template | Project-defined |
 
-See `.agent/skills/architecture-enforcement/SKILL.md` for folder guidance.
+Folder guidance: `.agent/skills/architecture-enforcement/SKILL.md`.

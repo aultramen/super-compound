@@ -1,0 +1,23 @@
+#
+# D09 test-only tool wheels for the tools venv (rfc3161 upstream pytest + closure check).
+# Never installed into capsule a or b. Installed together with the full capsule lock
+# (requirements-linux-cp312.txt supplies pygments for pytest). One wheel hash per pin.
+# Hashes: PyPI JSON GET 2026-10-11 (see inputs.json toolWheels for url/size/retrieval).
+# pytest is re-pinned from the uv.lock 9.0.2 to 9.0.3 (CVE-2025-71176 / GHSA-6w46-j5rx-g56g, fixed in 9.0.3;
+# PyPI JSON GET 2026-10-10T22:00:54Z, raw sha256 cc591fefe6e4a7b22355e88a83c3b28c6b652b0983db43f19066b9912c57689d).
+#
+iniconfig==2.3.0 \
+    --hash=sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12
+    # via pytest
+packaging==26.0 \
+    --hash=sha256:b36f1fef9334a5588b4166f8bcd26a14e521f2b55e6b9de3aaa80d3ff7a37529
+    # via pytest
+pluggy==1.6.0 \
+    --hash=sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746
+    # via pytest
+pretend==1.0.9 \
+    --hash=sha256:e389b12b7073604be67845dbe32bf8297360ad9a609b24846fe15d86e0b7dc01
+    # via rfc3161-client test group
+pytest==9.0.3 \
+    --hash=sha256:2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9
+    # via rfc3161-client test group

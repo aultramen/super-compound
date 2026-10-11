@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { watch, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import {
   access,
   mkdtemp,
   mkdir,
   readFile,
+  rename,
   rm,
   symlink,
   utimes,
@@ -711,10 +712,24 @@ test("recordWorkPackageResult rejects mutable work-package control-state evidenc
   }
 });
 
+// Mutates `file` right after the durable ledger rename, before the post-commit recheck.
+// A deterministic seam: fs.watch delivery order and latency differ by platform (macOS FSEvents).
+function mutateAfterLedgerCommit(ledgerPath, file, content) {
+  const state = { mutated: false };
+  state.writeOptions = {
+    renameFile: async (from, to) => {
+      await rename(from, to);
+      if (!state.mutated && path.basename(to) === path.basename(ledgerPath)) {
+        state.mutated = true;
+        writeFileSync(file, content);
+      }
+    },
+  };
+  return state;
+}
+
 test("recordWorkPackageResult rechecks evidence after the durable ledger commit", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "work-package-post-commit-evidence-"));
-  let watcher;
-  let mutationTimeout;
   try {
     const brief = path.join(root, "goal.md");
     const pathsFile = path.join(root, "scope.json");
@@ -735,40 +750,28 @@ test("recordWorkPackageResult rechecks evidence after the durable ledger commit"
       status: "in-progress",
     });
 
-    const mutationObserved = new Promise((resolve, reject) => {
-      mutationTimeout = setTimeout(
-        () => reject(new Error("Timed out waiting for the durable ledger commit")),
-        5_000,
-      );
-      watcher = watch(path.dirname(created.ledgerPath), (_eventType, filename) => {
-        if (String(filename) !== path.basename(created.ledgerPath)) return;
-        watcher.close();
-        watcher = undefined;
-        clearTimeout(mutationTimeout);
-        mutationTimeout = undefined;
-        writeFileSync(evidencePath, '{"pass":"changed-at-commit"}\n');
-        resolve();
-      });
-    });
-    const recording = recordWorkPackageResult(root, {
+    const commit = mutateAfterLedgerCommit(
+      created.ledgerPath,
+      evidencePath,
+      '{"pass":"changed-at-commit"}\n',
+    );
+    const outcome = await recordWorkPackageResult(root, {
       runId: "post-commit-evidence-run",
       goalId: "goal-001",
       expectedVersion: 2,
       status: "implemented",
       verification: "evidence must remain fresh across the durable commit",
       evidence: freshEvidence(),
+      writeOptions: commit.writeOptions,
     }).then(
       (value) => ({ status: "fulfilled", value }),
       (error) => ({ status: "rejected", error }),
     );
 
-    await mutationObserved;
-    const outcome = await recording;
+    assert.equal(commit.mutated, true);
     assert.equal(outcome.status, "rejected");
     assert.match(outcome.error.message, /evidence.*digest mismatch/i);
   } finally {
-    clearTimeout(mutationTimeout);
-    watcher?.close();
     await rm(root, { recursive: true, force: true });
   }
 });
@@ -783,27 +786,16 @@ test('proof drift during verified commit is quarantined before completion is ret
   const created=await createWorkPackage(root,{...common,briefPath:'goal.md',pathsFile:'scope.json',expectedEvidence:EXPECTED_EVIDENCE,completionContract:proof.completionContract});
   await recordWorkPackageResult(root,{...common,status:'in-progress',expectedVersion:1});
   await recordWorkPackageResult(root,{...common,status:'implemented',expectedVersion:2,verification:'actual outcome asserted',evidence:freshEvidence()});
-  let watcher,timeout;
-  try {
-    const mutated=new Promise((resolve,reject)=>{
-      timeout=setTimeout(()=>reject(new Error('verified commit not observed')),5000);
-      watcher=watch(path.dirname(created.ledgerPath),(_event,name)=>{
-        if (String(name)!==path.basename(created.ledgerPath)) return;
-        watcher.close(); watcher=undefined; clearTimeout(timeout);
-        writeFileSync(path.join(root,proof.evidencePath),'{"pass":false,"error":"changed during commit"}');
-        resolve();
-      });
-    });
-    const transition=recordWorkPackageResult(root,{...common,status:'verified',expectedVersion:3,verification:'actual verification',evidence:freshEvidence()});
-    await assert.rejects(transition,/evidence.*digest mismatch/i);
-    await mutated;
-    const ledger=await readLedger(root,created.ledgerPath,'run',{checkEvidence:false});
-    assert.equal(ledger.goals['goal-001'].status,'blocked');
-    assert.equal(ledger.goals['goal-001'].statusReason.code,'COMPLETION_DRIFT');
-    assert.ok(ledger.goals['goal-001'].quarantinedEvidence);
-    assert.equal(ledger.goals['goal-001'].evidence,undefined);
-    assert.equal(ledger.ledgerVersion,5);
-  } finally {clearTimeout(timeout);watcher?.close();}
+  const commit=mutateAfterLedgerCommit(created.ledgerPath,path.join(root,proof.evidencePath),'{"pass":false,"error":"changed during commit"}');
+  const transition=recordWorkPackageResult(root,{...common,status:'verified',expectedVersion:3,verification:'actual verification',evidence:freshEvidence(),writeOptions:commit.writeOptions});
+  await assert.rejects(transition,/evidence.*digest mismatch/i);
+  assert.equal(commit.mutated,true);
+  const ledger=await readLedger(root,created.ledgerPath,'run',{checkEvidence:false});
+  assert.equal(ledger.goals['goal-001'].status,'blocked');
+  assert.equal(ledger.goals['goal-001'].statusReason.code,'COMPLETION_DRIFT');
+  assert.ok(ledger.goals['goal-001'].quarantinedEvidence);
+  assert.equal(ledger.goals['goal-001'].evidence,undefined);
+  assert.equal(ledger.ledgerVersion,5);
 });
 
 test("ledger version overflow is rejected before any bytes change", async () => {

@@ -1,5 +1,8 @@
 # /sc-audit Runtime Contract
 
+Standards: `.agent/context/standards.contract.md`; inspect scoped pins/evidence,
+exceptions/drift and administrator-owned merge protection; report limits.
+
 Purpose: strictly read-only security, compatibility, compliance, agent-surface, and release-readiness audit.
 
 knowledge-search.mjs "<scope>" first; Accepted decisions bind through authority; observed lessons are advisory.

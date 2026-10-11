@@ -9,6 +9,7 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import fs from "node:fs";
 import { promisify } from "node:util";
 import {validateConstraints, contextDigest, constraintBlock, relevantConstraints} from './instruction-context.mjs';
 import {verifyCompletionEvidence} from './verification-recipe.mjs';
@@ -724,7 +725,8 @@ export async function recordWorkPackageResult(root, options) {
     if (statusReason) goal.statusReason = statusReason;
     if (recovery) goal.recovery = recovery;
     incrementLedgerVersion(ledger);
-    await writeJsonAtomic(safeRoot, ledgerPath, ledger, lock);
+    // writeOptions.renameFile lets tests act exactly at the durable commit (as in memory-maintenance).
+    await writeJsonAtomic(safeRoot, ledgerPath, ledger, lock, options.writeOptions);
     if (evidence) {
       try {
         await assertEvidenceArtifactsFresh(safeRoot,goalId,evidence);
@@ -1347,13 +1349,14 @@ function validateStoredPath(value, label) {
   return value;
 }
 
-async function writeJsonAtomic(root, target, value, lock = {}) {
+async function writeJsonAtomic(root, target, value, lock = {}, writeOptions = {}) {
   return writeFileAtomic(root, target, `${JSON.stringify(value, null, 2)}\n`, {
     assertOwnership: lock.assertOwnership,
     label: "Work-package ledger",
     maxBytes: MAX_LEDGER_BYTES,
     mode: 0o600,
     fallbackOnBusy: false,
+    renameFile: writeOptions.renameFile,
   });
 }
 
@@ -1514,7 +1517,7 @@ async function main() {
   if (result.status === 'over_budget') process.exitCode = 2;
 }
 
-const isCli = process.argv[1] === fileURLToPath(import.meta.url);
+const isCli = process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1]);
 if (isCli) {
   main().catch((error) => {
     console.error(error.message);

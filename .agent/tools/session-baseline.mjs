@@ -626,7 +626,7 @@ export async function main(argv) {
   return 2;
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
   main(process.argv.slice(2)).then(
     (code) => process.exit(code),
     (error) => {

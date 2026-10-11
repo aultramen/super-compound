@@ -1,0 +1,11 @@
+{
+  "schema": "standards_bundle_v1",
+  "id": "core",
+  "version": "1.0.0",
+  "adoption": "candidate",
+  "rules": [
+    { "id": "CORE-REVIEW", "level": "mandatory", "owner": "organization-engineering-owner", "source": ".agent/standards/core.md#review", "check": "review" },
+    { "id": "CORE-TEST", "level": "mandatory", "owner": "organization-engineering-owner", "source": ".agent/standards/core.md#testing", "check": "test" },
+    { "id": "CORE-SECURITY", "level": "mandatory", "owner": "organization-security-owner", "source": ".agent/standards/core.md#security", "check": "security" }
+  ]
+}

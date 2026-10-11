@@ -274,7 +274,7 @@ export async function runCodexPilot({baseline,enhanced=root,out,model,effort='lo
  return {trials,controlTrials,preflight,verdict};
 }
 
-if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
+if(process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
  const [command,...args]=process.argv.slice(2);
  const options={};for(let i=0;i<args.length;i+=2){if(!args[i].startsWith('--')||!args[i+1])throw new Error('invalid pilot arguments');options[args[i].slice(2)]=args[i+1];}
  if(options['noise-aware']!==undefined){if(!['true','false'].includes(options['noise-aware']))throw new Error('noise-aware must be true or false');options.noiseAware=options['noise-aware']==='true';delete options['noise-aware'];}

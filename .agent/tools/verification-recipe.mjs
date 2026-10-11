@@ -1,9 +1,12 @@
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
 import {spawn,spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {rm} from 'node:fs/promises';
 import {readBoundedFile,writeFileAtomic,resolveRepositoryPath} from './file-state.mjs';
+import {parseStandardsConfig,assertFreshStandards,resolveEffectiveStandards,standardsPath} from './standards.mjs';
+import {verifyStandardsReceipt} from './standards-checks.mjs';
 
 const digest=content=>createHash('sha256').update(content).digest('hex');
 const readJson=async (root,ref)=>JSON.parse(await readBoundedFile(root,ref,{encoding:'utf8',maxBytes:4*1024*1024}));
@@ -14,9 +17,14 @@ function refs(value,label,{empty=false}={}) {
  if(!Array.isArray(value)||value.length>200||(!empty&&!value.length)||value.some(ref=>!text(ref))||new Set(value).size!==value.length)throw new Error(`${label} must be bounded unique references`);
  return value;
 }
-function validateContract(contract) {
+export function validateContract(contract) {
  if(contract?.schema!=='completion_contract_v1'||!text(contract.taskId)||!text(contract.goal))throw new Error('completion_contract_v1 task and goal required');
  refs(contract.authorityRefs,'authorityRefs');refs(contract.sourceRefs,'sourceRefs',{empty:true});
+ if(contract.standards!==undefined) {
+  const binding=contract.standards;
+  if(!binding||typeof binding!=='object'||Array.isArray(binding)||Object.keys(binding).some(key=>!['snapshotRef','digest','receiptRef'].includes(key))||!/^[a-f0-9]{64}$/.test(binding.digest??''))throw new Error('invalid completion standards binding');
+  refs([binding.snapshotRef,binding.receiptRef],'standards binding');
+ }
  if(!Array.isArray(contract.criteria)||!contract.criteria.length||contract.criteria.length>200)throw new Error('completion acceptance criteria required');
  const ids=new Set(),authorities=new Set(contract.authorityRefs.map(fileRef));
  for(const criterion of contract.criteria) {
@@ -24,9 +32,26 @@ function validateContract(contract) {
   ids.add(criterion.id);refs(criterion.requirementRefs,'criterion requirementRefs');
   if(criterion.requirementRefs.some(ref=>!authorities.has(fileRef(ref))))throw new Error('criterion requirementRefs must point to authorityRefs');
  }
+ if(contract.replayRequired!==undefined&&(contract.replayRequired!==true||contract.criteria.some(criterion=>!text(criterion.recipeRef))))throw new Error('replayRequired must be true with a recipeRef for every criterion');
  return contract;
 }
-const contractRefs=contract=>[...new Set([...contract.authorityRefs.map(fileRef),...contract.sourceRefs])];
+const contractRefs=contract=>[...new Set([...contract.authorityRefs.map(fileRef),...contract.sourceRefs,...(contract.standards?[contract.standards.snapshotRef,contract.standards.receiptRef]:[])])];
+async function assertCompletionStandards(root,contract) {
+ let configuration;
+ try {configuration=parseStandardsConfig(await readBoundedFile(root,'.agent/rules/project-config.md',{encoding:'utf8',maxBytes:4*1024*1024}));}
+ catch(error) {if(!error.message.startsWith('File does not exist:'))throw error;}
+ if(configuration?.enabled&&!contract.standards)throw new Error('Active pinned standards require a bound standards binding');
+ if(!contract.standards)return {status:'legacy',limitations:['No active pinned standards; organizational compliance is not established.']};
+ const binding=contract.standards,standards=await readJson(root,binding.snapshotRef);
+ if(binding.digest!==standards.effectiveStandardsDigest)throw new Error('Completion standards digest does not match the pinned snapshot identity');
+ await assertFreshStandards(root,standards);
+ const sources=contract.sourceRefs.map(standardsPath).filter(ref=>!/^\.(?:scratch|debug|agent)(?:\/|$)/.test(ref));
+ const required=await resolveEffectiveStandards(root,sources.length?sources:['.agent/rules/project-config.md']);
+ if(required.status!=='ready'||required.scopes.some(scope=>!standards.scopes.some(bound=>bound.path===scope.path)))throw new Error(sources.length?'Completion standards scope does not cover contract sources':'Completion requires full standards for all configured scopes');
+ const receipt=await verifyStandardsReceipt(root,standards,await readJson(root,binding.receiptRef));
+ if(!receipt.allowed)throw new Error(`Completion standards verification failed: ${receipt.issues.join('; ')}`);
+ return {status:'ready',...binding,scopes:standards.scopes,limitations:standards.limitations,waivedRules:standards.checks.flatMap(check=>check.waivedRules.map(id=>({scope:check.scope,id})))};
+}
 function environmentFingerprint(recipe) {
  const names=recipe.envRefs??[];
  refs(names,'envRefs',{empty:true});
@@ -81,6 +106,11 @@ const outcomePassed=result=>result.status==='pass'&&(!result.counts||(result.cou
 function validateCommand(step) {
  if(!step||typeof step.command!=='string'||!step.command.trim()||!Array.isArray(step.args)||step.args.length>100||step.args.some(a=>typeof a!=='string'||a.includes('\0')))throw new Error('recipe commands require executable and argv; no shell strings');
 }
+function recipeTimeout(recipe,contract) {
+ const maximum=contract?.standards?1800000:60000,timeoutMs=recipe.timeoutMs??(contract?.standards?300000:30000);
+ if(!Number.isSafeInteger(timeoutMs)||timeoutMs<1||timeoutMs>maximum)throw new Error(`recipe step timeout must be 1..${maximum}ms`);
+ return timeoutMs;
+}
 function execute(root,phase,step,timeoutMs) {
  validateCommand(step);
  const result=spawnSync(step.command,step.args,{cwd:root,encoding:'utf8',timeout:timeoutMs,maxBuffer:2*1024*1024,windowsHide:true});
@@ -89,8 +119,6 @@ function execute(root,phase,step,timeoutMs) {
 
 export async function runVerificationRecipe(root,recipe) {
  if(!recipe||typeof recipe.id!=='string'||!recipe.id.trim()||!['LOCAL','MOCK','REAL'].includes(recipe.environment))throw new Error('invalid verification recipe identity');
- const timeoutMs=recipe.timeoutMs??30000;
- if(!Number.isSafeInteger(timeoutMs)||timeoutMs<1||timeoutMs>60000)throw new Error('recipe step timeout must be 1..60000ms');
  for(const phase of ['doctor','drive','cleanup'])if(!Array.isArray(recipe[phase])||recipe[phase].length>20||(phase!=='cleanup'&&!recipe[phase].length))throw new Error(`recipe ${phase} commands required`);
  [...recipe.doctor,...recipe.drive,...recipe.cleanup,...(recipe.launch?[recipe.launch]:[])].forEach(validateCommand);
  await resolveRepositoryPath(root,recipe.evidencePath);
@@ -100,11 +128,13 @@ export async function runVerificationRecipe(root,recipe) {
  if(recipe.contractPath||recipe.recipeRef||recipe.outcomesPath) {
   if(![recipe.contractPath,recipe.recipeRef,recipe.outcomesPath].every(text))throw new Error('bound recipes require contractPath, recipeRef and outcomesPath');
   contract=validateContract(await readJson(root,recipe.contractPath));
+  await assertCompletionStandards(root,contract);
   contractDigest=digest(await readBoundedFile(root,recipe.contractPath));
   const recipeBytes=await readBoundedFile(root,recipe.recipeRef);
   if(JSON.stringify(JSON.parse(recipeBytes.toString('utf8')))!==JSON.stringify(recipe))throw new Error('recipe must match its saved recipeRef');
   recipeFileDigest=digest(recipeBytes);
  }
+ const timeoutMs=recipeTimeout(recipe,contract);
  await assertRecipePaths(root,recipe,contract);
  const sources=[];
  if(!Array.isArray(recipe.sourceRefs)||recipe.sourceRefs.length>100)throw new Error('bounded sourceRefs required');
@@ -120,7 +150,7 @@ export async function runVerificationRecipe(root,recipe) {
   await new Promise(resolve=>setImmediate(resolve));
   evidence.launch={command:recipe.launch.command,args:recipe.launch.args,pid:child.pid??null};
  }
- let persisted=false;
+ let persisted=false,persistedEvidence;
  try {
   if(launchError)evidence.launch.error=launchError;
   for(const phase of launchError?[]:['doctor','drive']) {
@@ -159,12 +189,14 @@ export async function runVerificationRecipe(root,recipe) {
      await assertSnapshot(root,evidence.sources,contractRefs(contract),'source');
      await assertSnapshot(root,evidence.artifacts??[],evidence.outcomes?.criteria.flatMap(result=>result.evidenceRefs)??[],'artifact');
      if(digest(await readBoundedFile(root,recipe.outcomesPath))!==evidence.outcomesDigest||digest(await readBoundedFile(root,recipe.contractPath))!==contractDigest||digest(await readBoundedFile(root,recipe.recipeRef))!==recipeFileDigest||JSON.stringify(environmentFingerprint(recipe))!==JSON.stringify(runtimeFingerprint))throw new Error('verification inputs or outcomes changed during execution/cleanup');
+     if(contract.standards)await assertCompletionStandards(root,contract);
     } catch(error) {evidence.integrityError=error.message;evidence.pass=false;}
    }
-   await writeFileAtomic(root,recipe.evidencePath,`${JSON.stringify(evidence,null,2)}\n`,{maxBytes:4*1024*1024,fallbackOnBusy:false});
+   persistedEvidence=`${JSON.stringify(evidence,null,2)}\n`;
+   await writeFileAtomic(root,recipe.evidencePath,persistedEvidence,{maxBytes:4*1024*1024,fallbackOnBusy:false});
   }
  }
- return {pass:evidence.pass&&evidence.cleanup.pass,evidencePath:recipe.evidencePath};
+ return {pass:evidence.pass&&evidence.cleanup.pass,evidencePath:recipe.evidencePath,digest:digest(persistedEvidence)};
 }
 
 function assertExecution(evidence,recipe) {
@@ -192,7 +224,7 @@ async function assertRegression(root,outcome,evidence,contract,criterion) {
  }
 }
 
-export async function verifyCompletionEvidence(root,{contractPath,contractDigest,evidenceRefs}={}) {
+export async function verifyCompletionEvidence(root,{contractPath,contractDigest,evidenceRefs,replayed}={}) {
  const verdict={allowed:false,status:'Needs Validation',criteria:[],issues:[]};
  let contract,currentDigest;
  try {
@@ -200,6 +232,7 @@ export async function verifyCompletionEvidence(root,{contractPath,contractDigest
   currentDigest=digest(content);
   if(!/^[a-f0-9]{64}$/.test(contractDigest)||currentDigest!==contractDigest)throw new Error('completion contract pin is missing or stale');
   contract=validateContract(JSON.parse(content.toString('utf8')));
+  verdict.standards=await assertCompletionStandards(root,contract);
   // Opening each authority/source is required even before any proof is considered.
   for(const ref of contractRefs(contract))await readBoundedFile(root,ref,{maxBytes:4*1024*1024});
  } catch(error) {verdict.issues.push(error.message);return verdict;}
@@ -217,6 +250,7 @@ export async function verifyCompletionEvidence(root,{contractPath,contractDigest
      recipe[phase].forEach(validateCommand);
     }
     if(recipe.launch)validateCommand(recipe.launch);
+    recipeTimeout(recipe,contract);
     refs(recipe.sourceRefs,'recipe sourceRefs',{empty:true});
     await assertRecipePaths(root,recipe,contract);
     proofPath=recipe.evidencePath;
@@ -258,6 +292,7 @@ export async function verifyCompletionEvidence(root,{contractPath,contractDigest
    if(outcome.expected!==criterion.expected||!text(outcome.observed)||!['pass','fail','skip'].includes(outcome.status))throw new Error('outcome does not match required acceptance criterion');
    if(recipe&&['visual','manual'].includes(criterion.method))assertInspection(outcome.inspection,criterion);
    if(criterion.method==='regression')await assertRegression(root,outcome,evidence,contract,criterion);
+   if(contract.replayRequired&&replayed?.get(criterion.recipeRef)!==digest(content))throw new Error('fresh replay required: evidence was not produced by this verification');
    result.observed=outcome.observed;
    result.status=recipeFailure??(outcomePassed(outcome)?'pass':outcome.status==='skip'?'skip':'fail');
    if(result.status!=='pass')result.issues.push(`acceptance outcome ${result.status}`);
@@ -270,7 +305,7 @@ export async function verifyCompletionEvidence(root,{contractPath,contractDigest
  return verdict;
 }
 
-if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
+if(process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
  const recipe=JSON.parse(await readBoundedFile(process.cwd(),process.argv[2],{encoding:'utf8'}));
  const result=await runVerificationRecipe(process.cwd(),recipe);
  process.stdout.write(`${JSON.stringify(result)}\n`);if(!result.pass)process.exitCode=1;

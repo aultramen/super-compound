@@ -1,0 +1,97 @@
+{
+ "id": "d09-challenges",
+ "environment": "REAL",
+ "evidencePath": ".scratch/d09/evidence/challenges-receipt.json",
+ "sourceRefs": [
+  ".github/qualification/d09/d09.mjs",
+  ".github/qualification/d09/d09.py",
+  ".github/qualification/d09/inputs.json",
+  ".github/qualification/d09/cases.json",
+  ".github/qualification/d09/security-dispositions.json",
+  ".github/qualification/d09/requirements-linux-cp312.txt",
+  ".github/qualification/d09/requirements-tools.txt",
+  ".agent/tools/file-state.mjs",
+  ".agent/tools/instruction-context.mjs",
+  ".agent/tools/standards-checks.mjs",
+  ".agent/tools/standards.mjs",
+  ".agent/tools/verification-recipe.mjs",
+  ".agent/tools/verified-promise.mjs",
+  ".agent/tools/work-package.mjs",
+  ".agent/rules/project-config.md",
+  ".github/workflows/ci.yml"
+ ],
+ "contractPath": ".github/qualification/d09/contract-local.json",
+ "recipeRef": ".github/qualification/d09/recipe-challenges.json",
+ "outcomesPath": ".scratch/d09/evidence/challenges-outcomes.json",
+ "timeoutMs": 60000,
+ "doctor": [
+  {
+   "command": "node",
+   "args": [
+    ".github/qualification/d09/d09.mjs",
+    "challenge",
+    "doctor"
+   ]
+  }
+ ],
+ "drive": [
+  {
+   "command": "node",
+   "args": [
+    ".github/qualification/d09/d09.mjs",
+    "challenge",
+    "X1"
+   ]
+  },
+  {
+   "command": "node",
+   "args": [
+    ".github/qualification/d09/d09.mjs",
+    "challenge",
+    "X2"
+   ]
+  },
+  {
+   "command": "node",
+   "args": [
+    ".github/qualification/d09/d09.mjs",
+    "challenge",
+    "X3"
+   ]
+  },
+  {
+   "command": "node",
+   "args": [
+    ".github/qualification/d09/d09.mjs",
+    "challenge",
+    "X4"
+   ]
+  },
+  {
+   "command": "node",
+   "args": [
+    ".github/qualification/d09/d09.mjs",
+    "challenge",
+    "X6"
+   ]
+  },
+  {
+   "command": "node",
+   "args": [
+    ".github/qualification/d09/d09.mjs",
+    "outcomes",
+    "challenges"
+   ]
+  }
+ ],
+ "cleanup": [
+  {
+   "command": "node",
+   "args": [
+    ".github/qualification/d09/d09.mjs",
+    "challenge",
+    "cleanup"
+   ]
+  }
+ ]
+}

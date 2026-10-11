@@ -13,7 +13,9 @@ that cleanup owns. Fail visibly if cleanup removes evidence.
 Use `node .agent/tools/verification-recipe.mjs <recipe.json>` for a deterministic
 local harness. Shape: id, environment (`LOCAL`, `MOCK`, `REAL`), evidencePath,
 sourceRefs, optional launch command, doctor/drive/cleanup command arrays,
-optional timeoutMs (each step <=60 seconds). Each command is `{command,args}`;
+optional timeoutMs (legacy default 30 seconds, maximum 60 seconds per step).
+Standards-bound recipes default to 5 minutes and permit at most 30 minutes per
+step for stack validation. Each command is `{command,args}`;
 execute argv directly, never concatenate shell input. Use project scripts and
 existing installed tools. Empty launch means no service is necessary.
 
@@ -63,3 +65,11 @@ and opening/comparing the artifact. Regression criteria bind `regression:
 {beforeRef, afterRef}` to actual failing and passing evidence. Observation proof
 also pins `contractDigest`. Do not manufacture result JSON from confidence;
 the maintained harness/assertion or actual recorded inspection produces it.
+
+For active pinned standards, resolve and save the scoped standards snapshot,
+execute its applicable gates, and save their receipt before running the acceptance
+recipe. Bind both references and the effective digest in the completion contract.
+The recipe fingerprints these existing gate inputs and rechecks their freshness
+after drive/cleanup. Store gate outputs under `.scratch/standards/`; acceptance
+outputs cannot alias the snapshot or receipt. This preserves the existing
+completion gate and approval boundaries rather than creating a second status path.

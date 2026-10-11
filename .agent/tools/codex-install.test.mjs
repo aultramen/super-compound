@@ -17,7 +17,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
-import {isActiveAsset} from './active-assets.mjs';
+import {isDistributionAsset} from './active-assets.mjs';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const canonicalDirectories = [
@@ -26,6 +26,7 @@ const canonicalDirectories = [
   "skills",
   "templates",
   "rules",
+  "standards",
   "agents",
   "evals",
   "hooks",
@@ -55,7 +56,7 @@ function walkCanonicalFiles(root) {
   return walkFiles(root).filter((path) => {
     const segments = path.split("/");
     const directory = normalizePath(relative(join(repoRoot, '.agent'), root));
-    return isActiveAsset(`.agent/${directory}/${path}`) && !segments.includes("__pycache__") && !/\.(?:pyc|pyo)$/i.test(path);
+    return isDistributionAsset(`.agent/${directory}/${path}`) && !segments.includes("__pycache__") && !/\.(?:pyc|pyo)$/i.test(path);
   });
 }
 

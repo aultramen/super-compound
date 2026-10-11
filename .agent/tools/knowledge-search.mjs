@@ -324,6 +324,6 @@ function main(argv) {
     return requireComplete && !coverage.complete ? 2 : 0;
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
     process.exit(main(process.argv));
 }

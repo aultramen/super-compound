@@ -1,0 +1,1233 @@
+{
+ "schema": "d09_security_dispositions_v1",
+ "capturedAt": "2026-10-10T20:15:16Z",
+ "sources": [
+  {
+   "id": "glibc",
+   "path": "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json",
+   "sha256": "da0ead8164be04d25746a01be0aedc5bc388851294f55ca20e3d71a539f6052a"
+  },
+  {
+   "id": "glibc-s1",
+   "path": "control/d14-preparation-20261010-2004/research/glibc/glibc-s1-version-check.json",
+   "sha256": "b76c68e4b2a6402ba98d1f4b39555557340c01b9813ef90ac7028e19e64bf2c2"
+  },
+  {
+   "id": "debian",
+   "path": "control/d14-preparation-20261010-2004/research/debian/debian-report.json",
+   "sha256": "afde182638a3809e5ec882c561cd0294bfd7458d08f3f5838e169bb6181fa974"
+  },
+  {
+   "id": "debian-tracker",
+   "path": "control/d14-preparation-20261010-2004/research/debian/derived/tracker-analysis.json",
+   "sha256": "10c9a16162c0d8282a8db81bfe4a40a16740647e19667039f7040d2af6619bcf"
+  },
+  {
+   "id": "debian-tracker-raw",
+   "path": "control/d14-preparation-20261010-2004/research/debian/raw/tracker/security-tracker.debian.org_tracker_data_json",
+   "sha256": "fcb5553821379faa4832185187ddd47425613ffbcda083a0981e26c82ced2b91"
+  },
+  {
+   "id": "debian-reach",
+   "path": "control/d14-preparation-20261010-2004/research/debian/derived/verifier-static-import-reachability.json",
+   "sha256": "b8dab9354a98871a468ea20540ad2a25abc9a9eb5e752b77ed5fbc7ced63b753"
+  },
+  {
+   "id": "python",
+   "path": "control/d14-preparation-20261010-2004/research/python/python-report.json",
+   "sha256": "5696110f17baf9899f92693543ca75dd90b6a17d5945b01eb0d4878a95016373"
+  },
+  {
+   "id": "python-item5",
+   "path": "control/d14-preparation-20261010-2004/research/python/item5-cpython.json",
+   "sha256": "85232c6cef8a6fb70da131c3b36e3e142b895a11d72fc7950afaf09a6a2ef30b"
+  },
+  {
+   "id": "crates",
+   "path": "control/d14-preparation-20261010-2004/research/crates/crates-report.json",
+   "sha256": "a0a679eeef7c673dfabaeea948a8b85f7c428bd882addca61275d820f592ec7c"
+  },
+  {
+   "id": "pins-facts",
+   "path": "control/d14-preparation-20261010-2004/pins/d09-harness-facts.json",
+   "sha256": "c423cf8ea196edf0e91888a9829579fe3966a9050f71fef7e0c5422ebf3adc6b"
+  },
+  {
+   "id": "pins-pytest",
+   "path": "control/d14-preparation-20261010-2004/pins/main-session/pypi-records-20261010T220054Z.json",
+   "sha256": "58d15c7c1acbf55e13138d353e81cdec076cdf57347010129408173523f41077"
+  },
+  {
+   "id": "pins-pytest-raw",
+   "path": "control/d14-preparation-20261010-2004/pins/main-session/raw/pypi-pytest-9.0.3.json",
+   "sha256": "cc591fefe6e4a7b22355e88a83c3b28c6b652b0983db43f19066b9912c57689d"
+  },
+  {
+   "id": "pins-debian",
+   "path": "control/d14-preparation-20261010-2004/pins/d09-harness-debian/fetch-records.json",
+   "sha256": "bdd79c0186e8b9c72f62795481165adad139495a1ce1a0264f5e02be42bfcd29"
+  },
+  {
+   "id": "checks-main",
+   "path": "control/d14-preparation-20261010-2004/checks/main-session-verifications.txt",
+   "sha256": "e9483b7df46a6b4329571a961b654ed61ede3df0b67e91784a782fba0f2da283"
+  },
+  {
+   "id": "checks-symbols",
+   "path": "control/d14-preparation-20261010-2004/checks/main-session-symbol-scan.txt",
+   "sha256": "462ae16fbb6ffd298fb90b6aa0840c8b7d53f4db2d8d1ae0ab187d63159d47c7"
+  },
+  {
+   "id": "review",
+   "path": "control/d14-preparation-20261010-2004/review/advisory-review.md",
+   "sha256": "604ac123a56778542dc237c787c6c34abdb61f159fe457fc6d6a0a222e2fc6eb"
+  },
+  {
+   "id": "review-facts",
+   "path": "control/d14-preparation-20261010-2004/review/raw/fetched-facts.json",
+   "sha256": "1e8244e0df6f6d3b76fa7f5a40b4338c44b9b514e1516d0aa17d43253e3e5b8b"
+  },
+  {
+   "id": "d12-review",
+   "path": "control/d12-candidate-implementation-20261010-0704/review/review.md",
+   "sha256": "480c1427b5430f7ad11206b5d626ede01cb1e30df5e7d09e5bef3ee8d6a7a9df"
+  },
+  {
+   "id": "d11-oci",
+   "path": "control/d09-python-linux-preflight-20261010/oci/report.json",
+   "sha256": "034509d66fd8f74ab8f943b6f3a14908742dcf6a2b165eaeedc071e509921fcc"
+  },
+  {
+   "id": "pip-vendor",
+   "path": "control/runtime-admission-preflight-20261010-0736/os/pip-vendor-disposition.json",
+   "sha256": "924f6574bf9b260115e4dd86490090b3a756fe253115d28c3d157271aefd223b"
+  },
+  {
+   "id": "expat-cve",
+   "path": "control/d06-runtime-security-checklist-20261010.expat-cve-77214.response",
+   "sha256": "bef619b1e55db6b10d9f18ff3524310dfc10b685bae02241734b17f44dfeeea1"
+  },
+  {
+   "id": "gh-version",
+   "path": "control/runtime-compatibility-gh-version.stdout.log",
+   "sha256": "355ac3f605868e2bf8ed493b5222477e935e0bf135d6bad993eb7acf11ffa2bd"
+  },
+  {
+   "id": "zlib-reach",
+   "path": "control/d14-preparation-20261010-2004/checks/main-session-zlib-reachability.txt",
+   "sha256": "40256128f808619c5e6336a06cb8b67d987c4486f526ebd26d1551570379a32e"
+  },
+  {
+   "id": "zlib-scan",
+   "path": "control/d14-preparation-20261010-2004/checks/main-session-zlib-import-scan.json",
+   "sha256": "2d47875ea015e273aa8aea9654d90ab2227f447121d6d02b5510af36ec422f71"
+  },
+  {
+   "id": "process-closure",
+   "path": "control/d14-preparation-20261010-2004/research/glibc/process-closure.json",
+   "sha256": "e814d4266536c28d3fa58f771fa659237ba890557748c991de5f774014d37e54"
+  }
+ ],
+ "items": [
+  {
+   "id": "C01-L",
+   "residual": true,
+   "component": "D12 control C01, clause 1 only (reject the Expat 2.8.5 image before Python starts), limited to the D09 verifier capsule",
+   "package": "control:D12-C01",
+   "version": "D12 review.md line 29",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "C01-L replaces only C01 clause 1 and only for the D09 verifier capsule: the pinned image is admitted for the two D09 source verifications only while the S3 import guard is active in every verifier process before any verifier module is imported, with a per-process /proc/self/maps probe evaluated under S1-S4. C01 clauses 2 and 3 stay in force. The D06 guard and its FAIL are unchanged; the image stays rejected for golden-reference, application and G1 use. Component disposition: R-12-EXPAT-PYEXPAT.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d12-candidate-implementation-20261010-0704/review/review.md#L29",
+    "control/d09-python-linux-preflight-20261010/oci/report.json#passiveComponents.Expat",
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#B5"
+   ]
+  },
+  {
+   "id": "C10-L",
+   "residual": true,
+   "component": "D12 control C10, clause 1 only (reuse verification-recipe.mjs and verified-promise.mjs unchanged)",
+   "package": "control:D12-C10",
+   "version": "D12 review.md line 38",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "host-only",
+   "reachable": false,
+   "mitigation": "Superseded by the approved opt-in replay gate change in those two files (replayRequired in validateContract, a digest check in verifyCompletionEvidence, --replay in verified-promise.mjs); contracts without replayRequired behave as before. The condition in C10 itself (if origin cannot distinguish fabrication, remain BLOCKED) is what the change remedies: X1 RED shows the unchanged gate allowing a coherent forged receipt and X1 GREEN the changed gate denying it (AC-15). C10 clauses 2 to 4 stay in force.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d12-candidate-implementation-20261010-0704/review/review.md#L38",
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#(1) Gate change: no fail-open, no weakening"
+   ]
+  },
+  {
+   "id": "R-01-OPENSSL-TRUST",
+   "residual": true,
+   "component": "Debian OpenSSL 3.5.7 (system libcrypto.so.3 and libssl.so.3)",
+   "package": "deb:libssl3t64",
+   "version": "3.5.7-1~deb13u3",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libcrypto.so",
+    "libssl.so"
+   ],
+   "loaded": "yes",
+   "reachable": true,
+   "mitigation": "Trusted through the Debian archive and dpkg: AC-03 requires libcrypto.so.3 and libssl.so.3 byte-equal to the members of the signed libssl3t64 .deb, dpkg --verify clean and exactly one libcrypto.so.3 mapped. Debian tracker: 0 open records for openssl 3.5.7-1~deb13u3 (287 fixed at or before it, 33 not affected). No independent OpenSSL qualification.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.namedSources[source=openssl].counts",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#findings[id=DEB-07].fact"
+   ]
+  },
+  {
+   "id": "R-02-EGRESS-NAME-ONLY",
+   "residual": true,
+   "component": "Egress control of bridge-network container steps",
+   "package": "harness:docker-network",
+   "version": "--dns 127.0.0.1 --dns-search . plus per-step --add-host",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Bridge-network steps (fetch, TUF refresh, positives) restrict names (dead DNS plus a per-step --add-host allowlist), not raw IP connections. Only --network none steps prove zero egress (N-MISSING, T-NONET, admission negatives). All code that runs in these containers is hash-pinned (R-30).",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#(2) Harness false-green hunt: what holds / Network",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-8674].reachability.note"
+   ]
+  },
+  {
+   "id": "R-03-DOCKER-TCB",
+   "residual": true,
+   "component": "Docker daemon, kernel and host as trusted computing base; build and capture containers not --read-only",
+   "package": "host:docker",
+   "version": "daemon and kernel as recorded by init",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "host-only",
+   "reachable": false,
+   "mitigation": "The daemon, kernel and host are trusted (the host fs.protected_hardlinks value is UNKNOWN). Build and capture containers are not --read-only because dpkg must write the root filesystem; they are ephemeral --rm containers with --cap-drop ALL plus the minimum caps and no-new-privileges, and install only hash-pinned .debs. Verifier containers run --read-only with a private tmpfs /tmp.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#(2) Harness false-green hunt: what holds / Read-only mounts",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-86805].reachability.note"
+   ]
+  },
+  {
+   "id": "R-04-CONTAINERD-ID",
+   "residual": true,
+   "component": "Image identity as reported by the Docker image store",
+   "package": "host:docker-image-store",
+   "version": "classic or containerd store, recorded by init",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "host-only",
+   "reachable": false,
+   "mitigation": "init records the image-store and driver type. Identity accepts Id == pinned config digest (classic store) or Id == pinned index digest (containerd store), nothing else, plus RepoDigests containing the pinned index digest and RootFS.Layers == the pinned diffIds (AC-02, S5). The metadata reported by the daemon is trusted (R-03). The hosted CI image 20261004.327.1 ships Docker 28.0.4; the local D14 store type is UNKNOWN until init records it.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/review/raw/fetched-facts.json#facts[id=RF-1].extracted",
+    "control/d14-preparation-20261010-2004/review/raw/fetched-facts.json#facts[id=RF-2].claim",
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#Non-blocking / 12"
+   ]
+  },
+  {
+   "id": "R-05-CRYPTOGRAPHY-STATIC-OPENSSL",
+   "residual": true,
+   "component": "cryptography 50.0.2 with statically linked OpenSSL 4.0.3 (a second OpenSSL in the verifier process)",
+   "package": "wheel:cryptography",
+   "version": "50.0.2 (OpenSSL 4.0.3 29 Sep 2026)",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": true,
+   "mitigation": "0 of 43 OpenSSL 4.0 advisories affect 4.0.3 (every 4.0 range ends before 4.0.3). The static copy exports no OpenSSL symbols (ELF check on cryptography/hazmat/bindings/_rust.abi3.so), so it cannot shadow the system libcrypto.so.3 that W binds, and exactly one libcrypto.so.3 is mapped (S4). The basename _rust.abi3.so is shared with W, so it is not used as a probe prefix.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item2_openssl.facts[0]",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item2_openssl.facts[1]",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#verdict.item2_openssl_4_0_3"
+   ]
+  },
+  {
+   "id": "R-06-TSA-TAMPER-NOT-REJECTED",
+   "residual": true,
+   "component": "sigstore-python RFC 3161 signed-timestamp handling",
+   "package": "wheel:sigstore",
+   "version": "4.5.0",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": true,
+   "mitigation": "By design sigstore verify identity accepts a bundle whose signed timestamp fails to verify while the transparency-log integrated time verifies (verifier.py:146-150). CHAR-TSA (AC-12) records this as a characterization only; it is never counted or described as a rejection. tsa-direct (AC-11) exercises the rfc3161-client library API separately.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#(3) cases.json compared with the sigstore 4.5.0 source / Characterization"
+   ]
+  },
+  {
+   "id": "R-07-HOST-RUNNER",
+   "residual": true,
+   "component": "Host base: Docker Desktop/WSL2 locally, GitHub-hosted ubuntu-24.04 in CI, Node v24.15.0, gh 2.95.0",
+   "package": "host:runner",
+   "version": "Node v24.15.0; gh 2.95.0; CI image 20261004.327.1",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "host-only",
+   "reachable": false,
+   "mitigation": "The host OS, Docker Desktop/WSL2 and the hosted runner are outside D09. init requires process.version == inputs.host.nodeVersion (v24.15.0, equal to the ci.yml setup-node pin) or STOPs with S5, and the receipt fingerprint binds platform and Node version. gh (2.95.0 observed) is used only for read-only GETs in reconcile against the pinned repository (inputs.repository). Node and gh themselves are not qualified by D09.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/review/raw/fetched-facts.json#facts[id=RF-1].extracted",
+    "control/runtime-compatibility-gh-version.stdout.log#L1",
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#Non-blocking / 8"
+   ]
+  },
+  {
+   "id": "R-08-AI-ADVISORY",
+   "residual": true,
+   "component": "AI-assisted harness authoring and AI advisory review",
+   "package": "process:review",
+   "version": "advisory review 2026-10-10T21:52Z",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "host-only",
+   "reachable": false,
+   "mitigation": "Harness authoring and the Phase A review were AI-assisted; the review is labelled advisory and grants no approval or authority. Owner acceptance is owner self-review (R-38). No independent approval is implied.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#Label"
+   ]
+  },
+  {
+   "id": "R-10-ZLIB",
+   "residual": true,
+   "component": "zlib (libz.so.1, mapped through zlib, binascii and libcrypto.so.3)",
+   "package": "deb:zlib1g",
+   "version": "1:1.3.dfsg+really1.3.1-1+b1",
+   "advisories": [
+    "CVE-2026-27171",
+    "CVE-2026-85091"
+   ],
+   "severity": "UNKNOWN",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libz.so"
+   ],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Loaded (libz.so.1 through zlib, binascii and libcrypto.so.3); not reachable. CVE-2026-27171 (no-dsa minor, CPU loop in x2nmodp): its entry points crc32_combine, crc32_combine64, crc32_combine_gen and crc32_combine_gen64 are defined only by libz.so.1.3.1 and imported by none of the 753 ELF objects in the four image layers and the 31 wheels; inside libz only the two wrappers reach them (objdump). CVE-2026-85091 (untriaged, gz_vacate overflow through non-blocking gzwrite/gzprintf, stated for 1.3.1.2 through 1.3.2 while the image has 1.3.1): the gz* entry points are imported only by usr/bin/dpkg-deb and libapt-pkg.so.7.0.0, both outside the verifier process closure; mapping dpkg-deb is S4 (not in runtime.files) and mapping libapt-pkg is S3 (runtime.blockedObjects). The version-range reading is recorded, not relied on. No fix in trixie; residual, accepted only through ownerAcceptance. No waiver.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#findings[id=DEB-07].fact",
+    "control/d14-preparation-20261010-2004/research/debian/derived/tracker-analysis.json#namedSources[source=zlib].nonClearedItems",
+    "control/d14-preparation-20261010-2004/research/debian/derived/verifier-static-import-reachability.json#targets.zlib",
+    "control/d14-preparation-20261010-2004/research/debian/derived/verifier-static-import-reachability.json#targets.binascii",
+    "control/d14-preparation-20261010-2004/checks/main-session-zlib-reachability.txt#CVE-2026-27171",
+    "control/d14-preparation-20261010-2004/checks/main-session-zlib-reachability.txt#CVE-2026-85091",
+    "control/d14-preparation-20261010-2004/checks/main-session-zlib-import-scan.json#importers",
+    "control/d14-preparation-20261010-2004/research/debian/raw/tracker/security-tracker.debian.org_tracker_data_json#zlib.CVE-2026-85091.description"
+   ]
+  },
+  {
+   "id": "R-11-LIBLZMA",
+   "residual": true,
+   "component": "XZ Utils liblzma (liblzma.so.5 through _lzma)",
+   "package": "deb:liblzma5",
+   "version": "5.8.1-1+deb13u1",
+   "advisories": [
+    "TEMP-1147318-639065",
+    "GHSA-5qpq-xqfv-j9pg",
+    "DSA-6549-1"
+   ],
+   "severity": "UNKNOWN",
+   "fixAvailable": true,
+   "fixedIn": "5.8.1-1+deb13u2",
+   "objects": [
+    "liblzma",
+    "_lzma."
+   ],
+   "loaded": "no",
+   "reachable": true,
+   "mitigation": "Present, not loaded. The fix (5.8.1-1+deb13u2 in trixie-security, DSA-6549-1, .deb SHA256 b38acab3...84ec) is not applied because it would change the admitted image identity. _lzma is statically reachable (sigstore._cli -> sigstore.oidc -> webbrowser -> shutil -> lzma; requests.utils -> zipfile -> lzma), so non-loading depends on the S3 guard (lzma and _lzma blocked; shutil and zipfile handle the ImportError) in every verifier process, including venv creation. Any mapping STOPs with S1 (and with S3 through blockedObjects).",
+   "stopIfMapped": "S1",
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#findings[id=DEB-01].fact",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.xzUtilsDetail",
+    "control/d14-preparation-20261010-2004/checks/main-session-verifications.txt#Debian package versions from saved indexes: liblzma5 5.8.1-1+deb13u2",
+    "control/d14-preparation-20261010-2004/research/debian/derived/verifier-static-import-reachability.json#targets._lzma.chain"
+   ]
+  },
+  {
+   "id": "R-12-EXPAT-PYEXPAT",
+   "residual": true,
+   "component": "Expat 2.8.5 bundled in CPython 3.12.15 pyexpat",
+   "package": "cpython:pyexpat",
+   "version": "expat_2.8.5 in pyexpat.cpython-312-x86_64-linux-gnu.so",
+   "advisories": [
+    "CVE-2026-77214"
+   ],
+   "severity": "HIGH",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "pyexpat.",
+    "libexpat"
+   ],
+   "loaded": "no",
+   "reachable": true,
+   "mitigation": "Present, not loaded. CVE-2026-77214 (XML_ParseBuffer heap over-read, CVSS 3.1 8.2 HIGH, Expat <= 2.8.5) is fixed upstream in Expat 2.9.0 (commit 13c5f63), but no CPython 3.12 release bundles it. pyexpat, xml.parsers.expat and _elementtree are blocked by the S3 guard before any verifier import; the only deliberate load is the seeded an-pyexpat-guard negative (AC-13), which must be reported as S3. Any mapping in a verifier process STOPs with S3. Admission of the image rests on C01-L.",
+   "stopIfMapped": "S3",
+   "stop": false,
+   "evidence": [
+    "control/d09-python-linux-preflight-20261010/oci/report.json#passiveComponents.Expat",
+    "control/d06-runtime-security-checklist-20261010.expat-cve-77214.response#containers.cna.metrics",
+    "control/d06-runtime-security-checklist-20261010.expat-cve-77214.response#containers.cna.affected",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.facts[0]",
+    "control/d14-preparation-20261010-2004/research/debian/derived/verifier-static-import-reachability.json#targets.pyexpat"
+   ]
+  },
+  {
+   "id": "R-13-SQLITE",
+   "residual": true,
+   "component": "SQLite (libsqlite3.so.0 through _sqlite3)",
+   "package": "deb:libsqlite3-0",
+   "version": "3.46.1-7+deb13u2",
+   "advisories": [
+    "CVE-2021-45346",
+    "CVE-2025-70873",
+    "CVE-2026-50812",
+    "CVE-2026-50813"
+   ],
+   "severity": "UNKNOWN",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libsqlite3",
+    "_sqlite3."
+   ],
+   "loaded": "no",
+   "reachable": true,
+   "mitigation": "Present, not loaded: _sqlite3 is not statically reachable from the verifier, and sqlite3 and _sqlite3 are blocked by the S3 guard; any mapping STOPs with S3. Four open trixie tracker records (2 unimportant, 2 no-dsa minor), none fixed in trixie, no severity scores in the research.",
+   "stopIfMapped": "S3",
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.namedSources[source=sqlite3].openOrAffecting",
+    "control/d14-preparation-20261010-2004/research/debian/derived/verifier-static-import-reachability.json#targets._sqlite3"
+   ]
+  },
+  {
+   "id": "R-14-BZIP2",
+   "residual": true,
+   "component": "bzip2 (libbz2.so.1.0 through _bz2)",
+   "package": "deb:libbz2-1.0",
+   "version": "1.0.8-6",
+   "advisories": [
+    "CVE-2026-42250"
+   ],
+   "severity": "UNKNOWN",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libbz2",
+    "_bz2."
+   ],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "Present, not loaded. _bz2 is statically reachable (sigstore._cli -> sigstore.oidc -> webbrowser -> shutil -> bz2), so non-loading depends on the S3 guard (bz2 and _bz2 blocked); any mapping STOPs with S3. The open record (no-dsa minor, scope local) is in the bzip2recover utility, which the verifier never runs.",
+   "stopIfMapped": "S3",
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.namedSources[source=bzip2].openOrAffecting",
+    "control/d14-preparation-20261010-2004/research/debian/derived/verifier-static-import-reachability.json#targets._bz2.chain"
+   ]
+  },
+  {
+   "id": "R-15-PAM",
+   "residual": true,
+   "component": "Linux-PAM (libpam.so.0, libpam_misc.so.0, libpamc.so.0 and 44 security/pam_*.so modules)",
+   "package": "deb:libpam0g",
+   "version": "1.7.0-5",
+   "advisories": [
+    "CVE-2025-8941",
+    "CVE-2026-54411"
+   ],
+   "severity": "UNKNOWN",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libpam",
+    "pam_"
+   ],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "Present in the admitted inventory, not loaded: no verifier ELF links PAM and the verifier never authenticates users. S3 blockedObjects include the libpam and pam_ prefixes; any mapping STOPs with S3. Open records: CVE-2025-8941 (pam_namespace, undetermined) and CVE-2026-54411 (pam_userdb timing, no-dsa minor).",
+   "stopIfMapped": "S3",
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.namedSources[source=pam].openOrAffecting",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part1_runtime.rows[package=libpam0g].verifierMapping",
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#B6"
+   ]
+  },
+  {
+   "id": "R-16-OPENSSL-LEGACY-ENGINES",
+   "residual": true,
+   "component": "OpenSSL legacy provider (ossl-modules/legacy.so) and engines-3 (afalg, padlock, loader_attic)",
+   "package": "deb:openssl-provider-legacy",
+   "version": "3.5.7-1~deb13u3",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "legacy.",
+    "afalg.",
+    "padlock.",
+    "loader_attic."
+   ],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "Present, not loaded: both are dlopen-only and nothing requests them. /etc/ssl/openssl.cnf (sha256 a65a2cb9...d6b3, frozen layer 75b6a36c) lists only default = default_sect in [provider_sect], so the legacy provider is not activated by configuration. S3 blockedObjects include these four prefixes; any mapping STOPs with S3. Debian tracker: 0 open records for openssl 3.5.7-1~deb13u3.",
+   "stopIfMapped": "S3",
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/checks/main-session-verifications.txt#openssl.cnf provider sections",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part1_runtime.rows[package=openssl-provider-legacy].note",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.namedSources[source=openssl].counts"
+   ]
+  },
+  {
+   "id": "R-17-IMAGE-PIP-URLLIB3",
+   "residual": true,
+   "component": "pip 25.0.1 in the image site-packages, vendoring urllib3 1.26.20",
+   "package": "wheel:pip",
+   "version": "25.0.1 (vendored urllib3 1.26.20)",
+   "advisories": [
+    "CVE-2025-66471",
+    "CVE-2025-66418",
+    "CVE-2026-21441",
+    "CVE-2026-97687",
+    "CVE-2024-47081",
+    "CVE-2026-25645",
+    "CVE-2025-8869",
+    "CVE-2025-47273"
+   ],
+   "severity": "HIGH",
+   "fixAvailable": true,
+   "fixedIn": "pip 25.3 for CVE-2025-8869; urllib3 2.6.0, 2.6.3 and 2.8.0 upstream (a pip release vendoring them was not researched)",
+   "objects": [],
+   "loaded": "no",
+   "reachable": true,
+   "mitigation": "Present, not loaded; non-use is enforced, not assumed. Verifier and tool venvs are created --without-pip, run with -I and without system site-packages, so the pip in the image is never on a verifier sys.path, and pip and ensurepip are blocked by the S3 module guard (any import is an S3 violation). The capsule uses the hash-pinned urllib3 2.8.0 wheel. The vendor advisories (four HIGH urllib3 range matches, applicability NOT-RUN) were fetched before capturedAt (HISTORICAL).",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/runtime-admission-preflight-20261010-0736/os/pip-vendor-disposition.json#advisories",
+    "control/runtime-admission-preflight-20261010-0736/os/pip-vendor-disposition.json#mandatoryBlocker",
+    "control/d09-python-linux-preflight-20261010/oci/report.json#pip.version"
+   ]
+  },
+  {
+   "id": "R-18-GLIBC-HIGH-OWNER-REVIEW",
+   "residual": true,
+   "component": "GNU C Library: 6 open records with HIGH or CRITICAL scores, not reachable",
+   "package": "deb:libc6",
+   "version": "2.41-12+deb13u4",
+   "advisories": [
+    "CVE-2019-1010022",
+    "CVE-2018-20796",
+    "CVE-2019-1010023",
+    "CVE-2019-9192",
+    "CVE-2026-19499",
+    "CVE-2026-5435"
+   ],
+   "severity": "CRITICAL",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libc.so.6",
+    "ld-linux-x86-64.so.2",
+    "libresolv.so.2"
+   ],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "OWNER REVIEW FLAGGED (research ownerReview true). No newer glibc in trixie, trixie-updates or trixie-security (S1 not triggered). CVE-2019-1010022 (NVD 9.8) is a mitigation bypass without a standalone defect; CVE-2018-20796 and CVE-2019-9192 need attacker regex patterns and no verifier ELF imports glibc regex; CVE-2019-1010023 needs ldd on an attacker ELF, which the verifier never runs; CVE-2026-19499 (strfmon) and CVE-2026-5435 (libresolv debug printers) have no importer in the verifier closure (static .dynsym scan, cross-checked by the main session). Not reachable, so S2 does not apply; the import closure is pinned by S4 and S5.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2019-1010022].classificationReason",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2018-20796].classificationReason",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2019-1010023].classificationReason",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2019-9192].classificationReason",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-19499].classificationReason",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-5435].classificationReason",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-s1-version-check.json#answer",
+    "control/d14-preparation-20261010-2004/checks/main-session-symbol-scan.txt#regcomp regexec strfmon ns_sprintrr fp_nquery"
+   ]
+  },
+  {
+   "id": "R-19-GLIBC-RESOLVER",
+   "residual": true,
+   "component": "GNU C Library DNS stub resolver initialization with a long search list",
+   "package": "deb:libc6",
+   "version": "2.41-12+deb13u4",
+   "advisories": [
+    "CVE-2026-8674"
+   ],
+   "severity": "MEDIUM",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libc.so.6",
+    "libnss_dns.so.2",
+    "libresolv.so.2"
+   ],
+   "loaded": "yes",
+   "reachable": true,
+   "mitigation": "Conditional: the verifier resolves names through glibc (getaddrinfo is imported by _socket and by the cryptography _rust.abi3.so), and a search or domain entry of about 200 or more characters in /etc/resolv.conf or LOCALDOMAIN aborts the process (availability only; verification fails closed). Guard S7: containers run --dns 127.0.0.1 --dns-search . and probe-runtime records /etc/resolv.conf and STOPs unless nameserver is exactly 127.0.0.1, no search or domain entry exists and LOCALDOMAIN, RES_OPTIONS and HOSTALIASES are unset. Fixed upstream in 2.45; Debian no-dsa for trixie.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-8674].reachability",
+    "control/d14-preparation-20261010-2004/checks/main-session-symbol-scan.txt#getaddrinfo",
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#Non-blocking / 11"
+   ]
+  },
+  {
+   "id": "R-20-GLIBC-OTHER",
+   "residual": true,
+   "component": "GNU C Library: 12 open MEDIUM or LOW records, not reachable",
+   "package": "deb:libc6",
+   "version": "2.41-12+deb13u4",
+   "advisories": [
+    "CVE-2010-4756",
+    "CVE-2019-1010024",
+    "CVE-2019-1010025",
+    "CVE-2026-18374",
+    "CVE-2026-19542",
+    "CVE-2026-6238",
+    "CVE-2026-6791",
+    "CVE-2026-77117",
+    "CVE-2026-80489",
+    "CVE-2026-86805",
+    "CVE-2026-6368",
+    "CVE-2026-95818"
+   ],
+   "severity": "MEDIUM",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libc.so.6",
+    "ld-linux-x86-64.so.2",
+    "libresolv.so.2",
+    "SHIFT_JISX0213.so",
+    "EUC-JISX0213.so"
+   ],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "No newer glibc in trixie (S1 not triggered). Per the research: glob, wordexp, tdelete, the libresolv debug printers and the iconv JISX0213 converters have no importer in the verifier closure; no component passes an untrusted ',ccs=' fopen mode; CVE-2019-1010024 and CVE-2019-1010025 are ASLR mitigation bypasses without a standalone defect; CVE-2026-86805 and CVE-2026-95818 need setuid programs and a local attacker, both absent from the container. MEDIUM or LOW, so S2 does not apply.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2010-4756].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2019-1010024].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2019-1010025].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-18374].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-19542].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-6238].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-6791].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-77117].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-80489].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-86805].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-6368].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-95818].reachability.verdict",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#findings[id=DEB-07].fact"
+   ]
+  },
+  {
+   "id": "R-21-UTIL-LINUX",
+   "residual": true,
+   "component": "util-linux libraries (libuuid, libmount, libblkid, libsmartcols)",
+   "package": "deb-source:util-linux",
+   "version": "2.41.5-0+deb13u1",
+   "advisories": [
+    "CVE-2022-0563",
+    "CVE-2026-3184",
+    "CVE-2026-76642",
+    "CVE-2026-78408",
+    "CVE-2026-78409",
+    "CVE-2026-78410"
+   ],
+   "severity": "UNKNOWN",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libuuid",
+    "libmount",
+    "libblkid",
+    "libsmartcols"
+   ],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "Present, not loaded: _uuid is not statically reachable and no verifier ELF links libmount, libblkid or libsmartcols. The open records concern setuid or administrative utilities (chfn and chsh, login -h, mount helpers and mount options, nsenter), which the verifier never runs; no severity scores in the research.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.namedSources[source=util-linux].openOrAffecting",
+    "control/d14-preparation-20261010-2004/research/debian/derived/verifier-static-import-reachability.json#targets._uuid"
+   ]
+  },
+  {
+   "id": "R-22-LIBSTDCXX",
+   "residual": true,
+   "component": "GNU C++ standard library (libstdc++.so.6)",
+   "package": "deb:libstdc++6",
+   "version": "14.2.0-19",
+   "advisories": [
+    "CVE-2026-102010",
+    "CVE-2026-95619"
+   ],
+   "severity": "UNKNOWN",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libstdc++"
+   ],
+   "loaded": "no",
+   "reachable": true,
+   "mitigation": "Present, not loaded: no verifier ELF links libstdc++. Both open records (no-dsa minor) are libstdc++-specific (priority-queue erase_if, aligned operator new); libgcc_s.so.1 from the same source package is mapped but not named by them (R-41). Reachability is not excluded, so any mapping of libstdc++ raises S2.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.namedSources[source=gcc-14].openOrAffecting",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part1_runtime.rows[package=libstdc++6].verifierMapping"
+   ]
+  },
+  {
+   "id": "R-23-NCURSES",
+   "residual": true,
+   "component": "ncurses (libncursesw.so.6, libtinfo.so.6, libtic.so.6)",
+   "package": "deb-source:ncurses",
+   "version": "6.5+20250216-2",
+   "advisories": [
+    "CVE-2025-6141",
+    "CVE-2025-69720"
+   ],
+   "severity": "UNKNOWN",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libncursesw",
+    "libtinfo",
+    "libtic"
+   ],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "Present, not loaded: _curses and readline are not statically reachable. The open records (no-dsa minor) are a local terminfo parsing overflow and an infocmp tool overflow; no network, bundle or tarball input reaches terminfo parsing in the verifier. Taken from the raw tracker JSON (the derived tracker analysis did not list ncurses).",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/raw/tracker/security-tracker.debian.org_tracker_data_json#ncurses.CVE-2025-6141.releases.trixie",
+    "control/d14-preparation-20261010-2004/research/debian/raw/tracker/security-tracker.debian.org_tracker_data_json#ncurses.CVE-2025-69720.releases.trixie",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part1_runtime.rows[package=libncursesw6].verifierMapping"
+   ]
+  },
+  {
+   "id": "R-24-CPYTHON-TEMPFILE",
+   "residual": true,
+   "component": "CPython stdlib tempfile.TemporaryDirectory cleanup race",
+   "package": "cpython:stdlib",
+   "version": "3.12.15",
+   "advisories": [
+    "CVE-2026-12345"
+   ],
+   "severity": "MEDIUM",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Affects the image: the [3.12] backport was reverted before the tag and the image tempfile.py lacks the fix (the CNA range is wrong). tempfile is imported eagerly, but the only TemporaryDirectory() call on the eager import path of the verifier is importlib.resources._common.as_file, which sigstore does not use, and exploitation needs a local attacker modifying the temporary tree during cleanup. Verifier containers use a private tmpfs /tmp.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.open_or_non_fixed_cves[cve=CVE-2026-12345].applicability",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.facts[5]"
+   ]
+  },
+  {
+   "id": "R-25-CPYTHON-BASE64",
+   "residual": true,
+   "component": "CPython stdlib base64 and binascii decoding (altchars; stop at the first padded quad)",
+   "package": "cpython:stdlib",
+   "version": "3.12.15",
+   "advisories": [
+    "CVE-2026-3446",
+    "CVE-2025-12781"
+   ],
+   "severity": "MEDIUM",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "binascii."
+   ],
+   "loaded": "yes",
+   "reachable": true,
+   "mitigation": "Affects the image (no [3.12] backport; fixed only on newer branches). base64 is imported eagerly and decodes bundle fields, so the lenient decoding is reachable from bundle input. The decoded values are inputs to signature, certificate, transparency-log and digest checks, which N-CORRUPT, L-SET and MAL-TSA exercise; exploitability was not analyzed beyond the static call-site review in the research. MEDIUM, so S2 does not apply.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.open_or_non_fixed_cves[cve=CVE-2026-3446]",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.open_or_non_fixed_cves[cve=CVE-2025-12781]"
+   ]
+  },
+  {
+   "id": "R-26-CPYTHON-HTTP-COOKIES",
+   "residual": true,
+   "component": "CPython stdlib http.cookies BaseCookie.js_output() escaping",
+   "package": "cpython:stdlib",
+   "version": "3.12.15",
+   "advisories": [
+    "CVE-2026-6019"
+   ],
+   "severity": "LOW",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Affects the image; http.cookies is imported eagerly through requests.compat, but js_output() is never called by the frozen wheels (only inside http.cookies itself).",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.open_or_non_fixed_cves[cve=CVE-2026-6019].applicability"
+   ]
+  },
+  {
+   "id": "R-27-CPYTHON-IMAPLIB-POPLIB",
+   "residual": true,
+   "component": "CPython stdlib imaplib and poplib command injection",
+   "package": "cpython:stdlib",
+   "version": "3.12.15",
+   "advisories": [
+    "CVE-2025-15366",
+    "CVE-2025-15367"
+   ],
+   "severity": "MEDIUM",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "Affects the image; imaplib and poplib are not imported by sigstore verification (eager closure or upper bound).",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.open_or_non_fixed_cves[cve=CVE-2025-15366].applicability",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.open_or_non_fixed_cves[cve=CVE-2025-15367].applicability"
+   ]
+  },
+  {
+   "id": "R-28-CPYTHON-MIMETYPES-WINDOWS",
+   "residual": true,
+   "component": "CPython stdlib mimetypes default known files writable on Windows",
+   "package": "cpython:stdlib",
+   "version": "3.12.15",
+   "advisories": [
+    "CVE-2024-3220"
+   ],
+   "severity": "LOW",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "The CNA range includes 3.12.15, but the defect (a user-writable default mime.types path) is Windows-only; mimetypes is imported (urllib3.fields), and the condition does not exist on the Linux image.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.open_or_non_fixed_cves[cve=CVE-2024-3220].applicability"
+   ]
+  },
+  {
+   "id": "R-29-CFFI-LIBFFI",
+   "residual": true,
+   "component": "cffi _cffi_backend with statically linked libffi (3.4.6 inferred)",
+   "package": "wheel:cffi",
+   "version": "2.1.0 (libffi 3.4.6, inferred)",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "_cffi_backend."
+   ],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "libffi is statically linked (no cffi.libs/). Version 3.4.6 is inferred from the cffi CI configuration at the v2.1.0 tag plus binary markers, not from authenticated provenance (PyPI provenance HTTP 404). No CVE affects 3.4.6, but later upstream hardening (3.5.2, 3.7.0) is absent. _cffi_backend is not statically reachable from the verifier; the wheel is admitted by hash pin (R-30).",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item3_cffi_libffi.facts",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#verdict.item3_cffi_libffi",
+    "control/d14-preparation-20261010-2004/research/debian/derived/verifier-static-import-reachability.json#targets._cffi_backend"
+   ]
+  },
+  {
+   "id": "R-30-PYPI-HASH-PINS",
+   "residual": true,
+   "component": "30 unchanged D13 PyPI wheels (also installer, sdist, official rfc3161 wheel and 5 tool wheels) trusted by hash pins only",
+   "package": "wheel:*",
+   "version": "D13 lock and inputs.json pins",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Every wheel equals its PyPI sha256 for the exact filename and none is yanked; admission (exactly one wheel per pin, size and sha256, inert ZIP and RECORD checks) runs before any import, and installs use --validate-record all without index access. No PyPI provenance or attestation is verified (cffi has none; the sdist gitTag and gitCommit come from an unverified attestation), so trust rests on the PyPI-served bytes at capture time and on the release process of each project. 36 of 37 packages have no known advisory; pytest 9.0.2 is remediated (R-09).",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/pins/d09-harness-facts.json#facts[8]",
+    "control/d14-preparation-20261010-2004/pins/d09-harness-facts.json#facts[14]",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item1_python_packages.facts[2]",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item3_cffi_libffi.facts[5]"
+   ]
+  },
+  {
+   "id": "R-31-CRATE-CHACHA20-YANKED",
+   "residual": true,
+   "component": "Rust crate chacha20 compiled into W (through rand 0.10.2)",
+   "package": "crate:chacha20",
+   "version": "0.10.0 (yanked)",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Yanked on crates.io (reason not stated) but compiled from the unchanged official Cargo.lock; no RustSec or GHSA advisory for 0.10.x. The only documented later fix (0.10.2 changelog) is a correctness fix for an SSE4.1 intrinsic in the SSE2 backend. The lock is not modified (no patch policy).",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/crates/crates-report.json#summary.yanked",
+    "control/d14-preparation-20261010-2004/research/crates/crates-report.json#followUps.yankedLockedCrate.changelog_0_10_2",
+    "control/d14-preparation-20261010-2004/research/crates/crates-report.json#followUps.yankedLockedCrate.advisories"
+   ]
+  },
+  {
+   "id": "R-32-CRATE-ANYHOW",
+   "residual": true,
+   "component": "Rust crate anyhow in Cargo.lock, not compiled for the target",
+   "package": "crate:anyhow",
+   "version": "1.0.102",
+   "advisories": [
+    "RUSTSEC-2026-0190"
+   ],
+   "severity": "UNKNOWN",
+   "fixAvailable": true,
+   "fixedIn": "1.0.103",
+   "objects": [],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "Informational (unsound) advisory for Error::downcast_mut(). anyhow is reached only through wasm-only crates (wit-bindgen*, wasm-metadata, wit-component, wit-parser), so it is not compiled into W for x86_64-unknown-linux-gnu; the all-target cargo fetch (B3) downloads and checksum-verifies its .crate but nothing builds it. The official Cargo.lock is not modified.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/crates/crates-report.json#summary.rustsecAffecting",
+    "control/d14-preparation-20261010-2004/research/crates/crates-report.json#packages[name=anyhow].notCompiledReasons"
+   ]
+  },
+  {
+   "id": "R-33-CRATES-NO-ADVISORY-DB",
+   "residual": true,
+   "component": "Rust code outside advisory-database coverage and without declared MSRV: rfc3161-client and tsp-asn1 (local), cryptography-x509 0.50.1 (git), and the local crates inside cryptography 50.0.2",
+   "package": "crate:rfc3161-client",
+   "version": "rfc3161-client 0.0.1, tsp-asn1 0.0.1, cryptography-x509 0.50.1 (git ffde75a2)",
+   "advisories": [],
+   "severity": "UNKNOWN",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": true,
+   "mitigation": "These crates parse bundle timestamp data or certificates, but no advisory database covers them. rfc3161-client and tsp-asn1 declare no rust_version (10 compiled crates declare none; the highest declared is 1.85 against rustc 1.85.1); an MSRV failure fails the build closed (STOP), it cannot weaken it. The git checkout must equal ffde75a2 (prepare).",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/crates/crates-report.json#summary.undeclaredRustVersionCompiled",
+    "control/d14-preparation-20261010-2004/research/crates/crates-report.json#packages[name=rfc3161-client].msrvVerdict",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#gaps[6]"
+   ]
+  },
+  {
+   "id": "R-34-OPENSSL-SRC-BUILD-DEP",
+   "residual": true,
+   "component": "Rust crate openssl-src (vendored OpenSSL 3.6.2 C sources)",
+   "package": "crate:openssl-src",
+   "version": "300.6.0+3.6.2",
+   "advisories": [
+    "CVE-2026-84782",
+    "CVE-2026-45447"
+   ],
+   "severity": "HIGH",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "build-only",
+   "reachable": false,
+   "mitigation": "Compiled as an optional build dependency of openssl-sys, but with OPENSSL_NO_VENDOR=1 its C sources are not built and W links the system libcrypto.so.3; the ELF gate (wheel-audit) proves this later: NEEDED subset, PKCS7_verify undefined at OPENSSL_3.0.0, zero defined OpenSSL symbols, no 'OpenSSL 3.6' bytes (also an S3 condition). 41 of 61 OpenSSL 3.6 advisories affect 3.6.2, including HIGH CVE-2026-84782 and CVE-2026-45447 (PKCS7_verify use-after-free), which is why the official vendored wheel is rejected (AC-05). Whether a newer openssl-src fixes all of them was not researched; the official Cargo.lock is not modified.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/crates/crates-report.json#packages[name=openssl-src].activatedVia",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item2_openssl.facts[3]",
+    "control/d14-preparation-20261010-2004/research/crates/crates-report.json#method.limitations[4]"
+   ]
+  },
+  {
+   "id": "R-35-BUILD-TOOLCHAIN",
+   "residual": true,
+   "component": "Debian trixie build closure for W (about 82 packages incl. rustc and cargo 1.85.1, maturin 1.8.3, gcc 14, binutils 2.44, python3.13, libexpat1, libllvm19, curl, gnutls, krb5 and ldap stacks, libgit2, libssh2)",
+   "package": "deb:build-closure",
+   "version": "gcc=4:14.2.0-1, binutils=2.44-3, rustc and cargo 1.85.1+dfsg1-1+deb13u1, python3-maturin 1.8.3-1, libc6-dev 2.41-12+deb13u4, libssl-dev 3.5.7-1~deb13u3",
+   "advisories": [
+    "CVE-2026-77214"
+   ],
+   "severity": "HIGH",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "build-only",
+   "reachable": false,
+   "mitigation": "Build-only: installed from hash-pinned .debs into fresh build containers that run --network none on hash-pinned inputs (sdist, Cargo.lock-checksummed crates), and W is reproduced (B1 == B2 == W, CI B1 == W). Open tracker records in the closure include binutils (69), curl (25) and expat 2.8.3 (7, incl. CVE-2026-77214 HIGH); none of these sources has a newer fixed version, and no closure package is loaded by the verifier. maturin --compatibility linux makes --auditwheel check a no-op (audit.rs:297, :484), so the ELF gate (wheel-audit) is the real linkage control. The closure was modelled from the Packages index (apt not run); the signed apt capture in D14 is the authority.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#findings[id=DEB-05].fact",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#findings[id=DEB-03].fact",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.namedSources[source=binutils].counts",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.closureSources[source=expat]",
+    "control/d14-preparation-20261010-2004/pins/d09-harness-debian/fetch-records.json#records",
+    "control/d14-preparation-20261010-2004/checks/main-session-verifications.txt#Debian package versions from saved indexes"
+   ]
+  },
+  {
+   "id": "R-36-IMAGE-PROVENANCE",
+   "residual": true,
+   "component": "Docker Official Image python:3.12.15-slim-trixie build provenance",
+   "package": "image:docker.io/library/python",
+   "version": "index sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Identity is pinned by digest (index, manifest, config, diffIds; S5) and the frozen layers were re-hashed, but the in-toto/SPDX attestations of the image were only matched by subject digest: no signature, issuer, TUF or transparency check was run (cryptographicallyAuthenticated false). Trust rests on the digest-addressed bytes served by Docker Hub and on the Official Images build process.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d09-python-linux-preflight-20261010/oci/report.json#provenance.cryptographicallyAuthenticated",
+    "control/d09-python-linux-preflight-20261010/oci/report.json#provenance.signatureIssuerTUFTransparencyChecks",
+    "control/d14-preparation-20261010-2004/pins/d09-harness-facts.json#facts[0]"
+   ]
+  },
+  {
+   "id": "R-37-WRITABLE-OUT",
+   "residual": true,
+   "component": "Evidence mount /out writable by every container, including verifier subprocesses",
+   "package": "harness:evidence-mount",
+   "version": ".scratch/d09/evidence",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Bounded: code execution inside a verifier container already defeats the outputs of that container, and all code executed there is hash-pinned (image digest, 31 wheels, W, installer, d09.py bound by the receipt). The fresh replay of the gate (--replay) recomputes every outcome, so evidence from an earlier run cannot be reused. The S4 admitted set (manifest-a and manifest-b) is written under /out; passing its sha256 between steps or mounting it read-only is a recommended hardening.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#Non-blocking / 7"
+   ]
+  },
+  {
+   "id": "R-38-SOLO-OWNER",
+   "residual": true,
+   "component": "Owner = implementer = reviewer (single principal)",
+   "package": "process:governance",
+   "version": "solo owner",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "host-only",
+   "reachable": false,
+   "mitigation": "Owner acceptance of these residuals is owner self-review, labelled owner self-review in the ownerAcceptance record; it is not independent review and not security-owner approval. Independent G1 rows stay pending; D09 grants no G1 to G4 authority.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#(6) G1-SO",
+    "control/d14-preparation-20261010-2004/review/advisory-review.md#B8"
+   ]
+  },
+  {
+   "id": "R-09-PYTEST-CVE-2025-71176",
+   "residual": false,
+   "component": "pytest test-only tool wheel (tools venv only)",
+   "package": "wheel:pytest",
+   "version": "9.0.3 (was 9.0.2)",
+   "advisories": [
+    "CVE-2025-71176",
+    "GHSA-6w46-j5rx-g56g",
+    "PYSEC-2026-1845"
+   ],
+   "severity": "MEDIUM",
+   "fixAvailable": false,
+   "fixedIn": "9.0.3",
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Remediated, not a residual: toolWheels and requirements-tools.txt are re-pinned to pytest 9.0.3 (pytest-9.0.3-py3-none-any.whl, 375249 bytes, sha256 2c5efc45...d5b9); its PyPI JSON (2026-10-10T22:00:54Z) lists no vulnerabilities and its Requires-Dist equals 9.0.2. pytest runs only in the tools venv, never in a capsule.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/pins/main-session/pypi-records-20261010T220054Z.json#[version=9.0.3].vulnerabilities",
+    "control/d14-preparation-20261010-2004/pins/main-session/raw/pypi-pytest-9.0.3.json#urls",
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item1_python_packages.affected"
+   ]
+  },
+  {
+   "id": "R-39-CPYTHON-TARFILE-ZIPFILE-FIXED",
+   "residual": false,
+   "component": "CPython stdlib tarfile link filter and zipfile overlapped-entry checks",
+   "package": "cpython:stdlib",
+   "version": "3.12.15",
+   "advisories": [
+    "CVE-2026-11940",
+    "CVE-2024-0450"
+   ],
+   "severity": "HIGH",
+   "fixAvailable": false,
+   "fixedIn": "3.12.15 (fix present)",
+   "objects": [],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Resolved, not residual: the research classified both NEEDS-REVIEW; the main session read the frozen stdlib layer 6912e23e and found the CVE-2026-11940 fix in refactored form at tarfile.py:2693-2699 and the CVE-2024-0450 fix at zipfile/__init__.py:1693-1703.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/python/python-report.json#item5_cpython.classification_summary",
+    "control/d14-preparation-20261010-2004/research/python/item5-cpython.json#cves[id=CVE-2026-11940].cna_severity",
+    "control/d14-preparation-20261010-2004/research/python/item5-cpython.json#cves[id=CVE-2024-0450].cna_severity",
+    "control/d14-preparation-20261010-2004/checks/main-session-verifications.txt#CVE-2026-11940 (tarfile) fix presence in image stdlib",
+    "control/d14-preparation-20261010-2004/checks/main-session-verifications.txt#CVE-2024-0450 (zipfile) fix presence"
+   ]
+  },
+  {
+   "id": "R-40-GLIBC-NOT-APPLICABLE",
+   "residual": false,
+   "component": "GNU C Library: 2 open records that do not apply to the image",
+   "package": "deb:libc6",
+   "version": "2.41-12+deb13u4",
+   "advisories": [
+    "CVE-2026-89092",
+    "CVE-2026-97399"
+   ],
+   "severity": "MEDIUM",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [],
+   "loaded": "no",
+   "reachable": false,
+   "mitigation": "Not applicable, not residual: CVE-2026-89092 is in the nscd daemon, which the image does not contain; CVE-2026-97399 affects only the POWER8 strncasecmp implementation, absent from the linux/amd64 image.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-89092].classification",
+    "control/d14-preparation-20261010-2004/research/glibc/glibc-dispositions.json#[id=CVE-2026-97399].classification"
+   ]
+  },
+  {
+   "id": "R-41-MAPPED-NO-OPEN-RECORDS",
+   "residual": false,
+   "component": "Mapped libraries without open trixie records: libzstd.so.1 (through libcrypto.so.3) and libgcc_s.so.1",
+   "package": "deb:libzstd1",
+   "version": "libzstd1 1.5.7+dfsg-1; libgcc-s1 14.2.0-19",
+   "advisories": [],
+   "severity": "NONE",
+   "fixAvailable": false,
+   "fixedIn": null,
+   "objects": [
+    "libzstd.so",
+    "libgcc_s.so"
+   ],
+   "loaded": "yes",
+   "reachable": false,
+   "mitigation": "Recorded for completeness, not residual: the raw tracker JSON lists 4 libzstd records, all resolved at or before 1.5.7+dfsg-1; the two open gcc-14 records name libstdc++ only (R-22), not libgcc_s.",
+   "stopIfMapped": null,
+   "stop": false,
+   "evidence": [
+    "control/d14-preparation-20261010-2004/research/debian/raw/tracker/security-tracker.debian.org_tracker_data_json#libzstd",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part1_runtime.rows[package=libzstd1].note",
+    "control/d14-preparation-20261010-2004/research/debian/debian-report.json#part2_tracker.namedSources[source=gcc-14].openOrAffecting"
+   ]
+  }
+ ]
+}

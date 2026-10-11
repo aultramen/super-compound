@@ -5,6 +5,7 @@ import { execFile } from "node:child_process";
 import { lstat, mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import fs from "node:fs";
 
 import {
   DEFAULT_SCENARIOS,
@@ -1605,7 +1606,7 @@ async function main() {
   }
 }
 
-const isCli = process.argv[1] === fileURLToPath(import.meta.url);
+const isCli = process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1]);
 if (isCli) {
   main().catch((error) => {
     console.error(compactError(error));

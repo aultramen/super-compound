@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {readBoundedFile} from './file-state.mjs';
@@ -111,4 +112,4 @@ async function main() {
     } else throw new Error('usage: adaptive-eval.mjs <compare|paired|behavior> <input.json>');
     process.stdout.write(`${JSON.stringify(result)}\n`);
 }
-if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) main().catch(error => {console.error(error.message); process.exitCode = 2;});
+if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) main().catch(error => {console.error(error.message); process.exitCode = 2;});

@@ -1,6 +1,13 @@
 # Engineering Standards Reference
 
-> **Purpose:** Long-form engineering standards for on-demand consultation, not startup memory. Operational rules live in `AGENTS.md`, `CLAUDE.md`, and `.claude/rules/`.
+> **Purpose:** Long-form guidance for developing super-compound itself, read on demand, not startup memory. Repository operational rules live in `AGENTS.md`, `CLAUDE.md`, and `.claude/rules/`.
+
+Application projects adopt versioned core policy and development profiles from
+`.agent/standards/` through their explicit project configuration. This document's
+examples do not automatically become application policy. The authoritative rule
+ID, mandatory/recommendation label, scope and checks come from effective standards;
+see [adoption and migration](standards-adoption.md). Host adapters route to those
+sources and never own separate engineering rules.
 
 > **How to read this file:** Rules are written as imperatives. `MUST` = non-negotiable. `PREFER` = default choice unless context demands otherwise. `AVOID` = anti-pattern. Code blocks show `✅ DO` vs `❌ DON'T` side by side.
 
@@ -30,7 +37,8 @@
 
 ## 1. Non-Negotiable Rules
 
-Apply these in every session, every codebase, no exceptions.
+Apply these to this framework's development within applicable repository rules.
+Application obligations come from their adopted core and scoped profiles.
 
 **Security**
 - NEVER concatenate user input directly into SQL, shell commands, HTML, or file paths.

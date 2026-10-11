@@ -1,0 +1,245 @@
+{
+ "schema": "completion_contract_v1",
+ "taskId": "D09-SOURCE-VERIFICATION",
+ "goal": "Official Sigstore verification of exactly Python-3.12.15.tar.xz and Python-3.14.8.tar.xz with sigstore-python 4.5.0 on the pinned python:3.12.15-slim-trixie amd64 image, using rfc3161-client 1.0.9 rebuilt against Debian trixie libssl 3.5.7-1~deb13u3. Authenticity of these two files only.",
+ "replayRequired": true,
+ "authorityRefs": [
+  ".github/qualification/d09/README.md"
+ ],
+ "sourceRefs": [
+  ".github/qualification/d09/d09.mjs",
+  ".github/qualification/d09/d09.py",
+  ".github/qualification/d09/inputs.json",
+  ".github/qualification/d09/cases.json",
+  ".github/qualification/d09/security-dispositions.json",
+  ".github/qualification/d09/requirements-linux-cp312.txt",
+  ".github/qualification/d09/requirements-tools.txt",
+  ".agent/tools/file-state.mjs",
+  ".agent/tools/instruction-context.mjs",
+  ".agent/tools/standards-checks.mjs",
+  ".agent/tools/standards.mjs",
+  ".agent/tools/verification-recipe.mjs",
+  ".agent/tools/verified-promise.mjs",
+  ".agent/tools/work-package.mjs",
+  ".agent/rules/project-config.md",
+  ".github/workflows/ci.yml"
+ ],
+ "criteria": [
+  {
+   "id": "AC-01",
+   "expected": "Every inputs.json pin (CPython T1/T2 tarballs and bundles, 30 D13 wheels, rebuilt W, installer, 5 tool wheels, sdist, official rfc3161 wheel, debs) matches size and sha256, both locks match inputs.json, the local prepare build wheels (b1 and b2) equal W, the local prepare report equals rebuilt.reportSha256, and no PENDING slot remains",
+   "method": "artifact",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-01"
+   ]
+  },
+  {
+   "id": "AC-02",
+   "expected": "Image docker.io/library/python@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 (linux/amd64) is present locally with RepoDigests containing the index digest, Id equal to config sha256:df18428df8a0f9189c84e7424d214b4c50092af1f9dca5842a00c41c39bda316 on the classic image store or to the index digest on the containerd image store (store type recorded by init), and RootFS.Layers equal to the 4 pinned diffIds",
+   "method": "infrastructure",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-02"
+   ]
+  },
+  {
+   "id": "AC-03",
+   "expected": "Runtime admission holds: no S1, S2, S3, S4 or S7 STOP of D09-VERIFIER-ADMISSION/1.0.0 in any verifier process (S5 and S6 are enforced by the doctor steps before any verifier runs); CPython 3.12.15 on Debian trixie 13.7, pinned dpkg versions, dpkg --verify libc6 libssl3t64 clean apart from files the pinned slim-image dpkg path filters leave uninstalled, libcrypto.so.3 and libssl.so.3 equal the signed .deb bytes, dead resolver configuration, every loaded map of every verifier process is admitted and exactly one libcrypto.so.3 is mapped",
+   "method": "infrastructure",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-03"
+   ]
+  },
+  {
+   "id": "AC-04",
+   "expected": "rfc3161-client 1.0.9 rebuilt from the unchanged official sdist and Cargo.lock with OPENSSL_NO_VENDOR=1 is reproducible (local B1 == B2 == W, CI B1 == W) and W passes the ELF and wheel policy, as re-derived from the wheel bytes by the in-recipe wheel-audit step",
+   "method": "artifact",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-04"
+   ]
+  },
+  {
+   "id": "AC-05",
+   "expected": "Under the same ELF and wheel policy, re-derived from the wheel bytes by wheel-audit, the official vendored rfc3161-client 1.0.9 manylinux wheel fails on linkage (before, observed: NEEDED lacks libcrypto.so.3 and PKCS7_verify is not undefined at OPENSSL_3.0.0) and the rebuilt W passes (after, observed)",
+   "method": "regression",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-05"
+   ]
+  },
+  {
+   "id": "AC-06",
+   "expected": "Two frozen hash-checked binary-only installs (capsule a and b) are byte-identical, RECORD-verified, have dist set equal to the lock and satisfy Requires-Dist/WHEEL-tag closure for cp312 linux x86_64",
+   "method": "artifact",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-06"
+   ]
+  },
+  {
+   "id": "AC-07",
+   "expected": "Each capsule performed a fresh online TUF refresh from the embedded root (empty state): timestamp version >= 804, every metadata expiry > now+24h, trusted_root.json sha256 equals its targets entry",
+   "method": "functional",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-07"
+   ]
+  },
+  {
+   "id": "AC-08",
+   "expected": "Official sigstore 4.5.0 verify identity positives 4/4 (T1 thomas@python.org / https://accounts.google.com, T2 hugo@python.org / https://github.com/login/oauth, capsules a and b) exit 0 with OK and no TSA verification failure line",
+   "method": "functional",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-08"
+   ]
+  },
+  {
+   "id": "AC-09",
+   "expected": "Required negatives 24/24 (N-ARTIFACT, N-IDENTITY, N-ISSUER, N-CORRUPT, N-MISSING, N-NEARMATCH per target per capsule) rejected with the pinned exit code and pinned reason, no OK, after a passing same-target positive, with clean probes",
+   "method": "functional",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-09"
+   ]
+  },
+  {
+   "id": "AC-10",
+   "expected": "Supplementary trust negatives 4/4 (T-NONET, T-STAGING, L-SET, MAL-TSA) rejected with the pinned exit code and pinned reason",
+   "method": "functional",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-10"
+   ]
+  },
+  {
+   "id": "AC-11",
+   "expected": "rfc3161-client API tsa-direct: both genuine CPython TSA tokens verify and the 3 tampered variants per token raise VerificationError; upstream rfc3161-client 1.0.9 pytest suite against installed W has, over non-structural tests, total>0, failed=0, skipped=0 (structural fixture-absent skips under the README AC-11 rule are listed separately)",
+   "method": "functional",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-11"
+   ]
+  },
+  {
+   "id": "AC-12",
+   "expected": "CHAR-TSA characterization recorded: a final-byte-flipped signedTimestamp still verifies (exit 0, OK) with DEBUG Unable to verify Timestamp with CA.; accepted by design, not a rejection",
+   "method": "functional",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-12"
+   ]
+  },
+  {
+   "id": "AC-13",
+   "expected": "Guard self-test: pyexpat, xml.etree.ElementTree.fromstring, sqlite3, lzma and bz2 raise ImportError under the guard and the seeded an-pyexpat-guard probe is reported as an S3 violation",
+   "method": "functional",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-13"
+   ]
+  },
+  {
+   "id": "AC-14",
+   "expected": "Admission negatives: changed wheel byte, missing wheel and extra wheel denied before import; RECORD mismatch rejected by installer --validate-record all; reinstall without overwrite raises FileExistsError with bytes unchanged; --network none blocks connect and DNS",
+   "method": "functional",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-14"
+   ]
+  },
+  {
+   "id": "AC-15F",
+   "expected": "X1 fast: a fully coherent forged receipt (no execution) is denied by the current gate with fresh replay required, without git history or a PR",
+   "method": "workflow",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-15"
+   ]
+  },
+  {
+   "id": "AC-16F",
+   "expected": "X2 fast: a coherent receipt whose bound source changes afterwards is denied with stale source",
+   "method": "workflow",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-16"
+   ]
+  },
+  {
+   "id": "AC-17F",
+   "expected": "X3 fast: coherent receipts are denied with stale source after changing d09.py (tool), the inputs.json image pin (image) and requirements-linux-cp312.txt (lock)",
+   "method": "workflow",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-17"
+   ]
+  },
+  {
+   "id": "AC-19F",
+   "expected": "X6 fast: coherent receipts carrying a failed step, failed outcome, skipped outcome, missing outcome or empty outcomes are each denied",
+   "method": "workflow",
+   "recipeRef": ".github/qualification/d09/recipe-e2e-local.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-19"
+   ]
+  },
+  {
+   "id": "AC-15",
+   "expected": "X1 forged coherent receipt: the base gate 1ef9c70 without replayRequired prints COMPLETE_ALLOWED (before, gap evidence) and the current gate with replayRequired prints COMPLETE_DENIED fresh replay required (after)",
+   "method": "regression",
+   "recipeRef": ".github/qualification/d09/recipe-challenges.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-15"
+   ]
+  },
+  {
+   "id": "AC-16",
+   "expected": "X2 stale source: the genuine local e2e receipt is denied with stale source after one bound source changes",
+   "method": "workflow",
+   "recipeRef": ".github/qualification/d09/recipe-challenges.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-16"
+   ]
+  },
+  {
+   "id": "AC-17",
+   "expected": "X3 stale tool/image/lock: the genuine local e2e receipt is denied with stale source after changing d09.py, the inputs.json image pin or requirements-linux-cp312.txt",
+   "method": "workflow",
+   "recipeRef": ".github/qualification/d09/recipe-challenges.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-17"
+   ]
+  },
+  {
+   "id": "AC-18",
+   "expected": "X4 stale security evidence: --replay with securityEvidence.capturedAt older than maxAgeHours (168) fails at check-admission with D09-STOP S6: securityEvidence stale within the step cap and is denied",
+   "method": "workflow",
+   "recipeRef": ".github/qualification/d09/recipe-challenges.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-18"
+   ]
+  },
+  {
+   "id": "AC-19",
+   "expected": "X6 failed/skipped/missing/empty: receipts derived from the genuine local receipt carrying a failed step, failed outcome, skipped outcome, missing outcome or empty outcomes are each denied",
+   "method": "workflow",
+   "recipeRef": ".github/qualification/d09/recipe-challenges.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-19"
+   ]
+  },
+  {
+   "id": "AC-20",
+   "expected": "Hosted CI job d09-source-verification for the PR head of the pinned aultramen/super-compound pull request (base feature/standards-qualification at the pinned base sha) passed contract-ci with --replay on ubuntu-24.04 and completed within 72 h; PR, run, attempt, job, workflow, merge commit (parents exactly [base, head], tree equal to the head tree) and runner image identities reconcile with read-only GitHub API GETs; the artifact zip sha256 equals the API digest and its receipt, outcomes and sources bind this clean head checkout; CI outcomes, cases, W, capsule manifests and loaded set match local; X5 (the real other run, a wrong head, attempt+1, a wrong job) is each denied with its pinned reason by the same reconcile function",
+   "method": "workflow",
+   "recipeRef": ".github/qualification/d09/recipe-reconcile.json",
+   "requirementRefs": [
+    ".github/qualification/d09/README.md#AC-20"
+   ]
+  }
+ ]
+}

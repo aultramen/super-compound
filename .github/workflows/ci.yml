@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   setup-matrix:
     strategy:
@@ -18,9 +21,114 @@ jobs:
         with:
           node-version: 22
       - name: Setup, ownership, six-adapter discovery and rollback
-        run: node --test .agent/tools/setup.test.mjs .agent/tools/documentation-quality.test.mjs
+        run: node --test .agent/tools/setup.test.mjs .agent/tools/standards-install.test.mjs .agent/tools/documentation-quality.test.mjs
+  standards-runtime:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [22, 24]
+        python: ["3.12", "3.14"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Scoped standards, receipts, completion and Python adapters
+        run: node --test .agent/tools/standards.test.mjs .agent/tools/standards-checks.test.mjs .agent/tools/standards-completion.test.mjs .agent/tools/standards-contracts.test.mjs .agent/tools/standards-profiles.test.mjs .agent/tools/standards-references.test.mjs
+  standards-references:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned reference environment manager
+        run: python -m pip install uv==0.12.24
+      - name: Install frozen Next.js reference
+        run: npm ci --ignore-scripts --prefix .agent/standards/examples/nextjs-typescript
+      - name: Install frozen FastAPI reference
+        run: uv sync --locked --extra checks --python 3.12 --project .agent/standards/examples/fastapi-python
+      - name: Next.js format
+        working-directory: .agent/standards/examples/nextjs-typescript
+        run: npm run format
+      - name: Next.js lint
+        working-directory: .agent/standards/examples/nextjs-typescript
+        run: npm run lint
+      - name: Next.js types
+        working-directory: .agent/standards/examples/nextjs-typescript
+        run: npm run type
+      - name: Next.js boundaries
+        working-directory: .agent/standards/examples/nextjs-typescript
+        run: npm run architecture
+      - name: Next.js assertions
+        working-directory: .agent/standards/examples/nextjs-typescript
+        run: npm test
+      - name: Verify Next.js test outcome
+        working-directory: .agent/standards/examples/nextjs-typescript
+        run: node ../../tools/vitest-outcome.mjs --input .vitest-results.json --output .test-outcome.json
+      - name: Next.js build
+        working-directory: .agent/standards/examples/nextjs-typescript
+        run: npm run build
+      - name: FastAPI format
+        working-directory: .agent/standards/examples/fastapi-python
+        run: uv run --locked --extra checks python -m ruff format --check .
+      - name: FastAPI lint
+        working-directory: .agent/standards/examples/fastapi-python
+        run: uv run --locked --extra checks python -m ruff check .
+      - name: FastAPI types
+        working-directory: .agent/standards/examples/fastapi-python
+        run: uv run --locked --extra checks python -m mypy
+      - name: FastAPI assertions
+        working-directory: .agent/standards/examples/fastapi-python
+        run: uv run --locked --extra checks python -m pytest -q --junitxml=.pytest-results.xml
+      - name: Verify FastAPI test outcome
+        working-directory: .agent/standards/examples/fastapi-python
+        run: uv run --locked --extra checks python ../../tools/pytest-outcome.py --input .pytest-results.xml --output .test-outcome.json
+      - name: FastAPI boundaries
+        working-directory: .agent/standards/examples/fastapi-python
+        run: uv run --locked --extra checks python ../../tools/python-boundaries.py --root . --config standards-boundaries.json
+      - name: FastAPI dependency security on Windows
+        if: ${{ runner.os == 'Windows' }}
+        working-directory: .agent/standards/examples/fastapi-python
+        run: uv tool run --python 3.12 --from pip-audit==2.10.1 pip-audit --path .venv/Lib/site-packages --strict --format json --output .pip-audit.json --progress-spinner off
+      - name: FastAPI dependency security on Linux and macOS
+        if: ${{ runner.os != 'Windows' }}
+        working-directory: .agent/standards/examples/fastapi-python
+        run: uv tool run --python 3.12 --from pip-audit==2.10.1 pip-audit --path .venv/lib/python3.12/site-packages --strict --format json --output .pip-audit.json --progress-spinner off
+      - name: Next.js dependency security
+        working-directory: .agent/standards/examples/nextjs-typescript
+        run: npm audit --audit-level=low --include=dev --include=optional --package-lock-only --ignore-scripts --json
+      - name: Preserve actual reference outcomes
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: standards-references-${{ matrix.os }}
+          path: |
+            .agent/standards/examples/nextjs-typescript/.vitest-results.json
+            .agent/standards/examples/nextjs-typescript/.test-outcome.json
+            .agent/standards/examples/fastapi-python/.pytest-results.xml
+            .agent/standards/examples/fastapi-python/.test-outcome.json
+            .agent/standards/examples/fastapi-python/.pip-audit.json
+          include-hidden-files: true
+          if-no-files-found: error
   verify:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,10 +140,12 @@ jobs:
         with:
           python-version: "3.12"
       - name: Alias pwsh as powershell.exe
+        if: ${{ runner.os != 'Windows' }}
         run: |
-          command -v pwsh
-          sudo ln -sf "$(command -v pwsh)" /usr/local/bin/powershell.exe
-          powershell.exe -NoProfile -Command 'Write-Output ok'
+          mkdir -p "$RUNNER_TEMP/bin"
+          ln -sf "$(command -v pwsh)" "$RUNNER_TEMP/bin/powershell.exe"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/bin/powershell.exe" -NoProfile -Command 'Write-Output ok'
       - name: Deterministic checks and unit suites
         run: npm test
       - name: Python suites
@@ -43,14 +153,28 @@ jobs:
       - name: Framework audit
         run: npm run audit
 
-  windows-recovery:
-    runs-on: windows-latest
+  d09-source-verification:
+    if: ${{ github.event_name == 'pull_request' && startsWith(github.head_ref, 'feature/d09-') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: 22
-      - name: Retrieval, persistence, dispatch and installer parity
-        run: node --test .agent/tools/knowledge-search.test.mjs .agent/tools/memory-maintenance.test.mjs .agent/tools/file-state.test.mjs .agent/tools/work-package.test.mjs .agent/tools/instruction-context.test.mjs .agent/tools/completion-receipts.test.mjs .agent/tools/prevention-checks.test.mjs .agent/tools/maintenance-recovery.test.mjs .agent/tools/active-assets.test.mjs .agent/tools/codex-install.test.mjs
+          node-version: 24.15.0
+      - name: Prepare pinned inputs and reproducible rfc3161 rebuild
+        run: node .github/qualification/d09/d09.mjs prepare --ci
+      - name: D09 replay completion gate
+        run: node .agent/tools/verified-promise.mjs --contract .github/qualification/d09/contract-ci.json --replay
+      - name: Preserve D09 evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: d09-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .scratch/d09/evidence/
+            .scratch/d09/build/
+          include-hidden-files: true
+          if-no-files-found: error

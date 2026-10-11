@@ -72,6 +72,18 @@ recipe/observation refs. It is derived coverage, not new requirement authority.
 Compare its complete checklist with the source before accepting evidence; a
 report may not choose a convenient subset after results are known.
 
+With active pinned project standards, add `standards: {snapshotRef, digest,
+receiptRef}` to the same contract. `digest` pins the effective standards digest;
+the other fields reference the saved snapshot and actual gate receipt. Run the
+standards gate before the bound acceptance recipe so both references exist when
+provenance is captured. The shared verifier requires current scope, configuration,
+source inventory and every applicable mandatory result. A profile subset cannot
+cover another application scope; a contract without application source references
+requires all configured scopes. Failed, skipped, missing or stale standards proof
+prevents completion. Existing absent/disabled configurations retain legacy
+completion behavior and explicitly provide no organizational standards claim;
+invalid configuration cannot silently fall back to legacy.
+
 For a light/single task, use `.scratch/completion/<task-id>/` for the contract and
 evidence without creating BRD/PRD/FSD or a swarm ledger. Gate through
 `node .agent/tools/verified-promise.mjs --contract <path>`; ledger work uses

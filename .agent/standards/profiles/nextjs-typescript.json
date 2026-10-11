@@ -1,0 +1,15 @@
+{
+  "schema": "standards_bundle_v1",
+  "id": "nextjs-typescript",
+  "version": "1.0.0",
+  "adoption": "candidate",
+  "framework": { "name": "nextjs", "language": "typescript", "manifest": "package.json", "dependency": "next" },
+  "defaultCommands": { "format": "pnpm exec prettier --check .", "lint": "pnpm exec eslint .", "type": "pnpm exec tsc --noEmit", "architecture": "pnpm exec eslint . --config eslint.architecture.config.mjs" },
+  "rules": [
+    { "id": "NEXT-FORMAT", "level": "mandatory", "owner": "organization-typescript-owner", "source": ".agent/standards/profiles/nextjs-typescript.md#format", "check": "format" },
+    { "id": "NEXT-LINT", "level": "mandatory", "owner": "organization-typescript-owner", "source": ".agent/standards/profiles/nextjs-typescript.md#lint", "check": "lint" },
+    { "id": "NEXT-TYPE", "level": "mandatory", "owner": "organization-typescript-owner", "source": ".agent/standards/profiles/nextjs-typescript.md#type", "check": "type" },
+    { "id": "NEXT-ARCH", "level": "mandatory", "owner": "organization-typescript-owner", "source": ".agent/standards/profiles/nextjs-typescript.md#architecture", "check": "architecture" },
+    { "id": "NEXT-CONVENTIONS", "level": "recommendation", "owner": "organization-typescript-owner", "source": ".agent/standards/profiles/nextjs-typescript.md#conventions", "check": null }
+  ]
+}

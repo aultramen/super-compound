@@ -167,6 +167,23 @@ An approved BRD or PRD is always a durable artifact under `docs/brd/` or
 `docs/prd/`; chat drafts cannot authorize the next delivery stage. Eval evidence
 must likewise be stored under `.agent/evals/` whenever another gate consumes it.
 
+## Scoped Engineering Standards
+
+Application projects can adopt a shared core policy, directory-scoped
+Next.js/TypeScript or FastAPI/Python profiles, explicit project configuration and
+automated checks. [Effective standards](.agent/context/standards.contract.md)
+pin source/profile/tool/config identities across developers, AI hosts, subagents
+and resumed sessions; adapters route to the same sources. Manifest detection
+suggests profiles and reports conflicts without replacing configured choices.
+
+Standards are opt-in; existing project settings remain advisory until reviewed
+activation. Unknown stacks retain core/repository conventions with stated limits.
+Local and application CI use the same check entrypoint; active completion also
+requires the scoped snapshot and check receipt. Application administrators must
+activate required merge checks separately. See [adoption, planned pilot,
+migration and rollback](docs/standards-adoption.md); no live pilot or application
+repository protection is implied by shipping these assets.
+
 ## Evidence-Based Definition of Done
 
 **No Evidence = Not Done.** `Done`, `Completed`, `Resolved`, `Success`, and
@@ -590,17 +607,20 @@ The CSV loader fails fast when a row does not match its header width, so malform
   hooks/        deterministic local hook scripts
   rules/        concise always-on framework rules
   skills/       modular task procedures
+  standards/    opt-in scoped engineering standards, profiles and reference examples
   templates/    BRD, PRD, FSD, optional ADR, research-note, and PR templates
   tools/        deterministic local framework utilities
   workflows/    19 public workflows
 .claude/        Claude Code path-scoped rules
 .codex/         Codex skill adapter and hash-verified installer
+.github/        framework CI and qualification tooling (not installed into projects)
 docs/           engineering standards, archives, and runtime project docs
 SUPER-COMPOUND.md
 AGENTS.md
 CLAUDE.md
 WALKTHROUGH.md
 CHANGELOG.md
+LICENSE
 ```
 
 Release and delivery history lives in [CHANGELOG.md](CHANGELOG.md).
@@ -709,3 +729,8 @@ Bundled roles inherit the session model; installation updates preserve explicit
 model overrides. Effort/API guidance: [.agent/context/model-guidance.md](.agent/context/model-guidance.md).
 Runtime savings require paired real-work evidence against the current snapshot;
 static historical reduction is separate. Protocol: [.agent/evals/context-efficiency.md](.agent/evals/context-efficiency.md).
+
+## License
+
+Super Compound is released under the [MIT License](LICENSE). Bundled third-party
+components keep their own license notices next to the files they cover.

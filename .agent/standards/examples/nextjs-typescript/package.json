@@ -1,0 +1,35 @@
+{
+  "name": "sc-nextjs-standards-example",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0 <25"
+  },
+  "scripts": {
+    "format": "prettier --check .",
+    "lint": "eslint .",
+    "type": "tsc --noEmit",
+    "architecture": "eslint src/lib/services --config eslint.architecture.config.mjs",
+    "test": "vitest run --reporter=json --outputFile=.vitest-results.json",
+    "dev": "next dev",
+    "build": "next build"
+  },
+  "dependencies": {
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "10.12.0",
+    "prettier": "3.9.9",
+    "typescript-eslint": "8.71.1",
+    "typescript": "6.0.2",
+    "vite": "8.3.4",
+    "vitest": "5.0.3",
+    "@eslint-community/eslint-utils": "4.9.1"
+  }
+}
