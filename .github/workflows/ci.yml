@@ -55,7 +55,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install pinned reference environment manager
-        run: python -m pip install uv==0.12.17
+        run: python -m pip install uv==0.12.24
       - name: Install frozen Next.js reference
         run: npm ci --ignore-scripts --prefix .agent/standards/examples/nextjs-typescript
       - name: Install frozen FastAPI reference
@@ -124,7 +124,11 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
   verify:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -136,28 +140,18 @@ jobs:
         with:
           python-version: "3.12"
       - name: Alias pwsh as powershell.exe
+        if: ${{ runner.os != 'Windows' }}
         run: |
-          command -v pwsh
-          sudo ln -sf "$(command -v pwsh)" /usr/local/bin/powershell.exe
-          powershell.exe -NoProfile -Command 'Write-Output ok'
+          mkdir -p "$RUNNER_TEMP/bin"
+          ln -sf "$(command -v pwsh)" "$RUNNER_TEMP/bin/powershell.exe"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/bin/powershell.exe" -NoProfile -Command 'Write-Output ok'
       - name: Deterministic checks and unit suites
         run: npm test
       - name: Python suites
         run: npm run test:python
       - name: Framework audit
         run: npm run audit
-
-  windows-recovery:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Retrieval, persistence, dispatch and installer parity
-        run: node --test .agent/tools/knowledge-search.test.mjs .agent/tools/memory-maintenance.test.mjs .agent/tools/file-state.test.mjs .agent/tools/work-package.test.mjs .agent/tools/instruction-context.test.mjs .agent/tools/completion-receipts.test.mjs .agent/tools/prevention-checks.test.mjs .agent/tools/maintenance-recovery.test.mjs .agent/tools/active-assets.test.mjs .agent/tools/codex-install.test.mjs
 
   d09-source-verification:
     if: ${{ github.event_name == 'pull_request' && startsWith(github.head_ref, 'feature/d09-') }}

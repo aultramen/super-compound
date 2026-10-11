@@ -1,24 +1,24 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-10-10T00:45:34.332Z",
-  "repositoryHead": "8c94283ae8e7095211bcc42f1f9e79eaebcd2222",
+  "generatedAt": "2026-10-11T07:44:51.052Z",
+  "repositoryHead": "fe3db8fe0d477170baba0e3160231d2a46fbba5c",
   "pass": true,
   "summary": {
     "manifestSource": "git-active-manifest",
-    "manifestFiles": 677,
-    "auditedFiles": 676,
+    "manifestFiles": 692,
+    "auditedFiles": 691,
     "excludedFiles": [
       {
         "path": ".agent/benchmarks/framework-audit.after.json",
         "reason": "requested output path"
       }
     ],
-    "filesRead": 676,
-    "textFiles": 675,
+    "filesRead": 691,
+    "textFiles": 690,
     "binaryFiles": 1,
-    "bytesRead": 6518932,
-    "linesRead": 98842,
-    "contentDigest": "e4032f451ed696aee9aa4b59922276a77e23f3e9727a821dd1a29380908bcc23",
+    "bytesRead": 7196045,
+    "linesRead": 112099,
+    "contentDigest": "f80554ebdc6cdd4aefd90d15e1ad493bf70ee0d8000e5277afbf33efa9bfe8c4",
     "skillEntrypoints": 37,
     "skillEntrypointWords": 16285,
     "maxSkillEntrypointWords": 634,
@@ -32,14 +32,14 @@
     }
   },
   "coverage": {
-    "activeManifestEntries": 677,
-    "byteContentAuditedEntries": 676,
+    "activeManifestEntries": 692,
+    "byteContentAuditedEntries": 691,
     "specialVerificationEntries": 1,
-    "accountedEntries": 677,
+    "accountedEntries": 692,
     "unaccountedEntries": 0,
     "accountedPercent": 100,
-    "byteContentAuditPercent": 99.8523,
-    "classifiedEntries": 677,
+    "byteContentAuditPercent": 99.8555,
+    "classifiedEntries": 692,
     "unclassifiedEntries": 0,
     "classCoveragePercent": 100,
     "auditClassCounts": {
@@ -52,8 +52,8 @@
       "hook": 10,
       "host-adapter": 4,
       "host-rule": 28,
-      "project": 74,
-      "repository-config": 5,
+      "project": 75,
+      "repository-config": 19,
       "rule": 3,
       "runtime-context": 17,
       "skill-contract": 7,
@@ -67,7 +67,7 @@
       "workflow": 19,
       "workflow-contract": 19
     },
-    "auditClassDigest": "5dcd1f5146b07ca828cbff2abebe704e3f5bf1f25b59dd947fc9b998e9cfac82",
+    "auditClassDigest": "edc9ab95ff8f6d542d1efd1549c0046170b36993a9851be462c5c457c8a1b945",
     "contentDigestScope": "byte-content-audited",
     "specialVerificationRequired": true,
     "specialEntries": [
@@ -79,10 +79,10 @@
   },
   "physicalInventory": {
     "scope": "physical-authority-worktree-excluding-runtime-roots",
-    "files": 764,
-    "filesRead": 764,
+    "files": 779,
+    "filesRead": 779,
     "symlinks": 0,
-    "activeManifestEntries": 677,
+    "activeManifestEntries": 692,
     "outsideActiveManifestEntries": 87,
     "retiredAssets": [
       {
@@ -436,5 +436,5 @@
     ]
   },
   "findings": [],
-  "evidenceDigest": "164bb6840028d542d3fab083bbce4f4d9dcfbc3c2db4540355c72b79f6f21a46"
+  "evidenceDigest": "775ffdafabe575e73970005e87e2f7661fb534475d580d2a59db7ec3e2ad6f6a"
 }

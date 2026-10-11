@@ -5,7 +5,7 @@ Direct application/check dependencies are pinned in `pyproject.toml`. Python 3.1
 is the target. Work from a copy outside the framework source tree; preserve the
 application's existing tool configuration when adopting the profile.
 
-From the copied example directory, use uv 0.12.17 and the supplied universal
+From the copied example directory, use uv 0.12.24 and the supplied universal
 `uv.lock`: `uv sync --locked --extra checks --python 3.12`. Run commands through
 that environment (`uv run --locked --extra checks ...`) locally and in CI.
 The reference's runtime target does not override an application's approved

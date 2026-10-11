@@ -4,6 +4,20 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## 2026-10-11 - Public release v2.0.0
+
+- Publish Super Compound under the MIT License (`LICENSE`). Bundled third-party
+  components keep their own license notices.
+- Run the complete verification (npm test, test:python, audit) on Linux,
+  Windows and macOS in CI; the Windows recovery subset is folded into it.
+- Pin the FastAPI reference and CI to uv 0.12.24. uv 0.12.7 to 0.12.17 are
+  affected by GHSA-2cv4-cqwr-gwf7 (Windows wheel path traversal).
+- Refresh the committed token benchmark and framework audit receipts for the
+  released tree, and remove a local path from the D09 harness README.
+- Scoped standards stay opt-in and disabled by default; shipping them activates
+  no adoption, review or enforcement. The G1 adoption qualification is not
+  granted (no independent review yet); G1-SO, G2-SO and SOLO-OWNER stay inactive.
+
 ## 2026-10-11 - Solo qualification contract G1-SO, inactive
 
 - Add G1-SO/1.0.0 to the operations standard: one named owner may run an
@@ -51,7 +65,7 @@ Dated framework changes, compatibility notes and verification evidence; newest d
   historical qualification records; original application repositories remain unchanged.
 - Actual checks and residual blockers are recorded separately in the
   "Approved D03-D05 qualification execution - 2026-10-10"
-  (private historical evidence, not included in this framework-only PR).
+  (private historical evidence, not published in this repository).
 
 ## 2026-10-09 - Scoped engineering standards and shared quality checks
 

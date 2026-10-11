@@ -300,8 +300,8 @@ rebuilt wheel, was not in the static scan; `wheel-audit` requires that W imports
 ## Residuals (accepted only through `securityEvidence.ownerAcceptance`)
 
 One ID per item, in table order (= `securityEvidence.residuals`). Full text, objects and fields are in
-`security-dispositions.json`. Evidence locators are `<path>#<field>` relative to the validation root
-`D:\BATI\Validation\super-compound\20261009-wizard`; `PREP/` stands for
+`security-dispositions.json`. Evidence locators are `<path>#<field>` relative to the owner's private
+validation root (not published); `PREP/` stands for
 `control/d14-preparation-20261010-2004/`. `Lnn` is a line number; `[k=v]` selects a list entry.
 
 | ID | Component (package, version) | Advisories (severity) | Loaded / reachable / STOP | Bound / mitigation | Evidence |
