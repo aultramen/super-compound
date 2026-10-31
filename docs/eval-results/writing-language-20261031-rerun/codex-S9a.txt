@@ -1,0 +1,20 @@
+I’ll answer in English from now on.
+
+`/sc-hints` gives **practical advice based on project evidence** and recommends the next command.
+
+- `/sc-hints` uses the current conversation and work context.
+- `/sc-hints <question>` focuses on a specific question.
+- It explains the recommendation, supporting evidence, prerequisites, and expected result.
+- It is **read-only**: it does not modify files, start implementation, or approve artifacts.
+
+For example:
+
+```text
+/sc-hints My PRD is approved. What should I do next?
+```
+
+After checking the relevant documents, it may recommend `/sc-plan` to prepare the technical specification and goals.
+
+**Evidence of Completion:** Inspected the [workflow definition](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-hints.md).
+
+I did not execute the workflow; this explains its documented behavior.

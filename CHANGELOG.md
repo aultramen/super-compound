@@ -25,6 +25,9 @@ Dated framework changes, compatibility notes and verification evidence; newest d
   adapters point to the new file.
 - Verification: `node --test .agent/tools/writing-language.test.mjs`; startup
   budgets stay within limits.
+- Re-run the writing-language eval against the merged policy text and add S9
+  (standing language instruction across a resumed turn):
+  `docs/eval-results/writing-language-20261031-rerun.md`.
 
 ## 2026-10-31 - setup.mjs uninstall
 
