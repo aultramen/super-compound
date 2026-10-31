@@ -1,7 +1,7 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-10-11T07:58:57.489Z",
-  "repositoryHead": "14cd054db7b3863ed0a44a2782212ea12e3aa6bc",
+  "generatedAt": "2026-10-31T10:52:57.150Z",
+  "repositoryHead": "67b800c3964b13d7aefbe7aee5394ef024aecc13",
   "pass": true,
   "summary": {
     "manifestSource": "git-active-manifest",
@@ -16,9 +16,9 @@
     "filesRead": 691,
     "textFiles": 690,
     "binaryFiles": 1,
-    "bytesRead": 7198786,
-    "linesRead": 112116,
-    "contentDigest": "be2c844144f18edb8f73b207d89bcac0c9cd9ba6bebe8a68335fa02e5b753760",
+    "bytesRead": 7200869,
+    "linesRead": 112144,
+    "contentDigest": "ef1080f71e4eca065d4a4d1104d7cd09fe80796605d1596d193a1b14571f0651",
     "skillEntrypoints": 37,
     "skillEntrypointWords": 16285,
     "maxSkillEntrypointWords": 634,
@@ -67,7 +67,7 @@
       "workflow": 19,
       "workflow-contract": 19
     },
-    "auditClassDigest": "edc9ab95ff8f6d542d1efd1549c0046170b36993a9851be462c5c457c8a1b945",
+    "auditClassDigest": "3846cdede13d7973bd817bd286883c49cb6bc32fe66a0cbc7292a9f12039bd5f",
     "contentDigestScope": "byte-content-audited",
     "specialVerificationRequired": true,
     "specialEntries": [
@@ -436,5 +436,5 @@
     ]
   },
   "findings": [],
-  "evidenceDigest": "aee40259ae0571e6b0188c23fb622698290124dd6ef713ada68ba6df7742301b"
+  "evidenceDigest": "191cf58b718bb7f3dd323b0e74f9df5707711f05724d08192ae0f94c889dbf89"
 }

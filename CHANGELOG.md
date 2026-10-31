@@ -4,6 +4,16 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## 2026-10-31 - CI pinning and cross-OS audit receipts
+
+- Pin every GitHub Action in CI to an exact commit (checkout v4.4.0, setup-node
+  v4.4.0, setup-python v5.6.0, upload-artifact v4.6.2); behaviour is unchanged.
+- Order framework-audit paths and findings by code point instead of the host
+  locale, so a committed receipt verifies on every OS; the Linux, Windows and
+  macOS verify jobs now check the committed receipt before regenerating it.
+- main is protected by a ruleset: pull request plus the 21 CI checks, no force
+  push or deletion, admin-only bypass.
+
 ## 2026-10-11 - Public release v2.0.0
 
 - Publish Super Compound under the MIT License (`LICENSE`). Bundled third-party
