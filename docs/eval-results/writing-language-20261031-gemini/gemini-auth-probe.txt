@@ -1,0 +1,21 @@
+Warning: True color (24-bit) support not detected. Using a terminal with true color enabled will result in a better visual experience.
+Code discovery: prefer codebase-memory-mcp (search_graph, trace_path, get_code_snippet, query_graph, search_code) over grep/file-read; run index_repository first if the project is not indexed.
+Error authenticating: IneligibleTierError: This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products: https://antigravity.google
+    at throwIneligibleOrProjectIdError (file:///C:/Users/aul/AppData/Roaming/npm/node_modules/@google/gemini-cli/bundle/chunk-SBG6CUNK.js:307713:11)
+    at _doSetupUser (file:///C:/Users/aul/AppData/Roaming/npm/node_modules/@google/gemini-cli/bundle/chunk-SBG6CUNK.js:307702:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  ineligibleTiers: [
+    {
+      reasonCode: 'UNSUPPORTED_CLIENT',
+      reasonMessage: 'This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products: https://antigravity.google',
+      tierId: 'free-tier',
+      tierName: 'Gemini Code Assist for individuals'
+    }
+  ]
+}
+Ripgrep is not available. Falling back to GrepTool.
+Hook system message: Code discovery: prefer codebase-memory-mcp (search_graph, trace_path, get_code_snippet, query_graph, search_code) over grep/file-read; run index_repository first if the project is not indexed.
+An unexpected critical error occurred:IneligibleTierError: This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products: https://antigravity.google
+    at throwIneligibleOrProjectIdError (file:///C:/Users/aul/AppData/Roaming/npm/node_modules/@google/gemini-cli/bundle/chunk-SBG6CUNK.js:307713:11)
+    at _doSetupUser (file:///C:/Users/aul/AppData/Roaming/npm/node_modules/@google/gemini-cli/bundle/chunk-SBG6CUNK.js:307702:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

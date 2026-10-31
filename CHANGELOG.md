@@ -41,6 +41,9 @@ Dated framework changes, compatibility notes and verification evidence; newest d
 - Re-run the writing-language eval against the merged policy text and add S9
   (standing language instruction across a resumed turn):
   `docs/eval-results/writing-language-20261031-rerun.md`.
+- Attempt the same eval on Gemini CLI 0.47.0 as a third host: UNVERIFIED, the
+  CLI auth probe fails with `IneligibleTierError` before any prompt is sent;
+  evidence in `docs/eval-results/writing-language-20261031-gemini.md`.
 
 ## 2026-10-31 - setup.mjs uninstall
 
