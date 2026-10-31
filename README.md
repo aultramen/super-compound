@@ -232,7 +232,10 @@ Use the onboarding prompt in [SETUP.md](SETUP.md), or select scope and hosts exp
 node .agent/tools/setup.mjs install --scope project --host codex,claude --target "PATH TO PROJECT" --dry-run
 node .agent/tools/setup.mjs install --scope project --host codex,claude --target "PATH TO PROJECT"
 node .agent/tools/setup.mjs doctor --scope project --host codex,claude --target "PATH TO PROJECT"
+node .agent/tools/setup.mjs uninstall --scope project --target "PATH TO PROJECT" --dry-run
 ```
+
+Drop `--dry-run` to remove the installation; `uninstall` keeps edited user configuration and stops without removing anything if a framework file was edited.
 
 Choose `global` for a local framework cache and personal entrypoints, or `both`.
 Existing configuration and user-owned instructions are preserved; conflicts are

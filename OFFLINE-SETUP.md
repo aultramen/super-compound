@@ -24,7 +24,7 @@ node .agent/tools/setup.mjs install --source . --target "../my-project" --scope 
 node .agent/tools/setup.mjs doctor --source . --target "../my-project" --scope project --host codex
 ```
 
-Use `update` with the same options to refresh an existing installation. Preview is read-only. Installation preserves existing project configuration and stops on locally modified owned files. Doctor checks installation structure, source drift, and static local runtime dependencies; it does not test a live AI host.
+Use `update` with the same options to refresh an existing installation, and `uninstall --target "../my-project" --scope project` to remove it (edited user configuration is kept). Preview is read-only. Installation preserves existing project configuration and stops on locally modified owned files. Doctor checks installation structure, source drift, and static local runtime dependencies; it does not test a live AI host.
 
 Use `--scope global` to populate the local framework cache and host adapters, or `--scope both` for cache and project. See [SETUP.md](SETUP.md) for host-specific details. Do not copy a framework `package.json` into an application: the application keeps its own dependency and test commands.
 

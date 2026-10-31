@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
-import {setup,installCodexBundle} from './setup.mjs';
+import {setup,installCodexBundle,uninstall} from './setup.mjs';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
@@ -276,4 +276,48 @@ test('CLI runs when reached through a symlink or junction path',t=>{
   const p=spawnSync(process.execPath,[path.join(link,'setup.mjs'),'doctor','--source',source,'--target',f.target,'--scope','project','--host','codex','--json'],{encoding:'utf8',env:{...process.env,SUPER_COMPOUND_HOME:f.home}});
   assert.notEqual(p.stdout.trim(),'',`silent no-op: ${p.stderr}`);
   assert.equal(JSON.parse(p.stdout).command,'doctor');
+});
+
+test('uninstall reverses a project install and keeps user content',t=>{
+  const f=fixture(t),options={source,target:f.target,home:f.home,scope:'project',host:'claude,codex'};
+  fs.mkdirSync(f.target,{recursive:true});
+  fs.writeFileSync(path.join(f.target,'AGENTS.md'),'# My project\n\nMy own rule.\n');
+  fs.writeFileSync(path.join(f.target,'app.txt'),'user app\n');
+  assert.equal(setup(options).status,'applied');
+  const preview=uninstall({target:f.target,home:f.home,scope:'project',dryRun:true});
+  assert.equal(preview.status,'dry-run');
+  assert.ok(fs.existsSync(path.join(f.target,'.agent/tools/setup.mjs')));
+  const result=uninstall({target:f.target,home:f.home,scope:'project'});
+  assert.equal(result.status,'removed');
+  assert.deepEqual(fs.readdirSync(f.target).sort(),['AGENTS.md','app.txt']);
+  assert.equal(fs.readFileSync(path.join(f.target,'AGENTS.md'),'utf8'),'# My project\n\nMy own rule.\n');
+  assert.equal(uninstall({target:f.target,home:f.home,scope:'project'}).status,'not-installed');
+});
+test('uninstall refuses edited framework files and keeps edited user configuration',t=>{
+  const f=fixture(t),options={source,target:f.target,home:f.home,scope:'project',host:'claude'};
+  assert.equal(setup(options).status,'applied');
+  const owned=path.join(f.target,'.agent/context/output-style.md'),config=path.join(f.target,'.agent/rules/project-config.md');
+  fs.appendFileSync(owned,'user edit\n');
+  const blocked=uninstall({target:f.target,home:f.home,scope:'project'});
+  assert.equal(blocked.status,'conflict');
+  assert.deepEqual(blocked.conflicts.map(c=>c.path),['.agent/context/output-style.md']);
+  assert.ok(fs.existsSync(path.join(f.target,'.super-compound/manifest.json')),'nothing removed on conflict');
+  fs.rmSync(owned);
+  fs.appendFileSync(config,'\nuser setting\n');
+  const result=uninstall({target:f.target,home:f.home,scope:'project'});
+  assert.equal(result.status,'removed');
+  assert.ok(result.checks.some(c=>c.path==='.agent/rules/project-config.md'&&c.status==='user-file-kept'));
+  assert.match(fs.readFileSync(config,'utf8'),/user setting/);
+  assert.equal(fs.existsSync(path.join(f.target,'.claude')),false);
+  assert.equal(fs.existsSync(path.join(f.target,'.super-compound')),false);
+});
+test('uninstall CLI removes global and project installs from an isolated home',t=>{
+  const f=fixture(t);
+  assert.equal(setup({source,target:f.target,home:f.home,scope:'both',host:'claude,codex'}).status,'applied');
+  const p=spawnSync(process.execPath,[engine,'uninstall','--scope','both','--target',f.target,'--json'],{encoding:'utf8',env:{...process.env,SUPER_COMPOUND_HOME:f.home}});
+  assert.equal(p.status,0,p.stdout+p.stderr);
+  assert.equal(JSON.parse(p.stdout).status,'removed');
+  assert.equal(fs.existsSync(path.join(f.home,'.super-compound')),false);
+  assert.equal(fs.existsSync(path.join(f.home,'.claude/commands/sc-init.md')),false);
+  assert.equal(fs.existsSync(path.join(f.target,'.agent')),false);
 });

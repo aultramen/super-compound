@@ -4,6 +4,15 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## 2026-10-31 - setup.mjs uninstall
+
+- Add `node .agent/tools/setup.mjs uninstall --scope project|global|both`
+  (`--dry-run`, `--json`). It reverses the installation recorded in the ownership
+  manifest in one rollback-safe transaction: removes files that still match what
+  setup wrote, strips only the managed block from shared host files, keeps edited
+  user configuration, removes folders it emptied, and refuses with exit 1 when an
+  owned framework file was edited.
+
 ## 2026-10-31 - CI pinning and cross-OS audit receipts
 
 - Pin every GitHub Action in CI to an exact commit (checkout v4.4.0, setup-node

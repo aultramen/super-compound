@@ -221,9 +221,73 @@ export function setup(options={}) {
   }
   return report;
 }
+function withoutBlock(text) {
+  const start=text.indexOf(begin),stop=text.indexOf(end)+end.length;
+  const before=text.slice(0,start).replace(/\s*$/,''),after=text.slice(stop).replace(/^\s*\n/,'');
+  const rest=[before,after.replace(/\s*$/,'')].filter(Boolean).join('\n\n');
+  return rest?`${rest}\n`:null;
+}
+// Reverse one install root from its ownership manifest: remove only bytes that still match what
+// setup wrote, strip managed blocks, keep edited user configuration, and report edited framework
+// files as conflicts so nothing is removed.
+function planRemoval(root, stop) {
+  const manifestPath='.super-compound/manifest.json',location=safePath(root,manifestPath);
+  if(!exists(location))return {changes:[],conflicts:[],checks:[{root,path:manifestPath,status:'not-installed'}],stop};
+  const manifest=JSON.parse(fs.readFileSync(location,'utf8'));
+  if(manifest.schema!==1 || !manifest.files || typeof manifest.files!=='object')throw new Error('Invalid ownership manifest');
+  const changes=[],conflicts=[],checks=[];
+  for(const [rel,record] of Object.entries(manifest.files)) {
+    const full=safePath(root,rel);
+    if(!exists(full)){checks.push({root,path:rel,status:'already-absent'});continue;}
+    const old=fs.readFileSync(full);
+    if(record.mode==='block') {
+      let prior;
+      try{prior=managedPart(old.toString('utf8'));}catch(error){conflicts.push({root,path:rel,reason:error.message});continue;}
+      if(!prior){checks.push({root,path:rel,status:'already-absent'});continue;}
+      if(digest(prior)!==record.hash){conflicts.push({root,path:rel,reason:'managed block modified'});continue;}
+      const rest=withoutBlock(old.toString('utf8'));
+      changes.push({root,rel,old,bytes:rest===null?null:Buffer.from(rest)});
+      checks.push({root,path:rel,status:rest===null?'removed':'block-removed'});
+    } else if(digest(old)!==record.hash) {
+      if(['preserve','preserve-unowned'].includes(record.mode))checks.push({root,path:rel,status:'user-file-kept'});
+      else conflicts.push({root,path:rel,reason:'locally modified; remove or restore it, then uninstall again'});
+    } else {
+      changes.push({root,rel,old,bytes:null});checks.push({root,path:rel,status:'removed'});
+    }
+  }
+  changes.push({root,rel:manifestPath,old:fs.readFileSync(location),bytes:null});
+  return {changes,conflicts,checks,stop};
+}
+function removeEmptyDirs(changes, stops) {
+  for(const c of changes) {
+    if(c.bytes)continue;
+    const stop=safePath(stops.get(c.root),'.');
+    for(let dir=path.dirname(safePath(c.root,c.rel));dir.startsWith(stop+path.sep);dir=path.dirname(dir)) {
+      try{fs.rmdirSync(dir);}catch{break;}
+    }
+  }
+}
+export function uninstall(options={}) {
+  const {scope,dryRun=false}=options;
+  if(!['project','global','both'].includes(scope))throw new Error('Choose --scope project|global|both');
+  const target=path.resolve(options.target??process.cwd());
+  const home=path.resolve(options.home??process.env.SUPER_COMPOUND_HOME??os.homedir());
+  const plans=[];
+  if(scope!=='global')plans.push(planRemoval(target,target));
+  if(scope!=='project'){plans.push(planRemoval(path.join(home,'.super-compound/framework'),home));plans.push(planRemoval(home,home));}
+  const changes=plans.flatMap(p=>p.conflicts.length?[]:p.changes),conflicts=plans.flatMap(p=>p.conflicts),checks=plans.flatMap(p=>p.checks);
+  const installed=plans.some(p=>p.changes.length);
+  const status=conflicts.length?'conflict':!installed?'not-installed':dryRun?'dry-run':'removed';
+  if(status==='removed') {
+    applyTransaction(changes);
+    removeEmptyDirs(changes,new Map(plans.map(p=>[p.changes[0]?.root,p.stop]).filter(([r])=>r)));
+  }
+  const summary={conflict:'Edited framework files found; nothing was removed',['not-installed']:'No Super Compound installation manifest found',['dry-run']:'Uninstall previewed; nothing removed',removed:'Super Compound files removed; edited user configuration kept'}[status];
+  return {summary,command:'uninstall',scope,changed:status==='conflict'?0:changes.length,conflicts,checks,status};
+}
 function parseArgs(args) {
   const options={command:args.shift()};
-  if(!['install','update','doctor'].includes(options.command))throw new Error('Expected install, update or doctor');
+  if(!['install','update','doctor','uninstall'].includes(options.command))throw new Error('Expected install, update, doctor or uninstall');
   for(let i=0;i<args.length;i++) {
     const a=args[i];
     if(a==='--dry-run')options.dryRun=true;
@@ -272,7 +336,7 @@ export function installCodexBundle(options) {
 }
 if(process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1])) {
   try {
-    const options=parseArgs(process.argv.slice(2)),report=options['codex-home']?installCodexBundle(options):setup(options);
+    const options=parseArgs(process.argv.slice(2)),report=options.command==='uninstall'?uninstall(options):options['codex-home']?installCodexBundle(options):setup(options);
     console.log(options.json?JSON.stringify(report,null,2):`${report.summary}\nStatus: ${report.status}; changed: ${report.changed}; conflicts: ${report.conflicts.length}\n${report.conflicts.map(c=>`${c.root?c.root+'/':''}${c.path}: ${c.reason}`).join('\n')}`);
     process.exitCode=['conflict','drift'].includes(report.status)?1:0;
   }catch(error){ console.log(JSON.stringify({status:'error',error:error.message}));process.exitCode=2; }
