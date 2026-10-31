@@ -52,6 +52,10 @@ Prompt files: `docs/eval-results/<run>/prompts/`.
 - Codex: `codex exec --sandbox read-only -C <repo> -o <out> - < prompt`; turn 2
   with `codex exec resume --last -c sandbox_mode="read-only"`.
 - Antigravity: no CLI; UNVERIFIED until a scripted entry point exists.
+- Gemini CLI: `gemini -p --approval-mode plan -o text --skip-trust < prompt`;
+  turn 2 with `--resume latest`. Needs a root `GEMINI.md` (setup adapter
+  output). 2026-10-31 attempt UNVERIFIED, auth rejected:
+  `docs/eval-results/writing-language-20261031-gemini.md`.
 
 ## Limitations
 
