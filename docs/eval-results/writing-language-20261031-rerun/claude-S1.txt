@@ -1,0 +1,16 @@
+`/sc-status` = dashboard read-only + router. Sumber: `.agent/workflows/sc-status.md`.
+
+**Fungsi inti:**
+- Baca posisi proyek: `.continue-here.md`, `docs/STATE.md` (kanonik, diverifikasi lawan `git status`), `docs/progress.md`.
+- Inventaris metadata issue di `.scratch/*/issues/` (Status, Goal ID, Blocked by) tanpa baca isi semua issue.
+- Cek Git: branch, upstream, worktree. Tidak ubah apa pun.
+- Jalankan `node .agent/tools/memory-maintenance.mjs report` untuk sinyal stale/drift.
+- Periksa bukti completion tersimpan. Tidak rerun test, tidak buat evidence baru. Metadata/queue kosong bukan bukti sukses.
+
+**Output:**
+- Dashboard singkat: posisi, selesai, sisa, blocker, status verifikasi.
+- Satu rute berikutnya yang pasti dari 19 workflow publik, plus tier delivery (`light` → `/sc-work`/`/sc-debug`; `full` → `/sc-explore`/`/sc-prd`/`/sc-plan`).
+
+**Batasan:** murni read-only. Tidak tulis memori, tidak acknowledge receipt, tidak mutasi Git. Blocker `OPEN-RESEARCH-*` dirutekan ke `/sc-research`. `/sc-geniusloop` hanya disarankan jika ada permintaan improvement eksplisit dan tidak ada kerja lebih mendesak.
+
+Pakai di awal sesi atau saat butuh orientasi.

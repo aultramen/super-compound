@@ -112,3 +112,4 @@ language request persists until a new relevant instruction changes it" with: an
 explicit instruction applies to its own request; a standing instruction (for
 example "always reply in English") counts as step 1 until the user changes it.
 This matches the S4 and S6 verdicts above. The scenarios were not re-run.
+Re-run with the merged wording: `docs/eval-results/writing-language-20261031-rerun.md`.

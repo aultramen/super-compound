@@ -1,0 +1,14 @@
+`/sc-pause` は `/sc-status` の対になる「セッション終了時の引き継ぎ保存」ワークフローです。本当に作業を止めるときだけ使います。作業中の checkpoint は各 route が自前で行い、pause は呼びません。
+
+**やること** (`.agent/workflows/sc-pause.md`)
+
+1. `docs/STATE.md` と現在のタスク文脈、決定事項、ブロッカー、検証状況を読む。完了証拠は実物を確認し、メタデータだけで「完了」を引き継がない。テストの再実行もしない。
+2. `git status --short`、ブランチ、worktree パスを確認。Git は変更しない。
+3. 今セッションの未記録の失敗を `docs/ERROR_LOG.md` に `ERR-*`、確定した慣習を `docs/LEARNED_KNOWLEDGE.md` に `LRN-*` として記録。
+4. `docs/STATE.md` を正本として更新。現在位置、次の一手、ブロッカーと担当、決定、完了済み成果、検証、ブランチ、関連成果物へのリンク。変わった項目だけ書き換える。
+5. `.continue-here.md` を短いポインタとして書く。`# Continue Here`、`- State: docs/STATE.md`、`- Next action: ...`、`- Authoritative artifacts: ...` の4行。加えて `memory-maintenance.mjs checkpoint` で管理ブロック(nextAction、verifiedOutcomes、blockers、artifactRefs など)を保存。
+6. `docs/progress.md` は時系列履歴や恒久的パターンがあるときだけ更新。
+
+**出力**: 更新された `docs/STATE.md`、`.continue-here.md`、明確な次アクション。完了と主張するタスクには `Evidence of Completion` 必須。
+
+**関係**: pause が書き、次セッションの `/sc-status` がそれを git の実態と照合して再開します。

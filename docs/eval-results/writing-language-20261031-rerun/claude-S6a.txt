@@ -1,0 +1,10 @@
+`/sc-status` = dashboard read-only untuk orientasi sesi. Sumber: `.agent/workflows/sc-status.md`.
+
+Fungsi inti:
+- Baca posisi saat ini: `.continue-here.md`, `docs/STATE.md`, `docs/progress.md`, metadata issue di `.scratch/*/issues/`, status Git (branch, upstream, worktree). Tidak ubah apa pun.
+- Jalankan `node .agent/tools/memory-maintenance.mjs report` untuk sinyal stale state / drift.
+- Periksa bukti completion yang tersimpan; tidak asumsikan sukses dari metadata. Tidak rerun test.
+- Rangkum: posisi, pekerjaan selesai, sisa, blocker, status verifikasi.
+- Rekomendasikan **satu** route berikutnya dari 19 workflow (misal `/sc-work`, `/sc-plan`, `/sc-research`), plus delivery tier (`light` atau `full`).
+
+Pakai di awal sesi atau saat kehilangan arah.

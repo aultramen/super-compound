@@ -1,0 +1,15 @@
+`/sc-status` は読み取り専用の「現在地確認」ワークフローです。セッション開始時や方向を見失ったときに使います。
+
+**やること** (`.agent/workflows/sc-status.md`)
+
+1. `.continue-here.md`、`docs/STATE.md`、`docs/progress.md` を読み、`git status` と照合して現在位置を確認。
+2. `.scratch/*/issues/` のメタデータ(Status、Goal ID、Blocked by)だけを棚卸し。本文は選んだ issue のみ読む。
+3. Git のブランチ、upstream、worktree 状態を確認。変更はしない。
+4. `node .agent/tools/memory-maintenance.mjs report` を実行し、メモリの鮮度やドリフトを報告。
+5. 完了証拠を検査。メタデータや空キューから成功を推測しない。テストの再実行もしない。
+6. 次に進む workflow を1つだけ提示。例: `/sc-work`、`/sc-plan`、`/sc-research`、`/sc-pause`。
+7. その route の delivery tier(`light` は `/sc-work`/`/sc-debug` 直行、`full` は BRD→PRD→FSD 経由)を明示。
+
+**出力**: 短いダッシュボード + 推奨アクション1つ。
+
+**制約**: Git もメモリも書き込まない。質問だけなので plan file は作成していません。

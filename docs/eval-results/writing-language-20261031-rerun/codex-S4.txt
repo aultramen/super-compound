@@ -1,0 +1,3 @@
+`/sc-plan` mengubah PRD yang disetujui menjadi FSD sebagai acuan teknis implementasi.
+Alur ini membagi `GOAL-*` menjadi berkas tugas, menetapkan dependensi, dan menyusun rencana verifikasi sebelum `/sc-work`.
+Ringkasan diperiksa terhadap [sc-plan.md](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-plan.md); alur tidak dijalankan, sehingga perilaku aktual belum diuji.

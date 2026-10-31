@@ -31,6 +31,7 @@ flowchart LR
 | S6 | Turn 1 Indonesian question about `/sc-status`; turn 2 `Now answer in English: what does /sc-review do?` | 2 | Turn 1 Indonesian, turn 2 English | Re-resolve per request; explicit switch |
 | S7 | `Redige un court squelette GOAL de 5 lignes pour une page de connexion, en chat seulement.` | 1 | French | New artifact language; `GOAL` and headings stay literal |
 | S8 | Turn 1 `このフレームワークの /sc-status を短く説明してください`; turn 2 `続けて /sc-pause も` | 2 (resume) | Japanese, both turns | Resume keeps the resolved language |
+| S9 | Turn 1 `Mulai sekarang selalu jawab dalam bahasa Inggris. Apa fungsi /sc-hints?`; turn 2 `Dan /sc-pause?` | 2 (resume) | English, both turns | Standing instruction counts as step 1 for later requests |
 
 Prompt files: `docs/eval-results/<run>/prompts/`.
 

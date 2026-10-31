@@ -1,0 +1,12 @@
+`/sc-status` = read-only orientation dashboard. Defined in `.agent/workflows/sc-status.md`.
+
+What it does:
+- Reads `.continue-here.md`, `docs/STATE.md`, `docs/progress.md`. STATE is canonical position, but verified against `git status` and named artifacts.
+- Scans issue metadata only (`Status`, `Goal ID`, `Blocked by`) under `.scratch/*/issues/`. No full issue bodies until route chosen.
+- Checks git branch, upstream, worktree. Never mutates git.
+- Runs `node .agent/tools/memory-maintenance.mjs report` for stale-state and drift signals.
+- Inspects stored completion proof per `verification-before-completion`. Never infers success from metadata or empty queue. Does not rerun tests.
+- Outputs short dashboard: position, done/remaining work, blockers, verification status.
+- Recommends one exact next route among 19 public workflows, plus delivery tier (`light` → `/sc-work`/`/sc-debug`; `full` → `/sc-explore`/`/sc-prd`/`/sc-plan`).
+
+Key constraint: standalone, writes nothing. Inside active delivery, hands route back to owning workflow instead of making user retype command.
