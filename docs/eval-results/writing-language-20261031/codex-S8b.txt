@@ -1,0 +1,4 @@
+`/sc-pause` は、**作業を中断し、次のセッションで再開するための引き継ぎを保存するコマンド**です。進捗、決定事項、阻害要因、検証状況、次の作業を `docs/STATE.md` に記録し、`.continue-here.md` に再開用の案内を残します。再開時は `/sc-status` で状態を確認します。
+
+確認根拠：[ワークフロー定義](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-pause.md)。
+今回は説明のみで、`/sc-pause` の実行やファイル更新はしていません。

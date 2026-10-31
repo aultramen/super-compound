@@ -1,0 +1,5 @@
+`/sc-status` menampilkan posisi proyek saat ini: pekerjaan selesai dan tersisa, hambatan, kondisi Git, serta bukti verifikasi. Lalu, perintah ini menyarankan satu workflow berikutnya.
+
+Sifatnya **hanya baca**. Sumber: [sc-status.md](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-status.md).
+
+Saya hanya membaca definisinya; tidak menjalankan pemeriksaan status proyek.

@@ -1,0 +1,7 @@
+The lint check could not run. The terminal failed to start on both attempts: `helper_unknown_error: setup refresh had errors`.
+
+ASD-STE100 includes writing rules and a controlled dictionary. A lint result alone would not establish full compliance. [Official FAQ](https://www.asd-ste100.org/STE_faq.html)
+
+**Evidence of Completion:** No lint results were produced. No files changed.
+
+README findings and ASD-STE100 compliance remain unchecked.

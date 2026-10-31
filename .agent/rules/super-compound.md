@@ -16,7 +16,6 @@ Understand first; full scope follows BRD -> PRD -> FSD -> GOAL. Verify claims an
 - Prefer existing conventions, tools, and architecture.
 - Treat hooks, prompts, skills, workflows, MCP config, and dependency changes as security-sensitive.
 - Preserve unrelated user changes.
-- Route branch, commit, push, worktree, and Pull Request operations through `sc-go.md` and `git-workflow-operation`.
 - For UI-bearing work, PRD owns the experience baseline, FSD Section 8 owns the
   Screen & Interaction Contract, and delegated OpenAPI/JSON Schema owns exact
   wire shape. Mock-only is never real integration proof.
@@ -55,11 +54,11 @@ Understand first; full scope follows BRD -> PRD -> FSD -> GOAL. Verify claims an
 - Bugs, failures, regressions -> `sc-debug.md` and `systematic-debugging`.
 - Git branch, worktree, commit, push, or PR request -> `sc-go.md` and `git-workflow-operation`.
 - Security, current-stack dependency posture, release, MCP, compliance, or agent config risk -> `sc-audit.md`.
-- Open product/domain/architecture uncertainty -> `sc-explore.md`; convert resolved work through BRD, PRD, then FSD.
+- Open product/domain/architecture uncertainty -> `sc-explore.md`; resolved work -> BRD, PRD, FSD.
 - Named factual, current-doc, version-support, or option-feasibility gap -> `sc-research.md`, then return its advisory evidence to the workflow that owns the decision.
 - Issue shaping, triage, Kanban, Journey, or PRD-to-FSD-goal work -> `sc-plan.md` with `issue-workflow` or `triage-workflow`.
 - Implementation with an approved FSD goal -> `sc-work.md`.
-- Session boundary -> `sc-pause.md`; new session starts with `sc-status.md`.
+- Session boundary -> `sc-pause.md`; new session -> `sc-status.md`.
 
 ## Skill Priority
 
@@ -74,4 +73,4 @@ Understand first; full scope follows BRD -> PRD -> FSD -> GOAL. Verify claims an
 
 quality-gates.md Before Completion: fresh command/inspection; fix gaps before scope expansion.
 
-Documentation: `.agent/context/output-style.md`. Installation: `SETUP.md`, via `/sc-init setup`. Init/reload remain read-only.
+Documentation: `.agent/context/output-style.md`; output language and writing: `.agent/context/writing-language.md`. Installation: `SETUP.md`, via `/sc-init setup`. Init/reload remain read-only.

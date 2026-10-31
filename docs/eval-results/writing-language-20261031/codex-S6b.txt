@@ -1,0 +1,5 @@
+`/sc-review` checks code changes against the requested specification and engineering standards. It reports findings by severity, with evidence, file references, test gaps, and the workflow responsible for each fix. It does not implement fixes.
+
+Source: [sc-review.md](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-review.md).
+
+I read the workflow definition; I did not run a code review.

@@ -1,0 +1,12 @@
+`/sc-status` adalah workflow yang hanya membaca. Fungsinya: menunjukkan posisi kerja sekarang dan memberi satu langkah berikutnya. Gunakan di awal sesi atau saat Anda perlu orientasi.
+
+Langkahnya (`.agent/workflows/sc-status.md`):
+1. Membaca handoff `.continue-here.md`, `docs/STATE.md` (posisi utama) dan `docs/progress.md`. Isi STATE dicocokkan dengan `git status` sebelum dipercaya.
+2. Mendata metadata issue di `.scratch/*/issues/` (Status, Goal ID, Blocked by), tanpa membaca semua isi issue.
+3. Memeriksa kondisi Git: branch, upstream dan worktree. Kondisi Git tidak diubah.
+4. Menjalankan `node .agent/tools/memory-maintenance.mjs report` untuk mendeteksi drift dan state yang sudah lama.
+5. Memeriksa bukti penyelesaian yang tersimpan. Workflow ini tidak menjalankan ulang tes dan tidak menganggap status di metadata sebagai bukti.
+6. Menampilkan dashboard singkat: posisi, pekerjaan selesai dan tersisa, blocker, papan issue dan status verifikasi.
+7. Merekomendasikan **satu** workflow berikutnya, misalnya `/sc-work`, `/sc-debug`, `/sc-plan` atau `/sc-research`. Workflow ini juga menyebut tier delivery (`light` atau `full`).
+
+Workflow ini tidak menulis file, tidak mengubah memory dan tidak menjalankan tes.

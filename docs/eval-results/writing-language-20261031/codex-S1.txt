@@ -1,0 +1,11 @@
+`/sc-status` menampilkan **ringkasan kondisi proyek atau sesi**:
+
+- Pekerjaan yang selesai, tersisa, dan terhambat.
+- Status Git, daftar tugas, dan bukti verifikasi.
+- Satu rekomendasi alur kerja berikutnya untuk melanjutkan.
+
+Gunakan saat memulai atau melanjutkan sesi. Saat dijalankan sendiri, perintah ini hanya membaca keadaan tanpa mengubah file atau menjalankan ulang tes.
+
+Dasar: [sc-status.md](/D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-status.md).
+
+Saya hanya membaca definisinya; kondisi proyek saat ini belum diperiksa.

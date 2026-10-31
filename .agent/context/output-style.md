@@ -15,12 +15,14 @@ verification and one next action. Link supporting detail; expand only what the
 reader needs to review. A small completed task can return:
 
 ```text
-Hasil: [concrete outcome and accurate verification status]
+[Result label]: [concrete outcome and accurate verification status]
 ## Evidence of Completion
 [what was verified; actual command/inspection and result; evidence locator; AC met]
-Berikutnya: [one action, or complete within the requested scope]
-Detail: [artifact link when useful]
+[Next label]: [one action, or complete within the requested scope]
+[Detail label]: [artifact link when useful]
 ```
+
+Labels in brackets render in the resolved output language; `## Evidence of Completion` stays verbatim.
 
 Announce relevant skills together once per work phase, then route internally. Repeat a skill notice only for a consequential scope/risk change, fallback, or required user action. Human checkpoints show a short prioritized set of answerable needs; keep the complete unresolved decision register available by link or on request. Preserve stable IDs, partial answers, and actual approval boundaries. When the authorized goal is satisfied, report completion without creating an improvement backlog or another permission gate.
 
@@ -33,6 +35,12 @@ Keep skeleton-first authoring, authority IDs, acceptance criteria and required
 evidence. Do not add another template layer or universal word limit. When adding
 a human summary to a machine CLI, use additive `--text`; preserve existing JSON,
 parser fields, defaults and exit codes.
+
+## Language and Writing
+
+This standard covers all human-facing output: chat replies, checkpoints, reports
+and documentation. Output language, ASD-STE100-inspired wording and protected
+machine literals follow `.agent/context/writing-language.md`.
 
 ## High-Level Design
 

@@ -4,6 +4,20 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## Unreleased - writing and output language
+
+- Add `.agent/context/writing-language.md`: ASD-STE100-inspired writing (English;
+  not validated) and natural adaptation for other languages, automatic output
+  language resolution (request instruction, request language, optional
+  `conventions.output_language`, conversation, English), and protected machine
+  literals that are never translated. No new workflow, template or contract field.
+- `output-style.md` covers all human-facing output and uses language-neutral
+  example labels; `## Evidence of Completion` stays verbatim. AGENTS.md, the
+  Antigravity rules (`.agent/rules/super-compound.md`), policy-loading and setup
+  adapters point to the new file.
+- Verification: `node --test .agent/tools/writing-language.test.mjs`; startup
+  budgets stay within limits.
+
 ## 2026-10-31 - setup.mjs uninstall
 
 - Add `node .agent/tools/setup.mjs uninstall --scope project|global|both`

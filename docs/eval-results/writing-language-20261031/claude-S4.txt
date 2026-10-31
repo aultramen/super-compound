@@ -1,0 +1,5 @@
+Ringkasan `/sc-plan` (`.agent/workflows/sc-plan.md`):
+
+1. `/sc-plan` menerima PRD yang sudah disetujui. Hasil utamanya adalah FSD di `docs/fsd/fsd-<feature>.md`, dan FSD itu menjadi otoritas implementasi. Workflow ini tidak mengubah kode produk, karena implementasi menjadi tugas `/sc-work`.
+2. Setiap `GOAL-*` di FSD dipecah menjadi issue pointer vertikal di `.scratch/<feature>/issues/`. Setiap pointer berisi blocker, ref verifikasi, saran nama branch, dan kandidat worktree. Workflow ini berhenti dengan `OPEN-*` jika otoritas produk, keamanan atau detail teknis belum ada.
+3. Untuk scope UI, `readiness-gate.mjs` wajib lulus dengan hasil `READY_FOR_SLICE`. Jika aset mesin belum ada, alurnya adalah `CONTRACT_ENABLER`, lalu `FIRST_VERTICAL_SLICE`, lalu `SCALE_OUT_SLICE`, dengan `HARDENING` jika perlu. Rencana diperiksa dengan `plan-verification` (10 dimensi) sebelum eksekusi.
