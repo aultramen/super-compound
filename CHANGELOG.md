@@ -4,6 +4,14 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## Unreleased - risk-driven dual-track adoption plan
+
+- Add `docs/audits/2026-10-31-risk-driven-dual-track-adoption-plan.md`: read-only
+  fit-gap audit and work-package plan (WP-01, WP-03, WP-05, INT); no framework
+  file, workflow, gate or approval changes. Citations re-verified against main `7704023`;
+  review pass fixed five citation line numbers and recorded doc-lint and
+  `--verify-existing` output.
+
 ## Unreleased - writing and output language
 
 - Add `.agent/context/writing-language.md`: ASD-STE100-inspired writing (English;

@@ -63,6 +63,8 @@ Diagram ini adalah **view** dari mekanisme yang sudah ada. Diagram ini tidak mem
 | Input | empat laporan fit-gap: risk-adr (A, C, E), ux-arch (B, F, H), stack-poc (D, G), verify-ops-metrics (I, J, K, L, routing) |
 | Test dijalankan | Tidak. Audit ini read-only. Baseline test adalah langkah pertama WP-01. |
 
+[F] Semua sitasi path:line diperiksa ulang pada `main` `7704023` setelah PR #26 (writing-language policy: `.agent/context/writing-language.md`, `output-style.md`, `AGENTS.md`, `.agent/rules/super-compound.md`); tidak ada file yang disitasi dengan nomor baris berubah, dan PR #26 tidak menambah workflow, gate, approval, atau pin hash, jadi analisis gap Bagian 4 tidak berubah.
+
 ### 2.2 Current-State Capability Inventory
 
 | Kapabilitas | Lokasi canonical | Bukti |
@@ -96,7 +98,7 @@ Diagram ini adalah **view** dari mekanisme yang sudah ada. Diagram ini tidak mem
 | ID | Temuan | Bukti | Dampak ke rencana |
 |---|---|---|---|
 | N1 | `ui-contract-readiness.md` juga di-pin SHA-256, bukan hanya tiga reference lain. | [F] `.agent/skills/agentic-delivery/tests/progressive-disclosure-wave3.test.mjs:20,24-26` | Edit B1/F3/F5 pada doc ini wajib update pin. [R] Hindari edit doc ini bila code atau file lain cukup. |
-| N2 | `sc-plan.md`, `sc-plan.contract.md`, `sc-work.*`, `sc-status.*`, `sc-compound.contract.md`, `sc-eval`, `sc-launch`, `sc-review` contract di-pin di dua test. | [F] `.agent/tools/hitl-checkpoints.test.mjs:14-29,34-51`; `.agent/tools/questions-and-hints.test.mjs:16,23,51` | [R] Jangan edit file workflow/contract ini untuk gap kecil. Rute G2 dipindah ke `prototyping/SKILL.md` (tidak di-pin). |
+| N2 | `sc-plan.*`, `sc-work.*`, `sc-status.*`, `sc-review.*`, `sc-compound.*`, `sc-evolve.*`, `sc-debug.*`, `sc-audit.*`, `sc-init.*`, dan contract `sc-eval`, `sc-launch`, `sc-pause` di-pin di dua test. | [F] `.agent/tools/hitl-checkpoints.test.mjs:14-51`; `.agent/tools/questions-and-hints.test.mjs` (blok pin hash) | [R] Jangan edit file workflow/contract ini untuk gap kecil. Rute G2 dipindah ke `prototyping/SKILL.md` (tidak di-pin). |
 | N3 | Receipt audit framework diverifikasi di CI. Manifest mencakup semua file tracked dan untracked non-ignored, bukan hanya `.agent/`. | [F] `.github/workflows/ci.yml:149-150`; `package.json:17-18`; `.agent/tools/framework-audit.mjs:299-302`; `--verify-existing` stale dengan dokumen ini, 692/692 tanpa dokumen ini | [R] Satu PR; `npm run audit` sekali di langkah INT, termasuk dokumen ini. |
 | N4 | Qualification research sebelum eksekusi produk sudah diizinkan. | [F] `ui-contract-readiness.md:175-176` | Gap B1 (paralel UX/arsitektur) sebagian besar sudah tertutup. Tidak perlu rule baru di doc yang di-pin. |
 | N5 | Root cause terverifikasi sudah masuk `docs/solutions/`; perubahan material dikembalikan ke owner. | [F] `sc-compound.contract.md:1,8` | Gap J (umpan balik insiden) menjadi NOT_REQUIRED. |
@@ -201,7 +203,7 @@ Status: EXISTING, PARTIAL, MISSING, CONFLICT, NOT_REQUIRED.
 | 5 | Kapan stack butuh comparison/research/PoC? | Comparison: selalu oleh architect. Research: fakta bernama yang dapat mengubah FSD/TDEC/pilihan dependency. Compatibility pre-flight: setiap dependency/runtime/vendor/major version baru. PoC (E2): bila compatibility material, atau driver utama ADR HIGH/CRITICAL hanya punya E0/E1. | [F] `architect.md:15`; `sc-research.md:23-24`; `compatibility-check/SKILL.md:38-40`; ADR template `:198,390` |
 | 6 | Kapan FSD `TDEC-*` cukup? | Keputusan lokal proyek, satu sistem, reversible atau reversible lokal, bukan security/privacy/vendor-lock/recurring-cost/policy. | [F] `authority-and-adr.md:20,31-34` |
 | 7 | Kapan ADR wajib? | Bila salah satu kriteria benar: cross-system, high-risk, costly to reverse, security/privacy, platform, vendor-locking, recurring-cost material, policy. ADR harus `ACCEPTED`; FSD `LINKED`. | [F] `authority-and-adr.md:22-29` |
-| 8 | Kapan readiness gate memblokir? | Setiap gate yang berlaku gagal -> BLOCKED, exit non-zero (baseline, state, UIMAP, revision, derived asset, verification ref, HIGH_INTERACTION evidence, `OPEN-*` aktif, first slice, scale-out, hardening, cycle). | [F] `ui-contract-readiness.md:98-114`; `readiness-gate.mjs:211-280` |
+| 8 | Kapan readiness gate memblokir? | Setiap gate yang berlaku gagal -> BLOCKED, exit non-zero (baseline, state, UIMAP, revision, derived asset, verification ref, HIGH_INTERACTION evidence, `OPEN-*` aktif, first slice, scale-out, hardening, cycle). | [F] `ui-contract-readiness.md:98-114`; `readiness-gate.mjs:211-379` (G1-G8 `:211-285`, first slice/scale-out/hardening/cycle `:306-379`) |
 | 9 | Kapan exploratory coding diizinkan tanpa menjadi produksi? | Di `/sc-explore` (atau goal "Compatibility/smoke spike") di bawah `.scratch/prototypes/`, satu pertanyaan, dengan locator dan disposition. Pengecualian TDD hanya bila output dibuang. Reuse butuh scoped exception + tests/security/accessibility. `/sc-research` dan `/sc-plan` tidak menulis code produk. | [F] `sc-explore.contract.md:19-28`; `modes-and-exceptions.md:17-19`; `prototyping/SKILL.md:29-32`; `sc-plan.contract.md:14-15` |
 | 10 | Bagaimana authority, approval, rollback dijaga? | Authority: BRD -> PRD -> FSD -> ADR terlampir. Approval: mode `exception` default; rencana ini tidak menambah approval. Rollback: setiap WP punya langkah rollback berbasis revert file; pin hash dan receipt dikembalikan bersama. | [F] `authority-and-adr.md:1-8`; `project-config.md:52`; Bagian 11 |
 
@@ -221,7 +223,7 @@ Status: EXISTING, PARTIAL, MISSING, CONFLICT, NOT_REQUIRED.
 | `/sc-review` | `sc-review.contract.md` | Tidak ada | Tidak ada | Tidak | Tetap | test yang ada |
 | `/sc-audit` | `sc-audit.contract.md` | Tidak ada | Tidak ada | Tidak | Tetap | test yang ada |
 | `/sc-compound` | `sc-compound.contract.md` (di-pin) | Tidak ada (N5) | Tidak ada | Tidak | Tetap | `memory-maintenance.test.mjs` |
-| `/sc-evolve` | `sc-evolve.contract.md` | Tidak ada. Penyesuaian hasil pilot diajukan lewat sini sebagai DRAFT. | Tidak ada | Tidak | Tetap | test yang ada |
+| `/sc-evolve` | `sc-evolve.contract.md` (di-pin) | Tidak ada. Penyesuaian hasil pilot diajukan lewat sini sebagai DRAFT. | Tidak ada | Tidak | Tetap | test yang ada |
 | `/sc-launch` | `sc-launch.contract.md` | Tidak ada. Konsisten: launch = full (`sc-launch.contract.md:4`). | - | - | - | `workflow-contracts.test.mjs` |
 | `/sc-hints` | `sc-hints.contract.md`; `route-selection.md` | Tidak ada. Memakai rubric tier yang sama (`route-selection.md:30-31`). | - | - | - | `hints.test.mjs` |
 | `/sc-status` | `sc-status.contract.md`, `sc-status.md` (di-pin) | Tidak ada. `/sc-ui` sudah di daftar rute (`sc-status.md:50-51`). | - | - | - | `autonomy-policy.test.mjs` |
@@ -259,7 +261,7 @@ Aturan receipt untuk setiap WP:
 
 - [F] `npm run audit` menjalankan `bench` dan menulis kedua file `.agent/benchmarks/*.after.json` (`package.json:17-18`). CI memverifikasi receipt pada setiap push (`.github/workflows/ci.yml:149-150`).
 - [F] Manifest audit memakai `git ls-files --cached --others --exclude-standard` (`.agent/tools/framework-audit.mjs:299-302`), jadi file untracked non-ignored juga masuk, bukan hanya `.agent/`.
-- [F] Dengan dokumen ini ada di `docs/audits/` (untracked), `--verify-existing` melaporkan "Stored audit evidence is stale". Tanpa dokumen ini: "Verified ... (692/692 accounted)". Dicek pada `449cbd1`, 2026-10-31.
+- [F] Dengan dokumen ini ada di `docs/audits/` (untracked), `--verify-existing` melaporkan "Stored audit evidence is stale". Tanpa dokumen ini: "Verified ... (692/692 accounted)". Dicek pada `449cbd1`, 2026-10-31. Setelah dokumen ini di-commit (`a33f5f5`) dan `npm run audit` dijalankan ulang: `--verify-existing` keluar 0, "Framework audit: PASS", "Manifest accounted: 758/758 (100%)", "Findings: 0".
 - [R] Di dalam setiap WP jalankan `npm test` saja. Jalankan `npm run audit` **sekali**, di langkah INT, setelah semua file PR (termasuk dokumen ini) ada.
 
 ### P0 - Foundation / critical
@@ -360,7 +362,7 @@ Aturan receipt untuk setiap WP:
 
 | ID | Item | Trigger aktivasi | Spesifikasi bila aktif |
 |---|---|---|---|
-| WP-02 | G7 menerima exception | [F] Doc `:112-113` menyebut "explicit exception", tetapi `:101` meminta authorized owner untuk real risk exception, dan `EXCEPTION_APPROVED` adalah status baseline G1 (`readiness-gate.mjs:29,212`). Kesetaraan keduanya [A]. Aktif hanya bila D02 owner memilih maknanya **dan** pilot mencatat false BLOCKED berulang pada G7. | Target `readiness-gate.mjs` + test. AC: test baru; `HIGH_INTERACTION` + `EXCEPTION_APPROVED` + scale-out aktif -> BLOCKED; `VALIDATED` tanpa runnable tetap BLOCKED (sudah dicakup `readiness-gate.test.mjs:287,296`). Entri CHANGELOG wajib (perubahan perilaku gate). |
+| WP-02 | G7 menerima exception | [F] Doc `:112-113` menyebut "explicit exception", tetapi `:101` meminta authorized owner untuk real risk exception, dan `EXCEPTION_APPROVED` adalah status baseline G1 (`readiness-gate.mjs:29,212`). Kesetaraan keduanya [A]. Aktif hanya bila D02 owner memilih maknanya **dan** pilot mencatat false BLOCKED berulang pada G7. | Target `readiness-gate.mjs` + test. AC: test baru; `HIGH_INTERACTION` + `EXCEPTION_APPROVED` + scale-out aktif -> BLOCKED; `VALIDATED` tanpa runnable tetap BLOCKED (sudah dicakup `readiness-gate.test.mjs:296`, loop mutasi; baris mutasi `high-interaction-evidence` di `:287`). Entri CHANGELOG wajib (perubahan perilaku gate). |
 | WP-04 | Rute PoC teknis dari `/sc-prd`/`/sc-plan` | Pilot mencatat pertanyaan feasibility `OPEN-*` tanpa rute. Sementara itu pakai goal "Compatibility/smoke spike" (FSD template `:2264`) atau integration prototype (`prototyping/SKILL.md:17`). | Rule di body `prototyping/SKILL.md` saja; `description` (`:3`) tidak diubah karena dimuat saat routing di setiap sesi. |
 | WP-05b | Hint E0-E4 di Research Note `:33` | Pilot mencatat pilihan stack yang bertumpu pada E0/E1. | Legenda E0-E4 satu baris inline di hint. |
 | WP-08 | Locator wajib untuk `VALIDATED` di G1 | Pilot mencatat minimal satu baseline `VALIDATED` tanpa evidence. | Expand -> migrate -> switch; `readiness-gate.test.mjs`. |
@@ -424,7 +426,7 @@ flowchart LR
 | Klasifikasi UX profile | `readiness-gate.test.mjs:305,341`; `workflow-contracts.test.mjs` | - |
 | Authority FSD/ADR | `agent-contracts.test.mjs`; `artifact-contracts.test.mjs`; `progressive-disclosure-wave3.test.mjs`; `blueprint-document.test.mjs` | pin baru WP-03 |
 | Readiness gate | `readiness-gate.test.mjs` (24 `test(` top-level + loop mutasi `:296`, mis. `:196,226,296`) | - (WP-02 DEFER) |
-| Contract enabler | `readiness-gate.test.mjs:330`; `autonomy-policy.test.mjs` | - |
+| Contract enabler | `readiness-gate.test.mjs:292,296` (mutasi `enablers`: `Contract gate: READY_FOR_SLICE` -> BLOCKED), `:330` (cycle); `autonomy-policy.test.mjs` | - |
 | First vertical slice | `readiness-gate.test.mjs:323,336,429,442,454` | - |
 | Evidence of completion | `verified-promise.test.mjs`; `completion-evidence.test.mjs`; `completion-receipts.test.mjs` | - |
 | Agent adapter & install | `codex-install.test.mjs`; `setup.test.mjs`; `standards-install.test.mjs`; `agent-projection.test.mjs` | - |
@@ -519,7 +521,7 @@ node .agent/tools/doc-lint.mjs docs/audits/2026-10-31-risk-driven-dual-track-ado
 |---|---|---|---|---|
 | 1 | Scope D03 tidak konsisten; usul WP-03..WP-06 | Diterima sebagian | Inkonsistensi benar; usulan rentang ditolak karena WP-06 dihapus | D03 = WP-03 + WP-05 |
 | 2 | CHANGELOG untuk WP-02 | Diterima | `AGENTS.md` | Wajib bila WP-02 aktif |
-| 3 | AC3 WP-02 sudah dicakup test yang ada | Diterima | [F] `readiness-gate.test.mjs:287,296` | Dicatat di spesifikasi WP-02 (DEFER) |
+| 3 | AC3 WP-02 sudah dicakup test yang ada | Diterima | [F] `readiness-gate.test.mjs:296` (loop mutasi; baris mutasi `:287`) | Dicatat di spesifikasi WP-02 (DEFER) |
 | 4 | Separuh kalimat WP-03 mengulang policy | Diterima | Sama dengan First Principles 6 | Klausa dihapus |
 | 5 | Nilai WP-01 dilebihkan; mutasi memicu pin | Diterima | [F] `wave3.test.mjs:25` | Noise pin dicatat di AC3 WP-01 |
 | 6 | Dua metrik README hilang; definisi diduplikasi | Diterima sebagian | Rujukan ke README diterima; breaking contract dihitung dari `WIRE_BREAKING`. Critical-state coverage ditolak: sudah syarat gate G2 | Bagian 13 merujuk `README.md:358-371` |
@@ -555,10 +557,10 @@ node .agent/tools/doc-lint.mjs docs/audits/2026-10-31-risk-driven-dual-track-ado
 | 4 | CHANGELOG di langkah integrasi | Diterima | `AGENTS.md` | Langkah INT |
 | 5 | AC3 token WP-04 | Diterima | Sama dengan Contrarian 3 | WP-04 DEFER, body-only |
 | 6 | Spesifikasi regex samar; noise pin | Diterima | Regex tabel dihapus | Satu `assert.match`; noise pin di AC3 |
-| 7 | Prosedur pin WP-03 kurang | Diterima | [F] `wave3.test.mjs:18`; hash `9aef59e4` muncul 2 kali di `blueprint-document.responses.json` | AC3 + `blueprint-document.test.mjs` |
+| 7 | Prosedur pin WP-03 kurang | Diterima | [F] `wave3.test.mjs:20`; hash `9aef59e4` muncul 2 kali di `blueprint-document.responses.json` | AC3 + `blueprint-document.test.mjs` |
 | 8 | Hitungan test 25 salah | Diterima sebagian | [F] 24 `test(` top-level + 1 `test(` di loop mutasi (`readiness-gate.test.mjs:296`); "25 test" ambigu | Bagian 12.1 menyebut "24 top-level" |
 | 9 | Pilot terlalu banyak proses | Diterima | Baseline historis tidak ada | 4 KPI, langkah install, sumber hitung |
-| 10 | Panjang; §14 placeholder | Diterima sebagian | §14 diisi; doc-lint `--requires-hld` tidak menemukan masalah struktur; merge bagian ditolak (Contrarian 10) | Bagian 14 diisi |
+| 10 | Panjang; §14 placeholder | Diterima sebagian | §14 diisi; [F] doc-lint `--advisory --requires-hld` keluar 0 dengan output "No structural findings; content review still required." (dijalankan pada `a33f5f5`, 2026-10-31); merge bagian ditolak (Contrarian 10) | Bagian 14 diisi |
 | 11 | Kompleksitas, approval, kompatibilitas | Dikonfirmasi | Tidak ada command/status/approval baru | Tidak ada |
 
 ## 15. Final Optimized Recommendation
@@ -617,4 +619,4 @@ Otorisasi yang diperlukan: eksekusi WP-01 saja. Tidak ada commit, push, atau pub
 
 - Laporan input: fit-gap risk-adr, ux-arch, stack-poc, verify-ops-metrics (disediakan oleh workflow, tidak disimpan di repo).
 - `AGENTS.md`; `.agent/context/output-style.md`.
-- Semua path:line di atas mengacu ke commit `449cbd1a69fbff4b909ce5556d74686994308eea`.
+- Basis sitasi tunggal: semua path:line di atas mengacu ke commit audit `449cbd1a69fbff4b909ce5556d74686994308eea`. Pemeriksaan ulang pada `7704023` (Bagian 2.1) hanya mengonfirmasi bahwa nomor baris file yang disitasi identik; `7704023` bukan basis terpisah.
