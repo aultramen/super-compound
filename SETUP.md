@@ -43,9 +43,12 @@ node .agent/tools/setup.mjs install --scope project --host codex --target "PATH 
 node .agent/tools/setup.mjs install --scope both --host codex,claude,cursor --target "PATH TO PROJECT" --dry-run --json
 node .agent/tools/setup.mjs update --scope project --host auto --target "PATH TO PROJECT" --source "PATH TO CHECKOUT"
 node .agent/tools/setup.mjs doctor --scope project --host codex --target "PATH TO PROJECT" --json
+node .agent/tools/setup.mjs uninstall --scope project --target "PATH TO PROJECT" --dry-run
 ```
 
 `--scope` is required. `--host auto` uses recognizable configuration directories and environment hints; choose an explicit comma-separated host list if ambiguous or absent. `--target` defaults to the current directory; `--source` defaults to the engine's framework root. `install` and `update` share ownership checks. Exit 0 means success/read-only preview, 1 means conflicts or doctor drift, and 2 means invalid input or execution failure.
+
+`uninstall` reverses the installation recorded in `.super-compound/manifest.json` (and, for `global`/`both`, the cache and personal entrypoints): it removes files whose bytes still match what setup wrote, strips only the managed block from shared files such as `AGENTS.md` and `CLAUDE.md`, keeps edited user configuration such as `.agent/rules/project-config.md`, and removes folders it emptied. If an owned framework file was edited, it removes nothing and exits 1 with the conflict list. Preview with `--dry-run`. The legacy `.codex/install-super-compound.*` bundle is removed by deleting `$CODEX_HOME/skills/super-compound`.
 
 | Scope | Result |
 | --- | --- |
