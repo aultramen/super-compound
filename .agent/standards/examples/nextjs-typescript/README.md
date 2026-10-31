@@ -87,6 +87,13 @@ against the exact frozen lock and retain the actual outcome; neither source
 inspection nor functional tests establish security clearance. Original
 application lockfiles and the historical failed scans remain unchanged.
 
+`package.json` carries one npm override, `minimatch` pinned to exactly `11.0.3`,
+because eslint and typescript-eslint still declare `minimatch ^10` and 10.2.6 is
+affected by [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249)
+(fixed in 11.0.1). Remove the override when eslint and typescript-eslint accept
+minimatch 11; `.agent/tools/standards-references.test.mjs` allows only this one
+override and fails if any minimatch 10.x returns to the lock.
+
 ## Migration and rollback
 
 This is an explicit, bounded reference-tooling change. Existing projects keep
