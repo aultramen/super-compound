@@ -74,7 +74,7 @@ test('Next.js bridge preserves all recommended rule IDs and severities without t
   }
   const packageManifest = JSON.parse(fs.readFileSync(path.join(reference, 'package.json')));
   const lock = JSON.parse(fs.readFileSync(path.join(reference, 'package-lock.json')));
-  assert.equal(packageManifest.dependencies.next, '16.4.0');
+  assert.equal(packageManifest.dependencies.next, '16.4.3');
   assert.equal(packageManifest.devDependencies['@eslint-community/eslint-utils'], '4.9.1');
   assert.ok(!Object.hasOwn(packageManifest, 'overrides'));
   for (const name of ['@next/eslint-plugin-next', 'fast-glob', 'braces']) {

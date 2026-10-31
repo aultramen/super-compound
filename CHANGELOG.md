@@ -13,6 +13,15 @@ Dated framework changes, compatibility notes and verification evidence; newest d
   macOS verify jobs now check the committed receipt before regenerating it.
 - main is protected by a ruleset: pull request plus the 21 CI checks, no force
   push or deletion, admin-only bypass.
+- Reference security bumps: `next` 16.4.0 -> 16.4.3 (GHSA-2464-fhr4-w9xw critical,
+  GHSA-p3m5-59mp-jv5r high) and `certifi` 2026.7.22 -> 2026.10.23
+  (GHSA-6q48-6c7w-9gw2 critical). The Next.js rule bridge still matches: the
+  16.4.3 plugin package is byte-identical to 16.4.0 apart from its version.
+- Known open finding: minimatch 10.2.6 under eslint/typescript-eslint
+  (GHSA-g3hv-75wg-m249, moderate, lint tooling only). The fix exists only in
+  minimatch 11, which no eslint release accepts yet; the reference keeps its
+  no-override contract, so the reference npm audit stays red until eslint ships
+  support.
 
 ## 2026-10-11 - Public release v2.0.0
 
