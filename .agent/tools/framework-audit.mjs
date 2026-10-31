@@ -312,7 +312,7 @@ async function listRepositoryManifest(root) {
             .split("\0")
             .filter(Boolean)
             .map(normalizePath)
-            .sort((left, right) => left.localeCompare(right)),
+            .sort(compareCodePoints),
         );
       },
     );
@@ -433,7 +433,7 @@ function classifyAuditManifest(files) {
   }
 
   const orderedCounts = Object.fromEntries(
-    Object.entries(counts).sort(([left], [right]) => left.localeCompare(right)),
+    Object.entries(counts).sort(([left], [right]) => compareCodePoints(left, right)),
   );
   return {
     classifiedEntries: rows.length,
@@ -497,7 +497,7 @@ async function readPhysicalInventory(root, activeManifest) {
     const current = stack.pop();
     const absolute = path.join(root, current);
     const entries = (await readdir(absolute, { withFileTypes: true })).sort(
-      (left, right) => left.name.localeCompare(right.name),
+      (left, right) => compareCodePoints(left.name, right.name),
     );
 
     for (const entry of entries) {
@@ -548,7 +548,7 @@ async function readPhysicalInventory(root, activeManifest) {
 async function listFiles(root, current = "") {
   const absolute = path.join(root, current);
   const entries = (await readdir(absolute, { withFileTypes: true })).sort(
-    (left, right) => left.name.localeCompare(right.name),
+    (left, right) => compareCodePoints(left.name, right.name),
   );
   const files = [];
 
@@ -1491,11 +1491,16 @@ function finding(severity, code, file, message) {
   return { severity, code, file, message };
 }
 
+// Locale-independent order: stored audit evidence must verify on every OS and locale.
+export function compareCodePoints(left, right) {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
 function compareFindings(left, right) {
   return (
     SEVERITY_ORDER[left.severity] - SEVERITY_ORDER[right.severity] ||
-    left.code.localeCompare(right.code) ||
-    left.file.localeCompare(right.file)
+    compareCodePoints(left.code, right.code) ||
+    compareCodePoints(left.file, right.file)
   );
 }
 

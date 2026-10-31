@@ -6,7 +6,10 @@ Node 24 as the tested target. These versions were verified against official npm
 metadata; they are example pins, not automatic application upgrades.
 This bounded example loads TypeScript recommended rules and preserves all 22
 Next.js 16.4.0 recommended rule IDs and their warning/error severities through
-the licensed source closure in `checks/next-rule-bridge`. It does not claim the
+the licensed source closure in `checks/next-rule-bridge`. The runtime pin is
+`next` 16.4.3 (security fixes); the published `@next/eslint-plugin-next` 16.4.3
+package is byte-identical to 16.4.0 apart from its version field, so the bridge
+still matches. It does not claim the
 full React/hooks/accessibility rule set of `eslint-config-next`; preserve a real
 application's accepted lint config.
 

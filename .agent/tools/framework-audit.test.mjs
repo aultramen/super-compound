@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import {
   auditEvidenceFingerprint,
   auditRepository,
+  compareCodePoints,
   parseCsvRows,
   verifyStoredAuditEvidence,
 } from "./framework-audit.mjs";
@@ -499,4 +500,12 @@ test('auditRepository checks active runtime module dependencies', async () => {
   } finally {
     await rm(root, {recursive:true,force:true});
   }
+});
+
+test("audit ordering is locale-independent", () => {
+  // localeCompare would put references/ before SKILL.md on many hosts (for example en-ID).
+  assert.deepEqual(
+    ["references/a.md", "SKILL.md", "a", "_x"].sort(compareCodePoints),
+    ["SKILL.md", "_x", "a", "references/a.md"],
+  );
 });
