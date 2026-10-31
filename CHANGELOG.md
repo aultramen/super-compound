@@ -4,6 +4,19 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## Unreleased - Next.js reference minimatch override
+
+- Close GHSA-g3hv-75wg-m249 (minimatch 10.2.6, moderate) in the Next.js reference
+  with one npm override: `minimatch` pinned to exactly `11.0.3` in
+  `.agent/standards/examples/nextjs-typescript/package.json`; the frozen lock now
+  resolves minimatch 11.0.3 (plus its dependency `@isaacs/nonrecursive-glob-match`)
+  under eslint 10.12.0 and typescript-eslint 8.71.1, and the reference npm audit
+  reports zero vulnerabilities. This supersedes the no-override note of 2026-10-31.
+- `standards-references.test.mjs` replaces the blanket no-override assertion with a
+  narrow contract: `overrides` may contain only `minimatch`, pinned to an exact
+  11.x+ version, and no minimatch 10.x entry may remain in the lock. Remove the
+  override and the allowance once eslint and typescript-eslint accept minimatch 11.
+
 ## Unreleased - risk-driven dual-track adoption plan
 
 - Add `docs/audits/2026-10-31-risk-driven-dual-track-adoption-plan.md`: read-only
@@ -55,7 +68,7 @@ Dated framework changes, compatibility notes and verification evidence; newest d
   (GHSA-g3hv-75wg-m249, moderate, lint tooling only). The fix exists only in
   minimatch 11, which no eslint release accepts yet; the reference keeps its
   no-override contract, so the reference npm audit stays red until eslint ships
-  support.
+  support. Superseded by "Unreleased - Next.js reference minimatch override".
 
 ## 2026-10-11 - Public release v2.0.0
 
