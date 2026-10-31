@@ -1,0 +1,1 @@
+Briefly explain what /sc-status does in this framework.

@@ -1,0 +1,6 @@
+- **Light-tier**: proses ringkas untuk perubahan kecil dengan cakupan jelas. Dokumen lebih sedikit, tetapi hasil tetap harus diverifikasi.
+- **Full-tier**: proses lengkap untuk pekerjaan besar atau kompleks, dengan alur **BRD → PRD → FSD → GOAL**, lalu implementasi dan verifikasi.
+
+Keduanya tetap mengikuti prinsip **“No Evidence = Not Done.”**
+
+Saya mengacu pada instruksi yang Anda kirim. Pembacaan repo gagal, jadi batas resmi light-tier belum terverifikasi.

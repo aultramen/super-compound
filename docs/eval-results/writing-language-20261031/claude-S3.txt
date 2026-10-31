@@ -1,0 +1,25 @@
+Framework memilih tier sendiri untuk setiap request (`delivery_mode: auto`). Di awal, framework menulis satu baris `Tier: light|full; trigger: T<n>|none` dan tidak bertanya ke user.
+
+**`light`** (default untuk pekerjaan yang terbatas)
+- Untuk fitur atau halaman yang terbatas dan mudah di-undo. Contract, akses dan pola sudah ada. Acceptance jelas dan ada check untuk membuktikannya.
+- Langsung jalan ke `/sc-work` atau `/sc-debug`. Tidak perlu dokumen BRD/PRD/FSD.
+- Verifikasi memakai acceptance dan check dari request atau issue.
+- Hal baru saja tidak membuat tier naik.
+
+**`full`** (lifecycle lengkap `BRD -> PRD -> FSD -> GOAL`, lewat `/sc-launch`)
+Tier ini aktif hanya jika ada satu trigger material:
+- **T1**: kemampuan produk baru.
+- **T2**: perubahan pada kompatibilitas contract, akses, billing, atau penanganan PII.
+- **T3**: screen atau flow interaktif baru.
+- **T4**: koordinasi yang mengubah hasil, contract, atau risiko.
+- **T5**: user minta BRD/PRD/FSD secara eksplisit.
+
+Verifikasi memakai goal pointer dan section FSD/BRD/PRD yang dirujuk.
+
+**Aturan tambahan**
+- Satu perubahan trivial langsung dikerjakan, dengan verifikasi yang sesuai ukurannya.
+- Jika trigger material muncul di tengah pekerjaan, framework menulis `ESCALATE: T<n>`. Hanya bagian yang terdampak naik ke `full`.
+- Handoff administratif saja tidak membuat tier naik.
+- Tier bisa dikunci dengan `light` atau `full` di `.agent/rules/project-config.md`.
+
+Sumber: `SUPER-COMPOUND.md:21`. Rubric lengkap ada di `.agent/skills/agentic-delivery/references/workflow-integration.md`.

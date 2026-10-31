@@ -1,0 +1,16 @@
+`/sc-status` menunjukkan posisi kerja saat ini dan memilih langkah berikutnya. Workflow ini hanya membaca. Workflow ini tidak menulis, tidak commit, dan tidak menjalankan ulang tes.
+
+**Fungsi utama:**
+1. **Melanjutkan sesi.** Workflow membaca `Next action` di `docs/STATE.md` dan memprioritaskan tujuan yang sedang aktif. Checkpoint mengikuti `.agent/context/checkpoint.contract.md`.
+2. **Memindai issue dengan hemat.** Workflow hanya membaca header issue. Isi lengkap dibuka hanya untuk issue yang dipilih.
+3. **Membaca status Git.** Workflow tidak mengubah apa pun di repo.
+4. **Memberi satu rute `/sc-*` sesuai tier:**
+   - tier `light`: `/sc-work` atau `/sc-debug`
+   - tier `full`: `/sc-explore`, `/sc-prd`, atau `/sc-plan`, sesuai dokumen yang sudah ada (BRD/PRD/FSD)
+5. **Memeriksa memori.** Workflow menjalankan `node .agent/tools/memory-maintenance.mjs report`. Jika ada 3 atau lebih pelajaran dari sumber terpisah yang punya bukti, workflow menyarankan `/sc-evolve` (opsional).
+6. **Menangani status basi (`STALE_STATE` / `STALE_PROGRESS`).** Pemilik file merapikan checkpoint. Goal yang sudah siap tetap didahulukan. Status basi tidak boleh menahan pekerjaan lain yang sudah diizinkan. Hanya dependency yang terdampak yang diblokir.
+7. **Berhenti jika goal selesai.** Jika goal sudah tercapai dan semua cek serta penutupan sudah lengkap, workflow menyuruh deliver atau berhenti.
+8. **Menyarankan `/sc-geniusloop` hanya jika ada niat perbaikan yang jelas.** Antrean kosong saja tidak cukup.
+9. **Memeriksa bukti.** Bukti hanya dibaca dari hasil dan riwayat yang sudah ada, sesuai `verification-before-completion`. Jika bukti kurang, workflow menunjuk pemilik yang harus melengkapinya. Aturannya: No Evidence = Not Done.
+
+Sumber: `.agent/context/workflows/sc-status.contract.md`. Versi lengkapnya ada di `.agent/workflows/sc-status.md`.

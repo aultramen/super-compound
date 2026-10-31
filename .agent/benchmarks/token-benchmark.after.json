@@ -10,7 +10,7 @@
     },
     "limitation": "Deterministic repository-owned, scenario-weighted estimates; overlapping scenarios may count files more than once. This is not host-observed runtime usage; attach a transcript for observed model tokens."
   },
-  "generatedAt": "2026-10-31T11:52:20.044Z",
+  "generatedAt": "2026-10-31T13:40:03.667Z",
   "observedRuntimeTokens": "unknown",
   "hostInjectedSurfaceTokens": "unknown",
   "claimScope": {
@@ -1304,7 +1304,7 @@
   "deterministic": true,
   "runDigests": [
     {
-      "digest": "a4461c831a9c0759c2f33336a7b1c89d3e7c32fe30c52df922476a2a153950b6",
+      "digest": "91e6985c6fa918eccfbea45f0ec0e38ed05cc74bbaccefd74243870e29d41720",
       "count": 3
     }
   ],
@@ -1323,30 +1323,30 @@
       {
         "name": "startup-codex-repository",
         "stage": "input",
-        "beforeTokens": 1622,
-        "afterTokens": 1622,
+        "beforeTokens": 1669,
+        "afterTokens": 1669,
         "pass": true,
-        "afterDigest": "a98430e346f86a83431f804cb748b6f55a5cb8f9d423b100cb410629e5975a95",
+        "afterDigest": "de4c7c3765b1836faba52beb9dd82b1850f3dea914724b98134f35c7dce62386",
         "gateType": "budget",
         "maxAfterTokens": 2000
       },
       {
         "name": "startup-claude-repository",
         "stage": "input",
-        "beforeTokens": 2494,
-        "afterTokens": 2494,
+        "beforeTokens": 2541,
+        "afterTokens": 2541,
         "pass": true,
-        "afterDigest": "f41d234f6fd076b40746c406c8ad30126dce0a011c15b7feefd269afb65d0d15",
+        "afterDigest": "e7e9430bb6618894c8d5ecc2bfc253cd808df64920bb676ce5f61f771a0f9ba1",
         "gateType": "budget",
         "maxAfterTokens": 3000
       },
       {
         "name": "startup-antigravity-rules",
         "stage": "input",
-        "beforeTokens": 2748,
-        "afterTokens": 2748,
+        "beforeTokens": 2734,
+        "afterTokens": 2734,
         "pass": true,
-        "afterDigest": "97817b4182c7dabcb576f8a4cdabd1e8fcd2010bc8c1811bf967c63a2c0034dd",
+        "afterDigest": "08786de67182288ead6cc1d001c06baeea2330e7e75fc4594866899e807597e7",
         "gateType": "budget",
         "maxAfterTokens": 2750
       },

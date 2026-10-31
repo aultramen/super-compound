@@ -47,14 +47,14 @@ Expected result: a focused fix with regression evidence and one next action:
 
 ```text
 Hasil: Validasi form sudah diperbaiki.
-Evidence of Completion:
+## Evidence of Completion
 AC-1 email kosong ditolak: reproduksi gagal sebelum fix; regression test lulus setelah fix.
 Cara/hasil: command aktual, jumlah lulus/gagal, dan tautan evidence laporan.
 Berikutnya: Review perubahan melalui /sc-review.
 Detail: [tautan laporan]
 ```
 
-The numbers above illustrate the format; the agent reports actual check results.
+The numbers above illustrate the format; the agent reports actual check results. The reply uses the request language (Indonesian here); `## Evidence of Completion`, commands and IDs stay verbatim. See [writing and output language](.agent/context/writing-language.md).
 
 | Your task | Start here | What you provide | Result and next action |
 |---|---|---|---|

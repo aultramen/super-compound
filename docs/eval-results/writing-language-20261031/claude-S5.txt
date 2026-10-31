@@ -1,0 +1,21 @@
+`doc-lint.mjs` found no problems in `README.md`.
+
+```
+No structural findings; content review still required.
+exit=0
+```
+
+That check is structural only. It looks for a Summary, the Summary position, unclosed fences and broken links. It does not check ASD-STE100 wording, as `.agent/context/writing-language.md:98` says. I read the first 120 of 741 lines against the STE principles at https://www.asd-ste100.org/ and found these wording problems:
+
+| Line | Problem | STE principle |
+|---|---|---|
+| 11–20 | One paragraph packs more than 8 ideas, including approval, recommendation, review link, register and silence. | One main idea per sentence; a list for separate items |
+| 5 | "Existing configuration ... is preserved." The actor is not named. | Active voice when the actor is known |
+| 13–15 | "Agent research/tests proceed first; evidence refresh does not repeat approval." The slashes are unclear, and the actor of "repeat" is not named. | Clear terms; active voice |
+| 64 | One table cell holds a full sentence plus a chain of conditions. | Short, direct sentences |
+| 9 | "rather than a final ritual" is a figure of speech. | Literal, technical words |
+| 115–118 | One sentence holds 4 actions. | Numbered steps for a procedure |
+
+This is STE-inspired, not validated. The repo does not ship the STE dictionary or a checker, so nothing here proves compliance.
+
+Plan mode is active, so I changed nothing. If you want, my next step is a full pass over all 741 lines with STE rewrites. That pass would keep every link, command, ID and the `## Summary` heading as they are, and I would run `doc-lint` again after it. Tell me if you want the full rewrite or a findings report only.

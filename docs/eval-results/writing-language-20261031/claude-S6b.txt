@@ -1,0 +1,18 @@
+`/sc-review` is a read-only workflow that reviews code changes. Use it after implementation, or to review a diff, a branch or specific files. It finds problems but does not fix them. Fixes go to the workflow that owns them.
+
+Steps (`.agent/workflows/sc-review.md`):
+1. **Scope:** It finds the target, which is the current diff, a branch, files or a target you name. It also finds the spec, which is the request, BRD, PRD, FSD, goal issue, ADR or acceptance criteria.
+2. **Spec check first:** It looks for missing behavior, incorrect behavior and scope creep.
+3. **Standards check second:** It checks security, architecture, tests, maintainability, performance and docs against `.agent/context/standards.contract.md`. Each finding cites a rule ID.
+4. **Evidence check:** It does not accept a claim without proof. A diff shows edits, not working behavior. A build that passes does not prove the requested outcome. It does not rerun tests.
+5. **PR readiness (optional):** It checks the PR checklist. It does not commit or push; that goes through `/sc-go`.
+6. **Persist:** Findings that do not fit in chat go to `docs/reviews/YYYY-MM-DD-<scope>.md`. Then `doc-lint.mjs --advisory` checks that file.
+7. **Route each fix to an owner:**
+   - business scope → `/sc-explore`
+   - requirement gap → `/sc-prd`
+   - FSD/ADR/goal gap → `/sc-plan`
+   - defect → `/sc-debug`
+   - implementation → `/sc-work`
+   - Git/PR action → `/sc-go`
+
+Output: findings first, sorted by severity, with file and line references. It also lists open questions, test gaps and the next owner for each finding. Deferred findings go to `docs/todos/` or `docs/STATE.md`, so none is lost.
