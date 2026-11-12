@@ -1,27 +1,27 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-10-31T11:52:23.004Z",
-  "repositoryHead": "e24fb0a80377d525ddc507aff00c0a75824d955e",
+  "generatedAt": "2026-11-12T02:35:54.803Z",
+  "repositoryHead": "449cbd1a69fbff4b909ce5556d74686994308eea",
   "pass": true,
   "summary": {
     "manifestSource": "git-active-manifest",
-    "manifestFiles": 692,
-    "auditedFiles": 691,
+    "manifestFiles": 739,
+    "auditedFiles": 738,
     "excludedFiles": [
       {
         "path": ".agent/benchmarks/framework-audit.after.json",
         "reason": "requested output path"
       }
     ],
-    "filesRead": 691,
-    "textFiles": 690,
+    "filesRead": 738,
+    "textFiles": 737,
     "binaryFiles": 1,
-    "bytesRead": 7210317,
-    "linesRead": 112278,
-    "contentDigest": "be55ff3d9f6a8163e6e8b80f45e294feae4b60fad2a5092e3d00e5666c4477b7",
+    "bytesRead": 23321765,
+    "linesRead": 202813,
+    "contentDigest": "92c0b768b600d62f4ff8b64dc2a2847401cb2280fe325814ae8c2e050d22407f",
     "skillEntrypoints": 37,
-    "skillEntrypointWords": 16285,
-    "maxSkillEntrypointWords": 634,
+    "skillEntrypointWords": 16607,
+    "maxSkillEntrypointWords": 646,
     "skillEntrypointWordLimit": null,
     "findings": 0,
     "severityCounts": {
@@ -32,14 +32,14 @@
     }
   },
   "coverage": {
-    "activeManifestEntries": 692,
-    "byteContentAuditedEntries": 691,
+    "activeManifestEntries": 739,
+    "byteContentAuditedEntries": 738,
     "specialVerificationEntries": 1,
-    "accountedEntries": 692,
+    "accountedEntries": 739,
     "unaccountedEntries": 0,
     "accountedPercent": 100,
-    "byteContentAuditPercent": 99.8555,
-    "classifiedEntries": 692,
+    "byteContentAuditPercent": 99.8647,
+    "classifiedEntries": 739,
     "unclassifiedEntries": 0,
     "classCoveragePercent": 100,
     "auditClassCounts": {
@@ -47,7 +47,7 @@
       "benchmark-evidence": 12,
       "benchmark-self-evidence": 1,
       "data": 36,
-      "documentation": 126,
+      "documentation": 154,
       "eval-evidence": 23,
       "hook": 10,
       "host-adapter": 4,
@@ -58,16 +58,16 @@
       "runtime-context": 17,
       "skill-contract": 7,
       "skill-entrypoint": 37,
-      "skill-reference": 131,
-      "skill-support": 2,
+      "skill-reference": 134,
+      "skill-support": 3,
       "startup-contract": 3,
       "template": 16,
-      "test": 62,
-      "tool": 36,
+      "test": 74,
+      "tool": 39,
       "workflow": 19,
       "workflow-contract": 19
     },
-    "auditClassDigest": "3846cdede13d7973bd817bd286883c49cb6bc32fe66a0cbc7292a9f12039bd5f",
+    "auditClassDigest": "4660f82b1e4454a9668b42a7ca98202190fd690db44f5353cb3415b21ce38348",
     "contentDigestScope": "byte-content-audited",
     "specialVerificationRequired": true,
     "specialEntries": [
@@ -79,11 +79,11 @@
   },
   "physicalInventory": {
     "scope": "physical-authority-worktree-excluding-runtime-roots",
-    "files": 779,
-    "filesRead": 779,
+    "files": 3590,
+    "filesRead": 3590,
     "symlinks": 0,
-    "activeManifestEntries": 692,
-    "outsideActiveManifestEntries": 87,
+    "activeManifestEntries": 739,
+    "outsideActiveManifestEntries": 2851,
     "retiredAssets": [
       {
         "path": "docs/archive/retired-assets-20261007/docs/loop-runtime-v2.md",
@@ -436,5 +436,5 @@
     ]
   },
   "findings": [],
-  "evidenceDigest": "6d31e2b8190a871bdf14c7220f6241c3ede9ed7d6717740b866dc8f2ecb0f059"
+  "evidenceDigest": "38c307b90b80c67296d22ff97d1ac27802a5342febb915b9448e7250caa69396"
 }

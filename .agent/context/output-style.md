@@ -22,6 +22,10 @@ Berikutnya: [one action, or complete within the requested scope]
 Detail: [artifact link when useful]
 ```
 
+Every route's chat return uses this envelope. Say internal tokens and IDs in plain
+words in the user's language; add the token in parentheses only when the user
+must act on it. Reports never diagram the review method.
+
 Announce relevant skills together once per work phase, then route internally. Repeat a skill notice only for a consequential scope/risk change, fallback, or required user action. Human checkpoints show a short prioritized set of answerable needs; keep the complete unresolved decision register available by link or on request. Preserve stable IDs, partial answers, and actual approval boundaries. When the authorized goal is satisfied, report completion without creating an improvement backlog or another permission gate.
 
 Use **Evidence of Completion** in every completion report, including short tasks;

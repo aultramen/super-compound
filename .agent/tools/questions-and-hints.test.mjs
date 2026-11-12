@@ -25,29 +25,41 @@ const completionRevisionPins = {
   '.agent/workflows/sc-compound.md': '4da149d37837ef6ee0c2bd0bd3e3ec7686b271992d45dd47c1119bd9f9301a22',
   '.agent/workflows/sc-debug.md': 'da0fba2d5bfd867214cd268c983a0dcf960d9550914dc169eecf87bba5f01d52',
   '.agent/workflows/sc-eval.md': '122e356eba974a1441a487dbeeb352a61211cd17b61c025fae50c6453ef34cfa',
-  '.agent/workflows/sc-launch.md': '987f63afbba8ee8c02b8d0b88a9f6655f77925224356039a26e6ad09d976225a',
+  '.agent/workflows/sc-launch.md': 'ef0b11d03b6d0452c670438191efae0c117681fa99576476f73fd507e9d8ce81',
   '.agent/workflows/sc-pause.md': 'f70cbd7ca62d5fb640cdf4a0dca8bd32debb04350f356aa09f30f951b4082e19',
   '.agent/workflows/sc-plan.md': '2e173b162d5bebf0d7ba59f3218e03469d0ea30c069151b7132e1694be3b2e48',
   '.agent/workflows/sc-review.md': '5974aba3b73a2ec3df388d87b96b88b4468ebc4ac8e7432c137ea4213f50b941',
-  '.agent/workflows/sc-status.md': '7c99c5d5b80246698e41aeeccc45dd070fc078477f448cf48d41df4810a64123',
+  '.agent/workflows/sc-status.md': '08474df5aba5c51190f03fc7c943c34ed585b671f4e8c979af5412da2d4eee12',
+  '.agent/workflows/sc-prd.md': 'cf99464d5ecfc31c3adc10c93c4f611066f6070855717cb69090aaf6f6ef4cd5',
+  '.agent/workflows/sc-ui.md': 'b7c1afec980dcde2f8d9eeb107efa415ce2c1932af698ba7391d9c2fcbc4d392',
   '.agent/workflows/sc-work.md': 'd900582c5f73967999657d2007667c4f84f92c4667b84eaebbfde18b6c9da8f9',
 };
 // Candidate-specific source inspection of additive scoped standards routing.
 // Historical completion pins, response bytes and negative controls remain exact.
 // Exact candidate bytes only; no human approval or live qualification asserted.
 const standardsCandidateRevisionPins = {
+  // R06 conditionally routes business evidence; historical responses do not evaluate it.
+  ".agent/context/workflows/sc-research.contract.md": "e8966164da5d0bd2a7e3ed0951f6355d14de4818992ac11506768995dc273fbb",
+  ".agent/workflows/sc-research.md": "a0ab9ca896290767ddcf7faf5f40b405164c48e55ebae19fb5d8eb4bde3da56f",
+  // Reviewed R05 advisory addition; historical responses do not evaluate it.
+  ".agent/skills/brainstorming/references/questions-and-options.md": "d0451a26b33fdce319ea37b0de380c27aa573edebc0705b43bba69343cac3c1a",
+  // R02 optional comparison preserves checkpoint, approval and read-only boundaries.
+  ".agent/context/workflows/sc-explore.contract.md": "f3ded84421a86f7c73fbdfa2a6712152001f2aabf53ff8c379a7fd45b4b37170",
   ".agent/context/workflows/sc-init.contract.md": "002c95897ef42acae94c991f0a3057960925faa046b369cf64162c80541e767c",
   ".agent/workflows/sc-init.md": "dde20a59cad4c75b9c40f143ec9fa8b6e6dac277018e85c31eb02a56d6b8ddf7",
   ".agent/context/workflows/sc-plan.contract.md": "37b1ceff3269c3adf3f1bd8da628c6cb71f791ebcb175c4edb270aa5e4d2219e",
-  ".agent/workflows/sc-plan.md": "11cc2a6e5ea770860c1eeca4fcd2a2329780e436ffa0c0460dcf5cb88e78567f",
+  ".agent/workflows/sc-plan.md": "27a2073ea13556cc971409e049d6847d5f23055bdac12da279fdebc7ed049de4",
   ".agent/context/workflows/sc-work.contract.md": "5821f656597271a78239efe1dfc20489eedcb51cfddd91f552f2864d86f5503a",
-  ".agent/workflows/sc-work.md": "6972c4431704cf5406e68a040b86fa2b4e92710a1712ae1bd0507e09bf2024f8",
-  ".agent/context/workflows/sc-debug.contract.md": "4e5e415c3743ff4417911ba60606ee04f587db3e3fc6026dad2e827d8017851e",
+  ".agent/workflows/sc-work.md": "4e11b547777f259def47b5d7536149a3c3c9e5508dafc8c53b7c3869c2c6d447",
+  // R07 optional model checking preserves read-only and completion boundaries.
+  ".agent/context/workflows/sc-eval.contract.md": "bc5de3e453f0f6eff328c8daba7250619fc3ca8d91dfffc380c903ca85389c98",
+  ".agent/context/workflows/sc-debug.contract.md": "12f5b60f5e99c74bfc512bd72980bca6400dd1628b3c117039d5014c68ee4d38",
   ".agent/workflows/sc-debug.md": "b2a16041d814ca54a9f5e2d7c2e046ef3c1b22eee216935621330d871268c972",
-  ".agent/context/workflows/sc-review.contract.md": "92c3aa43ff64e1c8e6577e770ac8b293f97090675cb721c8d29c56f516ccdc31",
-  ".agent/workflows/sc-review.md": "d9c91223a5a811c84265ccf5a938196f348727e1bc5186dad71f959e92ec5aa9",
+  // Additive reviewer coverage; historical responses and negative controls stay unchanged.
+  ".agent/context/workflows/sc-review.contract.md": "2055ba7d4912b7cf138cd6117e0528448827c12f36e85dec8cf423c93fa97b88",
+  ".agent/workflows/sc-review.md": "b7464013ff222c7da9a59054933df9f738a51c73875c285b3cbecc0e671e0093",
   ".agent/context/workflows/sc-audit.contract.md": "e7919d41d6b519b9a75f4471b4c6c555a0830b66d1a5d78ebf164f24ae1d5259",
-  ".agent/workflows/sc-audit.md": "29e15ddd1c150d929f1757b06b9e278ce52b56160ec0d35437870ae4c6aa2cb5",
+  ".agent/workflows/sc-audit.md": "2e80fb2ffe947dc95c60e5f7cde34237b7a0b11ac428ce714f097a509c05808b",
   ".agent/context/workflows/sc-compound.contract.md": "82c55ea6265e4d35e84a6149ba668e042483aff4ccfcf6a6fe7a38fda68a9fbd",
   ".agent/workflows/sc-compound.md": "1ffbf9625e4f1fc5349a1ac37fcb3346cb2c11120ae8aac4efcf6ff1fc46a26d",
   ".agent/context/workflows/sc-evolve.contract.md": "57d529922cdb15d2939aa05f73104acc77fba6ca23d5155bc46bbc70a9f3899e",

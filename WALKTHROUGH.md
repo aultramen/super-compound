@@ -8,97 +8,9 @@ This walkthrough shows the current goal-oriented Super Compound flow. It uses th
 
 Every command starts with `/sc-*` so it stays separate from native Claude Code slash commands.
 
-## Verified knowledge and safe resume
-
-After a non-trivial verified result, the owning work/debug route captures useful
-reasoning or records a skip reason. Routine feature size alone does not justify
-duplicating final code/tests/docs into a solution. Guarded persistence rejects
-sensitive content before saving either knowledge or pending input.
-
-Search first with `knowledge-search.mjs "<topic>" --require-complete --json`;
-include only known project/stack/version flags. A partial scan names access
-diagnostics and cannot establish absence. Active archived ERR/LRN entries remain
-searchable with the same status filters and bounded result output. A retrieved
-lesson is advice, not permission to skip checks or change approved requirements.
-
-For interruption or non-trivial closeout, keep captured/skip/pending dispositions
-in the optional managed checkpoint `learningCloseouts`. A pending record points
-to validated capture input and verified evidence. `/sc-status` reads it;
-the owning route retries capture without redispatching verified implementation.
-Tiny changes need no checkpoint or ledger merely to record a skip. Existing
-checkpoints without this metadata remain readable and advisory.
-
-When applying a lesson, record feedback against its actual revision/digest.
-Later successes retain earlier failed observations; status/evolve reports their
-bounded proof pointers for owner review. Carry existing review finding IDs across
-revisions, and reuse proof only while relevant inputs stay unchanged. Research
-notes distinguish binding intent from factual premises that need current evidence.
-
-The [framework gap report](docs/audits/2026-10-06-framework-gap-analysis.md) maps
-the website checklist's six items into existing PRD/FSD/design/GOAL contracts;
-it does not require six separate documents or data storage for every website.
-[Delivery evidence](docs/eval-results/framework-enhancement-20261006.md) separates
-local verification from runtime measurement. Same-source controls describe noise;
-they cannot be reported as an enhancement win.
-
-## Practical guidance
-
-Use `/sc-hints` with active context, or add a question:
-
-```text
-/sc-hints
-/sc-hints Saya punya PRD approved, langkah berikutnya apa?
-/sc-hints Mengapa test modul order ini sulit ditulis?
-/sc-hints Kapan saya perlu prototype sebelum membuat FSD?
-/sc-hints Bagaimana melanjutkan pekerjaan setelah compact?
-```
-
-The response names the current condition, verified facts/assumptions/unknowns,
-main recommendation, reason and consequences, openable sources, next command,
-prerequisites and expected result. Empty context prompts for your need.
-Consultation writes no STATE, report, branch or code. “Setuju rekomendasinya”
-accepts advice; “Laksanakan rekomendasi itu” transfers to the owning workflow,
-which reuses valid authorization and checks remaining gates.
-
-For example: a verified approved PRD with no FSD in checked locations leads to
-`/sc-plan <PRD path>`, with the inspected approval section linked and FSD/GOAL
-as the expected result. A small concrete edit receives a light-tier step.
-Missing facts lead to a targeted evidence action; conflicting FSD advice returns
-to the artifact owner. Context recovery reuses context-engineering and `/sc-status`.
-See the [command comparison and flow](README.md#practical-guidance-with-sc-hints)
-and [examples](.agent/skills/hints/references/examples.md).
-
-## Reviewing one artifact
-
-You can say "Buat PRD saja", "Lanjutkan pekerjaan yang authorized", or "Apa
-langkah berikutnya?". The [three conceptual intents](README.md#quick-start)
-route to existing owners. Requested authoring stops at its artifact/validation;
-status and consultation alone remain read-only. Skills are agent routing detail.
-
-Start from the Summary in the artifact being reviewed. It names the outcome,
-scope, material risks and current decision. Detail expands inside that same
-artifact under [shared applicability](.agent/skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion),
-with qualified upstream refs and existing metadata/approval provenance. Optional
-empty support is omitted; required N/A remains factual and traceable. A grouped
-N/A names every covered decision/state ID. Approval never supplies missing proof.
-
-The excerpts below illustrate authoring, not approved project requirements or
-drop-in templates. They omit metadata/sections for explanation only; actual
-authoring preserves the canonical skeleton and parser interfaces.
-
-| Artifact | Before: generic coverage prompt | After: reviewer-oriented excerpt |
-|---|---|---|
-| BRD | Objectives, stakeholders, reporting, cost/benefit and readiness. | Summary: help Operations find failed tasks. BREQ-001: find tasks by status. Scope: existing list; non-scope: retry and access changes. BAC-001: find failures without inspecting every row. Measure: search time; baseline is unmeasured, not invented ROI. |
-| PRD | Alternate compact headings and a broad feature checklist. | FR-001: selecting a status filters the list; source BRD-TASK#BREQ-001. AC-001: results match that status. AC-002: empty results explain the condition and offer clearing the filter. Existing permission limits apply; UAT names steps/results and remains untested until evidence exists. |
-| FSD | Universal technical areas, with local topology after AI. | Reuse existing data/permissions. TDEC-001 proposes local state filtering. Section 8 maps local states to TEST refs with topology LOCAL_ONLY and network_actions empty. GOAL-001 uses the existing packet grammar and qualified PRD/FSD refs; proving checks and rollback cover the changed list behavior. |
-| ADR | Alternatives and N/A tables filled without a material decision. | Filter: adr_applicability NOT_REQUIRED, local TDEC suffices. A separate material cross-service schema decision would record one choice, viable options, consequences, FSD/GOAL/TEST obligations and a review trigger; PROPOSED never governs execution. |
-
-This local-only example does not remove the networked real-provider first-slice
-barrier. Security/privacy/accessibility and material risks retain their own gates.
-
 ## Delivery tier checkpoint
 
-For your first task, use the [five Quick Start scenarios](README.md#quick-start):
+For your first task, use the [Quick Start scenarios](README.md#quick-start):
 setup -> `/sc-init`; bug -> `/sc-debug`; small change -> `/sc-work`;
 new feature -> `/sc-launch`; resume -> `/sc-status`. Provide the expected result
 and a reproduction for bugs. A useful return names the outcome, actual
@@ -114,7 +26,58 @@ a short prioritized set of ready questions/approvals with stable IDs and automat
 separate from approval. Same-owner/scope inputs are coordinated; independent
 authorized work continues. See the [PromptShield before/after example](docs/eval-results/hitl-checkpoints-20261004.md).
 
-Every route classifies the request first and states `Tier: light|full; trigger: T<n>|none`. A bug fix or bounded reversible feature/page using existing contracts, access and patterns is `light`: `/sc-debug` or `/sc-work` starts immediately with relevant validation. A trivial change executes directly and still requires proportionate outcome evidence. Material new capability/flow, contract/access/data changes, consequential coordination, or an explicit artifact request uses `full`. Novelty alone does not raise the tier. The analytics scenario below assumes material new product behavior and is `full`.
+Every route classifies the request first and records `Tier: light|full; trigger: T<n>|none` in its artifact; chat shows the tier only when it is `full` or escalated. A bug fix or bounded reversible feature/page using existing contracts, access and patterns is `light`: `/sc-debug` or `/sc-work` starts immediately with relevant validation. A trivial change executes directly and still requires proportionate outcome evidence. Material new capability/flow, contract/access/data changes, consequential coordination, or an explicit artifact request uses `full`. Novelty alone does not raise the tier. The analytics scenario below assumes material new product behavior and is `full`.
+
+## Scenario
+
+You want to add a usage analytics dashboard to an existing SaaS app.
+
+The ideal path:
+
+```text
+/sc-launch usage analytics dashboard for account admins
+```
+
+What the agent does:
+
+1. Define: shapes the idea into a BRD and PRD, with read-only `/sc-ui` validation of the interactive surface.
+2. Plan: writes the FSD, passes the readiness gate, and slices the work into goals.
+3. Build: executes each goal test-first and promotes the next ready goal internally.
+4. Verify: proves every acceptance criterion, then reviews and audits read-only.
+5. Ship: previews the finish flow; commit, push, and PR run through `/sc-go` on your confirmation.
+
+It asks only for an unresolved material decision or missing authority; see
+[Answering a checkpoint](#answering-a-checkpoint).
+
+Manual equivalent (advanced). This is a multi-slice example with four goals; a
+single-slice feature needs only the first-slice goal, plus an enabler when
+contract assets are missing:
+
+```text
+/sc-init
+/sc-explore analytics dashboard for account admins
+/sc-research Can the current event store support tenant-safe daily metrics with 15-minute freshness?  # conditional
+/sc-prd
+/sc-ui review docs/prd/prd-analytics-dashboard.md
+/sc-plan --issues
+/sc-go start feature/analytics-dashboard
+/sc-work .scratch/analytics-dashboard/issues/01-materialize-analytics-contract.md
+/sc-work .scratch/analytics-dashboard/issues/02-account-usage-vertical-slice.md
+/sc-work .scratch/analytics-dashboard/issues/03-comparison-export-slices.md
+/sc-work .scratch/analytics-dashboard/issues/04-ui-hardening-and-uat.md
+/sc-review
+/sc-audit
+/sc-go commit "Implement analytics dashboard"
+/sc-go push
+/sc-go pr
+/sc-compound
+```
+
+For UI-heavy work, start with read-only design/review:
+
+```text
+/sc-ui review analytics dashboard for a B2B SaaS admin team
+```
 
 ## Answering a checkpoint
 
@@ -175,40 +138,6 @@ Internal document corrections and derived pointers run within the approved
 stage; they do not create new human checkpoints. Existing-screen light UI fixes
 go directly to work/debug; LOCAL_ONLY uses local behavior and accessibility tests.
 
-## Scenario
-
-You want to add a usage analytics dashboard to an existing SaaS app.
-
-The ideal path:
-
-```text
-/sc-init
-/sc-explore analytics dashboard for account admins
-/sc-research Can the current event store support tenant-safe daily metrics with 15-minute freshness?  # conditional
-/sc-prd
-/sc-ui review docs/prd/prd-analytics-dashboard.md
-/sc-plan --issues
-/sc-go start feature/analytics-dashboard
-/sc-work .scratch/analytics-dashboard/issues/01-materialize-analytics-contract.md
-/sc-plan --issues  # re-index revisions and auto-promote unchanged approved semantics
-/sc-work .scratch/analytics-dashboard/issues/02-account-usage-vertical-slice.md
-/sc-plan --issues  # promote only eligible dependents after real-slice verification
-/sc-work .scratch/analytics-dashboard/issues/03-comparison-export-slices.md
-/sc-work .scratch/analytics-dashboard/issues/04-ui-hardening-and-uat.md
-/sc-review
-/sc-audit
-/sc-go commit "Implement analytics dashboard"
-/sc-go push
-/sc-go pr
-/sc-compound
-```
-
-For UI-heavy work, start with read-only design/review:
-
-```text
-/sc-ui review analytics dashboard for a B2B SaaS admin team
-```
-
 ## 1. Initialize
 
 For adopted standards, `/sc-init` reads explicit directory profiles and compares
@@ -253,7 +182,7 @@ The agent should:
 
 - Benchmark the current system against the user's stated intent
 - Generate up to three numbered `GL-*` candidates by default; include valuable incremental improvements
-- Use read-only Brain evaluation when its benefit exceeds coordination overhead
+- Dispatch the Brain agent directly for read-only evaluation when its benefit exceeds coordination overhead
 - Expand to a broad inventory or Beta/Alpha/Theta/Delta filters only when requested
 - Route selected ideas to their owner, including `/sc-work` or `/sc-debug` for bounded changes
 
@@ -305,6 +234,48 @@ docs/brd/brd-analytics-dashboard.md
 
 For example, actor and retention decisions can share a frontier when independent; a storage decision dependent on retention waits for the next round. Answering only actor leaves retention open. Changing retention reopens affected storage decisions while preserving unrelated answers. Repository facts are investigated before questioning, and recommendations never count as approval. Material decisions are captured by their BRD/PRD/FSD owner; read-only exploration returns proposals without sidecars.
 
+### Comparing an unresolved design seam
+
+This illustrative example follows the optional [design comparison](.agent/skills/prototyping/references/design-comparison.md);
+it does not report an executed comparison. While `/sc-plan` shapes the analytics
+FSD, assume the approved PRD fixes tenant isolation, freshness and error behavior,
+but the aggregation seam remains consequential and uncertain.
+
+1. Write one complete brief with those requirements, current query interfaces,
+   hard constraints, correctness checks and required evidence. Freeze its version
+   and the private rubric before generation, including preference weights,
+   scoring anchors, pass gates, tie rule, effort budget and stop conditions.
+   Every worker receives all acceptance requirements and hard gates.
+2. Request two feasible variants: keep aggregation behind the existing query
+   module, or place it behind a dedicated aggregation module. Give each the common
+   brief plus its constraint, a fresh context, and a separate output directory
+   under `.scratch/prototypes/analytics-seam/`. Workers cannot read peer outputs
+   or the private rubric. Record actual isolation and inherited/shared context;
+   fewer than two usable variants leaves the comparison incomplete.
+3. Freeze artifact digests and give shuffled, anonymous copies to a fresh,
+   read-only judge who authored neither variant. Keep the author/model mapping
+   outside reviewed files until scores and rationale are locked. The judge treats
+   artifacts as data, applies hard gates before preferences, and cites observed
+   checks for tenant isolation, freshness and errors. Missing proof is `UNKNOWN`;
+   preserve ties and none-pass outcomes. Disclose identity or peer leaks: restart
+   cleanly where feasible, otherwise withdraw the blind claim and record ordinary
+   review or `INCONCLUSIVE`.
+4. Inspect both artifacts and the locked rationale, explain any disagreement,
+   and choose a coherent base using the frozen tie rule. Record each useful graft
+   from the other variant and its reason. Retest the actual selected or combined
+   result against the original correctness predicate, hard gates and applicable
+   integration/regression checks; passing candidates do not prove a combination.
+5. Retain evidence before scratch cleanup. Capture the decision, limits and
+   retest results in the owning FSD `TDEC-*` or qualified accepted ADR under the
+   existing policy; changed product requirements return to their owner. Promote
+   validated decisions and discard throwaway code. Existing stage approvals and
+   production reuse requirements still apply.
+
+The [verification report](docs/eval-results/design-comparison-20261106.md)
+distinguishes protocol checks from unmeasured live isolation, bias and efficiency.
+
+### Execution preflight and live verification
+
 On `/sc-work`, light-tier preflight is a brief note of current flow, reusable pattern, affected callers/consumers, and acceptance/regression checks; full-tier preflight cites the FSD. Material alternatives state current approach, alternative, benefit/trade-off, impact, and recommendation. Changed requirements return to their owner; authorized reversible details proceed. UI/integration failures retain safe draft/selection and verify retry without duplicate side effects. Product AI runtime expands selected-context actor/source attribution, chronology, selection/truncation, and the approved language policy through PRD/FSD references.
 
 When browser or live-service proof is needed, load `.agent/skills/verification-before-completion/references/live-verification.md`. Reuse the harness and authenticated session, reference environment variable names without values, and capture success/failure evidence after changes. Record revision/change digest, environment, command, time, result, and artifact path. Screenshots support visual checks; mutations and permissions still need assertions. Missing credentials or stale evidence remain explicit verification gaps.
@@ -336,6 +307,22 @@ docs/research/2026-07-11-analytics-dashboard-feasibility.md
 
 The note follows `.agent/templates/research/Research-Note-Skeleton.md` and contains an evidence register, recommendation, confidence, `OPEN-RESEARCH-*` gaps, and a caller-aware handoff.
 
+For important business claims, use the existing
+[evidence and fidelity procedure](.agent/skills/agentic-delivery/references/templates-and-outputs.md#business-claim-evidence-and-fidelity).
+For example, three publications quoting one vendor study provide one underlying
+origin. Keep their source anchors and applicable population/date; do not call
+them three independent confirmations. A sufficient authoritative primary source
+can still establish its bounded fact without a universal source quota.
+
+Preserve consequential wording: an offer to pilot in July if procurement agrees
+is still an offer. If its speaker later corrects it to August, keep the current
+date, condition, speaker and superseded anchor; do not invent funding or an
+assigned commitment. An actual conditional commitment must also remain a
+conditional commitment. Review only affected recommendations and qualified
+downstream refs through their existing owner. Research neither approves execution
+nor silently rewrites accepted scope. [R-06 evidence](docs/eval-results/business-evidence-20261107.md)
+separates the observed exercises from unmeasured model reliability.
+
 Return routing matters:
 
 | Finding | Return route |
@@ -348,7 +335,7 @@ Return routing matters:
 
 Other real examples:
 
-- Before a framework upgrade, compare official migration guidance, runtime support, peer constraints, and rollback evidence; return to `/sc-plan` for the authoritative migration sequence.
+- Before a framework upgrade, compare official migration guidance, runtime support, peer constraints, and rollback evidence; `/sc-plan` then owns the authoritative migration sequence.
 - Before a payment integration, verify provider webhook retry and idempotency semantics; return to `/sc-prd` for observable failure behavior and `/sc-audit` for replay, secret, PII, and compliance risk.
 - After `/sc-geniusloop` proposes replacing a custom queue, research vendor/runtime feasibility only if the user value is already clear; otherwise return to `/sc-explore` first.
 
@@ -459,7 +446,8 @@ python .agent/skills/interface-design/scripts/search.py "performance trackBy" --
 python .agent/skills/interface-design/scripts/search.py "mobile touch target" --domain app
 ```
 
-Example FSD goal sequence:
+Example FSD goal sequence (multi-slice example; a single-slice feature has one
+`FIRST_VERTICAL_SLICE` goal that carries its own mapped hardening checks):
 
 ```markdown
 ### GOAL-001 - Materialize The Analytics Contract
@@ -488,10 +476,10 @@ Blocked by: GOAL-002 and all applicable scale-out issues verified
 ```
 
 If the pinned executable assets already exist and pass the contract gate,
-`GOAL-001` may be omitted. Otherwise, after `GOAL-001` is verified, `/sc-plan`
-must update the FSD contract index, rerun readiness, and automatically promote
-unchanged approved semantics before `GOAL-002` can become ready; only material
-semantic/risk changes need scoped owner approval. Real integration proof is
+`GOAL-001` may be omitted. Otherwise, after `GOAL-001` is verified, the active
+controller updates the FSD contract index, reruns readiness, and promotes
+unchanged approved semantics internally before `GOAL-002` can become ready; only
+material semantic/risk changes return to `/sc-plan` for scoped owner approval. Real integration proof is
 produced by `GOAL-002`, not required before it starts. Missing executable
 qualification needs a bounded approved enabler, as specified by the canonical
 UI readiness reference.
@@ -517,8 +505,8 @@ This should review the proposed FSD goals with you, then create:
 Each issue includes `Status`, `Parent FSD`, `Goal ID`, `Blocked by`, qualified
 upstream/technical/optional ADR/verification refs, `UI delivery role`, versioned
 `Contract refs`, and `Contract gate`. It must not copy BRD, PRD, FSD, ADR, schema,
-or mapping prose. The DAG is contract enabler -> `/sc-plan` mechanical readiness promotion -> exactly
-one first vertical slice -> `/sc-plan` dependent promotion -> scale-out ->
+or mapping prose. The DAG is contract enabler -> internal readiness promotion -> exactly
+one first vertical slice -> internal dependent promotion -> scale-out ->
 hardening; only verified dependencies can release ready work.
 
 ## 6. Git Start
@@ -570,12 +558,12 @@ The agent should execute sequentially by default:
 - Mark issue status when work came from `.scratch/`
 - Update durable state for long work
 
-After `GOAL-001` verifies the executable assets, return to `/sc-plan` to pin
-their revisions and automatically promote unchanged approved semantics at `READY_FOR_SLICE`. Then `GOAL-002` verifies the pinned contract against the real backend,
+After `GOAL-001` verifies the executable assets, the active controller pins
+their revisions and promotes unchanged approved semantics internally at `READY_FOR_SLICE`. Then `GOAL-002` verifies the pinned contract against the real backend,
 including auth/permission, success, and a representative failure. It runs
 `integration-checking`; a mock-only result cannot produce
-`FIRST_VERTICAL_SLICE_VERIFIED`. Return to `/sc-plan` again so issue planning,
-not the active implementation goal, promotes eligible dependents.
+`FIRST_VERTICAL_SLICE_VERIFIED`. The active controller then promotes eligible
+dependents internally; material changes return to `/sc-plan`.
 
 Parallel execution starts only with 2+ independent streams when coordination
 cost is lower than saved time, `GOAL-002` is verified, every stream pins the same
@@ -632,7 +620,7 @@ Run:
 /sc-review
 ```
 
-Review focuses on findings first:
+Review returns a verdict line first, then every critical finding. It looks for:
 
 - Behavioral bugs
 - Missing tests
@@ -766,48 +754,66 @@ observed/confirmed origins with evidence, it recommends `/sc-evolve`, which cons
 the report's promotion candidates and drafts framework proposals for human
 approval.
 
+## Practical guidance
+
+Use `/sc-hints` with active context, or add a question:
+
+```text
+/sc-hints
+/sc-hints Saya punya PRD approved, langkah berikutnya apa?
+/sc-hints Mengapa test modul order ini sulit ditulis?
+/sc-hints Kapan saya perlu prototype sebelum membuat FSD?
+/sc-hints Bagaimana melanjutkan pekerjaan setelah compact?
+```
+
+The response names the current condition, verified facts/assumptions/unknowns,
+main recommendation, reason and consequences, openable sources, next command,
+prerequisites and expected result. Empty context prompts for your need.
+Consultation writes no STATE, report, branch or code. “Setuju rekomendasinya”
+accepts advice; “Laksanakan rekomendasi itu” transfers to the owning workflow,
+which reuses valid authorization and checks remaining gates.
+
+For example: a verified approved PRD with no FSD in checked locations leads to
+`/sc-plan <PRD path>`, with the inspected approval section linked and FSD/GOAL
+as the expected result. A small concrete edit receives a light-tier step.
+Missing facts lead to a targeted evidence action; conflicting FSD advice returns
+to the artifact owner. Context recovery reuses context-engineering and `/sc-status`.
+See the [command comparison and flow](README.md#practical-guidance-with-sc-hints)
+and [examples](.agent/skills/hints/references/examples.md).
+
+## Reviewing one artifact
+
+You can say "Buat PRD saja", "Lanjutkan pekerjaan yang authorized", or "Apa
+langkah berikutnya?". The [three conceptual intents](README.md#quick-start)
+route to existing owners. Requested authoring stops at its artifact/validation;
+status and consultation alone remain read-only. Skills are agent routing detail.
+
+Start from the Summary in the artifact being reviewed. It names the outcome,
+scope, material risks and current decision. Detail expands inside that same
+artifact under [shared applicability](.agent/skills/agentic-delivery/references/templates-and-outputs.md#applicability-and-expansion),
+with qualified upstream refs and existing metadata/approval provenance. Optional
+empty support is omitted; required N/A remains factual and traceable. A grouped
+N/A names every covered decision/state ID. Approval never supplies missing proof.
+
+The excerpts below illustrate authoring, not approved project requirements or
+drop-in templates. They omit metadata/sections for explanation only; actual
+authoring preserves the canonical skeleton and parser interfaces.
+
+| Artifact | Before: generic coverage prompt | After: reviewer-oriented excerpt |
+|---|---|---|
+| BRD | Objectives, stakeholders, reporting, cost/benefit and readiness. | Summary: help Operations find failed tasks. BREQ-001: find tasks by status. Scope: existing list; non-scope: retry and access changes. BAC-001: find failures without inspecting every row. Measure: search time; baseline is unmeasured, not invented ROI. |
+| PRD | Alternate compact headings and a broad feature checklist. | FR-001: selecting a status filters the list; source BRD-TASK#BREQ-001. AC-001: results match that status. AC-002: empty results explain the condition and offer clearing the filter. Existing permission limits apply; UAT names steps/results and remains untested until evidence exists. |
+| FSD | Universal technical areas, with local topology after AI. | Reuse existing data/permissions. TDEC-001 proposes local state filtering. Section 8 maps local states to TEST refs with topology LOCAL_ONLY and network_actions empty. GOAL-001 uses the existing packet grammar and qualified PRD/FSD refs; proving checks and rollback cover the changed list behavior. |
+| ADR | Alternatives and N/A tables filled without a material decision. | Filter: adr_applicability NOT_REQUIRED, local TDEC suffices. A separate material cross-service schema decision would record one choice, viable options, consequences, FSD/GOAL/TEST obligations and a review trigger; PROPOSED never governs execution. |
+
+This local-only example does not remove the networked real-provider first-slice
+barrier. Security/privacy/accessibility and material risks retain their own gates.
+
 ## Current Workflow Map
 
-| Need | Workflow |
-|---|---|
-| Initialize or reload | `/sc-init` |
-| Resume from disk state | `/sc-status` |
-| Generate proactive improvement ideas | `/sc-geniusloop` |
-| Shape fuzzy ideas | `/sc-explore` |
-| Answer a named factual or technical decision question with advisory evidence | `/sc-research` |
-| Write PRD product requirements | `/sc-prd` |
-| Create FSD and goal issue pointers | `/sc-plan` |
-| Define or run evals | `/sc-eval` |
-| Branch, worktree, commit, push, or PR | `/sc-go` |
-| Execute FSD goal | `/sc-work` |
-| Fix failures | `/sc-debug` |
-| Review changes | `/sc-review` |
-| Audit risk/readiness | `/sc-audit` |
-| Capture learnings | `/sc-compound` |
-| Cluster verified learnings into draft framework proposals | `/sc-evolve` |
-| Save handoff | `/sc-pause` |
-| Start lifecycle | `/sc-launch` |
-| Design/review interface | `/sc-ui` |
-| Implement approved interface goal | `/sc-work <approved-goal>` |
-
-## Removed Routes
-
-The cleanup intentionally removed alias and thin workflows.
-
-Use these replacements:
-
-| Old Intent | New Route |
-|---|---|
-| brainstorm, discuss, domain, strategy, prototype | `/sc-explore` |
-| issue shaping, triage, Kanban, Journey, task breakdown | `/sc-plan` |
-| loop execution, handoff, swarm work | `/sc-work` |
-| branch, worktree, commit, push, PR | `/sc-go` |
-| security, compatibility, MCP, compliance, release readiness | `/sc-audit` |
-| focused advice or a specific obstacle | `/sc-hints` |
-| progress or resume | `/sc-status` |
-| reload | `/sc-init reload` |
-| UI design/review | `/sc-ui` |
-| UI implementation | `/sc-work <approved-goal>` |
+See [Public Workflows](README.md#public-workflows) for the 19 workflows and
+when to use each. Alias and thin workflows were removed; older intents route to
+those same workflows.
 
 ## Quality Checklist
 
@@ -954,7 +960,223 @@ Use the [project verification recipe](.agent/skills/verification-before-completi
 to preserve proof through cleanup. Runtime benefit is decided by the paired pilot,
 not by the static text benchmark.
 
-## Context efficiency and session models
+## Maintainer notes
+
+### Applying the November framework improvements
+
+Use existing routes for the adopted checks:
+
+- `/sc-audit agent`: inspect MCP launch selectors as data; classify mutable,
+  exact and unresolved references without starting servers. A direct version
+  pin alone does not prove security or transitive reproducibility.
+- `/sc-audit security` or threat-model planning: retain risk ID, owner,
+  treatment, decision evidence, review/expiry and verification. Planned control
+  work stays OPEN; reuse existing exception evidence rather than another register.
+- `/sc-review`: record applicable coverage and evidence. A failed or empty
+  required reviewer is incomplete coverage; an explicit completed no-findings
+  report can support approval when all other gates pass.
+- `/sc-ui` and authorized UI work: record visual purpose, sourced claims,
+  measured contrast and applicable RTL/mixed-script rendered checks. Existing
+  draft recovery and retry/idempotency requirements still apply.
+- Vocabulary work: preserve the existing `GLOSSARY.md`/`GLOSSARY-MAP.md` or
+  `CONTEXT.md`/`CONTEXT-MAP.md` authority. For example, when a project already
+  uses `GLOSSARY.md`, update it instead of creating `CONTEXT.md`. Conflicting
+  dual sources stop only the ambiguous glossary write; advice stays read-only.
+
+See the [feature matrix and recommendations](docs/audits/2026-11-06-cross-framework-gap-analysis.md),
+[source revisions](docs/research/upstream-sources-20261106.json), and
+[verification limits](docs/eval-results/framework-adoption-20261106.md).
+
+### Maintaining changed skills and avoiding redundant implementation
+
+For skill changes, `skill-authoring` reviews the task's declared diff and owning
+bundles, including references, scripts, data and tests. Inspect protecting tests,
+incidents/history and consumers before pruning. Keep required gates and useful
+rationale; record disposition, successor ownership and evidence in the existing
+change report rather than creating another register.
+
+Before implementation, compare every requested outcome with current behavior and
+evidence. If both validation and its error path already pass the acceptance
+checks, report verified no-change completion. If only validation passes, preserve
+it and finish the error-path gap. An old GREEN or clean Git status cannot supply
+missing proof. Verification stays with the existing completion owner.
+
+For consequential handoff ambiguity, a fresh builder reads the canonical artifact
+and necessary references, then outlines implementation/checks and asks only
+questions whose wrong answer changes the plan. Repository facts and delegated
+choices are resolved internally; material acceptance/policy choices return to the
+existing owner. A concrete settled specification needs no additional interview
+or approval. See [R-05 evidence](docs/eval-results/skill-maintenance-20261106.md).
+
+### Diagnosing a requested MCP integration
+
+When `/sc-work`, `/sc-debug` or verification needs MCP evidence, the existing
+integration owner loads [MCP diagnostics](.agent/skills/integration-checking/references/mcp-diagnostics.md).
+Select the configured client's transport and protocol profile, then use the
+smallest authorized harmless operation with a bounded timeout. Keep each layer's
+outcome separate and exclude sensitive values before recording evidence.
+
+For example, a native client reports `Transport closed` while a fresh client
+returns the requested bounded project-list result. Record both client scopes;
+the first channel failed and the second operation succeeded. Neither observation
+identifies the underlying transport, authenticated principal or scopes. Do not
+restart every server or label the service globally unavailable.
+
+Use the profile-specific procedure: modern requests and legacy initialization
+have different requirements. Discovery alone does not prove the requested tool
+works. Local `MOCK` fixtures exercise diagnostic cases; they do not certify a
+real provider's authentication. See [R-04 evidence](docs/eval-results/mcp-diagnostics-20261106.md)
+for exercised cases and unverified details.
+
+### Refreshing UI catalogs and RTL guidance
+
+Run a targeted catalog query, then inspect identity and compatibility:
+
+```bash
+python .agent/skills/interface-design/scripts/search.py "Apple Native" --domain style --rtl=full --json
+python .agent/skills/interface-design/scripts/search.py "healthcare patient portal" --domain product --rtl=partial
+python .agent/skills/interface-design/scripts/search.py "upgrade Svelte 3 to latest Svelte 4" --stack svelte
+```
+
+The explicit migration destination determines the generation: `latest Svelte 4`
+still requests Svelte 4 legacy guidance. Current destinations select active
+guidance; the source version does not override the destination.
+
+`all` keeps the unfiltered result order; `full`, `partial`, and `caveats` select
+declared compatibility before the result limit. These levels guide design;
+verify actual direction, mixed text, focus and layout through the implementation
+checklist. A stack or design-system command cannot use `--rtl`.
+
+Generic style search uses active canonical styles. An exact supplemental or
+deprecated identity carries its status and resolves through the declared
+replacement when available. Reasoning rules and mode-compatible palettes retain
+actual source identities, including derivation metadata for adjusted surfaces.
+
+Refresh operators inspect each asset's effective revision and normalized hashes
+in `UPSTREAM.json`, preserve local transforms, and run the Python regression
+suite plus `scripts/evaluate_relevance.py`. The adapter retains original source
+judgments and numeric floors; source `web` cases map to local `app` data because
+this skill intentionally separates web and mobile guidance. Local web/app tests
+and baseline metric deltas are reported separately. See the
+[merge ledger](docs/research/interface-catalog-refresh-20261106.json) and
+[R-01 verification](docs/eval-results/interface-catalog-refresh-20261106.md).
+
+### Verified knowledge and safe resume
+
+After a non-trivial verified result, the owning work/debug route captures useful
+reasoning or records a skip reason. Routine feature size alone does not justify
+duplicating final code/tests/docs into a solution. Guarded persistence rejects
+sensitive content before saving either knowledge or pending input.
+
+Search first with `knowledge-search.mjs "<topic>" --require-complete --json`;
+include only known project/stack/version flags. A partial scan names access
+diagnostics and cannot establish absence. Active archived ERR/LRN entries remain
+searchable with the same status filters and bounded result output. A retrieved
+lesson is advice, not permission to skip checks or change approved requirements.
+
+For interruption or non-trivial closeout, keep captured/skip/pending dispositions
+in the optional managed checkpoint `learningCloseouts`. A pending record points
+to validated capture input and verified evidence. `/sc-status` reads it;
+the owning route retries capture without redispatching verified implementation.
+Tiny changes need no checkpoint or ledger merely to record a skip. Existing
+checkpoints without this metadata remain readable and advisory.
+
+When applying a lesson, record feedback against its actual revision/digest.
+Later successes retain earlier failed observations; status/evolve reports their
+bounded proof pointers for owner review. Carry existing review finding IDs across
+revisions, and reuse proof only while relevant inputs stay unchanged. Research
+notes distinguish binding intent from factual premises that need current evidence.
+
+The [framework gap report](docs/audits/2026-10-06-framework-gap-analysis.md) maps
+the website checklist's six items into existing PRD/FSD/design/GOAL contracts;
+it does not require six separate documents or data storage for every website.
+[Delivery evidence](docs/eval-results/framework-enhancement-20261006.md) separates
+local verification from runtime measurement. Same-source controls describe noise;
+they cannot be reported as an enhancement win.
+
+### Checking a new or changed gate
+
+For a newly authored or changed gate/checker, follow the existing
+[verification branch](.agent/skills/verification-before-completion/references/claim-evidence.md#authored-or-changed-gates).
+Lock expected verdicts and semantic predicates before runs. Bind actual current
+artifacts to HEAD plus scoped dirty/untracked byte hashes, checker, configuration
+and command. Run the same checker/configuration on real targets and isolated
+controls; inspect each mutation and require rejection for its intended semantic
+reason. A broken invocation cannot prove rejection. Evidence-backed N/A preserves
+legitimate exclusions; skipped required proof remains unresolved.
+
+The [bounded dependency check](.agent/tools/gate-qualification.test.mjs) uses the
+real `framework-audit.mjs` source: expected acceptance is no missing-dependency
+finding. An isolated derivative adds one absent local import; the same checker
+must reject it with P1 `MISSING_LOCAL_MODULE`. Source bytes stay unchanged.
+Its evidence covers dependency-gate API behavior.
+The [DAG checker](.agent/tools/goal-waves.mjs) likewise rejects unsupported blocker forms with
+`WAVES_INVALID_DEPENDENCY`; valid relative `.md` paths and `None` remain supported.
+
+Retain actual outputs and identities in the [R-03 report](docs/eval-results/real-artifact-gates-20261106.md).
+Report control sensitivity, actual target verdict and whole-system outcomes
+separately. An expected target rejection verifies that verdict while leaving the
+target unqualified. The example grants no approval or downstream authority.
+
+### Checking a bounded concurrency invariant
+
+When an invariant needs additional evidence, the existing verification owner
+loads [bounded formal checking](.agent/skills/verification-before-completion/references/bounded-formal-checking.md).
+Choose a property from current code, state the harm it prevents, and record the
+source revision plus current byte hashes, modeled transitions, assumptions and
+bounds before the run.
+
+The local pilot targets `withLedgerLock` in `.agent/tools/work-package.mjs`:
+operations for the same resolved ledger path must not overlap, and a rejected
+operation must not prevent its queued successor from running. Its test-local
+explicit-state exploration uses two actors with two calls each in one process.
+Each actor issues its next call after the preceding outer call finalizes, using
+one resolved path. Promise callback steps follow the source ordering, and finite
+traces supply terminating callback settlements. This checks finite safety and
+recovery; it proves neither scheduling fairness nor unbounded liveness.
+
+```bash
+node --test .agent/tools/bounded-formal-checking.test.mjs
+```
+
+The retained pilot run reports:
+
+| Source variant | States / transitions / terminals | Model result |
+|---|---|---|
+| Unchanged target | 1,625 / 1,854 / 304 | PASS within the declared model |
+| `unconditional-tail-delete` | 1,849 / 2,658 / 208 | Mutual exclusion violated; two callbacks running |
+| `poisoned-predecessor` | 1,145 / 1,328 / 190 | Finite rejection recovery violated |
+
+All three explorations closed with an empty frontier and maximum observed depth
+16, without a depth cutoff. A separate one-state cap control returned
+`INCONCLUSIVE`, preserving its unexplored successor boundary.
+
+The separate unmodified real-API check is a smoke test; it does not prove
+contention behavior. Deterministic counterexample replay uses a full-source copy
+with a synchronous passive enqueue hook, for both the target and isolated broken
+variants. `unconditional-tail-delete` deletes a newer queue tail;
+`poisoned-predecessor` removes predecessor rejection recovery. Retain each ordered
+trace and validate its path through the model before comparing the corresponding
+source-copy replay. Four baseline/mutant replay paths were validated against the
+model. Neither shortest abstract counterexample was exactly replayed: the
+realizable same-violation witnesses enqueue before settlement, while the retained
+shortest abstract paths settle before enqueue. Keep both kinds of trace and
+their relationship explicit. The unmodified smoke invoked four callbacks with
+one intentional rejection. A model-only failure remains a model finding until
+source behavior confirms it. Preserve the real target and report drift separately
+from a confirmed code defect. Recheck the mapping after covered code or state
+writers change.
+
+[R-07 evidence](docs/eval-results/bounded-formal-checking-20261107.md) records
+the exact run, controls and final acceptance receipts. Related verification passed
+149 Node tests and 28 skill tests, the Python router and syntax checks, plus an
+isolated six-host installation/doctor check with 49 matching installed byte
+checks and nine valid links. The final route benchmark passed three deterministic
+runs. This pilot uses Node and adds no production checker, formal-tool dependency,
+skill or workflow. Its scope excludes cross-process locking, filesystem durability
+and unrestricted executions.
+
+### Context efficiency and session models
 
 For a small edit, read the work contract and changed seam; reuse resident rules.
 Open a full procedure only when a required fact is missing. A checkpoint loads
@@ -964,3 +1186,35 @@ verified goals closed. Worker handoffs carry references and bounded verdicts.
 [Session model guidance](.agent/context/model-guidance.md) documents inherit and
 user overrides. [The evaluation protocol](.agent/evals/context-efficiency.md)
 separates cumulative payload estimates, real paired evidence and billing usage.
+
+#### Reading an external execution receipt
+
+The existing bounded `codex-pilot.mjs` and `session-baseline.mjs` can execute
+external evaluations. When that route is used, follow the existing orchestration
+owner's [external execution receipts](.agent/skills/subagent-orchestration/references/completion-inbox.md#external-execution-receipts).
+Add identity metadata to the existing eval receipt without changing the legacy
+requested `model` field, configured inheritance or explicit overrides.
+
+For example, a recorded invocation requests one harness, executable, model and
+effort, but returns no trustworthy serving metadata. Report those values as the
+request; leave the observed provider and model unknown/unverified. A successful
+process or plausible worker self-report cannot fill the missing identity.
+
+| Evidence | What it establishes |
+|---|---|
+| Recorded invocation/configuration | Requested harness, executable, model and effort |
+| Serving-side metadata with its source and trust basis | Only the observed identity supported by that metadata; adapter assertions are not backend attestation |
+| Model-family attribution | Family only; exact served model requires its own evidence |
+| Tool configuration, advertised availability, enforcement observation | Separate requested, available and enforced capabilities; configuration alone proves no effective restriction |
+
+Keep route execution, identity attribution and completion evidence separate.
+Local fixtures can verify receipt behavior; they do not prove a live provider's
+identity or enforced capabilities. No new provider, controller, serving-metadata
+parser, schema or gate is introduced. [R-08 evidence](docs/eval-results/model-receipts-20261107.md)
+records 75 passing related Node tests, 28 skill tests, syntax checks and a current
+agent-projection check. Projection verifies configuration only. Isolated
+Codex/Claude adapter installation and doctor checks passed, with 13 matching byte
+checks and five valid links; three deterministic benchmark runs passed the
+existing thresholds. Runtime controls and eight manual decisions used `MOCK`
+evidence. Baseline/guided decision parity establishes no reliability gain or live
+provider identity. See the report for final acceptance receipts and scope limits.

@@ -8,6 +8,7 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. Dis
 
 - Discipline compounds: rigorous process today saves time tomorrow.
 - `No Evidence = Not Done`: actual verification must prove the goal, requirements, and every acceptance criterion before a completion or success claim.
+  For a newly authored or changed gate, follow [gate qualification](.agent/skills/verification-before-completion/references/claim-evidence.md#authored-or-changed-gates): prove semantic real-artifact outcomes and rejection controls against current HEAD plus scoped dirty identities before downstream reliance. Existing approvals and light/full authority apply; no new approval or full-tier documents are required.
 - Test-first by default for behavior changes, at the strictness `tdd_mode` sets.
 - YAGNI and DRY: build only what is needed, never duplicate.
 - Infer -> decide -> execute -> report within scoped user authority. Human input is an exception for unresolved material decisions, critical missing information, or risky actions outside existing authority. New-install `approval_mode: exception`; explicit `stage` preferences remain valid.
@@ -16,9 +17,19 @@ Super Compound is a disciplined operating layer for AI-assisted engineering. Dis
 - Plan before code: `full`-tier product work follows `BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION`; `light` work goes straight to `/sc-work` or `/sc-debug`.
 - Turn reusable solutions into documentation through `/sc-compound`.
 
+For MCP configuration, risk artifacts, review coverage, UI evidence and existing
+glossary naming, use the owning skills and compact contracts. The 2026-11-06
+adoption retained those owners; use [dependency and MCP inspection](.agent/skills/compatibility-check/references/inspection-surface.md)
+for scoped selector/provenance checks. Conditional follow-ups create no new
+workflow or implementation authority.
+
+For requested MCP integration, use optional [transport/version, authentication,
+authorization and capability diagnostics](.agent/skills/integration-checking/references/mcp-diagnostics.md)
+through the existing integration/verification owners.
+
 ## Delivery Tiers
 
-The framework decides the tier per request (`delivery_mode: auto` in `.agent/rules/project-config.md`; `light` or `full` pin it). Intake states one line, `Tier: light|full; trigger: T<n>|none`, and never asks. Bounded reversible features/pages with existing contracts, access, patterns, clear acceptance and proving checks are `light`; novelty alone does not raise the tier. `full` is triggered by material new product capability (T1), a material change to contract compatibility, access, billing effects, or PII handling (T2), a material new interactive screen or flow (T3), coordination that changes outcomes, contracts, or material risk (T4), or an explicit request for BRD/PRD/FSD (T5). A single trivial change executes directly with proportionate outcome verification. A material trigger found mid-work escalates (`ESCALATE: T<n>`) only affected work to its owner; administrative handoff alone never raises the tier. The rubric lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`; `/sc-go` previews and `/sc-review` inspect semantic changes when touched paths match T2 signals.
+The framework decides the tier per request (`delivery_mode: auto` in `.agent/rules/project-config.md`; `light` or `full` pin it). Intake records one line, `Tier: light|full; trigger: T<n>|none`, in the artifact and never asks; chat shows it only when the tier is `full` or escalated. Bounded reversible features/pages with existing contracts, access, patterns, clear acceptance and proving checks are `light`; novelty alone does not raise the tier. `full` is triggered by material new product capability (T1), a material change to contract compatibility, access, billing effects, or PII handling (T2), a material new interactive screen or flow (T3), coordination that changes outcomes, contracts, or material risk (T4), or an explicit request for BRD/PRD/FSD (T5). A single trivial change executes directly with proportionate outcome verification. A material trigger found mid-work escalates (`ESCALATE: T<n>`) only affected work to its owner; administrative handoff alone never raises the tier. The rubric lives in `.agent/skills/agentic-delivery/references/workflow-integration.md`; `/sc-go` previews and `/sc-review` inspect semantic changes when touched paths match T2 signals.
 
 ## UI-Aware Lifecycle (trigger T3 or `full`)
 
@@ -47,11 +58,15 @@ the real provider; mock-only evidence is not integration proof. LOCAL_ONLY uses
 mapped local behavior/accessibility checks without synthetic provider assets.
 
 When contract assets are absent, the only executable goal is the bounded
-`CONTRACT_ENABLER`. After it is verified, return to `/sc-plan` to pin exact
-revisions, rerun the gate, and auto-promote approved semantics after readiness checks before the
-first slice. A verified first slice returns to `/sc-plan` for dependent pointer
-promotion. One final `HARDENING` goal owns merged integration, responsive,
-accessibility, E2E, visual-regression, and Business Owner UAT evidence when required by acceptance or unresolved material judgment;
+`CONTRACT_ENABLER`. After it is verified, the active controller pins exact
+revisions, reruns the gate, and promotes unchanged approved semantics internally before the
+first slice; after a verified first slice it promotes dependent pointers the same
+way. Material changes return to `/sc-plan`. A single-slice networked UI feature
+yields one `FIRST_VERTICAL_SLICE` goal carrying its own mapped hardening checks;
+real-provider first-slice proof stays mandatory, and an enabler exists only when
+contract assets are missing. A separate final `HARDENING` goal exists only when
+`SCALE_OUT_SLICE` issues exist. Either way that evidence covers merged integration, responsive,
+accessibility, E2E, visual-regression, and Business Owner UAT when required by acceptance or unresolved material judgment;
 `/sc-review` audits that evidence rather than creating it.
 
 Do not claim the outcome target from framework structure alone. Measure greater
@@ -118,7 +133,18 @@ consultation alone stay read-only. These labels add no commands or approval gate
 
 Research is a conditional sidecar, not a mandatory lifecycle stage. Use it only when the evidence gap is material enough to change a downstream decision or needs durable review. Resolve small lookups inline. Accepted findings must be translated into the BRD, PRD, FSD/TDEC, accepted ADR, or audit record that owns the decision.
 
+For decision-driving or contested business claims and material commitments/corrections,
+load [business claim evidence and fidelity](.agent/skills/agentic-delivery/references/templates-and-outputs.md#business-claim-evidence-and-fidelity);
+use existing registers and authority.
+
 For unresolved material product decisions, `/sc-explore` displays a short prioritized set with stable IDs, a recommendation and brief reason. Preserve the complete unresolved register and show detail on request; dependent items name prerequisites and next action. Wait for actual answers; preserve unanswered decisions and reopen affected descendants after corrections. Concrete scope skips interviewing. `/sc-work` preflight applies to both tiers; AI context and live-evidence procedures load conditionally. Full-tier BRD/PRD/FSD retains durable acceptance provenance under the configured approval policy.
+
+For consequential unresolved design choices, optionally use the
+[design comparison](.agent/skills/prototyping/references/design-comparison.md)
+owned by `prototyping`, `codebase-design`, and `eval-harness`: isolated alternatives,
+frozen rubric, blind read-only review, then retest the selected or grafted result
+against the original predicate. Capture accepted decisions in existing authority
+and keep prototype code disposable; existing authorization and stage gates apply.
 
 ## Skill Loading
 
@@ -227,11 +253,10 @@ the existing privacy guard. Non-trivial closeout records captured/skip/pending
 in the managed checkpoint; pending capture retries never replay verified work.
 Feedback preserves negative observations by knowledge revision/digest. Review
 carries stable finding IDs and unchanged proof; research separates binding intent
-from factual premises needing current evidence. See the deterministic knowledge
-loop and existing review references for the bounded procedures.
-See the [gap analysis](docs/audits/2026-10-06-framework-gap-analysis.md) for source
-coverage and [delivery evidence](docs/eval-results/framework-enhancement-20261006.md)
-for measured results and conditional candidates.
+from factual premises needing current evidence. Use the [deterministic knowledge
+loop](.agent/skills/knowledge-compounding/references/deterministic-loop.md) for source/revision
+capture and bounded recovery, and [prevention checks](.agent/skills/knowledge-compounding/references/prevention-checks.md)
+for recording observed results and reviewing conditional improvements.
 
 ## UI Work
 
@@ -249,9 +274,15 @@ Command examples:
 python .agent/skills/interface-design/scripts/search.py "mobile touch target" --domain app
 python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domain web
 python .agent/skills/interface-design/scripts/search.py "performance trackBy" --stack angular
+python .agent/skills/interface-design/scripts/search.py "Apple Native" --domain style --rtl=full
 ```
 
 Interface-design data must be retrieved through `scripts/search.py`; do not preload CSV files into model context.
+
+RTL filters apply only to explicit style/product retrieval. Read canonical
+identity, status, replacement and compatibility before using guidance; a filter
+does not prove rendered behavior. R-01 selective refresh preserves per-file source
+pins and local transforms; follow the [catalog refresh procedure](.agent/skills/interface-design/references/refresh-and-cache.md#selective-refresh).
 
 ## Quality Bar
 
@@ -271,6 +302,12 @@ goal and the final combined outcome. Both inspect stored proof, never silently
 rerun commands. Historical statuses remain history; metadata alone cannot
 authorize a new completion claim or dependency release. Hooks remain advisory.
 
+When a concurrency, retry or state-machine invariant needs additional evidence,
+use [optional bounded formal checking](.agent/skills/verification-before-completion/references/bounded-formal-checking.md)
+through the existing verification owner. Bind the property to current source,
+assumptions, finite bounds and a broken-code counterexample; a pass covers only
+that scope and adds no approval or completion authority.
+
 Verified reusable outcomes are captured automatically by their owning writer via
 memory-maintenance JSON operations; framework changes remain reviewed proposals.
 Resume checks the managed checkpoint and fresh ledger before dispatch.
@@ -284,13 +321,20 @@ safe continuation exists.
 
 ## Learning and Recovery Authority
 
+Before edits, [execution preflight](.agent/skills/executing-plans/references/authority-and-workspace.md#execution-preflight-both-tiers)
+verifies every required outcome: fully proved work closes without edits; partial
+work preserves proved results and completes the remainder. Changed skills use
+[stocktake and provenance pruning](.agent/skills/skill-authoring/references/structure-and-quality.md#changed-skill-stocktake).
+Use [fresh-builder checks](.agent/skills/brainstorming/references/questions-and-options.md#fresh-builder-ambiguity-check)
+for material handoff ambiguity; return decisions to existing owners.
+
 Work/debug may reuse/add scoped checks after verified outcomes using
 `.agent/skills/knowledge-compounding/references/prevention-checks.md`; compound
 stores results, evolve proposes skill/workflow/policy changes. Acceptance,
 required verifiers and budgets remain authoritative. Recover active constraints
 and durable receipts via `.agent/skills/context-engineering/references/active-context.md`.
 
-Documentation written or updated follows `.agent/context/output-style.md`. Setup uses `SETUP.md`; `/sc-init setup` installs explicitly while normal init/reload remain read-only. New setup uses separate stage approvals and execution authorization; preserve existing project preferences.
+Documentation written or updated follows `.agent/context/output-style.md`. Setup uses `SETUP.md`; `/sc-init setup` installs explicitly while normal init/reload remain read-only. New setup uses exception-based approval (`conventions.approval_mode: exception`); preserve existing project preferences, including explicit stage approvals.
 
 Human input/blockers/authorized handoffs: load `.agent/context/checkpoint.contract.md`.
 It owns all ready active-work items, per-item recommendations, full clickable
@@ -302,3 +346,8 @@ while preserving each route's authority and configured stage checkpoints.
 Context loading and session models: .agent/context/policy-loading.md and
 .agent/context/model-guidance.md on demand; paired measurement protocol:
 .agent/evals/context-efficiency.md.
+
+When external execution needs identity evidence, use the existing owner's
+[receipt procedure](.agent/skills/subagent-orchestration/references/completion-inbox.md#external-execution-receipts).
+Keep requested identity and capabilities separate from observed serving metadata
+and enforced capabilities; absent trustworthy evidence remains unknown/unverified.

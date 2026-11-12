@@ -35,7 +35,10 @@ Result and next action: Observable PRD acceptance; UI drafts go to /sc-ui, appro
    `DRAFT`, `VALIDATED`, or `EXCEPTION_APPROVED` (or `NOT_APPLICABLE` for a
    non-interactive surface). If UI is detected but unclassified, use `STANDARD`.
 9. For `STANDARD` or `HIGH_INTERACTION`, route the PRD draft through `/sc-ui`
-   before approval. `HIGH_INTERACTION` requires interactive evidence; runnable
+   before approval. `STANDARD` is one pass: run the read-only `/sc-ui` review in
+   the same turn and reconcile its evidence into the PRD once; only
+   `HIGH_INTERACTION` gets a separate visible round.
+   `HIGH_INTERACTION` requires interactive evidence; runnable
    evidence is mandatory when the material risk is timing, runtime responsive
    behavior, keyboard/focus, realtime, or offline behavior. `STANDARD` may use
    lower-fidelity evidence when it resolves the material risk.

@@ -4,6 +4,10 @@
 
 Install or update one canonical framework with native adapters for Codex, Claude Code, Antigravity, Cursor, Windsurf/Cascade, and Gemini CLI. Choose project, global, or both. Setup preserves existing configuration and user edits, reports conflicts together, and verifies the installation. Node 22+ is required on Windows, macOS, and Linux; Python is needed only for Python-based features such as interface search.
 
+Paste this prompt into your AI host:
+
+> Setup Super Compound untuk workspace ini dari repository aultramen/super-compound. Baca SETUP.md, deteksi OS dan host AI, tanyakan cakupan project/global/keduanya, pertahankan konfigurasi saya, pasang adapter yang relevan, dan jalankan doctor. Gunakan mode persetujuan bawaan (exception): kerjakan cakupan yang saya minta tanpa persetujuan per tahap, tanyakan hanya keputusan material, informasi penting yang belum ada, atau tindakan berisiko, serta ikuti Documentation Output Standard.
+
 ## Overview
 
 Installation includes `/sc-hints` as the nineteenth public route and the `hints`
@@ -12,10 +16,6 @@ Gemini receive native route pointers; Codex routes explicit commands and clear
 consultation intent through its framework skill and bundled fallback. Try
 `/sc-hints Saya punya PRD approved, langkah berikutnya apa?` after setup.
 Clear implementation, debugging, review and resume requests still select their owner.
-
-Paste this prompt into your AI host:
-
-> Setup Super Compound untuk workspace ini dari repository aultramen/super-compound. Baca SETUP.md, deteksi OS dan host AI, tanyakan cakupan project/global/keduanya, pertahankan konfigurasi saya, pasang adapter yang relevan, dan jalankan doctor. Gunakan persetujuan per tahap, izin eksekusi terpisah, serta Documentation Output Standard.
 
 The agent reads this file from a local checkout. If none exists, clone `https://github.com/aultramen/super-compound.git` into a new directory without replacing an existing checkout. Inspect existing host and project configuration. Ask only for missing scope or an ambiguous host choice. Directory detection is a hint; it is not proof the application is installed or active. Run a dry run, apply the authorized installation, then doctor. Do not request another approval merely to install the scope the user already selected.
 
@@ -133,9 +133,15 @@ through the same ownership-aware update; reconcile modified managed assets first
 After doctor succeeds, run `/sc-init` in the selected host. Confirm it reports
 the project context and verification commands, then try one small task such as
 `/sc-debug Email kosong lolos validasi login`. The expected return is a focused
-fix, actual check results, and one next action. The [Quick Start](README.md#quick-start)
-also covers small changes, new features, and resume. Keep full lifecycle details
-for work that needs them.
+fix, actual check results, and one next action. Other common first tasks are:
+
+```text
+/sc-work Ubah teks tombol Simpan menjadi Simpan perubahan
+/sc-launch Tambahkan dashboard penggunaan untuk admin akun
+/sc-status
+```
+
+Keep full lifecycle details for work that needs them.
 
 | Observation | Action |
 | --- | --- |
@@ -151,4 +157,4 @@ Doctor reports `filesValid`, `detected`, and `liveTested` separately; `liveTeste
 
 ## References
 
-Native formats are based on [Cursor skills](https://cursor.com/docs/skills), [Claude commands/skills](https://code.claude.com/docs/en/slash-commands), [Antigravity skill locations](https://antigravity.google/docs/skills), [Windsurf workflows](https://docs.windsurf.com/windsurf/cascade/workflows), and [Gemini custom commands](https://geminicli.com/docs/cli/custom-commands/). See [README](README.md) and [walkthrough](WALKTHROUGH.md) for the development lifecycle.
+Native formats are based on [Cursor skills](https://cursor.com/docs/skills), [Claude commands/skills](https://code.claude.com/docs/en/slash-commands), [Antigravity skill locations](https://antigravity.google/docs/skills), [Windsurf workflows](https://docs.windsurf.com/windsurf/cascade/workflows), and [Gemini custom commands](https://geminicli.com/docs/cli/custom-commands/). See the [public workflows](SUPER-COMPOUND.md#public-workflows) and [delivery tiers](SUPER-COMPOUND.md#delivery-tiers) for the development lifecycle.

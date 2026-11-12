@@ -357,13 +357,20 @@ export async function evaluateReadiness({ root = process.cwd(), fsdPath, prdPath
   const slices = [...firstSlices, ...scaleOuts].map((issue) => issue.file);
   const unlinked = hardening.length === 1
     ? slices.filter((file) => !hardening[0].blockedBy.includes(file))
-    : slices;
-  gate("hardening", hardening.length === 1 && unlinked.length === 0,
-    hardening.length !== 1
+    : [];
+  // Single-slice scope may carry its mapped hardening checks in the first slice;
+  // any SCALE_OUT_SLICE makes the one merged HARDENING goal mandatory. Roles are
+  // unvalidated free text, so a dependent gate also counts as a dependent slice.
+  const hasDependents = scaleOuts.length > 0 || issues.some((issue) => issue.gate === "FIRST_VERTICAL_SLICE_VERIFIED");
+  const hardeningCountOk = hardening.length === 1 || (hardening.length === 0 && !hasDependents);
+  gate("hardening", hardeningCountOk && unlinked.length === 0,
+    !hardeningCountOk
       ? `${hardening.length} HARDENING issues`
       : unlinked.length
         ? `${hardening[0].file} missing: ${unlinked.join(", ")}`
-        : `${hardening[0].file} depends on ${slices.length} slices`);
+        : hardening.length
+          ? `${hardening[0].file} depends on ${slices.length} slices`
+          : "no scale-out: first slice carries its mapped hardening checks");
 
   // B4
   const badEnablers = byRole("CONTRACT_ENABLER")

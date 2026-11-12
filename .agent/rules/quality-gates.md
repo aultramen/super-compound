@@ -6,7 +6,7 @@ Procedures: skills.
 
 ## Before Work
 
-- Classify tier: light|full (`skills/agentic-delivery/references/workflow-integration.md`); state one line. Mid-work triggers escalate, never block intake.
+- Classify tier: light|full (`skills/agentic-delivery/references/workflow-integration.md`); record one line. Mid-work triggers escalate, never block intake.
 - Compact contract before editing; full detail for uncovered checks, material risk,
   conflicts or procedure edits only.
 - `.agent/rules/project-config.md`: conventions/pins. Resolve affected standards

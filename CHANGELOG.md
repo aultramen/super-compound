@@ -4,6 +4,191 @@
 
 Dated framework changes, compatibility notes and verification evidence; newest delivery first.
 
+## 2026-11-12 - Lean default path
+
+- Readiness gate contract: zero `HARDENING` issues are accepted when no issue is
+  a `SCALE_OUT_SLICE` or carries the `FIRST_VERTICAL_SLICE_VERIFIED` gate; the
+  first slice then carries its mapped hardening checks. Any dependent slice
+  still requires exactly one `HARDENING` goal, and real-provider first-slice
+  proof stays mandatory.
+- `/sc-review` and `/sc-audit` return a verdict line first, then every
+  critical/high finding one line each; lower severities are counts plus the
+  report link, or listed when no report was saved.
+- The `Tier:` line is recorded at intake and shown in chat only when the tier
+  is `full` or escalated.
+- Enabler and first-slice promotion run inside the active controller; only
+  material changes return to `/sc-plan`. Closeout flushes once per feature.
+- `README.md` and `WALKTHROUGH.md` lead with the one-command path; the `SETUP.md`
+  prompt uses exception-based approval.
+
+## 2026-11-07 - Python manifest flake investigation
+
+- Preserve the original assertion failure and separate it from current native
+  observations; the historical child-process cause remains UNKNOWN.
+- Current traced and bare 58-file default runs passed 631/631 each; 69 focused
+  native comment cases passed. No native same-failure recurrence was observed.
+- The partial 50-file reconstruction passed 595/595 using retained critical
+  code; four observation controls passed. Keep Needs Validation and the TODO
+  pending: no native failure or original child diagnostics established a cause.
+  No runtime fix, timeout increase or permanent concurrency cap is justified.
+- [Investigation evidence](docs/eval-results/python-manifest-flake-20261107.md)
+  retains the bounded findings; historical R-01 through R-08 records are preserved.
+
+## 2026-11-07 - R-01 through R-08 final review corrections
+
+- Honor explicit migration destinations across supported version forms while
+  preserving genuine legacy requests.
+- Replace seven repository-only startup/setup links with shipped references
+  and self-contained examples; update the current R-01 through R-08 status pointer.
+- Preserve fail-closed Python manifest rejection while adding bounded subprocess
+  diagnostics without exposing parser stderr or private manifest values.
+- Frozen verification passed 631/631 Node tool tests including installers,
+  28/28 skill tests, 99 Python tests and 90 frozen relevance cases.
+  Isolated installation/doctor covered 6 adapters, 130 byte comparisons and
+  111 installed link/anchor checks. These checks do not certify live hosts.
+- The [combined review](docs/reviews/2026-11-07-r01-r08-final-review.md) retains
+  regression evidence, prior failed attempts and the final acceptance receipts.
+
+## 2026-11-07 - R-08 Requested and observed execution identity
+
+- Extend the existing completion-inbox owner with conditional external receipt
+  guidance; retain configured inheritance, explicit overrides and all 19 workflows.
+- Add request/observation identity metadata to existing bounded Codex pilot and
+  session-baseline eval receipts while preserving their legacy requested `model`.
+- Keep harness/executable/model/effort requests separate from serving identity;
+  missing trustworthy metadata remains unknown/unverified. Adapter assertions
+  are not backend attestation, and family attribution does not prove exact model.
+- Distinguish requested, available and enforced capabilities. Tool configuration
+  alone supplies no effective-capability proof or completion authority.
+- No new provider, controller, serving-metadata parser, schema or gate. Local
+  verification passed 75 related Node tests, 28 skill tests, syntax/configuration
+  projection checks, isolated Codex/Claude installation/doctor and three
+  deterministic benchmark runs at the existing thresholds. Runtime/manual controls
+  used MOCK evidence; live identity and effective capabilities remain unverified. See
+  [R-08 evidence](docs/eval-results/model-receipts-20261107.md).
+
+## 2026-11-07 - R-07 Optional bounded formal checking
+
+- Extend the existing verification owner with an optional reference for a named
+  concurrency, retry or state-machine invariant; preserve all 19 public workflows.
+- Bind properties and modeled atomic steps to current source, assumptions,
+  finite bounds and reproducible commands; distinguish model drift from defects.
+- Add a test-local Node pilot for `withLedgerLock` safety and rejection recovery,
+  with two actors making two calls each, broken-code controls, instrumented
+  source-copy replay and a separate unmodified real-API smoke test.
+- Keep finite results separate from cross-process locking, filesystem guarantees
+  and unbounded liveness. No production checker, new skill or dependency is added.
+- The finite target model passed at 1,625 states / 1,854 transitions; both broken
+  variants failed their intended properties and four source-copy paths were
+  model-validated. Shortest abstract traces were not exactly replayed; separate
+  realizable witnesses retain the same violations. Related checks passed 149 Node
+  tests, 28 skill tests, Python router and syntax checks, six-host installation/doctor and
+  three deterministic benchmark runs; actual runs and final acceptance receipts belong in
+  [R-07 evidence](docs/eval-results/bounded-formal-checking-20261107.md).
+
+## 2026-11-07 - R-06 Business evidence and statement fidelity
+
+- Route important business claims to existing research and shared authoring
+  guidance, with an explicit link for section-only applicability readers.
+- Trace publisher and underlying evidence origins; repeated domains, circular
+  citations and agreeing tools do not establish independent corroboration.
+- Preserve pinpoint support, exact scope and honest claim statuses without a
+  universal source quota or unsupported confidence score.
+- Preserve source/synthesis fidelity in both directions: corrections, attribution,
+  modality and conditional commitments; refresh only affected downstream refs.
+- Keep research advisory, canonical authority and existing approval boundaries;
+  reuse existing registers and template grammar. Actual controls, results and
+  limits are recorded in [R-06 evidence](docs/eval-results/business-evidence-20261107.md).
+
+## 2026-11-06 - R-05 Skill maintenance and execution prechecks
+
+- Review changed skill bundles and affected consumers against a declared task
+  baseline; retain unmeasured usage and evidence-backed dispositions in existing reports.
+- Trace rule provenance before pruning; preserve required gates, behavior-bearing
+  rationale, license/parser requirements and successor ownership.
+- Add selective fresh-builder ambiguity checks to existing brainstorming;
+  retain canonical decisions, delegated details and existing approval boundaries.
+- Compare all current outcomes before implementation: verified work can close
+  without edits; partial/unproved work continues only for remaining outcomes.
+- Keep all 19 public workflows and existing skills. Baselines, actual exercises,
+  tests and limits are recorded in [R-05 evidence](docs/eval-results/skill-maintenance-20261106.md).
+
+## 2026-11-06 - R-04 Scoped MCP diagnostics
+
+- Extend existing integration and live-verification owners with optional MCP
+  diagnostics for stdio, Streamable HTTP and configured legacy SSE; select the
+  protocol profile rather than requiring legacy initialization universally.
+- Separate transport, protocol, authentication, authorization, discovery and
+  requested operation outcomes. Preserve unknowns and client-specific failures.
+- Reuse trusted maintained clients and authorized harmless checks with bounded
+  timeouts, evidence allowlisting before output and diagnostic-owned cleanup.
+  Static dependency audit remains inspection-only.
+- Preserve all 19 workflows and existing approval boundaries; no new MCP client,
+  skill, workflow or dependency. Actual verification and limits are recorded in
+  [R-04 evidence](docs/eval-results/mcp-diagnostics-20261106.md).
+
+## 2026-11-06 - R-03 Real-artifact gate qualification
+
+- Qualify newly authored or changed gates through existing verification,
+  plan-verification and eval owners before downstream reliance: exercise actual
+  artifacts, a known-valid control and intended rejection controls.
+- Bind semantic expected/observed results to current HEAD and scoped dirty input,
+  checker, dependency and configuration identities. Command exit alone cannot
+  prove the verdict; preserve failed and blocked evidence.
+- Reject unsupported issue `Blocked by` tokens with
+  `WAVES_INVALID_DEPENDENCY` instead of silently erasing dependencies; valid
+  relative `.md` paths and `None` retain their behavior.
+- Keep all 19 workflows, existing approvals and light/full authority; no new
+  approval or full-tier documents are required.
+- Report gate sensitivity, actual target verdicts and broader outcome separately.
+  Rejected issue pointers and the legacy N/A FSD without an applicability reason
+  remain unqualified; see [R-03 evidence](docs/eval-results/real-artifact-gates-20261106.md)
+  for results and limits.
+
+## 2026-11-06 - R-02 Optional independent design comparisons
+
+- Route consequential uncertain design choices through existing `prototyping`,
+  `codebase-design`, and `eval-harness` owners; retain all 19 public workflows.
+- Compare 2-3 isolated constrained alternatives against complete public
+  requirements and acceptance; freeze private preference weights and scoring
+  anchors before generation.
+- Use an independent read-only judge with anonymous artifacts and a hidden
+  author/model mapping; retain failed attempts and disclose review limits.
+- Retest the selected or grafted result against the original correctness
+  predicate. Capture decisions in existing light/full-tier authority and keep
+  prototype code disposable under the existing scoped reuse exception.
+- Verification: 47 related regressions, 28 skill tests, a reproduced local blind
+  comparison and zero-finding audit; limits in [R-02 evidence](docs/eval-results/design-comparison-20261106.md).
+
+## 2026-11-06 - R-01 UI catalog and RTL retrieval refresh
+
+- Refresh 35 upstream CSV catalogs at `b7d5353`, retain the local web catalog and
+  106 local cell corrections, and record superseded values in the merge ledger.
+- Add canonical style taxonomy/alias handling and explicit style/product RTL
+  filters. Preserve bounded caching, acronym queries, full code fields, safe
+  persistence, web/app routing and existing CLI defaults.
+- Adapt closed reasoning rules, mode-compatible styles/palettes, source identity
+  and Reasoning/Confidence through existing generation; retain upstream licensing.
+- Track source revisions per file with normalized hashes and local transforms;
+  reuse the frozen 90-case relevance oracle and original thresholds. Local
+  baseline deltas are diagnostics, not a performance-improvement claim.
+- Verification status and commands: [R-01 evidence](docs/eval-results/interface-catalog-refresh-20261106.md).
+
+## 2026-11-06 - Cross-framework adoption in existing owners
+
+- Compare 12 refreshed upstream frameworks with source revisions and content
+  fingerprints; preserve local overlays and document the Ralph source migration.
+- Extend security/compatibility audit with static no-exec MCP selector review;
+  enrich threat/risk reporting with ownership, decisions and verification.
+- Make incomplete required reviewer coverage distinct from completed zero-findings.
+- Add purpose-based UI treatments, sourced claims, measured contrast and scoped
+  RTL/mixed-script checks while preserving recovery behavior.
+- Support existing GLOSSARY/CONTEXT naming and maps through one domain policy
+  and connected callers; no migration, new skill, workflow or public command.
+- Refresh six intentional reference hashes and two compact compatibility pins
+  without weakening preservation assertions. See the [analysis](docs/audits/2026-11-06-cross-framework-gap-analysis.md)
+  and [verification](docs/eval-results/framework-adoption-20261106.md).
+
 ## 2026-10-31 - setup.mjs uninstall
 
 - Add `node .agent/tools/setup.mjs uninstall --scope project|global|both`

@@ -11,7 +11,9 @@ Use this workflow as a UI capability sidecar with two explicit modes:
 
 - Design/review mode is read-only and may run without implementation authority.
 - Design/review mode may validate a UI-bearing PRD draft and produce evidence,
-  but it never edits the PRD, FSD, prototype, or source code.
+  but it never edits the PRD, FSD, prototype, or source code. A `STANDARD` PRD
+  draft is reviewed in the caller's turn and returned once; only
+  `HIGH_INTERACTION` is a separate visible round.
 - Implementation mode never edits directly: fuzzy intent routes to `/sc-explore`,
   an approved BRD without a PRD routes to `/sc-prd`, an approved PRD without an
   FSD routes to `/sc-plan`, and an approved FSD `GOAL-*` hands off to `/sc-work`.
