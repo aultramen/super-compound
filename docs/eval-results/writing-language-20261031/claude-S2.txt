@@ -1,0 +1,19 @@
+`/sc-status` is a read-only workflow that shows where the project and session stand, then names one next workflow to run. Use it at the start of a session or when you need to get your bearings. Source: `.agent/workflows/sc-status.md`.
+
+**What it reads:**
+- The handoff file `.continue-here.md`, plus `docs/STATE.md` and `docs/progress.md`. `STATE.md` is treated as the main record of position, but it is checked against `git status` and the files it names before it is trusted.
+- Issues under `.scratch/*/issues/`: only their metadata (`Status`, `Goal ID`, `Blocked by`, path). It reads the full text of only the one issue it selects.
+- Git state: branch, upstream and worktrees. It never changes them.
+- The output of `node .agent/tools/memory-maintenance.mjs report`. Stale-state signals from this report block only the goals they affect, not all work.
+
+**What it reports:**
+- A short dashboard: current position, work done, work remaining, blockers, issue board and verification status.
+- Stored completion proof, checked with `verification-before-completion`. It does not count issue metadata, an empty queue or a subagent report as proof, and it does not rerun tests or create new evidence.
+- One recommended route out of the 19 public workflows (for example `/sc-work`, `/sc-debug`, `/sc-research` or `/sc-plan`).
+- The delivery tier that route implies: `light` goes straight to `/sc-work` or `/sc-debug`. `full` goes to `/sc-explore`, `/sc-prd` or `/sc-plan`, depending on which documents already exist.
+
+**Rules:**
+- It is strictly read-only: no memory writes, no Git changes, no receipt acknowledgments.
+- It suggests `/sc-geniusloop` only when you asked for improvements and nothing more urgent is waiting. An empty queue alone is not enough.
+- It suggests `/sc-evolve` only as optional maintenance, and that never takes priority over ready work.
+- During an active delivery, it passes the route back to the workflow that owns the work, which then continues. It does not stop and leave you a command to retype.

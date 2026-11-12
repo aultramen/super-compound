@@ -1,0 +1,3 @@
+`/sc-review` checks code changes against requirements and engineering standards, including security, architecture, tests, and maintainability. It reports findings by severity, cites evidence, and assigns the next workflow for each fix. It reviews without implementing fixes.
+
+Source: [sc-review.md](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-review.md). I checked the definition; no code review or tests were run.

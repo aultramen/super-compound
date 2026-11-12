@@ -1,0 +1,15 @@
+`/sc-hints` is read-only consultation workflow. Source: `.agent/workflows/sc-hints.md`, contract `.agent/context/workflows/sc-hints.contract.md`.
+
+**What it does**
+- Answers a question about current work or a supplied topic. Produces advice in chat only. No STATE, report, branch, file, or implementation.
+- Input: `/sc-hints` uses active context. `/sc-hints <question>` focuses on that question. Both empty: shows examples, asks what you need.
+- Inspects only relevant artifacts, code, tests, knowledge (`node .agent/tools/knowledge-search.mjs "<query>"`). Separates verified facts, assumptions, unknowns. Cites openable sources.
+- Classifies smallest proportionate next step under light/full delivery policy. Full scope: checks BRD -> PRD -> FSD -> GOAL readiness and authorization.
+- Routes to owner workflow by need: `/sc-status` orientation, `/sc-geniusloop` improvement inventory, `/sc-explore` business scope, `/sc-prd` requirements, `/sc-plan` FSD/goals, `/sc-research` factual spike, `/sc-debug` failures, `/sc-review` review, `/sc-work` execution.
+- Output: current condition, main recommendation, evidence-backed reason, sources, one exact next command, prerequisites, expected result.
+
+**Boundaries**
+- "Agree with recommendation" = accepts advice only, not execution authorization. Explicit execution request hands off to owner workflow, which performs writes through existing gates.
+- Never overrides approved FSD. Never marks tests, goals, or release readiness verified.
+
+Adapted from Matt Pocock's `ask-matt` skill (attribution in `skills/hints/references/attribution.md`).

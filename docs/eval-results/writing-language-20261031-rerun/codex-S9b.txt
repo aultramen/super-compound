@@ -1,0 +1,15 @@
+`/sc-pause` **saves the current work context so you can stop and resume in a later session**.
+
+It records:
+
+- Current progress, decisions, blockers, and verification evidence in `docs/STATE.md`.
+- A short resume pointer and exact next action in `.continue-here.md`.
+- Relevant session learnings or errors when needed.
+
+Use `/sc-pause` when you finish a session. In the next session, use `/sc-status` to check the saved state against the current files before continuing.
+
+It does not commit changes or mark unfinished work as complete.
+
+**Evidence of Completion:** Inspected the [workflow definition](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-pause.md).
+
+I did not execute `/sc-pause` or change any files.

@@ -1,0 +1,9 @@
+```
+GOAL-001 — Connexion utilisateur par e-mail et mot de passe
+Objectif : l'utilisateur ouvre une session depuis la page /login.
+Entrées : e-mail valide, mot de passe (8 caractères minimum).
+Critère d'acceptation : avec des identifiants valides, le système redirige vers /dashboard. Avec des identifiants faux, le système affiche « Identifiants incorrects ».
+Vérification : un test E2E couvre le cas valide et le cas invalide.
+```
+
+Je n'ai créé aucun fichier : le squelette reste ici, dans le chat. Ce squelette ne traite pas la réinitialisation du mot de passe, le SSO ni la 2FA. Ajoutez-les dans un autre GOAL si le PRD les demande.

@@ -12,6 +12,7 @@ remain active. This routing does not add or waive authorization.
 | Intake: classify light/full and T1-T5 | `skills/agentic-delivery/references/workflow-integration.md#delivery-tier-at-intake` only when classification is unresolved |
 | Material action or changed authority | Same source, risk/authorization and stage sections |
 | Human need or reply | `context/checkpoint.contract.md`; detailed package only for complex needs |
+| Output language unclear, non-English output, or protected literals in prose | `context/writing-language.md` |
 | Branch/worktree/commit/push/PR | `context/skills/git-workflow-operation.contract.md`, then uncovered detail through `/sc-go` |
 | UI or external integration | Active route's topology/first-slice gates; relevant `integration-checking` or `interface-design` detail |
 | Scoped code, standards review, or affected standards drift | `context/standards.contract.md`; resolve target scopes, load selected rules/examples only |

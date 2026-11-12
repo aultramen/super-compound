@@ -1,0 +1,1 @@
+Redige un court squelette GOAL de 5 lignes pour une page de connexion, en chat seulement.

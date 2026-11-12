@@ -16,7 +16,7 @@ const attempt = JSON.parse(read('.agent/evals/blueprint-document.responses.json'
 const completionRevisionPins = {
   // Stored review refs are portable; runtime review still resolves absolute paths.
   '.agent/skills/checkpoint-protocol/references/answerable-package.md': '0e1f6537a7cb0105d5f1aace98e55bdca8de13be09c784a0aac6091dc65c19c1',
-  '.agent/context/output-style.md': 'da01e03a16de0ab20c1f6dcee448bcda076dcd6380db4602624bd69e7ab5a3cd',
+  '.agent/context/output-style.md': '81e6ea218b4b55daabb068b27f543a07bbbbc934235f3f73ae0d09687be6e13c',
   '.agent/skills/agentic-delivery/references/ui-contract-readiness.md': '3b2939743c1f8995e70cedff13045ded21420ecaac36c28fd14e9c8107aea3b5',
   '.agent/skills/agentic-delivery/references/workflow-integration.md': '36ec499ab856c652896361b4aa31981451f2acfba879eca0dcfb3e7729bbf576',
   '.agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md': 'd251ef453fe0796f04b814d40ecdea4baf03b58cb733160b6bdcf706e71406c7',

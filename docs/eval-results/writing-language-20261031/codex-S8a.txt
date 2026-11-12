@@ -1,0 +1,4 @@
+`/sc-status` は、**プロジェクトの現在地と次の作業を確認するコマンド**です。進捗、残作業、阻害要因、検証状況、Git の状態をまとめ、次に使うコマンドを1つ提示します。単独実行では読み取り専用です。
+
+確認根拠：[ワークフロー定義](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-status.md)。
+今回は定義の確認のみで、`/sc-status` 自体は実行していません。

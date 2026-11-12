@@ -1,0 +1,10 @@
+**Bedanya ada di cakupan dan risiko perubahan.**
+
+- **Light-tier:** perubahan terbatas, mudah dibatalkan, dan kriteria hasilnya jelas. Contoh: bug fix, refactor, atau halaman baru sederhana yang mengikuti pola existing. Bisa langsung lewat `/sc-work` atau `/sc-debug`, tanpa membuat BRD/PRD/FSD baru.
+- **Full-tier:** perubahan yang memerlukan keputusan produk besar atau mengubah kontrak penting, seperti API, data, akses, atau pembayaran. Mengikuti alur `BRD → PRD → FSD → GOAL → IMPLEMENTATION → VERIFICATION`. Berlaku juga jika kamu meminta dokumen tersebut atau proyek menetapkan `full`.
+
+**Keduanya tetap wajib verifikasi.** Fitur baru tidak otomatis masuk full-tier.
+
+Evidence of Completion: definisi dicek di [workflow-integration.md](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/skills/agentic-delivery/references/workflow-integration.md:9).
+
+Konfigurasi tier aktif proyek belum dicek; penjelasan ini membandingkan aturan umumnya.

@@ -76,7 +76,14 @@ test('Next.js bridge preserves all recommended rule IDs and severities without t
   const lock = JSON.parse(fs.readFileSync(path.join(reference, 'package-lock.json')));
   assert.equal(packageManifest.dependencies.next, '16.4.3');
   assert.equal(packageManifest.devDependencies['@eslint-community/eslint-utils'], '4.9.1');
-  assert.ok(!Object.hasOwn(packageManifest, 'overrides'));
+  // Single approved override: minimatch >=11.0.1 closes GHSA-g3hv-75wg-m249 under
+  // eslint/typescript-eslint. Remove the override (and this allowance) once eslint
+  // and typescript-eslint accept minimatch 11 on their own.
+  assert.deepEqual(Object.keys(packageManifest.overrides), ['minimatch']);
+  assert.match(packageManifest.overrides.minimatch, /^1[1-9]\.\d+\.\d+$/);
+  for (const [name, entry] of Object.entries(lock.packages)) {
+    if (name.endsWith('/minimatch')) assert.ok(!entry.version.startsWith('10.'), `${name}@${entry.version}`);
+  }
   for (const name of ['@next/eslint-plugin-next', 'fast-glob', 'braces']) {
     assert.ok(!Object.hasOwn(lock.packages, `node_modules/${name}`), name);
   }

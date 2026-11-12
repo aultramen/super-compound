@@ -1,0 +1,3 @@
+`/sc-plan` mengubah PRD yang telah disetujui menjadi FSD sebagai acuan implementasi teknis.
+Alur ini membagi FSD menjadi `GOAL-*` dengan dependensi, kriteria penerimaan, dan pemeriksaan sebelum pelaksanaan melalui `/sc-work`.
+Ringkasan berdasarkan dokumen alur; saya tidak menjalankan pemeriksaan kesiapan rencana.

@@ -1,0 +1,11 @@
+Squelette GOAL (5 lignes), inspiré de `Issue-Pointer-Skeleton.md` :
+
+```markdown
+# GOAL-001 - Page de connexion fonctionnelle
+Résultat : utilisateur saisit email + mot de passe, soumet, obtient session ou message d'erreur clair.
+Portée : formulaire, validation côté client et serveur, erreurs (identifiants invalides, champs vides), redirection post-login.
+Vérification : TEST-001 cas valide, invalide, champs vides ; accessibilité clavier et labels.
+Hors portée : mot de passe oublié, MFA, inscription.
+```
+
+Chat seul, rien écrit sur disque.

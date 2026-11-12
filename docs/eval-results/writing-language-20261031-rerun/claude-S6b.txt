@@ -1,0 +1,9 @@
+`/sc-review` = read-only code review of a diff, branch, or files against spec and engineering standards. Source: `.agent/workflows/sc-review.md`.
+
+Core behavior:
+- **Two review axes.** Spec first: missing behavior, wrong behavior, scope creep vs. user request, BRD/PRD/FSD, goal issue, or ADR. Then standards: security, architecture, tests, maintainability, performance, docs, using `.agent/context/standards.contract.md` with rule IDs cited.
+- **Evidence check.** Applies `verification-before-completion` to every claim. Diff proves edits, not working behavior. Inspects actual artifacts, names unsupported claims. Flags `ESCALATE: T2` for material risk changes outside authority.
+- **Strictly read-only.** Never fixes code, never commits or pushes. Reports persisted to `docs/reviews/YYYY-MM-DD-<scope>.md` when too big for chat, then linted with `doc-lint.mjs --advisory`.
+- **Routes every finding to owner:** `/sc-work` (approved goal), `/sc-debug` (reproduced defect), `/sc-plan` (FSD/ADR gap), `/sc-prd` (requirement gap), `/sc-explore` (business scope), `/sc-go` (git/PR action).
+
+Output: findings ordered by severity with file/line refs, open questions, test gaps, deferred items with durable sink. Use after implementation or before PR.

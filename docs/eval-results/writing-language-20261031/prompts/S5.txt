@@ -1,0 +1,4 @@
+```
+node .agent/tools/doc-lint.mjs README.md --advisory
+```
+https://www.asd-ste100.org/

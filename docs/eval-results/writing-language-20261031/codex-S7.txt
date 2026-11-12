@@ -1,0 +1,5 @@
+GOAL-001 — Permettre à l’utilisateur de se connecter à son compte.
+Périmètre — Champs courriel et mot de passe, bouton « Se connecter ».
+Critères d’acceptation — Identifiants valides : accès autorisé ; sinon : message d’erreur clair.
+Vérification prévue — Tester la connexion valide, les identifiants incorrects et les champs vides.
+Non vérifié — Implémentation et sécurité ; ce squelette ne prouve pas leur conformité.

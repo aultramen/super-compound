@@ -1,0 +1,7 @@
+The lint command could not start. The execution tool failed twice with `helper_unknown_error: setup refresh had errors`.
+
+**Evidence of Completion:** No lint results were produced. No files were changed.
+
+The official [ASD-STE100 website](https://www.asd-ste100.org/) lists Issue 9, dated January 15, 2025.
+
+Not checked: README findings or the linter’s rule coverage. ASD-STE100 compliance remains unverified.

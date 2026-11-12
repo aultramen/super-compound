@@ -1,0 +1,11 @@
+`/sc-status` gives a read-only overview of the project so you can resume work. It:
+
+- Checks saved state, handoffs, issue metadata, and Git state.
+- Summarizes completed work, remaining work, blockers, and existing verification evidence.
+- Recommends one exact next workflow and its delivery tier (`light` or `full`).
+
+It does not change files or Git state, rerun tests, or treat status labels as proof of completion.
+
+Evidence of Completion: checked the [workflow definition](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-status.md).
+
+I did not run `/sc-status`; this explains its documented behavior.

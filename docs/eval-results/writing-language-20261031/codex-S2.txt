@@ -1,0 +1,7 @@
+`/sc-status` gives a read-only overview of the current project or session. It checks saved state, handoff notes, issue metadata, Git state, and existing verification evidence.
+
+It reports completed work, remaining work, blockers, and evidence gaps, then recommends one exact workflow to continue. Use it when starting or resuming a session.
+
+**Evidence of Completion:** Checked the [workflow definition](D:/BATI/Development/framework/.sc-worktrees/sc-ste100-output/.agent/workflows/sc-status.md).
+
+I did not run `/sc-status` or assess the project’s current status.

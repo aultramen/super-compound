@@ -1,0 +1,13 @@
+ M .agent/context/output-style.md
+ M .agent/context/policy-loading.md
+ M .agent/rules/super-compound.md
+ M .agent/tools/blueprint-document.test.mjs
+ M .agent/tools/setup.mjs
+ M AGENTS.md
+ M CHANGELOG.md
+ M README.md
+ M SETUP.md
+?? .agent/context/writing-language.md
+?? .agent/evals/writing-language.md
+?? .agent/tools/writing-language.test.mjs
+?? docs/eval-results/writing-language-20261031/

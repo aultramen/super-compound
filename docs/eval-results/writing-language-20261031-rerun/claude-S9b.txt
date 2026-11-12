@@ -1,0 +1,20 @@
+`/sc-pause` = session handoff. Save compact state so later session resumes. Source: `.agent/workflows/sc-pause.md`, contract `.agent/context/workflows/sc-pause.contract.md`.
+
+**When**
+- Actual stop of session only. Mid-work compaction handled by owning route, not pause.
+
+**Steps**
+1. Load `skills/state-management/SKILL.md` for non-trivial work.
+2. Read `docs/STATE.md`, task context, decisions, blockers, verification status. Inspect stored proof before carrying any "verified" outcome forward. Keep incomplete statuses. No silent rerun, no promotion to complete.
+3. Check `git status --short`, branch, worktree path. No Git mutation.
+4. Log unlogged session mistakes (`ERR-*` in `docs/ERROR_LOG.md`) and confirmed conventions (`LRN-*` in `docs/LEARNED_KNOWLEDGE.md`) via `/sc-compound`.
+5. Update `docs/STATE.md` as canonical state: position, exact next action, blockers + owners, decisions, outcomes, verification, branch, artifact links. Change only changed fields.
+6. Write `.continue-here.md` short pointer: `# Continue Here`, `- State: docs/STATE.md`, `- Next action: ...`, `- Authoritative artifacts: ...`. Then managed checkpoint block (nextAction, verifiedOutcomes, blockers, artifactRefs, contractRefs, ledgerRefs) via `memory-maintenance.mjs checkpoint`.
+7. Update `docs/progress.md` only for chronological history or durable patterns.
+
+**Output**
+- `docs/STATE.md` updated, `.continue-here.md` pointer, clear next action.
+- Any "complete" claim needs `Evidence of Completion`: what/how, actual result/locator, all acceptance criteria mapped.
+- Next session runs `/sc-status` to verify pointer against tree before acting.
+
+Pair: `/sc-pause` saves, `/sc-status` resumes.

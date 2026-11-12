@@ -60,6 +60,8 @@ For global activation, invoke `/sc-init setup` inside the project. Read the cach
 
 New project configuration sets `conventions.approval_mode: exception`. A concrete implementation request authorizes bounded low/medium-risk work and its necessary artifacts; preserve scoped user-intent provenance and ask only for unresolved material decisions, critical missing information, or risky actions outside that authority. Explicit `stage` mode retains separate BRD, PRD, FSD and execution approvals. Existing project configuration and authorization remain intact. Internal corrections, derived boards, and unchanged contract promotions run without administrative approval gates. Documentation uses [Documentation Output Standard](.agent/context/output-style.md).
 
+Human-facing output follows [Writing and Output Language Standard](.agent/context/writing-language.md): replies, checkpoints and new artifacts use the request language, English wording is ASD-STE100-inspired (not validated), and machine literals such as JSON keys, commands, paths, IDs and required headings are never translated. To fix a project default, add the optional key `output_language` under `conventions` in `.agent/rules/project-config.md` (`auto`, a language name, or a BCP-47 tag such as `id`); it applies only when the request language cannot be determined, and absent means `auto`. Non-English output adapts the principles to the target language and never claims ASD-STE100 compliance; quality depends on the model's command of that language.
+
 ## Native Adapters
 
 | Host | Project entrypoint | Global entrypoint |

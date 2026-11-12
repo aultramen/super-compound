@@ -1,0 +1,22 @@
+`/sc-pause` は、**セッションを止めるときに引き継ぎ情報を保存するワークフロー**です。定義は `.agent/workflows/sc-pause.md` にあります。作業を続けている間は使いません。その場合は、担当のワークフローがコンパクション前に自分でチェックポイントを保存します。
+
+**手順**
+1. `docs/STATE.md` を読み、現在のタスク、決定事項、ブロッカー、検証の状況を確認します。保存済みの証跡も確認します。メタデータだけでは「完了」と判断しません。テストの再実行もしません。
+2. `git status --short`、branch、worktree を確認します。Git は変更しません。
+3. このセッションで記録されていないミスや規約を保存します。
+   - ミス：`ERR-*` として `docs/ERROR_LOG.md` に記録します。
+   - 確認済みの規約：`LRN-*` として `docs/LEARNED_KNOWLEDGE.md` に記録します。
+4. `docs/STATE.md` を更新します。これが正式な状態です。内容は、現在位置、次の具体的なアクション、ブロッカーとその担当、決定事項、完了した成果、検証、branch/workspace、関連する成果物へのリンクです。変更があった項目だけを更新します。
+5. `.continue-here.md` に短いポインタを書きます。
+   ```
+   # Continue Here
+   - State: docs/STATE.md
+   - Next action: <実行できる1ステップ または /sc-status>
+   - Authoritative artifacts: <paths>
+   ```
+   次に `memory-maintenance.mjs checkpoint` を実行して、チェックポイントブロックを保存します。内容は nextAction、verifiedOutcomes、blockers、artifactRefs、contractRefs、ledgerRefs です。
+6. `docs/progress.md` は、時系列の履歴やプロジェクトのパターンを記録するときだけ更新します。
+
+**`/sc-status` との違い**
+- `/sc-pause` は状態を**書き込みます**。
+- `/sc-status` は**読み取り専用**です。次のセッションの最初に実行して、保存されたポインタが現在のファイルと一致するか確認してから作業を再開します。

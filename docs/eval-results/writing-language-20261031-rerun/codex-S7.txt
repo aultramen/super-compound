@@ -1,0 +1,5 @@
+GOAL — Permettre à l’utilisateur de se connecter à son compte.
+Périmètre — Champs e-mail et mot de passe, bouton « Se connecter ».
+Comportement — Ouvrir l’espace personnel après une connexion valide ; afficher une erreur sinon.
+Critères d’acceptation — Vérifier les champs requis, les identifiants invalides et la connexion réussie.
+Non inclus — Inscription et mot de passe oublié ; sécurité à vérifier lors de l’implémentation.

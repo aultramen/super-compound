@@ -1,0 +1,20 @@
+Lint result: structural pass, exit 0. Output: `No structural findings; content review still required.`
+
+Plan written: `C:\Users\aul\.claude\plans\node-agent-tools-doc-lint-mjs-readme-md-soft-shannon.md`
+
+**Plan summary (README STE-inspired wording pass, no structure change):**
+
+- Split long chained sentences: Summary line 5, checkpoint paragraph 11-23, Delivery Tiers 122, Verification paragraphs 675-679.
+- Active voice where actor known ("is preserved", "are reported", "is detected").
+- Remove triple Node 22+ statement (27, 132, 242 → keep two).
+- One term per concept: "Pull Request" not "PR"; "goal issue pointers" everywhere; straight quotes line 70.
+- Trim filler modifiers ("actual", "genuinely"); keep defined terms like "material trigger".
+- Keep all headings, anchors, links, literals, code blocks, requirements.
+
+**Constraints:** `workflow-contracts.test.mjs` regex-checks README phrases. README in audit digest → `npm run audit` refresh needed.
+
+**Side flag:** uncommitted CHANGELOG links `docs/eval-results/writing-language-20261031-rerun.md`. File missing; only dir exists. Not in scope.
+
+**Verify:** doc-lint advisory, `node --test` workflow-contracts + writing-language tests, `npm run audit`, heading diff empty.
+
+ExitPlanMode tool unavailable in this session. Plan ready for approval. Say "go" to execute.

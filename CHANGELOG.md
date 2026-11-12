@@ -189,6 +189,47 @@ Dated framework changes, compatibility notes and verification evidence; newest d
   without weakening preservation assertions. See the [analysis](docs/audits/2026-11-06-cross-framework-gap-analysis.md)
   and [verification](docs/eval-results/framework-adoption-20261106.md).
 
+## Unreleased - Next.js reference minimatch override
+
+- Close GHSA-g3hv-75wg-m249 (minimatch 10.2.6, moderate) in the Next.js reference
+  with one npm override: `minimatch` pinned to exactly `11.0.3` in
+  `.agent/standards/examples/nextjs-typescript/package.json`; the frozen lock now
+  resolves minimatch 11.0.3 (plus its dependency `@isaacs/nonrecursive-glob-match`)
+  under eslint 10.12.0 and typescript-eslint 8.71.1, and the reference npm audit
+  reports zero vulnerabilities. This supersedes the no-override note of 2026-10-31.
+- `standards-references.test.mjs` replaces the blanket no-override assertion with a
+  narrow contract: `overrides` may contain only `minimatch`, pinned to an exact
+  11.x+ version, and no minimatch 10.x entry may remain in the lock. Remove the
+  override and the allowance once eslint and typescript-eslint accept minimatch 11.
+
+## Unreleased - risk-driven dual-track adoption plan
+
+- Add `docs/audits/2026-10-31-risk-driven-dual-track-adoption-plan.md`: read-only
+  fit-gap audit and work-package plan (WP-01, WP-03, WP-05, INT); no framework
+  file, workflow, gate or approval changes. Citations re-verified against main `7704023`;
+  review pass fixed five citation line numbers and recorded doc-lint and
+  `--verify-existing` output.
+
+## Unreleased - writing and output language
+
+- Add `.agent/context/writing-language.md`: ASD-STE100-inspired writing (English;
+  not validated) and natural adaptation for other languages, automatic output
+  language resolution (request instruction, request language, optional
+  `conventions.output_language`, conversation, English), and protected machine
+  literals that are never translated. No new workflow, template or contract field.
+- `output-style.md` covers all human-facing output and uses language-neutral
+  example labels; `## Evidence of Completion` stays verbatim. AGENTS.md, the
+  Antigravity rules (`.agent/rules/super-compound.md`), policy-loading and setup
+  adapters point to the new file.
+- Verification: `node --test .agent/tools/writing-language.test.mjs`; startup
+  budgets stay within limits.
+- Re-run the writing-language eval against the merged policy text and add S9
+  (standing language instruction across a resumed turn):
+  `docs/eval-results/writing-language-20261031-rerun.md`.
+- Attempt the same eval on Gemini CLI 0.47.0 as a third host: UNVERIFIED, the
+  CLI auth probe fails with `IneligibleTierError` before any prompt is sent;
+  evidence in `docs/eval-results/writing-language-20261031-gemini.md`.
+
 ## 2026-10-31 - setup.mjs uninstall
 
 - Add `node .agent/tools/setup.mjs uninstall --scope project|global|both`
@@ -215,7 +256,7 @@ Dated framework changes, compatibility notes and verification evidence; newest d
   (GHSA-g3hv-75wg-m249, moderate, lint tooling only). The fix exists only in
   minimatch 11, which no eslint release accepts yet; the reference keeps its
   no-override contract, so the reference npm audit stays red until eslint ships
-  support.
+  support. Superseded by "Unreleased - Next.js reference minimatch override".
 
 ## 2026-10-11 - Public release v2.0.0
 

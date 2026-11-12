@@ -1,0 +1,20 @@
+Ini pertanyaan penjelasan, bukan permintaan perubahan. Jawaban langsung dari `.agent/skills/agentic-delivery/references/workflow-integration.md:9-38`.
+
+**Light-tier**
+- Untuk kerja terbatas dan reversibel: bug fix, refactor, config, copy/style di layar yang ada, fitur/halaman kecil berisiko rendah.
+- Syarat: hasil dan acceptance jelas, kontrak/akses/pola yang ada sudah mencukupi, dan ada check yang bisa membuktikannya.
+- Tidak perlu BRD/PRD/FSD. Jalur: langsung `/sc-work` atau `/sc-debug`. Verifikasi dan `tdd_mode` tetap berlaku.
+
+**Full-tier**
+- Untuk perubahan dengan risiko material. Dipicu salah satu trigger T1 sampai T5:
+  - T1: kemampuan produk baru dengan keputusan bisnis yang belum selesai.
+  - T2: perubahan data invariant, API publik, access policy, billing, PII, integrasi eksternal.
+  - T3: surface interaktif baru dengan kontrak journey/state/data yang pola lama tidak cover.
+  - T4: kerja terkoordinasi yang mengubah outcome produk atau kontrak lintas stream.
+  - T5: user minta BRD/PRD/FSD, atau project pin `delivery_mode: full`.
+- Jalur: `BRD -> PRD -> FSD -> GOAL` lewat `/sc-explore`, `/sc-prd`, `/sc-plan`, lalu `/sc-work` per goal pointer.
+
+**Aturan penentuan**
+- Default `delivery_mode: auto`. Setiap request diklasifikasi di awal dengan satu baris `Tier: light|full; trigger: T<n>|none`.
+- Keputusan dari perubahan semantik dan risiko, bukan jumlah sesi atau karena fitur "baru". Tidak ada PRD/FSD saja tidak memaksa full.
+- Kalau trigger material muncul di tengah kerja: tulis `ESCALATE: T<n>`, kembalikan keputusan ke owner, lanjutkan kerja lain yang sudah diotorisasi.

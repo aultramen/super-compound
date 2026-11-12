@@ -1,0 +1,7 @@
+Ringkasan `/sc-plan` (3 baris):
+
+1. `/sc-plan` mengubah PRD yang sudah disetujui menjadi FSD (Functional Specification Document) sebagai kontrak teknis dan otoritas implementasi.
+2. Workflow ini memecah `GOAL-*` di FSD menjadi berkas issue ringan di `.scratch/<feature>/issues/`, lengkap dengan verifikasi, blocker, dan saran nama branch, tanpa menyentuh kode produk atau state Git.
+3. Untuk lingkup UI, workflow menjalankan readiness gate dan dapat membuat `CONTRACT_ENABLER`, `FIRST_VERTICAL_SLICE`, atau goal `HARDENING` sebelum eksekusi lewat `/sc-work`.
+
+Sumber: `.agent/workflows/sc-plan.md`. Tugas ini hanya ringkasan, tidak ada perubahan file.

@@ -51,6 +51,7 @@ Keep this file concise. It is startup context for many agents. Long-form standar
 - Preserve the documented public workflow names.
 - Do not overwrite user changes or generated local state such as `.debug/`, `docs/progress.md`, `docs/STATE.md`, or `.continue-here.md`.
 - Ask only when a missing product or compatibility decision blocks safe progress.
+- Human output: reply in the user's request language, ASD-STE100-inspired (clear, active, consistent terms); never translate machine literals. Rules: `.agent/context/writing-language.md`.
 
 ## Super Compound Conventions
 
