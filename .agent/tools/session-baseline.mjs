@@ -34,6 +34,15 @@ const SESSION_TIMEOUT_MS = 45 * 60 * 1000;
 // bypassed for every session; read-only intent stays a property of the route.
 const PERMISSION = ["--dangerously-skip-permissions"];
 
+export function executionProvenance(requested, stdoutRef, stderrRef) {
+  return {
+    requested,
+    observed: { model: "unknown", provider: "unknown", status: "unverified", reason: "No verified serving metadata" },
+    stdout: { ref: stdoutRef, sha256: createHash("sha256").update(fs.readFileSync(stdoutRef)).digest("hex") },
+    stderr: { ref: stderrRef, sha256: createHash("sha256").update(fs.readFileSync(stderrRef)).digest("hex") },
+  };
+}
+
 export const SESSIONS = Object.freeze([
   {
     route: "status",
@@ -350,8 +359,10 @@ async function runSession(dir, label, spec) {
     timeout: SESSION_TIMEOUT_MS,
   });
   const wallMs = Date.now() - startedAt;
-  fs.writeFileSync(path.join(runsDir, `${spec.route}.stdout.txt`), child.stdout ?? "", "utf8");
-  fs.writeFileSync(path.join(runsDir, `${spec.route}.stderr.txt`), child.stderr ?? "", "utf8");
+  const stdoutRef = path.join(runsDir, `${spec.route}.stdout.txt`);
+  const stderrRef = path.join(runsDir, `${spec.route}.stderr.txt`);
+  fs.writeFileSync(stdoutRef, child.stdout ?? "", "utf8");
+  fs.writeFileSync(stderrRef, child.stderr ?? "", "utf8");
   let result = null;
   try {
     result = JSON.parse(child.stdout);
@@ -399,6 +410,7 @@ async function runSession(dir, label, spec) {
     label,
     route: spec.route,
     model: spec.model,
+    executionProvenance: executionProvenance({ harness: "claude-cli", executable: "claude", model: spec.model, effort: null }, stdoutRef, stderrRef),
     sessionId,
     exitStatus: child.status,
     timedOut: child.error?.code === "ETIMEDOUT",
@@ -491,6 +503,7 @@ function summarize(metrics) {
   return {
     route: metrics.route,
     model: metrics.model,
+    executionProvenance: metrics.executionProvenance,
     models: Object.keys(metrics.result?.modelUsage ?? {}),
     inputTokens: metrics.result ? tokens.input : null,
     outputTokens: metrics.result ? tokens.output : null,

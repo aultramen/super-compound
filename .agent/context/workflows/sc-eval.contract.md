@@ -8,3 +8,6 @@ Human input/approval: .agent/context/checkpoint.contract.md
 Actual eval proves exercised criteria only; `verification-before-completion`
 requires goal/all-AC coverage. Missing/skipped/failed proof stays incomplete.
 Completion: `Evidence of Completion`, what/how, actual result/locator, AC mapping.
+Only for a named concurrency/retry/state-machine invariant needing extra proof,
+with a real target and available toolchain, consider optional
+verification-before-completion/references/bounded-formal-checking.md

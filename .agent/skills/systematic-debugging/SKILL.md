@@ -16,6 +16,9 @@ Use for every defect or unexplained failure, including flaky, environment-specif
 - Start with [Investigation and Hypotheses](references/investigation-and-hypotheses.md). It covers reproduction, boundary tracing, evidence, and falsifiable hypotheses.
 - After evidence confirms a cause, load [Fix and Regression](references/fix-and-regression.md) before implementing the failing test and root-cause fix.
 - Load [Advanced Techniques](references/advanced-techniques.md) only for regression localization, deep upstream tracing, recurring defect classes, async waits, or 3+ unsuccessful fix attempts.
+- Only for a named concurrency, retry, or state-machine invariant needing extra
+  proof, with a real target and available toolchain, consider optional
+  [bounded formal checking](../verification-before-completion/references/bounded-formal-checking.md).
 
 ## Core Loop
 

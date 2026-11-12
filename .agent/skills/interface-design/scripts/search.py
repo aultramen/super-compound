@@ -3,6 +3,7 @@
 """
 Interface Design Search - BM25 search engine for UI/UX design guidance
 Usage: python search.py "<query>" [--domain <domain>] [--stack <stack>] [--max-results 3]
+       python search.py "<query>" --domain style|product [--rtl [all|full|partial|caveats]]
        python search.py "<query>" --design-system [-p "Project Name"]
        python search.py "<query>" --design-system --persist [-p "Project Name"] [--page "dashboard"] [--overwrite]
 
@@ -24,6 +25,8 @@ from core import (
     AVAILABLE_STACKS,
     MAX_RESULTS,
     MAX_RESULTS_LIMIT,
+    RTL_LEVEL_CHOICES,
+    RTL_DOMAINS,
     search,
     search_stack,
 )
@@ -34,6 +37,12 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 if sys.stderr.encoding and sys.stderr.encoding.lower() != 'utf-8':
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
+UNTRUNCATED_COLS = {
+    "Code Example Good", "Code Example Bad", "Code Good", "Code Bad",
+    "Implementation Checklist", "Design System Variables", "CSS Import",
+    "Tailwind Config", "GSAP Snippet",
+}
 
 
 def format_output(result):
@@ -50,12 +59,19 @@ def format_output(result):
         output.append(f"**Domain:** {result['domain']} | **Query:** {result['query']}")
     output.append(f"**Source:** {result['file']} | **Found:** {result['count']} results\n")
 
+    if result.get("redirect"):
+        redirect = result["redirect"]
+        output.append(
+            f"This legacy style label is now modeled as `{redirect['id']}`; "
+            f"search with --domain {redirect['domain']}."
+        )
+
     for i, row in enumerate(result['results'], 1):
         output.append(f"### Result {i}")
         for key, value in row.items():
             value_str = str(value)
             is_code_field = re.search(r'\b(code|snippet|command)\b', key, re.I)
-            if len(value_str) > 300 and not is_code_field:
+            if len(value_str) > 300 and key not in UNTRUNCATED_COLS and not is_code_field:
                 value_str = (
                     value_str[:300]
                     + "... [truncated; rerun with --json for the full value]"
@@ -83,6 +99,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Interface Design Search")
     parser.add_argument("query", help="Search query")
     parser.add_argument("--domain", "-d", choices=list(CSV_CONFIG.keys()), help="Search domain")
+    parser.add_argument(
+        "--rtl", nargs="?", const="all", choices=RTL_LEVEL_CHOICES,
+        help="Filter RTL compatibility: full, partial or caveats; omit the value for all levels. Requires --domain style or product",
+    )
     parser.add_argument("--stack", "-s", choices=AVAILABLE_STACKS, help=f"Stack-specific search. Available: {', '.join(AVAILABLE_STACKS)}")
     parser.add_argument(
         "--max-results",
@@ -113,6 +133,13 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    if args.rtl is not None:
+        if args.design_system:
+            parser.error("--rtl is not supported with --design-system; run a separate --domain style or product search")
+        if args.stack:
+            parser.error("--rtl cannot be combined with --stack; use --domain style or product")
+        if args.domain not in RTL_DOMAINS:
+            parser.error("--rtl requires --domain style or product")
     if args.design_system and (args.json or args.stack or args.domain):
         parser.error("--design-system does not support --json, --stack or --domain; use --format markdown, then run stack/domain search separately")
     if (args.persist or args.page or args.overwrite or args.output_dir) and not args.design_system:
@@ -158,7 +185,7 @@ if __name__ == "__main__":
             print(format_output(result))
     # Domain search
     else:
-        result = search(args.query, args.domain, args.max_results)
+        result = search(args.query, args.domain, args.max_results, rtl=args.rtl)
         if args.json:
             import json
             print(json.dumps(result, indent=2, ensure_ascii=False))

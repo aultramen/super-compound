@@ -33,6 +33,13 @@ Each layer must have a distinct failure-detection purpose; do not add redundant 
 
 For async failures, wait for a condition or event rather than sleeping a fixed duration. Poll or subscribe until the condition is true, with a maximum timeout only as a safety net and a meaningful timeout failure. Prefer framework utilities such as `waitFor`, `eventually`, or event-driven notifications.
 
+## Bounded Formal Checking
+
+Only for a named concurrency, retry, or state-machine invariant needing extra
+proof, with a real target and available toolchain, consider optional
+[bounded formal checking](../../verification-before-completion/references/bounded-formal-checking.md).
+Use it alongside reproduction and regression evidence; keep the root-cause loop.
+
 ## Architecture Stop
 
 After three failed hypotheses/fixes, reassess evidence, abstraction boundaries, and test seams; escalate strategy or worker capability automatically when available. Follow the shared recovery policy in `agentic-delivery/references/workflow-integration.md`. Continue within authority when a safe alternative offers progress; ask only for missing authority/access or proven stagnation after alternatives.

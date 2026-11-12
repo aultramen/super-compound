@@ -14,12 +14,12 @@ Usage:
 """
 
 import csv
-import json
 import os
 import re
 from datetime import datetime
 from pathlib import Path
-from core import search, DATA_DIR
+from core import BM25, search, resolve_style, DATA_DIR
+from reasoning_contract import parse_decision_rules, apply_decision_rules
 
 
 # ============ CONFIGURATION ============
@@ -28,11 +28,200 @@ SAFE_SLUG_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]{0,80}$")
 
 SEARCH_CONFIG = {
     "style": {"max_results": 3},
-    "color": {"max_results": 2},
+    "color": {"max_results": 5},
     "landing": {"max_results": 2},
     "typography": {"max_results": 2}
 }
-PRODUCT_MAX_RESULTS = 1
+PRODUCT_MAX_RESULTS = 5
+PRODUCT_CONTEXT_TERMS = {
+    "admin", "analytics", "app", "application", "b2b", "b2c", "business",
+    "dashboard", "data", "desktop", "general", "interface", "management",
+    "mobile", "platform", "portal", "product", "service", "software",
+    "system", "tool", "ui", "web", "website",
+}
+
+_DARK_PRIMARY_MARKERS = (
+    "dark mode primary", "dark primary", "dark-only", "dark only",
+    "dark preferred", "dark focused", "dark-first", "dark rich",
+    "light mode only as exception",
+)
+
+# Query phrases that are an explicit request for a dark theme.
+_DARK_QUERY_MARKERS = (
+    "dark mode", "dark theme", "dark ui", "dark-mode", "darkmode",
+    "night mode", "midnight", "oled",
+)
+
+# Anti-pattern clauses that contradict a resolved dark mode.
+_DARK_ANTI_PATTERN_MARKERS = ("dark mode", "dark modes", "dark theme")
+
+# Relative luminance below which a Background hex counts as a dark surface.
+# #1F2937 (the lightest dark background in colors.csv) sits at ~0.026 and
+# #E8ECF1 (the darkest light background) at ~0.79, so the gap is wide.
+_DARK_BACKGROUND_MAX_LUMINANCE = 0.18
+
+
+def _relative_luminance(hex_color: str):
+    """WCAG relative luminance of a #RRGGBB string, or None if unparseable."""
+    if not hex_color:
+        return None
+    value = hex_color.strip().lstrip("#")
+    if len(value) == 3:
+        value = "".join(c * 2 for c in value)
+    if len(value) != 6:
+        return None
+    try:
+        channels = [int(value[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    except ValueError:
+        return None
+    linear = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+              for c in channels]
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+
+def _palette_is_dark(palette: dict) -> bool:
+    """True when a colors.csv row's Background is a dark surface."""
+    luminance = _relative_luminance((palette or {}).get("Background", ""))
+    return luminance is not None and luminance < _DARK_BACKGROUND_MAX_LUMINANCE
+
+
+def _contrast_ratio(first: str, second: str):
+    """WCAG contrast ratio for two hex colors, or None if either is invalid."""
+    first_luminance = _relative_luminance(first)
+    second_luminance = _relative_luminance(second)
+    if first_luminance is None or second_luminance is None:
+        return None
+    lighter = max(first_luminance, second_luminance)
+    darker = min(first_luminance, second_luminance)
+    return (lighter + 0.05) / (darker + 0.05)
+
+
+def _style_is_dark_primary(style: dict) -> bool:
+    """True when a styles.csv row describes itself as dark-first."""
+    if not style:
+        return False
+    preferred_mode = style.get("Preferred Mode", "").strip().lower()
+    if preferred_mode in {"dark", "light"}:
+        return preferred_mode == "dark"
+    if (style.get("Light Mode ✓") == "not-recommended"
+            and style.get("Dark Mode ✓") == "supported"):
+        return True
+    declared = "{} {}".format(
+        style.get("Light Mode ✓", ""), style.get("Dark Mode ✓", "")
+    ).lower()
+    return any(marker in declared for marker in _DARK_PRIMARY_MARKERS)
+
+
+def _query_wants_dark(query: str) -> bool:
+    """True when the query explicitly asks for a dark theme."""
+    lowered = (query or "").lower()
+    return any(marker in lowered for marker in _DARK_QUERY_MARKERS)
+
+
+def _explicit_color_mode(query: str):
+    if re.search(r"\b(?:light[\s-](?:mode|theme|ui)|lightmode)\b", (query or "").lower()):
+        return "light"
+    if _query_wants_dark(query):
+        return "dark"
+    return None
+
+
+def _style_supports_mode(style: dict, mode: str) -> bool:
+    support = style.get(f"{mode.title()} Mode ✓", "").strip().lower()
+    return support in {"supported", "conditional"} or (
+        not support and style.get("Preferred Mode", "").strip().lower() == mode)
+
+
+def _resolve_color_mode(query: str, style: dict, preferred_mode: str = None) -> str:
+    """Resolve the mode the rest of the output has to agree with."""
+    explicit_mode = _explicit_color_mode(query)
+    if explicit_mode:
+        return explicit_mode
+    if preferred_mode:
+        return preferred_mode
+    if _style_is_dark_primary(style):
+        return "dark"
+    return "light"
+
+
+def _derive_dark_palette(palette: dict) -> dict:
+    """Keep product brand tokens while deriving accessible dark surfaces."""
+    derived = dict(palette)
+    background = "#0F172A"
+    ring_candidates = (
+        palette.get("Ring"), palette.get("Accent"), palette.get("Primary"),
+        "#60A5FA",
+    )
+    ring = next(
+        (candidate for candidate in ring_candidates
+         if (_contrast_ratio(candidate, background) or 0) >= 3),
+        "#60A5FA",
+    )
+    derived.update({
+        "Background": background,
+        "Foreground": "#F8FAFC",
+        "Card": "#111827",
+        "Card Foreground": "#F8FAFC",
+        "Muted": "#1E293B",
+        "Muted Foreground": "#CBD5E1",
+        "Border": "#334155",
+        "Ring": ring,
+        "_mode_derivation": "derived-dark",
+    })
+    return derived
+
+
+def _derive_light_palette(palette: dict) -> dict:
+    """Keep the source identity and brand colors while adapting dark surfaces."""
+    derived = dict(palette)
+    background = "#F8FAFC"
+    derived.update({
+        "Background": background,
+        "Foreground": "#0F172A",
+        "Card": "#FFFFFF",
+        "Card Foreground": "#0F172A",
+        "Muted": "#E2E8F0",
+        "Muted Foreground": "#475569",
+        "Border": "#CBD5E1",
+        "Ring": next((candidate for candidate in (
+            palette.get("Ring"), palette.get("Accent"), palette.get("Primary"),
+        ) if (_contrast_ratio(candidate, background) or 0) >= 3), "#2563EB"),
+        "_mode_derivation": "derived-light",
+    })
+    return derived
+
+
+def _select_palette_for_mode(palettes: list, mode: str,
+                             category: str = None) -> dict:
+    """Preserve the category palette, deriving surfaces when its mode differs."""
+    if not palettes:
+        return _derive_dark_palette({}) if mode == "dark" else {}
+    category_palette = next(
+        (palette for palette in palettes
+         if palette.get("Product Type") == category),
+        None,
+    )
+    if category_palette:
+        if mode == "dark" and not _palette_is_dark(category_palette):
+            return _derive_dark_palette(category_palette)
+        if mode == "light" and _palette_is_dark(category_palette):
+            return _derive_light_palette(category_palette)
+        return category_palette
+    for palette in palettes:
+        if _palette_is_dark(palette) == (mode == "dark"):
+            return palette
+    return _derive_dark_palette(palettes[0]) if mode == "dark" else _derive_light_palette(palettes[0])
+
+
+def _filter_anti_patterns_for_mode(anti_patterns: str, mode: str) -> str:
+    """Drop "avoid dark mode" advice once dark mode is the resolved answer."""
+    if mode != "dark" or not anti_patterns:
+        return anti_patterns
+    kept = [
+        clause for clause in anti_patterns.split("+")
+        if not any(marker in clause.lower() for marker in _DARK_ANTI_PATTERN_MARKERS)
+    ]
+    return " + ".join(clause.strip() for clause in kept if clause.strip())
 
 
 # ============ DESIGN SYSTEM GENERATOR ============
@@ -41,6 +230,7 @@ class DesignSystemGenerator:
 
     def __init__(self):
         self.reasoning_data = self._load_reasoning()
+        self.landing_lookup = self._load_landing_patterns()
 
     def _load_reasoning(self) -> list:
         """Load reasoning rules from CSV."""
@@ -50,44 +240,56 @@ class DesignSystemGenerator:
         with open(filepath, 'r', encoding='utf-8') as f:
             return list(csv.DictReader(f))
 
-    def _multi_domain_search(self, query: str, style_priority: list = None) -> dict:
+    def _load_landing_patterns(self) -> dict:
+        filepath = DATA_DIR / "landing.csv"
+        if not filepath.exists():
+            return {}
+        lookup = {}
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for row in csv.DictReader(f):
+                identities = [row.get("Pattern ID", ""), row.get("Pattern Name", "")]
+                identities.extend(row.get("Aliases", "").split("|"))
+                for identity in identities:
+                    if identity.strip():
+                        lookup[identity.strip().casefold()] = row
+        return lookup
+
+    def _multi_domain_search(self, query: str, category: str, reasoning: dict) -> dict:
         """Execute searches across multiple domains."""
         results = {}
+        style_priority = reasoning.get("style_priority", [])
+        constraints = " ".join(item.replace("-", " ") for item in reasoning.get("constraints", []))
+        resolved_query = " ".join(part for part in (query, category, constraints) if part)
         for domain, config in SEARCH_CONFIG.items():
             if domain == "style" and style_priority:
-                # For style, also search with priority keywords
-                priority_query = " ".join(style_priority[:2]) if style_priority else query
-                combined_query = f"{query} {priority_query}"
+                priority_query = " ".join(style_priority[:2])
+                combined_query = f"{resolved_query} {priority_query}"
                 results[domain] = search(combined_query, domain, config["max_results"])
+            elif domain == "color":
+                results[domain] = search(
+                    f"{reasoning.get('color_mood', '')} {resolved_query}", domain, config["max_results"])
+            elif domain == "landing":
+                pattern = reasoning.get("pattern", "")
+                landing_query = pattern if pattern.casefold() in self.landing_lookup else f"{pattern} {resolved_query}"
+                results[domain] = search(landing_query or query, domain, config["max_results"])
+            elif domain == "typography":
+                results[domain] = search(
+                    f"{reasoning.get('typography_mood', '')} {resolved_query}", domain, config["max_results"])
             else:
                 results[domain] = search(query, domain, config["max_results"])
         return results
 
     def _find_reasoning_rule(self, category: str) -> dict:
         """Find matching reasoning rule for a category."""
-        category_lower = category.lower()
+        category_lower = category.strip().casefold()
 
-        # Try exact match first
         for rule in self.reasoning_data:
-            if rule.get("UI_Category", "").lower() == category_lower:
-                return rule
-
-        # Try partial match
-        for rule in self.reasoning_data:
-            ui_cat = rule.get("UI_Category", "").lower()
-            if ui_cat in category_lower or category_lower in ui_cat:
-                return rule
-
-        # Try keyword match
-        for rule in self.reasoning_data:
-            ui_cat = rule.get("UI_Category", "").lower()
-            keywords = ui_cat.replace("/", " ").replace("-", " ").split()
-            if any(kw in category_lower for kw in keywords):
+            if rule.get("UI_Category", "").strip().casefold() == category_lower:
                 return rule
 
         return {}
 
-    def _apply_reasoning(self, category: str, search_results: dict) -> dict:
+    def _apply_reasoning(self, category: str, query: str) -> dict:
         """Apply reasoning rules to search results."""
         rule = self._find_reasoning_rule(category)
 
@@ -100,49 +302,56 @@ class DesignSystemGenerator:
                 "key_effects": "Subtle hover transitions",
                 "anti_patterns": "",
                 "decision_rules": {},
+                "activated_rules": [],
+                "constraints": [],
+                "preferred_mode": None,
+                "is_default": True,
                 "severity": "MEDIUM"
             }
 
-        # Parse decision rules JSON
-        raw_decision_rules = rule.get("Decision_Rules", "{}").strip() or "{}"
         try:
-            decision_rules = json.loads(raw_decision_rules)
-        except json.JSONDecodeError as exc:
+            decision_rules = parse_decision_rules(rule.get("Decision_Rules", "{}"))
+        except ValueError as exc:
             rule_category = rule.get("UI_Category", category)
             raise ValueError(
-                "Invalid Decision_Rules JSON for UI category "
-                f"'{rule_category}' in {REASONING_FILE}: {exc.msg} "
-                f"at column {exc.colno}"
+                "Invalid Decision_Rules for UI category "
+                f"'{rule_category}' in {REASONING_FILE}: {exc}"
             ) from exc
+        applied = apply_decision_rules(decision_rules, query)
+        applied_styles = [resolve_style(style_id).get("Style Category", style_id)
+                          for style_id in applied["style_ids"]]
 
         return {
-            "pattern": rule.get("Recommended_Pattern", ""),
-            "style_priority": [s.strip() for s in rule.get("Style_Priority", "").split("+")],
+            "pattern": applied["pattern"] or rule.get("Recommended_Pattern", ""),
+            "style_priority": applied_styles + [s.strip() for s in rule.get("Style_Priority", "").split("+") if s.strip()],
             "color_mood": rule.get("Color_Mood", ""),
             "typography_mood": rule.get("Typography_Mood", ""),
             "key_effects": rule.get("Key_Effects", ""),
             "anti_patterns": rule.get("Anti_Patterns", ""),
             "decision_rules": decision_rules,
+            "activated_rules": applied["activated"],
+            "constraints": applied["constraints"],
+            "preferred_mode": applied["mode"],
+            "is_default": False,
+            "reasoning": rule.get("Reasoning", ""),
+            "confidence": rule.get("Confidence", ""),
             "severity": rule.get("Severity", "MEDIUM")
         }
 
-    def _select_best_match(self, results: list, priority_keywords: list) -> dict:
+    def _select_best_match(self, results: list, priority_keywords: list, mode: str = None) -> dict:
         """Select best matching result based on priority keywords."""
+        for priority in priority_keywords:
+            canonical = resolve_style(priority)
+            if canonical and (not mode or _style_supports_mode(canonical, mode)):
+                return canonical
+        if mode:
+            results = [row for row in results if _style_supports_mode(row, mode)]
         if not results:
             return {}
 
         if not priority_keywords:
             return results[0]
 
-        # First: try exact style name match
-        for priority in priority_keywords:
-            priority_lower = priority.lower().strip()
-            for result in results:
-                style_name = result.get("Style Category", "").lower()
-                if priority_lower in style_name or style_name in priority_lower:
-                    return result
-
-        # Second: score by keyword match in all fields
         scored = []
         for result in results:
             result_str = str(result).lower()
@@ -167,21 +376,35 @@ class DesignSystemGenerator:
         """Extract results list from search result dict."""
         return search_result.get("results", [])
 
+    def _select_product(self, query: str, candidates: list) -> dict:
+        if not candidates:
+            return {}
+        tokenizer = BM25()
+        query_tokens = set(tokenizer.tokenize(query))
+        best, specificity = candidates[0], 0
+        for candidate in candidates:
+            label = candidate.get("Product Type", "")
+            if label.strip().casefold() == query.strip().casefold():
+                return candidate
+            # Named product/industry labels outrank screen and audience qualifiers.
+            for alias in re.split(r"[/&()]", label):
+                tokens = set(tokenizer.tokenize(alias)) - PRODUCT_CONTEXT_TERMS
+                if tokens and tokens <= query_tokens and len(tokens) > specificity:
+                    best, specificity = candidate, len(tokens)
+        return best
+
     def generate(self, query: str, project_name: str = None) -> dict:
         """Generate complete design system recommendation."""
         # Step 1: First search product to get category
         product_result = search(query, "product", PRODUCT_MAX_RESULTS)
         product_results = product_result.get("results", [])
-        category = "General"
-        if product_results:
-            category = product_results[0].get("Product Type", "General")
+        product = self._select_product(query, product_results)
+        category = product.get("Product Type", "General")
 
         # Step 2: Get reasoning rules for this category
-        reasoning = self._apply_reasoning(category, {})
-        style_priority = reasoning.get("style_priority", [])
-
+        reasoning = self._apply_reasoning(category, query)
         # Step 3: Multi-domain search with style priority hints
-        search_results = self._multi_domain_search(query, style_priority)
+        search_results = self._multi_domain_search(query, category, reasoning)
         search_results["product"] = product_result  # Reuse product search
 
         # Step 4: Select best matches from each domain using priority
@@ -190,10 +413,18 @@ class DesignSystemGenerator:
         typography_results = self._extract_results(search_results.get("typography", {}))
         landing_results = self._extract_results(search_results.get("landing", {}))
 
-        best_style = self._select_best_match(style_results, reasoning.get("style_priority", []))
-        best_color = color_results[0] if color_results else {}
+        explicit_mode = _explicit_color_mode(query)
+        best_style = self._select_best_match(
+            style_results, reasoning.get("style_priority", []), explicit_mode)
+        if explicit_mode and not best_style:
+            raise ValueError(f"No {explicit_mode}-compatible style found; refine the query or choose a compatible style.")
+        color_mode = _resolve_color_mode(query, best_style, reasoning.get("preferred_mode"))
+        best_color = _select_palette_for_mode(color_results, color_mode, category)
         best_typography = typography_results[0] if typography_results else {}
-        best_landing = landing_results[0] if landing_results else {}
+        best_landing = next(
+            (row for row in landing_results if row.get("Pattern Name") == reasoning.get("pattern")),
+            landing_results[0] if landing_results else {},
+        )
 
         # Step 5: Build final recommendation
         # Combine effects from both reasoning and style search
@@ -205,6 +436,7 @@ class DesignSystemGenerator:
             "project_name": project_name or query.upper(),
             "category": category,
             "pattern": {
+                "id": best_landing.get("Pattern ID", ""),
                 "name": best_landing.get("Pattern Name", reasoning.get("pattern", "Hero + Features + CTA")),
                 "sections": best_landing.get("Section Order", "Hero > Features > CTA"),
                 "cta_placement": best_landing.get("Primary CTA Placement", "Above fold"),
@@ -212,7 +444,10 @@ class DesignSystemGenerator:
                 "conversion": best_landing.get("Conversion Optimization", "")
             },
             "style": {
+                "id": best_style.get("Style ID", ""),
                 "name": best_style.get("Style Category", "Minimalism"),
+                "preferred_mode": best_style.get("Preferred Mode", ""),
+                "rtl_level": best_style.get("rtl_level", ""),
                 "type": best_style.get("Type", "General"),
                 "effects": style_effects,
                 "keywords": best_style.get("Keywords", ""),
@@ -247,14 +482,39 @@ class DesignSystemGenerator:
                 "css_import": best_typography.get("CSS Import", "")
             },
             "key_effects": combined_effects,
-            "anti_patterns": reasoning.get("anti_patterns", ""),
+            "anti_patterns": _filter_anti_patterns_for_mode(reasoning.get("anti_patterns", ""), color_mode),
             "decision_rules": reasoning.get("decision_rules", {}),
+            "activated_rules": reasoning.get("activated_rules", []),
+            "constraints": reasoning.get("constraints", []),
+            "preferred_mode": reasoning.get("preferred_mode"),
+            "color_mode": color_mode,
+            "reasoning_default": reasoning.get("is_default", False),
+            "source_identities": {
+                "product": product.get("Product Type"),
+                "reasoning": category if not reasoning.get("is_default") else None,
+                "style": best_style.get("Style ID") or best_style.get("Style Category"),
+                "color": best_color.get("Product Type"),
+                "typography": best_typography.get("Font Pairing Name"),
+                "landing": best_landing.get("Pattern Name"),
+            },
+            "source_derivations": {"color_mode": best_color.get("_mode_derivation")},
+            "reasoning": reasoning.get("reasoning", ""),
+            "confidence": reasoning.get("confidence", ""),
             "severity": reasoning.get("severity", "MEDIUM")
         }
 
 
 # ============ OUTPUT FORMATTERS ============
 BOX_WIDTH = 90  # Wider box for more content
+
+
+def _reasoning_summary(design_system: dict) -> list:
+    lines = [f"{label}: {design_system[key]}" for label, key in (
+        ("Reasoning", "reasoning"), ("Confidence", "confidence"), ("Color mode", "color_mode"),
+    ) if design_system.get(key)]
+    if design_system.get("constraints"):
+        lines.append("Constraints: " + ", ".join(design_system["constraints"]))
+    return lines
 
 
 def hex_to_ansi(hex_color: str) -> str:
@@ -408,6 +668,13 @@ def format_ascii_box(design_system: dict) -> str:
             lines.append(line.ljust(BOX_WIDTH) + "│")
 
     # Pre-Delivery Checklist section
+    summary = _reasoning_summary(design_system)
+    if summary:
+        lines.append(section_header("REASONING", BOX_WIDTH + 1))
+        for item in summary:
+            for line in wrap_text(item, "│     ", BOX_WIDTH):
+                lines.append(line.ljust(BOX_WIDTH) + "│")
+
     lines.append(section_header("PRE-DELIVERY CHECKLIST", BOX_WIDTH + 1))
     checklist_items = [
         "[ ] No emojis as icons (use SVG: Heroicons/Lucide)",
@@ -439,6 +706,10 @@ def format_markdown(design_system: dict) -> str:
     lines = []
     lines.append(f"## Design System: {project}")
     lines.append("")
+    summary = _reasoning_summary(design_system)
+    if summary:
+        lines.extend(f"- {item}" for item in summary)
+        lines.append("")
 
     # Pattern section
     lines.append("### Pattern")
@@ -679,6 +950,7 @@ def format_master_md(design_system: dict) -> str:
     lines.append("")
     lines.append(f"{project}: {style.get('name', 'Minimalism')} with {pattern.get('name', 'project layout')}.")
     lines.append(f"Typography: {typography.get('heading', 'Inter')} headings and {typography.get('body', 'Inter')} body.")
+    lines.extend(_reasoning_summary(design_system))
     lines.append("Next: review these recommendations against project requirements, then implement using the selected stack.")
     lines.append("")
     lines.append("> **LOGIC:** When building a specific page, first check `pages/[page-name].md`.")

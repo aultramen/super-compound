@@ -26,6 +26,10 @@ keyboard/focus, realtime, or offline risk. Accepted decisions move into BRD/PRD/
 Its supporting locator is an external URL plus revision or repository-relative
 throwaway path plus digest, with decision question, reviewer, date, and
 disposition. UI evidence returns to `/sc-ui`; it is never authority.
+For consequential unresolved design choices, optionally load
+[isolated design comparison](../../skills/prototyping/references/design-comparison.md):
+independent constrained alternatives, frozen private rubric, anonymous judging,
+and retesting the selected/grafted result before authority capture.
 Exploration may remain a chat draft, but before approval and `/sc-prd` it must
 be saved at `docs/brd/brd-<feature>.md`. Use brainstorming and domain modeling
 advisory read-only modes unless a separate sidecar mutation is explicitly owned.

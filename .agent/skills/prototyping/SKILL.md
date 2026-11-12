@@ -21,7 +21,8 @@ If the question is ambiguous, choose the type closest to the code area and state
 ## Rules
 
 - Mark prototypes clearly as throwaway.
-- Place them near the relevant module or route when that improves context.
+- Isolate them under `.scratch/prototypes/`; reference the relevant module or
+  route in their brief rather than placing disposable code in production source.
 - Provide one command or URL to run.
 - Avoid persistence unless persistence is the question.
 - Skip production polish, broad error handling, and abstractions.
@@ -34,10 +35,18 @@ If the question is ambiguous, choose the type closest to the code area and state
 ## Process
 
 1. State the question the prototype answers.
+   For optional comparison of consequential, uncertain design alternatives,
+   load [design comparison](references/design-comparison.md). Skip that branch
+   for routine implementation choices or settled requirements.
 2. Let the user or verification evidence pick the answer.
-3. Capture the answer in a PRD, ADR, issue, plan, or notes.
+3. Capture the answer and evidence with the existing authority. Light-tier work
+   uses the authorized request, issue, or conversation; do not require a new
+   artifact solely for the comparison. Full-tier work retains the owning BRD,
+   PRD, FSD `TDEC-*`, or qualified accepted ADR under existing policy; issues
+   hold qualified pointers when those artifacts exist.
 4. Promote validated decisions, not code, into planned work. Delete the throwaway
-   code; any explicit reuse exception must name its scope and production checks.
+   code after retaining evidence required by the next gate; any explicit reuse exception
+   must name its scope and production checks.
 
 ## UI Variant Guidance
 

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -77,12 +77,58 @@ test('parseIssueDependencies reads Blocked by lines', (t) => {
     assert.deepEqual(computeWaves(goals), [['01-first.md'], ['02-second.md']]);
 });
 
+test('parseIssueDependencies rejects unsupported blockers instead of dropping them', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'waves-invalid-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    fs.writeFileSync(path.join(dir, '01-first.md'), 'Blocked by: None\n');
+    for (const [blockers, invalid] of [
+        ['FSD-PSTACK#GOAL-001', 'FSD-PSTACK#GOAL-001'],
+        ['01-first.md, FSD-PSTACK#GOAL-001', 'FSD-PSTACK#GOAL-001'],
+        ['01-first.md, None', 'None'],
+        ['[first](01-first.md)', '[first](01-first.md)'],
+    ]) {
+        fs.writeFileSync(path.join(dir, '02-second.md'), `Blocked by: ${blockers}\n`);
+        assert.throws(() => parseIssueDependencies(dir), {
+            message: `WAVES_INVALID_DEPENDENCY: 02-second.md -> ${invalid}; expected an issue .md path or None`,
+        });
+    }
+});
+
+test('parseIssueDependencies preserves relative paths, whitespace and None semantics', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'waves-paths-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    fs.writeFileSync(path.join(dir, '01-first.md'), 'Blocked by:  nOnE  \r\n');
+    fs.writeFileSync(path.join(dir, '02-second.md'), 'Status: ready\n');
+    fs.writeFileSync(path.join(dir, '03-third.md'),
+        'Blocked by: ./01-first.md,  ../issues/02-second.md  \r\n');
+    const goals = parseIssueDependencies(dir);
+    assert.deepEqual(goals, [
+        { id: '01-first.md', dependsOn: [] },
+        { id: '02-second.md', dependsOn: [] },
+        { id: '03-third.md', dependsOn: ['01-first.md', '02-second.md'] },
+    ]);
+    assert.deepEqual(computeWaves(goals), [['01-first.md', '02-second.md'], ['03-third.md']]);
+});
+
 test('resolveMaxWorkers prefers override, then 2', () => {
     assert.equal(resolveMaxWorkers('.', 4), 4);
     assert.equal(resolveMaxWorkers('.', null), 2);
 });
 
 const cliPath = fileURLToPath(new URL('./goal-waves.mjs', import.meta.url));
+
+test('--issues-dir rejects unsupported blockers without emitting a plan', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'waves-invalid-cli-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    fs.writeFileSync(path.join(dir, '01-first.md'), 'Blocked by: None\n');
+    fs.writeFileSync(path.join(dir, '02-second.md'), 'Blocked by: FSD-PSTACK#GOAL-001\n');
+    const result = spawnSync(process.execPath, [cliPath, '--issues-dir', dir, '--json'], {
+        encoding: 'utf8',
+    });
+    assert.equal(result.status, 1);
+    assert.equal(result.stdout, '');
+    assert.match(result.stderr, /WAVES_INVALID_DEPENDENCY: 02-second\.md -> FSD-PSTACK#GOAL-001/);
+});
 
 function writeGoalsFile(dir) {
     const input = path.join(dir, 'goals.json');

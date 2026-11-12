@@ -1,0 +1,3335 @@
+{
+  "cases": [
+    {
+      "actual": [
+        {
+          "Style Category": "Glassmorphism"
+        },
+        {
+          "Style Category": "Spatial UI (VisionOS)"
+        },
+        {
+          "Style Category": "Liquid Glass"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "style",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "domain-style-glassmorphism",
+      "route": "style",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "style"
+    },
+    {
+      "actual": [
+        {
+          "Style Category": "Accessible & Ethical"
+        },
+        {
+          "Style Category": "Inclusive Design"
+        },
+        {
+          "Style Category": "Vibrant & Block-based"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "style",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        1,
+        0
+      ],
+      "id": "domain-style-accessible-paraphrase",
+      "route": "style",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "style"
+    },
+    {
+      "actual": [
+        {
+          "Product Type": "Beauty/Spa/Wellness Service"
+        },
+        {
+          "Product Type": "Mental Health App"
+        },
+        {
+          "Product Type": "Parenting & Baby Tracker"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "color",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "domain-color-spa",
+      "route": "color",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "color"
+    },
+    {
+      "actual": [
+        {
+          "Product Type": "Financial Dashboard"
+        },
+        {
+          "Product Type": "Cybersecurity Platform"
+        },
+        {
+          "Product Type": "Smart Home/IoT Dashboard"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "color",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        2,
+        0
+      ],
+      "id": "domain-color-cyber-typo",
+      "route": "color",
+      "scores": {
+        "mrr3": 0.5,
+        "ndcg3": 0.6309297535714574,
+        "p1": 0.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "color"
+    },
+    {
+      "actual": [
+        {
+          "Data Type": "Trend Over Time"
+        },
+        {
+          "Data Type": "Real-Time Streaming"
+        },
+        {
+          "Data Type": "Anomaly Detection"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "chart",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "domain-chart-time-series",
+      "route": "chart",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.8262346571285599,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "chart"
+    },
+    {
+      "actual": [
+        {
+          "Data Type": "Correlation / Distribution"
+        },
+        {
+          "Data Type": "Real-Time Streaming"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "chart",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0
+      ],
+      "id": "domain-chart-correlation-paraphrase",
+      "route": "chart",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "chart"
+    },
+    {
+      "actual": [
+        {
+          "Pattern Name": "Pricing-Focused Landing"
+        },
+        {
+          "Pattern Name": "Pricing Page + CTA"
+        },
+        {
+          "Pattern Name": "Comparison Table + CTA"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "landing",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        2,
+        1
+      ],
+      "id": "domain-landing-pricing",
+      "route": "landing",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 1.0
+      },
+      "sourceDomain": "landing"
+    },
+    {
+      "actual": [
+        {
+          "Pattern Name": "Trust & Authority + Conversion"
+        },
+        {
+          "Pattern Name": "Enterprise Gateway"
+        },
+        {
+          "Pattern Name": "Pricing Page + CTA"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "landing",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        1,
+        0
+      ],
+      "id": "domain-landing-enterprise-typo",
+      "route": "landing",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "landing"
+    },
+    {
+      "actual": [
+        {
+          "Product Type": "Beauty/Spa/Wellness Service"
+        },
+        {
+          "Product Type": "Booking & Appointment App"
+        },
+        {
+          "Product Type": "Government/Public Service"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "product",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        1,
+        0
+      ],
+      "id": "domain-product-spa",
+      "route": "product",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "product"
+    },
+    {
+      "actual": [],
+      "diagnostics": {},
+      "effectiveLocalDomain": "product",
+      "expectedRoute": null,
+      "grades": [],
+      "id": "domain-product-security-paraphrase",
+      "route": "product",
+      "scores": {
+        "mrr3": 0.0,
+        "ndcg3": 0.0,
+        "p1": 0.0,
+        "p3": 0.0
+      },
+      "sourceDomain": "product"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Accessibility",
+          "Issue": "Keyboard Navigation"
+        },
+        {
+          "Category": "Accessibility",
+          "Issue": "Focus Not Obscured (Enhanced)"
+        },
+        {
+          "Category": "Accessibility",
+          "Issue": "Focus Not Obscured (Minimum)"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "ux",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "domain-ux-keyboard-focus",
+      "route": "ux",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.6131471927654584,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "ux"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Animation",
+          "Issue": "Excessive Motion"
+        },
+        {
+          "Category": "Animation",
+          "Issue": "Reduced Motion"
+        },
+        {
+          "Category": "Animation",
+          "Issue": "Continuous Animation"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "ux",
+      "expectedRoute": null,
+      "grades": [
+        1,
+        2,
+        0
+      ],
+      "id": "domain-ux-motion-paraphrase",
+      "route": "ux",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.7967075809905066,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "ux"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Serif + Sans",
+          "Font Pairing Name": "Luxury Serif"
+        },
+        {
+          "Category": "Serif + Sans",
+          "Font Pairing Name": "Classic Elegant"
+        },
+        {
+          "Category": "Serif + Sans",
+          "Font Pairing Name": "Real Estate Luxury"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "typography",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        2,
+        0
+      ],
+      "id": "domain-typography-luxury",
+      "route": "typography",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.9072836011519267,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "typography"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Sans + Sans",
+          "Font Pairing Name": "Accessibility First"
+        },
+        {
+          "Category": "Serif + Sans",
+          "Font Pairing Name": "Academic/Research"
+        },
+        {
+          "Category": "Sans + Serif (Display) + Mono",
+          "Font Pairing Name": "Bold Typography Mobile (Inter Poster)"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "typography",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        1,
+        0
+      ],
+      "id": "domain-typography-accessible-typo",
+      "route": "typography",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "typography"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Action",
+          "Icon Name": "magnifying-glass"
+        },
+        {
+          "Category": "Guideline",
+          "Icon Name": "icon-context-accessibility"
+        },
+        {
+          "Category": "Style Config",
+          "Icon Name": "cyberpunk-icon-system"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "icons",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "domain-icons-search",
+      "route": "icons",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.8262346571285599,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "icons"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Status",
+          "Icon Name": "warning"
+        },
+        {
+          "Category": "Status",
+          "Icon Name": "check"
+        },
+        {
+          "Category": "Status",
+          "Icon Name": "x-circle"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "icons",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "domain-icons-warning-typo",
+      "route": "icons",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.8262346571285599,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "icons"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Scroll Reveal",
+          "Intensity Tier": "Subtle",
+          "Trigger": "scroll (viewport enter)"
+        },
+        {
+          "Category": "Scroll Reveal",
+          "Intensity Tier": "Standard",
+          "Trigger": "scroll (viewport enter)"
+        },
+        {
+          "Category": "Scroll Reveal",
+          "Intensity Tier": "Complex",
+          "Trigger": "scroll (continuous scrub)"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "gsap",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        2,
+        1
+      ],
+      "id": "domain-gsap-scroll-reveal",
+      "route": "gsap",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 1.0
+      },
+      "sourceDomain": "gsap"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Loading / Skeleton",
+          "Intensity Tier": "Subtle",
+          "Trigger": "on mount / async wait"
+        },
+        {
+          "Category": "Loading / Skeleton",
+          "Intensity Tier": "Standard",
+          "Trigger": "on mount / async wait"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "gsap",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        1
+      ],
+      "id": "domain-gsap-skeleton-typo",
+      "route": "gsap",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "gsap"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Async Waterfall",
+          "Issue": "Promise.all Parallel"
+        },
+        {
+          "Category": "Async Waterfall",
+          "Issue": "Dependency Parallelization"
+        },
+        {
+          "Category": "Server",
+          "Issue": "React.cache Dedup"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "react",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        1,
+        0
+      ],
+      "id": "domain-react-parallel-promises",
+      "route": "react",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "react"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Bundle Size",
+          "Issue": "Conditional Loading"
+        },
+        {
+          "Category": "Bundle Size",
+          "Issue": "Preload Intent"
+        },
+        {
+          "Category": "Bundle Size",
+          "Issue": "Dynamic Imports"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "react",
+      "expectedRoute": null,
+      "grades": [
+        1,
+        0,
+        2
+      ],
+      "id": "domain-react-dynamic-import-paraphrase",
+      "route": "react",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.6885288809404666,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "react"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Accessibility",
+          "Issue": "Icon Button Labels"
+        },
+        {
+          "Category": "Anti-Pattern",
+          "Issue": "No Gesture-Only Actions"
+        },
+        {
+          "Category": "Accessibility",
+          "Issue": "Decorative Icons"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "app",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "domain-web-icon-label",
+      "route": "web",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "web"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Typography",
+          "Issue": "Dynamic Type Support"
+        },
+        {
+          "Category": "Performance",
+          "Issue": "Virtualize Long Lists"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "app",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        2
+      ],
+      "id": "domain-web-virtual-list-paraphrase",
+      "route": "web",
+      "scores": {
+        "mrr3": 0.5,
+        "ndcg3": 0.6309297535714574,
+        "p1": 0.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "web"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Sans Serif",
+          "Family": "Inter"
+        },
+        {
+          "Category": "Sans Serif",
+          "Family": "Noto Emoji"
+        },
+        {
+          "Category": "Sans Serif",
+          "Family": "Inter Tight"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "google-fonts",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        1
+      ],
+      "id": "domain-google-fonts-inter",
+      "route": "google-fonts",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.9639404333166532,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "google-fonts"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Sans Serif",
+          "Family": "Atkinson Hyperlegible"
+        },
+        {
+          "Category": "Sans Serif",
+          "Family": "Atkinson Hyperlegible Mono"
+        },
+        {
+          "Category": "Sans Serif",
+          "Family": "Atkinson Hyperlegible Next"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "google-fonts",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        1
+      ],
+      "id": "domain-google-fonts-atkinson-paraphrase",
+      "route": "google-fonts",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.9639404333166532,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "google-fonts"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Components",
+          "Guideline": "Use standalone components"
+        },
+        {
+          "Category": "Performance",
+          "Guideline": "Minimize bundle with standalone APIs"
+        },
+        {
+          "Category": "Testing",
+          "Guideline": "Use TestBed for component tests"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-angular-standalone",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "State",
+          "Guideline": "Use signals for local state"
+        },
+        {
+          "Category": "Components",
+          "Guideline": "Use signals for state"
+        },
+        {
+          "Category": "State",
+          "Guideline": "Use NgRx Signal Store for complex state"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        2,
+        0
+      ],
+      "id": "stack-angular-signals-paraphrase",
+      "route": "stack",
+      "scores": {
+        "mrr3": 0.5,
+        "ndcg3": 0.6309297535714574,
+        "p1": 0.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Architecture",
+          "Guideline": "Use Islands Architecture"
+        },
+        {
+          "Category": "Markdown",
+          "Guideline": "Use MDX for components"
+        },
+        {
+          "Category": "Architecture",
+          "Guideline": "Default to zero JS"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-astro-islands",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "TypeScript",
+          "Guideline": "Enable TypeScript"
+        },
+        {
+          "Category": "SEO",
+          "Guideline": "Use canonical URLs"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        0
+      ],
+      "id": "stack-astro-zero-js-paraphrase",
+      "route": "stack",
+      "scores": {
+        "mrr3": 0.0,
+        "ndcg3": 0.0,
+        "p1": 0.0,
+        "p3": 0.0
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "XAML",
+          "Guideline": "Use Avalonia XAML namespace"
+        },
+        {
+          "Category": "XAML",
+          "Guideline": "Enable compiled bindings globally"
+        },
+        {
+          "Category": "Animation",
+          "Guideline": "Use CSS-like keyframe animations"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-avalonia-namespace",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "XAML",
+          "Guideline": "Use compiled bindings with x:DataType"
+        },
+        {
+          "Category": "XAML",
+          "Guideline": "Enable compiled bindings globally"
+        },
+        {
+          "Category": "Performance",
+          "Guideline": "Use compiled bindings and TrimmerRoots.xml for PublishAot"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-avalonia-compiled-binding",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Widgets",
+          "Guideline": "Use StatelessWidget when possible"
+        },
+        {
+          "Category": "State",
+          "Guideline": "Prefer Riverpod or Provider"
+        },
+        {
+          "Category": "State",
+          "Guideline": "Use setState correctly"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-flutter-stateless",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Widgets",
+          "Guideline": "Use const constructors"
+        },
+        {
+          "Category": "Performance",
+          "Guideline": "Use const widgets"
+        },
+        {
+          "Category": "Widgets",
+          "Guideline": "Use StatelessWidget when possible"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-flutter-const-paraphrase",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Z-Index",
+          "Guideline": "Use Tailwind z-* scale"
+        },
+        {
+          "Category": "Spacing",
+          "Guideline": "Consistent spacing scale"
+        },
+        {
+          "Category": "Z-Index",
+          "Guideline": "Negative z-index for backgrounds"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-html-tailwind-z-index",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Animation",
+          "Guideline": "Hover transitions"
+        },
+        {
+          "Category": "Layout",
+          "Guideline": "Container queries"
+        },
+        {
+          "Category": "Animation",
+          "Guideline": "Transition duration"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-html-tailwind-hover",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Application",
+          "Guideline": "Start UI from Application subclass"
+        },
+        {
+          "Category": "Threading",
+          "Guideline": "Update UI only on FX thread"
+        },
+        {
+          "Category": "Theme",
+          "Guideline": "Use AtlantaFX as the enterprise theme baseline"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-javafx-application",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Threading",
+          "Guideline": "Keep work off the FX Application Thread"
+        },
+        {
+          "Category": "Threading",
+          "Guideline": "Update UI only on FX thread"
+        },
+        {
+          "Category": "Application",
+          "Guideline": "Start UI from Application subclass"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-javafx-threading-paraphrase",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Composable",
+          "Guideline": "Pure UI composables"
+        },
+        {
+          "Category": "State",
+          "Guideline": "Snapshot state only"
+        },
+        {
+          "Category": "Animation",
+          "Guideline": "Compose animation APIs"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-compose-pure-ui",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "State",
+          "Guideline": "Snapshot state only"
+        },
+        {
+          "Category": "Layout",
+          "Guideline": "Avoid nested scroll containers"
+        },
+        {
+          "Category": "State",
+          "Guideline": "Single source of truth"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        0,
+        2
+      ],
+      "id": "stack-compose-single-source",
+      "route": "stack",
+      "scores": {
+        "mrr3": 0.3333333333333333,
+        "ndcg3": 0.5,
+        "p1": 0.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Blade Templates",
+          "Guideline": "Use Blade components for reusable UI"
+        },
+        {
+          "Category": "Components",
+          "Guideline": "Use anonymous Blade components for UI primitives"
+        },
+        {
+          "Category": "Styling",
+          "Guideline": "Set up Tailwind CSS via Vite"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-laravel-blade-component",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Blade Templates",
+          "Guideline": "Use @props for component type-safety"
+        },
+        {
+          "Category": "Livewire",
+          "Guideline": "Bind inputs with wire:model"
+        },
+        {
+          "Category": "Blade Templates",
+          "Guideline": "Use Blade components for reusable UI"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-laravel-props",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Routing",
+          "Guideline": "Use App Router for new projects"
+        },
+        {
+          "Category": "Routing",
+          "Guideline": "Use file-based routing"
+        },
+        {
+          "Category": "API",
+          "Guideline": "Use Route Handlers for APIs"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-nextjs-app-router",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Rendering",
+          "Guideline": "Use Server Components by default"
+        },
+        {
+          "Category": "Rendering",
+          "Guideline": "Use streaming for better UX"
+        },
+        {
+          "Category": "Environment",
+          "Guideline": "Use NEXT_PUBLIC prefix"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-nextjs-server-components",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Installation",
+          "Guideline": "Add Nuxt UI module"
+        },
+        {
+          "Category": "Installation",
+          "Guideline": "Let Nuxt UI declare module dependencies"
+        },
+        {
+          "Category": "Icons",
+          "Guideline": "Install required icon collections locally"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-nuxt-ui-module",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Components",
+          "Guideline": "Use semantic color props"
+        },
+        {
+          "Category": "Performance",
+          "Guideline": "Enable component detection for Nuxt"
+        },
+        {
+          "Category": "Theming",
+          "Guideline": "Define complete custom palettes with @theme static"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-nuxt-ui-semantic-color",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Routing",
+          "Guideline": "Use file-based routing"
+        },
+        {
+          "Category": "Routing",
+          "Guideline": "Define page metadata with definePageMeta"
+        },
+        {
+          "Category": "Lifecycle",
+          "Guideline": "Use onPrehydrate for pre-hydration logic"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-nuxtjs-file-routing",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Rendering",
+          "Guideline": "Use .client suffix for client-only components"
+        },
+        {
+          "Category": "Rendering",
+          "Guideline": "Use .server suffix for server-only components"
+        },
+        {
+          "Category": "Plugins",
+          "Guideline": "Use .client or .server suffix"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        0,
+        0
+      ],
+      "id": "stack-nuxtjs-ssr",
+      "route": "stack",
+      "scores": {
+        "mrr3": 0.0,
+        "ndcg3": 0.0,
+        "p1": 0.0,
+        "p3": 0.0
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Components",
+          "Guideline": "Use functional components"
+        },
+        {
+          "Category": "Animation",
+          "Guideline": "Use gesture handler"
+        },
+        {
+          "Category": "Native",
+          "Guideline": "Use Expo when possible"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-react-native-functional",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Styling",
+          "Guideline": "Avoid inline styles"
+        },
+        {
+          "Category": "Styling",
+          "Guideline": "Use StyleSheet.create"
+        },
+        {
+          "Category": "Testing",
+          "Guideline": "Use React Native Testing Library"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        2,
+        0
+      ],
+      "id": "stack-react-native-stylesheet",
+      "route": "stack",
+      "scores": {
+        "mrr3": 0.5,
+        "ndcg3": 0.6309297535714574,
+        "p1": 0.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "State",
+          "Guideline": "Use useState for local state"
+        },
+        {
+          "Category": "Hooks",
+          "Guideline": "Follow rules of hooks"
+        },
+        {
+          "Category": "State",
+          "Guideline": "Initialize state lazily"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-react-usestate",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Effects",
+          "Guideline": "Clean up effects"
+        },
+        {
+          "Category": "Effects",
+          "Guideline": "Specify dependencies correctly"
+        },
+        {
+          "Category": "Hooks",
+          "Guideline": "Use an Effect Event for non-reactive effect logic"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-react-effect-cleanup",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Setup",
+          "Guideline": "Use CLI for installation"
+        },
+        {
+          "Category": "Registry",
+          "Guideline": "Inspect CLI changes before writing"
+        },
+        {
+          "Category": "Registry",
+          "Guideline": "Install public GitHub registries directly"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-shadcn-cli",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Theming",
+          "Guideline": "Use CSS variables for colors"
+        },
+        {
+          "Category": "Theming",
+          "Guideline": "Support dark mode"
+        },
+        {
+          "Category": "Customization",
+          "Guideline": "Create custom components"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-shadcn-css-vars",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Reactivity",
+          "Guideline": "Use $state in Svelte 5"
+        },
+        {
+          "Category": "Stores",
+          "Guideline": "Use writable for mutable state"
+        },
+        {
+          "Category": "SvelteKit",
+          "Guideline": "Use $app/state for current app state"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-svelte-state",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Reactivity",
+          "Guideline": "Use $effect for side effects"
+        },
+        {
+          "Category": "Lifecycle",
+          "Guideline": "Avoid beforeUpdate and afterUpdate"
+        },
+        {
+          "Category": "Lifecycle",
+          "Guideline": "Use onMount for initialization"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-svelte-effect",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "State",
+          "Guideline": "Use @State for local state"
+        },
+        {
+          "Category": "Views",
+          "Guideline": "Use struct for views"
+        },
+        {
+          "Category": "State",
+          "Guideline": "Use @EnvironmentObject for shared state"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-swiftui-state",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Navigation",
+          "Guideline": "Use NavigationStack or NavigationSplitView (iOS 16+)"
+        },
+        {
+          "Category": "Observable",
+          "Guideline": "Use @Observable macro (iOS 17+)"
+        },
+        {
+          "Category": "Navigation",
+          "Guideline": "Use navigationDestination"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-swiftui-navigation",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Setup",
+          "Guideline": "Import OrbitControls from Three.js Addons"
+        },
+        {
+          "Category": "Camera",
+          "Guideline": "OrbitControls vs GSAP Camera Rig"
+        },
+        {
+          "Category": "GSAP",
+          "Guideline": "Load GSAP Before Scene Script"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-threejs-orbitcontrols",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Setup",
+          "Guideline": "Pixel Ratio Cap at 2"
+        },
+        {
+          "Category": "Setup",
+          "Guideline": "Single Renderer Per Page"
+        },
+        {
+          "Category": "Raycasting",
+          "Guideline": "NDC Mouse Coordinates"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-threejs-pixel-ratio",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "XAML",
+          "Guideline": "Use WinUI XAML API surface"
+        },
+        {
+          "Category": "XAML",
+          "Guideline": "Use Uno.WinUI not Uno.UI for new projects"
+        },
+        {
+          "Category": "XAML",
+          "Guideline": "Check API implementation status"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-uno-winui-xaml",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "XAML",
+          "Guideline": "Use Uno.WinUI not Uno.UI for new projects"
+        },
+        {
+          "Category": "Architecture",
+          "Guideline": "Use Uno.Sdk with UnoFeatures"
+        },
+        {
+          "Category": "XAML",
+          "Guideline": "Check API implementation status"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-uno-package-paraphrase",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Performance",
+          "Guideline": "Use compiled bindings in DataTemplates"
+        },
+        {
+          "Category": "XAML",
+          "Guideline": "Use x:Bind for compiled bindings"
+        },
+        {
+          "Category": "Data Binding",
+          "Guideline": "Specify Mode on x:Bind"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        2,
+        0
+      ],
+      "id": "stack-uwp-xbind",
+      "route": "stack",
+      "scores": {
+        "mrr3": 0.5,
+        "ndcg3": 0.6309297535714574,
+        "p1": 0.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Architecture",
+          "Guideline": "Prefer WinUI 3 for new projects"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2
+      ],
+      "id": "stack-uwp-migration",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Composition",
+          "Guideline": "Use Composition API for new projects"
+        },
+        {
+          "Category": "State",
+          "Guideline": "Use Pinia for global state"
+        },
+        {
+          "Category": "Routing",
+          "Guideline": "Use useRouter and useRoute"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-vue-composition",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "State",
+          "Guideline": "Use Pinia for global state"
+        },
+        {
+          "Category": "State",
+          "Guideline": "Use storeToRefs for destructuring"
+        },
+        {
+          "Category": "Testing",
+          "Guideline": "Use Vue Test Utils"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-vue-pinia",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Controls",
+          "Guideline": "Use InfoBar for status messages"
+        },
+        {
+          "Category": "Threading",
+          "Guideline": "Use DispatcherQueue not Dispatcher"
+        },
+        {
+          "Category": "Styling",
+          "Guideline": "Use WinUI theme resources"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-winui-infobar",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Threading",
+          "Guideline": "Use DispatcherQueue not Dispatcher"
+        },
+        {
+          "Category": "Navigation",
+          "Guideline": "Handle back navigation"
+        },
+        {
+          "Category": "Threading",
+          "Guideline": "Use Task.Run for CPU-bound work"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-winui-dispatcherqueue",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Data Binding",
+          "Guideline": "Implement INotifyPropertyChanged"
+        },
+        {
+          "Category": "Data Binding",
+          "Guideline": "Use UpdateSourceTrigger appropriately"
+        },
+        {
+          "Category": "Architecture",
+          "Guideline": "Use MVVM pattern"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "stack-wpf-property-change",
+      "route": "stack",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Data Binding",
+          "Guideline": "Use ObservableCollection for lists"
+        },
+        {
+          "Category": "Performance",
+          "Guideline": "Use async for long operations"
+        },
+        {
+          "Category": "Performance",
+          "Guideline": "Use VirtualizingStackPanel for large lists"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        0,
+        2
+      ],
+      "id": "stack-wpf-virtualization",
+      "route": "stack",
+      "scores": {
+        "mrr3": 0.3333333333333333,
+        "ndcg3": 0.5,
+        "p1": 0.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Accessibility",
+          "Issue": "Focus Not Obscured (Enhanced)"
+        },
+        {
+          "Category": "Accessibility",
+          "Issue": "Focus Not Obscured (Minimum)"
+        },
+        {
+          "Category": "Accessibility",
+          "Issue": "Keyboard Navigation"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "ux",
+      "expectedRoute": "ux",
+      "grades": [
+        0,
+        0,
+        2
+      ],
+      "id": "auto-route-accessibility",
+      "route": "ux",
+      "scores": {
+        "mrr3": 0.3333333333333333,
+        "ndcg3": 0.41311732856427996,
+        "p1": 0.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "ux"
+    },
+    {
+      "actual": [
+        {
+          "Product Type": "E-commerce Luxury"
+        },
+        {
+          "Product Type": "Creative Agency"
+        },
+        {
+          "Product Type": "Architecture / Interior"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "color",
+      "expectedRoute": "color",
+      "grades": [
+        0,
+        0,
+        0
+      ],
+      "id": "auto-route-color",
+      "route": "color",
+      "scores": {
+        "mrr3": 0.0,
+        "ndcg3": 0.0,
+        "p1": 0.0,
+        "p3": 0.0
+      },
+      "sourceDomain": "color"
+    },
+    {
+      "actual": [
+        {
+          "Data Type": "Correlation / Distribution"
+        },
+        {
+          "Data Type": "Distribution / Statistical"
+        },
+        {
+          "Data Type": "Flow / Process Data"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "chart",
+      "expectedRoute": "chart",
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "auto-route-chart",
+      "route": "chart",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "chart"
+    },
+    {
+      "actual": [
+        {
+          "Pattern Name": "Hero + Testimonials + CTA"
+        },
+        {
+          "Pattern Name": "Pricing Page + CTA"
+        },
+        {
+          "Pattern Name": "AI Personalization Landing"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "landing",
+      "expectedRoute": "landing",
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "auto-route-landing",
+      "route": "landing",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 0.8262346571285599,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "landing"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Monospace",
+          "Family": "JetBrains Mono"
+        },
+        {
+          "Category": "Sans Serif",
+          "Family": "Noto Sans Mono"
+        },
+        {
+          "Category": "Monospace",
+          "Family": "Kode Mono"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "google-fonts",
+      "expectedRoute": "google-fonts",
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "auto-route-fonts",
+      "route": "google-fonts",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "google-fonts"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Status",
+          "Icon Name": "warning"
+        },
+        {
+          "Category": "Status",
+          "Icon Name": "warning-circle"
+        },
+        {
+          "Category": "Guideline",
+          "Icon Name": "icon-context-accessibility"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "icons",
+      "expectedRoute": "icons",
+      "grades": [
+        2,
+        1,
+        0
+      ],
+      "id": "auto-route-icons",
+      "route": "icons",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.6666666666666666
+      },
+      "sourceDomain": "icons"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Stagger List",
+          "Intensity Tier": "Complex",
+          "Trigger": "load or scroll"
+        },
+        {
+          "Category": "Stagger List",
+          "Intensity Tier": "Subtle",
+          "Trigger": "load or scroll"
+        },
+        {
+          "Category": "Scroll Reveal",
+          "Intensity Tier": "Subtle",
+          "Trigger": "scroll (viewport enter)"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "gsap",
+      "expectedRoute": "gsap",
+      "grades": [
+        0,
+        0,
+        0
+      ],
+      "id": "auto-route-gsap",
+      "route": "gsap",
+      "scores": {
+        "mrr3": 0.0,
+        "ndcg3": 0.0,
+        "p1": 0.0,
+        "p3": 0.0
+      },
+      "sourceDomain": "gsap"
+    },
+    {
+      "actual": [
+        {
+          "Category": "Async Waterfall",
+          "Issue": "Suspense Boundaries"
+        },
+        {
+          "Category": "Async Waterfall",
+          "Issue": "API Route Optimization"
+        },
+        {
+          "Category": "Server",
+          "Issue": "React.cache Dedup"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "react",
+      "expectedRoute": "react",
+      "grades": [
+        2,
+        0,
+        0
+      ],
+      "id": "auto-route-react",
+      "route": "react",
+      "scores": {
+        "mrr3": 1.0,
+        "ndcg3": 1.0,
+        "p1": 1.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": "react"
+    },
+    {
+      "domainTargets": [
+        {
+          "effectiveLocalDomain": "style",
+          "sourceDomain": "style"
+        },
+        {
+          "effectiveLocalDomain": "color",
+          "sourceDomain": "color"
+        },
+        {
+          "effectiveLocalDomain": "chart",
+          "sourceDomain": "chart"
+        },
+        {
+          "effectiveLocalDomain": "landing",
+          "sourceDomain": "landing"
+        },
+        {
+          "effectiveLocalDomain": "product",
+          "sourceDomain": "product"
+        },
+        {
+          "effectiveLocalDomain": "ux",
+          "sourceDomain": "ux"
+        },
+        {
+          "effectiveLocalDomain": "typography",
+          "sourceDomain": "typography"
+        },
+        {
+          "effectiveLocalDomain": "icons",
+          "sourceDomain": "icons"
+        },
+        {
+          "effectiveLocalDomain": "gsap",
+          "sourceDomain": "gsap"
+        },
+        {
+          "effectiveLocalDomain": "react",
+          "sourceDomain": "react"
+        },
+        {
+          "effectiveLocalDomain": "app",
+          "sourceDomain": "web"
+        },
+        {
+          "effectiveLocalDomain": "google-fonts",
+          "sourceDomain": "google-fonts"
+        }
+      ],
+      "falsePositiveTargets": [],
+      "falsePositives": 0,
+      "id": "negative-gibberish-alpha",
+      "negativeChecks": 34
+    },
+    {
+      "domainTargets": [
+        {
+          "effectiveLocalDomain": "style",
+          "sourceDomain": "style"
+        },
+        {
+          "effectiveLocalDomain": "color",
+          "sourceDomain": "color"
+        },
+        {
+          "effectiveLocalDomain": "chart",
+          "sourceDomain": "chart"
+        },
+        {
+          "effectiveLocalDomain": "landing",
+          "sourceDomain": "landing"
+        },
+        {
+          "effectiveLocalDomain": "product",
+          "sourceDomain": "product"
+        },
+        {
+          "effectiveLocalDomain": "ux",
+          "sourceDomain": "ux"
+        },
+        {
+          "effectiveLocalDomain": "typography",
+          "sourceDomain": "typography"
+        },
+        {
+          "effectiveLocalDomain": "icons",
+          "sourceDomain": "icons"
+        },
+        {
+          "effectiveLocalDomain": "gsap",
+          "sourceDomain": "gsap"
+        },
+        {
+          "effectiveLocalDomain": "react",
+          "sourceDomain": "react"
+        },
+        {
+          "effectiveLocalDomain": "app",
+          "sourceDomain": "web"
+        },
+        {
+          "effectiveLocalDomain": "google-fonts",
+          "sourceDomain": "google-fonts"
+        }
+      ],
+      "falsePositiveTargets": [],
+      "falsePositives": 0,
+      "id": "negative-gibberish-numeric",
+      "negativeChecks": 34
+    },
+    {
+      "domainTargets": [
+        {
+          "effectiveLocalDomain": "style",
+          "sourceDomain": "style"
+        },
+        {
+          "effectiveLocalDomain": "color",
+          "sourceDomain": "color"
+        },
+        {
+          "effectiveLocalDomain": "chart",
+          "sourceDomain": "chart"
+        },
+        {
+          "effectiveLocalDomain": "landing",
+          "sourceDomain": "landing"
+        },
+        {
+          "effectiveLocalDomain": "product",
+          "sourceDomain": "product"
+        },
+        {
+          "effectiveLocalDomain": "ux",
+          "sourceDomain": "ux"
+        },
+        {
+          "effectiveLocalDomain": "typography",
+          "sourceDomain": "typography"
+        },
+        {
+          "effectiveLocalDomain": "icons",
+          "sourceDomain": "icons"
+        },
+        {
+          "effectiveLocalDomain": "gsap",
+          "sourceDomain": "gsap"
+        },
+        {
+          "effectiveLocalDomain": "react",
+          "sourceDomain": "react"
+        },
+        {
+          "effectiveLocalDomain": "app",
+          "sourceDomain": "web"
+        },
+        {
+          "effectiveLocalDomain": "google-fonts",
+          "sourceDomain": "google-fonts"
+        }
+      ],
+      "falsePositiveTargets": [],
+      "falsePositives": 0,
+      "id": "negative-geography-fact",
+      "negativeChecks": 34
+    },
+    {
+      "domainTargets": [
+        {
+          "effectiveLocalDomain": "style",
+          "sourceDomain": "style"
+        },
+        {
+          "effectiveLocalDomain": "color",
+          "sourceDomain": "color"
+        },
+        {
+          "effectiveLocalDomain": "chart",
+          "sourceDomain": "chart"
+        },
+        {
+          "effectiveLocalDomain": "landing",
+          "sourceDomain": "landing"
+        },
+        {
+          "effectiveLocalDomain": "product",
+          "sourceDomain": "product"
+        },
+        {
+          "effectiveLocalDomain": "ux",
+          "sourceDomain": "ux"
+        },
+        {
+          "effectiveLocalDomain": "typography",
+          "sourceDomain": "typography"
+        },
+        {
+          "effectiveLocalDomain": "icons",
+          "sourceDomain": "icons"
+        },
+        {
+          "effectiveLocalDomain": "gsap",
+          "sourceDomain": "gsap"
+        },
+        {
+          "effectiveLocalDomain": "react",
+          "sourceDomain": "react"
+        },
+        {
+          "effectiveLocalDomain": "app",
+          "sourceDomain": "web"
+        },
+        {
+          "effectiveLocalDomain": "google-fonts",
+          "sourceDomain": "google-fonts"
+        }
+      ],
+      "falsePositiveTargets": [
+        "domain:ux",
+        "domain:google-fonts",
+        "stack:threejs",
+        "stack:winui"
+      ],
+      "falsePositives": 4,
+      "id": "negative-math-proof",
+      "negativeChecks": 34
+    },
+    {
+      "domainTargets": [
+        {
+          "effectiveLocalDomain": "style",
+          "sourceDomain": "style"
+        },
+        {
+          "effectiveLocalDomain": "color",
+          "sourceDomain": "color"
+        },
+        {
+          "effectiveLocalDomain": "chart",
+          "sourceDomain": "chart"
+        },
+        {
+          "effectiveLocalDomain": "landing",
+          "sourceDomain": "landing"
+        },
+        {
+          "effectiveLocalDomain": "product",
+          "sourceDomain": "product"
+        },
+        {
+          "effectiveLocalDomain": "ux",
+          "sourceDomain": "ux"
+        },
+        {
+          "effectiveLocalDomain": "typography",
+          "sourceDomain": "typography"
+        },
+        {
+          "effectiveLocalDomain": "icons",
+          "sourceDomain": "icons"
+        },
+        {
+          "effectiveLocalDomain": "gsap",
+          "sourceDomain": "gsap"
+        },
+        {
+          "effectiveLocalDomain": "react",
+          "sourceDomain": "react"
+        },
+        {
+          "effectiveLocalDomain": "app",
+          "sourceDomain": "web"
+        },
+        {
+          "effectiveLocalDomain": "google-fonts",
+          "sourceDomain": "google-fonts"
+        }
+      ],
+      "falsePositiveTargets": [],
+      "falsePositives": 0,
+      "id": "negative-cooking",
+      "negativeChecks": 34
+    },
+    {
+      "domainTargets": [
+        {
+          "effectiveLocalDomain": "style",
+          "sourceDomain": "style"
+        },
+        {
+          "effectiveLocalDomain": "color",
+          "sourceDomain": "color"
+        },
+        {
+          "effectiveLocalDomain": "chart",
+          "sourceDomain": "chart"
+        },
+        {
+          "effectiveLocalDomain": "landing",
+          "sourceDomain": "landing"
+        },
+        {
+          "effectiveLocalDomain": "product",
+          "sourceDomain": "product"
+        },
+        {
+          "effectiveLocalDomain": "ux",
+          "sourceDomain": "ux"
+        },
+        {
+          "effectiveLocalDomain": "typography",
+          "sourceDomain": "typography"
+        },
+        {
+          "effectiveLocalDomain": "icons",
+          "sourceDomain": "icons"
+        },
+        {
+          "effectiveLocalDomain": "gsap",
+          "sourceDomain": "gsap"
+        },
+        {
+          "effectiveLocalDomain": "react",
+          "sourceDomain": "react"
+        },
+        {
+          "effectiveLocalDomain": "app",
+          "sourceDomain": "web"
+        },
+        {
+          "effectiveLocalDomain": "google-fonts",
+          "sourceDomain": "google-fonts"
+        }
+      ],
+      "falsePositiveTargets": [],
+      "falsePositives": 0,
+      "id": "negative-biology",
+      "negativeChecks": 34
+    },
+    {
+      "actual": {
+        "category": "Beauty/Spa/Wellness Service",
+        "pattern": "Hero + Testimonials + CTA",
+        "style": "Soft UI Evolution"
+      },
+      "coherence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "design-system-spa"
+    },
+    {
+      "actual": {
+        "category": "Cybersecurity Platform",
+        "pattern": "Real-Time / Operations Landing",
+        "style": "Cyberpunk UI"
+      },
+      "coherence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "design-system-cybersecurity-dark"
+    },
+    {
+      "actual": {
+        "category": "SaaS (General)",
+        "pattern": "Hero + Features + CTA",
+        "style": "Glassmorphism"
+      },
+      "coherence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "design-system-saas"
+    },
+    {
+      "actual": {
+        "category": "Healthcare App",
+        "pattern": "Hero + Testimonials + CTA",
+        "style": "Neumorphism"
+      },
+      "coherence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "design-system-healthcare"
+    },
+    {
+      "actual": {
+        "category": "Portfolio/Personal",
+        "pattern": "Scroll-Triggered Storytelling",
+        "style": "Brutalism"
+      },
+      "coherence": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "design-system-portfolio-dark"
+    },
+    {
+      "actual": {
+        "category": "Fintech/Crypto",
+        "pattern": "Trust & Authority + Conversion",
+        "style": "Minimalism & Swiss Style"
+      },
+      "coherence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "design-system-fintech-dark"
+    },
+    {
+      "actual": {
+        "category": "General",
+        "pattern": "Hero + Features + CTA",
+        "style": "Minimalism & Swiss Style"
+      },
+      "coherence": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "id": "design-system-spa-paraphrase"
+    },
+    {
+      "actual": {
+        "category": "Cybersecurity Platform",
+        "pattern": "Real-Time / Operations Landing",
+        "style": "Cyberpunk UI"
+      },
+      "coherence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "design-system-cyber-typo"
+    }
+  ],
+  "decision": "PASS",
+  "domainMapping": {
+    "web": "app"
+  },
+  "failures": [],
+  "identityErrors": [],
+  "localBaselineComparison": {
+    "scope": "Catalog changes may raise or lower these metrics; source thresholds and behavioral regression tests own acceptance. Deltas alone are not an improvement claim.",
+    "splits": {
+      "all": {
+        "baselineSamples": {
+          "cases": 90,
+          "designSystem": 8,
+          "domain:chart": 2,
+          "domain:color": 2,
+          "domain:google-fonts": 2,
+          "domain:gsap": 2,
+          "domain:icons": 2,
+          "domain:landing": 2,
+          "domain:product": 2,
+          "domain:react": 2,
+          "domain:style": 2,
+          "domain:typography": 2,
+          "domain:ux": 2,
+          "domain:web": 2,
+          "negativeChecks": 204,
+          "retrieval": 76,
+          "routing": 8,
+          "stack:angular": 2,
+          "stack:astro": 2,
+          "stack:avalonia": 2,
+          "stack:flutter": 2,
+          "stack:html-tailwind": 2,
+          "stack:javafx": 2,
+          "stack:jetpack-compose": 2,
+          "stack:laravel": 2,
+          "stack:nextjs": 2,
+          "stack:nuxt-ui": 2,
+          "stack:nuxtjs": 2,
+          "stack:react": 2,
+          "stack:react-native": 2,
+          "stack:shadcn": 2,
+          "stack:svelte": 2,
+          "stack:swiftui": 2,
+          "stack:threejs": 2,
+          "stack:uno": 2,
+          "stack:uwp": 2,
+          "stack:vue": 2,
+          "stack:winui": 2,
+          "stack:wpf": 2,
+          "typo": 5
+        },
+        "currentSamples": {
+          "cases": 90,
+          "designSystem": 8,
+          "domain:chart": 2,
+          "domain:color": 2,
+          "domain:google-fonts": 2,
+          "domain:gsap": 2,
+          "domain:icons": 2,
+          "domain:landing": 2,
+          "domain:product": 2,
+          "domain:react": 2,
+          "domain:style": 2,
+          "domain:typography": 2,
+          "domain:ux": 2,
+          "domain:web": 2,
+          "negativeChecks": 204,
+          "retrieval": 76,
+          "routing": 8,
+          "stack:angular": 2,
+          "stack:astro": 2,
+          "stack:avalonia": 2,
+          "stack:flutter": 2,
+          "stack:html-tailwind": 2,
+          "stack:javafx": 2,
+          "stack:jetpack-compose": 2,
+          "stack:laravel": 2,
+          "stack:nextjs": 2,
+          "stack:nuxt-ui": 2,
+          "stack:nuxtjs": 2,
+          "stack:react": 2,
+          "stack:react-native": 2,
+          "stack:shadcn": 2,
+          "stack:svelte": 2,
+          "stack:swiftui": 2,
+          "stack:threejs": 2,
+          "stack:uno": 2,
+          "stack:uwp": 2,
+          "stack:vue": 2,
+          "stack:winui": 2,
+          "stack:wpf": 2,
+          "typo": 5
+        },
+        "metrics": {
+          "designSystemCoherence": {
+            "baseline": 0.66875,
+            "current": 0.90625,
+            "delta": 0.23750000000000004
+          },
+          "mrrAt3": {
+            "baseline": 0.8267543859649124,
+            "current": 0.875,
+            "delta": 0.04824561403508765
+          },
+          "ndcgAt3": {
+            "baseline": 0.818041447366609,
+            "current": 0.8658717479923351,
+            "delta": 0.04783030062572613
+          },
+          "negativeAbstention": {
+            "baseline": 0.7598039215686274,
+            "current": 0.9803921568627451,
+            "delta": 0.22058823529411764
+          },
+          "precisionAt1": {
+            "baseline": 0.7631578947368421,
+            "current": 0.8289473684210527,
+            "delta": 0.06578947368421051
+          },
+          "precisionAt3": {
+            "baseline": 0.37280701754385964,
+            "current": 0.3815789473684211,
+            "delta": 0.00877192982456143
+          },
+          "routingAccuracy": {
+            "baseline": 0.875,
+            "current": 1.0,
+            "delta": 0.125
+          },
+          "typoRecoveryAt3": {
+            "baseline": 1.0,
+            "current": 1.0,
+            "delta": 0.0
+          }
+        },
+        "samplesUnchanged": true
+      },
+      "calibration": {
+        "baselineSamples": {
+          "cases": 46,
+          "designSystem": 4,
+          "negativeChecks": 102,
+          "retrieval": 39,
+          "routing": 5,
+          "typo": 0
+        },
+        "currentSamples": {
+          "cases": 46,
+          "designSystem": 4,
+          "negativeChecks": 102,
+          "retrieval": 39,
+          "routing": 5,
+          "typo": 0
+        },
+        "metrics": {
+          "designSystemCoherence": {
+            "baseline": 0.625,
+            "current": 1.0,
+            "delta": 0.375
+          },
+          "mrrAt3": {
+            "baseline": 0.9358974358974359,
+            "current": 0.9444444444444445,
+            "delta": 0.008547008547008628
+          },
+          "ndcgAt3": {
+            "baseline": 0.914390424689258,
+            "current": 0.9277150672724844,
+            "delta": 0.01332464258322641
+          },
+          "negativeAbstention": {
+            "baseline": 0.7549019607843137,
+            "current": 1.0,
+            "delta": 0.2450980392156863
+          },
+          "precisionAt1": {
+            "baseline": 0.9230769230769231,
+            "current": 0.9230769230769231,
+            "delta": 0.0
+          },
+          "precisionAt3": {
+            "baseline": 0.40170940170940167,
+            "current": 0.40170940170940167,
+            "delta": 0.0
+          },
+          "routingAccuracy": {
+            "baseline": 1.0,
+            "current": 1.0,
+            "delta": 0.0
+          },
+          "typoRecoveryAt3": {
+            "baseline": 0.0,
+            "current": 0.0,
+            "delta": 0.0
+          }
+        },
+        "samplesUnchanged": true
+      },
+      "held_out": {
+        "baselineSamples": {
+          "cases": 44,
+          "designSystem": 4,
+          "negativeChecks": 102,
+          "retrieval": 37,
+          "routing": 3,
+          "typo": 5
+        },
+        "currentSamples": {
+          "cases": 44,
+          "designSystem": 4,
+          "negativeChecks": 102,
+          "retrieval": 37,
+          "routing": 3,
+          "typo": 5
+        },
+        "metrics": {
+          "designSystemCoherence": {
+            "baseline": 0.7125,
+            "current": 0.8125,
+            "delta": 0.09999999999999998
+          },
+          "mrrAt3": {
+            "baseline": 0.7117117117117117,
+            "current": 0.8018018018018018,
+            "delta": 0.09009009009009017
+          },
+          "ndcgAt3": {
+            "baseline": 0.7164844172157085,
+            "current": 0.8006855465889345,
+            "delta": 0.08420112937322599
+          },
+          "negativeAbstention": {
+            "baseline": 0.7647058823529411,
+            "current": 0.9607843137254902,
+            "delta": 0.1960784313725491
+          },
+          "precisionAt1": {
+            "baseline": 0.5945945945945946,
+            "current": 0.7297297297297297,
+            "delta": 0.1351351351351351
+          },
+          "precisionAt3": {
+            "baseline": 0.34234234234234234,
+            "current": 0.36036036036036034,
+            "delta": 0.018018018018018
+          },
+          "routingAccuracy": {
+            "baseline": 0.6666666666666666,
+            "current": 1.0,
+            "delta": 0.33333333333333337
+          },
+          "typoRecoveryAt3": {
+            "baseline": 1.0,
+            "current": 1.0,
+            "delta": 0.0
+          }
+        },
+        "samplesUnchanged": true
+      }
+    },
+    "status": "diagnostic-only"
+  },
+  "metrics": {
+    "designSystemCoherence": 0.90625,
+    "mrrAt3": 0.875,
+    "ndcgAt3": 0.8658717479923351,
+    "negativeAbstention": 0.9803921568627451,
+    "precisionAt1": 0.8289473684210527,
+    "precisionAt3": 0.3815789473684211,
+    "routingAccuracy": 1.0,
+    "typoRecoveryAt3": 1.0
+  },
+  "oracleFingerprint": "27ded3fd88a75a267a30c861e2ba9977c217592eefbe57288981fa7f1b8aeda4",
+  "runtimeFingerprint": "caccd56e452272d2bb476611d711d708b6fe3a3744a57cc145dcefcace5e5e8a",
+  "samples": {
+    "cases": 90,
+    "designSystem": 8,
+    "domain:chart": 2,
+    "domain:color": 2,
+    "domain:google-fonts": 2,
+    "domain:gsap": 2,
+    "domain:icons": 2,
+    "domain:landing": 2,
+    "domain:product": 2,
+    "domain:react": 2,
+    "domain:style": 2,
+    "domain:typography": 2,
+    "domain:ux": 2,
+    "domain:web": 2,
+    "negativeChecks": 204,
+    "retrieval": 76,
+    "routing": 8,
+    "stack:angular": 2,
+    "stack:astro": 2,
+    "stack:avalonia": 2,
+    "stack:flutter": 2,
+    "stack:html-tailwind": 2,
+    "stack:javafx": 2,
+    "stack:jetpack-compose": 2,
+    "stack:laravel": 2,
+    "stack:nextjs": 2,
+    "stack:nuxt-ui": 2,
+    "stack:nuxtjs": 2,
+    "stack:react": 2,
+    "stack:react-native": 2,
+    "stack:shadcn": 2,
+    "stack:svelte": 2,
+    "stack:swiftui": 2,
+    "stack:threejs": 2,
+    "stack:uno": 2,
+    "stack:uwp": 2,
+    "stack:vue": 2,
+    "stack:winui": 2,
+    "stack:wpf": 2,
+    "typo": 5
+  },
+  "schemaVersion": 1,
+  "scope": "Original 90-case source oracle, 12 source domains and 22 stacks; local web/app hard negatives are supplemental.",
+  "sourceRevision": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+  "sourceThresholdOracleFingerprint": "02e7226428c64a995ec24ae104ce4d186f5f91bf0f062556e90ef9b0fcb6d67a",
+  "sourceThresholdRuntimeFingerprint": "986ebb10ad9b09b905d263811b6693d52449fadd0ef4145bb3848c0916c16a33",
+  "splits": {
+    "calibration": {
+      "metrics": {
+        "designSystemCoherence": 1.0,
+        "mrrAt3": 0.9444444444444445,
+        "ndcgAt3": 0.9277150672724844,
+        "negativeAbstention": 1.0,
+        "precisionAt1": 0.9230769230769231,
+        "precisionAt3": 0.40170940170940167,
+        "routingAccuracy": 1.0,
+        "typoRecoveryAt3": 0.0
+      },
+      "samples": {
+        "cases": 46,
+        "designSystem": 4,
+        "negativeChecks": 102,
+        "retrieval": 39,
+        "routing": 5,
+        "typo": 0
+      }
+    },
+    "held_out": {
+      "metrics": {
+        "designSystemCoherence": 0.8125,
+        "mrrAt3": 0.8018018018018018,
+        "ndcgAt3": 0.8006855465889345,
+        "negativeAbstention": 0.9607843137254902,
+        "precisionAt1": 0.7297297297297297,
+        "precisionAt3": 0.36036036036036034,
+        "routingAccuracy": 1.0,
+        "typoRecoveryAt3": 1.0
+      },
+      "samples": {
+        "cases": 44,
+        "designSystem": 4,
+        "negativeChecks": 102,
+        "retrieval": 37,
+        "routing": 3,
+        "typo": 5
+      }
+    }
+  },
+  "supplementalLocal": {
+    "cases": [
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-gibberish-alpha",
+        "localDomain": "web"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-gibberish-alpha",
+        "localDomain": "app"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-gibberish-numeric",
+        "localDomain": "web"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-gibberish-numeric",
+        "localDomain": "app"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-geography-fact",
+        "localDomain": "web"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-geography-fact",
+        "localDomain": "app"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-math-proof",
+        "localDomain": "web"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-math-proof",
+        "localDomain": "app"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-cooking",
+        "localDomain": "web"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-cooking",
+        "localDomain": "app"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-biology",
+        "localDomain": "web"
+      },
+      {
+        "count": 0,
+        "error": null,
+        "id": "negative-biology",
+        "localDomain": "app"
+      }
+    ],
+    "checks": 12,
+    "passes": 12,
+    "scope": "Local web and app hard negatives only; no invented positive judgments."
+  }
+}

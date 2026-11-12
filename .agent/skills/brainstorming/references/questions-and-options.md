@@ -44,6 +44,34 @@ Wait for user answers before the next round. Recommendations, preselected option
 
 If an answer changes, reopen only affected descendants and explain which earlier decisions need reconsideration; keep independent answers settled. Reconfirm changed material decisions through the owning artifact's existing gate.
 
+## Fresh-builder ambiguity check
+
+When a material handoff may depend on author context absent from the canonical
+artifact, use a fresh-context reader to check whether the written design is
+sufficient to plan from. Skip routine delegated implementation choices,
+wording nitpicks, and settled concrete scope; this is not a blanket step for all
+work.
+
+Give the reader only the canonical BRD/PRD/FSD/design and necessary repository
+or contract references, without author explanations or conversation history.
+Ask it to outline implementation and proving checks, then rank only unanswered
+questions whose wrong guess would change behavior, scope, acceptance, public
+contracts, policy, or security. Each question explains how its answer changes
+the plan. If none remain, report no material questions.
+
+Resolve repository facts and answers already in authorized history in the
+canonical artifact. Settle reversible implementation choices internally. Return
+genuinely missing material decisions to the existing BRD/PRD/FSD or `OPEN-*`
+checkpoint owner. Preserve current authority and advisory/read-only mode: return
+proposed corrections instead of writing when read-only. Use the existing
+artifact and checkpoint; add no sidecar, approval, or veto. A reader's questions
+are evidence for the owner, not new authority or a fixed limit on question
+rounds.
+
+If a fresh agent is unavailable, make a separate pass yourself and disclose
+reduced isolation. This fallback does not establish fresh-context or independent
+review. Existing skill pressure tests remain a separate verification obligation.
+
 ## Finish and ownership
 
 Finish when all material decisions in scope are settled, not when an arbitrary number of rounds ends. Name assumptions and non-goals. Record blocking unresolved decisions as OPEN-* with owner/next action; use existing prototyping for questions requiring direct experience. A deliberately deferred blocker does not count as a settled prerequisite.
@@ -57,3 +85,5 @@ Advisory/read-only callers return proposals without writing a sidecar or glossar
 
 Adapted from Matt Pocock's `grilling`, local `mattpocock-skills` snapshot 1.2.3, commit `d81f3a183412e71a5b1e84ca21bc1a35eea03a60`.
 Source: `https://github.com/mattpocock/skills`, `skills/productivity/grilling/SKILL.md`. The local adaptation preserves Super Compound authority and capture ownership. License notice: [MIT](grilling-MIT.txt).
+
+Fresh-builder check adapted from Superpowers `skills/brainstorming/builder-check-prompt.md` and its design triage, commit `22f0b463e7a5e579904dd6211a520321035526f7`. Source: `https://github.com/obra/superpowers`.

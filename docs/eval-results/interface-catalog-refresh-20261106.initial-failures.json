@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "decision": "FAIL",
+  "failures": [
+    "held_out.routingAccuracy: 0.6666666666666666 below floor 1.0",
+    "stack-uwp-migration: locked result missing from top 1; actual=[{'Category': 'Architecture', 'Guideline': 'Plan migration to Windows App SDK'}, {'Category': 'Architecture', 'Guideline': 'Prefer WinUI 3 for new projects'}, {'Category': 'Architecture', 'Guideline': 'Use Template Studio for scaffolding'}]"
+  ],
+  "metrics": {
+    "designSystemCoherence": 0.90625,
+    "mrrAt3": 0.868421052631579,
+    "ndcgAt3": 0.861015560539328,
+    "negativeAbstention": 0.9803921568627451,
+    "precisionAt1": 0.8157894736842105,
+    "precisionAt3": 0.3815789473684211,
+    "routingAccuracy": 0.875,
+    "typoRecoveryAt3": 1.0
+  },
+  "samples": {
+    "cases": 90,
+    "designSystem": 8,
+    "domain:chart": 2,
+    "domain:color": 2,
+    "domain:google-fonts": 2,
+    "domain:gsap": 2,
+    "domain:icons": 2,
+    "domain:landing": 2,
+    "domain:product": 2,
+    "domain:react": 2,
+    "domain:style": 2,
+    "domain:typography": 2,
+    "domain:ux": 2,
+    "domain:web": 2,
+    "negativeChecks": 204,
+    "retrieval": 76,
+    "routing": 8,
+    "stack:angular": 2,
+    "stack:astro": 2,
+    "stack:avalonia": 2,
+    "stack:flutter": 2,
+    "stack:html-tailwind": 2,
+    "stack:javafx": 2,
+    "stack:jetpack-compose": 2,
+    "stack:laravel": 2,
+    "stack:nextjs": 2,
+    "stack:nuxt-ui": 2,
+    "stack:nuxtjs": 2,
+    "stack:react": 2,
+    "stack:react-native": 2,
+    "stack:shadcn": 2,
+    "stack:svelte": 2,
+    "stack:swiftui": 2,
+    "stack:threejs": 2,
+    "stack:uno": 2,
+    "stack:uwp": 2,
+    "stack:vue": 2,
+    "stack:winui": 2,
+    "stack:wpf": 2,
+    "typo": 5
+  },
+  "splits": {
+    "calibration": {
+      "metrics": {
+        "designSystemCoherence": 1.0,
+        "mrrAt3": 0.9444444444444445,
+        "ndcgAt3": 0.9277150672724844,
+        "negativeAbstention": 1.0,
+        "precisionAt1": 0.9230769230769231,
+        "precisionAt3": 0.40170940170940167,
+        "routingAccuracy": 1.0,
+        "typoRecoveryAt3": 0.0
+      },
+      "samples": {
+        "cases": 46,
+        "designSystem": 4,
+        "negativeChecks": 102,
+        "retrieval": 39,
+        "routing": 5,
+        "typo": 0
+      }
+    },
+    "held_out": {
+      "metrics": {
+        "designSystemCoherence": 0.8125,
+        "mrrAt3": 0.7882882882882883,
+        "ndcgAt3": 0.7907106750638387,
+        "negativeAbstention": 0.9607843137254902,
+        "precisionAt1": 0.7027027027027027,
+        "precisionAt3": 0.36036036036036034,
+        "routingAccuracy": 0.6666666666666666,
+        "typoRecoveryAt3": 1.0
+      },
+      "samples": {
+        "cases": 44,
+        "designSystem": 4,
+        "negativeChecks": 102,
+        "retrieval": 37,
+        "routing": 3,
+        "typo": 5
+      }
+    }
+  },
+  "runtimeFingerprint": "d377ea54a1512a11f48d6bfb497b438d6f8e080e4e32dc85642f4ea939c7983e",
+  "oracleFingerprint": "27ded3fd88a75a267a30c861e2ba9977c217592eefbe57288981fa7f1b8aeda4",
+  "failedCases": [
+    {
+      "actual": [
+        {
+          "Category": "Architecture",
+          "Guideline": "Plan migration to Windows App SDK"
+        },
+        {
+          "Category": "Architecture",
+          "Guideline": "Prefer WinUI 3 for new projects"
+        },
+        {
+          "Category": "Architecture",
+          "Guideline": "Use Template Studio for scaffolding"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "stack",
+      "expectedRoute": null,
+      "grades": [
+        0,
+        2,
+        0
+      ],
+      "id": "stack-uwp-migration",
+      "route": "stack",
+      "scores": {
+        "mrr3": 0.5,
+        "ndcg3": 0.6309297535714574,
+        "p1": 0.0,
+        "p3": 0.3333333333333333
+      },
+      "sourceDomain": null
+    },
+    {
+      "actual": [
+        {
+          "Category": "Animation",
+          "Issue": "Continuous Animation"
+        },
+        {
+          "Category": "Animation",
+          "Issue": "Reduced Motion"
+        },
+        {
+          "Category": "Animation",
+          "Issue": "Loading States"
+        }
+      ],
+      "diagnostics": {},
+      "effectiveLocalDomain": "ux",
+      "expectedRoute": "gsap",
+      "grades": [
+        0,
+        0,
+        0
+      ],
+      "id": "auto-route-gsap",
+      "route": "ux",
+      "scores": {
+        "mrr3": 0.0,
+        "ndcg3": 0.0,
+        "p1": 0.0,
+        "p3": 0.0
+      },
+      "sourceDomain": "gsap"
+    }
+  ],
+  "fullReportSha256": "e53ad3ade5a93bc83ab8e0af7b99f3616a8b738a2df08338f9f9c110e1d6982d",
+  "disposition": "Retained initial failures; general runtime fixes verified by subsequent known-oracle run. No oracle/threshold changes or unbiased hold-out claim."
+}

@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: "Use when work needs shared domain language, CONTEXT.md updates, conditional ADR decisions, glossary cleanup, or terminology checks during BRD, PRD, FSD, triage, architecture, or goal shaping."
+description: "Use when work needs shared domain language, CONTEXT.md or GLOSSARY.md updates, conditional ADR decisions, glossary cleanup, or terminology checks during BRD, PRD, FSD, triage, architecture, or goal shaping."
 ---
 
 # Domain Modeling
@@ -11,7 +11,19 @@ Keep domain language precise and durable so agents use the same words as the pro
 
 ## Files
 
-Use the simplest layout that fits the project:
+Preserve the project's existing glossary name and location. Follow explicit
+project routing and the relevant bounded-context map: `CONTEXT.md` /
+`CONTEXT-MAP.md` and `GLOSSARY.md` / `GLOSSARY-MAP.md` are supported conventions.
+Inspect purpose first; task/runtime context is not a domain glossary merely
+because it is named `CONTEXT.md`.
+
+When both conventions exist, follow documented authority. If authority or
+definitions conflict, report the conflict and withhold only the ambiguous
+glossary write; continue independent analysis. Preserve both sources until the
+owning workflow resolves them. Never create a competing glossary or rename
+existing documents as a side effect.
+
+When no glossary convention exists, use the simplest default layout:
 
 ```text
 CONTEXT.md
@@ -32,14 +44,14 @@ Create files only when there is something real to record.
 
 When a read-only caller uses domain modeling only to evaluate ideas, reviews, or
 risks, identify terminology conflicts and return proposed glossary changes, but
-do not update or create `CONTEXT.md`, `CONTEXT-MAP.md`, an FSD, or an ADR. The
+do not update or create a glossary/map under either convention, an FSD, or an ADR. The
 owning write-authorized workflow decides whether to persist them.
 
 ## Process
 
 ### 1. Read Existing Language
 
-Before changing language, read the relevant `CONTEXT.md`, `CONTEXT-MAP.md`, FSD Technical Decision Register entries, and linked accepted ADRs.
+Before changing language, resolve and read the relevant glossary/map using the Files policy above, FSD Technical Decision Register entries, and linked accepted ADRs.
 
 If no domain docs exist, infer terms from code, tests, BRDs, PRDs, FSDs, goal issues, and user language.
 
@@ -54,7 +66,7 @@ Use concrete scenarios to force clarity. Check terminology and factual claims ag
 
 ### 3. Update The Glossary Inline
 
-Outside advisory read-only mode, when a term is resolved, update `CONTEXT.md` immediately.
+Outside advisory read-only mode, when a term is resolved, update the selected glossary immediately within the owning workflow's write authority.
 
 Use this shape:
 
@@ -66,7 +78,7 @@ Use this shape:
 _Avoid_: <synonyms or misleading terms>
 ```
 
-Keep `CONTEXT.md` free of implementation details. It is a glossary, not a BRD, PRD, FSD, scratchpad, or design document.
+Keep the selected glossary free of implementation details. It is vocabulary, not a BRD, PRD, FSD, scratchpad, or design document.
 
 ### 4. Record Technical Decisions Sparingly
 

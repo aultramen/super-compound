@@ -15,6 +15,16 @@ Regression evals ask whether protected behavior still works. Name an immutable b
 
 ## Grader routing
 
+For a newly authored or changed grader/gate, plan and run
+[actual-artifact qualification](../../verification-before-completion/references/claim-evidence.md#authored-or-changed-gates)
+before downstream reliance. Keep real-target outcomes separate from control
+sensitivity and any whole-system claim.
+
+Only for a named concurrency, retry, or state-machine invariant needing extra
+proof, with a real target and available toolchain, consider optional
+[bounded formal checking](../../verification-before-completion/references/bounded-formal-checking.md).
+It supplements the task-relevant tests and integration evidence.
+
 1. Prefer deterministic code-based graders: targeted tests, a build, schema validation, static checks, or an explicit endpoint/output assertion. Commands must be safe, reproducible, and fail nonzero.
 2. Use an LLM-as-judge for genuinely open-ended properties. Provide a rubric with an explicit pass bar and require the judge to cite the evidence for its verdict.
 3. Require human review when the decision depends on security acceptance, legal interpretation, or subjective UX judgment. State the change, reason, risk, and decision needed.

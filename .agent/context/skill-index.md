@@ -40,13 +40,14 @@ any full skill:
 | `security-audit` | security, secrets, agent-surface, readiness |
 | `compatibility-check` | runtime/dependency fit |
 | `architecture-enforcement` | placement and dependency direction |
-| `domain-modeling` | shared vocabulary and invariants |
-| `codebase-design` | module seams and interface shape |
+| `domain-modeling` | shared vocabulary; preserve existing CONTEXT/GLOSSARY naming and authority using its Files policy |
+| `codebase-design` | module seams, interface shape and optional independent design comparison |
 | `plan-verification` | ten-dimension FSD/goal gate including conditional UI/API readiness |
 | `integration-checking` | cross-component wiring |
 | `parallel-execution` | 2+ independent gated streams in isolated worktrees after required first-slice proof |
 | `knowledge-compounding` | durable solved-problem notes |
 | `knowledge-refresh` | audit and prune the knowledge store against the current tree |
+| `skill-authoring` | changed-skill stocktake, provenance pruning and pressure-tested instruction edits |
 | `subagent-orchestration` | file-backed approved-goal dispatch and two-stage review |
 | Other support skills | load only when their description matches the active risk |
 

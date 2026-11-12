@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "Selective provenance for active retrieval scripts and assets; files not listed are not claimed to mirror upstream.",
+  "scope": "Per-file provenance for active CSV catalogs, selected runtime/relevance helpers and the MIT notice. upstream.commit remains the historical default; each refreshed file records upstream_commit. Files not listed are not claimed to mirror upstream. Cell-level merge evidence: docs/research/interface-catalog-refresh-20261106.json (repository evidence, not a runtime dependency).",
   "upstream": {
     "repository": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
     "commit": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
@@ -12,87 +12,363 @@
   },
   "files": [
     {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
       "upstream_path": "src/ui-ux-pro-max/scripts/core.py",
-      "upstream_lf_sha256": "ab9f398b493e34404448cefc766239ee86119c7a21d8581ba965cabdc698b0a8",
+      "upstream_lf_sha256": "caf92bdcf2579c9a7d6af4f53c54ee9d3c8f05472cfab77aaec38bef120ec63e",
       "local_path": "scripts/core.py",
-      "local_lf_sha256": "7c710d8c7e1d480511b52f677eebd439c26a191f7706e63a5c131bb29544ead1",
+      "local_lf_sha256": "437ed0d343a2b330d55455da0998f69297e8064c78a08b034af529cca4738f0a",
       "status": "transformed"
     },
     {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
       "upstream_path": "src/ui-ux-pro-max/scripts/search.py",
-      "upstream_lf_sha256": "b38f35395a7ded28a7d5adfd39195d6db01602121aefcdc4a7e67eb1bbdd5a40",
+      "upstream_lf_sha256": "9fd5acc991142fd43c3afe7be0f6720911b668f3988b34e74b5cbc41d58e7947",
       "local_path": "scripts/search.py",
-      "local_lf_sha256": "015bae836db157e21b526dbc070c4d2f1bd83faec3848c7b38556ae4da4084fd",
+      "local_lf_sha256": "2bc09d782a248ee1754346497871f10702a7176430ba3f4e621f065548038ba4",
       "status": "transformed"
     },
     {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
       "upstream_path": "src/ui-ux-pro-max/scripts/design_system.py",
-      "upstream_lf_sha256": "db272c6649322e383714c73305705101fe1d44c15bd64556d5a515b1c419c2d2",
+      "upstream_lf_sha256": "e7d1c94c4b2eada17c5551157668362659ccf9626d34dbd58e68142410f90103",
       "local_path": "scripts/design_system.py",
-      "local_lf_sha256": "867d7892594946b5cb1cf29dcccc86597f71c2d6abf2070eeeb65b398a99a8af",
+      "local_lf_sha256": "0fbb62e1280c31b4a47cf203eb7cf15c9839f85383f7800d9c3d13579ad7249b",
       "status": "transformed"
     },
     {
-      "upstream_path": "src/ui-ux-pro-max/data/products.csv",
-      "upstream_lf_sha256": "e9749e4fd8f7d4c94919c25ebd347a4adaddb671e7b01d33fbc2c87d447e6667",
-      "local_path": "data/products.csv",
-      "local_lf_sha256": "ac14a85ca548db25e7f144a113f2c110f0d5ba227fada9321e17476f082fc1e6",
-      "status": "transformed"
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/scripts/reasoning_contract.py",
+      "upstream_lf_sha256": "b8bac1af82aa280d3e06f00aabaeac4337e632996b07fed874e2b6ee6e9c5913",
+      "local_path": "scripts/reasoning_contract.py",
+      "local_lf_sha256": "b8bac1af82aa280d3e06f00aabaeac4337e632996b07fed874e2b6ee6e9c5913",
+      "status": "mirrored"
     },
     {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/app-interface.csv",
+      "upstream_lf_sha256": "331e7cf2c0b222d80c566c5f255c63cb339f65bfd02e471a720f28e4864a9f08",
+      "local_path": "data/app-interface.csv",
+      "local_lf_sha256": "331e7cf2c0b222d80c566c5f255c63cb339f65bfd02e471a720f28e4864a9f08",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/charts.csv",
+      "upstream_lf_sha256": "4115cf1120680f2cedef0676cb648f30c7ef4699e2a947535d4113e71ed3b12a",
+      "local_path": "data/charts.csv",
+      "local_lf_sha256": "4115cf1120680f2cedef0676cb648f30c7ef4699e2a947535d4113e71ed3b12a",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
       "upstream_path": "src/ui-ux-pro-max/data/colors.csv",
-      "upstream_lf_sha256": "cb26759805217edaaa31b09836aec09eab0fe245c58f5884e9a16ef802c6e26a",
+      "upstream_lf_sha256": "8162429222bce22df62b564085946a30d07cc9722c58d0a3a494bd0d1d00841c",
       "local_path": "data/colors.csv",
-      "local_lf_sha256": "cb26759805217edaaa31b09836aec09eab0fe245c58f5884e9a16ef802c6e26a",
+      "local_lf_sha256": "8162429222bce22df62b564085946a30d07cc9722c58d0a3a494bd0d1d00841c",
       "status": "mirrored"
     },
     {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/google-fonts.csv",
+      "upstream_lf_sha256": "1c8c3b2ea1faf6a1012da463756def8b3889db33f2226f0343bb4daa80307d03",
+      "local_path": "data/google-fonts.csv",
+      "local_lf_sha256": "1c8c3b2ea1faf6a1012da463756def8b3889db33f2226f0343bb4daa80307d03",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/icons.csv",
+      "upstream_lf_sha256": "50816c6012030178195a16ee481ebf58b47bd985d70e8ec58886cc83f6eddafc",
+      "local_path": "data/icons.csv",
+      "local_lf_sha256": "50816c6012030178195a16ee481ebf58b47bd985d70e8ec58886cc83f6eddafc",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/landing.csv",
+      "upstream_lf_sha256": "9a2edd3bb676c2a58f00ade7a062e285222d4297bfd847c8d5b056f0dbbf52d0",
+      "local_path": "data/landing.csv",
+      "local_lf_sha256": "9a2edd3bb676c2a58f00ade7a062e285222d4297bfd847c8d5b056f0dbbf52d0",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
       "upstream_path": "src/ui-ux-pro-max/data/motion.csv",
-      "upstream_lf_sha256": "6452fbd8028ab71d52993775340e1bc40a150d92be8d4b4cb8710620fd1a7512",
+      "upstream_lf_sha256": "381affe8df8ea1f66fbbda2598827f9f54299107bbe6a1b4e9b68f6b62091ceb",
       "local_path": "data/motion.csv",
-      "local_lf_sha256": "6452fbd8028ab71d52993775340e1bc40a150d92be8d4b4cb8710620fd1a7512",
+      "local_lf_sha256": "381affe8df8ea1f66fbbda2598827f9f54299107bbe6a1b4e9b68f6b62091ceb",
       "status": "mirrored"
     },
     {
-      "upstream_path": "src/ui-ux-pro-max/data/stacks/javafx.csv",
-      "upstream_lf_sha256": "5545e331b2479eb431ca45203799ce1b0ab1e369045ab7735d5a9f85ec78f956",
-      "local_path": "data/stacks/javafx.csv",
-      "local_lf_sha256": "69d3adb56ad8124ae0bbf274a63a319b1625d85b8343480db6df7d672743e721",
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/products.csv",
+      "upstream_lf_sha256": "5756125e2b0e0d2360926f175d0975c8cd846c7589e5e2ce02631ff645e66361",
+      "local_path": "data/products.csv",
+      "local_lf_sha256": "1bdc6d8f5ccda75b4251590e4a3985aeb4861dcf15c9c53fd28f2dcb6d2c3b83",
       "status": "transformed"
     },
     {
-      "upstream_path": "src/ui-ux-pro-max/data/stacks/wpf.csv",
-      "upstream_lf_sha256": "ca78b5f28dc50d66900548d602d74856400097284c73e076fcfbb5a38ae5083c",
-      "local_path": "data/stacks/wpf.csv",
-      "local_lf_sha256": "ca78b5f28dc50d66900548d602d74856400097284c73e076fcfbb5a38ae5083c",
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/react-performance.csv",
+      "upstream_lf_sha256": "3d925802539abac5afeb63ae8aa1960b7229ad271b3a47caed40ab2d97ad0734",
+      "local_path": "data/react-performance.csv",
+      "local_lf_sha256": "3d925802539abac5afeb63ae8aa1960b7229ad271b3a47caed40ab2d97ad0734",
       "status": "mirrored"
     },
     {
-      "upstream_path": "src/ui-ux-pro-max/data/stacks/winui.csv",
-      "upstream_lf_sha256": "2d970b08e44509d7afa53ce7feb446930b2d5e0667fa637df9aeeed65c42bbbe",
-      "local_path": "data/stacks/winui.csv",
-      "local_lf_sha256": "2d970b08e44509d7afa53ce7feb446930b2d5e0667fa637df9aeeed65c42bbbe",
-      "status": "mirrored"
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/angular.csv",
+      "upstream_lf_sha256": "704be83f2bad30c7e6de01afb113ffa01e0c458762f48b7102f31ba2367b5553",
+      "local_path": "data/stacks/angular.csv",
+      "local_lf_sha256": "1ef5e58674a27ab2b696b7744a99d7e31f57a32583dada9b385e75ea87c40caf",
+      "status": "transformed"
     },
     {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/astro.csv",
+      "upstream_lf_sha256": "2c2f55fadaafc05e04cc321c8194a1a28b656e6757fe2ba316f41b16428299c6",
+      "local_path": "data/stacks/astro.csv",
+      "local_lf_sha256": "d770ce013e44dd3ce46e90e544b62e85d485d5a830905becf454f9db9559e1b0",
+      "status": "transformed"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
       "upstream_path": "src/ui-ux-pro-max/data/stacks/avalonia.csv",
-      "upstream_lf_sha256": "6bfa40ec6609fcb59e52a38281edcc3a3e5b5e56341304fe5628b32cb9b1f875",
+      "upstream_lf_sha256": "442fca14675a020683473e7e49f08abb27b9df0765c80efe54aef61f1a4ac258",
       "local_path": "data/stacks/avalonia.csv",
-      "local_lf_sha256": "6bfa40ec6609fcb59e52a38281edcc3a3e5b5e56341304fe5628b32cb9b1f875",
+      "local_lf_sha256": "442fca14675a020683473e7e49f08abb27b9df0765c80efe54aef61f1a4ac258",
       "status": "mirrored"
     },
     {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/flutter.csv",
+      "upstream_lf_sha256": "64dba0ac17349f28bce517a0f5f48c54d9ed2e487ec0c0258303463b382f41a0",
+      "local_path": "data/stacks/flutter.csv",
+      "local_lf_sha256": "64dba0ac17349f28bce517a0f5f48c54d9ed2e487ec0c0258303463b382f41a0",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/html-tailwind.csv",
+      "upstream_lf_sha256": "d05a581d20af57b8ca0104a6d31d90a07c437d500662a96c3029fc2f9a4678ee",
+      "local_path": "data/stacks/html-tailwind.csv",
+      "local_lf_sha256": "d05a581d20af57b8ca0104a6d31d90a07c437d500662a96c3029fc2f9a4678ee",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/javafx.csv",
+      "upstream_lf_sha256": "2e819b8d5abdd23ad4dae0991650fdb57af497aabd68b37463aa9c442944c869",
+      "local_path": "data/stacks/javafx.csv",
+      "local_lf_sha256": "5ee1c1c31f96fc0fabc58195e739a41d689cd2dd67f794e42eca0fe572b94aa8",
+      "status": "transformed"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/jetpack-compose.csv",
+      "upstream_lf_sha256": "699de218b286948eaec7d15767b6e1350ee299167e49bf476d82e3ff58724e0a",
+      "local_path": "data/stacks/jetpack-compose.csv",
+      "local_lf_sha256": "699de218b286948eaec7d15767b6e1350ee299167e49bf476d82e3ff58724e0a",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/laravel.csv",
+      "upstream_lf_sha256": "854ea4daa5fc61292d22235ad33b49ba3fe22423c3de8d3cb03758ffed3b59f9",
+      "local_path": "data/stacks/laravel.csv",
+      "local_lf_sha256": "2a20270da6f85f2bddf31f4592cc5d24c5e189624a59fb774cad162d17a17ccd",
+      "status": "transformed"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/nextjs.csv",
+      "upstream_lf_sha256": "ecd2c27b2ea0127d203ae726060efcdd7335b5e83f96b99e4f3befbbfeebd5a4",
+      "local_path": "data/stacks/nextjs.csv",
+      "local_lf_sha256": "ecd2c27b2ea0127d203ae726060efcdd7335b5e83f96b99e4f3befbbfeebd5a4",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/nuxt-ui.csv",
+      "upstream_lf_sha256": "9c0179d559abe39ad63b958b54cb29c82be1dd20706430476096ea8967bfa328",
+      "local_path": "data/stacks/nuxt-ui.csv",
+      "local_lf_sha256": "9c0179d559abe39ad63b958b54cb29c82be1dd20706430476096ea8967bfa328",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/nuxtjs.csv",
+      "upstream_lf_sha256": "3d9b54ed2d151bd9c86e9e5609b8a6f88a00c4c52fa601a30af96c49b2c4d176",
+      "local_path": "data/stacks/nuxtjs.csv",
+      "local_lf_sha256": "3d9b54ed2d151bd9c86e9e5609b8a6f88a00c4c52fa601a30af96c49b2c4d176",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/react-native.csv",
+      "upstream_lf_sha256": "ba31dd9c0c04da6bc02a74448bf121f9c0728ae5ba3b4d47b487778b0a1135b5",
+      "local_path": "data/stacks/react-native.csv",
+      "local_lf_sha256": "ba31dd9c0c04da6bc02a74448bf121f9c0728ae5ba3b4d47b487778b0a1135b5",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/react.csv",
+      "upstream_lf_sha256": "4dd176a9787e5c6306b5df94158d75955adcdc6edab41ce5286641a5842303c1",
+      "local_path": "data/stacks/react.csv",
+      "local_lf_sha256": "4dd176a9787e5c6306b5df94158d75955adcdc6edab41ce5286641a5842303c1",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/shadcn.csv",
+      "upstream_lf_sha256": "e56cfde5b74907836ac3582a4779d5b7f3d206a702ab81b8669a1b668c3eeb51",
+      "local_path": "data/stacks/shadcn.csv",
+      "local_lf_sha256": "e56cfde5b74907836ac3582a4779d5b7f3d206a702ab81b8669a1b668c3eeb51",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/svelte.csv",
+      "upstream_lf_sha256": "f6e379ba802941ba26b01d4ffbe3cd39120f2587659a1d93851c707f66bc13db",
+      "local_path": "data/stacks/svelte.csv",
+      "local_lf_sha256": "f6e379ba802941ba26b01d4ffbe3cd39120f2587659a1d93851c707f66bc13db",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/swiftui.csv",
+      "upstream_lf_sha256": "bdd9231ff3ad658f4e7c063e1eb49df2fd09ac8d90631a86df899b39833b9623",
+      "local_path": "data/stacks/swiftui.csv",
+      "local_lf_sha256": "bdd9231ff3ad658f4e7c063e1eb49df2fd09ac8d90631a86df899b39833b9623",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/threejs.csv",
+      "upstream_lf_sha256": "155d583b9c64da0df4b6c6cb060c02eab222505e0734d6353da02c9e2b5d982b",
+      "local_path": "data/stacks/threejs.csv",
+      "local_lf_sha256": "155d583b9c64da0df4b6c6cb060c02eab222505e0734d6353da02c9e2b5d982b",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
       "upstream_path": "src/ui-ux-pro-max/data/stacks/uno.csv",
-      "upstream_lf_sha256": "5d2e0f396bb9dc5a2661204264cc0eda7cc4fa3d78152dec89d668704a41b8fc",
+      "upstream_lf_sha256": "a0474363e4225b5367214d5675fd3e075f137026f9500f0d04357882ef4f6d48",
       "local_path": "data/stacks/uno.csv",
-      "local_lf_sha256": "5d2e0f396bb9dc5a2661204264cc0eda7cc4fa3d78152dec89d668704a41b8fc",
+      "local_lf_sha256": "a0474363e4225b5367214d5675fd3e075f137026f9500f0d04357882ef4f6d48",
       "status": "mirrored"
     },
     {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
       "upstream_path": "src/ui-ux-pro-max/data/stacks/uwp.csv",
-      "upstream_lf_sha256": "debf669928871261ced9333788d5afd5784377ea1fa1b4f53993dd8f1574c0fc",
+      "upstream_lf_sha256": "c409f08c1fbba1f1029f1acaa554e7b4471cc85517a5751c9f2e62465badcd5c",
       "local_path": "data/stacks/uwp.csv",
-      "local_lf_sha256": "debf669928871261ced9333788d5afd5784377ea1fa1b4f53993dd8f1574c0fc",
+      "local_lf_sha256": "c409f08c1fbba1f1029f1acaa554e7b4471cc85517a5751c9f2e62465badcd5c",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/vue.csv",
+      "upstream_lf_sha256": "b655f1ebb9dff2652d15981f31b1784c8a6d4759efd2815a14f3088257569f95",
+      "local_path": "data/stacks/vue.csv",
+      "local_lf_sha256": "b655f1ebb9dff2652d15981f31b1784c8a6d4759efd2815a14f3088257569f95",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/winui.csv",
+      "upstream_lf_sha256": "e676dc1c13ee6c205c40b0746f1335150a346c7a49a0616d2545bc3d2c930c85",
+      "local_path": "data/stacks/winui.csv",
+      "local_lf_sha256": "e676dc1c13ee6c205c40b0746f1335150a346c7a49a0616d2545bc3d2c930c85",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/stacks/wpf.csv",
+      "upstream_lf_sha256": "9781a9950b20333637b30a02e498b7efca21b618a3eeb8665836f3ac6e974da7",
+      "local_path": "data/stacks/wpf.csv",
+      "local_lf_sha256": "9781a9950b20333637b30a02e498b7efca21b618a3eeb8665836f3ac6e974da7",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/styles.csv",
+      "upstream_lf_sha256": "a9b6cadbd1cb9e7cb8398a3b445e0691d01e42ed5e5efa60a5d0c08c99c8100d",
+      "local_path": "data/styles.csv",
+      "local_lf_sha256": "4d0fd1b1aeb3771b78d71677e339f0e21364febd2efdcc6687c87272d6c35171",
+      "status": "transformed"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/typography.csv",
+      "upstream_lf_sha256": "321fc446e89024488ebae96dda93efc4d2307bd8bddb240857ad51364f6782c8",
+      "local_path": "data/typography.csv",
+      "local_lf_sha256": "45ed6fd7b6e53fa293cfce98904ec1d45ab34cd3b3a003d73d8c9dc484931a1d",
+      "status": "transformed"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/ui-reasoning.csv",
+      "upstream_lf_sha256": "f0774dd741cecdad5eec842034bd6d5e9ea50e9f220a1910069748daa0bb8e9a",
+      "local_path": "data/ui-reasoning.csv",
+      "local_lf_sha256": "f0774dd741cecdad5eec842034bd6d5e9ea50e9f220a1910069748daa0bb8e9a",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/data/ux-guidelines.csv",
+      "upstream_lf_sha256": "ff81ec613f70ba9fc3fcce52dbe4ae35d44b2079dbe6dc066d2d6e38c28facd5",
+      "local_path": "data/ux-guidelines.csv",
+      "local_lf_sha256": "ff81ec613f70ba9fc3fcce52dbe4ae35d44b2079dbe6dc066d2d6e38c28facd5",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "LICENSE",
+      "upstream_lf_sha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+      "local_path": "LICENSE",
+      "local_lf_sha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "scripts/evaluate-relevance.py",
+      "upstream_lf_sha256": "1294b92d3242af84092b37aea7a5a93f7df5cb07721fee36c534de2cdda7703e",
+      "local_path": "scripts/evaluate_relevance.py",
+      "local_lf_sha256": "408f6047e71c5f079b021121a8370c1b02328504d3bc38bb78954e489dd93f85",
+      "status": "transformed"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "scripts/relevance_metrics.py",
+      "upstream_lf_sha256": "a5126f734365380b3f3390453f25d2f504a6488c6af0fc88256a9529c02e1547",
+      "local_path": "scripts/relevance_metrics.py",
+      "local_lf_sha256": "a5126f734365380b3f3390453f25d2f504a6488c6af0fc88256a9529c02e1547",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/scripts/tests/fixtures/relevance-cases.json",
+      "upstream_lf_sha256": "e77d36eebbf6ddc2860946a02cdb659351da6c09f2688f1ed30939a418099646",
+      "local_path": "scripts/tests/fixtures/relevance-cases.json",
+      "local_lf_sha256": "e77d36eebbf6ddc2860946a02cdb659351da6c09f2688f1ed30939a418099646",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/scripts/tests/fixtures/relevance-thresholds.json",
+      "upstream_lf_sha256": "331197e8644c751d433183ada0a9979fb2ae251efa0d77000bafdcbddc88d0e7",
+      "local_path": "scripts/tests/fixtures/relevance-thresholds.json",
+      "local_lf_sha256": "331197e8644c751d433183ada0a9979fb2ae251efa0d77000bafdcbddc88d0e7",
+      "status": "mirrored"
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/scripts/tests/fixtures/relevance-baseline.json",
+      "upstream_lf_sha256": "0df200fc54c1cb97a52d6775e7f501509163cea8f8b73fd7268429bc1f835afe",
+      "local_path": "scripts/tests/fixtures/relevance-baseline.json",
+      "local_lf_sha256": "0df200fc54c1cb97a52d6775e7f501509163cea8f8b73fd7268429bc1f835afe",
       "status": "mirrored"
     }
   ],
@@ -133,7 +409,7 @@
       "files": [
         "data/products.csv"
       ],
-      "description": "Retain existing local keyword enrichments for rows 1-161 and append upstream rows 162-192 unchanged."
+      "description": "Retain fourteen local product keyword enrichments by row identity while merging the current upstream schema and all 192 rows."
     },
     {
       "id": "explicit-motion-retrieval",
@@ -142,7 +418,7 @@
         "scripts/search.py",
         "data/motion.csv"
       ],
-      "description": "Expose upstream GSAP guidance only through the explicit gsap domain; default auto-detection remains unchanged and code/snippet fields are emitted without destructive truncation."
+      "description": "Expose upstream GSAP guidance through explicit tool intent: --domain gsap or a query naming GSAP/ScrollTrigger. Keep generic animation and scroll-reveal queries in UX, and emit code/snippet fields without destructive truncation."
     },
     {
       "id": "prompt-safe-retrieval-output",
@@ -150,7 +426,7 @@
         "scripts/core.py",
         "scripts/search.py"
       ],
-      "description": "Bound result counts, route truncated human-readable fields to complete JSON output, and emit only a compact artifact manifest in persistence mode."
+      "description": "Bound result counts, preserve the nine source untruncated fields plus local code/snippet/command fields verbatim, truncate ordinary human-readable fields at 300 characters with a complete-JSON hint, and emit only a compact artifact manifest in persistence mode."
     },
     {
       "id": "deterministic-design-system-generation",
@@ -158,7 +434,7 @@
         "scripts/search.py",
         "scripts/design_system.py"
       ],
-      "description": "Search the product catalog once, fail with source context on malformed decision rules, and keep persistence links project-scoped. Lead generated guidance with decisions, omit empty page sections and generic CSS kits; retrieve selected-stack implementation guidance separately. Reject unsupported design-system JSON/stack/domain combinations before writes."
+      "description": "Search the product catalog once, fail with source context on malformed decision rules, and keep persistence links project-scoped. Lead generated guidance with decisions, omit empty page sections and generic CSS kits; retrieve selected-stack implementation guidance separately. Reject unsupported design-system JSON/stack/domain combinations before writes. Parse the refreshed conditional reasoning grammar with the mirrored reasoning_contract helper, preserve contextual failures and Reasoning Confidence, resolve canonical style identity through core, and retain source identities/derivations plus selective mode/palette derivation and current role/on-color tokens without importing upstream design dials or CSS kits. Honor explicit mode over inference, select mode-compatible styles, preserve origin for derived light palettes, and reject unsupported-only candidates before persistence."
     },
     {
       "id": "standards-compliant-javafx-csv",
@@ -172,7 +448,66 @@
       "files": [
         "scripts/core.py"
       ],
-      "description": "Cache 16 in-process BM25 indexes by path and source stat signature; retain strict CSV validation, fresh result dictionaries, and explicit applicability/provenance. Repeated-query benefit measured locally."
+      "description": "Cache 16 in-process BM25 indexes by path, selected columns, active/all-row/version-generation modes and source stat signature; retain strict CSV validation, fresh result dictionaries, explicit applicability/provenance and source mutation invalidation. Read per-file upstream_commit before the historical default and retain unknown/local-reference metadata for local-only assets; invalidate manifest metadata by its source signature."
+    },
+    {
+      "id": "retained-stack-guidance-corrections",
+      "files": [
+        "data/stacks/angular.csv",
+        "data/stacks/astro.csv",
+        "data/stacks/laravel.csv"
+      ],
+      "description": "Retain Angular row 28 stable tracking language (2 cells), Astro row 35 canonical URL language/documentation (3 cells), and Laravel rows 24/45 text repairs (2 cells)."
+    },
+    {
+      "id": "retained-style-copy",
+      "files": [
+        "data/styles.csv"
+      ],
+      "description": "Retain the two existing AI-assisted wording edits in Best For for style identities 34 and 43; preserve sparse source identities and source taxonomy/status/RTL metadata."
+    },
+    {
+      "id": "retained-typography-share-links",
+      "files": [
+        "data/typography.csv"
+      ],
+      "description": "Retain all 74 local Google Fonts share-page URLs while adopting current upstream row metadata."
+    },
+    {
+      "id": "canonical-active-retrieval-and-rtl",
+      "files": [
+        "scripts/core.py"
+      ],
+      "description": "Resolve exact style ID/name/pipe aliases, redirects and deprecations before generic BM25 ranking; search active rows by default and filter explicit RTL style/product queries before result limits. Explicit all accepts declared RTL levels only while omission keeps the default corpus. Retain two-character acronym weighting, strict validation and bounded result counts; optional style metadata failures leave unrelated automatic searches available and direct style errors actionable."
+    },
+    {
+      "id": "selective-source-quality-and-routing",
+      "files": [
+        "scripts/core.py"
+      ],
+      "description": "Adopt source synonym normalization, exact source stopwords, raw confidence/coverage floors, phrase routing and fixed tie priority while retaining a local one-term topic/acronym lookup bypass, broad product routing and local web/app domains. Route GSAP only for an explicit domain or named GSAP/ScrollTrigger tool intent; generic animation/scroll-reveal stays in UX. Prioritize named guideline rows only when at least three distinctive label tokens occur in the query; select current/legacy generations from version or migration intent with bounded row-status cache variants. Supported numeric/version-prefix and Three.js rN notation is parsed at both source and destination positions. An explicit destination version overrides current/latest/modern qualifiers and the source version; genuinely legacy-targeted requests retain legacy guidance. For legacy stacks, distinguish new-project successor choice from existing-app migration using guidance-row intent. Explicit product search ranks literal Product Type label evidence by category-title inverse frequency before the BM25 tie, without rewriting keyword overrides or caching query results. Include time-series/forecast/Phosphor routing cues and reject unsupported Lucide-only icon lookups; validate relevance with the original cases and gates."
+    },
+    {
+      "id": "rtl-cli-and-palette-output",
+      "files": [
+        "scripts/search.py",
+        "scripts/design_system.py"
+      ],
+      "description": "Expose optional RTL filtering through the existing CLI with early unsupported-combination validation; retain bounded text/complete JSON and safe compact persistence, and carry current palette roles and canonical identities into generated output."
+    },
+    {
+      "id": "generator-category-intent-selection",
+      "files": [
+        "scripts/design_system.py"
+      ],
+      "description": "Keep one bounded product lookup with five candidates. Prefer an exact Product Type query match, then the most specific fully covered source title/alias after ignoring generic UI/audience/context qualifiers; keep the original core top result on ties or no meaningful full match. Use the selected actual row for source identity and canonical reasoning category without changing direct search ranking or the fourteen local product keyword enrichments."
+    },
+    {
+      "id": "local-relevance-adapter",
+      "files": [
+        "scripts/evaluate_relevance.py"
+      ],
+      "description": "Adapt the repository-root upstream evaluator to this skill layout and local generated-output parser while preserving all 90 original judgments, original all/calibration/held-out metric floors, all 16 locked cases, identity resolution and frozen-fixture checks. Keep local-baseline metric deltas diagnostic-only; supplementary local web/app hard negatives and the old local behavior suite remain separate."
     }
   ],
   "local_only": [
@@ -186,7 +521,7 @@
     },
     {
       "path": "scripts/test_search_regressions.py",
-      "reason": "Regression coverage for selective upstream retrieval behavior."
+      "reason": "Local regression coverage for catalog-derived expectations, two-character retrieval, active canonical guidance, complete GSAP snippets, source signatures and explicit applicability."
     },
     {
       "path": "scripts/test_csv_integrity.py",
@@ -194,33 +529,41 @@
     },
     {
       "path": "scripts/test_design_system_efficiency.py",
-      "reason": "Local coverage for single-pass retrieval and actionable reasoning failures."
+      "reason": "Local coverage for single-pass retrieval, conditional reasoning errors/confidence, canonical source identity and coherent mode/palette derivation."
     },
     {
       "path": "scripts/test_search_cli.py",
-      "reason": "Local end-to-end coverage for bounded and compact CLI output."
+      "reason": "Local end-to-end coverage for bounded/compact output, current palette metadata and supported/unsupported RTL option combinations."
     },
     {
       "path": "scripts/test_upstream_provenance.py",
-      "reason": "Local integrity checks for this selective provenance manifest."
+      "reason": "Offline local inventory/hash/applicability checks, hermetic Git mutation tests and a separate optional pinned-source checkout proof."
     },
     {
       "path": "scripts/benchmark_search.py",
       "reason": "Local paired cache-disabled/cache-enabled benchmark with identical result digests."
+    },
+    {
+      "path": "scripts/test_rtl_search.py",
+      "reason": "Local regression coverage for canonical/active style retrieval, optional RTL filtering, source quality/routing and unavailable icon-library handling."
+    },
+    {
+      "path": "scripts/test_evaluate_relevance.py",
+      "reason": "Local regression coverage for the adapted offline relevance evaluator and unchanged fixture gates."
     }
   ],
   "intentionally_not_imported": [
     {
       "upstream_path": "src/ui-ux-pro-max/data/design.csv",
-      "reason": "Not routed by the upstream active search configuration."
+      "reason": "Legacy exclusion retained for compatibility; this path is absent at both the historical default and refreshed pinned Git trees and is not a local runtime asset."
     },
     {
       "upstream_path": "src/ui-ux-pro-max/data/draft.csv",
-      "reason": "Not routed by the upstream active search configuration."
+      "reason": "Legacy exclusion retained for compatibility; this path is absent at both the historical default and refreshed pinned Git trees and is not a local runtime asset."
     },
     {
       "upstream_path": "src/ui-ux-pro-max/data/_sync_all.py",
-      "reason": "Repository maintenance helper, not a runtime retrieval asset."
+      "reason": "Legacy exclusion retained for compatibility; this path is absent at both the historical default and refreshed pinned Git trees and is not a local runtime asset."
     },
     {
       "upstream_paths": [
@@ -228,16 +571,31 @@
         "src/ui-ux-pro-max/scripts/design_system.py"
       ],
       "feature": "design dials",
-      "reason": "Deferred because the upstream dial implementation crosses local persistence and formatting protections; existing retrieval defaults remain unchanged."
+      "reason": "Do not adopt upstream dial behavior, generic CSS kits or the persistence rewrite. Only the refreshed reasoning schema and palette correctness are selectively merged into protected local generation."
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_paths": [
+        "src/ui-ux-pro-max/data/catalog-summary.json",
+        "src/ui-ux-pro-max/data/data-provenance.json",
+        "src/ui-ux-pro-max/data/google-font-licenses.json",
+        "src/ui-ux-pro-max/data/phosphor-icons-upstream.json"
+      ],
+      "reason": "Build/catalog provenance companions are not local runtime CSV inputs; no fonts or icon binaries are imported, and this manifest does not claim independent row verification."
+    },
+    {
+      "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "upstream_path": "src/ui-ux-pro-max/scripts/validate_data.py",
+      "reason": "Run directly from the pinned source for refresh validation; not shipped as a local runtime helper."
     }
   ],
   "guidance_applicability": {
     "data/stacks/nextjs.csv": {
-      "Configure caching explicitly (Next.js 15+)": {
-        "guideline": "Configure caching explicitly (Next.js 15+)",
-        "version": "Next.js 15+",
-        "source": "https://nextjs.org/docs/app/building-your-application/upgrading/version-15",
-        "basis": "existing local guidance row; not a new upstream refresh"
+      "Configure caching explicitly (Next.js 16.2+)": {
+        "guideline": "Configure caching explicitly (Next.js 16.2+)",
+        "version": "Next.js 16.2+",
+        "source": "https://nextjs.org/docs/app/guides/upgrading/version-16",
+        "basis": "Pinned upstream row 13 at b7d5353; row-native Applies To is nextjs 16.2 and Verified At is 2026-08-13. Source-recorded applicability, not independent documentation revalidation."
       }
     }
   }

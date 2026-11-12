@@ -17,7 +17,7 @@ Review in two distinct stages: first the contract, then implementation quality. 
 
 Use for external reviews, self-review before handoff, and `/sc-review`.
 
-- Load [Spec Compliance](references/spec-compliance.md) first when a plan, issue, FSD, PRD, BRD, `CONTEXT.md`, acceptance criteria, or accepted ADR defines the change.
+- Load [Spec Compliance](references/spec-compliance.md) first when a plan, issue, FSD, PRD, BRD, domain glossary, acceptance criteria, or accepted ADR defines the change.
 - After assessing Stage 1, load [Quality Axes](references/quality-axes.md) for the relevant code domains. Invoke deeper security/privacy skills when that branch applies.
 - Load [Findings and Self-Review](references/findings-and-self-review.md) when classifying results, writing feedback, or reviewing your own diff.
 

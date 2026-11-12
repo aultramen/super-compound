@@ -73,7 +73,7 @@ const specs = {
       "stride.md": "31d6dbbdf9f9566c449be987d8f9fe7588b68d7f68a61a5feafaa12cf27b8a68",
       "attack-trees.md": "5a4a87a383ecbe8015b7fd3744e4a7f800cbd438b15409f66771ed977b60ed2a",
       "trust-boundaries.md": "24f2dd2fc77fb2a7945ca240838f4418704d17cdde9fa1020a7f5a788a2414bc",
-      "document-template.md": "0806ea7f979e80e0347e9351463d705290fa292d6cf445d9ec76ece283a6ef8e",
+      "document-template.md": "dbdaa3374a8f1c16a5bcd9cfed6046443f39036cba5c11b06b2b27d7b0c22585",
       "process.md": "7b18d63bc86626e0b90e77d680b33ae531ae245becca0bcff67eb9298690c0a2",
       "red-flags.md": "df55923b8b78ffec29c5f17567d27faba6a0df05b2ee0bd25b2176dcde315ba0",
     },
@@ -103,8 +103,8 @@ const specs = {
       "owasp.md": "179da9dc1d6adffa09ce4882e876b00821d66d8e3bf43d603f0ae7581d620647",
       "secrets.md": "3d60df1bf26c6c69976e1958f76e31e42aac3e8b6f6123c7181d6b057a42a829",
       "supply-chain.md": "d15ac415a557856a0e4c5da305bdd77edffb7440461c96852edca0c1e83b30c8",
-      "agent-surface.md": "ce7c233651c026dd36e4ba488eec19c95a117b1c8828de563fa7f8cdbddd9877",
-      "reporting.md": "786739b9d3c25f066fa4c806b5c0dc7ca3e6dbe87f036e9a96c9ae9ab4cd865c",
+      "agent-surface.md": "6c053ddb4f65b025e8811d9b35d00d3837df96116d8d04a63ae39eb5f588d909",
+      "reporting.md": "d6900d029189cd96702ea1756fa99eaf238c194c770a381cf1e35dbdb79a9120",
     },
     headings: [
       "## Purpose",
@@ -131,7 +131,7 @@ const specs = {
     frontmatter:
       '---\nname: compatibility-check\ndescription: "Use when introducing dependencies or auditing runtime support, peer conflicts, deprecations, vulnerability posture, and rollback risk."\n---',
     references: {
-      "inspection-surface.md": "5b0da19c6090488af88fc81a6d7005f433d7e9102ce6f1614ac236ec009c22d1",
+      "inspection-surface.md": "2824e42880f34e1788b9574fbdbb018f6db21c140fb927425f73df5883f30905",
       "preflight.md": "f7e9115fd5b0c4b064035ba40fbca2541a32e7e3c3f4cce6f7dc5a088f597ed8",
       "audit.md": "ab840249d2967411447233cd0afde8763b93db5c75dfde9e64ecf18cade111e3",
       "commands.md": "ffb4081d25994084826c5b93274b8dae5d54145e18c5e3387cf77897a01a3f24",

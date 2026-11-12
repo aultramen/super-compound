@@ -16,6 +16,22 @@ load triggers as suggested by [Astra guidance](https://developers.openai.com/blo
 Sol supports low/medium/high/xhigh/max, with none/minimal unavailable; verify
 model-specific controls in the [Sol documentation](https://developers.openai.com/api/docs/models/gpt-6.1-sol).
 
+## Requested and Observed Execution
+
+The model mapping, including inherit, native projections and CLI/API model or
+effort fields describe requested settings. They do not establish the provider
+or exact model that served a run; preserve explicit installation overrides.
+
+When an authorized external route is selected or recovered, or authoritative
+acceptance requires identity proof, load
+[external execution receipts](../skills/subagent-orchestration/references/completion-inbox.md#external-execution-receipts).
+For native execution too, observed provider/model identity remains UNKNOWN
+without trustworthy runtime evidence. A provider/family assertion does not prove
+the exact served model; an adapter assertion is not backend attestation.
+Fixture traces, configured tools and self-report prove neither live identity nor
+enforced capabilities. Keep receipt facts in existing report/evidence locators;
+ordinary delegation gains no new identity or completion gate.
+
 ## API options
 
 This is guidance, not a new API adapter. Keep stable instructions/tool prefixes

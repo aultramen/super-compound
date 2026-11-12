@@ -47,12 +47,76 @@ Retain IDs, anchors, numbered headings, status/field grammar and FSD Section 8;
 exact wire shapes remain in linked machine contracts and GOAL packets are authored
 once. Follow output-style.md; no numerical document length targets apply.
 
+For important business claims, apply [business evidence and fidelity](#business-claim-evidence-and-fidelity).
+
 | Artifact | Reviewer focus | Expand when |
 |---|---|---|
 | BRD | Why, business impact/outcome, scope, rules, success measure and business acceptance/decision. | Business evidence, financial exposure, regulatory/privacy obligations, cross-department change or transition risk requires detail; keep the BRD Profile Gate. |
 | PRD | Who, permission intent, main flow, observable behavior, failure/recovery, acceptance and UAT. | UI states, permissions, quality constraints or product risks need clarification; keep the Minimum Completeness and UI Experience gates. |
 | FSD | How, components/contracts, data/API/state/security, technical decisions, GOAL/TEST and rollout/recovery. | Changed interfaces, invariants, integrations or operations need an exact contract; follow UI topology/readiness for Section 8. |
 | ADR | One material decision, context, viable options, rationale, consequences, obligations and revisit trigger. | The conditional ADR policy applies; use FSD TDEC for local decisions. No invented alternatives to fill a table. |
+
+## Business claim evidence and fidelity
+
+Apply this section when a business decision materially depends on a claim,
+commitment or correction, including contested evidence. Name the decision
+consumer and applicable scope. Routine facts retain proportionate inline checks;
+there is no universal two-source quota or confidence-scoring ritual. Use existing
+source/evidence registers, synthesis, revision/conflict and impact sections with
+their existing IDs, rather than a new ledger.
+
+Anchor each material claim to an exact passage, table, message, timestamp or
+local observation. Preserve units, population, period, method, scope and
+qualifications; support for a narrower fact cannot verify an extrapolation.
+Record publisher and underlying origin/data/reporting, source version and
+publication/effective/as-of date separately from retrieval or observation date.
+A verified self-report establishes what its author asserted; the underlying
+business claim needs its own support.
+
+Assess independence from both publisher and underlying evidence. Syndication,
+circular citations, repeated vendor material, different domains and agreement
+between tools/imports do not create independent corroboration. Identify shared
+origins; keep opaque lineage or ownership as independence unknown. Unknown
+independence does not invalidate adequate primary support. One authoritative
+primary source or direct local observation can verify a bounded fact; seek
+proportionate corroboration for decision-driving or conflicting claims.
+
+Mark claim conclusions in the existing register or synthesis: verified for
+direct support within current scope; inferred for reasoning with cited inputs;
+contested for material disagreement, retaining each supported account; unknown
+for missing, stale or unavailable proof. These are evidence labels, separate
+from artifact status or approval. State useful confidence limits without
+inventing numerical certainty or averaging incompatible figures.
+
+Check fidelity in both directions: every material source decision, commitment,
+condition and correction survives synthesis, and each synthesized assertion
+links back to supporting evidence. Preserve the actual speaker, any stated
+owner, dates, figures, scope, conditions and modality. Quote consequential
+wording exactly where paraphrase changes meaning. Keep proposals, offers,
+intentions and estimates as stated, with missing terms unspecified. Preserve
+an actual conditional commitment as a conditional commitment, with approval
+and fulfillment assessed separately.
+
+Establish the final supported state through attributable correction/retraction
+chronology, not retrieval order. Retain prior source anchors, the replacement
+anchor and what changed; a newly retrieved stale copy cannot restore superseded
+terms. Keep unclear attribution, conflicting accounts or uncertain chronology
+visible rather than silently choosing a current answer.
+
+Trace changed premises to affected downstream summaries, recommendations,
+assumptions/calculations and qualified BRD/PRD/FSD/TDEC/AC/GOAL/TEST references.
+Refresh and reverify only affected conclusions and descendants; retain history,
+unrelated settled work and unaffected approvals. Reconcile factual corrections
+through the existing owner; material decision changes retain that owner's gate.
+Uncertain material dependencies use existing OPEN-* handling with impacted refs,
+owner and next evidence action. Read-only scope proposes these changes.
+Evidence does not authorize execution, grant approval or prove fulfillment.
+
+Conceptual attribution: independently written adaptation of pinned BMad
+[claim verification](https://github.com/bmad-code-org/bmad-method/blob/022be9314e4facd16826104a9f8033e1c5ed4fdc/skills/bmad-deep-recon/references/verification.md)
+and [source ingestion](https://github.com/bmad-code-org/bmad-method/blob/022be9314e4facd16826104a9f8033e1c5ed4fdc/skills/bmad-ingest/SKILL.md).
+BMad runtime, memlogs, source quotas and cross-tool confirmation shortcuts are
+not adopted.
 
 ## Section-On-Demand Reference Libraries
 

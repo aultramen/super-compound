@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
 import {analyzeCodexJsonl} from './codex-pilot.mjs';
 import {runVerificationRecipe} from './verification-recipe.mjs';
 
@@ -13,6 +15,33 @@ async function actualCompletionEvidence(dir,seed) {
  const result=await runVerificationRecipe(dir,recipe);
  assert.equal(result.pass,true,'actual arithmetic acceptance assertions must pass');
  return {[seed.fixture==='multi-goal-resume'?'GOAL-002':'GOAL-001']:{contractPath:pin.contractPath,contractDigest:pin.contractDigest}};
+}
+
+function assertExecutionReceipt(receipt,requested,stdoutRef,stderrRef) {
+ assert.ok(receipt,'external process receipt is missing execution provenance');
+ assert.deepEqual(receipt.requested,requested);
+ assert.deepEqual(receipt.observed,{model:'unknown',provider:'unknown',status:'unverified',reason:'No verified serving metadata'});
+ for(const [name,ref] of Object.entries({stdout:stdoutRef,stderr:stderrRef})) {
+  assert.equal(receipt[name].ref,ref);
+  assert.equal(receipt[name].sha256,createHash('sha256').update(fs.readFileSync(ref)).digest('hex'));
+ }
+}
+
+const runtimeControlSources=()=>Object.fromEntries(['codex-pilot.mjs','session-baseline.mjs','codex-pilot.test.mjs'].map(name=>[`.agent/tools/${name}`,createHash('sha256').update(fs.readFileSync(new URL(name,import.meta.url))).digest('hex')]));
+const runtimeControlBefore=runtimeControlSources(),runtimeControls=[];
+const runtimeControlStartedAt=new Date().toISOString();
+function saveRuntimeControl(control,receipt) {
+ if(receipt) {
+  control.executionProvenance=receipt;
+  control.outputs=Object.fromEntries(['stdout','stderr'].map(name=>[name,{...receipt[name],rawBase64:fs.readFileSync(receipt[name].ref).toString('base64')}]));
+ }
+ runtimeControls.push(control);
+ const sourceAfter=runtimeControlSources();
+ const report={schema:'r08_runtime_controls_v1',evidenceClass:'MOCK',limits:'Controlled local Node subprocesses and an unavailable executable; no live provider or serving identity attestation.',startedAt:runtimeControlStartedAt,updatedAt:new Date().toISOString(),sourceBefore:runtimeControlBefore,sourceAfter,sourceUnchanged:JSON.stringify(runtimeControlBefore)===JSON.stringify(sourceAfter),complete:runtimeControls.length===3,controls:runtimeControls};
+ const target=fileURLToPath(new URL('../../.scratch/r08-model-receipts-20261107/runtime-controls.json',import.meta.url));
+ fs.mkdirSync(path.dirname(target),{recursive:true});
+ fs.writeFileSync(target,JSON.stringify(report,null,2)+'\n');
+ assert.equal(report.sourceUnchanged,true,'runtime control inputs changed during execution');
 }
 
 test('Codex usage includes cached input once and counts observed commands and errors',()=>{
@@ -36,9 +65,14 @@ test('full pilot stops before counted pairs when access/build preflight fails',a
   const result=await runCodexPilot({baseline:source,enhanced:source,out:path.join(root,'out'),model:'fixed-model',fixture:'debugging',noiseAware:true,executable:path.join(root,'unavailable.exe')});
   assert.equal(result.verdict.decision,'INCONCLUSIVE');assert.equal(result.trials.length,0);
   assert.equal(result.controlTrials.length,0);assert.equal(result.preflight.attempts.length,1);
+  const attempt=result.preflight.attempts[0].result;
+  assert.equal(attempt.failure,'ENOENT');
+  assertExecutionReceipt(attempt.executionProvenance,{harness:'codex-cli',executable:path.join(root,'unavailable.exe'),model:'fixed-model',effort:'low'},path.join(root,'out/preflight/preflight-A.jsonl'),path.join(root,'out/preflight/preflight-A.stderr.log'));
+  saveRuntimeControl({id:'unavailable-executable',expected:'A created output pair retains requested settings and unknown observed identity while process failure remains ENOENT.',actual:{failure:attempt.failure,exitCode:attempt.exitCode},status:'pass'},attempt.executionProvenance);
   assert.equal(result.preflight.protocol,'rtk-explicit-v3');
   const protocol=JSON.parse(fs.readFileSync(path.join(root,'out/protocol.json'),'utf8'));
   assert.equal(protocol.protocol,'rtk-explicit-v3');assert.equal(protocol.controlPairs,6);
+  assert.equal(protocol.model,'fixed-model');
   assert.ok(protocol.prompt.includes('rtk powershell'));assert.ok(protocol.prompt.includes('rtk node'));
  } finally {fs.rmSync(root,{recursive:true,force:true});}
 });
@@ -228,7 +262,7 @@ test('a retrieved active poisoned lesson cannot replace observed verification or
 });
 
 test('paired pilot retains the first failed A/A control and starts no A/B sessions',async()=>{
- const {runCodexPilot}=await import('./codex-pilot.mjs');
+ const {runCodexPilot,runCodexPreflight}=await import('./codex-pilot.mjs');
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'codex-control-failfast-'));
  const previous=process.env.NODE_OPTIONS;
  try {
@@ -246,7 +280,7 @@ test('paired pilot retains the first failed A/A control and starts no A/B sessio
     fs.mkdirSync('.scratch',{recursive:true});fs.writeFileSync('.scratch/pilot-write-proof.json',JSON.stringify(build));
     events.push(command('rtk node -e write .scratch/pilot-write-proof.json',0,'probe saved'));
    }
-   events.push({type:'turn.completed',usage:{input_tokens:100,output_tokens:20,cached_input_tokens:0}});
+   events.push({type:'turn.completed',model:'spoofed-model',provider:'spoofed-provider',usage:{input_tokens:100,output_tokens:20,cached_input_tokens:0}});
    process.stdout.write(events.map(e=>JSON.stringify(e)).join('\\n')+'\\n');process.exit(0);
   }`);
   // This local subprocess fixture emits controlled traces; it is not a live model session.
@@ -257,11 +291,37 @@ test('paired pilot retains the first failed A/A control and starts no A/B sessio
   assert.equal(result.verdict.decision,'INCONCLUSIVE');assert.equal(result.trials.length,0);
   assert.equal(result.controlTrials.length,1);assert.equal(result.controlTrials[0].correctness,false);
   assert.equal(result.controlTrials[0].failure,null);assert.equal(result.controlTrials[0].checks.tests,false);
+  const requested={harness:'codex-cli',executable:process.execPath,model:'fixed-model',effort:'low'};
+  for(const attempt of result.preflight.attempts) {
+   const label=`preflight-${attempt.variant}`;
+   assertExecutionReceipt(attempt.result.executionProvenance,requested,path.join(out,'preflight',`${label}.jsonl`),path.join(out,'preflight',`${label}.stderr.log`));
+  }
+  const trial=result.controlTrials[0];
+  assert.equal(trial.model,'fixed-model');
+  assertExecutionReceipt(trial.executionProvenance,requested,path.join(out,'control-session-1.jsonl'),path.join(out,'control-session-1.stderr.log'));
+  assert.match(fs.readFileSync(trial.executionProvenance.stdout.ref,'utf8'),/spoofed-model/);
+  assert.match(fs.readFileSync(trial.executionProvenance.stdout.ref,'utf8'),/spoofed-provider/);
+  const grade=JSON.parse(fs.readFileSync(path.join(out,'control-session-1.grade.json'),'utf8'));
+  assert.deepEqual(grade.result.executionProvenance,trial.executionProvenance);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(out,'protocol.json'),'utf8')).model,'fixed-model');
   assert.equal(fs.existsSync(path.join(out,'control-session-1.grade.json')),true);
   assert.equal(fs.existsSync(path.join(out,'control-session-2')),false);
   assert.equal(fs.existsSync(path.join(out,'session-1')),false);
   assert.equal(JSON.parse(fs.readFileSync(path.join(out,'trials.json'),'utf8')).gates.controlTrials.length,1);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(out,'trials.json'),'utf8')).gates.controlTrials[0].executionProvenance,trial.executionProvenance);
   assert.equal(JSON.parse(fs.readFileSync(path.join(out,'verdict.json'),'utf8')).decision,'INCONCLUSIVE');
+  saveRuntimeControl({id:'spoofed-serving-hints',expected:'Spoofed model/provider stdout leaves observed identity unknown; actual receipt survives preflight, grade and trial with matching persisted output digests.',actual:{failure:trial.failure,exitCode:trial.exitCode,legacyModel:trial.model},status:'pass'},trial.executionProvenance);
+  const missingOutputPreload=path.join(root,'missing-output.cjs');
+  const controlled=fs.readFileSync(preload,'utf8');
+  assert.equal(controlled.split('process.stdout.write(events').length-1,1);
+  fs.writeFileSync(missingOutputPreload,controlled.replace('process.stdout.write(events',"fs.unlinkSync(require('node:path').join(process.cwd(),'..',require('node:path').basename(process.cwd())+'.stderr.log'));process.stdout.write(events"));
+  process.env.NODE_OPTIONS=`--require="${missingOutputPreload.replaceAll('\\','/')}"`;
+  let metadataError;
+  await assert.rejects(runCodexPreflight({baseline:source,enhanced:source,out:path.join(root,'missing-output'),model:'fixed-model',fixture:'debugging',executable:process.execPath}),error=>{
+   metadataError={name:error.name,code:error.code,message:error.message};
+   return error.code==='ENOENT';
+  });
+  saveRuntimeControl({id:'missing-output',expected:'A missing persisted output rejects with ENOENT rather than leaving an unhandled rejection or pending process promise.',actual:metadataError,status:'pass'});
  } finally {
   if(previous===undefined)delete process.env.NODE_OPTIONS;else process.env.NODE_OPTIONS=previous;
   fs.rmSync(root,{recursive:true,force:true});
