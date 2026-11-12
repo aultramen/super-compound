@@ -61,8 +61,7 @@ Result and next action: Read-only findings by severity and evidence; route each 
 
 ## Output
 
-- Findings first, ordered by severity.
-- Evidence for each finding.
+- Verdict line first, then every critical/high (P0/P1) finding, one line each with its evidence; never truncated. Lower severities: counts plus the report link when a report was saved (step 10); otherwise list each one line with its evidence.
 - Clear distinction between confirmed issues, risks, and unverified assumptions.
 - Exact next owner for every remediation.
 - Each finding stated exactly once in its reporting block, with evidence, fix, and next owner as fields of that block; summaries carry counts only, and remediation ordering references finding IDs.

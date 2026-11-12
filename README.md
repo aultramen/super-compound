@@ -2,41 +2,23 @@
 
 ## Summary
 
-Use [prompt-driven setup](SETUP.md), describe the goal, and let the framework understand context, execute authorized work, validate, and deliver. New installations ask for approval only when an exception requires human judgment or additional authority. Existing configuration, including explicit stage approvals, is preserved.
+Use [prompt-driven setup](SETUP.md), describe the goal, and the framework reads the project, does the work you asked for, checks it, and reports. New installations ask you only when a decision or extra permission is needed. Existing configuration, including explicit stage approvals, is preserved.
 
 Super Compound is a compact AI-assisted development framework for Antigravity IDE, Claude Code, and compatible coding agents.
 
 It keeps the public command surface small, pushes detailed procedures into skills, and treats verification as part of the work rather than a final ritual.
 
-Human input uses one [answerable checkpoint](.agent/context/checkpoint.contract.md):
-what remains approved, the blocked result, owner, recommendation, direct review
-material and a short prioritized set of ready questions/approvals with stable IDs and automatic continuation. Agent research/tests proceed
-first; evidence refresh does not repeat approval. Authorized owner handoffs run
-internally while configured stage checkpoints and read-only boundaries remain.
-Every displayed item includes a recommendation, brief reason, and review link
-when material is needed. The complete unresolved register, dependent items,
-and supporting detail stay available by link or on request. Reply examples
-appear when useful; partial replies keep unanswered IDs open, and silence grants no approval.
-Approval does not supply missing information, test evidence or access readiness.
-See [how to answer](WALKTHROUGH.md#answering-a-checkpoint) and the
-[question/answer eval](docs/eval-results/questions-and-hints-20261005.md).
-See the [PromptShield example and regression evidence](docs/eval-results/hitl-checkpoints-20261004.md).
-
 ## Quick Start
 
-Start with [setup](SETUP.md), then try one small task. Node 22+ is required;
+Start with [setup](SETUP.md). Node 22+ is required;
 Python is needed only for interface search and Python checks.
 
-Describe the result you need in ordinary language; commands remain available:
+Two entry points cover most work:
 
-| Intent | Example | Expected boundary |
-|---|---|---|
-| Start/change work | "Ubah label ini" or "Buat PRD saja dari BRD approved" | The agent selects the existing owner/tier; document-only scope ends at that artifact and applicable validation. |
-| Continue/check status | "Lanjutkan pekerjaan yang authorized" or "Lihat status saja" | Resume valid authority/evidence through the work owner; status-only stays read-only. |
-| Consult | "Apa langkah berikutnya?" | Read-only advice; accepting a recommendation does not start implementation. |
+- **New feature:** `/sc-launch <idea>`. The agent plans, builds, checks and reports, and asks you only when it needs a decision.
+- **Small change or bug:** describe it in plain language, or use `/sc-work <change>` or `/sc-debug <symptom>`.
 
-These are conceptual labels, not new commands or runtime modes. The
-[dispatcher](.agent/context/workflow-dispatch.md) retains all existing gates.
+Try one small task first:
 
 ```text
 /sc-init
@@ -56,14 +38,20 @@ Detail: [tautan laporan]
 
 The numbers above illustrate the format; the agent reports actual check results. The reply uses the request language (Indonesian here); `## Evidence of Completion`, commands and IDs stay verbatim. See [writing and output language](.agent/context/writing-language.md).
 
-| Your task | Start here | What you provide | Result and next action |
+| Your task | Start here (command or plain words) | What you provide | Result and next action |
 |---|---|---|---|
 | Setup | [SETUP.md](SETUP.md), then `/sc-init` | Project path, host and project/global scope | Doctor result and detected verification commands; try a small task |
 | Bug | `/sc-debug Email kosong lolos validasi login` | Symptom, reproduction and expected behavior | Root cause, tested fix and evidence; review the change |
-| Small change | `/sc-work Ubah teks tombol Simpan menjadi Simpan perubahan` | Exact change and expected result in the existing screen | Scoped edit and relevant checks; review |
-| New feature | `/sc-launch Tambahkan dashboard penggunaan untuk admin akun` | Users, outcome and known constraints | Bounded changes reuse existing contracts; material full-tier work preserves BRD -> PRD -> FSD -> verified goals with exception checkpoints |
-| Resume | `/sc-status` | Existing workspace and handoff, plus any changed intent | Current evidence/blockers and one exact next action; continue authorized ready work |
-| Advice | `/sc-hints <question or condition>` | A question, or active work context | Recommendation, owner command, prerequisites and expected result; consultation writes no files |
+| Small change | `/sc-work Ubah teks tombol Simpan menjadi Simpan perubahan`, or just "Ubah label ini" | Exact change and expected result in the existing screen | Scoped edit and relevant checks; review |
+| New feature | `/sc-launch Tambahkan dashboard penggunaan untuk admin akun` | Users, outcome and known constraints | A small feature reuses what the project already has; a larger one goes through BRD -> PRD -> FSD -> verified goals, and the agent stops only when it needs your decision |
+| One document only | "Buat PRD saja dari BRD approved" | The approved source document | That document and its checks; nothing else is built |
+| Resume | `/sc-status`, or "Lanjutkan pekerjaan yang authorized" | Existing workspace and handoff, plus any changed intent | Current evidence/blockers and one exact next action; work you already approved continues. "Lihat status saja" changes nothing |
+| Advice | `/sc-hints <question or condition>`, or "Apa langkah berikutnya?" | A question, or active work context | Recommendation, owner command, prerequisites and expected result; advice writes no files and starts no work until you ask |
+
+Plain-language requests pass the same checks as the commands; the
+[dispatcher](.agent/context/workflow-dispatch.md) picks the workflow.
+When the agent needs your decision it asks one short, numbered set of questions;
+see [how to answer](WALKTHROUGH.md#answering-a-checkpoint).
 
 All 19 commands use `/sc-*`; Claude Code exposes native slash commands after
 installation. Other hosts use their adapters. In Codex, plain language such as
@@ -93,15 +81,6 @@ verified facts, assumptions and unknowns. Advice stays in chat; accepting a
 recommendation does not start implementation. Ask to execute it to continue
 through its owner under existing authorization and gates.
 
-| Need | Command |
-|---|---|
-| Focused advice or a specific obstacle | `/sc-hints` |
-| Project position or resume | `/sc-status` |
-| Improvement inventory with Brain filtering | `/sc-geniusloop` |
-| Business scope and decisions | `/sc-explore` |
-| A factual evidence gap | `/sc-research` |
-| Change review or failure diagnosis | `/sc-review` or `/sc-debug` |
-
 ```mermaid
 flowchart LR
     Q[Question or active context] --> H[sc-hints: inspect evidence]
@@ -119,7 +98,7 @@ names the expected FSD/GOAL result. See [worked examples](.agent/skills/hints/re
 
 ## Delivery Tiers
 
-The framework decides how much process a request needs. Intake states one line, `Tier: light|full; trigger: T<n>|none`. `light` includes bounded reversible features and pages that reuse existing contracts, access and patterns with clear acceptance and proving checks; it goes to `/sc-work` or `/sc-debug`. A single trivial change executes directly with proportionate outcome verification. `full` covers material new capability/flow, contract/access/data/side-effect changes, coordination that changes outcomes or risk, or an explicit BRD/PRD/FSD request. It takes `BRD -> PRD -> FSD -> GOAL` with durable authority, without repeating permission already granted. A material trigger found mid-work escalates only affected work. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
+The framework decides how much process a request needs. Intake records one line, `Tier: light|full; trigger: T<n>|none`, and shows it in chat only when the tier is `full` or escalated. `light` includes bounded reversible features and pages that reuse existing contracts, access and patterns with clear acceptance and proving checks; it goes to `/sc-work` or `/sc-debug`. A single trivial change executes directly with proportionate outcome verification. `full` covers material new capability/flow, contract/access/data/side-effect changes, coordination that changes outcomes or risk, or an explicit BRD/PRD/FSD request. It takes `BRD -> PRD -> FSD -> GOAL` with durable authority, without repeating permission already granted. A material trigger found mid-work escalates only affected work. Pin a project with `delivery_mode: light|full` in `.agent/rules/project-config.md`; the rubric is in `.agent/skills/agentic-delivery/references/workflow-integration.md`.
 
 Session handoff, a derived issue board, and parallelism alone do not raise a
 clear bugfix above `light`. Sensitive paths trigger semantic inspection.
@@ -297,8 +276,8 @@ For product work with an interactive surface, the default hybrid lifecycle is:
 ```text
 BRD -> PRD draft -> UI validation -> approved PRD
     -> FSD/UI-API contract -> contract enabler (when needed)
-    -> /sc-plan re-index + automatic promotion of approved semantics
-    -> first real vertical slice -> /sc-plan dependent promotion
+    -> internal re-index + automatic promotion of approved semantics
+    -> first real vertical slice -> internal dependent promotion
     -> controlled parallel scale-out -> hardening
     -> applicable integration/responsive/accessibility/E2E/visual + conditional UAT
 ```
@@ -311,8 +290,8 @@ surface is detected.
 
 If executable contract assets already match the pinned revision, skip the
 enabler loop. Otherwise only the bounded enabler may run while readiness is
-`DRAFT/BLOCKED`; the first slice stays blocked until `/sc-plan` reaches
-`READY_FOR_SLICE` again. `EXCEPTION_APPROVED` can release that first slice but
+`DRAFT/BLOCKED`; the first slice stays blocked until the active controller reruns the
+gate and reaches `READY_FOR_SLICE`; material changes return to `/sc-plan`. `EXCEPTION_APPROVED` can release that first slice but
 never parallel scale-out.
 
 For read-only UI design/review, then implementation from approved authority:
@@ -372,29 +351,31 @@ preferences are healthy iteration and are excluded from preventable rework.
 
 ## Public Workflows
 
-Only these workflow files are public:
+Only these workflow files are public. "Who runs it" shows what you type yourself:
+`You` is a command you start, `Auto via launch` runs inside `/sc-launch` (you can
+still call it directly), and `Optional` is never needed for normal delivery.
 
-| Workflow | Use When |
-|---|---|
-| [/sc-init](.agent/workflows/sc-init.md) | Set up or reload framework context |
-| [/sc-hints](.agent/workflows/sc-hints.md) | Practical evidence-backed guidance; read-only until an owner execution request |
-| [/sc-status](.agent/workflows/sc-status.md) | Inspect current state and route the next action |
-| [/sc-geniusloop](.agent/workflows/sc-geniusloop.md) | Generate a bounded improvement shortlist when explicitly requested |
-| [/sc-explore](.agent/workflows/sc-explore.md) | Shape fuzzy ideas into a BRD with business objectives, constraints, policies, and acceptance |
-| [/sc-research](.agent/workflows/sc-research.md) | Resolve a named factual or technical gap with an advisory research note, then return to the decision owner |
-| [/sc-prd](.agent/workflows/sc-prd.md) | Write PRD product requirements from an approved BRD |
-| [/sc-plan](.agent/workflows/sc-plan.md) | Produce the FSD, ADR applicability decision, goal issue pointers, risk checks, and verification |
-| [/sc-eval](.agent/workflows/sc-eval.md) | Define and run evaluation criteria before or after implementation |
-| [/sc-go](.agent/workflows/sc-go.md) | Preview branch, worktree, commit, push, and Pull Request operations |
-| [/sc-work](.agent/workflows/sc-work.md) | Execute an approved FSD goal or goal issue pointer sequentially or with safe parallel slices |
-| [/sc-debug](.agent/workflows/sc-debug.md) | Reproduce, isolate, and fix root causes |
-| [/sc-review](.agent/workflows/sc-review.md) | Review changes for correctness, maintainability, and missing tests |
-| [/sc-audit](.agent/workflows/sc-audit.md) | Check security, compatibility, compliance, agent surface, and release readiness |
-| [/sc-compound](.agent/workflows/sc-compound.md) | Capture reusable solutions and lessons |
-| [/sc-evolve](.agent/workflows/sc-evolve.md) | Cluster verified learnings into draft framework proposals for human approval |
-| [/sc-pause](.agent/workflows/sc-pause.md) | Save durable handoff state |
-| [/sc-launch](.agent/workflows/sc-launch.md) | Start a focused project or feature lifecycle |
-| [/sc-ui](.agent/workflows/sc-ui.md) | Design or review UI read-only; route approved implementation to `/sc-work` |
+| Workflow | Who runs it | Use When |
+|---|---|---|
+| [/sc-init](.agent/workflows/sc-init.md) | You | Set up or reload framework context |
+| [/sc-hints](.agent/workflows/sc-hints.md) | You | Practical evidence-backed guidance; read-only until an owner execution request |
+| [/sc-status](.agent/workflows/sc-status.md) | You | Inspect current state and route the next action |
+| [/sc-geniusloop](.agent/workflows/sc-geniusloop.md) | Optional | Generate a bounded improvement shortlist when explicitly requested |
+| [/sc-explore](.agent/workflows/sc-explore.md) | Auto via launch | Shape fuzzy ideas into a BRD with business objectives, constraints, policies, and acceptance |
+| [/sc-research](.agent/workflows/sc-research.md) | Auto via launch | Resolve a named factual or technical gap with an advisory research note, then return to the decision owner |
+| [/sc-prd](.agent/workflows/sc-prd.md) | Auto via launch | Write PRD product requirements from an approved BRD |
+| [/sc-plan](.agent/workflows/sc-plan.md) | Auto via launch | Produce the FSD, ADR applicability decision, goal issue pointers, risk checks, and verification |
+| [/sc-eval](.agent/workflows/sc-eval.md) | Auto via launch | Define and run evaluation criteria before or after implementation |
+| [/sc-go](.agent/workflows/sc-go.md) | You | Preview branch, worktree, commit, push, and Pull Request operations |
+| [/sc-work](.agent/workflows/sc-work.md) | You (small change); Auto via launch | Execute an approved FSD goal or goal issue pointer sequentially or with safe parallel slices |
+| [/sc-debug](.agent/workflows/sc-debug.md) | You | Reproduce, isolate, and fix root causes |
+| [/sc-review](.agent/workflows/sc-review.md) | Auto via launch | Review changes for correctness, maintainability, and missing tests |
+| [/sc-audit](.agent/workflows/sc-audit.md) | Auto via launch | Check security, compatibility, compliance, agent surface, and release readiness |
+| [/sc-compound](.agent/workflows/sc-compound.md) | Auto via launch | Capture reusable solutions and lessons |
+| [/sc-evolve](.agent/workflows/sc-evolve.md) | Optional | Cluster verified learnings into draft framework proposals for human approval |
+| [/sc-pause](.agent/workflows/sc-pause.md) | You | Save durable handoff state |
+| [/sc-launch](.agent/workflows/sc-launch.md) | You | Start a focused project or feature lifecycle |
+| [/sc-ui](.agent/workflows/sc-ui.md) | Auto via launch | Design or review UI read-only; route approved implementation to `/sc-work` |
 
 Non-trivial debug evidence that would not fit the chat return is stored at
 `docs/debug/YYYY-MM-DD-<slug>.md`; `/sc-compound` remains reserved for verified,
@@ -412,6 +393,13 @@ reusable lessons.
 | What security, compatibility, compliance, or release risks exist? | `/sc-audit` | Findings by severity | Owning remediation workflow; never fix inside audit |
 
 Run research only when the named evidence gap could materially change a decision, sources conflict, or the result needs review/revalidation. Keep a one-line API lookup inside the active workflow. If intent is still fuzzy, use explore; if a concrete failure exists, use debug; if the job is risk severity or readiness, use audit.
+
+For decision-driving or contested business claims, research and artifact authors use
+[business claim evidence and fidelity](.agent/skills/agentic-delivery/references/templates-and-outputs.md#business-claim-evidence-and-fidelity)
+in existing registers: trace underlying origins, preserve conditions and corrections,
+and keep proposals separate from commitments. Repeated domains or tool agreement
+do not establish independent corroboration; evidence does not grant approval.
+See [R-06 exercises and limits](docs/eval-results/business-evidence-20261107.md).
 
 Example:
 
@@ -437,6 +425,13 @@ Removed workflows are intentionally not aliases. Route them this way:
 | reload | `/sc-init reload` |
 
 Exploration uses numbered decision rounds: ask small batches of consequential decisions with settled prerequisites, with a recommendation, reason, and trade-off for each question. Partial answers remain open; corrections reopen affected descendants. Concrete scope skips grilling, and existing BRD/PRD/FSD approvals remain authoritative. Both execution tiers inspect current flow, reusable patterns, affected callers, and proving checks. Product AI context and live verification expand only when relevant through their skill references.
+
+For a consequential unresolved design question, existing `prototyping` and
+`codebase-design` owners can use the optional [design comparison](.agent/skills/prototyping/references/design-comparison.md).
+It compares constrained alternatives using a frozen rubric and anonymous review,
+then verifies the selected result through the owning authority. See the
+[illustrative example](WALKTHROUGH.md#comparing-an-unresolved-design-seam) and
+[verification limits](docs/eval-results/design-comparison-20261106.md).
 
 ## Skills
 
@@ -591,6 +586,8 @@ Use:
 python .agent/skills/interface-design/scripts/search.py "preconnect cdn" --domain web
 python .agent/skills/interface-design/scripts/search.py "mobile touch target" --domain app
 python .agent/skills/interface-design/scripts/search.py "performance trackBy" --stack angular
+python .agent/skills/interface-design/scripts/search.py "Apple Native" --domain style --rtl=full --json
+python .agent/skills/interface-design/scripts/search.py "healthcare patient portal" --domain product --rtl=partial
 python .agent/skills/interface-design/scripts/search.py "SaaS dashboard" --design-system --persist -p "Acme CRM" --page dashboard --overwrite
 ```
 
@@ -599,6 +596,21 @@ Domains include `product`, `style`, `color`, `typography`, `landing`, `chart`, `
 Use interface-design by retrieval: run targeted searches and read the returned rows. Do not preload `.agent/skills/interface-design/data/**/*.csv` into agent context.
 
 The CSV loader fails fast when a row does not match its header width, so malformed reference data is caught during validation rather than silently producing bad search results.
+
+Catalog results include canonical style identity, aliases/status and applicable
+RTL metadata. `--rtl` requires an explicit `style` or `product` domain; stack
+and design-system combinations are rejected before writes. `full`, `partial`
+and `caveats` describe catalog compatibility, not proof of a rendered RTL UI.
+Existing web/app routing, local enrichments, bounded caching and persistence
+protections remain. Each refreshed asset has its own source revision and hashes
+in [UPSTREAM.json](.agent/skills/interface-design/UPSTREAM.json); superseded local
+values remain in the [merge ledger](docs/research/interface-catalog-refresh-20261106.json).
+See [R-01 verification](docs/eval-results/interface-catalog-refresh-20261106.md)
+for original-oracle relevance, regression evidence and limits.
+
+Migration queries use the selected stack's explicit destination generation. An
+older numeric destination still selects legacy guidance when wording also says
+`latest`; genuine legacy maintenance remains supported.
 
 ## Repository Layout
 
@@ -648,6 +660,131 @@ The framework now favors clear operational defaults over preserving every import
 
 ## Verification
 
+```bash
+npm test
+npm run test:local
+```
+
+For framework maintenance, `npm run test:local` runs syntax, tool, skill, hook,
+and Python checks while excluding the cross-platform installer integration
+suite. `npm test` retains full installer verification; run it in CI and after
+installer/adapter changes. `npm run audit` refreshes benchmark freshness and
+checks structural invariants. Local Git previews can use `start`/`worktree` with
+`--local --base <known-local-branch>` without requiring a remote.
+
+The full check list and benchmark notes are under [Framework Evidence](#framework-evidence).
+
+## Evidence-Based Learning and Recovery
+
+Existing work/debug workflows turn verified lessons into reusable or additive
+regression checks; compound stores outcomes and evolve proposes changes to
+skills/workflows/policy. Active instructions survive checkpoint/dispatch and
+completion receipts survive interruption. See [learning/check guide](.agent/skills/knowledge-compounding/references/prevention-checks.md),
+[recovery protocol](.agent/skills/context-engineering/references/active-context.md),
+and [verification recipes](.agent/skills/verification-before-completion/references/verification-recipes.md).
+
+The [exact retirement registry](.agent/context/retired-assets.json) excludes retired
+files from the active runner, Codex bundle, operational knowledge, active benchmark
+and pilot fixtures. The [historical archive](docs/archive/retired-assets-20261007/)
+preserves 87 retired files byte-for-byte with original/archive locator mappings,
+SHA-256 checksums and provenance. Both exact locators are retired. New paths are active
+by default. Use `npm run test:tools`; direct wildcard runners include retired
+tests. Distribution should use the selector rather than an unfiltered copy.
+Audit records physical retired bytes and digests separately. Historical token
+baselines remain immutable.
+
+The [pstack delivery analysis](docs/audits/2026-10-04-pstack-gap-analysis.md)
+links acceptance and implementation evidence. Runtime savings require measured
+paired sessions; static context reduction is not runtime token/latency proof.
+See [paired experiments](.agent/skills/eval-harness/references/paired-experiments.md).
+
+## Context efficiency and session models
+
+Use contracts for covered mandatory checks and load procedure sections only for
+uncovered facts, material risk, conflicts or editing them. Reuse unchanged resident
+rules. Conditional detail: [.agent/context/policy-loading.md](.agent/context/policy-loading.md).
+Bundled roles inherit the session model; installation updates preserve explicit
+model overrides. Effort/API guidance: [.agent/context/model-guidance.md](.agent/context/model-guidance.md).
+Existing external eval executors, including the bounded `codex-pilot.mjs` and
+`session-baseline.mjs`, use the existing owner's [external execution receipt procedure](.agent/skills/subagent-orchestration/references/completion-inbox.md#external-execution-receipts)
+when applicable. Record requested harness, executable, model and effort separately
+from observed provider/model; missing trustworthy metadata stays unknown or
+unverified. An adapter assertion does not attest the backend, and family identity
+does not prove the exact served model. Additive metadata preserves the legacy
+requested `model` value. [R-08 verification](docs/eval-results/model-receipts-20261107.md)
+records passing local source/test and adapter installation checks; live serving
+identity and effective capabilities remain unverified.
+Runtime savings require paired real-work evidence against the current snapshot;
+static historical reduction is separate. Protocol: [.agent/evals/context-efficiency.md](.agent/evals/context-efficiency.md).
+
+## Framework Evidence
+
+Maintainer reference. These notes moved here unchanged from the top of this page and from Verification.
+
+### Audits, evaluations and checkpoints
+
+The [November framework comparison](docs/audits/2026-11-06-cross-framework-gap-analysis.md)
+maps 12 refreshed upstream sources to existing owners. Adopted guidance covers
+static MCP dependency review, evidence-backed risk lifecycle, reviewer coverage,
+RTL/contrast/content checks, and existing `GLOSSARY.md`/`CONTEXT.md` conventions.
+The [verification report](docs/eval-results/framework-adoption-20261106.md)
+separates local checks from unmeasured host effectiveness; all 19 commands remain.
+
+The [combined R-01 through R-08 review](docs/reviews/2026-11-07-r01-r08-final-review.md)
+tracks current integrated verification and the four review corrections. Earlier
+reports retain their historical results and evidence limits.
+
+Requested MCP integrations use optional [transport/version and access diagnostics](.agent/skills/integration-checking/references/mcp-diagnostics.md)
+through the existing integration owner: transport/protocol readiness, authentication,
+authorization, capability discovery and requested-tool results stay separate.
+[R-04 evidence](docs/eval-results/mcp-diagnostics-20261106.md) labels local fixtures
+`MOCK`; native transport, authenticated principal and live-provider behavior remain
+unknown until directly observed.
+
+Existing owners handle [changed-skill stocktake and provenance pruning](.agent/skills/skill-authoring/references/structure-and-quality.md#changed-skill-stocktake),
+[execution preflight](.agent/skills/executing-plans/references/authority-and-workspace.md#execution-preflight-both-tiers)
+and [selective fresh-builder checks](.agent/skills/brainstorming/references/questions-and-options.md#fresh-builder-ambiguity-check).
+Preflight verifies every required outcome against current relevant state: fully
+proved work closes without edits; partial work preserves proved results and
+completes the remaining work. Skill maintenance inspects changed files and affected
+consumers, with evidence before rule removal. Fresh readers surface material
+unanswered decisions through existing authority. See [R-05 evidence](docs/eval-results/skill-maintenance-20261106.md)
+for exercises and limits.
+
+Human input uses one [answerable checkpoint](.agent/context/checkpoint.contract.md):
+what remains approved, the blocked result, owner, recommendation, direct review
+material and a short prioritized set of ready questions/approvals with stable IDs and automatic continuation. Agent research/tests proceed
+first; evidence refresh does not repeat approval. Authorized owner handoffs run
+internally while configured stage checkpoints and read-only boundaries remain.
+Every displayed item includes a recommendation, brief reason, and review link
+when material is needed. The complete unresolved register, dependent items,
+and supporting detail stay available by link or on request. Reply examples
+appear when useful; partial replies keep unanswered IDs open, and silence grants no approval.
+Approval does not supply missing information, test evidence or access readiness.
+See [how to answer](WALKTHROUGH.md#answering-a-checkpoint) and the
+[question/answer eval](docs/eval-results/questions-and-hints-20261005.md).
+See the [PromptShield example and regression evidence](docs/eval-results/hitl-checkpoints-20261004.md).
+
+### Gate authoring and bounded formal checking
+
+When authoring or changing a gate/checker, use the existing
+[verification procedure](.agent/skills/verification-before-completion/references/claim-evidence.md#authored-or-changed-gates)
+to lock expected verdicts, inspect current real artifacts and prove intended
+invalid cases are rejected. Record input identity and actual results; control
+sensitivity, the target verdict and whole-system completion remain separate
+claims. See the [bounded example](WALKTHROUGH.md#checking-a-new-or-changed-gate).
+
+For a concurrency, retry or state-machine invariant that needs more evidence,
+the existing verification owner can use [optional bounded formal checking](.agent/skills/verification-before-completion/references/bounded-formal-checking.md).
+Record the property, source identity, assumptions, finite bounds and a failing
+broken-code control. The local Node pilot explores `withLedgerLock` safety and
+rejection recovery for two actors with two calls each. The target passed within
+that finite model; [R-07 evidence](docs/eval-results/bounded-formal-checking-20261107.md)
+records controls, replay limits, passing related tests and six-host installation checks.
+A bounded result covers those assumptions, not other processes or every execution.
+
+### Framework maintenance checks
+
 Recommended checks after editing the framework:
 
 ```bash
@@ -693,47 +830,6 @@ Also check:
 - The benchmark is deterministic across 3 runs, every route meets the 10% ratio gate and startup surfaces stay within their absolute caps, and every hotspot reduction gate exceeds 90%
 - The exact active-manifest framework audit passes with fresh benchmark evidence
 - `docs/engineering-standards.md` and archive docs are not ignored
-
-For framework maintenance, `npm run test:local` runs syntax, tool, skill, hook,
-and Python checks while excluding the cross-platform installer integration
-suite. `npm test` retains full installer verification; run it in CI and after
-installer/adapter changes. `npm run audit` refreshes benchmark freshness and
-checks structural invariants. Local Git previews can use `start`/`worktree` with
-`--local --base <known-local-branch>` without requiring a remote.
-
-## Evidence-Based Learning and Recovery
-
-Existing work/debug workflows turn verified lessons into reusable or additive
-regression checks; compound stores outcomes and evolve proposes changes to
-skills/workflows/policy. Active instructions survive checkpoint/dispatch and
-completion receipts survive interruption. See [learning/check guide](.agent/skills/knowledge-compounding/references/prevention-checks.md),
-[recovery protocol](.agent/skills/context-engineering/references/active-context.md),
-and [verification recipes](.agent/skills/verification-before-completion/references/verification-recipes.md).
-
-The [exact retirement registry](.agent/context/retired-assets.json) excludes retired
-files from the active runner, Codex bundle, operational knowledge, active benchmark
-and pilot fixtures. The [historical archive](docs/archive/retired-assets-20261007/)
-preserves 87 retired files byte-for-byte with original/archive locator mappings,
-SHA-256 checksums and provenance. Both exact locators are retired. New paths are active
-by default. Use `npm run test:tools`; direct wildcard runners include retired
-tests. Distribution should use the selector rather than an unfiltered copy.
-Audit records physical retired bytes and digests separately. Historical token
-baselines remain immutable.
-
-The [pstack delivery analysis](docs/audits/2026-10-04-pstack-gap-analysis.md)
-links acceptance and implementation evidence. Runtime savings require measured
-paired sessions; static context reduction is not runtime token/latency proof.
-See [paired experiments](.agent/skills/eval-harness/references/paired-experiments.md).
-
-## Context efficiency and session models
-
-Use contracts for covered mandatory checks and load procedure sections only for
-uncovered facts, material risk, conflicts or editing them. Reuse unchanged resident
-rules. Conditional detail: [.agent/context/policy-loading.md](.agent/context/policy-loading.md).
-Bundled roles inherit the session model; installation updates preserve explicit
-model overrides. Effort/API guidance: [.agent/context/model-guidance.md](.agent/context/model-guidance.md).
-Runtime savings require paired real-work evidence against the current snapshot;
-static historical reduction is separate. Protocol: [.agent/evals/context-efficiency.md](.agent/evals/context-efficiency.md).
 
 ## License
 

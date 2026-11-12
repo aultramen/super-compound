@@ -16,8 +16,24 @@ Verification: <test or command>
 - <important area checked with no issue>
 
 ## Residual Risk
-- <risk that remains, owner, and next review>
+- **RISK-001: <remaining risk; related finding/control ID>**
+  - Owner: <accountable owner>
+  - Treatment: <mitigate / accept / transfer / avoid; action and status>
+  - Residual risk: <likelihood/impact after verified controls; OPEN / mitigated / accepted>
+  - Decision: <authority, dated decision and evidence link; pending if unaccepted>
+  - Review / expiry: <next review/date or trigger; expiry or justified N/A>
+  - Verification: <check, actual result/status and evidence locator; pending if unverified>
 ```
+
+Reuse existing risk IDs and decision/exception evidence. Planned treatment stays
+OPEN; accepted status requires recorded decision authority and evidence.
+
+For requested compliance scope, map applicable control IDs to applicability
+rationale, observed implementation status, evidence/date, owner and residual
+risk. Reuse evidence across controls; planned or documented controls alone do
+not prove effectiveness or certification. For requested risk/exception lifecycle
+reviews, disclose overdue reviews separately from vulnerabilities and passing
+checks, using recorded dates rather than inventing review schedules.
 
 Severity:
 

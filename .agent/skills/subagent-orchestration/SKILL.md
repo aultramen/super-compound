@@ -40,6 +40,8 @@ If the host has no subagent capability, execute goals and the same review checks
    Send `briefPath`, `reportPath`, read-only `pathsPath`, target paths, TDD
    requirement, and outcome/evidence/blocker return format. Implementers never
    edit scheduler scope. Seed `.agent/templates/orchestration/Implementer-Brief-Skeleton.md`.
+   For selected/recovered external execution or an authoritative identity
+   requirement, follow [execution receipts](references/completion-inbox.md#external-execution-receipts).
 3. Run parallel goals only in isolated worktrees/workspaces. Review rejects a
    changed scope digest and any new working-tree edit outside the allowlist.
 4. After implementation, freeze one working-tree review package:

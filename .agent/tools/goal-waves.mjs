@@ -75,10 +75,15 @@ export function parseIssueDependencies(issuesDir) {
         const dependsOn =
             line.trim().toLowerCase() === 'none'
                 ? []
-                : line
+                : line.trim()
                     .split(/[,\s]+/)
-                    .map((token) => path.basename(token.trim()))
-                    .filter((token) => token.endsWith('.md'));
+                    .map((token) => {
+                        const dependency = path.basename(token);
+                        if (!dependency.endsWith('.md')) {
+                            throw new Error(`WAVES_INVALID_DEPENDENCY: ${name} -> ${token}; expected an issue .md path or None`);
+                        }
+                        return dependency;
+                    });
         goals.push({ id: name, dependsOn });
     }
     return goals;

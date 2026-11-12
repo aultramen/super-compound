@@ -16,7 +16,8 @@ agent's report are not evidence.
 Apply before completion wording, task transition, commit/push/PR claims, or
 delegation assuming previous success.
 
-- For a test, build, lint, bug-fix, or delegated-work claim, read [Claim Evidence](references/claim-evidence.md).
+- For test/build/lint, bug-fix or delegated claims, read [Claim Evidence](references/claim-evidence.md); for authored/changed gates, follow [gate qualification](references/claim-evidence.md#authored-or-changed-gates).
+- Only when a named concurrency, retry or state-machine invariant needs additional proof, load [Bounded Formal Checking](references/bounded-formal-checking.md); retain ordinary tests and required gates.
 - For a completed feature, workflow, plan, or gap-closure outcome, also read [Goal-Backward Verification](references/goal-backward.md).
 - For work spanning components, services, layers, auth, configuration, events, or background jobs, read [integration-checking](../integration-checking/SKILL.md), run its checks, then return to this gate. Detailed cross-component checks live there, not here.
 

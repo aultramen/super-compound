@@ -8,5 +8,8 @@ Use for BRD/PRD/FSD/issue planning without loading full skills first.
 - Use FSD `TDEC-*` by default; link only `ACCEPTED` ADRs.
 - Create issue pointers with qualified refs and verification refs.
 - Stop on `OPEN-*` blockers.
+- For consequential handoff ambiguity, use
+  `brainstorming/references/questions-and-options.md#fresh-builder-ambiguity-check`;
+  keep decisions with their existing owner.
 - Plan optional contract enabler -> exactly one first real vertical slice ->
   dependent scale-out; mock-only never opens parallel work.

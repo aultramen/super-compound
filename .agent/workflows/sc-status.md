@@ -26,7 +26,7 @@ Result and next action: Read-only position, evidence and blockers; one exact nex
    under `.scratch/*/issues/` without reading all issue bodies. Read the body of
    only the selected ready or blocking issue after the route is chosen.
 4. Check Git status, active branch, upstream, and worktree state when inside a Git repo; do not mutate Git state.
-5. Summarize current position, completed work, remaining work, blockers, issue board status, and verification status. Apply `.agent/context/checkpoint.contract.md`: show newly resolved and remaining needs, each owner and next action, blocked scope and independent ready work. Route a named `OPEN-RESEARCH-*` evidence blocker to `/sc-research`, then back to its owning workflow.
+5. Summarize current position, blockers, and verification status; completed work, remaining work, and issue board status on request or when blocking. Apply `.agent/context/checkpoint.contract.md`: show newly resolved and remaining needs, each owner and next action, blocked scope and independent ready work. Route a named `OPEN-RESEARCH-*` evidence blocker to `/sc-research`, then back to its owning workflow.
 6. Run `node .agent/tools/memory-maintenance.mjs report`. Prioritize active user
    intent and dependency-ready goals. `STALE_STATE`/`STALE_PROGRESS` are
    reconciliation signals for the owning route, not global blockers. Suggest
@@ -40,8 +40,8 @@ Result and next action: Read-only position, evidence and blockers; one exact nex
    Do not silently rerun tests or create evidence in this read-only route. Report
    incomplete statuses/gaps and route validation to the owner. If the requested
    goal is satisfied with all acceptance criteria proved by current evidence and required
-   closeout is complete, include `Evidence of Completion` with what/how,
-   results/locators and acceptance mapping, report the result and stop.
+   closeout is complete, include `Evidence of Completion` per
+   `.agent/rules/quality-gates.md`, report the result and stop.
    An empty issue queue alone is not improvement
    intent. Recommend `/sc-geniusloop` only for an explicit improvement request
    with no more urgent authorized work, handoff, blocker, or failing verification.
@@ -49,14 +49,15 @@ Result and next action: Read-only position, evidence and blockers; one exact nex
    `/sc-explore`, `/sc-research`, `/sc-prd`, `/sc-plan`, `/sc-eval`, `/sc-go`,
    `/sc-work`, `/sc-debug`, `/sc-review`, `/sc-audit`, `/sc-compound`,
    `/sc-evolve`, `/sc-pause`, `/sc-launch`, or `/sc-ui`.
-9. State the delivery tier the route implies (`skills/agentic-delivery/references/workflow-integration.md`):
+9. Apply the delivery tier the route implies (`skills/agentic-delivery/references/workflow-integration.md`), naming it in chat only when `full` or escalated:
    `light` goes directly to `/sc-work` or `/sc-debug`; `full` goes to
    `/sc-explore`, `/sc-prd`, or `/sc-plan` by the artifacts that already exist.
 
 ## Output
 
-- Short dashboard.
-- Recommended next action.
+- Short dashboard: position, blockers and decisions needed, one recommended next action.
+- Everything else (constraint provenance, pending completion receipts, check
+  effectiveness, board and memory detail) on request or when blocking.
 
 Standalone status stays read-only. Within active authorized delivery, return
 the route internally to its owner and continue there after checking authority;
@@ -64,6 +65,4 @@ do not finish with only a command for the user to retype.
 
 Read-only: memory-maintenance.mjs resume reports checkpoint/contract drift; owning routes reconcile missing checkpoints and affected goals, never write memory here.
 
-Report active constraint provenance, pending completion receipts, and check
-effectiveness from resume/report. Route unfinished maintenance to its owner;
-status does not acknowledge receipts or flush writes.
+Route unfinished maintenance to its owner; status does not acknowledge receipts or flush writes.

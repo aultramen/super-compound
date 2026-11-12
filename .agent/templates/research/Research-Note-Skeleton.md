@@ -28,6 +28,12 @@
 
 ## Evidence Register
 
+For consequential business claims, apply [business claim evidence and fidelity](../../skills/agentic-delivery/references/templates-and-outputs.md#business-claim-evidence-and-fidelity).
+In existing rows or adjacent notes, map each claim to pinpoint source anchors and
+mark it verified, inferred, contested, or unknown (local evidence labels, not
+artifact statuses). Retain origin/source-family links, method, scope/version,
+source date, and retrieval or observation dates.
+
 | ID | Finding | Source or local reference | Applies to / version | Retrieved or observed | Quality | Confidence |
 |---|---|---|---|---|---|---|
 | EVID-001 | <fact> | <current observed result or primary source; a premise is not its own proof> | <version/scope> | YYYY-MM-DD | primary/local | high/medium/low |
@@ -38,6 +44,7 @@
 - **Inferences:** <reasoning derived from the facts>
 - **Contradictions:** <conflicting evidence and resolution; omit when none>
 - **Unknowns:** <remaining gaps; omit when none>
+- **Corrections and commitments (when present):** <retain superseded and current statements with source/date; preserve actor, action, conditions, negation, quantities/units, dates and commitment status; do not turn a proposal, request or promise into completed action; missing details stay unknown>
 
 ## Options And Recommendation
 
@@ -53,6 +60,6 @@ Include the options table only when more than one option was considered.
 
 ## Delivery Impact
 
-- **Owning artifact changes:** <BRD/PRD/FSD/TDEC/ADR/audit refs to update>
+- **Owning artifact changes:** <affected BRD/PRD/FSD/TDEC/ADR/audit refs, responsible owner and required existing gate for corrected claims or commitments>
 - **OPEN-RESEARCH-*:** <missing fact, impacted refs, owner/gate, next evidence action>
 - **Handoff:** <return workflow and exact next decision>

@@ -1,6 +1,8 @@
 # Findings and Self-Review
 
-Load when turning review evidence into feedback or reviewing your own change.
+## Summary
+
+Use when turning review evidence into feedback or reviewing your own change. Record applicable coverage and verified findings before choosing a verdict.
 
 ## Severity
 
@@ -16,11 +18,19 @@ Default effort: low for mechanical changes, medium for behavior changes, high fo
 
 Read the scope, authority, patch, and report once; reuse resident review evidence and checks. Use scheduler self-review for mechanical low-risk work; request an independent reviewer only when risk warrants it. No nested reviewer fanout. Expand reads or repeat tests only for a named material risk, changed evidence, or missing proof; record the reason and result in the existing review report. Required final acceptance and integration checks still run.
 
+## Review Coverage
+
+Select axes/lenses by scope and risk; mechanical work may use scheduler self-review. In the existing review report, record each applicable axis/lens, whether required, its outcome (`completed`, `failed`, or `skipped`), reason, and evidence reference. An inapplicable or optional lens may be skipped with a factual reason; this does not require every reviewer or lens on every task.
+
+`completed` requires a substantive report of the assessed scope and result. An explicit completed report with zero findings is valid evidence; missing or empty reviewer output is not. Verify findings from completed reviews even when another lens fails.
+
+A required lens that failed, lacks a result, or was skipped without an applicable factual `N/A` leaves review incomplete. Use `NEEDS DISCUSSION`, or `CHANGES REQUESTED` for demonstrated defects; do not claim `APPROVE` or clean coverage. Completed zero-finding reviews permit `APPROVE` only when all other applicable gates pass.
+
 ## Finding Format
 
 Each finding explains problem, impact, evidence, and action; use as many sentences as needed. Include `file:line` location, then the violated requirement or invariant, concrete impact and trigger conditions, the evidence establishing it, and a focused fix.
 
-Group findings by severity and related root cause; omit empty severity tiers. Do not inflate counts by splitting one issue across symptoms. Add a Strengths line only when it informs the merge decision. The verdict states the decision only and never restates findings. Include Residual Risk only when it is non-empty.
+Verify each alleged behavior against code and evidence before grouping by severity and related root cause; retain each finding's originating axis/lens and location. Similar descriptions alone do not establish the same defect. Omit empty severity tiers and do not inflate counts by splitting one issue across symptoms. Add a Strengths line only when it informs the merge decision. The verdict states the decision only and never restates findings. Include Residual Risk only when it is non-empty.
 
 Persist opened findings in the existing `docs/reviews/YYYY-MM-DD-<scope>.md` report, using its existing bullet or table format. Assign a stable finding ID once, based on origin file/symbol and root cause; line offsets are location evidence, not identity. Reuse existing IDs and never renumber after sorting or moving lines.
 

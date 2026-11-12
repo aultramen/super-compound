@@ -16,14 +16,14 @@ const specs = {
       '---\nname: agentic-delivery\ndescription: "Use when following the Super Compound BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION delivery path, artifact traceability, FSD authority, optional ADR handling, zero context bloat issue slicing, or OPEN-* stop conditions."\n---',
     references: {
       // Reviewed authoring revision; prior hash is retained in blueprint-document.responses.json baseline.
-      "templates-and-outputs.md": "f025dfe20fd036fcfe1402ed3627bcbf32715cf3edfe224a0fe56ec0a24fd5b9",
+      "templates-and-outputs.md": "f548b565cdeec5c367274c12cc8dbd0de885ba536b7b077a3d6c1837ef3df0ef",
       "authority-and-adr.md": "9aef59e4f9c21fe16aaba0537464a578e12b214c56a29e5e53833c45d644c9ff",
       "qualified-references.md": "bc5f8b87bb0333347f291087ae7a28858b5326ebfd12c09094e5532f21c110eb",
       // Completion locators remain pointers; all-AC proof adds no authority or status enum.
       "context-and-issue-pointers.md": "58b6fc8affb70d297c65cff5b8114ee47cdeccd55e5973cb21c168c1ec85c1ab",
       "open-stop-conditions.md": "8f172287ee50e5619dac9c40700e2cf85b10d403ed9778f52dbcc9df347d089a",
-      "workflow-integration.md": "8f3e2ed1b91440a45c41f5b4b55095ecf0e3031cf777b138f30272dbbe3ccefc",
-      "ui-contract-readiness.md": "48d64c07c120731d522049075eff511f149be4deac6101d04e75fe8fd1700dc0",
+      "workflow-integration.md": "36ec499ab856c652896361b4aa31981451f2acfba879eca0dcfb3e7729bbf576",
+      "ui-contract-readiness.md": "3b2939743c1f8995e70cedff13045ded21420ecaac36c28fd14e9c8107aea3b5",
     },
     invariants: [
       /BRD -> PRD -> FSD -> GOAL -> IMPLEMENTATION -> VERIFICATION/,
@@ -38,7 +38,7 @@ const specs = {
       '---\nname: issue-workflow\ndescription: "Use when /sc-plan needs FSD GOAL-* packets turned into lightweight issue pointers, local Markdown Kanban boards, blocker DAGs, or multi-agent task contracts."\n---',
     references: {
       "zero-context.md": "60efe561a41dcf40ffe1f9fe88f94b64aebad51fb2ac7dd5b50d6b54a15007e7",
-      "process.md": "68221c113365764007bc7f143f3e9ae989ee6a04d8e42c5e61777ff9e25cbfa9",
+      "process.md": "25c6b3b9f7545d264ae66407bc167d63e8f6179c8a691123cc8f669b5f754f35",
       // Existing issue grammar retained; actual outcome proof now gates done/verified.
       "status-and-done.md": "12f981a5f8cf89dbb46ed7372c6166fdeb960d9b2ad10d06100f5cabb002a01b",
     },
@@ -56,7 +56,7 @@ const specs = {
       "coverage-and-dependencies.md": "e0c77f317c0b4915d8185b64c5c1da50b9fd64c536708ddf7da05cd391a568fa",
       "links-scope-and-must-haves.md": "d73c1b53afe2bab7a3b5bd8221b3ef62f1705490eb18abba300d6f1218157b7d",
       "sizing.md": "449d2058678489910fbd8d56e839bcd132db1025927ad267f94c2b52d559edb0",
-      "tests-and-decisions.md": "cae52add5bb14a16a3937acc9c397992c60fbdca85029fe0fec494fd11240e83",
+      "tests-and-decisions.md": "c6029da119503282c426cdd0830494ab12e662ed6be83bc21c92974fae795e11",
       "verification-process.md": "6593bf3baf3db739e7ca5c745543b2c07c0fc75f3b3c80e23c98c703674caeec",
       "revision-rules.md": "541a5a8061f13aeeb69156486bd4f63d7b48766c30a69c1f99824f7ece66c97a",
     },
@@ -137,7 +137,7 @@ const specs = {
       '---\nname: brainstorming\ndescription: "Use when creative product, feature, UI, or behavior work needs intent, requirements, constraints, or design explored before implementation."\n---',
     references: {
       "local-context.md": "4f4e589b57040e890219e10f0fb79121d84fefd8d5d4798ea08e4e7de63af545",
-      "questions-and-options.md": "55deecb66d543dadf0f684ca36fa3194395461153105978b843e71db5af295e3",
+      "questions-and-options.md": "d0451a26b33fdce319ea37b0de380c27aa573edebc0705b43bba69343cac3c1a",
       "capture.md": "c716169a240bb4b1eddb153e38956398b3a4c4813c899a5163e4f19a9a6c033e",
       "ui-and-visual.md": "5ec57d9d3ffd0a22f7a9e0bd4c7bbaee7a1fd07e65a11bcd760b4f2ba0a68531",
       "red-flags-and-next.md": "23d7b575d662f5daaddc493460bfa52449d0c29cb8608eafec339de53ad9222a",
@@ -153,9 +153,9 @@ const specs = {
     frontmatter:
       '---\nname: interface-design\ndescription: "Use when building, redesigning, or reviewing frontend UI: pages, components, dashboards, landing pages, mobile screens, charts, and interaction states."\n---',
     references: {
-      "retrieval-workflow.md": "5e5cd0a5d7798cd90ed757ac980d8fa9c14071ea33ecd327806112bc02ff25c1",
-      "catalog.md": "a3fd67ddc0d9ea57345e0e6f2f13dcc41d2653e7a33c0e19903262b43b97fa36",
-      "implementation-and-checklist.md": "fc26e206fb980a9e923be8fc08e1ae645ce8575e16b2f8369d557346012f091a",
+      "retrieval-workflow.md": "00b0a1452b9fa251b41b125ae3208f61da59a0e997d9c6eec6f68cc9523561da",
+      "catalog.md": "261664ae50009c6d9aa78cfaab3ab78a6fa9f2042f51eb400df8cd95b6491cdc",
+      "implementation-and-checklist.md": "800eed6a8c6edb3459c6029892e8c742eff544bad9510dd1f58611ca57a2de73",
     },
     invariants: [
       /Retrieval gate:/,

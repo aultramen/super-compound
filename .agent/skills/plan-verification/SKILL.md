@@ -33,24 +33,9 @@ Run ten verification dimensions initially; after revision recheck affected dimen
   enabler path when facts/assets are missing; apply the canonical UI readiness
   reference. First-slice real integration proof gates scale-out, not first-slice entry.
 - **Scope gate:** Derive endpoint/page/workflow capability, critical error handling, and user validation. Split separate features or oversized work; merge tiny mechanical work. A coherent tracer bullet may cross layers and must not be rejected merely for doing so.
-- **Test gate:** Every critical path, edge case, and error path needs a verification step.
+- **Test gate:** Every critical path, edge case, and error path needs a verification step. Plan authored/changed-gate qualification under [dimension 8](references/tests-and-decisions.md#8-test-coverage).
 - **Decision gate:** Every approved `TDEC-*` and every applicable obligation from a linked `ACCEPTED` ADR must map by exact ID to at least one `GOAL-*` and one `TEST-*`. Blocked or superseded decisions stay out of executable goals. Missing exact-ID coverage blocks execution. Fuzzy text similarity may warn after implementation but must never create a blocking match.
-- **UI/API readiness gate:** Dimension 10 applies only to UI-bearing scope. Follow topology in the canonical reference; LOCAL_ONLY uses mapped local
-  checks without provider barriers. Networked scope requires
-  `node .agent/tools/readiness-gate.mjs` exit 0 (every canonical hard gate),
-  contract version and refs on each UI issue, exactly one first vertical slice,
-  and scale-out dependencies on its verified issue. When networked merged
-  verification obligations remain, require one `HARDENING` goal that depends
-  on the applicable UI delivery slices. LOCAL_ONLY completes mapped checks
-  within the goal; separate hardening is only for outstanding cross-slice checks. An exception or
-  mock-only result cannot hide a failed hard gate. Non-UI work records
-  `NOT_APPLICABLE` with factual reason.
-- **Enabler-only gate:** A `CONTRACT_ENABLER` is the sole exception while
-  readiness is `DRAFT` or `BLOCKED`. Report `PASS WITH NOTES - ENABLER_ONLY` only
-  when the enabler is independently bounded/testable and every
-  first vertical slice and scale-out issue remains blocked. After verification,
-  the active controller applies the planning-owned deterministic index/readiness
-  operation internally before releasing a slice; no full planning re-entry is
-  needed for unchanged semantics. Rerun applicable UI/API hard gates.
+- **UI/API readiness gate:** For UI-bearing scope apply [dimension 10](references/tests-and-decisions.md#10-uiapi-integration-readiness): networked `readiness-gate.mjs` exit 0; LOCAL_ONLY mapped local proof within the goal; non-UI `NOT_APPLICABLE` with factual reason. When networked merged verification remains, one `HARDENING` goal depends on applicable UI delivery slices.
+- **Enabler-only gate:** `PASS WITH NOTES - ENABLER_ONLY` requires a bounded `CONTRACT_ENABLER` while readiness is `DRAFT/BLOCKED`; first vertical slice and scale-out stay blocked. Apply [qualification/promotion rules](references/tests-and-decisions.md#10-uiapi-integration-readiness) and [verdict limits](references/verification-process.md).
 - **Verdict gate:** Report `PASS`, `PASS WITH NOTES`, or `NEEDS REVISION`, with impact-based findings. Apply targeted fixes within scope.
 - **Recovery gate:** Repeated failure triggers reassessment/escalation per shared recovery policy; only missing authority/access, hard limits, or proven stagnation stop the affected goal.

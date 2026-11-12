@@ -57,11 +57,9 @@ Result and next action: Read-only findings with evidence and owners; remediation
 
 ## Output
 
-- Findings first, ordered by severity.
-- File/line references where available.
-- Open questions and residual test gaps.
+- Verdict line first, then every P1 finding (and P0 once defined), every P2 finding needing a disposition, and every blocking question, one line each with file/line where available; never truncated.
+- P3 findings, non-blocking questions and residual test gaps: counts plus the report link.
 - Exact next owner for every actionable finding.
 - Deferred findings with their owner and durable sink (`docs/todos/YYYY-MM-DD-<slug>.md` or `docs/STATE.md` Deferred Ideas); nothing is parked silently.
 - The durable review report follows `.agent/context/output-style.md`.
-- A completion claim includes `Evidence of Completion` with what/how, actual
-  results/evidence locators, and acceptance mapping; missing proof stays incomplete.
+- A completion claim includes `Evidence of Completion` per `.agent/rules/quality-gates.md`; missing proof stays incomplete.

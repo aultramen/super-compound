@@ -4,6 +4,11 @@
 
 Load only when browser-visible behavior or a real service/session must be proven. Use the project's mapped harness/configuration, fixtures, selectors, and authenticated session; do not invent a new E2E command or replace assertions with screenshots.
 
+For a requested MCP integration check or MCP-dependent failure, load
+[MCP diagnostics](../../integration-checking/references/mcp-diagnostics.md).
+Record transport, protocol, authentication, authorization, discovery and the
+requested operation separately; a native client result may leave transport unknown.
+
 ## Prepare
 
 - Resolve required critical flows, permissions, representative failure, recovery, and retry checks from approved acceptance/risk. Use development, UAT, or testing environment appropriate to the task.

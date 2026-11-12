@@ -15,11 +15,12 @@ Use for a non-trivial feature, an AI-produced result that is hard to trust, a pa
 
 - To choose evals and graders, load [eval design](references/eval-design.md).
 - To create definition files, reports, and run history, load [templates and reporting](references/templates-and-reporting.md).
+- For consequential design alternatives with blind qualitative judging, load [design comparison](../prototyping/references/design-comparison.md). Measured optimization still uses [paired experiments](references/paired-experiments.md); design scores do not establish runtime gains or reliability.
 - During planning load the first branch; during reporting load the second. Load both only when creating an eval package end to end.
 
 ## Invariants
 
-- Compare paired task/host/model/grader/basis with adaptive-eval.mjs. Grade observed action order with `behavior`; synthetic tool traces do not measure real-host reliability.
+- For measured optimization, compare paired task/host/model/grader/basis with adaptive-eval.mjs. Grade observed action order with `behavior`; synthetic tool traces do not measure real-host reliability.
 
 - Follow `DEFINE → IMPLEMENT → EVALUATE → REPORT`; criteria exist before implementation.
 - Include capability evals for intended behavior and regression evals for protected behavior.

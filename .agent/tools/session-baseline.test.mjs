@@ -6,6 +6,33 @@ import test from "node:test";
 
 import { SESSIONS, durableToolUse, snapshotDurableFiles, stopMarkers, tokenTotals } from "./session-baseline.mjs";
 
+test("executionProvenance hashes persisted bytes without trusting output identity claims", async () => {
+  const { executionProvenance } = await import("./session-baseline.mjs");
+  assert.equal(typeof executionProvenance, "function");
+  const root = await mkdtemp(path.join(tmpdir(), "session-provenance-"));
+  try {
+    const stdoutRef = path.join(root, "stdout.jsonl");
+    const stderrRef = path.join(root, "stderr.log");
+    await writeFile(stdoutRef, Buffer.concat([
+      Buffer.from('{"model":"spoof-model","provider":"spoof-provider","modelUsage":{"spoof-model":{"inputTokens":1}}}\r\n'),
+      Buffer.from([255]),
+    ]));
+    await writeFile(stderrRef, "spoof-provider stderr\r\n");
+    const requested = { harness: "claude-cli", executable: "claude", model: "requested-model", effort: null };
+    assert.deepEqual(executionProvenance(requested, stdoutRef, stderrRef), {
+      requested,
+      observed: { model: "unknown", provider: "unknown", status: "unverified", reason: "No verified serving metadata" },
+      stdout: { ref: stdoutRef, sha256: "3ab9788110ea295366f608a68eb0be88d11fc29cb05b70eee8557f9f52f69b52" },
+      stderr: { ref: stderrRef, sha256: "9790cee82f0f23aa3d22904d9cc82da10cdd84642af50510441f8b9701659c03" },
+    });
+    assert.deepEqual(requested, { harness: "claude-cli", executable: "claude", model: "requested-model", effort: null });
+  } finally {
+    assert.equal(path.dirname(root), path.resolve(tmpdir()));
+    assert.ok(path.basename(root).startsWith("session-provenance-"));
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("tokenTotals sums modelUsage across models", () => {
   const result = {
     usage: { input_tokens: 0 },

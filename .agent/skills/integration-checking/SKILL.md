@@ -28,6 +28,11 @@ User action / external event
 
 ## Checks
 
+Only for a named concurrency, retry, or state-machine invariant needing extra
+proof, with a real target and available toolchain, consider optional
+[bounded formal checking](../verification-before-completion/references/bounded-formal-checking.md).
+Keep the integrated path and real-provider checks below.
+
 | Area | Verify |
 |------|--------|
 | API contract | Callers send the fields the endpoint expects; responses match consumers |
@@ -81,5 +86,6 @@ User action / external event
 - Called by `executing-plans`, `verification-before-completion`, and `gap-closure`.
 - Required after the first integrated vertical slice and after merged parallel streams; local checks may complete within the existing goal. UAT is required only by acceptance/policy or unresolved material human judgment.
 - For browser/live-service evidence, use [live verification](../verification-before-completion/references/live-verification.md) with the repository harness and session.
+- Only when requested MCP integration or an observed MCP failure is in scope, load [MCP diagnostics](references/mcp-diagnostics.md); keep transport, protocol, authentication, authorization, discovery, and invocation outcomes separate.
 
 - Maintain the mapped harness with [verification recipes](../verification-before-completion/references/verification-recipes.md); retain evidence before cleanup.

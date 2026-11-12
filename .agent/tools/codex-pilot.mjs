@@ -3,7 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {spawn,spawnSync} from 'node:child_process';
-import {seedFiles} from './session-baseline.mjs';
+import {seedFiles,executionProvenance} from './session-baseline.mjs';
 import {activeCopyFilter,selectActiveAssets} from './active-assets.mjs';
 import {comparePairedTrials} from './adaptive-eval.mjs';
 import {persistCheckpoint,validateLearningCloseouts,parseEntries} from './memory-maintenance.mjs';
@@ -188,7 +188,7 @@ export async function gradePilot(dir,trace,seed) {
 }
 
 function runSession(executable,dir,model,rawFile,errFile,{prompt=PILOT_PROMPT,effort='low',timeoutMs=300000}={}) {
- return new Promise(resolve=>{
+ return new Promise((resolve,reject)=>{
   const started=Date.now(),out=fs.createWriteStream(rawFile),err=fs.createWriteStream(errFile);
   const args=codexArgs(model,effort);
   const child=spawn(executable,args,{cwd:dir,windowsHide:true,stdio:['pipe','pipe','pipe']});
@@ -201,8 +201,10 @@ function runSession(executable,dir,model,rawFile,errFile,{prompt=PILOT_PROMPT,ef
   },timeoutMs);
   child.on('error',error=>{failure=error.code||error.message;});
   child.on('close',async code=>{
-   clearTimeout(timer);await Promise.all([new Promise(r=>out.end(r)),new Promise(r=>err.end(r))]);
-   resolve({exitCode:code,latencyMs:Date.now()-started,failure:failure|| (code===0?null:`exit_${code}`),timestamp:new Date().toISOString(),args});
+   try {
+    clearTimeout(timer);await Promise.all([new Promise(r=>out.end(r)),new Promise(r=>err.end(r))]);
+    resolve({exitCode:code,latencyMs:Date.now()-started,failure:failure|| (code===0?null:`exit_${code}`),timestamp:new Date().toISOString(),args,executionProvenance:executionProvenance({harness:'codex-cli',executable,model,effort},rawFile,errFile)});
+   } catch(error) {reject(error);}
   });
   child.stdin.on('error',()=>{});child.stdin.end(prompt);
  });

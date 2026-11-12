@@ -82,5 +82,11 @@ Use `.agent/context/agent-models.json`; bundled roles inherit the session model.
 Preserve explicit installation overrides. Recommend low effort for mechanical
 tasks, medium for normal implementation and high for complex reasoning or
 stalled diagnosis. User settings win; unsupported controls are advice only.
-No automatic Sol/Astra switching. See `.agent/context/model-guidance.md` for
-model-specific controls and optional API caching/tool-calling guidance.
+No automatic Sol/Astra switching. Use [model guidance](../../../context/model-guidance.md)
+for model-specific controls and optional API caching/tool-calling guidance.
+
+When an authorized external route is selected or recovered, or authoritative
+acceptance requires identity proof, load
+[external execution receipts](completion-inbox.md#external-execution-receipts).
+Mappings and inherit describe requested settings; unproved native or external
+provider/model identity remains UNKNOWN. Ordinary delegation gains no new gate.

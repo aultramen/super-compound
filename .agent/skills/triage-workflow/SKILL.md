@@ -23,7 +23,7 @@ has one category and one state; conflicting states require a stop.
 
 ### 1. Gather Context
 
-Read the issue body, comments, linked FSD/PRD/BRD, related `.scratch/` board, relevant code, tests, `CONTEXT.md`, and linked accepted ADRs.
+Read the issue body, comments, linked FSD/PRD/BRD, related `.scratch/` board, relevant code, tests, the existing domain glossary/map using [domain-modeling's Files policy](../domain-modeling/SKILL.md#files), and linked accepted ADRs.
 
 Check two things before recommending work:
 

@@ -126,6 +126,10 @@ function fixture(patches = {}) {
   roots.push(root);
   const files = { "docs/prd.md": PRD, "docs/fsd.md": FSD, ...ISSUES };
   for (const [file, patch] of Object.entries(patches)) {
+    if (patch === null) {
+      delete files[file];
+      continue;
+    }
     if (typeof patch === "string") {
       files[file] = patch;
       continue;
@@ -297,6 +301,56 @@ for (const [id, patches] of Object.entries(MUTATIONS)) {
     assertBlocked(await evaluate(patches), id);
   });
 }
+
+const SINGLE_SLICE = { "issues/issue-003-scale-out.md": null, "issues/issue-004-hardening.md": null };
+const hardeningGate = (result) => result.gates.find((gate) => gate.id === "hardening");
+
+test("single-slice networked UI is ready without a separate HARDENING goal", async () => {
+  const result = await evaluate(SINGLE_SLICE);
+  assert.equal(result.verdict, "READY_FOR_SLICE");
+  assert.deepEqual(result.failures, []);
+  assert.equal(hardeningGate(result).status, "pass");
+});
+
+test("single-slice networked UI may keep one HARDENING goal, which must depend on the first slice", async () => {
+  const one = { "issues/issue-003-scale-out.md": null, "issues/issue-004-hardening.md": [", issue-003-scale-out.md", ""] };
+  assert.equal((await evaluate(one)).verdict, "READY_FOR_SLICE");
+  assertBlocked(await evaluate({
+    "issues/issue-003-scale-out.md": null,
+    "issues/issue-004-hardening.md": ["Blocked by: issue-002-first-slice.md, issue-003-scale-out.md", "Blocked by: issue-001-enabler.md"],
+  }), "hardening");
+});
+
+test("scale-out without a HARDENING goal still blocks", async () => {
+  const result = await evaluate({ "issues/issue-004-hardening.md": null });
+  assertBlocked(result, "hardening");
+  assert.match(hardeningGate(result).detail, /^0 HARDENING issues/);
+});
+
+test("a dependent slice with a blank role and no HARDENING goal still blocks", async () => {
+  assertBlocked(await evaluate({
+    "issues/issue-003-scale-out.md": ["UI delivery role: SCALE_OUT_SLICE", "UI delivery role:"],
+    "issues/issue-004-hardening.md": null,
+  }), "hardening");
+});
+
+test("more than one HARDENING goal blocks with or without scale-out", async () => {
+  const second = ISSUES["issues/issue-004-hardening.md"];
+  assertBlocked(await evaluate({ "issues/issue-005-hardening.md": second }), "hardening");
+  assertBlocked(await evaluate({
+    "issues/issue-003-scale-out.md": null,
+    "issues/issue-004-hardening.md": [", issue-003-scale-out.md", ""],
+    "issues/issue-005-hardening.md": second.replace(", issue-003-scale-out.md", ""),
+  }), "hardening");
+});
+
+test("single-slice scope keeps the first-slice and real-provider proof requirements", async () => {
+  assertBlocked(await evaluate({ ...SINGLE_SLICE, "issues/issue-002-first-slice.md": ["@1.2.0", "@1.1.0"] }), "first-slice");
+  assertBlocked(await evaluate({ ...SINGLE_SLICE, "issues/issue-002-first-slice.md": ["Status: ready-for-agent", "Status: verified"] }), "first-slice");
+  const root = fixture({ ...SINGLE_SLICE, "issues/issue-002-first-slice.md": ["Status: ready-for-agent", "Status: verified"] });
+  await attachFirstSliceProof(root, { status: "fail" });
+  assertBlocked(await evaluateRoot(root), "first-slice");
+});
 
 test("verification ref whose TEST id is absent from the FSD body fails", async () => {
   assertBlocked(await evaluate({ "docs/fsd.md": ["FSD-X#TEST-005", "FSD-X#TEST-009"] }), "verification-refs");

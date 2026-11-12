@@ -63,6 +63,54 @@ For a regression test, preserve the original failing test without the fix and pa
   work the coordinator inspects actual evidence and coverage independently;
   agent reports, reasoning, or an untyped review assertion never replace proof.
 
+## Authored or Changed Gates
+
+Apply this branch when authoring or changing a gate/checker whose verdict
+qualifies artifacts or releases downstream work. Use the existing completion
+contract and recipe/observation evidence; light/full scope and all-AC coverage
+remain unchanged.
+
+Only if a named concurrency, retry, or state-machine invariant needs extra proof
+and a real target and toolchain are available, consider optional
+[bounded formal checking](bounded-formal-checking.md) alongside this qualification.
+Its bounded model evidence cannot replace required target or integration checks.
+
+1. Before runs, fix expected verdicts, semantic predicates, actual target paths,
+   workspace root/configuration and downstream consumer reliance: ACCEPT for the
+   known-valid control and REJECT for intended invalid controls. A current target
+   may legitimately be expected to REJECT or remain BLOCKED; verifying that
+   verdict never qualifies the target.
+   Mark a check N/A or skip it only with evidence that its applicability predicate
+   excludes it. Missing required proof remains unresolved.
+2. Bind runs to current HEAD and scoped dirty/untracked file inventory and raw
+   byte hashes for target inputs, gate/checker, dependencies and configuration;
+   record root, environment and exact command/arguments or inspection steps.
+   A revision alone cannot identify uncommitted tested inputs.
+3. Run the same gate/checker and configuration on real current target artifacts,
+   a known-valid control, and isolated representative invalid controls. A qualifying
+   real target may also serve as the valid control; duplicate runs are unnecessary.
+   Inspect
+   each control's raw inputs/diff to verify its intended mutation. Inspect semantic
+   verdicts beyond exit status: invalid controls must reject for their intended
+   reason, rather than invocation failure or a missing copied dependency.
+   Preserve legitimate N/A/skip behavior; required checks cannot disappear.
+   Keep control mutations isolated from user artifacts.
+4. For a prose gate, perform repeatable direct inspection against those
+   predicates on the real target and controls, recording expected and observed
+   verdicts and evidence locators through the existing observation procedure.
+5. Preserve every run/inspection result, output, expected/observed verdict and
+   before/after input identity, including failed or blocked targets and controls.
+   Changed inputs invalidate affected proof. Work in the existing dirty workspace
+   without requiring a commit, clean tree or new approval solely for this
+   qualification.
+
+Report control sensitivity, actual target verdict, and broader system outcome
+separately. Passing fixture controls proves only exercised acceptance/rejection
+behavior, not whole-system proof. A target's expected rejection may verify the
+gate while leaving that target unqualified and downstream work blocked. Missing
+required controls or target evidence prevents gate qualification; whole-system
+claims still require their own mapped outcome proof.
+
 ## Completion Contract and Local Gate
 
 Store one `completion_contract_v1` snapshot of the authoritative request/FSD:

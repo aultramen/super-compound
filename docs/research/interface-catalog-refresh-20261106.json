@@ -1,0 +1,2265 @@
+{
+  "baseline": ".scratch/r01-ui-refresh-20261106/baseline/data",
+  "upstream_commit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+  "merge_rules": [
+    "Read every CSV with the standard csv parser and assert exact header widths.",
+    "Match rows by No; use Family for google-fonts and old positional No for threejs only.",
+    "Take current upstream columns and cells where the frozen local value equals old upstream.",
+    "Preserve local divergent cells and document old, local, upstream, and merged values.",
+    "Keep local-only web-interface and every surviving local row identity; archive the ten canonically removed font rows and three obsolete Nuxt v3 rows in this inventory instead of keeping them active.",
+    "Canonical Nuxt UI v4 rows 8,9,18 supersede obsolete local v3 code; preserve displaced local rows and rationale in this inventory.",
+    "Canonical Next.js 16.2+ row 13 supersedes pinned Next.js 15+ guidance; archive the prior source/version row and retain current upstream applicability.",
+    "Do not renumber sparse style identities or manufacture local RTL ratings.",
+    "Write UTF-8 and RFC 4180 quoting with normalized LF line endings."
+  ],
+  "checks": {
+    "strict_csv_width": "pass",
+    "roundtrip": "pass",
+    "local_row_identity_accounting": "pass",
+    "local_divergent_cell_preservation_or_explicit_supersession": "pass"
+  },
+  "schema": "interface_catalog_refresh_v1",
+  "scope": "R-01 three-way catalog merge evidence. Fingerprints preserve full CSV identity; duplicate complete row-ID sets are omitted. Retained/superseded local values remain recorded below.",
+  "full_working_inventory_sha256": "c09564f516579983288069ce3799ae5b1013e455d73d9c6b522d1c592f0b8abc",
+  "previous_source_commit": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+  "files": [
+    {
+      "path": "data/app-interface.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 30,
+      "rows_old_upstream": 30,
+      "rows_upstream": 32,
+      "rows_after": 32,
+      "added_columns": [],
+      "baseline_lf_sha256": "2a17ef810dab715ce1f339861817a8fbe3ccc38142b70517301e874803e838ac",
+      "upstream_lf_sha256": "331e7cf2c0b222d80c566c5f255c63cb339f65bfd02e471a720f28e4864a9f08",
+      "local_lf_sha256": "331e7cf2c0b222d80c566c5f255c63cb339f65bfd02e471a720f28e4864a9f08",
+      "new_upstream_identities": [
+        "31",
+        "32"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/charts.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 25,
+      "rows_old_upstream": 25,
+      "rows_upstream": 25,
+      "rows_after": 25,
+      "added_columns": [
+        "Accessibility Risk"
+      ],
+      "baseline_lf_sha256": "a70ef7460b0eaaea8614f86a0d09a4bc38b467804179762464b5ca45b491baac",
+      "upstream_lf_sha256": "4115cf1120680f2cedef0676cb648f30c7ef4699e2a947535d4113e71ed3b12a",
+      "local_lf_sha256": "4115cf1120680f2cedef0676cb648f30c7ef4699e2a947535d4113e71ed3b12a",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/colors.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 192,
+      "rows_old_upstream": 192,
+      "rows_upstream": 192,
+      "rows_after": 192,
+      "added_columns": [],
+      "baseline_lf_sha256": "cb26759805217edaaa31b09836aec09eab0fe245c58f5884e9a16ef802c6e26a",
+      "upstream_lf_sha256": "8162429222bce22df62b564085946a30d07cc9722c58d0a3a494bd0d1d00841c",
+      "local_lf_sha256": "8162429222bce22df62b564085946a30d07cc9722c58d0a3a494bd0d1d00841c",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/google-fonts.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "Family"
+      ],
+      "rows_before": 1923,
+      "rows_old_upstream": 1923,
+      "rows_upstream": 1934,
+      "rows_after": 1934,
+      "added_columns": [],
+      "baseline_lf_sha256": "3fd2898fb0fdd31ba758bf05cfcd2b58cd0f038a20cf08e417d09e5a8a4a509e",
+      "upstream_lf_sha256": "1c8c3b2ea1faf6a1012da463756def8b3889db33f2226f0343bb4daa80307d03",
+      "local_lf_sha256": "1c8c3b2ea1faf6a1012da463756def8b3889db33f2226f0343bb4daa80307d03",
+      "new_upstream_identities": [
+        "Akt",
+        "Alien Block",
+        "BJCree",
+        "Datatype",
+        "Estedad",
+        "Finlandica Headline",
+        "Finlandica Text",
+        "Geist Pixel",
+        "Geomini",
+        "Hibur Mono",
+        "Iosevka Charon",
+        "Iosevka Charon Mono",
+        "M PLUS U",
+        "Miranda Sans",
+        "Montenegrin Gothic One",
+        "Pliant",
+        "Saira Stencil",
+        "STIX Two Math",
+        "Strichpunkt Sans",
+        "Yuyu",
+        "Yuyu Short"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [
+        {
+          "identity": "Edu NSW ACT Cursive",
+          "row": {
+            "Family": "Edu NSW ACT Cursive",
+            "Category": "Handwriting",
+            "Stroke": "",
+            "Classifications": "Handwriting",
+            "Keywords": "personal casual friendly warm handwritten script organic  script cursive hand-drawn artistic informal variable variable-font responsive variable-weight english western european extended-latin european",
+            "Styles": "400 | 500 | 600 | 700",
+            "Variable Axes": "wght: -",
+            "Subsets": "latin | latin-ext",
+            "Designers": "Tina Anderson | Corey Anderson",
+            "Popularity Rank": "1264",
+            "Trending Rank": "148",
+            "Is Noto": "No",
+            "Date Added": "2025-05-28",
+            "Last Modified": "2025-09-04",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Edu+NSW+ACT+Cursive"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        },
+        {
+          "identity": "Edu NSW ACT Hand Pre",
+          "row": {
+            "Family": "Edu NSW ACT Hand Pre",
+            "Category": "Handwriting",
+            "Stroke": "",
+            "Classifications": "Handwriting",
+            "Keywords": "personal casual friendly warm handwritten script organic  script cursive hand-drawn artistic informal variable variable-font responsive variable-weight english western european extended-latin european",
+            "Styles": "400 | 500 | 600 | 700",
+            "Variable Axes": "wght: -",
+            "Subsets": "latin | latin-ext",
+            "Designers": "Tina Anderson | Corey Anderson",
+            "Popularity Rank": "1831",
+            "Trending Rank": "2285",
+            "Is Noto": "No",
+            "Date Added": "2025-05-28",
+            "Last Modified": "2025-09-10",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Edu+NSW+ACT+Hand+Pre"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        },
+        {
+          "identity": "Edu QLD Hand",
+          "row": {
+            "Family": "Edu QLD Hand",
+            "Category": "Handwriting",
+            "Stroke": "",
+            "Classifications": "Handwriting",
+            "Keywords": "personal casual friendly warm handwritten script organic  script cursive hand-drawn artistic informal variable variable-font responsive variable-weight english western european extended-latin european vietnamese",
+            "Styles": "400 | 500 | 600 | 700",
+            "Variable Axes": "wght: -",
+            "Subsets": "latin | latin-ext | vietnamese",
+            "Designers": "Tina Anderson | Corey Anderson",
+            "Popularity Rank": "1945",
+            "Trending Rank": "2002",
+            "Is Noto": "No",
+            "Date Added": "2025-05-28",
+            "Last Modified": "2025-09-11",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Edu+QLD+Hand"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        },
+        {
+          "identity": "Edu SA Hand",
+          "row": {
+            "Family": "Edu SA Hand",
+            "Category": "Handwriting",
+            "Stroke": "",
+            "Classifications": "Handwriting",
+            "Keywords": "personal casual friendly warm handwritten script organic  script cursive hand-drawn artistic informal variable variable-font responsive variable-weight english western european extended-latin european",
+            "Styles": "400 | 500 | 600 | 700",
+            "Variable Axes": "wght: -",
+            "Subsets": "latin | latin-ext",
+            "Designers": "Tina Anderson | Corey Anderson",
+            "Popularity Rank": "1830",
+            "Trending Rank": "2121",
+            "Is Noto": "No",
+            "Date Added": "2025-05-28",
+            "Last Modified": "2025-09-08",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Edu+SA+Hand"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        },
+        {
+          "identity": "Edu VIC WA NT Hand",
+          "row": {
+            "Family": "Edu VIC WA NT Hand",
+            "Category": "Handwriting",
+            "Stroke": "",
+            "Classifications": "Handwriting",
+            "Keywords": "personal casual friendly warm handwritten script organic  script cursive hand-drawn artistic informal variable variable-font responsive variable-weight english western european extended-latin european",
+            "Styles": "400 | 500 | 600 | 700",
+            "Variable Axes": "wght: -",
+            "Subsets": "latin | latin-ext",
+            "Designers": "Tina Anderson | Corey Anderson",
+            "Popularity Rank": "1962",
+            "Trending Rank": "2036",
+            "Is Noto": "No",
+            "Date Added": "2025-05-28",
+            "Last Modified": "2025-09-08",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Edu+VIC+WA+NT+Hand"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        },
+        {
+          "identity": "Edu VIC WA NT Hand Pre",
+          "row": {
+            "Family": "Edu VIC WA NT Hand Pre",
+            "Category": "Handwriting",
+            "Stroke": "",
+            "Classifications": "Handwriting",
+            "Keywords": "personal casual friendly warm handwritten script organic  script cursive hand-drawn artistic informal variable variable-font responsive variable-weight english western european extended-latin european",
+            "Styles": "400 | 500 | 600 | 700",
+            "Variable Axes": "wght: -",
+            "Subsets": "latin | latin-ext",
+            "Designers": "Tina Anderson | Corey Anderson",
+            "Popularity Rank": "1956",
+            "Trending Rank": "2086",
+            "Is Noto": "No",
+            "Date Added": "2025-05-28",
+            "Last Modified": "2025-09-11",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Edu+VIC+WA+NT+Hand+Pre"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        },
+        {
+          "identity": "Finlandica",
+          "row": {
+            "Family": "Finlandica",
+            "Category": "Sans Serif",
+            "Stroke": "Sans Serif",
+            "Classifications": "",
+            "Keywords": "clean modern minimal professional readable neutral geometric humanist grotesque italic variable variable-font responsive variable-weight russian cyrillic slavic cyrillic extended english western european extended-latin european",
+            "Styles": "400 | 400i | 500 | 500i | 600 | 600i | 700 | 700i",
+            "Variable Axes": "wght: -",
+            "Subsets": "cyrillic | cyrillic-ext | latin | latin-ext",
+            "Designers": "Helsinki Type Studio | Niklas Ekholm | Juho Hiilivirta | Jaakko Suomalainen",
+            "Popularity Rank": "1290",
+            "Trending Rank": "227",
+            "Is Noto": "No",
+            "Date Added": "2022-05-13",
+            "Last Modified": "2025-09-08",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Finlandica"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        },
+        {
+          "identity": "Google Sans",
+          "row": {
+            "Family": "Google Sans",
+            "Category": "Sans Serif",
+            "Stroke": "Sans Serif",
+            "Classifications": "",
+            "Keywords": "clean modern minimal professional readable neutral geometric humanist grotesque italic variable variable-font responsive variable-weight armenian bengali bangladeshi indian russian cyrillic slavic cyrillic extended hindi devanagari indian ethiopic amharic georgian greek greek extended gujarati indian punjabi gurmukhi indian hebrew RTL israeli khmer cambodian lao laotian english western european extended-latin european malayalam indian odia oriya indian sinhala sri-lankan tamil indian telugu indian thai southeast-asia vietnamese multilingual international top-popular trending most-used",
+            "Styles": "400 | 400i | 500 | 500i | 600 | 600i | 700 | 700i",
+            "Variable Axes": "GRAD: - | opsz: - | wght: -",
+            "Subsets": "armenian | bengali | canadian-aboriginal | cyrillic | cyrillic-ext | devanagari | ethiopic | georgian | greek | greek-ext | gujarati | gurmukhi | hebrew | khmer | lao | latin | latin-ext | malayalam | oriya | sinhala | symbols | tamil | telugu | thai | vietnamese",
+            "Designers": "Google",
+            "Popularity Rank": "4",
+            "Trending Rank": "887",
+            "Is Noto": "No",
+            "Date Added": "2025-12-09",
+            "Last Modified": "2025-12-10",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Google+Sans"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        },
+        {
+          "identity": "Google Sans Flex",
+          "row": {
+            "Family": "Google Sans Flex",
+            "Category": "Sans Serif",
+            "Stroke": "Sans Serif",
+            "Classifications": "",
+            "Keywords": "clean modern minimal professional readable neutral geometric humanist grotesque versatile multi-weight flexible variable variable-font responsive variable-weight variable-width variable-slant english western european extended-latin european vietnamese multilingual international popular widely-used",
+            "Styles": "1 | 100 | 1000 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900",
+            "Variable Axes": "GRAD: - | ROND: - | opsz: - | slnt: - | wdth: - | wght: -",
+            "Subsets": "canadian-aboriginal | cherokee | latin | latin-ext | math | nushu | symbols | syriac | tifinagh | vietnamese",
+            "Designers": "Google",
+            "Popularity Rank": "119",
+            "Trending Rank": "47",
+            "Is Noto": "No",
+            "Date Added": "2025-11-12",
+            "Last Modified": "2025-12-11",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Google+Sans+Flex"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        },
+        {
+          "identity": "Saira Stencil One",
+          "row": {
+            "Family": "Saira Stencil One",
+            "Category": "Display",
+            "Stroke": "Sans Serif",
+            "Classifications": "Display",
+            "Keywords": "bold decorative headline attention-grabbing creative expressive geometric humanist grotesque headline hero decorative large-text attention english western european extended-latin european vietnamese",
+            "Styles": "400",
+            "Variable Axes": "",
+            "Subsets": "latin | latin-ext | vietnamese",
+            "Designers": "Hector Gatti | Omnibus-Type",
+            "Popularity Rank": "961",
+            "Trending Rank": "2232",
+            "Is Noto": "No",
+            "Date Added": "2019-06-18",
+            "Last Modified": "2025-09-10",
+            "Google Fonts URL": "https://fonts.google.com/specimen/Saira+Stencil+One"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "resolution": "archived only; removed from canonical current upstream catalog and not claimed as currently available"
+        }
+      ],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/icons.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 105,
+      "rows_old_upstream": 105,
+      "rows_upstream": 105,
+      "rows_after": 105,
+      "added_columns": [
+        "Semantic Role",
+        "Allowed Contexts"
+      ],
+      "baseline_lf_sha256": "f376c29fb4df37b4bdb366a5aa70cb211ba3dd8b435390aaa03152a64b07d2e8",
+      "upstream_lf_sha256": "50816c6012030178195a16ee481ebf58b47bd985d70e8ec58886cc83f6eddafc",
+      "local_lf_sha256": "50816c6012030178195a16ee481ebf58b47bd985d70e8ec58886cc83f6eddafc",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/landing.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 34,
+      "rows_old_upstream": 34,
+      "rows_upstream": 34,
+      "rows_after": 34,
+      "added_columns": [
+        "Pattern ID",
+        "Aliases"
+      ],
+      "baseline_lf_sha256": "121a2cac7cf21050234b5f80e7b4e182f10123536032e0f9ad862ad3aec9677d",
+      "upstream_lf_sha256": "9a2edd3bb676c2a58f00ade7a062e285222d4297bfd847c8d5b056f0dbbf52d0",
+      "local_lf_sha256": "9a2edd3bb676c2a58f00ade7a062e285222d4297bfd847c8d5b056f0dbbf52d0",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/motion.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 16,
+      "rows_old_upstream": 16,
+      "rows_upstream": 17,
+      "rows_after": 17,
+      "added_columns": [],
+      "baseline_lf_sha256": "6452fbd8028ab71d52993775340e1bc40a150d92be8d4b4cb8710620fd1a7512",
+      "upstream_lf_sha256": "381affe8df8ea1f66fbbda2598827f9f54299107bbe6a1b4e9b68f6b62091ceb",
+      "local_lf_sha256": "381affe8df8ea1f66fbbda2598827f9f54299107bbe6a1b4e9b68f6b62091ceb",
+      "new_upstream_identities": [
+        "17"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/products.csv",
+      "classification": "transformed",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 192,
+      "rows_old_upstream": 192,
+      "rows_upstream": 192,
+      "rows_after": 192,
+      "added_columns": [
+        "rtl_level"
+      ],
+      "baseline_lf_sha256": "ac14a85ca548db25e7f144a113f2c110f0d5ba227fada9321e17476f082fc1e6",
+      "upstream_lf_sha256": "5756125e2b0e0d2360926f175d0975c8cd846c7589e5e2ce02631ff645e66361",
+      "local_lf_sha256": "1bdc6d8f5ccda75b4251590e4a3985aeb4861dcf15c9c53fd28f2dcb6d2c3b83",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [
+        {
+          "identity": "2",
+          "field": "Keywords",
+          "old": "indie, micro-saas, niche, solo, bootstrap, micro, side-project, solopreneur, small-team, indie-hacker, product-hunt",
+          "local": "app, b2b, cloud, indie, micro, micro-saas, niche, saas, small, software, solo, subscription",
+          "upstream": "indie, micro-saas, niche, solo, bootstrap, micro, side-project, solopreneur, small-team, indie-hacker, product-hunt",
+          "merged": "app, b2b, cloud, indie, micro, micro-saas, niche, saas, small, software, solo, subscription"
+        },
+        {
+          "identity": "5",
+          "field": "Keywords",
+          "old": "b2b, enterprise, consulting, professional, solution, contract, corporate, strategy, advisory, roi, deliverable, whitepaper",
+          "local": "appointment, b, b2b, booking, business, consultation, corporate, enterprise, service",
+          "upstream": "b2b, enterprise, consulting, professional, solution, contract, corporate, strategy, advisory, roi, deliverable, whitepaper",
+          "merged": "appointment, b, b2b, booking, business, consultation, corporate, enterprise, service"
+        },
+        {
+          "identity": "6",
+          "field": "Keywords",
+          "old": "portfolio, trading, pnl, budget, revenue, expense, cashflow, balance-sheet, investment, bank, accounting, fintech",
+          "local": "admin, analytics, dashboard, data, financial, panel",
+          "upstream": "portfolio, trading, pnl, budget, revenue, expense, cashflow, balance-sheet, investment, bank, accounting, fintech",
+          "merged": "admin, analytics, dashboard, data, financial, panel"
+        },
+        {
+          "identity": "7",
+          "field": "Keywords",
+          "old": "kpi, metric, funnel, conversion, cohort, retention, segment, attribution, ab-test, dashboard-data, business-intelligence",
+          "local": "admin, analytics, dashboard, data, panel",
+          "upstream": "kpi, metric, funnel, conversion, cohort, retention, segment, attribution, ab-test, dashboard-data, business-intelligence",
+          "merged": "admin, analytics, dashboard, data, panel"
+        },
+        {
+          "identity": "10",
+          "field": "Keywords",
+          "old": "branding, identity, portfolio, logo, visual, rebrand, creative-director, campaign, awards, award-winning, showreel",
+          "local": "agency, creative, design, marketing, studio",
+          "upstream": "branding, identity, portfolio, logo, visual, rebrand, creative-director, campaign, awards, award-winning, showreel",
+          "merged": "agency, creative, design, marketing, studio"
+        },
+        {
+          "identity": "13",
+          "field": "Keywords",
+          "old": "government, civic, municipal, federal, citizen, public, administration, permit, tax, voter, transparency, regulation",
+          "local": "appointment, booking, consultation, government, public, service",
+          "upstream": "government, civic, municipal, federal, citizen, public, administration, permit, tax, voter, transparency, regulation",
+          "merged": "appointment, booking, consultation, government, public, service"
+        },
+        {
+          "identity": "26",
+          "field": "Keywords",
+          "old": "subscription, box, recurring, membership, unboxing, curated, plan, monthly, surprise, product-box",
+          "local": "appointment, booking, box, consultation, membership, plan, recurring, service, subscription",
+          "upstream": "subscription, box, recurring, membership, unboxing, curated, plan, monthly, surprise, product-box",
+          "merged": "appointment, booking, box, consultation, membership, plan, recurring, service, subscription"
+        },
+        {
+          "identity": "31",
+          "field": "Keywords",
+          "old": "hyperlocal, local, neighborhood, nearby, community, nearby, zip, map, local-business, geo-target, city",
+          "local": "appointment, booking, consultation, hyperlocal, service, services",
+          "upstream": "hyperlocal, local, neighborhood, nearby, community, nearby, zip, map, local-business, geo-target, city",
+          "merged": "appointment, booking, consultation, hyperlocal, service, services"
+        },
+        {
+          "identity": "32",
+          "field": "Keywords",
+          "old": "spa, beauty, salon, wellness, treatment, relaxation, massage, skincare, facial, aesthetic, self-care, pamper",
+          "local": "appointment, beauty, booking, consultation, service, spa, wellness",
+          "upstream": "spa, beauty, salon, wellness, treatment, relaxation, massage, skincare, facial, aesthetic, self-care, pamper",
+          "merged": "appointment, beauty, booking, consultation, service, spa, wellness"
+        },
+        {
+          "identity": "34",
+          "field": "Keywords",
+          "old": "restaurant, menu, order, food, dining, reservation, delivery, cuisine, chef, table, takeaway, eatery",
+          "local": "appointment, booking, consultation, delivery, food, menu, order, restaurant, service",
+          "upstream": "restaurant, menu, order, food, dining, reservation, delivery, cuisine, chef, table, takeaway, eatery",
+          "merged": "appointment, booking, consultation, delivery, food, menu, order, restaurant, service"
+        },
+        {
+          "identity": "37",
+          "field": "Keywords",
+          "old": "travel, tourism, vacation, flight, hotel, destination, adventure, cruise, safari, backpacking, guided-tour, holiday-package",
+          "local": "agency, booking, creative, design, flight, hotel, marketing, studio, tourism, travel, vacation",
+          "upstream": "travel, tourism, vacation, flight, hotel, destination, adventure, cruise, safari, backpacking, guided-tour, holiday-package",
+          "merged": "agency, booking, creative, design, flight, hotel, marketing, studio, tourism, travel, vacation"
+        },
+        {
+          "identity": "40",
+          "field": "Keywords",
+          "old": "law, attorney, legal, case, compliance, contract, court, firm, counsel, litigation, practice-area, jurisdiction",
+          "local": "appointment, attorney, booking, compliance, consultation, contract, law, legal, service, services",
+          "upstream": "law, attorney, legal, case, compliance, contract, court, firm, counsel, litigation, practice-area, jurisdiction",
+          "merged": "appointment, attorney, booking, compliance, consultation, contract, law, legal, service, services"
+        },
+        {
+          "identity": "55",
+          "field": "Keywords",
+          "old": "plumber, electrician, hvac, handyman, repair, maintenance, home, emergency, leak, wiring, inspection, licensed",
+          "local": "appointment, booking, consultation, electrician, home, plumber, service, services",
+          "upstream": "plumber, electrician, hvac, handyman, repair, maintenance, home, emergency, leak, wiring, inspection, licensed",
+          "merged": "appointment, booking, consultation, electrician, home, plumber, service, services"
+        },
+        {
+          "identity": "69",
+          "field": "Keywords",
+          "old": "campaign, ads, growth, roi, seo, sem, ppc, social-media, conversion-funnel, ab-test, attribution, performance-marketing",
+          "local": "agency, creative, design, marketing, studio",
+          "upstream": "campaign, ads, growth, roi, seo, sem, ppc, social-media, conversion-funnel, ab-test, attribution, performance-marketing",
+          "merged": "agency, creative, design, marketing, studio"
+        }
+      ],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/react-performance.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 44,
+      "rows_old_upstream": 44,
+      "rows_upstream": 44,
+      "rows_after": 44,
+      "added_columns": [],
+      "baseline_lf_sha256": "904c8afcda229629545912dde0e8ac37503757131f0169f80b016f1f58c4fd3f",
+      "upstream_lf_sha256": "3d925802539abac5afeb63ae8aa1960b7229ad271b3a47caed40ab2d97ad0734",
+      "local_lf_sha256": "3d925802539abac5afeb63ae8aa1960b7229ad271b3a47caed40ab2d97ad0734",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/angular.csv",
+      "classification": "transformed",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 50,
+      "rows_old_upstream": 50,
+      "rows_upstream": 50,
+      "rows_after": 50,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "46c5be30f9dfb14518f8b5f9622abb86f1a130ae757c2e5297e00d158f22f63a",
+      "upstream_lf_sha256": "704be83f2bad30c7e6de01afb113ffa01e0c458762f48b7102f31ba2367b5553",
+      "local_lf_sha256": "1ef5e58674a27ab2b696b7744a99d7e31f57a32583dada9b385e75ea87c40caf",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [
+        {
+          "identity": "28",
+          "field": "Do",
+          "old": "track item.id in @for",
+          "local": "Track stable item.id in @for",
+          "upstream": "track item.id in @for",
+          "merged": "Track stable item.id in @for"
+        },
+        {
+          "identity": "28",
+          "field": "Don't",
+          "old": "track $index for dynamic data",
+          "local": "Track $index for mutable or reorderable lists",
+          "upstream": "track $index for dynamic data",
+          "merged": "Track $index for mutable or reorderable lists"
+        }
+      ],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/astro.csv",
+      "classification": "transformed",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 53,
+      "rows_old_upstream": 53,
+      "rows_upstream": 53,
+      "rows_after": 53,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "3d0deda7dd0ec41fe03da7dfc0a6756f677e3b34438a6b179b249f2f49af822f",
+      "upstream_lf_sha256": "2c2f55fadaafc05e04cc321c8194a1a28b656e6757fe2ba316f41b16428299c6",
+      "local_lf_sha256": "d770ce013e44dd3ce46e90e544b62e85d485d5a830905becf454f9db9559e1b0",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [
+        {
+          "identity": "35",
+          "field": "Do",
+          "old": "Astro.url for canonical generation",
+          "local": "Generate canonical links from Astro.url",
+          "upstream": "Astro.url for canonical generation",
+          "merged": "Generate canonical links from Astro.url"
+        },
+        {
+          "identity": "35",
+          "field": "Don't",
+          "old": "No canonical tags",
+          "local": "Ship duplicated public pages without canonical tags",
+          "upstream": "No canonical tags",
+          "merged": "Ship duplicated public pages without canonical tags"
+        },
+        {
+          "identity": "35",
+          "field": "Docs URL",
+          "old": "",
+          "local": "https://docs.astro.build/en/reference/api-reference/#url",
+          "upstream": "",
+          "merged": "https://docs.astro.build/en/reference/api-reference/#url"
+        }
+      ],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/avalonia.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 56,
+      "rows_old_upstream": 56,
+      "rows_upstream": 56,
+      "rows_after": 56,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "6bfa40ec6609fcb59e52a38281edcc3a3e5b5e56341304fe5628b32cb9b1f875",
+      "upstream_lf_sha256": "442fca14675a020683473e7e49f08abb27b9df0765c80efe54aef61f1a4ac258",
+      "local_lf_sha256": "442fca14675a020683473e7e49f08abb27b9df0765c80efe54aef61f1a4ac258",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/flutter.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 52,
+      "rows_old_upstream": 52,
+      "rows_upstream": 52,
+      "rows_after": 52,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "fe36d404c799781e8ba6e9a8179b45799ed5126a545528550cd2eb0f2346e8c5",
+      "upstream_lf_sha256": "64dba0ac17349f28bce517a0f5f48c54d9ed2e487ec0c0258303463b382f41a0",
+      "local_lf_sha256": "64dba0ac17349f28bce517a0f5f48c54d9ed2e487ec0c0258303463b382f41a0",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/html-tailwind.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 55,
+      "rows_old_upstream": 55,
+      "rows_upstream": 59,
+      "rows_after": 59,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "7aef38e75c53559470afcfa91580a9917ca8b7dbf8b92110389e23e93703ac52",
+      "upstream_lf_sha256": "d05a581d20af57b8ca0104a6d31d90a07c437d500662a96c3029fc2f9a4678ee",
+      "local_lf_sha256": "d05a581d20af57b8ca0104a6d31d90a07c437d500662a96c3029fc2f9a4678ee",
+      "new_upstream_identities": [
+        "56",
+        "57",
+        "58",
+        "59"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/javafx.csv",
+      "classification": "transformed",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 75,
+      "rows_old_upstream": 75,
+      "rows_upstream": 75,
+      "rows_after": 75,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "69d3adb56ad8124ae0bbf274a63a319b1625d85b8343480db6df7d672743e721",
+      "upstream_lf_sha256": "2e819b8d5abdd23ad4dae0991650fdb57af497aabd68b37463aa9c442944c869",
+      "local_lf_sha256": "5ee1c1c31f96fc0fabc58195e739a41d689cd2dd67f794e42eca0fe572b94aa8",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [
+        {
+          "identity": "8",
+          "field": "Code Good",
+          "old": "URL view = getClass().getResource(\\/views/main.fxml\\\"); Parent root = FXMLLoader.load(view);\"",
+          "local": "URL view = getClass().getResource(\"/views/main.fxml\"); Parent root = FXMLLoader.load(view);",
+          "upstream": "URL view = getClass().getResource(\\/views/main.fxml\\\"); Parent root = FXMLLoader.load(view);\"",
+          "merged": "URL view = getClass().getResource(\"/views/main.fxml\"); Parent root = FXMLLoader.load(view);"
+        },
+        {
+          "identity": "9",
+          "field": "Code Good",
+          "old": "button.getStyleClass().add(\\primary-action\\\");\"",
+          "local": "button.getStyleClass().add(\"primary-action\");",
+          "upstream": "button.getStyleClass().add(\\primary-action\\\");\"",
+          "merged": "button.getStyleClass().add(\"primary-action\");"
+        },
+        {
+          "identity": "9",
+          "field": "Code Bad",
+          "old": ".setStyle(\\-fx-background-color: #2563eb; -fx-padding: 12; ...\\\")\"",
+          "local": ".setStyle(\"-fx-background-color: #2563eb; -fx-padding: 12; ...\")",
+          "upstream": ".setStyle(\\-fx-background-color: #2563eb; -fx-padding: 12; ...\\\")\"",
+          "merged": ".setStyle(\"-fx-background-color: #2563eb; -fx-padding: 12; ...\")"
+        },
+        {
+          "identity": "20",
+          "field": "Code Good",
+          "old": "table.setPlaceholder(new Label(\\No customers match this filter\\\"));\"",
+          "local": "table.setPlaceholder(new Label(\"No customers match this filter\"));",
+          "upstream": "table.setPlaceholder(new Label(\\No customers match this filter\\\"));\"",
+          "merged": "table.setPlaceholder(new Label(\"No customers match this filter\"));"
+        },
+        {
+          "identity": "22",
+          "field": "Code Good",
+          "old": "label.textProperty().unbind(); label.setText(\\Ready\\\");\"",
+          "local": "label.textProperty().unbind(); label.setText(\"Ready\");",
+          "upstream": "label.textProperty().unbind(); label.setText(\\Ready\\\");\"",
+          "merged": "label.textProperty().unbind(); label.setText(\"Ready\");"
+        },
+        {
+          "identity": "22",
+          "field": "Code Bad",
+          "old": "label.textProperty().bind(task.messageProperty()); label.setText(\\\"Ready\\\");",
+          "local": "label.textProperty().bind(task.messageProperty()); label.setText(\"Ready\");",
+          "upstream": "label.textProperty().bind(task.messageProperty()); label.setText(\\\"Ready\\\");",
+          "merged": "label.textProperty().bind(task.messageProperty()); label.setText(\"Ready\");"
+        },
+        {
+          "identity": "26",
+          "field": "Code Good",
+          "old": "nameLabel.setLabelFor(nameField); nameField.setPromptText(\\Jane Doe\\\");\"",
+          "local": "nameLabel.setLabelFor(nameField); nameField.setPromptText(\"Jane Doe\");",
+          "upstream": "nameLabel.setLabelFor(nameField); nameField.setPromptText(\\Jane Doe\\\");\"",
+          "merged": "nameLabel.setLabelFor(nameField); nameField.setPromptText(\"Jane Doe\");"
+        },
+        {
+          "identity": "26",
+          "field": "Code Bad",
+          "old": "nameField.setPromptText(\\\"Name\\\");",
+          "local": "nameField.setPromptText(\"Name\");",
+          "upstream": "nameField.setPromptText(\\\"Name\\\");",
+          "merged": "nameField.setPromptText(\"Name\");"
+        },
+        {
+          "identity": "42",
+          "field": "Code Bad",
+          "old": "FXMLLoader.load(getClass().getResource(\\\"/views/admin.fxml\\\"));",
+          "local": "FXMLLoader.load(getClass().getResource(\"/views/admin.fxml\"));",
+          "upstream": "FXMLLoader.load(getClass().getResource(\\\"/views/admin.fxml\\\"));",
+          "merged": "FXMLLoader.load(getClass().getResource(\"/views/admin.fxml\"));"
+        }
+      ],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/jetpack-compose.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 52,
+      "rows_old_upstream": 52,
+      "rows_upstream": 52,
+      "rows_after": 52,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "6c8fd4b0391c342c12b0af15610cd5becbeccaef0bbe8dcfc01d928c3195d93e",
+      "upstream_lf_sha256": "699de218b286948eaec7d15767b6e1350ee299167e49bf476d82e3ff58724e0a",
+      "local_lf_sha256": "699de218b286948eaec7d15767b6e1350ee299167e49bf476d82e3ff58724e0a",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/laravel.csv",
+      "classification": "transformed",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 50,
+      "rows_old_upstream": 50,
+      "rows_upstream": 50,
+      "rows_after": 50,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "14d744cbce74d8cdc34d533bd044e0e402a92ba49d3b4b254a44656ff111d0b9",
+      "upstream_lf_sha256": "854ea4daa5fc61292d22235ad33b49ba3fe22423c3de8d3cb03758ffed3b59f9",
+      "local_lf_sha256": "2a20270da6f85f2bddf31f4592cc5d24c5e189624a59fb774cad162d17a17ccd",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [
+        {
+          "identity": "24",
+          "field": "Don't",
+          "old": "No content config \u2014 ship all 3MB of CSS",
+          "local": "No content config - ship all CSS",
+          "upstream": "No content config \u2014 ship all 3MB of CSS",
+          "merged": "No content config - ship all CSS"
+        },
+        {
+          "identity": "45",
+          "field": "Don't",
+          "old": "No caching \u2014 serve every response fresh",
+          "local": "No caching - serve every response fresh",
+          "upstream": "No caching \u2014 serve every response fresh",
+          "merged": "No caching - serve every response fresh"
+        }
+      ],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/nextjs.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 52,
+      "rows_old_upstream": 52,
+      "rows_upstream": 60,
+      "rows_after": 60,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "e828ccc04843742f52f545a068e8a9ab0d2b97c0e771f7e93bf0cef74da05554",
+      "upstream_lf_sha256": "ecd2c27b2ea0127d203ae726060efcdd7335b5e83f96b99e4f3befbbfeebd5a4",
+      "local_lf_sha256": "ecd2c27b2ea0127d203ae726060efcdd7335b5e83f96b99e4f3befbbfeebd5a4",
+      "new_upstream_identities": [
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": [
+        {
+          "identity": "13",
+          "row": {
+            "No": "13",
+            "Category": "DataFetching",
+            "Guideline": "Configure caching explicitly (Next.js 15+)",
+            "Description": "Next.js 15 changed defaults to uncached for fetch",
+            "Do": "Explicitly set cache: 'force-cache' for static data",
+            "Don't": "Assume default is cached (it's not in Next.js 15)",
+            "Code Good": "fetch(url { cache: 'force-cache' })",
+            "Code Bad": "fetch(url) // Uncached in v15",
+            "Severity": "High",
+            "Docs URL": "https://nextjs.org/docs/app/building-your-application/upgrading/version-15"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "rationale": "Canonical Next.js 16.2+ explicit caching semantics and version-16 documentation supersede the pinned Next.js 15+ row."
+        }
+      ]
+    },
+    {
+      "path": "data/stacks/nuxt-ui.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 50,
+      "rows_old_upstream": 70,
+      "rows_upstream": 83,
+      "rows_after": 83,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "05d6e74501b2b6a636faed32450622759f49a5bcafad971f5f4e7eba0eb7be71",
+      "upstream_lf_sha256": "9c0179d559abe39ad63b958b54cb29c82be1dd20706430476096ea8967bfa328",
+      "local_lf_sha256": "9c0179d559abe39ad63b958b54cb29c82be1dd20706430476096ea8967bfa328",
+      "new_upstream_identities": [
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66",
+        "67",
+        "68",
+        "69",
+        "70",
+        "71",
+        "72",
+        "73",
+        "74",
+        "75",
+        "76",
+        "77",
+        "78",
+        "79",
+        "80",
+        "81",
+        "82",
+        "83"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": [
+        {
+          "identity": "8",
+          "row": {
+            "No": "8",
+            "Category": "Icons",
+            "Guideline": "Use icon prop with Iconify format",
+            "Description": "Nuxt UI supports Iconify icons via icon prop",
+            "Do": "icon=\"lucide:home\" icon=\"heroicons:user\"",
+            "Don't": "i-lucide-home format",
+            "Code Good": "<UButton icon=\"lucide:home\">",
+            "Code Bad": "<UButton icon=\"i-lucide-home\">",
+            "Severity": "Medium",
+            "Docs URL": "https://ui.nuxt.com/docs/getting-started/integrations/icons/nuxt"
+          },
+          "old_upstream_row": {
+            "No": "8",
+            "Category": "Icons",
+            "Guideline": "Use i-{collection}-{name} format for icons",
+            "Description": "Nuxt UI v4 uses Iconify i-prefix format \u2014 lucide:home is v3 legacy",
+            "Do": "i-lucide-home i-heroicons-user format",
+            "Don't": "lucide:home format (v3 syntax)",
+            "Code Good": "<UButton icon=\"i-lucide-home\">",
+            "Code Bad": "<UButton icon=\"lucide:home\">",
+            "Severity": "High",
+            "Docs URL": "https://ui.nuxt.com/docs/getting-started/installation/nuxt"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "rationale": "Local v3 icon/overlay API conflicts with canonical active Nuxt UI v4; current upstream row retained unchanged."
+        },
+        {
+          "identity": "9",
+          "row": {
+            "No": "9",
+            "Category": "Icons",
+            "Guideline": "Use leadingIcon and trailingIcon",
+            "Description": "Position icons with dedicated props for clarity",
+            "Do": "leadingIcon=\"lucide:plus\" trailingIcon=\"lucide:arrow-right\"",
+            "Don't": "Manual icon positioning",
+            "Code Good": "<UButton leadingIcon=\"lucide:plus\">",
+            "Code Bad": "<UButton><Icon name=\"lucide:plus\"/>Add</UButton>",
+            "Severity": "Low",
+            "Docs URL": "https://ui.nuxt.com/docs/components/button"
+          },
+          "old_upstream_row": {
+            "No": "9",
+            "Category": "Icons",
+            "Guideline": "Use leadingIcon and trailingIcon props",
+            "Description": "Position icons with dedicated props for clarity",
+            "Do": "leadingIcon=\"i-lucide-plus\" trailingIcon=\"i-lucide-arrow-right\"",
+            "Don't": "Manual icon positioning or slots",
+            "Code Good": "<UButton leadingIcon=\"i-lucide-plus\" label=\"Add\">",
+            "Code Bad": "<UButton><UIcon name=\"i-lucide-plus\"/>Add</UButton>",
+            "Severity": "Low",
+            "Docs URL": "https://ui.nuxt.com/docs/components/button"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "rationale": "Local v3 icon/overlay API conflicts with canonical active Nuxt UI v4; current upstream row retained unchanged."
+        },
+        {
+          "identity": "18",
+          "row": {
+            "No": "18",
+            "Category": "Overlays",
+            "Guideline": "Use useOverlay composable for programmatic overlays",
+            "Description": "Open overlays programmatically without template refs",
+            "Do": "useOverlay().open(MyModal)",
+            "Don't": "Template ref and manual control",
+            "Code Good": "const overlay = useOverlay(); overlay.open(MyModal, { props })",
+            "Code Bad": "const modal = ref(); modal.value.open()",
+            "Severity": "Medium",
+            "Docs URL": "https://ui.nuxt.com/docs/components/modal"
+          },
+          "old_upstream_row": {
+            "No": "18",
+            "Category": "Overlays",
+            "Guideline": "Use useOverlay composable for programmatic overlays",
+            "Description": "Open overlays programmatically \u2014 v4 API is create().open() not open(Component)",
+            "Do": "overlay.create(Component).open({ props }) pattern",
+            "Don't": "v3 overlay.open(Component) pattern (removed in v4)",
+            "Code Good": "const modal = overlay.create(MyModal); const { result } = modal.open({ title: 'Confirm' })",
+            "Code Bad": "overlay.open(MyModal, { props: { title: 'Confirm' } })",
+            "Severity": "High",
+            "Docs URL": "https://ui.nuxt.com/docs/components/modal"
+          },
+          "source_revision": "3da52ff1cab1be91848072ec1be5f493d730fd5f",
+          "rationale": "Local v3 icon/overlay API conflicts with canonical active Nuxt UI v4; current upstream row retained unchanged."
+        }
+      ]
+    },
+    {
+      "path": "data/stacks/nuxtjs.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 58,
+      "rows_old_upstream": 58,
+      "rows_upstream": 67,
+      "rows_after": 67,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "f7a3f2d9542856d00199f85c6c023b7c284cc698e2e6e12d61afce2edacb24d6",
+      "upstream_lf_sha256": "3d9b54ed2d151bd9c86e9e5609b8a6f88a00c4c52fa601a30af96c49b2c4d176",
+      "local_lf_sha256": "3d9b54ed2d151bd9c86e9e5609b8a6f88a00c4c52fa601a30af96c49b2c4d176",
+      "new_upstream_identities": [
+        "59",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66",
+        "67"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/react-native.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 51,
+      "rows_old_upstream": 51,
+      "rows_upstream": 51,
+      "rows_after": 51,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "077aefc81d194895ecf7936b3ed298b978e36961f183e3a275f8acda19b5f621",
+      "upstream_lf_sha256": "ba31dd9c0c04da6bc02a74448bf121f9c0728ae5ba3b4d47b487778b0a1135b5",
+      "local_lf_sha256": "ba31dd9c0c04da6bc02a74448bf121f9c0728ae5ba3b4d47b487778b0a1135b5",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/react.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 53,
+      "rows_old_upstream": 53,
+      "rows_upstream": 66,
+      "rows_after": 66,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "e5624ab41d33427d88e41d07581ce4eca59b37b36ab72a6ad43a9c8e2d0a1c72",
+      "upstream_lf_sha256": "4dd176a9787e5c6306b5df94158d75955adcdc6edab41ce5286641a5842303c1",
+      "local_lf_sha256": "4dd176a9787e5c6306b5df94158d75955adcdc6edab41ce5286641a5842303c1",
+      "new_upstream_identities": [
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/shadcn.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 60,
+      "rows_old_upstream": 60,
+      "rows_upstream": 68,
+      "rows_after": 68,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "395c2e415ef6f48a474acccdc8eb2c7258a6ed751a5037ba171a2d8823e02ded",
+      "upstream_lf_sha256": "e56cfde5b74907836ac3582a4779d5b7f3d206a702ab81b8669a1b668c3eeb51",
+      "local_lf_sha256": "e56cfde5b74907836ac3582a4779d5b7f3d206a702ab81b8669a1b668c3eeb51",
+      "new_upstream_identities": [
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66",
+        "67",
+        "68"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/svelte.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 53,
+      "rows_old_upstream": 53,
+      "rows_upstream": 55,
+      "rows_after": 55,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "71af52d64f266c88070b91dbbaa900c2f8074b6baae9f35eaea6ba9cec6fd803",
+      "upstream_lf_sha256": "f6e379ba802941ba26b01d4ffbe3cd39120f2587659a1d93851c707f66bc13db",
+      "local_lf_sha256": "f6e379ba802941ba26b01d4ffbe3cd39120f2587659a1d93851c707f66bc13db",
+      "new_upstream_identities": [
+        "54",
+        "55"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/swiftui.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 50,
+      "rows_old_upstream": 50,
+      "rows_upstream": 50,
+      "rows_after": 50,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "c9c2d2510f8e66281a2514e8dd0125a6b653b9ef53a71281b5e7dfe003d5b569",
+      "upstream_lf_sha256": "bdd9231ff3ad658f4e7c063e1eb49df2fd09ac8d90631a86df899b39833b9623",
+      "local_lf_sha256": "bdd9231ff3ad658f4e7c063e1eb49df2fd09ac8d90631a86df899b39833b9623",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/threejs.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 53,
+      "rows_old_upstream": 53,
+      "rows_upstream": 53,
+      "rows_after": 53,
+      "added_columns": [
+        "No",
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "f1c05f8f269fc4784170c837f4ff43b50042f00bbd6ba7dbef2896081a052544",
+      "upstream_lf_sha256": "155d583b9c64da0df4b6c6cb060c02eab222505e0734d6353da02c9e2b5d982b",
+      "local_lf_sha256": "155d583b9c64da0df4b6c6cb060c02eab222505e0734d6353da02c9e2b5d982b",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/uno.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 59,
+      "rows_old_upstream": 59,
+      "rows_upstream": 59,
+      "rows_after": 59,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "5d2e0f396bb9dc5a2661204264cc0eda7cc4fa3d78152dec89d668704a41b8fc",
+      "upstream_lf_sha256": "a0474363e4225b5367214d5675fd3e075f137026f9500f0d04357882ef4f6d48",
+      "local_lf_sha256": "a0474363e4225b5367214d5675fd3e075f137026f9500f0d04357882ef4f6d48",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/uwp.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 55,
+      "rows_old_upstream": 55,
+      "rows_upstream": 55,
+      "rows_after": 55,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "debf669928871261ced9333788d5afd5784377ea1fa1b4f53993dd8f1574c0fc",
+      "upstream_lf_sha256": "c409f08c1fbba1f1029f1acaa554e7b4471cc85517a5751c9f2e62465badcd5c",
+      "local_lf_sha256": "c409f08c1fbba1f1029f1acaa554e7b4471cc85517a5751c9f2e62465badcd5c",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/vue.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 49,
+      "rows_old_upstream": 49,
+      "rows_upstream": 49,
+      "rows_after": 49,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "c2724915d3c11cd67263f25896cff721f787a0fdd8326002d31e9f5806dfd8f8",
+      "upstream_lf_sha256": "b655f1ebb9dff2652d15981f31b1784c8a6d4759efd2815a14f3088257569f95",
+      "local_lf_sha256": "b655f1ebb9dff2652d15981f31b1784c8a6d4759efd2815a14f3088257569f95",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/winui.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 59,
+      "rows_old_upstream": 59,
+      "rows_upstream": 59,
+      "rows_after": 59,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "2d970b08e44509d7afa53ce7feb446930b2d5e0667fa637df9aeeed65c42bbbe",
+      "upstream_lf_sha256": "e676dc1c13ee6c205c40b0746f1335150a346c7a49a0616d2545bc3d2c930c85",
+      "local_lf_sha256": "e676dc1c13ee6c205c40b0746f1335150a346c7a49a0616d2545bc3d2c930c85",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/stacks/wpf.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 56,
+      "rows_old_upstream": 56,
+      "rows_upstream": 56,
+      "rows_after": 56,
+      "added_columns": [
+        "Applies To",
+        "Status",
+        "Verified At"
+      ],
+      "baseline_lf_sha256": "ca78b5f28dc50d66900548d602d74856400097284c73e076fcfbb5a38ae5083c",
+      "upstream_lf_sha256": "9781a9950b20333637b30a02e498b7efca21b618a3eeb8665836f3ac6e974da7",
+      "local_lf_sha256": "9781a9950b20333637b30a02e498b7efca21b618a3eeb8665836f3ac6e974da7",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/styles.csv",
+      "classification": "transformed",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 84,
+      "rows_old_upstream": 84,
+      "rows_upstream": 89,
+      "rows_after": 89,
+      "added_columns": [
+        "Style ID",
+        "Aliases",
+        "Status",
+        "Parent Style ID",
+        "Replacement Domain",
+        "Replacement ID",
+        "Preferred Mode",
+        "rtl_level"
+      ],
+      "baseline_lf_sha256": "5b9c8b2309ce5ae81476a4cc08fbf3af02c6e271862238107e2172ba0a25299f",
+      "upstream_lf_sha256": "a9b6cadbd1cb9e7cb8398a3b445e0691d01e42ed5e5efa60a5d0c08c99c8100d",
+      "local_lf_sha256": "4d0fd1b1aeb3771b78d71677e339f0e21364febd2efdcc6687c87272d6c35171",
+      "new_upstream_identities": [
+        "86",
+        "87",
+        "88",
+        "89",
+        "90"
+      ],
+      "local_cell_overrides": [
+        {
+          "identity": "34",
+          "field": "Best For",
+          "old": "Forecasting dashboards, anomaly detection systems, trend prediction dashboards, AI-powered analytics, budget planning",
+          "local": "Forecasting dashboards, anomaly detection systems, trend prediction dashboards, AI-assisted analytics, budget planning",
+          "upstream": "Forecasting dashboards, anomaly detection systems, trend prediction dashboards, AI-powered analytics, budget planning",
+          "merged": "Forecasting dashboards, anomaly detection systems, trend prediction dashboards, AI-assisted analytics, budget planning"
+        },
+        {
+          "identity": "43",
+          "field": "Best For",
+          "old": "AI products, chatbots, voice assistants, copilots, AI-powered tools, conversational interfaces",
+          "local": "AI products, chatbots, voice assistants, copilots, AI-assisted tools, conversational interfaces",
+          "upstream": "AI products, chatbots, voice assistants, copilots, AI-powered tools, conversational interfaces",
+          "merged": "AI products, chatbots, voice assistants, copilots, AI-assisted tools, conversational interfaces"
+        }
+      ],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/typography.csv",
+      "classification": "transformed",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 74,
+      "rows_old_upstream": 74,
+      "rows_upstream": 74,
+      "rows_after": 74,
+      "added_columns": [],
+      "baseline_lf_sha256": "1f5f6a116b16f8d9eb675ae7a41486a246b768b3864a86cc6411816a851a438a",
+      "upstream_lf_sha256": "321fc446e89024488ebae96dda93efc4d2307bd8bddb240857ad51364f6782c8",
+      "local_lf_sha256": "45ed6fd7b6e53fa293cfce98904ec1d45ab34cd3b3a003d73d8c9dc484931a1d",
+      "new_upstream_identities": [],
+      "local_cell_overrides": [
+        {
+          "identity": "1",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600;700|Playfair+Display:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600;700|Playfair+Display:wght@400;500;600;700"
+        },
+        {
+          "identity": "2",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Open+Sans:wght@300;400;500;600;700|Poppins:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Open+Sans:wght@300;400;500;600;700|Poppins:wght@400;500;600;700"
+        },
+        {
+          "identity": "3",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=DM+Sans:wght@400;500;700|Space+Grotesk:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=DM+Sans:wght@400;500;700|Space+Grotesk:wght@400;500;600;700"
+        },
+        {
+          "identity": "4",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Cormorant+Garamond:wght@400;500;600;700|Libre+Baskerville:wght@400;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Cormorant+Garamond:wght@400;500;600;700|Libre+Baskerville:wght@400;700"
+        },
+        {
+          "identity": "5",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "6",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Fredoka:wght@400;500;600;700|Nunito:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Fredoka:wght@400;500;600;700|Nunito:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "7",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Bebas+Neue|Source+Sans+3:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Bebas+Neue|Source+Sans+3:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "8",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Lora:wght@400;500;600;700|Raleway:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Lora:wght@400;500;600;700|Raleway:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "9",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=IBM+Plex+Sans:wght@300;400;500;600;700|JetBrains+Mono:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=IBM+Plex+Sans:wght@300;400;500;600;700|JetBrains+Mono:wght@400;500;600;700"
+        },
+        {
+          "identity": "10",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Merriweather:wght@300;400;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Abril+Fatface|Merriweather:wght@300;400;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Merriweather:wght@300;400;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Abril+Fatface|Merriweather:wght@300;400;700"
+        },
+        {
+          "identity": "11",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Outfit:wght@300;400;500;600;700|Work+Sans:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Outfit:wght@300;400;500;600;700|Work+Sans:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "12",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Cormorant:wght@400;500;600;700|Montserrat:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Cormorant:wght@400;500;600;700|Montserrat:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "13",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Plus+Jakarta+Sans:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Plus+Jakarta+Sans:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "14",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Newsreader:wght@400;500;600;700|Roboto:wght@300;400;500;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Newsreader:wght@400;500;600;700|Roboto:wght@300;400;500;700"
+        },
+        {
+          "identity": "15",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Caveat:wght@400;500;600;700|Quicksand:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Caveat:wght@400;500;600;700|Quicksand:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "16",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Lexend:wght@300;400;500;600;700|Source+Sans+3:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Lexend:wght@300;400;500;600;700|Source+Sans+3:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "17",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Space+Mono:wght@400;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Space+Mono:wght@400;700"
+        },
+        {
+          "identity": "18",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Manrope:wght@300;400;500;600;700|Syne:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Manrope:wght@300;400;500;600;700|Syne:wght@400;500;600;700"
+        },
+        {
+          "identity": "19",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&family=Varela+Round&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Nunito+Sans:wght@300;400;500;600;700|Varela+Round",
+          "upstream": "https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&family=Varela+Round&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Nunito+Sans:wght@300;400;500;600;700|Varela+Round"
+        },
+        {
+          "identity": "20",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=DM+Sans:wght@400;500;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=DM+Sans:wght@400;500;700"
+        },
+        {
+          "identity": "21",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Be+Vietnam+Pro:wght@300;400;500;600;700|Noto+Sans:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Be+Vietnam+Pro:wght@300;400;500;600;700|Noto+Sans:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "22",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Noto+Sans+JP:wght@300;400;500;700|Noto+Serif+JP:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Noto+Sans+JP:wght@300;400;500;700|Noto+Serif+JP:wght@400;500;600;700"
+        },
+        {
+          "identity": "23",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Noto+Sans+KR:wght@300;400;500;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Noto+Sans+KR:wght@300;400;500;700"
+        },
+        {
+          "identity": "24",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Noto+Sans+TC:wght@300;400;500;700|Noto+Serif+TC:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Noto+Sans+TC:wght@300;400;500;700|Noto+Serif+TC:wght@400;500;600;700"
+        },
+        {
+          "identity": "25",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Noto+Sans+SC:wght@300;400;500;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Noto+Sans+SC:wght@300;400;500;700"
+        },
+        {
+          "identity": "26",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Noto+Naskh+Arabic:wght@400;500;600;700|Noto+Sans+Arabic:wght@300;400;500;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Noto+Naskh+Arabic:wght@400;500;600;700|Noto+Sans+Arabic:wght@300;400;500;700"
+        },
+        {
+          "identity": "27",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Noto+Sans+Thai:wght@300;400;500;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Noto+Sans+Thai:wght@300;400;500;700"
+        },
+        {
+          "identity": "28",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Noto+Sans+Hebrew:wght@300;400;500;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Noto+Sans+Hebrew:wght@300;400;500;700"
+        },
+        {
+          "identity": "29",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=EB+Garamond:wght@400;500;600;700|Lato:wght@300;400;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=EB+Garamond:wght@400;500;600;700|Lato:wght@300;400;700"
+        },
+        {
+          "identity": "30",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Figtree:wght@300;400;500;600;700|Noto+Sans:wght@300;400;500;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Figtree:wght@300;400;500;600;700|Noto+Sans:wght@300;400;500;700"
+        },
+        {
+          "identity": "31",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=IBM+Plex+Sans:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=IBM+Plex+Sans:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "32",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Josefin+Sans:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Cinzel:wght@400;500;600;700|Josefin+Sans:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Josefin+Sans:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Cinzel:wght@400;500;600;700|Josefin+Sans:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "33",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&family=Playfair+Display+SC:wght@400;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Karla:wght@300;400;500;600;700|Playfair+Display+SC:wght@400;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&family=Playfair+Display+SC:wght@400;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Karla:wght@300;400;500;600;700|Playfair+Display+SC:wght@400;700"
+        },
+        {
+          "identity": "34",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Poiret+One&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Didact+Gothic|Poiret+One",
+          "upstream": "https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Poiret+One&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Didact+Gothic|Poiret+One"
+        },
+        {
+          "identity": "35",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Libre+Bodoni:wght@400;500;600;700&family=Public+Sans:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Libre+Bodoni:wght@400;500;600;700|Public+Sans:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Libre+Bodoni:wght@400;500;600;700&family=Public+Sans:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Libre+Bodoni:wght@400;500;600;700|Public+Sans:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "36",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Exo+2:wght@300;400;500;600;700|Orbitron:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Exo+2:wght@300;400;500;600;700|Orbitron:wght@400;500;600;700"
+        },
+        {
+          "identity": "37",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Russo+One&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Chakra+Petch:wght@300;400;500;600;700|Russo+One",
+          "upstream": "https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Russo+One&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Chakra+Petch:wght@300;400;500;600;700|Russo+One"
+        },
+        {
+          "identity": "38",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Cabin:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Amatic+SC:wght@400;700|Cabin:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Cabin:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Amatic+SC:wght@400;700|Cabin:wght@400;500;600;700"
+        },
+        {
+          "identity": "39",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Outfit:wght@400;500;600;700|Rubik:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Outfit:wght@400;500;600;700|Rubik:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "40",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Nunito+Sans:wght@300;400;500;600;700|Rubik:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Nunito+Sans:wght@300;400;500;600;700|Rubik:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "41",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Crimson+Pro:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Atkinson+Hyperlegible:wght@400;700|Crimson+Pro:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Crimson+Pro:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Atkinson+Hyperlegible:wght@400;700|Crimson+Pro:wght@400;500;600;700"
+        },
+        {
+          "identity": "42",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Fira+Code:wght@400;500;600;700|Fira+Sans:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Fira+Code:wght@400;500;600;700|Fira+Sans:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "43",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Righteous&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Poppins:wght@300;400;500;600;700|Righteous",
+          "upstream": "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Righteous&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Poppins:wght@300;400;500;600;700|Righteous"
+        },
+        {
+          "identity": "44",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Archivo:wght@300;400;500;600;700|Space+Grotesk:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Archivo:wght@300;400;500;600;700|Space+Grotesk:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "45",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Baloo+2:wght@400;500;600;700|Comic+Neue:wght@300;400;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Baloo+2:wght@400;500;600;700|Comic+Neue:wght@300;400;700"
+        },
+        {
+          "identity": "46",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@300;400;500;600;700&family=Great+Vibes&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Cormorant+Infant:wght@300;400;500;600;700|Great+Vibes",
+          "upstream": "https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@300;400;500;600;700&family=Great+Vibes&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Cormorant+Infant:wght@300;400;500;600;700|Great+Vibes"
+        },
+        {
+          "identity": "47",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Exo:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Exo:wght@300;400;500;600;700|Roboto+Mono:wght@300;400;500;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Exo:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Exo:wght@300;400;500;600;700|Roboto+Mono:wght@300;400;500;700"
+        },
+        {
+          "identity": "48",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Atkinson+Hyperlegible:wght@400;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Atkinson+Hyperlegible:wght@400;700"
+        },
+        {
+          "identity": "49",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Barlow+Condensed:wght@400;500;600;700|Barlow:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Barlow+Condensed:wght@400;500;600;700|Barlow:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "50",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Bodoni+Moda:wght@400;500;600;700|Jost:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Bodoni+Moda:wght@400;500;600;700|Jost:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "51",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Fira+Code:wght@300;400;500;600;700|Share+Tech+Mono",
+          "upstream": "https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Fira+Code:wght@300;400;500;600;700|Share+Tech+Mono"
+        },
+        {
+          "identity": "52",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Press+Start+2P|VT323",
+          "upstream": "https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Press+Start+2P|VT323"
+        },
+        {
+          "identity": "53",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@100..900&family=Public+Sans:wght@100..900&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Lexend+Mega:wght@100..900|Public+Sans:wght@100..900",
+          "upstream": "https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@100..900&family=Public+Sans:wght@100..900&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Lexend+Mega:wght@100..900|Public+Sans:wght@100..900"
+        },
+        {
+          "identity": "54",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=EB+Garamond:wght@400;500;600;700;800&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Crimson+Text:wght@400;600;700|EB+Garamond:wght@400;500;600;700;800",
+          "upstream": "https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=EB+Garamond:wght@400;500;600;700;800&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Crimson+Text:wght@400;600;700|EB+Garamond:wght@400;500;600;700;800"
+        },
+        {
+          "identity": "55",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600",
+          "upstream": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600"
+        },
+        {
+          "identity": "56",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syncopate:wght@400;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Space+Mono:wght@400;700|Syncopate:wght@400;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syncopate:wght@400;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Space+Mono:wght@400;700|Syncopate:wght@400;700"
+        },
+        {
+          "identity": "57",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Anton|Epilogue:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Anton|Epilogue:wght@400;500;600;700"
+        },
+        {
+          "identity": "58",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Outfit:wght@400;500;700;900",
+          "upstream": "https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Outfit:wght@400;500;700;900"
+        },
+        {
+          "identity": "59",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400|Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300",
+          "local": "https://fonts.google.com/share?selection.family=JetBrains+Mono:wght@400;500|Playfair+Display:ital,wght@0,400;0,700;0,900;1,400|Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300",
+          "upstream": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300",
+          "merged": "https://fonts.google.com/share?selection.family=JetBrains+Mono:wght@400;500|Playfair+Display:ital,wght@0,400;0,700;0,900;1,400|Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300"
+        },
+        {
+          "identity": "60",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600;700"
+        },
+        {
+          "identity": "61",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Calistoga:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Calistoga:ital@0;1|Inter:wght@300;400;500;600;700|JetBrains+Mono:wght@400;500",
+          "upstream": "https://fonts.googleapis.com/css2?family=Calistoga:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Calistoga:ital@0;1|Inter:wght@300;400;500;600;700|JetBrains+Mono:wght@400;500"
+        },
+        {
+          "identity": "62",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;1,400",
+          "local": "https://fonts.google.com/share?selection.family=JetBrains+Mono:ital,wght@0,400;0,500;1,400",
+          "upstream": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;1,400",
+          "merged": "https://fonts.google.com/share?selection.family=JetBrains+Mono:ital,wght@0,400;0,500;1,400"
+        },
+        {
+          "identity": "63",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Space+Grotesk:wght@400;500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Space+Grotesk:wght@400;500;600;700"
+        },
+        {
+          "identity": "64",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Inter:wght@400;600;700;800",
+          "upstream": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Inter:wght@400;600;700;800"
+        },
+        {
+          "identity": "65",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400",
+          "local": "https://fonts.google.com/share?selection.family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400",
+          "upstream": "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400",
+          "merged": "https://fonts.google.com/share?selection.family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400"
+        },
+        {
+          "identity": "66",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Space+Grotesk:wght@700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Space+Grotesk:wght@700"
+        },
+        {
+          "identity": "67",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400|JetBrains+Mono:wght@400|Playfair+Display:ital@1",
+          "local": "https://fonts.google.com/share?selection.family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400|JetBrains+Mono:wght@400|Playfair+Display:ital@1",
+          "upstream": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400&family=Playfair+Display:ital@1",
+          "merged": "https://fonts.google.com/share?selection.family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400|JetBrains+Mono:wght@400|Playfair+Display:ital@1"
+        },
+        {
+          "identity": "68",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500|Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400",
+          "local": "https://fonts.google.com/share?selection.family=Cinzel:wght@400;500;600|Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500|Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400",
+          "upstream": "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400",
+          "merged": "https://fonts.google.com/share?selection.family=Cinzel:wght@400;500;600|Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500|Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400"
+        },
+        {
+          "identity": "69",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@700;900&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=JetBrains+Mono:wght@400;500|Orbitron:wght@700;900",
+          "upstream": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@700;900&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=JetBrains+Mono:wght@400;500|Orbitron:wght@700;900"
+        },
+        {
+          "identity": "70",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Inter:wght@400;500;600;700|JetBrains+Mono:wght@400;500|Space+Grotesk:wght@500;600;700",
+          "upstream": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Inter:wght@400;500;600;700|JetBrains+Mono:wght@400;500|Space+Grotesk:wght@500;600;700"
+        },
+        {
+          "identity": "71",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400|Nunito:ital,wght@0,700;0,800;0,900;1,700",
+          "local": "https://fonts.google.com/share?selection.family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400|Nunito:ital,wght@0,700;0,800;0,900;1,700",
+          "upstream": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Nunito:ital,wght@0,700;0,800;0,900;1,700",
+          "merged": "https://fonts.google.com/share?selection.family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400|Nunito:ital,wght@0,700;0,800;0,900;1,700"
+        },
+        {
+          "identity": "72",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400",
+          "local": "https://fonts.google.com/share?selection.family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400",
+          "upstream": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400",
+          "merged": "https://fonts.google.com/share?selection.family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400"
+        },
+        {
+          "identity": "73",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Patrick+Hand&display=swap",
+          "local": "https://fonts.google.com/share?selection.family=Kalam:wght@400;700|Patrick+Hand",
+          "upstream": "https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Patrick+Hand&display=swap",
+          "merged": "https://fonts.google.com/share?selection.family=Kalam:wght@400;700|Patrick+Hand"
+        },
+        {
+          "identity": "74",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;1,400",
+          "local": "https://fonts.google.com/share?selection.family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;1,400",
+          "upstream": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;1,400",
+          "merged": "https://fonts.google.com/share?selection.family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;1,400"
+        }
+      ],
+      "both_changed_conflicts": [
+        {
+          "identity": "59",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400|Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300",
+          "local": "https://fonts.google.com/share?selection.family=JetBrains+Mono:wght@400;500|Playfair+Display:ital,wght@0,400;0,700;0,900;1,400|Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300",
+          "upstream": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300",
+          "merged": "https://fonts.google.com/share?selection.family=JetBrains+Mono:wght@400;500|Playfair+Display:ital,wght@0,400;0,700;0,900;1,400|Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300"
+        },
+        {
+          "identity": "67",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400|JetBrains+Mono:wght@400|Playfair+Display:ital@1",
+          "local": "https://fonts.google.com/share?selection.family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400|JetBrains+Mono:wght@400|Playfair+Display:ital@1",
+          "upstream": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400&family=Playfair+Display:ital@1",
+          "merged": "https://fonts.google.com/share?selection.family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400|JetBrains+Mono:wght@400|Playfair+Display:ital@1"
+        },
+        {
+          "identity": "68",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500|Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400",
+          "local": "https://fonts.google.com/share?selection.family=Cinzel:wght@400;500;600|Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500|Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400",
+          "upstream": "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400",
+          "merged": "https://fonts.google.com/share?selection.family=Cinzel:wght@400;500;600|Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500|Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400"
+        },
+        {
+          "identity": "71",
+          "field": "Google Fonts URL",
+          "old": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400|Nunito:ital,wght@0,700;0,800;0,900;1,700",
+          "local": "https://fonts.google.com/share?selection.family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400|Nunito:ital,wght@0,700;0,800;0,900;1,700",
+          "upstream": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Nunito:ital,wght@0,700;0,800;0,900;1,700",
+          "merged": "https://fonts.google.com/share?selection.family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400|Nunito:ital,wght@0,700;0,800;0,900;1,700"
+        }
+      ],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/ui-reasoning.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 161,
+      "rows_old_upstream": 161,
+      "rows_upstream": 192,
+      "rows_after": 192,
+      "added_columns": [
+        "Reasoning",
+        "Confidence"
+      ],
+      "baseline_lf_sha256": "06e4369445388ba9b7a57347510b125b7a2145bbf8546a327ba50292503b204a",
+      "upstream_lf_sha256": "f0774dd741cecdad5eec842034bd6d5e9ea50e9f220a1910069748daa0bb8e9a",
+      "local_lf_sha256": "f0774dd741cecdad5eec842034bd6d5e9ea50e9f220a1910069748daa0bb8e9a",
+      "new_upstream_identities": [
+        "162",
+        "163",
+        "164",
+        "165",
+        "166",
+        "167",
+        "168",
+        "169",
+        "170",
+        "171",
+        "172",
+        "173",
+        "174",
+        "175",
+        "176",
+        "177",
+        "178",
+        "179",
+        "180",
+        "181",
+        "182",
+        "183",
+        "184",
+        "185",
+        "186",
+        "187",
+        "188",
+        "189",
+        "190",
+        "191",
+        "192"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/ux-guidelines.csv",
+      "classification": "mirrored",
+      "identity_fields": [
+        "No"
+      ],
+      "rows_before": 99,
+      "rows_old_upstream": 99,
+      "rows_upstream": 119,
+      "rows_after": 119,
+      "added_columns": [],
+      "baseline_lf_sha256": "e01943c433b2cad3040f19389b3b0455673758a569b7a927b5bedf65c989cb96",
+      "upstream_lf_sha256": "ff81ec613f70ba9fc3fcce52dbe4ae35d44b2079dbe6dc066d2d6e38c28facd5",
+      "local_lf_sha256": "ff81ec613f70ba9fc3fcce52dbe4ae35d44b2079dbe6dc066d2d6e38c28facd5",
+      "new_upstream_identities": [
+        "100",
+        "101",
+        "102",
+        "103",
+        "104",
+        "105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "110",
+        "111",
+        "112",
+        "113",
+        "114",
+        "115",
+        "116",
+        "117",
+        "118",
+        "119"
+      ],
+      "local_cell_overrides": [],
+      "both_changed_conflicts": [],
+      "upstream_removed_local_rows": [],
+      "superseded_local_rows": []
+    },
+    {
+      "path": "data/web-interface.csv",
+      "classification": "local-only",
+      "rows_before": 30,
+      "rows_upstream": 0,
+      "rows_after": 30,
+      "local_lf_sha256": "20aa14dbe19d06b021d399e5314152ec88621fc8189ddc996b1b791d38f2d9c2",
+      "row_identities": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30"
+      ],
+      "preservation": "unchanged local-only catalog"
+    }
+  ],
+  "baseline_catalog_repository_commit": "449cbd1a69fbff4b909ce5556d74686994308eea"
+}

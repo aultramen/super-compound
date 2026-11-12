@@ -236,6 +236,89 @@ test("sc-research remains a conditional advisory evidence workflow", async () =>
   );
 });
 
+// These checks protect instruction content and routes, not factual reliability.
+const BUSINESS_EVIDENCE_FILE = ".agent/skills/agentic-delivery/references/templates-and-outputs.md";
+const BUSINESS_EVIDENCE_ANCHOR = "business-claim-evidence-and-fidelity";
+
+async function businessEvidenceSection() {
+  const text = await readRepositoryFile(BUSINESS_EVIDENCE_FILE);
+  const heading = /^## Business Claim Evidence And Fidelity\r?$/im.exec(text);
+  assert.ok(heading, "shared authoring owner must expose the business evidence section");
+  return text.slice(heading.index + heading[0].length).split(/^## /m)[0];
+}
+
+test("R06 business evidence routes resolve real paths and anchors and reject severed edges", async () => {
+  const destination = `${BUSINESS_EVIDENCE_FILE}#${BUSINESS_EVIDENCE_ANCHOR}`;
+  function targets(file, text, inline = false) {
+    const links = [...text.matchAll(/(?<!!)\[[^\]]*\]\(([^)\s]+)\)/g)].map(match => match[1]);
+    if (inline) links.push(...[...text.matchAll(/\.agent\/skills\/[\w./-]+\.md#[\w-]+/g)].map(match => match[0]));
+    return links.filter(link => !/^[a-z]+:/i.test(link)).map(link => {
+      const [relative, anchor] = link.split("#");
+      const target = !relative ? file : relative.startsWith(".agent/") ? relative
+        : path.posix.normalize(path.posix.join(path.posix.dirname(file), relative));
+      return `${target}#${anchor ?? ""}`;
+    });
+  }
+  const routes = [
+    [".agent/workflows/sc-research.md", false],
+    [".agent/context/workflows/sc-research.contract.md", true],
+    [".agent/templates/research/Research-Note-Skeleton.md", false],
+  ];
+  for (const [file, inline] of routes) {
+    const text = await readRepositoryFile(file);
+    assert.ok(targets(file, text, inline).includes(destination), `${file}: missing conditional owner route`);
+    const severed = text.replaceAll(`#${BUSINESS_EVIDENCE_ANCHOR}`, "#severed-business-evidence");
+    assert.ok(!targets(file, severed, inline).includes(destination), `${file}: broken anchor must sever the route`);
+    assert.match(text, /(?:material|important|consequential)[\s\S]*business|business[\s\S]*(?:material|important|consequential)/i,
+      `${file}: business evidence route must be conditional`);
+  }
+  await businessEvidenceSection();
+  const owner = await readRepositoryFile(BUSINESS_EVIDENCE_FILE);
+  for (const kind of ["BRD", "PRD", "FSD"]) {
+    const file = `.agent/templates/agentic-delivery/skeletons/${kind}-Skeleton.md`;
+    const applicability = `${BUSINESS_EVIDENCE_FILE}#applicability-and-expansion`;
+    assert.ok(targets(file, await readRepositoryFile(file)).includes(applicability), `${kind}: retain shared applicability route`);
+  }
+  assert.match(owner, /^## Applicability and Expansion\r?$/m, "existing artifact route anchor must resolve");
+  const applicabilityBody = owner.split(/^## Applicability and Expansion\r?$/m)[1].split(/^## /m)[0];
+  assert.ok(targets(BUSINESS_EVIDENCE_FILE, applicabilityBody).includes(destination), "named applicability section must conditionally link the business evidence procedure");
+  const skeleton = await readRepositoryFile(routes[2][0]);
+  assert.deepEqual(skeleton.match(/^## [^\r\n]+/gm), [
+    "## Summary", "## Research Question", "## Premises And Authority", "## Evidence Register",
+    "## Synthesis", "## Options And Recommendation", "## Delivery Impact",
+  ]);
+  assert.match(skeleton, /DRAFT \| READY \| INCONCLUSIVE \| SUPERSEDED/);
+  assert.ok(skeleton.includes("| ID | Finding | Source or local reference | Applies to / version | Retrieved or observed | Quality | Confidence |"));
+});
+
+test("R06 material business claims use underlying origins without a universal source quota", async () => {
+  const text = await businessEvidenceSection();
+  for (const [meaning, patterns] of [
+    ["conditional material or disputed business claim", [/business/i, /material|important|consequential/i, /disput|conflict|contest/i]],
+    ["claim-specific source support", [/claim/i, /anchor|passage|section|locator/i, /scope|applies/i]],
+    ["underlying origin, including repeated publishers", [/origin|underlying/i, /publisher|author|organization/i, /repeat|syndicat|derivative|same source/i]],
+    ["domains and tool counts do not establish independence", [/domain/i, /tool/i, /independen/i]],
+    ["unestablished independence remains unknown", [/unknown|unestablished|unresolved/i, /independen/i]],
+    ["routine facts avoid blanket two-source requirements", [/routine|ordinary/i, /(?:no|not|never|without|do not)[\s\S]*(?:blanket|universal|quota|two.source|minimum)/i]],
+  ]) {
+    for (const pattern of patterns) assert.match(text, pattern, meaning);
+  }
+});
+
+test("R06 corrections and commitments preserve fidelity, affected scope and existing authority", async () => {
+  const text = await businessEvidenceSection();
+  for (const [meaning, patterns] of [
+    ["explicit supported and unresolved claim states", [/verified/i, /inferred/i, /contested/i, /unknown/i]],
+    ["source currency differs from retrieval", [/as.of|current|effective/i, /retriev|accessed|observed/i, /distinct|separat|different|does not/i]],
+    ["corrections preserve old and new evidence with return links", [/correct|supersed/i, /prior|previous|old/i, /new|replacement|current/i, /bidirectional|both directions|back.link|link.back/i]],
+    ["proposal and commitment retain modality and conditions", [/proposal|intention/i, /commitment/i, /modality|must|shall|will/i, /condition/i, /scope/i, /date/i]],
+    ["recheck affected descendants without resetting unrelated work", [/affected/i, /downstream|descendant|dependent/i, /re.?verif|reopen|reassess/i, /unaffected|unrelated/i]],
+    ["correction returns material authority changes to the existing owner", [/BRD/i, /PRD/i, /FSD/i, /owner/i, /(?:not|never|no)[\s\S]*(?:authoriz|approval)/i]],
+  ]) {
+    for (const pattern of patterns) assert.match(text, pattern, meaning);
+  }
+});
+
 test("compact routing is one-way and keeps mutation guardrails", async () => {
   const [dispatch, routing, goContract, ...workflows] = await Promise.all([
     readRepositoryFile(".agent/context/workflow-dispatch.md"),

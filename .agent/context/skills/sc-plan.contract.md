@@ -11,6 +11,7 @@ Use compact contracts until a step needs the full procedure.
 | plan quality gate | `plan-verification` |
 | UI profile/readiness/first-slice gate | `agentic-delivery` UI readiness reference |
 | vocabulary/seams still unclear | `domain-modeling`, `codebase-design` |
+| material ambiguity in a builder handoff | `brainstorming/references/questions-and-options.md#fresh-builder-ambiguity-check` |
 
 Always preserve: qualified refs, ADR applicability, exact `TDEC/ADR -> GOAL -> TEST`
 coverage, OPEN blockers, verification refs, and zero-context-bloat issue pointers.

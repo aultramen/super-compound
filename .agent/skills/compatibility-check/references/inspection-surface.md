@@ -7,3 +7,4 @@
 - Deprecated APIs or end-of-life runtimes
 - Native extensions, platform constraints, and browser/server compatibility
 - Licenses, install scripts, provenance, and suspicious package names for new dependencies
+- When MCP configuration is affected, use the [static MCP dependency review](../../security-audit/references/agent-surface.md#static-mcp-dependency-review) to inspect selectors without executing or installing servers.

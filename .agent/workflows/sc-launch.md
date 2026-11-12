@@ -23,34 +23,48 @@ Result and next action: BRD -> PRD -> FSD -> verified goals; retain configured s
 
 ## Pipeline
 
+Five phases; the numbered steps below are the detail. A step marked
+(conditional) runs only when its trigger applies; otherwise skip it silently.
+
+| Phase | Steps | Ends with |
+|---|---|---|
+| Define | 1-6 | approved BRD and PRD |
+| Plan | 7-8 | FSD, readiness gate, goal pointers, checks |
+| Build | 9-13 | verified first vertical slice and any scale-out |
+| Verify | 14-16 | hardening evidence, review, audit |
+| Ship | 17-18 | `/sc-go` finish preview and captured lessons |
+
 1. `sc-status.md` - check current state and existing handoff; resume from the `docs/STATE.md` Next action.
 2. `sc-explore.md` - resolve business intent, constraints, non-goals, and open decisions into a BRD.
 3. `sc-research.md` - conditional evidence gate only when a named factual or technical gap could change the BRD, PRD, FSD, or risk decision; otherwise skip it.
 4. `sc-prd.md` - create the PRD draft and classify UI delivery risk.
-5. `/sc-ui` - validate the UI-bearing PRD draft, optionally returning to `/sc-explore` for a throwaway prototype spike.
-6. `sc-prd.md` - absorb accepted evidence and produce the approved PRD experience baseline.
+5. `/sc-ui` (conditional) - validate the UI-bearing PRD draft read-only. `STANDARD` runs in the same turn as step 4 with no separate visible round; only `HIGH_INTERACTION` gets its own round, optionally returning to `/sc-explore` for a throwaway prototype spike.
+6. `sc-prd.md` - absorb accepted evidence once and produce the approved PRD experience baseline.
 7. `sc-plan.md` - create the FSD/UI-API readiness gate, optional contract enabler, exactly one blocked first vertical slice, and dependent scale-out pointers.
-8. `sc-eval.md` - define measurable pass/fail checks when useful.
-9. `sc-go.md` - preview branch or optional worktree setup when configured or requested.
-10. `sc-work.md` - materialize and verify the bounded contract enabler when needed.
-11. Internal planning-owned promotion - after an enabler, the active controller
+8. `sc-eval.md` (conditional) - define measurable pass/fail checks when useful.
+9. `sc-go.md` (conditional) - preview branch or optional worktree setup when configured or requested.
+10. `sc-work.md` (conditional) - materialize and verify the bounded contract enabler when needed.
+11. Internal planning-owned promotion (conditional) - after an enabler, the active controller
     re-indexes exact revisions, reruns readiness and releases the first slice
     without planning re-entry solely for metadata; material deltas return to `/sc-plan`/owner.
 12. `sc-work.md` - for networked UI, verify the first vertical slice against the real provider, then internally promote only eligible dependents through the same planning-owned checks. LOCAL_ONLY uses mapped local checks without provider barriers.
-13. `sc-work.md` - perform controlled scale-out only after the first-slice issue is verified and the PRD baseline is `VALIDATED`.
-14. `sc-work.md` - execute the bounded hardening/verification goal for integration, responsive, accessibility, E2E, and visual-regression evidence; obtain Business Owner UAT approval only when required by acceptance or material human judgment.
-15. `sc-review.md` - audit implementation and recorded verification/UAT evidence against authority; it does not manufacture missing evidence. All individual goals and the final combined outcome must pass the canonical completion gate before delivery is Done/Completed; include `Evidence of Completion` with actual results/locators and every acceptance criterion mapped.
-16. `sc-audit.md` - run risk checks when the change affects users, data, dependencies, auth, release, or agent surfaces.
+13. `sc-work.md` (conditional) - perform controlled scale-out only after the first-slice issue is verified and the PRD baseline is `VALIDATED`.
+14. `sc-work.md` - execute the bounded hardening/verification goal the plan defines for integration, responsive, accessibility, E2E, and visual-regression evidence (a single-slice plan carries these checks in step 12); obtain Business Owner UAT approval only when required by acceptance or material human judgment.
+15. `sc-review.md` - audit implementation and recorded verification/UAT evidence against authority; it does not manufacture missing evidence. Every goal and the final combined outcome need `Evidence of Completion` per `.agent/rules/quality-gates.md` before delivery is Done/Completed.
+16. `sc-audit.md` (conditional) - run risk checks when the change affects users, data, dependencies, auth, release, or agent surfaces.
 17. `sc-go.md` - preview the finish flow and PR template after verification; commit, push, and PR run through `/sc-go` on explicit confirmation.
-18. `sc-compound.md` - document reusable lessons.
+18. `sc-compound.md` (conditional) - document reusable lessons only when an ERR/LRN or convention arose.
 
-Run one active stage at a time. At every non-trivial boundary update
-`docs/STATE.md` with artifact paths, accepted decisions, blockers, qualified
-gate refs/version plus a non-authoritative status snapshot, verification refs,
-and next route; update only the STATE fields that changed and never
-re-serialize unchanged sections; use `.continue-here.md` only as a short pointer
-when stopping. Release prior-stage detail before loading the next contract. UI implementation
+Run one active stage at a time. At every non-trivial boundary update only the
+changed `docs/STATE.md` fields (artifact paths, accepted decisions, blockers,
+gate and verification refs, next route) per `skills/state-management/SKILL.md`;
+`.continue-here.md` stays a short pointer when stopping. Release prior-stage
+detail before loading the next contract. UI implementation
 is a capability of an approved goal under `sc-work.md`, not a parallel authority.
+
+Close out once per launch, not per goal: run
+`node .agent/tools/memory-maintenance.mjs flush` once after the last goal.
+Closeout appears in chat only as the `Detail:` link.
 
 Route every implementation handoff through `/sc-work`; launch itself writes
 only `docs/STATE.md` and never mutates implementation directly.

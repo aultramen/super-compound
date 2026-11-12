@@ -16,9 +16,13 @@ const attempt = JSON.parse(read('.agent/evals/blueprint-document.responses.json'
 const completionRevisionPins = {
   // Stored review refs are portable; runtime review still resolves absolute paths.
   '.agent/skills/checkpoint-protocol/references/answerable-package.md': '0e1f6537a7cb0105d5f1aace98e55bdca8de13be09c784a0aac6091dc65c19c1',
-  '.agent/context/output-style.md': '081dc8c65e04a8fda0880a331007ccf6512f4202afd4e844b0e21f8c70999bd1',
+  '.agent/context/output-style.md': '81e6ea218b4b55daabb068b27f543a07bbbbc934235f3f73ae0d09687be6e13c',
+  '.agent/skills/agentic-delivery/references/ui-contract-readiness.md': '3b2939743c1f8995e70cedff13045ded21420ecaac36c28fd14e9c8107aea3b5',
+  '.agent/skills/agentic-delivery/references/workflow-integration.md': '36ec499ab856c652896361b4aa31981451f2acfba879eca0dcfb3e7729bbf576',
   '.agent/templates/agentic-delivery/skeletons/FSD-Skeleton.md': 'd251ef453fe0796f04b814d40ecdea4baf03b58cb733160b6bdcf706e71406c7',
   '.agent/templates/agentic-delivery/FSD-Agentic-AI-Ready-Template.md': '93816a75613f3e9f3b22589c23fbfbfc60e4e6e0d8c178e93042029db9632589',
+  // Reviewed R06 evidence/fidelity guidance retains the historical authority interfaces.
+  '.agent/skills/agentic-delivery/references/templates-and-outputs.md': 'f548b565cdeec5c367274c12cc8dbd0de885ba536b7b077a3d6c1837ef3df0ef',
 };
 // Outcomes are reviewed responses, not an implementation of a new dispatcher.
 const expected = {

@@ -150,7 +150,10 @@ critical/highest-risk flow. Every `SCALE_OUT_SLICE` depends on the verified
 first-slice issue. For networked merged/cross-slice verification, `/sc-plan` creates exactly one `HARDENING` goal that
 depends on all applicable UI delivery slices and owns final merged-system
 integration and the responsive, accessibility, E2E, visual-regression, or UAT
-evidence required by changed behavior and approved acceptance.
+evidence required by changed behavior and approved acceptance. That goal is
+mandatory whenever a `SCALE_OUT_SLICE` exists; with no scale-out, the
+`FIRST_VERTICAL_SLICE` goal may carry those mapped checks, with real-provider
+proof unchanged, and no separate `HARDENING` goal is needed.
 
 `CONTRACT_ENABLER` materializes schema, deterministic and edge fixtures, mock,
 typed consumer, and contract tests. `FIRST_VERTICAL_SLICE` must use the real

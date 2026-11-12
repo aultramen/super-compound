@@ -249,7 +249,14 @@ export async function resolveEffectiveStandards(root, paths, {now = new Date()} 
           for (const executable of ['python', 'python3']) {
             const parsed = spawnSync(executable, [script, '--input', await resolveRepositoryPath(root, manifestRef)], {cwd: root, encoding: 'utf8', timeout: 10000, maxBuffer: 1024 * 1024, windowsHide: true});
             if (parsed.error?.code === 'ENOENT') continue;
-            if (parsed.status !== 0 || parsed.error) throw new Error('Python manifest evidence requires Python 3.11+ and a valid supported TOML dependency declaration');
+            if (parsed.status !== 0 || parsed.error) {
+              const status = Number.isSafeInteger(parsed.status) ? parsed.status : 'none';
+              const signal = /^[A-Z0-9]{1,16}$/.test(parsed.signal) ? parsed.signal : 'none';
+              const code = /^[A-Z0-9_]{1,32}$/.test(parsed.error?.code) ? parsed.error.code : 'none';
+              // Parser stderr can contain private dependency names; retain only its fingerprint.
+              const stderr = parsed.stderr || '';
+              throw new Error(`Python manifest evidence requires Python 3.11+ and a valid supported TOML dependency declaration (status=${status}; signal=${signal}; error=${code}; stderrBytes=${Buffer.byteLength(stderr)}; stderrSha256=${standardsHash(stderr)})`);
+            }
             evidence = JSON.parse(parsed.stdout); break;
           }
           const declared = evidence?.dependencies?.[profile.framework.dependency];

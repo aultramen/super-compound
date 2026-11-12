@@ -1,6 +1,8 @@
 # Authority and Workspace
 
-Load before the first edit for a goal.
+## Summary
+
+Load before the first edit for a goal to gather authority, assess current outcomes, and identify remaining work.
 
 ## Context to Gather
 
@@ -38,9 +40,22 @@ Before expanding discovery, name the missing fact; retrieve the section or symbo
 
 Before editing, identify the current flow from trigger to outcome, the reusable pattern in nearby code/tests, affected boundaries plus callers/consumers, and proving checks for acceptance and regression. Investigate repository facts before asking. For full-tier work cite the relevant FSD/GOAL sections instead of copying them. For light-tier work keep a brief note in the existing conversation or issue; no new artifact or approval gate is required. A concrete single trivial edit needs only a proportionate inspection/check.
 
+Compare every requested outcome and acceptance criterion with actual current behavior and evidence before entering the implementation sequence:
+
+- If all are already proved, exit the implementation sequence without implementation edits and apply [existing completion verification](../../verification-before-completion/SKILL.md). Report the already-satisfied outcome with `Evidence of Completion`, then continue independent ready authorized goals.
+- For partial satisfaction, preserve proved parts and implement or check only remaining uncovered outcomes. Completion still requires every acceptance criterion.
+- Stale, missing, failed, or skipped required proof leaves the affected outcome unverified, not already satisfied. External deliverables require actual current observation. File existence, clean Git state, issue status, or an old GREEN do not prove the requested outcome.
+
+For consequential handoff ambiguity that could change behavior or acceptance, use the [fresh builder ambiguity check](../../brainstorming/references/questions-and-options.md#fresh-builder-ambiguity-check) before affected execution.
+
 Trace relevant callers and consumers at the changed seam; select checks from requirements and risk, not a universal set of test layers. Identify validation, errors, state retention, permissions, and side effects only where affected. New product/schema/API/auth decisions trigger the existing escalation path.
 
 ## Better alternative within authority
+
+For consequential unresolved design choices, optionally use
+[isolated design comparison](../../prototyping/references/design-comparison.md).
+Keep production edits with the current owner; the comparison supplies evidence
+and does not change authority or permit prototype code promotion.
 
 When a material alternative is supported by evidence, present:
 

@@ -32,7 +32,7 @@ Avoid vague substitutes such as boundary, helper, service, or component when the
 
 ### 1. Find The Candidate Seam
 
-Read `CONTEXT.md`, the relevant FSD `TDEC-*` records, linked accepted ADRs in `docs/solutions/`, similar code, tests, and the planned behavior.
+Read the existing domain glossary/map using [domain-modeling's Files policy](../domain-modeling/SKILL.md#files), the relevant FSD `TDEC-*` records, linked accepted ADRs in `docs/solutions/`, similar code, tests, and the planned behavior.
 
 Look for:
 
@@ -53,6 +53,11 @@ For significant changes, compare two or three designs:
 
 Recommend the smallest interface that preserves behavior and improves locality.
 
+For consequential unresolved seam choices, use [isolated design comparison](../prototyping/references/design-comparison.md)
+before publishing a recommendation. This optional branch supplies independent
+briefs, a frozen private rubric, blind judging and selection/graft retesting;
+routine choices keep the table above.
+
 ### 3. Feed The Plan
 
 Record in the PRD when behavior needs clarification, in the FSD when implementation authority is needed, or in the goal issue pointer by qualified reference:
@@ -63,6 +68,9 @@ Record in the PRD when behavior needs clarification, in the FSD when implementat
 - What tests should cross the seam
 - What stays out of scope
 - Any material technical decision as an FSD `TDEC-*` unless ADR criteria from `agentic-delivery` are met
+
+For a comparison, reference the brief/rubric revision, candidate constraints,
+scores and evidence, choice/graft rationale, final checks and blindness limits.
 
 Do not introduce abstraction for imagined future variation.
 

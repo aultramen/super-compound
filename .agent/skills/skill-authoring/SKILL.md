@@ -20,6 +20,8 @@ Use for every new skill, behavioral change to an existing skill, invocation rede
 - Before editing behavior, load [pressure testing](references/pressure-testing.md) and execute the RED → GREEN → REFACTOR loop.
 - When designing metadata, invocation, body organization, pruning, or final quality, load [structure and quality](references/structure-and-quality.md).
 - Load both only when creating a skill end to end.
+- For changed-skill maintenance, use the [changed-skill stocktake](references/structure-and-quality.md#changed-skill-stocktake) and its provenance check before pruning.
+- When consequential handoff ambiguity remains after inspection, use the [fresh-builder ambiguity check](../brainstorming/references/questions-and-options.md#fresh-builder-ambiguity-check).
 
 ## Invariants
 

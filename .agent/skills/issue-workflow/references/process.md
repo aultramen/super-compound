@@ -7,7 +7,7 @@ Read the source material needed to slice safely:
 - Approved FSD under `docs/fsd/`
 - Upstream PRD and BRD IDs referenced by the FSD
 - Linked accepted ADRs under `docs/solutions/adr-####-<slug>.md`, if any
-- Relevant `CONTEXT.md`, code, tests, and previous `.scratch/` boards
+- Relevant glossary/map using [domain-modeling's Files policy](../../domain-modeling/SKILL.md#files), code, tests, and previous `.scratch/` boards
 
 If a local board needs a parent file, create `.scratch/<feature-slug>/FSD.md` as a short pointer to `docs/fsd/fsd-<feature>.md`, not a copy of the FSD.
 

@@ -262,6 +262,36 @@ test('Python manifest comments cannot masquerade as framework version evidence',
   assert.match(result.conflicts.join(' '), /framework conflicts with Python manifest/);
 });
 
+test('Python manifest failures retain process diagnostics without leaking manifest content', async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'sc-standards-python-diagnostics-'));
+  t.after(() => rm(root, {recursive: true, force: true}));
+  await standardsFixture(root);
+  const privateKey = 'SC_PRIVATE_POETRY_KEY';
+  const privateValue = 'SC_PRIVATE_POETRY_VALUE';
+  const script = fileURLToPath(new URL('../standards/tools/python-manifest.py', import.meta.url));
+  for (const manifest of [
+    `# ${privateValue}\n[project]\ndependencies = [\n`,
+    `[tool.poetry.dependencies]\n"${privateKey}" = {version = {nested = "${privateValue}"}}\n`,
+  ]) {
+    await put(root, 'services/api/pyproject.toml', manifest);
+    let parsed;
+    for (const executable of ['python', 'python3']) {
+      parsed = spawnSync(executable, [script, '--input', path.join(root, 'services/api/pyproject.toml')], {encoding: 'utf8', timeout: 10000, windowsHide: true});
+      if (parsed.error?.code !== 'ENOENT') break;
+    }
+    assert.equal(parsed.status, 2, 'negative control must execute the parser and fail');
+    if (manifest.includes('[tool.poetry.dependencies]')) assert.ok(parsed.stderr.includes(privateKey), 'control stderr must contain the private key');
+    const result = await standards.resolveEffectiveStandards(root, ['services/api/src/service.txt']);
+    assert.equal(result.status, 'conflict');
+    const diagnostic = result.conflicts.join(' ');
+    assert.match(diagnostic, /^Python manifest evidence requires Python 3\.11\+ and a valid supported TOML dependency declaration/);
+    assert.match(diagnostic, /status=2; signal=none; error=none/);
+    assert.ok(diagnostic.includes(`stderrBytes=${Buffer.byteLength(parsed.stderr)}`));
+    assert.ok(diagnostic.includes(`stderrSha256=${hash(parsed.stderr)}`));
+    assert.doesNotMatch(JSON.stringify(result), new RegExp(`${privateKey}|${privateValue}|Traceback|unsupported Poetry dependency|Invalid value`));
+  }
+});
+
 test('malformed/duplicate blocks and missing owner approval remain conflicts', async t => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'sc-standards-config-block-'));
   t.after(() => rm(root, {recursive: true, force: true}));

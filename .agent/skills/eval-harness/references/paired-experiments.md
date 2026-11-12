@@ -5,6 +5,15 @@ configuration and grader before changes. Optimize in order: remove useless work,
 avoid repeated work, reduce volume, then evaluate concurrency/model alternatives.
 Keep negative and inconclusive results with evidence; never quietly retry them.
 
+For actual pilot sessions or another selected authorized external route, use
+[external execution receipts](../../subagent-orchestration/references/completion-inbox.md#external-execution-receipts).
+Legacy protocol/trial `model` remains requested configuration. The pilot's
+additive `executionProvenance` separates requested settings from observed
+`unknown`/`unverified` identity and binds stdout/stderr artifact hashes.
+CLI flags and host-reported model usage are not serving attestation. Fixture
+traces and supplied labels prove neither live identity, model-family independence,
+nor enforced tool/filesystem/policy restrictions; retain actual execution evidence.
+
 Use five interleaved pairs with identical task prompts and anonymous session
 labels. Keep the rubric and variant mapping outside worker fixtures. Grade
 observed commands, artifacts and actual results; prompt promises and synthetic

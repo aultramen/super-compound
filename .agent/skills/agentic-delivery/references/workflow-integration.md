@@ -10,7 +10,7 @@
 
 `delivery_mode` in `.agent/rules/project-config.md` is `auto` unless a project
 pins `light` or `full`. Under `auto`, classify every request before any read
-fan-out and state one line: `Tier: light|full; trigger: T<n>|none`. Intake decides from changed semantics and material risk, never from session count.
+fan-out and record one line: `Tier: light|full; trigger: T<n>|none` (shown in chat only when `full` or escalated). Intake decides from changed semantics and material risk, never from session count.
 Reassess when scope changes; administrative coordination alone cannot raise the tier.
 
 Precedence: a pinned `full` mode or explicit BRD/PRD/FSD request keeps its

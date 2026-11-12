@@ -8,6 +8,7 @@ import {setup,installCodexBundle,uninstall} from './setup.mjs';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {provisionCompletionFixture} from './completion-fixture.test-support.mjs';
+import {lintDoc} from './doc-lint.mjs';
 const engine = path.resolve('.agent/tools/setup.mjs');
 const source = process.cwd();
 function fixture(t) {
@@ -98,6 +99,16 @@ test('dry run is read-only; six adapters install and reinstall is a no-op', t =>
   assert.doesNotMatch(fs.readFileSync(path.join(f.target,'AGENTS.md'),'utf8'), /Full-tier checkpoints: BRD approval/);
   assert.equal(fs.existsSync(path.join(f.target,'.agent/tools/budget-wizard.mjs')),false);
   assert.equal(run(f,'doctor').status,0);
+  for (const name of ['SUPER-COMPOUND.md', 'SETUP.md']) {
+    const broken = lintDoc({docPath:path.join(f.target, name)})
+      .filter(finding => finding.kind === 'broken-reference');
+    assert.deepEqual(broken, [], `installed ${name} must resolve its local document links`);
+  }
+  const installedSetup = path.join(f.target, 'SETUP.md');
+  fs.appendFileSync(installedSetup, '\n[Missing installed document](not-shipped.md)\n');
+  const invalid = lintDoc({docPath:installedSetup}).filter(finding => finding.kind === 'broken-reference');
+  assert.equal(invalid.length, 1, 'an intentionally unshipped target must fail the same check');
+  assert.match(invalid[0].value, /not-shipped\.md/);
 });
 
 test('all six generated host adapters carry the canonical evidence completion gate', t => {

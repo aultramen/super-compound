@@ -1,0 +1,368 @@
+{
+  "schema": "interface_catalog_source_verification_v1",
+  "normalization": "UTF-8 text with CRLF normalized to LF",
+  "manifestLfSha256": "7d86dbcca34df5c0261540bf90feef55eeaad211674e2a24cfd23b848b98cc54",
+  "verifiedSourceRecords": 45,
+  "files": [
+    {
+      "localPath": "scripts/core.py",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/scripts/core.py",
+      "sourceSha256": "caf92bdcf2579c9a7d6af4f53c54ee9d3c8f05472cfab77aaec38bef120ec63e",
+      "localSha256": "2988d37e889228aa83166c015429a06acf3513e8444d08fb62f9909035f448ef",
+      "status": "transformed"
+    },
+    {
+      "localPath": "scripts/search.py",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/scripts/search.py",
+      "sourceSha256": "9fd5acc991142fd43c3afe7be0f6720911b668f3988b34e74b5cbc41d58e7947",
+      "localSha256": "2bc09d782a248ee1754346497871f10702a7176430ba3f4e621f065548038ba4",
+      "status": "transformed"
+    },
+    {
+      "localPath": "scripts/design_system.py",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/scripts/design_system.py",
+      "sourceSha256": "e7d1c94c4b2eada17c5551157668362659ccf9626d34dbd58e68142410f90103",
+      "localSha256": "0fbb62e1280c31b4a47cf203eb7cf15c9839f85383f7800d9c3d13579ad7249b",
+      "status": "transformed"
+    },
+    {
+      "localPath": "scripts/reasoning_contract.py",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/scripts/reasoning_contract.py",
+      "sourceSha256": "b8bac1af82aa280d3e06f00aabaeac4337e632996b07fed874e2b6ee6e9c5913",
+      "localSha256": "b8bac1af82aa280d3e06f00aabaeac4337e632996b07fed874e2b6ee6e9c5913",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/app-interface.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/app-interface.csv",
+      "sourceSha256": "331e7cf2c0b222d80c566c5f255c63cb339f65bfd02e471a720f28e4864a9f08",
+      "localSha256": "331e7cf2c0b222d80c566c5f255c63cb339f65bfd02e471a720f28e4864a9f08",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/charts.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/charts.csv",
+      "sourceSha256": "4115cf1120680f2cedef0676cb648f30c7ef4699e2a947535d4113e71ed3b12a",
+      "localSha256": "4115cf1120680f2cedef0676cb648f30c7ef4699e2a947535d4113e71ed3b12a",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/colors.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/colors.csv",
+      "sourceSha256": "8162429222bce22df62b564085946a30d07cc9722c58d0a3a494bd0d1d00841c",
+      "localSha256": "8162429222bce22df62b564085946a30d07cc9722c58d0a3a494bd0d1d00841c",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/google-fonts.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/google-fonts.csv",
+      "sourceSha256": "1c8c3b2ea1faf6a1012da463756def8b3889db33f2226f0343bb4daa80307d03",
+      "localSha256": "1c8c3b2ea1faf6a1012da463756def8b3889db33f2226f0343bb4daa80307d03",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/icons.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/icons.csv",
+      "sourceSha256": "50816c6012030178195a16ee481ebf58b47bd985d70e8ec58886cc83f6eddafc",
+      "localSha256": "50816c6012030178195a16ee481ebf58b47bd985d70e8ec58886cc83f6eddafc",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/landing.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/landing.csv",
+      "sourceSha256": "9a2edd3bb676c2a58f00ade7a062e285222d4297bfd847c8d5b056f0dbbf52d0",
+      "localSha256": "9a2edd3bb676c2a58f00ade7a062e285222d4297bfd847c8d5b056f0dbbf52d0",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/motion.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/motion.csv",
+      "sourceSha256": "381affe8df8ea1f66fbbda2598827f9f54299107bbe6a1b4e9b68f6b62091ceb",
+      "localSha256": "381affe8df8ea1f66fbbda2598827f9f54299107bbe6a1b4e9b68f6b62091ceb",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/products.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/products.csv",
+      "sourceSha256": "5756125e2b0e0d2360926f175d0975c8cd846c7589e5e2ce02631ff645e66361",
+      "localSha256": "1bdc6d8f5ccda75b4251590e4a3985aeb4861dcf15c9c53fd28f2dcb6d2c3b83",
+      "status": "transformed"
+    },
+    {
+      "localPath": "data/react-performance.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/react-performance.csv",
+      "sourceSha256": "3d925802539abac5afeb63ae8aa1960b7229ad271b3a47caed40ab2d97ad0734",
+      "localSha256": "3d925802539abac5afeb63ae8aa1960b7229ad271b3a47caed40ab2d97ad0734",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/angular.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/angular.csv",
+      "sourceSha256": "704be83f2bad30c7e6de01afb113ffa01e0c458762f48b7102f31ba2367b5553",
+      "localSha256": "1ef5e58674a27ab2b696b7744a99d7e31f57a32583dada9b385e75ea87c40caf",
+      "status": "transformed"
+    },
+    {
+      "localPath": "data/stacks/astro.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/astro.csv",
+      "sourceSha256": "2c2f55fadaafc05e04cc321c8194a1a28b656e6757fe2ba316f41b16428299c6",
+      "localSha256": "d770ce013e44dd3ce46e90e544b62e85d485d5a830905becf454f9db9559e1b0",
+      "status": "transformed"
+    },
+    {
+      "localPath": "data/stacks/avalonia.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/avalonia.csv",
+      "sourceSha256": "442fca14675a020683473e7e49f08abb27b9df0765c80efe54aef61f1a4ac258",
+      "localSha256": "442fca14675a020683473e7e49f08abb27b9df0765c80efe54aef61f1a4ac258",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/flutter.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/flutter.csv",
+      "sourceSha256": "64dba0ac17349f28bce517a0f5f48c54d9ed2e487ec0c0258303463b382f41a0",
+      "localSha256": "64dba0ac17349f28bce517a0f5f48c54d9ed2e487ec0c0258303463b382f41a0",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/html-tailwind.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/html-tailwind.csv",
+      "sourceSha256": "d05a581d20af57b8ca0104a6d31d90a07c437d500662a96c3029fc2f9a4678ee",
+      "localSha256": "d05a581d20af57b8ca0104a6d31d90a07c437d500662a96c3029fc2f9a4678ee",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/javafx.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/javafx.csv",
+      "sourceSha256": "2e819b8d5abdd23ad4dae0991650fdb57af497aabd68b37463aa9c442944c869",
+      "localSha256": "5ee1c1c31f96fc0fabc58195e739a41d689cd2dd67f794e42eca0fe572b94aa8",
+      "status": "transformed"
+    },
+    {
+      "localPath": "data/stacks/jetpack-compose.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/jetpack-compose.csv",
+      "sourceSha256": "699de218b286948eaec7d15767b6e1350ee299167e49bf476d82e3ff58724e0a",
+      "localSha256": "699de218b286948eaec7d15767b6e1350ee299167e49bf476d82e3ff58724e0a",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/laravel.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/laravel.csv",
+      "sourceSha256": "854ea4daa5fc61292d22235ad33b49ba3fe22423c3de8d3cb03758ffed3b59f9",
+      "localSha256": "2a20270da6f85f2bddf31f4592cc5d24c5e189624a59fb774cad162d17a17ccd",
+      "status": "transformed"
+    },
+    {
+      "localPath": "data/stacks/nextjs.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/nextjs.csv",
+      "sourceSha256": "ecd2c27b2ea0127d203ae726060efcdd7335b5e83f96b99e4f3befbbfeebd5a4",
+      "localSha256": "ecd2c27b2ea0127d203ae726060efcdd7335b5e83f96b99e4f3befbbfeebd5a4",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/nuxt-ui.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/nuxt-ui.csv",
+      "sourceSha256": "9c0179d559abe39ad63b958b54cb29c82be1dd20706430476096ea8967bfa328",
+      "localSha256": "9c0179d559abe39ad63b958b54cb29c82be1dd20706430476096ea8967bfa328",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/nuxtjs.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/nuxtjs.csv",
+      "sourceSha256": "3d9b54ed2d151bd9c86e9e5609b8a6f88a00c4c52fa601a30af96c49b2c4d176",
+      "localSha256": "3d9b54ed2d151bd9c86e9e5609b8a6f88a00c4c52fa601a30af96c49b2c4d176",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/react-native.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/react-native.csv",
+      "sourceSha256": "ba31dd9c0c04da6bc02a74448bf121f9c0728ae5ba3b4d47b487778b0a1135b5",
+      "localSha256": "ba31dd9c0c04da6bc02a74448bf121f9c0728ae5ba3b4d47b487778b0a1135b5",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/react.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/react.csv",
+      "sourceSha256": "4dd176a9787e5c6306b5df94158d75955adcdc6edab41ce5286641a5842303c1",
+      "localSha256": "4dd176a9787e5c6306b5df94158d75955adcdc6edab41ce5286641a5842303c1",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/shadcn.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/shadcn.csv",
+      "sourceSha256": "e56cfde5b74907836ac3582a4779d5b7f3d206a702ab81b8669a1b668c3eeb51",
+      "localSha256": "e56cfde5b74907836ac3582a4779d5b7f3d206a702ab81b8669a1b668c3eeb51",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/svelte.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/svelte.csv",
+      "sourceSha256": "f6e379ba802941ba26b01d4ffbe3cd39120f2587659a1d93851c707f66bc13db",
+      "localSha256": "f6e379ba802941ba26b01d4ffbe3cd39120f2587659a1d93851c707f66bc13db",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/swiftui.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/swiftui.csv",
+      "sourceSha256": "bdd9231ff3ad658f4e7c063e1eb49df2fd09ac8d90631a86df899b39833b9623",
+      "localSha256": "bdd9231ff3ad658f4e7c063e1eb49df2fd09ac8d90631a86df899b39833b9623",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/threejs.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/threejs.csv",
+      "sourceSha256": "155d583b9c64da0df4b6c6cb060c02eab222505e0734d6353da02c9e2b5d982b",
+      "localSha256": "155d583b9c64da0df4b6c6cb060c02eab222505e0734d6353da02c9e2b5d982b",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/uno.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/uno.csv",
+      "sourceSha256": "a0474363e4225b5367214d5675fd3e075f137026f9500f0d04357882ef4f6d48",
+      "localSha256": "a0474363e4225b5367214d5675fd3e075f137026f9500f0d04357882ef4f6d48",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/uwp.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/uwp.csv",
+      "sourceSha256": "c409f08c1fbba1f1029f1acaa554e7b4471cc85517a5751c9f2e62465badcd5c",
+      "localSha256": "c409f08c1fbba1f1029f1acaa554e7b4471cc85517a5751c9f2e62465badcd5c",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/vue.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/vue.csv",
+      "sourceSha256": "b655f1ebb9dff2652d15981f31b1784c8a6d4759efd2815a14f3088257569f95",
+      "localSha256": "b655f1ebb9dff2652d15981f31b1784c8a6d4759efd2815a14f3088257569f95",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/winui.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/winui.csv",
+      "sourceSha256": "e676dc1c13ee6c205c40b0746f1335150a346c7a49a0616d2545bc3d2c930c85",
+      "localSha256": "e676dc1c13ee6c205c40b0746f1335150a346c7a49a0616d2545bc3d2c930c85",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/stacks/wpf.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/stacks/wpf.csv",
+      "sourceSha256": "9781a9950b20333637b30a02e498b7efca21b618a3eeb8665836f3ac6e974da7",
+      "localSha256": "9781a9950b20333637b30a02e498b7efca21b618a3eeb8665836f3ac6e974da7",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/styles.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/styles.csv",
+      "sourceSha256": "a9b6cadbd1cb9e7cb8398a3b445e0691d01e42ed5e5efa60a5d0c08c99c8100d",
+      "localSha256": "4d0fd1b1aeb3771b78d71677e339f0e21364febd2efdcc6687c87272d6c35171",
+      "status": "transformed"
+    },
+    {
+      "localPath": "data/typography.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/typography.csv",
+      "sourceSha256": "321fc446e89024488ebae96dda93efc4d2307bd8bddb240857ad51364f6782c8",
+      "localSha256": "45ed6fd7b6e53fa293cfce98904ec1d45ab34cd3b3a003d73d8c9dc484931a1d",
+      "status": "transformed"
+    },
+    {
+      "localPath": "data/ui-reasoning.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/ui-reasoning.csv",
+      "sourceSha256": "f0774dd741cecdad5eec842034bd6d5e9ea50e9f220a1910069748daa0bb8e9a",
+      "localSha256": "f0774dd741cecdad5eec842034bd6d5e9ea50e9f220a1910069748daa0bb8e9a",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "data/ux-guidelines.csv",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/data/ux-guidelines.csv",
+      "sourceSha256": "ff81ec613f70ba9fc3fcce52dbe4ae35d44b2079dbe6dc066d2d6e38c28facd5",
+      "localSha256": "ff81ec613f70ba9fc3fcce52dbe4ae35d44b2079dbe6dc066d2d6e38c28facd5",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "LICENSE",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "LICENSE",
+      "sourceSha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+      "localSha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "scripts/evaluate_relevance.py",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "scripts/evaluate-relevance.py",
+      "sourceSha256": "1294b92d3242af84092b37aea7a5a93f7df5cb07721fee36c534de2cdda7703e",
+      "localSha256": "408f6047e71c5f079b021121a8370c1b02328504d3bc38bb78954e489dd93f85",
+      "status": "transformed"
+    },
+    {
+      "localPath": "scripts/relevance_metrics.py",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "scripts/relevance_metrics.py",
+      "sourceSha256": "a5126f734365380b3f3390453f25d2f504a6488c6af0fc88256a9529c02e1547",
+      "localSha256": "a5126f734365380b3f3390453f25d2f504a6488c6af0fc88256a9529c02e1547",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "scripts/tests/fixtures/relevance-cases.json",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/scripts/tests/fixtures/relevance-cases.json",
+      "sourceSha256": "e77d36eebbf6ddc2860946a02cdb659351da6c09f2688f1ed30939a418099646",
+      "localSha256": "e77d36eebbf6ddc2860946a02cdb659351da6c09f2688f1ed30939a418099646",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "scripts/tests/fixtures/relevance-thresholds.json",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/scripts/tests/fixtures/relevance-thresholds.json",
+      "sourceSha256": "331197e8644c751d433183ada0a9979fb2ae251efa0d77000bafdcbddc88d0e7",
+      "localSha256": "331197e8644c751d433183ada0a9979fb2ae251efa0d77000bafdcbddc88d0e7",
+      "status": "mirrored"
+    },
+    {
+      "localPath": "scripts/tests/fixtures/relevance-baseline.json",
+      "sourceCommit": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+      "sourcePath": "src/ui-ux-pro-max/scripts/tests/fixtures/relevance-baseline.json",
+      "sourceSha256": "0df200fc54c1cb97a52d6775e7f501509163cea8f8b73fd7268429bc1f835afe",
+      "localSha256": "0df200fc54c1cb97a52d6775e7f501509163cea8f8b73fd7268429bc1f835afe",
+      "status": "mirrored"
+    }
+  ]
+}

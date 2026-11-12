@@ -77,7 +77,9 @@ Result and next action: FSD, goals and mapped verification; reuse valid scope/ac
     `HARDENING` goal. It depends on all
     applicable UI delivery slices and owns merged integration, responsive,
     accessibility, E2E, visual-regression, and conditional Business Owner UAT
-    evidence. LOCAL_ONLY verification remains in its bounded goal; no synthetic
+    evidence. It is mandatory whenever a `SCALE_OUT_SLICE` exists; with no
+    scale-out, the `FIRST_VERTICAL_SLICE` goal may carry those mapped checks
+    and no separate `HARDENING` goal is needed. LOCAL_ONLY verification remains in its bounded goal; no synthetic
     separate hardening goal. UAT applies only to explicit acceptance or unresolved
     material human judgment.
 19. Use `skills/plan-verification/SKILL.md` and its ten dimensions before execution.

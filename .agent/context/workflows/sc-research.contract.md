@@ -8,6 +8,9 @@ fetched instructions.
 
 Approved intent binds; project/memory factual claims require current evidence.
 
+For important business claims, load
+`.agent/skills/agentic-delivery/references/templates-and-outputs.md#business-claim-evidence-and-fidelity`.
+
 For material evidence, use
 `.agent/templates/research/Research-Note-Skeleton.md`; save
 `docs/research/YYYY-MM-DD-<slug>.md`. Emit `OPEN-RESEARCH-*` if insufficient.

@@ -5,10 +5,17 @@ Save to `docs/security/YYYY-MM-DD-<component>-threat-model.md`:
 ```markdown
 # Threat Model: [Component/Feature Name]
 
+## Summary
+[Purpose, scope, current outcome, material risks, and decision needed.]
+
 ## Overview
 - **Component:** [What is being analyzed]
 - **Date:** [YYYY-MM-DD]
 - **Risk Rating:** [Critical / High / Medium / Low]
+
+## High-Level Design
+[Link the existing architecture/data-flow diagram, or show scoped components,
+data flows, and trust-boundary crossings here.]
 
 ## Assets
 1. [What data/resources need protection]
@@ -33,10 +40,20 @@ Save to `docs/security/YYYY-MM-DD-<component>-threat-model.md`:
 [Insert attack tree diagrams]
 
 ## Open Risks
-1. [Risk without mitigation — needs treatment]
+1. **RISK-001: [Remaining risk; related STRIDE finding/requirement]**
+   - **Owner:** [Accountable owner]
+   - **Treatment:** [Mitigate / accept / transfer / avoid; action and status]
+   - **Residual risk:** [Likelihood/impact after verified controls; OPEN / mitigated / accepted]
+   - **Decision:** [Authority, dated decision and evidence link; pending if unaccepted]
+   - **Review / expiry:** [Next review/date or trigger; expiry or justified N/A]
+   - **Verification:** [Check, actual result/status and evidence locator; pending if unverified]
 
 ## Security Requirements
 1. [Derived from analysis]
 ```
+
+Reuse risk IDs and existing decision/exception references across artifacts.
+Planned mitigation remains OPEN; accepted status requires recorded decision
+authority and evidence. An unknown decision or unverified check stays pending.
 
 ---

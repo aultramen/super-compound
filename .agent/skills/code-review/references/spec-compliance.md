@@ -5,7 +5,7 @@ Load before quality review whenever authoritative requirements exist.
 ## Understand the Change
 
 1. Read the plan, issue, FSD goal, and acceptance criteria.
-2. Read referenced PRD/BRD requirements, domain `CONTEXT.md`, and accepted ADRs.
+2. Read referenced PRD/BRD requirements, the existing glossary/map using [domain-modeling's Files policy](../../domain-modeling/SKILL.md#files), and accepted ADRs. Vocabulary informs review; it does not replace implementation authority.
 3. Identify intended outcomes, explicit non-goals, dependencies, and evidence expected for completion.
 4. Inspect the complete diff and nearby callers, tests, and interfaces; do not review isolated snippets only.
 
