@@ -1,7 +1,7 @@
 {
   "schema": "super_compound_framework_audit_v2",
-  "generatedAt": "2026-11-12T03:02:12.046Z",
-  "repositoryHead": "cb65f3b58f280ab318f02f374e2737f24555d91a",
+  "generatedAt": "2026-11-12T03:09:15.925Z",
+  "repositoryHead": "f7d82ea39ed263ff914d34a2b35c79b6efad9628",
   "pass": true,
   "summary": {
     "manifestSource": "git-active-manifest",
@@ -18,7 +18,7 @@
     "binaryFiles": 1,
     "bytesRead": 23574051,
     "linesRead": 206323,
-    "contentDigest": "8d250c3256be3c0b459e3bbf0f57ac23d9623dc3c76ec817b6f19ed6304732d0",
+    "contentDigest": "400ccfe2d96a71b2c1216692ad208b1e56e3a3719115632875bf42fe5a637c1f",
     "skillEntrypoints": 37,
     "skillEntrypointWords": 16607,
     "maxSkillEntrypointWords": 646,
@@ -79,11 +79,11 @@
   },
   "physicalInventory": {
     "scope": "physical-authority-worktree-excluding-runtime-roots",
-    "files": 3729,
-    "filesRead": 3729,
+    "files": 965,
+    "filesRead": 965,
     "symlinks": 0,
     "activeManifestEntries": 878,
-    "outsideActiveManifestEntries": 2851,
+    "outsideActiveManifestEntries": 87,
     "retiredAssets": [
       {
         "path": "docs/archive/retired-assets-20261007/docs/loop-runtime-v2.md",
@@ -436,5 +436,5 @@
     ]
   },
   "findings": [],
-  "evidenceDigest": "c19d1a5c818c3f31bf1a175ab49adef5a17cff9e0615f610a7b89ce49297e03e"
+  "evidenceDigest": "4c531618f7b56558e83ff4fbb6db3de61dfd34b536b17560ff9ae44314b854d1"
 }
