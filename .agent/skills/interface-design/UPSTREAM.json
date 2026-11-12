@@ -336,7 +336,7 @@
       "upstream_path": "scripts/evaluate-relevance.py",
       "upstream_lf_sha256": "1294b92d3242af84092b37aea7a5a93f7df5cb07721fee36c534de2cdda7703e",
       "local_path": "scripts/evaluate_relevance.py",
-      "local_lf_sha256": "408f6047e71c5f079b021121a8370c1b02328504d3bc38bb78954e489dd93f85",
+      "local_lf_sha256": "f1b0c5911bfe35a4ad372d4305ef8f501f82b0520ac126e89f1f0840f675af34",
       "status": "transformed"
     },
     {

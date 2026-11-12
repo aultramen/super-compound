@@ -34,7 +34,7 @@ SOURCE_RUNTIME_FINGERPRINT = "986ebb10ad9b09b905d263811b6693d52449fadd0ef4145bb3
 SOURCE_ORACLE_FINGERPRINT = "02e7226428c64a995ec24ae104ce4d186f5f91bf0f062556e90ef9b0fcb6d67a"
 SOURCE_FIXTURE_HASHES = {
     "relevance-cases.json": "e77d36eebbf6ddc2860946a02cdb659351da6c09f2688f1ed30939a418099646",
-    "relevance-thresholds.json": "185cc3c16a7187348ab28bc47b5b14fd50a083efce142fcfb5c544fe3b82e5f8",
+    "relevance-thresholds.json": "331197e8644c751d433183ada0a9979fb2ae251efa0d77000bafdcbddc88d0e7",
     "relevance-baseline.json": "0df200fc54c1cb97a52d6775e7f501509163cea8f8b73fd7268429bc1f835afe",
 }
 SOURCE_DOMAIN_MAP = {"web": "app"}
